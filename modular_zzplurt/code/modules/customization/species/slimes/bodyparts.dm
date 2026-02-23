@@ -24,7 +24,7 @@
 
 /obj/item/bodypart/leg/left/digitigrade/jelly/slime/roundstart
 	icon_greyscale = BODYPART_ICON_ROUNDSTARTSLIME
-	limb_id = "digitigrade_1"
+	limb_id = SPECIES_SLIMEPERSON
 	base_limb_id = "digitigrade_1"
 	biological_state = (BIO_FLESH|BIO_BLOODED)
 	dmg_overlay_type = null
@@ -32,7 +32,7 @@
 
 /obj/item/bodypart/leg/right/digitigrade/jelly/slime/roundstart
 	icon_greyscale = BODYPART_ICON_ROUNDSTARTSLIME
-	limb_id = "digitigrade_1"
+	limb_id = SPECIES_SLIMEPERSON
 	base_limb_id = "digitigrade_1"
 	biological_state = (BIO_FLESH|BIO_BLOODED)
 	dmg_overlay_type = null
