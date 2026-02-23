@@ -1,0 +1,1482 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/showcase/machinery/tgmc/closet{
+	name = "GHMME Automated Engineer Closet"
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ai" = (
+/obj/structure/deployable_barricade/metal/plasteel{
+	dir = 4
+	},
+/obj/effect/turf_decal/stripes/white/full{
+	color = "#EFB341"
+	},
+/obj/item/radio/intercom/directional/south,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"at" = (
+/obj/structure/bed/medical/emergency,
+/obj/effect/decal/cleanable/blood,
+/obj/effect/mob_spawn/corpse/human/canterbury/kills,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"au" = (
+/obj/effect/turf_decal/tile/dark_red/half/contrasted{
+	dir = 4
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"aU" = (
+/obj/effect/decal/cleanable/blood/splatter,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"bO" = (
+/obj/machinery/vending/wallmed/directional/north,
+/obj/effect/decal/cleanable/blood/splatter,
+/obj/item/disk/nuclear/fake{
+	icon_state = "datadisk0";
+	desc = "Better keep this safe, it's one of the disks needed for the Terran Government branded nuclear fission explosives that take 3 disks, makes you wonder why Space Station 13 doesn't have that kinda technology..";
+	name = "red nuclear authentication disk"
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"cB" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/structure/cable,
+/obj/machinery/computer/monitor{
+	dir = 1
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"cN" = (
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/obj/effect/decal/cleanable/blood/splatter,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"cT" = (
+/obj/machinery/power/apc/auto_name/directional/south,
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/obj/effect/decal/cleanable/blood/drip,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"ds" = (
+/obj/effect/turf_decal/tile/dark_blue/half/contrasted{
+	dir = 1
+	},
+/obj/structure/cable,
+/obj/machinery/computer/terminal/canterbury/overwatch{
+	connectable = 0
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"dW" = (
+/obj/structure/cable,
+/obj/effect/decal/cleanable/blood/xeno,
+/obj/effect/mob_spawn/corpse/xenomorph,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ei" = (
+/obj/structure/table/reinforced,
+/obj/item/surgery_tray/full,
+/obj/machinery/light/directional/south,
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"fp" = (
+/obj/effect/turf_decal/tile/dark_blue/anticorner/contrasted{
+	dir = 1
+	},
+/obj/machinery/computer{
+	desc = "Used to access the various cameras on the station, even if there was anymore cameras, you doubt this is working anymore.";
+	name = "security camera console";
+	icon_keyboard = "security_key";
+	icon_screen = "cameras";
+	icon = 'modular_zzplurt/icons/obj/machines/computer.dmi';
+	icon_state = "computer_tabletop";
+	connectable = 0
+	},
+/obj/structure/table/reinforced,
+/obj/structure/cable,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"fP" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/showcase/machinery/tgmc/equipment{
+	name = "NEXUS Automated Engineer Equipment Rack";
+	desc = "An automated engineer equipment rack hooked up to a colossal storage unit, or it would have were it not broken beyond repair."
+	},
+/obj/structure/window/reinforced/spawner/directional/west,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"gx" = (
+/obj/machinery/light/directional/north,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"gA" = (
+/obj/machinery/door/poddoor/preopen{
+	id = "canterbury_umbilical_port";
+	name = "Port External Blast Door"
+	},
+/obj/machinery/door/poddoor/shutters/preopen{
+	dir = 4;
+	name = "Transit Shutters"
+	},
+/obj/structure/fans/tiny/forcefield{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/blood/trail_holder{
+	dir = 8
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"gP" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/structure/window/reinforced/spawner/directional/north,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ia" = (
+/obj/machinery/vending/sustenance,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"if" = (
+/obj/structure/chair/comfy/shuttle/tactical{
+	dir = 8
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ih" = (
+/obj/effect/turf_decal/box/white{
+	color = "#A56B00"
+	},
+/obj/structure/showcase/machinery/tgmc/loadout,
+/obj/structure/window/reinforced/spawner/directional/east,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ip" = (
+/obj/machinery/door/poddoor{
+	name = "Starboard External Blast Door";
+	id = "canterbury_umbilical_starboard"
+	},
+/obj/machinery/door/poddoor/shutters/preopen{
+	dir = 8;
+	name = "Transit Shutters"
+	},
+/obj/structure/fans/tiny/forcefield{
+	dir = 8
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"iu" = (
+/turf/closed/wall/r_wall,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"jd" = (
+/obj/machinery/iv_drip,
+/obj/effect/decal/cleanable/blood/splatter,
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"jv" = (
+/obj/structure/showcase/machinery/tgmc/weapons,
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/window/reinforced/spawner/directional/east,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"jx" = (
+/obj/effect/turf_decal/box/white{
+	color = "#A56B00"
+	},
+/obj/structure/closet/crate/large/import{
+	name = "sandbag supply crate"
+	},
+/obj/item/stack/sheet/mineral/sandbags/fifty,
+/obj/item/stack/sheet/mineral/sandbags/fifty,
+/obj/item/stack/sheet/mineral/sandbags/fifty,
+/obj/item/stack/sheet/mineral/sandbags/fifty,
+/obj/machinery/button/door/directional/west{
+	name = "External Blast Doors Control";
+	id = "canterbury_umbilical_port"
+	},
+/obj/machinery/airalarm/directional/north,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"jJ" = (
+/obj/item/gun/ballistic/automatic/ar/modular/m44a{
+	accepted_magazine_type = null;
+	spawnwithmagazine = 0;
+	name = "damaged NT M44A Pulse Rifle";
+	desc = "A specialized Nanotrasen-produced ballistic pulse rifle that uses compressed magazines to output absurd firepower in a compact package, this one seems to have been badly damaged, and bent out of shape. Magazines won't even fit in it anymore.."
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"jM" = (
+/obj/structure/cable,
+/obj/effect/decal/cleanable/blood/drip,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"kl" = (
+/obj/machinery/door/airlock/command{
+	name = "Command Cockpit"
+	},
+/obj/structure/cable,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"kn" = (
+/obj/effect/turf_decal/stripes/white/full{
+	color = "#EFB341"
+	},
+/obj/effect/decal/cleanable/blood/drip,
+/obj/effect/decal/cleanable/blood/trail_holder{
+	dir = 10
+	},
+/obj/structure/deployable_barricade/metal/plasteel{
+	dir = 8
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"kU" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"le" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/machinery/vending/tool,
+/obj/machinery/light/small/directional/west,
+/obj/structure/window/reinforced/spawner/directional/north,
+/obj/item/radio/intercom/directional/west,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"lg" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/showcase/machinery/tgmc/closet,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"lP" = (
+/obj/effect/spawner/structure/window/reinforced,
+/obj/effect/decal/cleanable/blood/splatter/over_window,
+/turf/open/floor/plating,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"mk" = (
+/obj/effect/turf_decal/tile/dark_blue/fourcorners,
+/obj/structure/cable,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"mr" = (
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/obj/machinery/airalarm/directional/west,
+/obj/machinery/sleeper{
+	dir = 4
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"mS" = (
+/obj/machinery/limbgrower,
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"nf" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/window/reinforced/spawner/directional/west,
+/obj/machinery/door/window/left/directional/south,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ni" = (
+/obj/machinery/porta_turret/syndicate/toolbox/mag_fed/outpost/malf{
+	dir = 8
+	},
+/obj/machinery/light/small/directional/south,
+/obj/effect/decal/cleanable/blood/splatter,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"nm" = (
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/obj/structure/table/reinforced,
+/obj/item/defibrillator/loaded{
+	pixel_y = 7
+	},
+/obj/item/storage/box/bodybags,
+/obj/machinery/recharger,
+/obj/item/storage/medkit/o2,
+/obj/item/storage/medkit/fire,
+/obj/item/storage/medkit/regular,
+/obj/machinery/vending/wallmed/directional/north,
+/obj/item/reagent_containers/cup/beaker/cryoxadone,
+/obj/item/emergency_bed,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"nP" = (
+/obj/effect/decal/cleanable/blood/xeno,
+/obj/effect/mob_spawn/corpse/xenomorph/warrior,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"nW" = (
+/obj/structure/cable,
+/obj/item/ammo_box/magazine/m44a{
+	start_empty = 1
+	},
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"oa" = (
+/obj/machinery/power/shuttle_engine/propulsion/burst/right,
+/turf/open/floor/catwalk_floor/iron_dark/airless,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"pd" = (
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/obj/structure/frame/machine,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"pv" = (
+/obj/structure/alien/weeds/node,
+/obj/effect/decal/cleanable/blood/drip,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"pM" = (
+/obj/effect/decal/cleanable/blood/trail_holder,
+/obj/item/gun/ballistic/automatic/smart_machine_gun{
+	desc = "A weapon with a blistering rate of fire, so heavy that it needs to be mounted on a modsuit to wield. It's equipped with IFF technology, allowing the bullets to intentionally miss friendly targets, this one has been melted down to all hell, whatever happened to it, something must've wanted it gone.";
+	name = "acid damaged M63A4 \"Smartgun\"";
+	accepted_magazine_type = null;
+	spawnwithmagazine = 0
+	},
+/obj/effect/decal/cleanable/blood/splatter/xeno,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"pY" = (
+/obj/structure/showcase/machinery/tgmc/blood,
+/obj/item/reagent_containers/blood/o_minus{
+	pixel_x = -5;
+	pixel_y = -6
+	},
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"qn" = (
+/obj/effect/spawner/structure/window/reinforced,
+/turf/open/floor/plating,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"qu" = (
+/obj/effect/decal/cleanable/blood/splatter/xeno,
+/obj/item/stack/sheet/mineral/titanium{
+	amount = 2
+	},
+/obj/item/stack/sheet/mineral/titanium{
+	amount = 2
+	},
+/obj/item/stack/sheet/mineral/titanium{
+	amount = 2
+	},
+/obj/item/stack/sheet/mineral/titanium{
+	amount = 2
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"qx" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/window/reinforced/spawner/directional/north,
+/obj/machinery/door/window/right/directional/east,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"qZ" = (
+/obj/structure/cable,
+/obj/machinery/porta_turret/syndicate/toolbox/mag_fed/outpost/malf,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"rQ" = (
+/obj/structure/cable,
+/obj/item/ammo_box/magazine/smartgun_drum,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"sc" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/machinery/light/directional/east,
+/obj/structure/window/reinforced/spawner/directional/south,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"sn" = (
+/obj/structure/chair/comfy/shuttle/tactical{
+	dir = 4
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"sv" = (
+/obj/effect/turf_decal/box/white{
+	color = "#A56B00"
+	},
+/obj/structure/rack/shelf,
+/obj/machinery/button/door/directional/east{
+	name = "External Blast Doors Control";
+	id = "canterbury_umbilical_starboard"
+	},
+/obj/machinery/airalarm/directional/north,
+/obj/item/extinguisher,
+/obj/item/storage/belt/utility/full,
+/obj/item/clothing/suit/hazardvest,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"sy" = (
+/obj/effect/turf_decal/stripes/line{
+	dir = 8
+	},
+/turf/closed/wall/r_wall,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"sG" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/machinery/vending/engivend,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"sJ" = (
+/obj/item/ammo_box/magazine/m44a{
+	start_empty = 1
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"sO" = (
+/obj/effect/turf_decal/stripes/white/full{
+	color = "#EFB341"
+	},
+/obj/effect/decal/cleanable/blood,
+/obj/item/stack/sheet/plasteel{
+	pixel_x = -7;
+	pixel_y = 3
+	},
+/obj/item/clothing/head/helmet/marine/sulaco{
+	pixel_x = 5;
+	pixel_y = -4
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"tF" = (
+/obj/machinery/door/poddoor{
+	name = "Aft External Blast Door";
+	id = "canterbury_engine_aft"
+	},
+/obj/machinery/door/poddoor/shutters/preopen{
+	dir = 1;
+	name = "Transit Shutters"
+	},
+/obj/structure/fans/tiny/forcefield{
+	dir = 1
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ua" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/machinery/light/directional/east,
+/obj/structure/window/reinforced/spawner/directional/north,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"um" = (
+/obj/effect/turf_decal/tile/dark_blue/anticorner/contrasted{
+	dir = 4
+	},
+/obj/structure/table/reinforced,
+/obj/machinery/computer{
+	desc = "You can use this to change ID's, now if only you had an ID to use with it.. Even then, you don't think this thing will respond to input either.";
+	name = "Identification Computer";
+	icon_screen = "id";
+	icon = 'modular_zzplurt/icons/obj/machines/computer.dmi';
+	icon_state = "computer_tabletop";
+	connectable = 0
+	},
+/obj/structure/cable,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"ux" = (
+/obj/machinery/deployable_turret/hmg/canterbury{
+	dir = 8
+	},
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"uD" = (
+/obj/structure/chair/comfy/shuttle/tactical{
+	dir = 1
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"uJ" = (
+/obj/item/ammo_box/magazine/m44a,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"vi" = (
+/obj/structure/deployable_barricade/metal/plasteel{
+	dir = 4
+	},
+/obj/effect/turf_decal/stripes/white/full{
+	color = "#EFB341"
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"vv" = (
+/obj/effect/mob_spawn/corpse/human/cmo,
+/obj/effect/decal/cleanable/blood,
+/obj/structure/alien/weeds/node,
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"vz" = (
+/obj/structure/chair/comfy/shuttle/tactical{
+	dir = 1
+	},
+/obj/machinery/light/small/directional/south,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"vW" = (
+/obj/machinery/door/poddoor/shutters/preopen{
+	dir = 1;
+	name = "Transit Shutters"
+	},
+/obj/structure/fans/tiny/forcefield{
+	dir = 1
+	},
+/obj/machinery/door/poddoor/preopen{
+	id = "canterbury_engine_aft";
+	name = "Aft External Blast Door"
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ws" = (
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"wE" = (
+/obj/structure/sink/directional/north,
+/obj/item/stack/medical/suture/medicated{
+	pixel_x = 11;
+	pixel_y = 13
+	},
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"xa" = (
+/obj/effect/decal/cleanable/blood/drip,
+/obj/structure/barricade/sandbags,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"xx" = (
+/obj/structure/showcase/machinery/tgmc/armor,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"xC" = (
+/obj/effect/decal/cleanable/blood/splatter/xeno,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"xF" = (
+/obj/effect/turf_decal/box/white{
+	color = "#A56B00"
+	},
+/obj/structure/showcase/machinery/tgmc/equipment{
+	name = "NEXUS Automated Squad Leader Equipment Rack";
+	desc = "An automated squad leader equipment rack hooked up to a colossal storage unit, or it would have were it not broken beyond repair."
+	},
+/obj/structure/window/reinforced/spawner/directional/east,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"xH" = (
+/obj/machinery/light/directional/north,
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/obj/machinery/firealarm/directional/north,
+/obj/structure/frame/machine/secured,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"xJ" = (
+/obj/structure/cable,
+/obj/machinery/door/airlock/engineering{
+	name = "Power Control"
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"xN" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/showcase/machinery/tgmc/clothes,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"xY" = (
+/obj/machinery/cryopod/canterbury{
+	dir = 8
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"yP" = (
+/obj/effect/spawner/structure/window/reinforced,
+/obj/structure/cable,
+/turf/open/floor/plating,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"zl" = (
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/obj/structure/alien/weeds/node,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"zD" = (
+/obj/structure/showcase/machinery/tgmc/nuke{
+	dir = 8
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"zT" = (
+/obj/machinery/computer/crew{
+	dir = 4
+	},
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"Ad" = (
+/obj/structure/reagent_dispensers/fueltank,
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/machinery/light/small/directional/south,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"AI" = (
+/obj/machinery/door/airlock/medical/glass{
+	name = "Medbay"
+	},
+/turf/open/floor/iron/white/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"AT" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/structure/cable,
+/obj/structure/alien/weeds/node,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"AX" = (
+/obj/item/stack/sheet/mineral/titanium{
+	amount = 2
+	},
+/obj/structure/alien/weeds/node,
+/obj/effect/decal/cleanable/blood,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"BI" = (
+/obj/structure/showcase/machinery/tgmc/clothes,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"BJ" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/showcase/machinery/tgmc/equipment{
+	name = "NEXUS Automated Medical Equipment Rack";
+	desc = "An automated medic equipment rack hooked up to a colossal storage unit, or it would have were it not broken beyond repair."
+	},
+/obj/structure/window/reinforced/spawner/directional/west,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"CJ" = (
+/obj/effect/spawner/structure/window/reinforced,
+/turf/open/floor/plating,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"Da" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/showcase/machinery/tgmc/closet{
+	name = "GHMME Automated Corpsman Closet"
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"DP" = (
+/obj/effect/decal/cleanable/blood/xeno,
+/obj/effect/mob_spawn/corpse/xenomorph/runner,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"DS" = (
+/obj/effect/turf_decal/box/white{
+	color = "#A56B00"
+	},
+/obj/structure/rack/shelf,
+/obj/machinery/light/small/directional/north,
+/obj/item/storage/toolbox/mechanical,
+/obj/item/wrench,
+/obj/item/screwdriver,
+/obj/item/crowbar,
+/obj/item/extinguisher/mini,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"DV" = (
+/obj/machinery/door/poddoor/preopen{
+	id = "canterbury_umbilical_port";
+	name = "Port External Blast Door"
+	},
+/obj/machinery/door/poddoor/shutters/preopen{
+	dir = 4;
+	name = "Transit Shutters"
+	},
+/obj/structure/fans/tiny/forcefield{
+	dir = 4
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Ed" = (
+/obj/machinery/power/port_gen/pacman/super,
+/obj/structure/cable,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Ex" = (
+/obj/machinery/door/poddoor/preopen{
+	id = "canterbury_umbilical_port";
+	name = "Port External Blast Door"
+	},
+/obj/machinery/door/poddoor/shutters/preopen{
+	dir = 4;
+	name = "Transit Shutters"
+	},
+/obj/structure/fans/tiny/forcefield{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/blood,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"EI" = (
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/obj/machinery/cryo_cell,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"EX" = (
+/obj/structure/cable,
+/obj/effect/spawner/structure/window/reinforced,
+/turf/open/floor/plating,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Fi" = (
+/obj/item/ammo_box/magazine/m44a{
+	start_empty = 1
+	},
+/obj/effect/decal/cleanable/blood/trail_holder,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"FD" = (
+/obj/machinery/computer/cryopod/canterbury{
+	dir = 8
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Gh" = (
+/obj/structure/cable,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Gj" = (
+/obj/effect/turf_decal/tile/dark_blue/anticorner/contrasted,
+/obj/structure/showcase/machinery/tgmc/equipment{
+	name = "NEXUS Automated Field Commander Equipment Rack";
+	desc = "An automated field commander equipment rack hooked up to a colossal storage unit, or it would have were it not broken beyond repair."
+	},
+/obj/machinery/light/directional/east,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"GD" = (
+/obj/effect/turf_decal/tile/dark_blue/half/contrasted{
+	dir = 1
+	},
+/obj/structure/table/reinforced,
+/obj/machinery/fax{
+	name = "Combat Information Center Fax Machine";
+	department = "TGS Canterbury"
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"GS" = (
+/obj/structure/deployable_barricade/metal/plasteel,
+/obj/effect/turf_decal/stripes/white/full{
+	color = "#EFB341"
+	},
+/obj/machinery/airalarm/directional/east,
+/obj/machinery/light/small/directional/east,
+/obj/effect/decal/cleanable/blood/drip,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Hf" = (
+/obj/structure/chair/comfy/shuttle/tactical,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Hl" = (
+/obj/structure/deployable_barricade/metal/plasteel,
+/obj/effect/turf_decal/stripes/white/full{
+	color = "#EFB341"
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Hp" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/window/reinforced/spawner/directional/north,
+/obj/structure/window/reinforced/spawner/directional/west,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Hu" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/window/reinforced/spawner/directional/west,
+/obj/machinery/door/window/right/directional/north,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Hx" = (
+/obj/effect/turf_decal/stripes/line{
+	dir = 5
+	},
+/obj/structure/rack/shelf,
+/obj/item/stack/sheet/mineral/uranium/fifty,
+/obj/item/stack/sheet/mineral/uranium/fifty,
+/obj/machinery/power/terminal,
+/obj/structure/cable,
+/obj/machinery/light/small/directional/west,
+/turf/open/floor/iron/dark/herringbone,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"HO" = (
+/obj/effect/turf_decal/box/white{
+	color = "#A56B00"
+	},
+/obj/structure/rack/shelf,
+/obj/item/hand_labeler,
+/obj/item/storage/toolbox/electrical,
+/obj/item/stack/sheet/iron/fifty,
+/obj/item/stack/sheet/iron/fifty,
+/obj/item/stack/sheet/plasteel/twenty,
+/obj/item/wrench,
+/obj/item/storage/toolbox/mechanical,
+/obj/item/screwdriver,
+/obj/machinery/light/small/directional/north,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Iw" = (
+/obj/machinery/vending/cigarette,
+/obj/machinery/light/directional/east,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Ix" = (
+/obj/structure/table/optable,
+/obj/effect/mob_spawn/corpse/human/canterbury/dan,
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"IE" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/showcase/machinery/tgmc/loadout,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Ja" = (
+/obj/machinery/power/shuttle_engine/propulsion/burst,
+/turf/open/floor/catwalk_floor/iron_dark/airless,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Jf" = (
+/obj/structure/alien/weeds/node,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Jw" = (
+/obj/item/reagent_containers/blood/o_minus{
+	pixel_x = 10;
+	pixel_y = 5
+	},
+/obj/item/reagent_containers/blood/o_minus{
+	pixel_x = 6;
+	pixel_y = -3
+	},
+/obj/effect/decal/cleanable/blood,
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"Jx" = (
+/obj/structure/showcase/machinery/tgmc/synth,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Jz" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/showcase/machinery/tgmc/closet{
+	name = "GHMME Automated Smartgunner Closet"
+	},
+/obj/structure/window/reinforced/spawner/directional/west,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"JB" = (
+/obj/structure/cable,
+/obj/effect/mob_spawn/corpse/human/canterbury/corpsman/heals,
+/obj/effect/decal/cleanable/blood,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"KF" = (
+/obj/machinery/vending/medical,
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"KN" = (
+/obj/effect/turf_decal/box/white{
+	color = "#A56B00"
+	},
+/obj/structure/showcase/machinery/tgmc/weapons,
+/obj/structure/window/reinforced/spawner/directional/east,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Mp" = (
+/obj/structure/showcase/machinery/tgmc/closet,
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Mt" = (
+/obj/machinery/power/shuttle_engine/propulsion/burst/left,
+/turf/open/floor/catwalk_floor/iron_dark/airless,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Nm" = (
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Nu" = (
+/obj/structure/deployable_barricade/metal/plasteel,
+/obj/effect/turf_decal/stripes/white/full{
+	color = "#EFB341"
+	},
+/obj/machinery/button/door/directional/west{
+	name = "External Blast Doors Control";
+	id = "canterbury_engine_aft"
+	},
+/obj/machinery/light/small/directional/west,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Ol" = (
+/obj/structure/chair/comfy/shuttle,
+/turf/open/floor/iron/white,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"Or" = (
+/obj/effect/decal/cleanable/blood/splatter/xeno,
+/obj/item/ammo_box/magazine/m44a{
+	start_empty = 1
+	},
+/obj/effect/decal/cleanable/blood/drip,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"OB" = (
+/obj/effect/turf_decal/tile/dark_blue/half/contrasted{
+	dir = 1
+	},
+/obj/machinery/computer{
+	desc = "The remote controls for the 'Canterbury' shuttle, it seems to not be responding to input anymore.";
+	name = "'Canterbury' shuttle console";
+	icon_keyboard = "tech_key";
+	icon_screen = "shuttle";
+	icon = 'modular_zzplurt/icons/obj/machines/computer.dmi';
+	icon_state = "computer_tabletop";
+	connectable = 0
+	},
+/obj/structure/table/reinforced,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"OD" = (
+/obj/structure/chair/comfy/shuttle/tactical{
+	dir = 1
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"OF" = (
+/turf/template_noop,
+/area/template_noop)
+"OR" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/structure/cable,
+/obj/machinery/power/apc/auto_name/directional/south,
+/obj/structure/rack/shelf,
+/obj/item/lightreplacer,
+/obj/item/stock_parts/power_store/cell/high,
+/obj/machinery/cell_charger,
+/obj/item/radio,
+/obj/item/crowbar,
+/obj/item/storage/toolbox/emergency/turret/mag_fed/outpost/pre_filled,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Pe" = (
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"PU" = (
+/obj/structure/cable,
+/obj/effect/mob_spawn/corpse/human/canterbury/engineer/hannah,
+/obj/effect/decal/cleanable/blood,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Qq" = (
+/obj/effect/spawner/structure/window/reinforced,
+/obj/structure/cable,
+/turf/open/floor/plating,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Qw" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/item/ammo_box/magazine/m44a,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"QY" = (
+/obj/structure/barricade/sandbags,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"RS" = (
+/obj/structure/cable,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"SK" = (
+/obj/effect/turf_decal/tile/dark_blue/half/contrasted,
+/obj/machinery/airalarm/directional/south,
+/obj/machinery/telecomms/relay/preset/ruskie{
+	name = "telecommunication relay";
+	id = "Canterbury Relay"
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"Tt" = (
+/obj/structure/deployable_barricade/metal/plasteel{
+	dir = 8
+	},
+/obj/effect/turf_decal/stripes/white/full{
+	color = "#EFB341"
+	},
+/obj/effect/decal/cleanable/blood/xeno,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"TF" = (
+/obj/effect/turf_decal/tile/blue/fourcorners{
+	color = "#39B590"
+	},
+/obj/structure/showcase/machinery/tgmc/med,
+/obj/item/stack/medical/mesh/advanced{
+	pixel_x = -4;
+	pixel_y = -8
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"Ue" = (
+/turf/closed/wall/r_wall,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"UQ" = (
+/obj/effect/decal/cleanable/blood/splatter,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"UU" = (
+/obj/effect/decal/cleanable/blood/drip,
+/obj/effect/decal/cleanable/blood/trail_holder{
+	dir = 10
+	},
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Vd" = (
+/obj/effect/turf_decal/tile/dark_blue/anticorner/contrasted{
+	dir = 8
+	},
+/obj/machinery/light/directional/west,
+/obj/machinery/firealarm/directional/south,
+/obj/structure/closet/secure_closet/canterbury,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"Vq" = (
+/turf/closed/wall/r_wall,
+/area/ruin/space/has_grav/abandonedcanterbury/medbay)
+"VU" = (
+/obj/effect/turf_decal/box/white{
+	color = "#A56B00"
+	},
+/obj/structure/showcase/machinery/tgmc/closet{
+	name = "GHMME Automated Leader Closet"
+	},
+/obj/structure/window/reinforced/spawner/directional/east,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Wb" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/structure/cable,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Ww" = (
+/obj/effect/turf_decal/tile/dark_blue/half/contrasted{
+	dir = 4
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"Xb" = (
+/obj/effect/turf_decal/stripes/line{
+	dir = 4
+	},
+/obj/machinery/power/smes/super/full,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/herringbone,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Yi" = (
+/obj/effect/turf_decal/tile/dark_blue/half/contrasted,
+/obj/machinery/power/apc/auto_name/directional/south,
+/obj/structure/showcase/machinery/tgmc/closet{
+	name = "GHMME Automated Commander Closet"
+	},
+/obj/structure/cable,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"Zd" = (
+/obj/effect/turf_decal/tile/dark_blue/half/contrasted{
+	dir = 8
+	},
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"Zf" = (
+/obj/effect/turf_decal/tile/dark_red/fourcorners,
+/obj/structure/showcase/machinery/tgmc/equipment{
+	name = "NEXUS Automated Smartgunner Equipment Rack";
+	desc = "An automated smartgunner equipment rack hooked up to a colossal storage unit, or it would have were it not broken beyond repair."
+	},
+/obj/structure/window/reinforced/spawner/directional/east,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Zr" = (
+/obj/effect/turf_decal/box/white{
+	color = "#A56B00"
+	},
+/obj/structure/showcase/machinery/tgmc/equipment,
+/turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ZS" = (
+/obj/machinery/door/airlock/service/glass{
+	name = "Hypersleep"
+	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"ZV" = (
+/obj/effect/decal/cleanable/blood/xeno,
+/obj/structure/barricade/sandbags,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+
+(1,1,1) = {"
+OF
+OF
+OF
+OF
+OF
+OF
+OF
+OF
+iu
+iu
+iu
+iu
+Vq
+Vq
+Vq
+Vq
+Vq
+Vq
+Vq
+Vq
+iu
+"}
+(2,1,1) = {"
+OF
+OF
+OF
+sy
+iu
+gA
+DV
+Ex
+iu
+Ed
+Hx
+Xb
+Vq
+mr
+pd
+CJ
+mS
+Ix
+zT
+Vq
+Mt
+"}
+(3,1,1) = {"
+OF
+OF
+OF
+iu
+jx
+sO
+kn
+Tt
+iu
+kU
+kU
+cB
+Vq
+Pe
+Pe
+lP
+Ol
+vv
+ei
+Vq
+Ja
+"}
+(4,1,1) = {"
+OF
+OF
+OF
+iu
+HO
+zD
+AX
+ni
+iu
+Qq
+xJ
+EX
+Vq
+xH
+zl
+AI
+Jw
+jd
+wE
+Vq
+Ja
+"}
+(5,1,1) = {"
+Ue
+yP
+yP
+Ue
+Ue
+xa
+ZV
+QY
+le
+sG
+AT
+Ad
+Vq
+nm
+cN
+CJ
+pY
+KF
+TF
+Vq
+oa
+"}
+(6,1,1) = {"
+yP
+fp
+Zd
+Vd
+Ue
+Hf
+ux
+qu
+gP
+Qw
+Wb
+OR
+Vq
+EI
+cT
+Vq
+CJ
+CJ
+CJ
+Vq
+iu
+"}
+(7,1,1) = {"
+yP
+OB
+uD
+SK
+Ue
+bO
+UU
+sJ
+jJ
+ws
+dW
+xC
+sn
+aU
+qZ
+sn
+sn
+sn
+sn
+Nu
+tF
+"}
+(8,1,1) = {"
+yP
+ds
+mk
+RS
+kl
+Gh
+PU
+Gh
+Gh
+Gh
+Gh
+nW
+rQ
+JB
+jM
+Nm
+Or
+pv
+DP
+Hl
+vW
+"}
+(9,1,1) = {"
+yP
+GD
+uD
+Yi
+Ue
+Hf
+Nm
+xC
+sJ
+xC
+ws
+Nm
+at
+Fi
+pM
+UQ
+if
+if
+if
+GS
+tF
+"}
+(10,1,1) = {"
+yP
+um
+Ww
+Gj
+Ue
+Hf
+nP
+OD
+Zr
+ih
+KN
+Jf
+xx
+Iw
+ia
+Nm
+IE
+Hp
+Jz
+iu
+iu
+"}
+(11,1,1) = {"
+Ue
+yP
+yP
+Ue
+Ue
+Hf
+uJ
+vz
+iu
+ws
+ws
+uJ
+BI
+iu
+jv
+Nm
+Jx
+qx
+Zf
+iu
+Mt
+"}
+(12,1,1) = {"
+OF
+OF
+OF
+iu
+DS
+Hf
+Nm
+OD
+iu
+VU
+xF
+ZS
+qn
+iu
+Mp
+Nm
+Jf
+Nm
+lg
+iu
+Ja
+"}
+(13,1,1) = {"
+OF
+OF
+OF
+iu
+sv
+vi
+vi
+ai
+iu
+gx
+ws
+ws
+ws
+iu
+fP
+nf
+au
+Hu
+BJ
+iu
+Ja
+"}
+(14,1,1) = {"
+OF
+OF
+OF
+iu
+iu
+ip
+ip
+ip
+iu
+xY
+xY
+xY
+FD
+iu
+aa
+sc
+xN
+ua
+Da
+iu
+oa
+"}
+(15,1,1) = {"
+OF
+OF
+OF
+OF
+OF
+OF
+OF
+OF
+iu
+iu
+iu
+iu
+iu
+iu
+iu
+iu
+iu
+iu
+iu
+iu
+iu
+"}
