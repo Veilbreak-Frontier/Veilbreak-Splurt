@@ -973,7 +973,7 @@
 /obj/structure/table/reinforced,
 /obj/machinery/fax{
 	name = "Combat Information Center Fax Machine";
-	department = "TGS Canterbury"
+	fax_name = "TGS Canterbury"
 	},
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
