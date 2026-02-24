@@ -19,5 +19,6 @@
 /datum/map_template/ruin/space/splurt/canterbury
 	id = "canterbury"
 	suffix = "abandoned_canterbury.dmm"
+	prefix = "_maps/RandomRuins/SpaceRuins/splurt/"
 	name = "Space-Ruin Abandoned Canterbury"
 	description = "A small ship usually used by Terragov's Marine Corps to land on XX-121 infested planets, it seems this particular nuclear mission went awry. Nobody's sure how, but it's machines and objects inside it are rendered inoperable to severe degrees."

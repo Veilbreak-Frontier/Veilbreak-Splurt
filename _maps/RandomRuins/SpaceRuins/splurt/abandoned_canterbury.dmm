@@ -508,16 +508,16 @@
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "tF" = (
-/obj/machinery/door/poddoor{
-	name = "Aft External Blast Door";
-	id = "canterbury_engine_aft"
+/obj/structure/fans/tiny/forcefield{
+	dir = 1
+	},
+/obj/machinery/door/poddoor/preopen{
+	id = "canterbury_engine_aft";
+	name = "Aft External Blast Door"
 	},
 /obj/machinery/door/poddoor/shutters/preopen{
 	dir = 1;
 	name = "Transit Shutters"
-	},
-/obj/structure/fans/tiny/forcefield{
-	dir = 1
 	},
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
@@ -602,20 +602,6 @@
 /obj/structure/deployable_barricade/metal,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
-"vW" = (
-/obj/machinery/door/poddoor/shutters/preopen{
-	dir = 1;
-	name = "Transit Shutters"
-	},
-/obj/structure/fans/tiny/forcefield{
-	dir = 1
-	},
-/obj/machinery/door/poddoor/preopen{
-	id = "canterbury_engine_aft";
-	name = "Aft External Blast Door"
-	},
-/turf/open/floor/iron/smooth_large,
-/area/ruin/space/has_grav/abandonedcanterbury)
 "ws" = (
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
@@ -685,7 +671,7 @@
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "xY" = (
-/obj/machinery/cryopod/canterbury{
+/obj/machinery/cryopod{
 	dir = 8
 	},
 /turf/open/floor/iron/smooth_large,
@@ -864,9 +850,8 @@
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "FD" = (
-/obj/machinery/computer/cryopod/canterbury{
-	dir = 8
-	},
+/obj/machinery/computer/cryopod/directional/east,
+/obj/structure/rack/shelf,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Gh" = (
@@ -1480,7 +1465,7 @@ Or
 pv
 DP
 Hl
-vW
+tF
 "}
 (9,1,1) = {"
 yP

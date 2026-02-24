@@ -62,6 +62,7 @@
 	desc = "You probably shouldn't stick around to see if this is armed.. Or well, it can't be sadly. It's basically useless without the green, red, and blue disks. And it's missing all of them."
 	icon_state = "nuclearbomb_base"
 	anchored = 0
+	resistance_flags = INDESTRUCTIBLE
 
 /obj/machinery/deployable_turret/hmg/canterbury
 	desc = "A heavy caliber machine gun commonly used by Nanotrasen forces, famed for its ability to give people on the receiving end more holes than normal, this one seems to be custom-made, making you unsure of how to undeploy it.."
@@ -109,42 +110,6 @@
 	icon_state = "riot"
 	door_anim_time = 0
 
-/obj/machinery/cryopod/canterbury
-	name = "hypersleep chamber"
-	desc = "A large automated capsule with LED displays intended to put anyone inside into 'hypersleep', a form of non-cryogenic statis used on most ships, linked to a long-term hypersleep bay on a lower level."
-	icon = 'icons/obj/machines/sleeper.dmi'
-	icon_state = "partypod-open"
-	base_icon_state = "partypod"
-	open_icon_state = "partypod-open"
-
-/obj/machinery/computer/cryopod/canterbury
-	name = "hypersleep bay console"
-	desc = "A large console controlling the ship's hypersleep bay. Mainly used for recovery of items from long-term hypersleeping crew."
-	icon = 'icons/obj/machines/computer.dmi'
-	icon_state = "computer"
-	icon_screen = "comm_logs"
-	icon_keyboard = "generic_key"
-
-/obj/machinery/computer/cryopod/canterbury/update_icon_state()
-	. = ..()
-	if(icon_keyboard)
-		if(keyboard_change_icon && (machine_stat & NOPOWER))
-			. += "[icon_keyboard]_off"
-		else
-			. += icon_keyboard
-
-	if(machine_stat & BROKEN)
-		. += mutable_appearance(icon, "[icon_state]_broken")
-		return // If we don't do this broken computers glow in the dark.
-
-	if(machine_stat & NOPOWER) // Your screen can't be on if you've got no damn charge
-		return
-
-	// This lets screens ignore lighting and be visible even in the darkest room
-	if(icon_screen)
-		. += mutable_appearance(icon, icon_screen)
-		. += emissive_appearance(icon, icon_screen, src)
-
 /obj/structure/closet/secure_closet/canterbury/PopulateContents()
 	..()
 	new /obj/item/gun/ballistic/shotgun/riot/sol(src)
@@ -175,33 +140,94 @@
 /obj/effect/mob_spawn/corpse/human/canterbury/dan
 	name = "Pvt. Dan Smith's Corpse"
 	mob_name = "Pvt. Dan Smith"
-	gender = MALE
 	hairstyle = "Slightly Long Hair"
+
+/obj/effect/mob_spawn/corpse/human/canterbury/dan/special(mob/living/carbon/human/H)
+	. = ..()
+	if(!H)
+		return
+
+	// Set gender
+	H.gender = MALE
 
 /obj/effect/mob_spawn/corpse/human/canterbury/kills
 	name = "Pfc. Kills-The-Xenos's Corpse"
 	mob_name = "Pfc. Kills-The-Xenos"
-	gender = MALE
-	mob_type = /mob/living/carbon/human/species/lizard
+
+/obj/effect/mob_spawn/corpse/human/canterbury/kills/special(mob/living/carbon/human/H)
+	. = ..()
+	if(!H)
+		return
+
+	// Set gender
+	H.gender = MALE
+
+	// Set species
+	H.set_species(/datum/species/lizard)
+
+	// Mutant parts
+	H.dna.features["tail"] = "Smooth"
+	H.dna.features["snout"] = "Round"
+	H.dna.features["spines"] = SPRITE_ACCESSORY_NONE
+	H.dna.features["frills"] = SPRITE_ACCESSORY_NONE
+	H.dna.features["horns"] = SPRITE_ACCESSORY_NONE
+
+	// Unified color
+	var/color = "#682f2f"
+	H.dna.features["mcolor"] = color
+	H.dna.features["mcolor2"] = color
+	H.dna.features["mcolor3"] = color
+
+	// Apply appearance
+	H.update_body()
+	H.update_body_parts()
+	H.update_hair()
 
 /obj/effect/mob_spawn/corpse/human/canterbury/engineer/hannah
 	name = "LCpl. Hannah Brown's Corpse"
 	mob_name = "LCpl. Hannah Brown"
-	gender = FEMALE
 	hairstyle = "Pigtails 2"
+
+/obj/effect/mob_spawn/corpse/human/canterbury/engineer/hannah/special(mob/living/carbon/human/H)
+	. = ..()
+	if(!H)
+		return
+
+	// Set gender
+	H.gender = FEMALE
 
 /obj/effect/mob_spawn/corpse/human/canterbury/corpsman/heals
 	name = "Cpl. Heals-The-Wounds's Corpse"
 	mob_name = "Cpl. Heals-The-Wounds"
-	gender = FEMALE
-	mob_type = /mob/living/carbon/human/species/lizard
 
-/obj/effect/mob_spawn/corpse/human/canterbury/synth
-	name = "Synthetic Corpse"
-	hairstyle = "Bald"
-	facial_hairstyle = "Shaved"
-	outfit = /datum/outfit/centcom/canterbury
-	mob_type = /mob/living/carbon/human/species/synth
+/obj/effect/mob_spawn/corpse/human/canterbury/corpsman/heals/special(mob/living/carbon/human/H)
+	. = ..()
+	if(!H)
+		return
+
+	// Set gender
+	H.gender = FEMALE
+
+	// Set species
+	H.set_species(/datum/species/lizard)
+
+	// Mutant parts
+	H.dna.features["tail"] = list(MUTANT_INDEX_NAME = "Smooth")
+	H.dna.features["snout"] = list(MUTANT_INDEX_NAME = "Round")
+	H.dna.features["spines"] = SPRITE_ACCESSORY_NONE
+	H.dna.features["frills"] = SPRITE_ACCESSORY_NONE
+	H.dna.features["horns"] = SPRITE_ACCESSORY_NONE
+
+	// Unified color
+	var/color = "#2cb5b9"
+	H.dna.features["mcolor"] = color
+	H.dna.features["mcolor2"] = color
+	H.dna.features["mcolor3"] = color
+
+	// Apply appearance
+	H.update_body()
+	H.update_body_parts()
+	H.update_hair()
 
 /obj/item/clothing/suit/armor/vest/marine/sulaco/security
 	name = "damaged large tactical armor vest"
