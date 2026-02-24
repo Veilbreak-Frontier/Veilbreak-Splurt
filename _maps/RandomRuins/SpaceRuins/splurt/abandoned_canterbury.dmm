@@ -9,12 +9,13 @@
 /area/ruin/space/has_grav/abandonedcanterbury)
 "ai" = (
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "at" = (
 /obj/structure/bed/medical/emergency,
 /obj/effect/decal/cleanable/blood,
-/obj/effect/mob_spawn/corpse/human/canterbury/kills,
+/obj/effect/mob_spawn/corpse/human/canterbury/jenkins,
 /obj/effect/mapping_helpers/mob_buckler,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
@@ -24,10 +25,12 @@
 	},
 /obj/item/shard,
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "aU" = (
 /obj/effect/decal/cleanable/blood/splatter,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "bO" = (
@@ -38,6 +41,10 @@
 	desc = "Better keep this safe, it's one of the disks needed for the Terran Government branded nuclear fission explosives that take 3 disks, makes you wonder why Space Station 13 doesn't have that kinda technology..";
 	name = "red nuclear authentication disk"
 	},
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"bP" = (
+/obj/effect/decal/cleanable/vomit/old,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "cB" = (
@@ -60,6 +67,7 @@
 /obj/item/emergency_bed{
 	pixel_x = -6
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "cT" = (
@@ -68,6 +76,7 @@
 	color = "#39B590"
 	},
 /obj/effect/decal/cleanable/blood/drip,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "df" = (
@@ -83,18 +92,21 @@
 /obj/machinery/computer/terminal/canterbury/overwatch{
 	connectable = 0
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
 "dW" = (
 /obj/structure/cable,
 /obj/effect/decal/cleanable/blood/xeno,
 /obj/effect/mob_spawn/corpse/xenomorph,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "ei" = (
 /obj/structure/table/reinforced,
 /obj/item/surgery_tray/full,
 /obj/machinery/light/directional/south,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/white,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "en" = (
@@ -102,8 +114,19 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
+"eS" = (
+/obj/structure/deployable_barricade/metal/plasteel{
+	dir = 4
+	},
+/obj/effect/turf_decal/stripes/white/full{
+	color = "#EFB341"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
 "fp" = (
 /obj/effect/turf_decal/tile/dark_blue/anticorner/contrasted{
 	dir = 1
@@ -133,6 +156,7 @@
 /area/ruin/space/has_grav/abandonedcanterbury)
 "gx" = (
 /obj/machinery/light/directional/north,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "gA" = (
@@ -155,10 +179,12 @@
 "gP" = (
 /obj/effect/turf_decal/tile/yellow/fourcorners,
 /obj/structure/window/reinforced/spawner/directional/north,
+/obj/effect/decal/cleanable/blood/oil,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "ia" = (
 /obj/machinery/vending/sustenance,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "if" = (
@@ -199,6 +225,7 @@
 	pixel_x = -9;
 	pixel_y = 7
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "jd" = (
@@ -231,6 +258,12 @@
 /obj/machinery/airalarm/directional/north,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
+"jB" = (
+/obj/structure/cable,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
 "jJ" = (
 /obj/item/gun/ballistic/automatic/ar/modular/m44a{
 	accepted_magazine_type = null;
@@ -238,11 +271,14 @@
 	name = "damaged NT M44A Pulse Rifle";
 	desc = "A specialized Nanotrasen-produced ballistic pulse rifle that uses compressed magazines to output absurd firepower in a compact package, this one seems to have been badly damaged, and bent out of shape. Magazines won't even fit in it anymore.."
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "jM" = (
 /obj/structure/cable,
 /obj/effect/decal/cleanable/blood/drip,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/molten_object/large,
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "kl" = (
@@ -252,6 +288,7 @@
 /obj/structure/cable,
 /obj/effect/mapping_helpers/airlock/access/all/command/general,
 /obj/machinery/door/firedoor,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
 "kn" = (
@@ -266,6 +303,7 @@
 	dir = 8
 	},
 /obj/effect/mapping_helpers/broken_floor,
+/obj/effect/decal/cleanable/molten_object,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "kJ" = (
@@ -274,6 +312,7 @@
 /area/ruin/space/has_grav/abandonedcanterbury)
 "kU" = (
 /obj/effect/turf_decal/tile/yellow/fourcorners,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "le" = (
@@ -298,6 +337,7 @@
 "mk" = (
 /obj/effect/turf_decal/tile/dark_blue/fourcorners,
 /obj/structure/cable,
+/obj/effect/decal/cleanable/blood/splatter,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
 "mr" = (
@@ -308,6 +348,7 @@
 /obj/machinery/sleeper{
 	dir = 4
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "mS" = (
@@ -329,6 +370,7 @@
 /obj/machinery/light/small/directional/south,
 /obj/effect/decal/cleanable/blood/splatter,
 /obj/effect/mapping_helpers/broken_floor,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "nm" = (
@@ -400,6 +442,7 @@
 	pixel_y = -6
 	},
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/white,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "qn" = (
@@ -409,6 +452,7 @@
 "qp" = (
 /obj/structure/chair/comfy/shuttle/tactical,
 /obj/effect/mapping_helpers/broken_floor,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "qu" = (
@@ -425,6 +469,7 @@
 /obj/item/stack/sheet/mineral/titanium{
 	amount = 2
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "qx" = (
@@ -435,6 +480,7 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 4
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "qZ" = (
@@ -451,6 +497,7 @@
 /obj/machinery/light/directional/east,
 /obj/structure/window/reinforced/spawner/directional/south,
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "sn" = (
@@ -472,6 +519,7 @@
 /obj/item/extinguisher,
 /obj/item/storage/belt/utility/full,
 /obj/item/clothing/suit/hazardvest,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "sy" = (
@@ -483,12 +531,14 @@
 "sG" = (
 /obj/effect/turf_decal/tile/yellow/fourcorners,
 /obj/machinery/vending/engivend,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "sJ" = (
 /obj/item/ammo_box/magazine/m44a{
 	start_empty = 1
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "sO" = (
@@ -542,6 +592,7 @@
 	connectable = 0
 	},
 /obj/structure/cable,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
 "ux" = (
@@ -554,6 +605,7 @@
 /obj/structure/chair/comfy/shuttle/tactical{
 	dir = 1
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
 "uJ" = (
@@ -561,6 +613,8 @@
 /obj/structure/deployable_barricade/metal/plasteel{
 	dir = 4
 	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/blood/splatter,
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "uS" = (
@@ -568,6 +622,7 @@
 	dir = 1
 	},
 /obj/item/radio/intercom/directional/south,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "vi" = (
@@ -580,9 +635,9 @@
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "vv" = (
-/obj/effect/mob_spawn/corpse/human/cmo,
 /obj/effect/decal/cleanable/blood,
 /obj/structure/alien/weeds/node,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/white,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "vz" = (
@@ -593,6 +648,14 @@
 /obj/structure/deployable_barricade/metal{
 	dir = 4
 	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"vH" = (
+/obj/structure/chair/comfy/shuttle/tactical{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "vI" = (
@@ -602,7 +665,14 @@
 /obj/structure/deployable_barricade/metal,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
+"wb" = (
+/obj/structure/alien/weeds/node,
+/obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/blood/splatter/xeno,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
 "ws" = (
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "wE" = (
@@ -612,6 +682,7 @@
 	pixel_y = 13
 	},
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/white,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "wL" = (
@@ -623,6 +694,8 @@
 /obj/effect/decal/cleanable/blood/drip,
 /obj/effect/mapping_helpers/broken_floor,
 /obj/structure/barricade/sandbags,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/plasma,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "xx" = (
@@ -632,6 +705,7 @@
 /area/ruin/space/has_grav/abandonedcanterbury)
 "xC" = (
 /obj/effect/decal/cleanable/blood/splatter/xeno,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "xF" = (
@@ -654,6 +728,7 @@
 /obj/machinery/firealarm/directional/north,
 /obj/structure/frame/machine/secured,
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "xJ" = (
@@ -697,6 +772,7 @@
 	pixel_y = 7;
 	pixel_x = -7
 	},
+/obj/effect/decal/cleanable/blood/xeno,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "zD" = (
@@ -710,13 +786,22 @@
 /obj/machinery/computer/crew{
 	dir = 4
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/white,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "Ad" = (
 /obj/structure/reagent_dispensers/fueltank,
 /obj/effect/turf_decal/tile/yellow/fourcorners,
 /obj/machinery/light/small/directional/south,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/fuel_pool,
 /turf/open/floor/iron/smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"AF" = (
+/obj/structure/chair/comfy/shuttle/tactical,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "AI" = (
 /obj/machinery/door/airlock/medical/glass{
@@ -728,7 +813,7 @@
 "AT" = (
 /obj/effect/turf_decal/tile/yellow/fourcorners,
 /obj/structure/cable,
-/obj/structure/alien/weeds/node,
+/obj/effect/decal/cleanable/fuel_pool,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "AX" = (
@@ -738,7 +823,14 @@
 /obj/structure/alien/weeds/node,
 /obj/effect/decal/cleanable/blood,
 /obj/effect/mapping_helpers/broken_floor,
+/obj/effect/decal/cleanable/plasma,
 /turf/open/floor/plating,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"Bm" = (
+/obj/structure/cable,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/blood/splatter,
+/turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "BI" = (
 /obj/structure/showcase/machinery/tgmc/clothes,
@@ -797,11 +889,14 @@
 /obj/structure/fans/tiny/forcefield{
 	dir = 4
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Ed" = (
 /obj/machinery/power/port_gen/pacman/super,
 /obj/structure/cable,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/greenglow/radioactive,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Ex" = (
@@ -836,6 +931,7 @@
 /obj/structure/deployable_barricade/metal{
 	dir = 4
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Fi" = (
@@ -843,10 +939,12 @@
 /obj/item/ammo_box/magazine/smartgun_drum{
 	start_empty = 1
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Fu" = (
 /obj/item/storage/toolbox/emergency/turret/mag_fed/outpost/pre_filled,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "FD" = (
@@ -889,6 +987,12 @@
 	},
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
+"GT" = (
+/obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/blood/splatter,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
 "Hf" = (
 /obj/structure/chair/comfy/shuttle/tactical,
 /turf/open/floor/iron/smooth_large,
@@ -896,6 +1000,7 @@
 "Hl" = (
 /obj/structure/deployable_barricade/metal/plasteel,
 /obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Hp" = (
@@ -903,6 +1008,7 @@
 /obj/structure/window/reinforced/spawner/directional/north,
 /obj/structure/window/reinforced/spawner/directional/west,
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Hu" = (
@@ -913,6 +1019,7 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 1
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Hx" = (
@@ -952,6 +1059,8 @@
 "Ix" = (
 /obj/structure/table/optable,
 /obj/effect/mob_spawn/corpse/human/canterbury/dan,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/blood,
 /turf/open/floor/iron/white,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "IE" = (
@@ -964,6 +1073,7 @@
 	color = "#39B590"
 	},
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "Ja" = (
@@ -971,8 +1081,8 @@
 /turf/open/floor/catwalk_floor/iron_dark/airless,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Jf" = (
-/obj/structure/alien/weeds/node,
 /obj/effect/decal/cleanable/glass,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Jw" = (
@@ -1003,12 +1113,12 @@
 /area/ruin/space/has_grav/abandonedcanterbury)
 "JB" = (
 /obj/structure/cable,
-/obj/effect/mob_spawn/corpse/human/canterbury/corpsman/heals,
 /obj/effect/decal/cleanable/blood,
 /obj/item/stack/medical/suture/medicated{
 	pixel_x = 11;
 	pixel_y = 13
 	},
+/obj/effect/mob_spawn/corpse/human/canterbury/corpsman/trisha,
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "KF" = (
@@ -1030,6 +1140,15 @@
 /obj/effect/decal/cleanable/glass,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
+"Li" = (
+/obj/structure/cable,
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
+"LR" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/catwalk_floor/iron_smooth,
+/area/ruin/space/has_grav/abandonedcanterbury)
 "Mp" = (
 /obj/structure/showcase/machinery/tgmc/closet,
 /obj/effect/turf_decal/tile/dark_red/fourcorners,
@@ -1040,11 +1159,19 @@
 /obj/machinery/power/shuttle_engine/propulsion/burst/left,
 /turf/open/floor/catwalk_floor/iron_dark/airless,
 /area/ruin/space/has_grav/abandonedcanterbury)
+"MT" = (
+/obj/machinery/cryopod{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/smooth_large,
+/area/ruin/space/has_grav/abandonedcanterbury)
 "MV" = (
 /obj/structure/chair/comfy/shuttle/tactical{
 	dir = 8
 	},
 /obj/effect/decal/cleanable/blood/splatter,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Nm" = (
@@ -1064,6 +1191,7 @@
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Ol" = (
 /obj/structure/chair/comfy/shuttle,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/white,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "Or" = (
@@ -1072,6 +1200,7 @@
 	start_empty = 1
 	},
 /obj/effect/decal/cleanable/blood/drip,
+/obj/effect/decal/cleanable/molten_object,
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "OB" = (
@@ -1088,6 +1217,7 @@
 	connectable = 0
 	},
 /obj/structure/table/reinforced,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
 "OD" = (
@@ -1108,12 +1238,15 @@
 /obj/item/lightreplacer,
 /obj/machinery/cell_charger,
 /obj/item/crowbar,
+/obj/effect/decal/cleanable/fuel_pool,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Pe" = (
 /obj/effect/turf_decal/tile/blue/fourcorners{
 	color = "#39B590"
 	},
+/obj/effect/decal/cleanable/blood,
+/obj/effect/mob_spawn/corpse/human/cmo,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/medbay)
 "PU" = (
@@ -1149,6 +1282,7 @@
 	name = "telecommunication relay";
 	id = "Canterbury Relay"
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
 "Tt" = (
@@ -1159,6 +1293,7 @@
 	color = "#EFB341"
 	},
 /obj/effect/decal/cleanable/blood/xeno,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "TF" = (
@@ -1186,6 +1321,7 @@
 /obj/effect/decal/cleanable/blood/trail_holder{
 	dir = 10
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Vd" = (
@@ -1218,6 +1354,8 @@
 	pixel_y = -6;
 	pixel_x = -6
 	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/fuel_pool,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Ww" = (
@@ -1233,6 +1371,7 @@
 	},
 /obj/machinery/power/smes/super/full,
 /obj/structure/cable,
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/dark/herringbone,
 /area/ruin/space/has_grav/abandonedcanterbury)
 "Yi" = (
@@ -1249,6 +1388,7 @@
 /obj/effect/turf_decal/tile/dark_blue/half/contrasted{
 	dir = 8
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/abandonedcanterbury/cockpit)
 "Zf" = (
@@ -1280,6 +1420,8 @@
 /obj/effect/decal/cleanable/blood/xeno,
 /obj/effect/mapping_helpers/broken_floor,
 /obj/structure/barricade/sandbags,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/plasma,
 /turf/open/floor/catwalk_floor/iron_smooth,
 /area/ruin/space/has_grav/abandonedcanterbury)
 
@@ -1431,16 +1573,16 @@ bO
 UU
 sJ
 jJ
-ws
+xC
 dW
 iU
 sn
 aU
 qZ
 vI
-sn
-sn
-sn
+vH
+vH
+vH
 Nu
 tF
 "}
@@ -1450,12 +1592,12 @@ ds
 mk
 RS
 kl
-Gh
+jB
 PU
+Li
 Gh
-Gh
-Gh
-Gh
+Li
+Bm
 nW
 Gh
 JB
@@ -1479,7 +1621,7 @@ xC
 yw
 xC
 KL
-Nm
+LR
 at
 Fi
 pM
@@ -1496,7 +1638,7 @@ um
 Ww
 Gj
 Ue
-Hf
+AF
 nP
 OD
 Zr
@@ -1529,7 +1671,7 @@ df
 BI
 iu
 jv
-rQ
+GT
 Jx
 qx
 Zf
@@ -1553,7 +1695,7 @@ qn
 iu
 Mp
 rQ
-Jf
+wb
 wL
 lg
 iu
@@ -1566,11 +1708,11 @@ OF
 iu
 sv
 vi
-vi
+eS
 vi
 iu
 gx
-ws
+bP
 ws
 ws
 iu
@@ -1594,7 +1736,7 @@ ip
 iu
 xY
 xY
-xY
+MT
 FD
 iu
 aa

@@ -91,12 +91,12 @@
 		<tr>     <td>Greg Tulman</td>     <td>Squad Leader</td>     <td>Dead</td>     <td>Dormitories Recreation</td>     <td> N/A </td>   </tr>   \
 		<tr>     <td>Kade Steel</td>     <td>Squad Smartgunner</td>     <td>Dead</td>     <td>Dormitories Recreation</td>     <td>5</td>   </tr>   \
 		<tr>     <td>Jacob Capone</td>     <td>Squad Smartgunner</td>     <td>Dead</td>     <td>Unknown</td>     <td> N/A </td>   </tr>   \
-		<tr>     <td>Heals-The-Wounds</td>     <td>Squad Corpsman</td>     <td>Dead</td>     <td>TGS Canterbury</td>     <td> N/A </td>   </tr>   \
+		<tr>     <td>Trisha Dolver</td>     <td>Squad Corpsman</td>     <td>Dead</td>     <td>TGS Canterbury</td>     <td> N/A </td>   </tr>   \
 		<tr>     <td>Felix Skewer</td>     <td>Squad Corpsman</td>     <td>Dead</td>     <td>Dormitories Recreation</td>     <td>9</td>   </tr>   \
 		<tr>     <td>HELLFIGHTER-02</td>     <td>Squad Engineer</td>     <td>Dead</td>     <td>Southern Dormitories</td>     <td>26</td>   </tr>   \
 		<tr>     <td>Hannah Brown</td>     <td>Squad Engineer</td>     <td>Dead</td>     <td>TGS Canterbury</td>     <td> N/A </td>   </tr>   \
 		<tr>     <td>Khaled Reed</td>     <td>Squad Marine</td>     <td>Dead</td>     <td>Southeastern Colony</td>     <td>72</td>   </tr>   \
-		<tr>     <td>Kills-The-Xenos</td>     <td>Squad Marine</td>     <td>Dead</td>     <td>TGS Canterbury</td>     <td> N/A </td>   </tr>   \
+		<tr>     <td>Jenkins Rex</td>     <td>Squad Marine</td>     <td>Dead</td>     <td>TGS Canterbury</td>     <td> N/A </td>   </tr>   \
 		<tr>     <td>Sam Henderson</td>     <td>Squad Marine</td>     <td>Dead</td>     <td>Southeastern Colony</td>     <td>68</td>   </tr> \
 		<tr>     <td>Dan Smith</td>     <td>Squad Marine</td>     <td>Dead</td>     <td>TGS Canterbury Medical</td>     <td> N/A </td>   </tr> \
 		<tr>     <td>Percy Gullin</td>     <td>Squad Marine</td>     <td>Dead</td>     <td>Unknown</td>     <td> N/A </td>   </tr> \
@@ -141,6 +141,7 @@
 	name = "Pvt. Dan Smith's Corpse"
 	mob_name = "Pvt. Dan Smith"
 	hairstyle = "Slightly Long Hair"
+	facial_hairstyle = "Watson Mustache"
 
 /obj/effect/mob_spawn/corpse/human/canterbury/dan/special(mob/living/carbon/human/H)
 	. = ..()
@@ -150,38 +151,18 @@
 	// Set gender
 	H.gender = MALE
 
-/obj/effect/mob_spawn/corpse/human/canterbury/kills
-	name = "Pfc. Kills-The-Xenos's Corpse"
-	mob_name = "Pfc. Kills-The-Xenos"
+/obj/effect/mob_spawn/corpse/human/canterbury/jenkins
+	name = "Pfc. Jenkins Rex's Corpse"
+	mob_name = "Pfc. Jenkins Rex"
+	hairstyle = "Slightly Messy"
 
-/obj/effect/mob_spawn/corpse/human/canterbury/kills/special(mob/living/carbon/human/H)
+/obj/effect/mob_spawn/corpse/human/canterbury/jenkins/special(mob/living/carbon/human/H)
 	. = ..()
 	if(!H)
 		return
 
 	// Set gender
 	H.gender = MALE
-
-	// Set species
-	H.set_species(/datum/species/lizard)
-
-	// Mutant parts
-	H.dna.features["tail"] = "Smooth"
-	H.dna.features["snout"] = "Round"
-	H.dna.features["spines"] = SPRITE_ACCESSORY_NONE
-	H.dna.features["frills"] = SPRITE_ACCESSORY_NONE
-	H.dna.features["horns"] = SPRITE_ACCESSORY_NONE
-
-	// Unified color
-	var/color = "#682f2f"
-	H.dna.features["mcolor"] = color
-	H.dna.features["mcolor2"] = color
-	H.dna.features["mcolor3"] = color
-
-	// Apply appearance
-	H.update_body()
-	H.update_body_parts()
-	H.update_hair()
 
 /obj/effect/mob_spawn/corpse/human/canterbury/engineer/hannah
 	name = "LCpl. Hannah Brown's Corpse"
@@ -196,38 +177,18 @@
 	// Set gender
 	H.gender = FEMALE
 
-/obj/effect/mob_spawn/corpse/human/canterbury/corpsman/heals
-	name = "Cpl. Heals-The-Wounds's Corpse"
-	mob_name = "Cpl. Heals-The-Wounds"
+/obj/effect/mob_spawn/corpse/human/canterbury/corpsman/trisha
+	name = "Cpl. Trisha Dolver's Corpse"
+	mob_name = "Cpl. Trisha Dolver"
+	hairstyle = "Pigtails 3"
 
-/obj/effect/mob_spawn/corpse/human/canterbury/corpsman/heals/special(mob/living/carbon/human/H)
+/obj/effect/mob_spawn/corpse/human/canterbury/corpsman/trisha/special(mob/living/carbon/human/H)
 	. = ..()
 	if(!H)
 		return
 
 	// Set gender
 	H.gender = FEMALE
-
-	// Set species
-	H.set_species(/datum/species/lizard)
-
-	// Mutant parts
-	H.dna.features["tail"] = list(MUTANT_INDEX_NAME = "Smooth")
-	H.dna.features["snout"] = list(MUTANT_INDEX_NAME = "Round")
-	H.dna.features["spines"] = SPRITE_ACCESSORY_NONE
-	H.dna.features["frills"] = SPRITE_ACCESSORY_NONE
-	H.dna.features["horns"] = SPRITE_ACCESSORY_NONE
-
-	// Unified color
-	var/color = "#2cb5b9"
-	H.dna.features["mcolor"] = color
-	H.dna.features["mcolor2"] = color
-	H.dna.features["mcolor3"] = color
-
-	// Apply appearance
-	H.update_body()
-	H.update_body_parts()
-	H.update_hair()
 
 /obj/item/clothing/suit/armor/vest/marine/sulaco/security
 	name = "damaged large tactical armor vest"
