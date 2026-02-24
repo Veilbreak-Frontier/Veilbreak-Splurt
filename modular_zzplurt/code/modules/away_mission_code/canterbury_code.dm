@@ -64,7 +64,7 @@
 	anchored = 0
 
 /obj/machinery/deployable_turret/hmg/canterbury
-	desc = "A heavy caliber machine gun commonly used by Nanotrasen forces, famed for its ability to give people on the receiving end more holes than normal, this one seems to be stuck to the floor."
+	desc = "A heavy caliber machine gun commonly used by Nanotrasen forces, famed for its ability to give people on the receiving end more holes than normal, this one seems to be custom-made, making you unsure of how to undeploy it.."
 	can_be_undeployed = FALSE
 
 /obj/machinery/computer/terminal/canterbury/overwatch
@@ -92,7 +92,7 @@
 		<tr>     <td>Jacob Capone</td>     <td>Squad Smartgunner</td>     <td>Dead</td>     <td>Unknown</td>     <td> N/A </td>   </tr>   \
 		<tr>     <td>Heals-The-Wounds</td>     <td>Squad Corpsman</td>     <td>Dead</td>     <td>TGS Canterbury</td>     <td> N/A </td>   </tr>   \
 		<tr>     <td>Felix Skewer</td>     <td>Squad Corpsman</td>     <td>Dead</td>     <td>Dormitories Recreation</td>     <td>9</td>   </tr>   \
-		<tr>     <td>Romeo Jules</td>     <td>Squad Engineer</td>     <td>Dead</td>     <td>Southern Dormitories</td>     <td>26</td>   </tr>   \
+		<tr>     <td>HELLFIGHTER-02</td>     <td>Squad Engineer</td>     <td>Dead</td>     <td>Southern Dormitories</td>     <td>26</td>   </tr>   \
 		<tr>     <td>Hannah Brown</td>     <td>Squad Engineer</td>     <td>Dead</td>     <td>TGS Canterbury</td>     <td> N/A </td>   </tr>   \
 		<tr>     <td>Khaled Reed</td>     <td>Squad Marine</td>     <td>Dead</td>     <td>Southeastern Colony</td>     <td>72</td>   </tr>   \
 		<tr>     <td>Kills-The-Xenos</td>     <td>Squad Marine</td>     <td>Dead</td>     <td>TGS Canterbury</td>     <td> N/A </td>   </tr>   \
@@ -195,6 +195,13 @@
 	mob_name = "Cpl. Heals-The-Wounds"
 	gender = FEMALE
 	mob_type = /mob/living/carbon/human/species/lizard
+
+/obj/effect/mob_spawn/corpse/human/canterbury/synth
+	name = "Synthetic Corpse"
+	hairstyle = "Bald"
+	facial_hairstyle = "Shaved"
+	outfit = /datum/outfit/centcom/canterbury
+	mob_type = /mob/living/carbon/human/species/synth
 
 /obj/item/clothing/suit/armor/vest/marine/sulaco/security
 	name = "damaged large tactical armor vest"
