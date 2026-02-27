@@ -2106,7 +2106,7 @@
 	c_tag = "Evacuation Shuttle External - Forward"
 	},
 /turf/template_noop,
-/area/template_noop)
+/area/shuttle/escape)
 "rS" = (
 /obj/machinery/newscaster/directional/north,
 /obj/effect/turf_decal/siding/wood{
@@ -2941,7 +2941,7 @@
 	c_tag = "Evacuation Shuttle External - Starboard"
 	},
 /turf/template_noop,
-/area/template_noop)
+/area/shuttle/escape)
 "Ay" = (
 /obj/effect/turf_decal/siding/thinplating_new/dark,
 /obj/structure/cable,
@@ -3285,7 +3285,7 @@
 	c_tag = "Evacuation Shuttle External - Port Quarter"
 	},
 /turf/template_noop,
-/area/template_noop)
+/area/shuttle/escape)
 "DV" = (
 /obj/effect/spawner/structure/window/reinforced/shuttle,
 /obj/structure/cable,
@@ -3890,7 +3890,7 @@
 	c_tag = "Evacuation Shuttle External - Starboard Bow"
 	},
 /turf/template_noop,
-/area/template_noop)
+/area/shuttle/escape)
 "Kd" = (
 /obj/machinery/space_heater/wall_mounted/directional/north,
 /obj/effect/turf_decal/siding/wood,
@@ -3981,7 +3981,7 @@
 	c_tag = "Evacuation Shuttle External - Starboard Quarter"
 	},
 /turf/template_noop,
-/area/template_noop)
+/area/shuttle/escape)
 "KF" = (
 /obj/machinery/button/door{
 	id = "vortexevac";
@@ -4562,7 +4562,7 @@
 	c_tag = "Evacuation Shuttle External - Port Bow"
 	},
 /turf/template_noop,
-/area/template_noop)
+/area/shuttle/escape)
 "QO" = (
 /obj/effect/turf_decal/siding/thinplating_new/dark{
 	dir = 1
@@ -4781,7 +4781,7 @@
 	c_tag = "Evacuation Shuttle External - Port"
 	},
 /turf/template_noop,
-/area/template_noop)
+/area/shuttle/escape)
 "SR" = (
 /obj/effect/turf_decal/siding/thinplating_new/dark{
 	dir = 1
