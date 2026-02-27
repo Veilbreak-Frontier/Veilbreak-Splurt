@@ -215,7 +215,7 @@
 
 	var/path
 
-	switch(lowertext(mat))
+	switch(LOWER_TEXT(mat))
 		if("iron")		path = /datum/material/iron
 		if("glass")		path = /datum/material/glass
 		if("plasma")	path = /datum/material/plasma
