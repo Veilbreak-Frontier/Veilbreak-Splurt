@@ -5473,12 +5473,6 @@
 /obj/structure/hedge,
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
-"YW" = (
-/obj/structure/sign/nanotrasen{
-	pixel_x = -32
-	},
-/turf/template_noop,
-/area/template_noop)
 "Za" = (
 /obj/structure/window/reinforced/survival_pod/spawner/directional/west,
 /obj/machinery/suit_storage_unit/engine,
@@ -6547,7 +6541,7 @@ sq
 sq
 sq
 sq
-YW
+dM
 sq
 sq
 sq
