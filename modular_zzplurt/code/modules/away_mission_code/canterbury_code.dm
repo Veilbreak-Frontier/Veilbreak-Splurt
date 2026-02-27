@@ -10,6 +10,7 @@
 /obj/structure/showcase/machinery/tgmc
 	name = "tgmc stuff"
 	desc = "Me when beno major victory."
+	icon_state = "marineuniform-broken"
 	icon = 'modular_zzplurt/icons/obj/tgmc_stuff.dmi'
 
 /obj/structure/showcase/machinery/tgmc/closet
