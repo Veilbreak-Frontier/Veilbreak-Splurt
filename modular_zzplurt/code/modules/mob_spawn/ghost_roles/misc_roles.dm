@@ -57,9 +57,9 @@
 	uniform = /obj/item/clothing/under/rank/centcom/official/turtleneck
 	suit = /obj/item/clothing/suit/armor/vest/alt
 	back = /obj/item/storage/backpack/satchel/leather
-	box = /obj/item/storage/box/survival/centcom
 	shoes = /obj/item/clothing/shoes/laceup
 	ears = /obj/item/radio/headset/headset_cent
+	glasses = /obj/item/clothing/glasses/sunglasses/reagent
 	gloves = /obj/item/clothing/gloves/color/black
 	l_pocket = /obj/item/modular_computer/pda/heads
 	id = /obj/item/card/id/advanced/centcom
