@@ -10515,6 +10515,7 @@
 #include "modular_zzplurt\code\modules\projectiles\projectile\beams.dm"
 #include "modular_zzplurt\code\modules\projectiles\projectile\bullets.dm"
 #include "modular_zzplurt\code\modules\projectiles\projectile\bullets\_incendiary.dm"
+#include "modular_zzplurt\code\modules\projectiles\projectile\bullets\revolver.dm"
 #include "modular_zzplurt\code\modules\projectiles\projectile\bullets\shotgun.dm"
 #include "modular_zzplurt\code\modules\protected_roles\code\antag_restricted_jobs.dm"
 #include "modular_zzplurt\code\modules\quote_of_the_round\ticker.dm"
