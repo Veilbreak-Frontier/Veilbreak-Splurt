@@ -352,6 +352,12 @@
 /obj/machinery/light/cold/dim/directional/north,
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
+"dM" = (
+/obj/structure/sign/nanotrasen{
+	pixel_x = -32
+	},
+/turf/template_noop,
+/area/shuttle/escape)
 "ep" = (
 /obj/structure/table/reinforced/titaniumglass,
 /obj/effect/turf_decal/siding/thinplating_new/dark{
@@ -1044,7 +1050,7 @@
 	pixel_x = 32
 	},
 /turf/template_noop,
-/area/template_noop)
+/area/shuttle/escape)
 "jP" = (
 /obj/effect/turf_decal/siding/thinplating_new/dark{
 	dir = 4
@@ -6473,7 +6479,7 @@ sq
 sq
 sq
 JZ
-YW
+dM
 xW
 VX
 fF
@@ -6527,13 +6533,13 @@ sq
 sq
 sq
 sq
-YW
+dM
 sq
 sq
 Ax
 sq
 sq
-YW
+dM
 sq
 sq
 sq
@@ -6551,7 +6557,7 @@ sq
 sq
 sq
 sq
-YW
+dM
 sq
 sq
 sq
