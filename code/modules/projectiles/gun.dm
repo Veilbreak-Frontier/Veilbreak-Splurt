@@ -221,14 +221,11 @@
 				var/obj/item/bodypart/disloc_target = user.get_active_hand()
 				disloc_target.force_wound_upwards(/datum/wound/blunt/bone/moderate)
 
-		// viewpunch if new shooter
-		if((HAS_TRAIT(user, TRAIT_NEW_SHOOTER)))
-			// apply effective recoil modifier from quirks
+		// viewpunch
+		if(HAS_TRAIT(user, TRAIT_NEW_SHOOTER) || recoil >= 5)
+			// i hope there's a better way to do this - orcawa
 			var/effective_recoil = recoil
 
-			// i hope there's a better way to do this - orcawa
-			if (HAS_TRAIT(user, TRAIT_BALLISTIC_TRAINING))
-				effective_recoil = effective_recoil*0.75
 			if (user.has_quirk(/datum/quirk/oversized))
 				effective_recoil = effective_recoil*0.8
 			if (user.has_quirk(/datum/quirk/tough))
@@ -244,9 +241,6 @@
 				effective_recoil = effective_recoil*1.2
 			else if (user.has_quirk(/datum/quirk/micro))
 				effective_recoil = effective_recoil*1.2
-
-			var/has_quirk_newshoot = user.has_quirk(/datum/quirk/new_shooter)
-
 
 			// apply punch to camera
 			var/client/uc = user.client
