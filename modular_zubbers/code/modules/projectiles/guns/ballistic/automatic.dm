@@ -8,7 +8,7 @@
 	name = "\improper WT-551 Autorifle"
 	desc = "A heavier, bulkier automatic variant of the WT-550, and now with 99% less discombobulation! It's back, baby. Uses 4.6x30mm rounds. Recommended to hold with two hands."
 	icon = 'modular_zubbers/icons/obj/weapons/guns/wt551.dmi'
-	fire_sound = 'modular_zubbers/sound/weapons/gun/wt551/shot.ogg'
+	fire_sound = 'sound/items/weapons/gun/smg/shot_wt.ogg' // used to point to 'modular_zubbers/sound/weapons/gun/wt551/shot.ogg'
 	w_class = WEIGHT_CLASS_BULKY
 	fire_delay = 3
 	recoil = 0.4 // bit less than the wt-550

@@ -83,6 +83,7 @@
 	mag_display = TRUE
 	mag_display_ammo = TRUE
 	empty_indicator = TRUE
+	fire_sound = 'sound/items/weapons/gun/smg/shot_wt.ogg'
 
 /obj/item/gun/ballistic/automatic/wt550/Initialize(mapload)
 	. = ..()
