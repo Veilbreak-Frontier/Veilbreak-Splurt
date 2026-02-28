@@ -1,24 +1,10 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
-"ad" = (
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-4-8";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
+"af" = (
+/obj/machinery/door/airlock/shuttle/ferry{
+	name = "Magnetic interlock control"
 	},
-/obj/structure/fake_stairs/directional/south{
-	icon_state = "stairs-old";
-	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
-	color = "#666666";
-	dir = 4
-	},
-/obj/structure/railing/corner/end/flip{
-	dir = 4;
-	color = "#666666"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
+/turf/open/indestructible/vault,
+/area/trainstation/indoors/station/controll)
 "ag" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/blood/drip{
@@ -35,6 +21,14 @@
 /obj/item/kirbyplants/organic/applebush,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"aE" = (
+/obj/effect/turf_decal/siding/dark,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/table/reinforced,
+/obj/item/storage/fancy/donut_box,
+/obj/effect/spawner/random/engineering/tool,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "aM" = (
 /obj/structure/broken_flooring/pile{
 	color = "#9F9F9F";
@@ -48,18 +42,6 @@
 "aX" = (
 /turf/closed/indestructible/meat,
 /area/trainstation/indoors/station)
-"ba" = (
-/obj/structure/decorative{
-	anchored = 1;
-	name = "flesh cluster";
-	desc = "Something's moving inside...";
-	icon = 'icons/mob/simple/animal.dmi';
-	icon_state = "fleshblob";
-	pixel_x = 6;
-	pixel_y = -1
-	},
-/turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
 "bc" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark,
 /obj/effect/decal/cleanable/blood,
@@ -68,7 +50,7 @@
 	pixel_y = 1
 	},
 /turf/open/floor/stone,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "bi" = (
 /obj/structure/broken_flooring/pile,
 /turf/open/floor/plating,
@@ -109,6 +91,10 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"bB" = (
+/obj/effect/decal/cleanable/blood,
+/turf/open/indestructible/meat,
+/area/trainstation/indoors/station)
 "bD" = (
 /obj/effect/spawner/structure/window/reinforced/indestructible,
 /turf/open/floor/iron/white,
@@ -137,7 +123,7 @@
 	},
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/stone,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "cx" = (
 /obj/effect/spawner/structure/window/reinforced/indestructible,
 /obj/effect/turf_decal/trimline/blue/filled/line{
@@ -181,9 +167,22 @@
 	},
 /turf/open/floor/plating,
 /area/trainstation/indoors/station)
-"cI" = (
-/turf/closed/indestructible/fakedoor,
-/area/trainstation/outdoor/station)
+"cO" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/structure/table/reinforced,
+/obj/item/flashlight/lamp,
+/obj/item/papercutter,
+/obj/item/pen,
+/obj/effect/spawner/random/engineering/tool,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "cX" = (
 /obj/structure/decorative{
 	icon = 'icons/obj/tram/tram_controllers.dmi';
@@ -241,8 +240,29 @@
 	},
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"dD" = (
+/obj/effect/decal/cleanable/blood,
+/obj/structure/decorative{
+	anchored = 1;
+	name = "flesh cluster";
+	desc = "Something's moving inside...";
+	icon = 'icons/mob/simple/animal.dmi';
+	icon_state = "fleshblob";
+	pixel_x = 6;
+	pixel_y = -1
+	},
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
+"dF" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/status_display/evac/directional/east,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
 "dG" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/structure/broken_flooring/pile,
 /turf/open/floor/plating,
 /area/trainstation/indoors/station)
@@ -276,16 +296,6 @@
 	},
 /turf/open/floor/iron/dark/small,
 /area/trainstation/indoors/station)
-"dW" = (
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-1-4";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "dY" = (
 /obj/item/kirbyplants/organic/plant22,
 /turf/open/floor/iron/white,
@@ -299,7 +309,7 @@
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
 "eg" = (
-/mob/living/basic/corrupted_arachnid,
+/mob/living/basic/khara_mutant/reaper,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "ei" = (
@@ -327,9 +337,6 @@
 /turf/open/floor/iron/dark/small,
 /area/trainstation/indoors/station)
 "eu" = (
-/obj/machinery/computer/trainstation_control{
-	dir = 8
-	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "eB" = (
@@ -346,7 +353,7 @@
 "eG" = (
 /obj/effect/decal/cleanable/garbage,
 /turf/open/misc/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "eM" = (
 /obj/effect/turf_decal/trimline/blue/filled/warning{
 	dir = 1
@@ -356,7 +363,7 @@
 "eO" = (
 /obj/structure/holosign/barrier,
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "eS" = (
 /obj/item/shard,
 /obj/effect/turf_decal/trimline/blue/filled/line{
@@ -385,10 +392,6 @@
 /obj/item/kirbyplants/organic/plant21,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"eW" = (
-/obj/structure/flora/tree/dead,
-/turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
 "eZ" = (
 /obj/structure/table,
 /obj/item/reagent_containers/cup/bottle/epinephrine,
@@ -406,19 +409,10 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"fv" = (
-/obj/structure/fence/interlink{
-	dir = 8
-	},
-/obj/effect/turf_decal/siding/wideplating/dark{
-	dir = 1
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "fC" = (
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "fD" = (
 /obj/structure/table,
 /obj/item/storage/box/gloves{
@@ -427,9 +421,9 @@
 /turf/open/floor/iron/dark/small,
 /area/trainstation/indoors/station)
 "fE" = (
-/obj/structure/sign/warning/electric_shock,
-/turf/closed/wall/ice,
-/area/trainstation/outdoor/station)
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/turf/closed/indestructible/rock/snow/ice/ore,
+/area/trainstation/outdoor)
 "fF" = (
 /obj/effect/mob_spawn/corpse/human/doctor,
 /obj/structure/decorative{
@@ -473,6 +467,11 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"fY" = (
+/obj/effect/turf_decal/siding/dark,
+/obj/item/radio/intercom/directional/south,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "gd" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 6
@@ -484,7 +483,7 @@
 "ge" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "gi" = (
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 6
@@ -493,7 +492,7 @@
 /area/trainstation/indoors/station)
 "gj" = (
 /turf/closed/indestructible/rock/snow/ice/ore,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "gq" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -586,25 +585,9 @@
 /obj/item/surgicaldrill,
 /turf/open/floor/iron/dark/small,
 /area/trainstation/indoors/station)
-"hB" = (
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-1-8";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "hD" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/structure/railing{
-	dir = 1;
-	color = "#666666"
-	},
-/obj/effect/turf_decal/stripes/line,
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/turf/closed/wall/city/siding,
+/area/trainstation/indoors/station/controll)
 "hJ" = (
 /obj/effect/turf_decal/trimline/blue/corner{
 	dir = 1
@@ -643,12 +626,11 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "if" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/effect/turf_decal/stripes/line{
+/obj/structure/sneak_pod/iced/enterence{
 	dir = 8
 	},
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
 "ig" = (
 /obj/machinery/light/small/directional/west{
 	dir = 1
@@ -660,12 +642,24 @@
 /obj/structure/rack,
 /turf/open/misc/asphalt,
 /area/trainstation/indoors/station)
+"il" = (
+/obj/item/shard,
+/obj/effect/mob_spawn/ghost_role/flesh_spider,
+/turf/open/floor/iron/white,
+/area/trainstation/indoors/station)
 "in" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 8
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"io" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/machinery/photocopier/prebuilt,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "ix" = (
 /obj/structure/chair/stool/directional/west,
 /turf/open/floor/iron/white,
@@ -699,16 +693,9 @@
 /turf/open/floor/iron/dark/small,
 /area/trainstation/indoors/station)
 "iV" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/machinery/computer/cargo{
-	dir = 4
-	},
-/obj/effect/turf_decal/stripes/line{
-	dir = 8
-	},
-/obj/effect/turf_decal/box,
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/obj/structure/holosign/barrier,
+/turf/open/floor/asphalt,
+/area/trainstation/outdoor)
 "iY" = (
 /obj/effect/decal/cleanable/blood/tracks{
 	dir = 6
@@ -716,6 +703,12 @@
 /obj/structure/barricade/wooden,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"jg" = (
+/obj/structure/chair/office/tactical{
+	dir = 1
+	},
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/trainstation/indoors/station/controll)
 "jh" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -751,6 +744,20 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"jo" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/effect/spawner/random/trash/box,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner,
+/area/trainstation/indoors/station/controll)
+"jt" = (
+/obj/structure/flora/tree/dead/style_random,
+/turf/open/misc/asteroid/snow/indestructible,
+/area/trainstation/outdoor)
 "ju" = (
 /obj/structure/chair/office{
 	dir = 1
@@ -788,10 +795,14 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"jG" = (
+/obj/structure/flora/tree/pine/style_random,
+/turf/open/misc/asteroid/snow/indestructible,
+/area/trainstation/outdoor)
 "jQ" = (
 /obj/effect/decal/cleanable/blood,
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "jR" = (
 /obj/structure/table,
 /obj/item/paper_bin{
@@ -846,7 +857,7 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "kf" = (
-/turf/open/floor/iron/white,
+/turf/closed/indestructible/rock/snow/ice/ore,
 /area/trainstation/indoors/station)
 "ki" = (
 /obj/structure/decorative{
@@ -868,11 +879,20 @@
 /obj/effect/mob_spawn/ghost_role/flesh_spider,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"kn" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/structure/extinguisher_cabinet/directional/west,
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "kp" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 10
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "kq" = (
@@ -892,7 +912,7 @@
 /area/trainstation/indoors/station)
 "kx" = (
 /obj/effect/decal/cleanable/blood,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "kD" = (
@@ -903,39 +923,23 @@
 /obj/structure/barricade/wooden/crude,
 /turf/open/floor/plating,
 /area/trainstation/indoors/station)
-"kI" = (
-/obj/structure/prop/general/highvoltagegrille_off,
-/obj/structure/railing{
-	dir = 1;
-	color = "#666666"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "kO" = (
 /obj/effect/decal/cleanable/dirt/dust,
 /obj/item/healthanalyzer/advanced,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"lg" = (
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-4-8";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/obj/structure/fake_stairs/directional/south{
-	icon_state = "stairs-old";
-	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
-	color = "#666666";
+"kX" = (
+/obj/effect/turf_decal/siding/dark{
 	dir = 8
 	},
-/obj/structure/railing/corner/end{
-	dir = 8;
-	color = "#666666"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
+/obj/structure/closet/secure_closet/personal,
+/obj/effect/spawner/random/weapon,
+/obj/effect/spawner/random/medical/minor_healing,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
+"le" = (
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "lk" = (
 /obj/effect/decal/cleanable/blood/tracks{
 	dir = 4
@@ -947,6 +951,15 @@
 /obj/effect/decal/cleanable/blood/drip,
 /turf/open/floor/plating,
 /area/trainstation/indoors/station)
+"ln" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 9
+	},
+/obj/structure/table/reinforced,
+/obj/item/flashlight/lamp,
+/obj/effect/spawner/random/entertainment/deck,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner,
+/area/trainstation/indoors/station/controll)
 "lB" = (
 /obj/machinery/light/small/directional/west{
 	dir = 2
@@ -988,13 +1001,11 @@
 /turf/open/floor/plating,
 /area/trainstation/indoors/station)
 "lU" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/structure/railing{
-	dir = 9;
-	color = "#666666"
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
 	},
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/turf/closed/indestructible/rock/snow/ice/ore,
+/area/trainstation/outdoor)
 "mf" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_x = 6;
@@ -1009,6 +1020,7 @@
 	pixel_x = 3;
 	pixel_y = 7
 	},
+/mob/living/basic/khara_mutant/reaper,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
 "mk" = (
@@ -1033,14 +1045,6 @@
 /obj/item/folder,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
-"ms" = (
-/obj/structure/prop/general/highvoltagegrille_off,
-/obj/structure/railing{
-	dir = 5;
-	color = "#666666"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "mu" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -1095,10 +1099,7 @@
 /area/trainstation/indoors/station)
 "mX" = (
 /turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
-"mY" = (
-/turf/closed/indestructible/rock/snow/ice/ore,
-/area/trainstation/indoors/station)
+/area/trainstation/outdoor)
 "mZ" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -1112,13 +1113,10 @@
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
 "ni" = (
-/obj/effect/decal/fakelattice,
-/obj/effect/turf_decal/siding/dark,
-/obj/effect/turf_decal/siding/dark{
-	dir = 1
-	},
-/turf/open/misc/asteroid/snow/standard_air,
-/area/trainstation/outdoor/station)
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood,
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
 "nn" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_x = 19;
@@ -1153,6 +1151,16 @@
 	},
 /turf/open/floor/plating,
 /area/trainstation/indoors/station)
+"nH" = (
+/obj/effect/turf_decal/siding/dark/corner,
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 1
+	},
+/area/trainstation/indoors/station/controll)
 "nO" = (
 /obj/item/shard,
 /turf/open/floor/iron/white,
@@ -1173,7 +1181,16 @@
 	pixel_y = -1
 	},
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
+"of" = (
+/obj/structure/rack/shelf,
+/obj/effect/turf_decal/delivery,
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
+/obj/effect/spawner/random/engineering/material_cheap,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "om" = (
 /obj/effect/turf_decal/trimline/blue/filled/warning{
 	dir = 4
@@ -1191,25 +1208,15 @@
 	},
 /turf/closed/wall/city/siding,
 /area/trainstation/indoors/station)
-"ox" = (
-/obj/effect/decal/cleanable/blood,
-/obj/structure/decorative{
-	anchored = 1;
-	name = "flesh cluster";
-	desc = "Something's moving inside...";
-	icon = 'icons/mob/simple/animal.dmi';
-	icon_state = "fleshblob";
-	pixel_x = 6;
-	pixel_y = -1
-	},
-/turf/open/indestructible/meat,
-/area/trainstation/indoors/station)
 "oF" = (
 /obj/structure/prop/vehicle/marshalls{
 	pixel_y = -12
 	},
 /turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
+"oG" = (
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/trainstation/indoors/station/controll)
 "oH" = (
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 4
@@ -1218,7 +1225,7 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "oI" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
@@ -1241,7 +1248,7 @@
 	},
 /obj/effect/decal/cleanable/blood,
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "oU" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -1256,7 +1263,7 @@
 /area/trainstation/indoors/station)
 "pb" = (
 /turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "pc" = (
 /obj/effect/turf_decal/siding{
 	dir = 1;
@@ -1266,7 +1273,7 @@
 	pixel_y = 16
 	},
 /turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "po" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -1279,19 +1286,6 @@
 	},
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
-"pt" = (
-/obj/structure/fake_stairs/directional/south{
-	icon_state = "stairs-old";
-	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
-	color = "#666666";
-	dir = 4
-	},
-/obj/structure/railing/corner/end/flip{
-	dir = 4;
-	color = "#666666"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "pv" = (
 /obj/structure/broken_flooring/pile{
 	color = "#9F9F9F";
@@ -1303,16 +1297,6 @@
 	},
 /turf/open/floor/plating,
 /area/trainstation/indoors/station)
-"py" = (
-/obj/structure/fence/corner{
-	dir = 6
-	},
-/obj/effect/turf_decal/tile/dark/half{
-	dir = 8;
-	alpha = 200
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "pD" = (
 /obj/structure/table,
 /obj/item/storage/box/rxglasses{
@@ -1321,15 +1305,6 @@
 	},
 /turf/open/floor/iron/dark/small,
 /area/trainstation/indoors/station)
-"pE" = (
-/obj/structure/fence/interlink{
-	dir = 8
-	},
-/obj/effect/turf_decal/siding/wideplating/dark/corner{
-	dir = 1
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "pL" = (
 /obj/machinery/computer/dna_console{
 	dir = 4
@@ -1347,10 +1322,6 @@
 /obj/structure/table/optable,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"pZ" = (
-/obj/machinery/door/poddoor/story,
-/turf/closed/wall/city/siding,
-/area/trainstation/outdoor/station)
 "qc" = (
 /obj/structure/table/reinforced,
 /obj/structure/desk_bell{
@@ -1364,22 +1335,28 @@
 /obj/item/pen,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"qj" = (
-/obj/structure/emergency_shield/regenerating{
-	uses_integrity = 0;
-	pixel_y = 32;
-	name = "stasis field";
-	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+"qh" = (
+/obj/effect/decal/cleanable/blood,
+/obj/effect/mob_spawn/corpse/human,
+/mob/living/basic/khara_mutant/arachnid,
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
+"qi" = (
+/obj/structure/prop/city/buildingventbig11_off{
+	name = "Generator";
+	dir = 1;
+	pixel_x = -16
 	},
-/obj/structure/railing/corner/end/flip{
-	dir = 4
+/obj/structure/railing{
+	dir = 2;
+	color = "#666666";
+	pixel_y = 0
 	},
-/obj/structure/prop/general/zcomputermachine{
-	name = "locked down stasis control terminal";
-	desc = "A relatively low-tech solution for internal computing, internal network mail, and logging. This model appears to be quite old."
+/obj/effect/turf_decal/siding/dark{
+	dir = 10
 	},
-/turf/open/floor/iron/dark/textured_large,
-/area/trainstation/outdoor/station)
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
 "qo" = (
 /obj/effect/mob_spawn/corpse/human/doctor,
 /turf/open/indestructible/meat,
@@ -1445,6 +1422,28 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"qR" = (
+/obj/structure/railing/unbreakable{
+	dir = 5
+	},
+/obj/structure/decorative{
+	density = 1;
+	anchored = 1;
+	name = "magnetic stasis emitter";
+	desc = "A machine that somehow fabricates hardlight using electrons. Seems to be impervious to conventional means of damage.";
+	icon = 'icons/obj/machines/modular_shield_generator.dmi';
+	icon_state = "charger_on_closed";
+	dir = 1;
+	uses_integrity = 0
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor)
 "qT" = (
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
@@ -1487,15 +1486,36 @@
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
 "rg" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/structure/railing{
-	dir = 1;
-	color = "#666666"
+/obj/structure/sneak_pod/iced,
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
+"rk" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
 	},
-/obj/effect/turf_decal/trimline/white,
-/obj/machinery/light/floor,
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor)
 "rn" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/vending/cigarette,
@@ -1504,15 +1524,15 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"rq" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/trainstation/indoors/station/controll)
 "rt" = (
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 1
 	},
 /turf/open/floor/iron/white,
-/area/trainstation/indoors/station)
-"rw" = (
-/obj/effect/decal/cleanable/garbage,
-/turf/open/misc/asphalt,
 /area/trainstation/indoors/station)
 "rA" = (
 /obj/effect/turf_decal/trimline/blue/filled/warning,
@@ -1529,9 +1549,6 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"rE" = (
-/turf/closed/indestructible/meat,
-/area/trainstation/outdoor/station)
 "rF" = (
 /obj/machinery/light/small/directional/west{
 	dir = 1
@@ -1547,31 +1564,6 @@
 /obj/effect/spawner/structure/window/reinforced/indestructible,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"rL" = (
-/obj/structure/emergency_shield/regenerating{
-	uses_integrity = 0;
-	pixel_y = 32;
-	name = "stasis field";
-	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
-	},
-/obj/structure/railing/corner/end{
-	dir = 8
-	},
-/turf/open/floor/plating/reinforced,
-/area/trainstation/outdoor/station)
-"rN" = (
-/obj/structure/prop/general/zhalfgrate1{
-	dir = 4
-	},
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-4-8";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "rP" = (
 /obj/structure/rack,
 /obj/item/reagent_containers/spray/cleaner,
@@ -1581,6 +1573,24 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"rS" = (
+/obj/structure/decorative{
+	anchored = 1;
+	name = "flesh cluster";
+	desc = "Something's moving inside...";
+	icon = 'icons/mob/simple/animal.dmi';
+	icon_state = "fleshblob";
+	pixel_x = 6;
+	pixel_y = -1
+	},
+/turf/open/indestructible/meat,
+/area/trainstation/indoors/station)
+"rT" = (
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
+"se" = (
+/turf/closed/wall/city/siding,
+/area/trainstation/outdoor)
 "sg" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_x = 19;
@@ -1609,34 +1619,34 @@
 	},
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
-"sK" = (
-/obj/structure/prop/general/zhalfgrate1{
-	dir = 8
-	},
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-4-8";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "sS" = (
 /obj/effect/decal/cleanable/dirt/dust,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "sV" = (
-/obj/effect/mob_spawn/corpse/human,
-/turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
+/obj/structure/statue/bone/rib,
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
 "sX" = (
-/turf/closed/wall/city/siding,
-/area/trainstation/outdoor/station)
+/mob/living/basic/khara_mutant/reaper,
+/turf/open/floor/asphalt,
+/area/trainstation/outdoor)
 "sY" = (
 /obj/effect/gibspawner/human,
 /turf/open/floor/plating,
 /area/trainstation/indoors/station)
+"tf" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/computer/trainstation_control{
+	dir = 8
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleinvertcorner_side{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "ti" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/turf_decal/trimline/blue/filled/line{
@@ -1652,6 +1662,27 @@
 	},
 /turf/open/misc/asphalt,
 /area/trainstation/indoors/station)
+"tn" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-2-4";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor)
 "to" = (
 /obj/machinery/light/small/directional/west,
 /obj/effect/turf_decal/trimline/blue/filled/line{
@@ -1670,8 +1701,22 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "tE" = (
-/turf/open/floor/plating/cobblestone,
-/area/trainstation/outdoor/station)
+/obj/structure/fake_stairs/directional/north,
+/obj/structure/fake_stairs/directional/north,
+/turf/open/misc/asphalt,
+/area/trainstation/outdoor)
+"tI" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/structure/table/reinforced,
+/obj/item/paper_bin,
+/obj/item/pen,
+/obj/item/folder/blue,
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "tJ" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -1702,9 +1747,6 @@
 "tX" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/white,
-/area/trainstation/indoors/station)
-"ua" = (
-/turf/open/misc/asphalt,
 /area/trainstation/indoors/station)
 "ub" = (
 /obj/effect/turf_decal/trimline/blue/filled/warning{
@@ -1746,6 +1788,16 @@
 /obj/structure/prop/general/hospitalcurtain,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"vb" = (
+/obj/effect/mob_spawn/ghost_role/flesh_spider,
+/turf/open/floor/asphalt,
+/area/trainstation/outdoor)
+"vc" = (
+/obj/structure/window/reinforced/tinted/frosted/spawner/directional/east,
+/obj/structure/window/reinforced/tinted/frosted/spawner/directional/west,
+/obj/structure/grille/indestructible,
+/turf/open/floor/plating,
+/area/trainstation/indoors/station/controll)
 "vd" = (
 /obj/machinery/power/port_gen/pacman/pre_loaded,
 /turf/open/misc/asphalt,
@@ -1756,16 +1808,10 @@
 /obj/item/stack/sheet/mineral/plasma,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"vj" = (
-/obj/structure/fence/corner{
-	dir = 10
-	},
-/obj/effect/turf_decal/tile/dark/half{
-	dir = 4;
-	alpha = 200
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
+"vm" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "vo" = (
 /obj/machinery/door/window/left/directional/north{
 	name = "Pharmacy Desk";
@@ -1781,10 +1827,17 @@
 /obj/effect/turf_decal/trimline/blue/filled/line,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"vy" = (
-/obj/structure/flora/rock/style_2,
-/turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
+"vH" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/spawner/random/entertainment/lighter,
+/obj/effect/spawner/random/medical/medkit,
+/obj/structure/table/reinforced,
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "vI" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -1829,11 +1882,11 @@
 	},
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "vQ" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "vR" = (
 /obj/machinery/light{
 	dir = 1
@@ -1843,7 +1896,11 @@
 /area/trainstation/indoors/station)
 "vY" = (
 /turf/open/misc/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
+"wc" = (
+/obj/structure/sign/warning/electric_shock,
+/turf/closed/wall/city/siding/style/style_1,
+/area/trainstation/indoors/station/controll)
 "wf" = (
 /obj/machinery/light/floor,
 /obj/effect/turf_decal/trimline/blue/filled/line{
@@ -1865,6 +1922,19 @@
 /obj/structure/bed/medical/emergency,
 /turf/open/misc/asphalt,
 /area/trainstation/indoors/station)
+"wp" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 5
+	},
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
+"wC" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 5
+	},
+/obj/effect/spawner/random/trash/graffiti,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
 "wG" = (
 /obj/effect/decal/cleanable/dirt/dust,
 /obj/item/shard,
@@ -1872,19 +1942,34 @@
 /obj/effect/mob_spawn/corpse/human/charredskeleton,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"wN" = (
-/obj/structure/fence/interlink{
-	dir = 2
+"wP" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
 	},
-/obj/effect/turf_decal/tile/dark/half{
-	dir = 8;
-	alpha = 200
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-2-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
 	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor)
 "wV" = (
 /turf/closed/wall/city/siding,
 /area/trainstation/indoors/station)
+"wY" = (
+/obj/structure/flora/bush/snow/style_random,
+/turf/open/misc/asteroid/snow/indestructible,
+/area/trainstation/outdoor)
 "wZ" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 10
@@ -1893,6 +1978,12 @@
 /obj/machinery/light,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"xe" = (
+/obj/machinery/door/airlock/shuttle/ferry{
+	name = "Magnetic interlock control"
+	},
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
 "xj" = (
 /obj/structure/statue/bone/rib{
 	dir = 8
@@ -1912,9 +2003,22 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"xs" = (
-/turf/open/misc/dirt/icy_planet,
-/area/trainstation/outdoor/station)
+"xn" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/obj/structure/prop/general/zcomputermachine_off{
+	desc = "A relatively low-tech solution for internal computing, internal network mail, and logging. This model appears to be quite old.";
+	name = "locked down stasis control terminal"
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor)
 "xt" = (
 /obj/effect/decal/cleanable/blood,
 /obj/effect/gibspawner/human,
@@ -1925,7 +2029,7 @@
 	dir = 4
 	},
 /turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "xP" = (
 /obj/effect/turf_decal/siding{
 	dir = 1;
@@ -1936,43 +2040,7 @@
 	},
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
-"xQ" = (
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-4-8";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
-"xW" = (
-/obj/structure/emergency_shield/regenerating{
-	uses_integrity = 0;
-	pixel_y = 32;
-	name = "stasis field";
-	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
-	},
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-4-8";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/obj/structure/railing/corner/end{
-	dir = 8
-	},
-/obj/structure/prop/general/zcomputermachine_off{
-	desc = "A relatively low-tech solution for internal computing, internal network mail, and logging. This model appears to be quite old.";
-	name = "locked down stasis control terminal"
-	},
-/turf/open/floor/iron/dark/textured_large,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "xY" = (
 /obj/structure/window/reinforced/spawner/directional/east,
 /obj/machinery/smartfridge/chemistry/virology/preloaded,
@@ -2101,10 +2169,15 @@
 	},
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
-"yS" = (
-/obj/structure/fence/door,
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
+"yP" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
+/obj/item/kirbyplants/random,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 1
+	},
+/area/trainstation/indoors/station/controll)
 "yT" = (
 /obj/effect/turf_decal/trimline/blue/corner{
 	dir = 4
@@ -2139,6 +2212,13 @@
 /obj/item/gun/energy/modular_laser_rifle/carbine,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"zt" = (
+/obj/effect/decal/cleanable/blood/drip{
+	pixel_x = 11
+	},
+/mob/living/basic/khara_mutant/reaper,
+/turf/open/floor/iron/white,
+/area/trainstation/indoors/station)
 "zB" = (
 /obj/effect/mob_spawn/corpse/human/charredskeleton,
 /obj/structure/decorative{
@@ -2159,6 +2239,25 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"zI" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/machinery/modular_computer/preset/civilian,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
+"zQ" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 9
+	},
+/obj/machinery/light/red/directional/west,
+/obj/structure/closet/secure_closet/personal,
+/obj/item/clothing/under/syndicate/skyrat/overalls/unarmoured,
+/obj/effect/spawner/random/medical/minor_healing,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/spawner/random/entertainment/musical_instrument,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
 "zZ" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/turf_decal/trimline/blue/filled/line{
@@ -2184,12 +2283,6 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"An" = (
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
 "Aq" = (
 /obj/machinery/light/small/directional/west{
 	dir = 2
@@ -2202,23 +2295,10 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"AD" = (
-/obj/structure/fence/interlink{
-	dir = 2
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/effect/turf_decal/tile/dark/half{
-	dir = 8;
-	alpha = 200
-	},
-/turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
 "AI" = (
 /obj/structure/fake_stairs/directional/north,
 /turf/open/misc/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "AK" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_x = 2;
@@ -2252,7 +2332,7 @@
 /obj/effect/decal/cleanable/blood,
 /obj/effect/mob_spawn/corpse/human,
 /turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "Bc" = (
 /obj/machinery/door/airlock/medical/glass{
 	name = "Subject Containment Area"
@@ -2307,7 +2387,20 @@
 /obj/effect/turf_decal/siding/wideplating_new/dark,
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/stone,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
+"Bz" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/structure/table/reinforced,
+/obj/machinery/fax{
+	fax_name = "Head of Personnel's Office";
+	name = "Head of Personnel's Fax Machine"
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "BB" = (
 /obj/structure/chair/office{
 	dir = 8
@@ -2367,15 +2460,9 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "BX" = (
-/obj/structure/flora/tree/massive/dead/style_random,
-/obj/structure/flora/rock/style_2,
-/turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
-"BY" = (
-/obj/structure/flora/bush/fullgrass/style_random,
-/obj/structure/flora/rock/style_2,
-/turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
+/obj/structure/closet/secure_closet/personal,
+/turf/closed/indestructible/rock/snow/ice/ore,
+/area/trainstation/indoors/station)
 "Ca" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_x = -4;
@@ -2384,14 +2471,9 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "Cj" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/structure/railing{
-	dir = 2;
-	color = "#666666";
-	pixel_y = 0
-	},
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/obj/effect/mob_spawn/ghost_role/flesh_spider,
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
 "Cu" = (
 /obj/machinery/light/floor,
 /obj/effect/decal/cleanable/blood/drip{
@@ -2414,19 +2496,6 @@
 /obj/item/kirbyplants/organic/plant3,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"CH" = (
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-2-4";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
 "CU" = (
 /obj/machinery/computer/operating,
 /turf/open/floor/iron/white,
@@ -2444,7 +2513,7 @@
 "CX" = (
 /obj/structure/closet/crate/trashcart,
 /turf/open/misc/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "CZ" = (
 /obj/structure/table/glass,
 /obj/item/folder/white{
@@ -2452,19 +2521,21 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"Dh" = (
+/obj/effect/turf_decal/siding/dark,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "Dk" = (
-/obj/structure/fake_stairs/directional/south{
-	icon_state = "stairs-old";
-	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
-	color = "#666666";
+/turf/open/floor/stone,
+/area/trainstation/outdoor)
+"Dl" = (
+/obj/effect/turf_decal/siding/dark{
 	dir = 8
 	},
-/obj/structure/railing/corner/end{
-	dir = 8;
-	color = "#666666"
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
 	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
+/area/trainstation/indoors/station/controll)
 "Dp" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 6
@@ -2473,16 +2544,10 @@
 /obj/item/stack/medical/suture,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"Dt" = (
-/obj/structure/prop/general/zhalfgrate1{
-	dir = 8
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "Dw" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/misc/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "DI" = (
 /obj/effect/decal/cleanable/blood,
 /obj/effect/decal/cleanable/blood,
@@ -2523,45 +2588,7 @@
 	pixel_y = -1
 	},
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
-"DW" = (
-/obj/structure/fence/interlink{
-	dir = 2
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/obj/effect/turf_decal/tile/dark/half{
-	dir = 4;
-	alpha = 200
-	},
-/turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
-"DY" = (
-/obj/structure/fence/interlink{
-	dir = 2
-	},
-/obj/effect/turf_decal/tile/dark/half{
-	dir = 4;
-	alpha = 200
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
-"Eo" = (
-/obj/structure/flora/bush/fullgrass/style_random,
-/obj/structure/flora/bush/fullgrass/style_random,
-/obj/structure/flora/rock/style_2,
-/turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
-"Ez" = (
-/obj/structure/fence/interlink{
-	dir = 8
-	},
-/obj/effect/turf_decal/siding/wideplating/dark/corner{
-	dir = 4
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "EB" = (
 /obj/effect/decal/cleanable/blood,
 /obj/item/kirbyplants/organic/plant21,
@@ -2579,7 +2606,7 @@
 	},
 /obj/effect/mob_spawn/corpse/human,
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "EE" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 6
@@ -2594,6 +2621,18 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"EP" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/structure/chair/office/tactical{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "ET" = (
 /obj/machinery/light/small/directional/west{
 	dir = 4
@@ -2616,14 +2655,17 @@
 	},
 /turf/open/misc/asphalt,
 /area/trainstation/indoors/station)
-"Fd" = (
-/obj/effect/turf_decal/trimline/blue/filled/warning,
-/turf/open/floor/iron/white,
-/area/trainstation/indoors/station)
 "Fn" = (
 /obj/machinery/gulag_item_reclaimer,
 /turf/closed/wall/city/siding,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
+"Fr" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
+/obj/effect/spawner/random/structure/crate,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
 "Fs" = (
 /obj/effect/decal/cleanable/blood,
 /obj/vehicle/ridden/trainstation/bike/red{
@@ -2632,7 +2674,7 @@
 	pixel_y = 6
 	},
 /turf/open/floor/asphalt,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "FA" = (
 /obj/machinery/door/airlock/medical/glass{
 	name = "Subject Containment Area"
@@ -2651,7 +2693,7 @@
 	dir = 1
 	},
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "FY" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_x = 2;
@@ -2689,7 +2731,7 @@
 	pixel_y = -1
 	},
 /turf/open/indestructible/meat,
-/area/trainstation/indoors/station)
+/area/trainstation/outdoor)
 "GC" = (
 /obj/structure/mirror/directional/west{
 	pixel_x = 0
@@ -2710,24 +2752,21 @@
 "GL" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark,
 /turf/open/floor/stone,
-/area/trainstation/outdoor/station)
-"GN" = (
-/obj/structure/emergency_shield/regenerating{
-	uses_integrity = 0;
-	pixel_y = 32;
-	name = "stasis field";
-	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+/area/trainstation/outdoor)
+"Ho" = (
+/obj/structure/prop/city/buildingventbig11_off{
+	name = "Generator"
 	},
-/obj/structure/railing/corner/end/flip{
-	dir = 4
+/obj/structure/railing{
+	dir = 2;
+	color = "#666666";
+	pixel_y = 0
 	},
-/turf/open/floor/plating/reinforced,
-/area/trainstation/outdoor/station)
-"GT" = (
-/obj/structure/flora/tree/massive/dead/style_random,
-/obj/structure/flora/bush/fullgrass/style_random,
-/turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
 "Hq" = (
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 8
@@ -2800,36 +2839,12 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/indoors/station)
-"HU" = (
-/obj/structure/emergency_shield/regenerating{
-	uses_integrity = 0;
-	pixel_y = 32;
-	name = "stasis field";
-	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
-	},
-/obj/structure/railing/corner/end{
-	dir = 8
-	},
-/obj/structure/prop/general/zcomputermachine{
-	name = "locked down stasis control terminal";
-	desc = "A relatively low-tech solution for internal computing, internal network mail, and logging. This model appears to be quite old."
-	},
-/turf/open/floor/iron/dark/textured_large,
-/area/trainstation/outdoor/station)
 "HZ" = (
 /obj/machinery/door/airlock/medical/glass{
 	name = "Subject Containment Area"
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"Ib" = (
-/obj/structure/prop/city/buildingventbig11_off{
-	name = "Generator";
-	dir = 1;
-	pixel_x = -16
-	},
-/turf/open/floor/plating/reinforced,
-/area/trainstation/outdoor/station)
 "Ih" = (
 /obj/structure/reagent_dispensers/plumbed,
 /turf/open/misc/asphalt,
@@ -2860,12 +2875,23 @@
 /obj/machinery/light,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"IX" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/structure/filingcabinet/medical,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
+"IY" = (
+/obj/effect/mob_spawn/ghost_role/flesh_spider,
+/turf/open/floor/plating,
+/area/trainstation/indoors/station)
 "Jg" = (
 /obj/structure/window/reinforced/spawner/directional/east,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "Ji" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "Jn" = (
@@ -2877,7 +2903,7 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "Jq" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/structure/broken_flooring/pile{
 	color = "#9F9F9F";
 	desc = null;
@@ -2894,6 +2920,9 @@
 	},
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"JM" = (
+/turf/closed/wall/city/siding/style/style_2,
+/area/trainstation/indoors/station/controll)
 "JZ" = (
 /obj/effect/turf_decal/trimline/blue/corner{
 	dir = 8
@@ -2914,7 +2943,7 @@
 /area/trainstation/indoors/station)
 "Ki" = (
 /turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "Kp" = (
 /obj/structure/window/reinforced/spawner/directional/south,
 /obj/effect/decal/cleanable/blood,
@@ -2932,18 +2961,6 @@
 /obj/structure/barricade/sandbags,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"Kz" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/docking_port/stationary{
-	dir = 8;
-	dwidth = 5;
-	height = 7;
-	name = "Cargo Bay";
-	shuttle_id = "cargo_home";
-	width = 12
-	},
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
 "KB" = (
 /obj/machinery/computer/dna_console,
 /turf/open/floor/iron/white,
@@ -2978,12 +2995,6 @@
 /obj/structure/statue/bone/rib,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
-"KV" = (
-/obj/structure/prop/city/buildingventbig11_off{
-	name = "Generator"
-	},
-/turf/open/floor/plating/reinforced,
-/area/trainstation/outdoor/station)
 "KW" = (
 /obj/structure/closet/shuttle/engivent{
 	pixel_x = 30;
@@ -3001,13 +3012,32 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"Lj" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/effect/turf_decal/stripes/line{
-	dir = 4
+"Lf" = (
+/obj/structure/railing/unbreakable{
+	dir = 9
 	},
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/obj/structure/decorative{
+	density = 1;
+	anchored = 1;
+	name = "magnetic stasis emitter";
+	desc = "A machine that somehow fabricates hardlight using electrons. Seems to be impervious to conventional means of damage.";
+	icon = 'icons/obj/machines/modular_shield_generator.dmi';
+	icon_state = "charger_on_closed";
+	dir = 1;
+	uses_integrity = 0
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor)
+"Lj" = (
+/obj/effect/decal/cleanable/blood,
+/turf/open/space/basic,
+/area/trainstation/outdoor)
 "Ln" = (
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 4
@@ -3057,10 +3087,6 @@
 /obj/effect/mob_spawn/corpse/human/intern,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
-"LP" = (
-/obj/effect/decal/cleanable/blood,
-/turf/open/indestructible/meat,
-/area/trainstation/indoors/station)
 "Mf" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 10
@@ -3083,7 +3109,7 @@
 /obj/effect/turf_decal/siding/wideplating_new/dark,
 /obj/effect/decal/cleanable/blood,
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "Mv" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -3114,10 +3140,24 @@
 	},
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"Mx" = (
+/obj/effect/turf_decal/siding/dark,
+/obj/structure/table/reinforced,
+/obj/machinery/coffeemaker/impressa,
+/obj/item/storage/box/coffeepack,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
+"MD" = (
+/obj/structure/fake_stairs/directional/west,
+/turf/open/misc/asteroid/snow/indestructible,
+/area/trainstation/outdoor)
 "ML" = (
 /obj/structure/barricade/sandbags,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"MP" = (
+/turf/closed/wall/city/siding/style/style_1,
+/area/trainstation/indoors/station/controll)
 "Nd" = (
 /obj/effect/decal/cleanable/blood,
 /obj/item/gun/energy/modular_laser_rifle/carbine,
@@ -3149,14 +3189,24 @@
 	pixel_y = -1
 	},
 /turf/open/floor/stone,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "Ni" = (
 /turf/closed/wall/city,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "Nl" = (
 /obj/structure/rack,
 /turf/open/misc/asphalt,
 /area/trainstation/indoors/station)
+"Nm" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 10
+	},
+/obj/structure/closet/secure_closet/personal,
+/obj/item/clothing/under/syndicate/skyrat/overalls/unarmoured,
+/obj/effect/spawner/random/special_lighter,
+/obj/effect/spawner/random/entertainment/plushie_delux,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
 "Nw" = (
 /obj/structure/deployable_barricade/guardrail{
 	dir = 4
@@ -3164,7 +3214,7 @@
 /obj/effect/decal/cleanable/blood,
 /obj/effect/mob_spawn/corpse/human,
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "NE" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 4
@@ -3177,7 +3227,7 @@
 /obj/effect/decal/cleanable/blood,
 /obj/effect/mob_spawn/corpse/human,
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "NV" = (
 /obj/machinery/holopad,
 /turf/open/floor/iron/white,
@@ -3191,9 +3241,9 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "NY" = (
-/obj/structure/flora/bush/fullgrass/style_random,
+/obj/structure/flora/rock/style_random,
 /turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "NZ" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_y = -1;
@@ -3209,16 +3259,11 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "Oo" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/structure/railing{
-	dir = 2;
-	color = "#666666";
-	pixel_y = 0
+/obj/structure/sneak_pod/iced/enterence{
+	dir = 4
 	},
-/obj/effect/turf_decal/trimline/white,
-/obj/machinery/light/floor,
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
 "Op" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_x = 11
@@ -3239,14 +3284,6 @@
 /obj/item/healthanalyzer/advanced,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"OA" = (
-/obj/structure/prop/general/highvoltagegrille_off,
-/obj/structure/railing{
-	dir = 9;
-	color = "#666666"
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "OB" = (
 /obj/structure/broken_flooring/pile{
 	color = "#9F9F9F";
@@ -3281,6 +3318,11 @@
 	},
 /turf/closed/indestructible/meat,
 /area/trainstation/indoors/station)
+"OH" = (
+/obj/effect/turf_decal/trimline/tram,
+/obj/machinery/light/floor/transport,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "OI" = (
 /obj/effect/decal/cleanable/blood,
 /obj/structure/decorative{
@@ -3304,17 +3346,10 @@
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
 "ON" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/obj/structure/railing{
-	dir = 2;
-	color = "#666666";
-	pixel_y = 0
-	},
-/obj/effect/turf_decal/stripes/line{
-	dir = 1
-	},
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/obj/structure/sign/warning/directional/east,
+/obj/effect/decal/cleanable/blood,
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
 "OQ" = (
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 4
@@ -3322,6 +3357,39 @@
 /obj/structure/prop/general/hospitalcurtain,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"OR" = (
+/turf/closed/indestructible/meat,
+/area/trainstation/outdoor)
+"OT" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/decorative{
+	density = 1;
+	anchored = 1;
+	name = "magnetic stasis emitter";
+	desc = "A machine that somehow fabricates hardlight using electrons. Seems to be impervious to conventional means of damage.";
+	icon = 'icons/obj/machines/modular_shield_generator.dmi';
+	icon_state = "charger_on_closed";
+	dir = 1;
+	uses_integrity = 0
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor)
 "OX" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_x = 6;
@@ -3345,7 +3413,7 @@
 	},
 /obj/effect/decal/cleanable/blood,
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "Pg" = (
 /obj/structure/table/reinforced,
 /obj/item/folder/white{
@@ -3443,10 +3511,12 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"Qx" = (
-/obj/structure/flora/tree/massive/dead/style_random,
-/turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
+"Qy" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 9
+	},
+/turf/open/indestructible/dark/textured,
+/area/trainstation/indoors/station/controll)
 "Qz" = (
 /obj/machinery/light/small/directional/west{
 	dir = 2
@@ -3456,6 +3526,13 @@
 /obj/item/reagent_containers/dropper,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"QC" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/prop/general/highvoltagegrille_off,
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor)
 "QK" = (
 /obj/machinery/light/small/directional/west{
 	dir = 2
@@ -3478,24 +3555,11 @@
 	dir = 1
 	},
 /turf/open/floor/stone,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "Rg" = (
 /obj/item/shard,
 /turf/open/floor/iron/dark/small,
 /area/trainstation/indoors/station)
-"Ri" = (
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-2-8";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/obj/structure/railing{
-	dir = 1
-	},
-/turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
 "Rj" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 6
@@ -3503,6 +3567,11 @@
 /obj/machinery/light/small/directional/west{
 	dir = 4
 	},
+/turf/open/floor/iron/white,
+/area/trainstation/indoors/station)
+"Rt" = (
+/obj/effect/turf_decal/trimline/blue/filled/warning,
+/obj/effect/mob_spawn/ghost_role/flesh_spider,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "RG" = (
@@ -3513,9 +3582,8 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "RJ" = (
-/obj/machinery/door/airlock/centcom,
-/turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/turf/closed/indestructible/fakedoor,
+/area/trainstation/outdoor)
 "RK" = (
 /obj/structure/broken_flooring/pile{
 	color = "#9F9F9F";
@@ -3551,6 +3619,18 @@
 	},
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"Sf" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "Sm" = (
 /obj/machinery/light/small/directional/west{
 	dir = 4
@@ -3592,6 +3672,15 @@
 /obj/effect/gibspawner/human,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"SB" = (
+/obj/structure/rack/shelf,
+/obj/effect/turf_decal/delivery,
+/obj/effect/turf_decal/siding/dark{
+	dir = 10
+	},
+/obj/effect/spawner/random/engineering,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "SJ" = (
 /obj/effect/mob_spawn/corpse/human,
 /obj/structure/decorative{
@@ -3651,6 +3740,10 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"TD" = (
+/obj/effect/decal/cleanable/garbage,
+/turf/open/misc/asphalt,
+/area/trainstation/indoors/station)
 "TH" = (
 /obj/structure/window/reinforced/spawner/directional/south,
 /obj/machinery/light/small/directional/west{
@@ -3658,11 +3751,6 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"TI" = (
-/obj/structure/flora/bush/fullgrass/style_random,
-/obj/structure/flora/bush/fullgrass/style_random,
-/turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
 "TQ" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 1
@@ -3674,33 +3762,43 @@
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"TS" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 5
+	},
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "TW" = (
 /turf/open/misc/asteroid/snow/indestructible,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
+"TY" = (
+/obj/structure/broken_flooring/pile{
+	color = "#9F9F9F";
+	desc = null;
+	name = "tiling"
+	},
+/mob/living/basic/khara_mutant/reaper,
+/turf/open/floor/plating,
+/area/trainstation/indoors/station)
+"TZ" = (
+/obj/effect/turf_decal/siding/dark,
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/microwave/engineering/cell_included,
+/obj/structure/table/reinforced,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 4
+	},
+/area/trainstation/indoors/station/controll)
 "Ub" = (
 /obj/structure/table,
 /obj/item/storage/box/bodybags,
 /turf/open/floor/iron/dark/small,
 /area/trainstation/indoors/station)
-"Ud" = (
-/obj/structure/emergency_shield/regenerating{
-	uses_integrity = 0;
-	pixel_y = 32;
-	name = "stasis field";
-	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
-	},
-/obj/structure/decorative{
-	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
-	icon_state = "l4-4-8";
-	anchored = 1;
-	name = "cable";
-	color = "#222222"
-	},
-/obj/structure/railing/corner/end/flip{
-	dir = 4
-	},
-/turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
 "Uj" = (
 /obj/structure/window/reinforced/spawner/directional/south,
 /obj/item/kirbyplants/organic/plant22,
@@ -3713,7 +3811,7 @@
 	color = "#666666"
 	},
 /turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "Ul" = (
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 8
@@ -3748,37 +3846,15 @@
 	pixel_x = 11;
 	pixel_y = 6
 	},
+/mob/living/basic/khara_mutant/reaper,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
-"UC" = (
-/turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
 "UH" = (
 /obj/machinery/light{
 	dir = 4
 	},
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"UI" = (
-/obj/structure/prop/general/highvoltagegrille_off,
-/obj/structure/decorative{
-	density = 1;
-	anchored = 1;
-	name = "magnetic stasis emitter";
-	desc = "A machine that somehow fabricates hardlight using electrons. Seems to be impervious to conventional means of damage.";
-	icon = 'icons/obj/machines/modular_shield_generator.dmi';
-	icon_state = "charger_on_closed";
-	dir = 1;
-	uses_integrity = 0
-	},
-/obj/structure/emergency_shield/regenerating{
-	uses_integrity = 0;
-	pixel_y = 32;
-	name = "stasis field";
-	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
-	},
-/turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
 "UO" = (
 /obj/structure/table/glass,
 /obj/machinery/reagentgrinder{
@@ -3844,6 +3920,14 @@
 /obj/effect/decal/cleanable/dirt/dust,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"VI" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 4
+	},
+/area/trainstation/indoors/station/controll)
 "VJ" = (
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/airalarm/directional/south{
@@ -3851,6 +3935,17 @@
 	},
 /turf/open/floor/plating,
 /area/trainstation/indoors/station)
+"VN" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/machinery/modular_computer/preset/civilian{
+	dir = 4
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "VU" = (
 /obj/structure/broken_flooring/pile{
 	color = "#9F9F9F";
@@ -3871,11 +3966,14 @@
 	pixel_y = -1
 	},
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/indoors/station)
 "VY" = (
-/obj/effect/turf_decal/lunar_sand/plating,
-/turf/open/floor/plating,
-/area/trainstation/outdoor/station)
+/obj/item/paper/trainstation_password,
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
+"Wb" = (
+/turf/open/misc/asphalt,
+/area/trainstation/indoors/station)
 "Wk" = (
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/iron/white,
@@ -3889,6 +3987,10 @@
 /area/trainstation/indoors/station)
 "Wt" = (
 /turf/open/floor/iron/dark/small,
+/area/trainstation/indoors/station)
+"WA" = (
+/mob/living/basic/khara_mutant/arachnid,
+/turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
 "WD" = (
 /obj/effect/turf_decal/trimline/blue/corner{
@@ -3916,6 +4018,7 @@
 	desc = null;
 	name = "tiling"
 	},
+/mob/living/basic/khara_mutant/reaper,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
 "WT" = (
@@ -3933,7 +4036,7 @@
 "WW" = (
 /obj/effect/spawner/random/structure/billboard/nanotrasen,
 /turf/open/indestructible/train_platform/bottom,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "WY" = (
 /obj/effect/decal/cleanable/blood,
 /obj/structure/decorative{
@@ -3952,6 +4055,14 @@
 /obj/item/clothing/suit/apron/surgical,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"Xj" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleinvertcorner_side{
+	dir = 4
+	},
+/area/trainstation/indoors/station/controll)
 "Xo" = (
 /obj/structure/broken_flooring/pile{
 	color = "#9F9F9F";
@@ -3980,6 +4091,40 @@
 /obj/effect/gibspawner/human,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"XA" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor)
 "XG" = (
 /obj/effect/turf_decal/trimline/blue/corner{
 	dir = 1
@@ -3987,12 +4132,6 @@
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
-"XL" = (
-/obj/structure/prop/general/zhalfgrate1{
-	dir = 4
-	},
-/turf/open/indestructible/train_platform,
-/area/trainstation/outdoor/station)
 "XP" = (
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 8
@@ -4000,11 +4139,9 @@
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 "XR" = (
-/obj/structure/prop/vehicle/marshalls{
-	pixel_y = -12
-	},
-/turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/mob/living/basic/khara_mutant/arachnid,
+/turf/open/floor/iron/white,
+/area/trainstation/indoors/station)
 "XY" = (
 /obj/structure/closet/secure_closet/medical2,
 /obj/item/stack/sticky_tape/surgical,
@@ -4031,6 +4168,14 @@
 /obj/effect/mob_spawn/corpse/human/charredskeleton,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
+"Yh" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/indoors/station/controll)
 "Yl" = (
 /obj/structure/sign/departments/virology,
 /turf/closed/wall/city/siding,
@@ -4055,7 +4200,7 @@
 "YQ" = (
 /obj/effect/mob_spawn/corpse/human,
 /turf/open/indestructible/meat,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
 "YZ" = (
 /obj/structure/sign/directions/medical/directional/east,
 /turf/open/floor/plating,
@@ -4067,16 +4212,24 @@
 "Zr" = (
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/stone,
-/area/trainstation/outdoor/station)
+/area/trainstation/outdoor)
+"Zt" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/machinery/status_display/evac/directional/north,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/indoors/station/controll)
 "ZK" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/item/gun/energy/modular_laser_rifle/carbine,
 /turf/open/indestructible/meat,
 /area/trainstation/indoors/station)
 "ZO" = (
-/obj/effect/spawner/structure/window/reinforced/indestructible,
-/turf/open/floor/plating,
-/area/trainstation/indoors/station)
+/mob/living/basic/khara_mutant/spreader,
+/obj/effect/decal/cleanable/blood,
+/turf/open/indestructible/meat,
+/area/trainstation/outdoor)
 "ZQ" = (
 /obj/effect/turf_decal/trimline/blue/line{
 	dir = 10
@@ -4084,23 +4237,32 @@
 /obj/structure/table_frame,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
+"ZS" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/turf/open/floor/stone,
+/area/trainstation/outdoor)
 "ZW" = (
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/iron/white,
 /area/trainstation/indoors/station)
 
 (1,1,1) = {"
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4137,17 +4299,17 @@ gj
 gj
 "}
 (2,1,1) = {"
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4186,15 +4348,15 @@ gj
 (3,1,1) = {"
 Ki
 mX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4235,13 +4397,13 @@ Ki
 mX
 mX
 mX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4282,13 +4444,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4329,13 +4491,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4376,13 +4538,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4423,13 +4585,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4470,13 +4632,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4517,13 +4679,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4564,13 +4726,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4611,13 +4773,13 @@ WW
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4658,13 +4820,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4705,13 +4867,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4752,13 +4914,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4799,13 +4961,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4846,13 +5008,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4893,13 +5055,13 @@ WW
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4940,13 +5102,13 @@ Ki
 mX
 mX
 mX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 gj
 gj
@@ -4987,11 +5149,18 @@ Ki
 mX
 mX
 mX
-sX
-sX
-sX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+se
+se
+se
 Fn
-sX
+se
 wV
 wV
 wV
@@ -5019,22 +5188,22 @@ wV
 wV
 wV
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (21,1,1) = {"
 Ki
 mX
 mX
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 vY
@@ -5066,22 +5235,22 @@ cx
 XP
 Ok
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (22,1,1) = {"
 Ki
 mX
 mX
 vQ
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 vY
@@ -5095,40 +5264,40 @@ Wt
 Wt
 wV
 ds
-kf
+eu
 sS
-kf
-kf
+eu
+eu
 cc
 wh
 uk
 uk
-kf
+eu
 kO
-kf
+eu
 Hr
 cc
-kf
+eu
 rK
-kf
+eu
 vx
 dZ
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (23,1,1) = {"
 Ki
 mX
 mX
 vQ
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 vY
@@ -5155,27 +5324,27 @@ cB
 yh
 Ln
 VD
-kf
+eu
 WT
 nO
 vx
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (24,1,1) = {"
 Ki
 mX
 mX
 vQ
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 Dw
@@ -5189,7 +5358,7 @@ lE
 Wt
 nC
 dH
-kf
+eu
 XP
 eS
 XP
@@ -5207,22 +5376,22 @@ Pg
 hc
 vx
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (25,1,1) = {"
 Ki
 mX
 mX
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 eG
 vY
@@ -5236,9 +5405,9 @@ Rg
 iI
 wV
 KY
-kf
+eu
 tX
-kf
+eu
 SW
 ei
 ET
@@ -5247,29 +5416,29 @@ Am
 ET
 SW
 Am
-kf
-kf
+eu
+eu
 tX
 gD
 rB
 vx
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (26,1,1) = {"
 Ki
 mX
 mX
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 Dw
 vY
@@ -5283,9 +5452,9 @@ Wt
 Wt
 hT
 uU
-kf
+eu
 mA
-kf
+eu
 jz
 jz
 jz
@@ -5296,27 +5465,27 @@ jz
 jz
 tX
 Ca
-kf
+eu
 bD
-kf
+eu
 vx
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (27,1,1) = {"
 Ki
 mX
 mX
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 Dw
 vY
@@ -5331,8 +5500,8 @@ bE
 wV
 rt
 Ac
-kf
-kf
+eu
+eu
 PR
 kc
 eV
@@ -5341,29 +5510,29 @@ kc
 eV
 PR
 kc
-kf
-kf
+eu
+eu
 UY
 bD
 Aw
 vx
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (28,1,1) = {"
 Ki
 mX
 mX
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 vY
@@ -5390,27 +5559,27 @@ BS
 BS
 oH
 Yo
-kf
+eu
 qc
 BB
 vx
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (29,1,1) = {"
 ge
 mX
 vQ
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 vY
@@ -5418,8 +5587,8 @@ vY
 wV
 HJ
 bn
-ua
-ua
+Wb
+Wb
 HJ
 vd
 wV
@@ -5437,27 +5606,27 @@ DN
 DN
 Hq
 jS
-kf
+eu
 Ts
-kf
+eu
 vx
 dZ
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (30,1,1) = {"
 Ki
 mX
 vQ
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 Dw
@@ -5471,40 +5640,40 @@ rH
 vd
 wV
 rt
-kf
+eu
 sS
 fM
 ag
 wG
 Zc
 uf
-kf
-kf
-kf
+eu
+eu
+eu
 sS
 cc
-kf
-kf
+eu
+eu
 bD
-kf
+eu
 vx
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (31,1,1) = {"
 Ki
 mX
 vQ
 vQ
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 vY
@@ -5536,22 +5705,22 @@ vo
 BS
 gi
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (32,1,1) = {"
 Ki
 mX
 mX
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 vY
@@ -5562,7 +5731,7 @@ rH
 jv
 jv
 rH
-ua
+Wb
 wV
 wV
 wV
@@ -5583,22 +5752,22 @@ wV
 wV
 wV
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (33,1,1) = {"
 Ki
 mX
 mX
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 vY
@@ -5611,41 +5780,41 @@ jv
 rH
 Nl
 wV
-mY
-mY
-mY
-mY
+kf
+kf
+kf
+kf
 wV
 SJ
 Uo
-kf
+eu
 wV
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (34,1,1) = {"
 Ki
 mX
 mX
 mX
+mX
+mX
+mX
+mX
+mX
+mX
 AI
+tE
 AI
 vY
 vY
@@ -5656,42 +5825,42 @@ rH
 HS
 HS
 HS
-ua
+Wb
 wV
-mY
-mY
-mY
-mY
+kf
+kf
+kf
+kf
 wV
 ki
 QL
-kf
+eu
 wV
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (35,1,1) = {"
 Ki
 mX
 mX
 mX
+mX
+mX
+mX
+mX
+mX
+mX
+AI
 AI
 AI
 vY
@@ -5699,108 +5868,108 @@ CX
 CX
 wV
 tl
-ua
+Wb
 jv
 jv
 HS
 Ih
 cX
-mY
-mY
-mY
-mY
+kf
+kf
+kf
+kf
 bH
 YZ
 LE
 qq
 wV
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (36,1,1) = {"
-DW
-DY
-vj
+mX
+mX
+mX
 vQ
-wV
-wV
-wV
-wV
-wV
+mX
+mX
+mX
+mX
+mX
+mX
+se
+se
+se
+se
+se
+se
 wV
 cX
-ua
+Wb
 jv
 jv
 rH
-ua
+Wb
 wV
-mY
-mY
-mY
-mY
+kf
+kf
+kf
+kf
 wV
 wV
 kD
 wV
 wV
-mY
-mY
-mY
+kf
+kf
+kf
 wV
 wV
 wV
 wV
 wV
 wV
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (37,1,1) = {"
-rL
-Ib
-fv
+Ki
 mX
-wV
-mY
-mY
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
+kf
+kf
 wV
 wo
 HS
 rH
 rH
-rw
+TD
 wV
-mY
-mY
+kf
+kf
 wV
 wV
 qw
@@ -5817,28 +5986,28 @@ Iy
 zm
 CZ
 wV
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (38,1,1) = {"
-UI
-OA
-fv
+Ki
 mX
-wV
-mY
-mY
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
+kf
+kf
 wV
 mE
 ik
@@ -5846,12 +6015,12 @@ Nl
 ik
 mE
 wV
-mY
-mY
+kf
+kf
 wV
 tp
 jj
-kf
+eu
 nO
 bV
 WD
@@ -5865,25 +6034,25 @@ xt
 Qz
 wV
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (39,1,1) = {"
-qj
-lg
-fv
+Ki
 mX
-wV
-mY
-mY
-wV
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 aX
 aX
 aX
@@ -5897,11 +6066,11 @@ wV
 wV
 Bp
 hJ
-kf
+eu
 kq
 VU
 pN
-kf
+eu
 JZ
 KG
 wV
@@ -5912,25 +6081,25 @@ yk
 OB
 Ji
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (40,1,1) = {"
-An
-sK
-pE
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 aX
 zB
 zB
@@ -5940,16 +6109,16 @@ Hw
 QL
 mO
 QL
-kf
+eu
 Vh
 Pa
 uf
-nO
-VU
+il
+TY
 QL
-kf
+eu
 fr
-kf
+eu
 FB
 Yl
 qt
@@ -5959,25 +6128,25 @@ xY
 RK
 Jg
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (41,1,1) = {"
-CH
-hB
-yS
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 aX
 HE
 lk
@@ -5990,8 +6159,8 @@ fr
 rA
 nC
 Kx
-kf
-kf
+eu
+eu
 NV
 kq
 nO
@@ -5999,39 +6168,39 @@ QL
 Ji
 SP
 zh
-kf
-kf
+eu
+eu
 zq
 gM
 Iy
 ju
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (42,1,1) = {"
-xQ
-XL
-Ez
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 aX
 Sz
 RP
 Qr
 QL
 fr
-kf
+eu
 jY
 QL
 QL
@@ -6040,38 +6209,38 @@ TQ
 QL
 nO
 kq
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
 BR
 wV
 DT
 VU
 Kp
 DI
-kf
+eu
 Aq
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (43,1,1) = {"
-xW
-pt
-fv
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 wV
 tM
 vJ
@@ -6085,11 +6254,11 @@ wV
 wV
 cG
 jV
-kf
+eu
 fr
 Lr
 VU
-kf
+eu
 RU
 Rj
 wV
@@ -6100,83 +6269,83 @@ Sp
 LB
 vi
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (44,1,1) = {"
-UI
-kI
-fE
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 wV
 QL
 uz
 VU
 wV
-GA
+rS
 po
 qT
 DT
 GC
-mY
+kf
 wV
 en
 yT
 QL
-kf
-kf
+eu
+eu
 EK
 gd
 wV
 wV
 wV
 wV
-kf
+eg
 Wk
 Wk
-kf
+eu
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (45,1,1) = {"
-Ud
-Dk
-fv
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 KW
 LD
 fO
 QL
 Ux
 po
-kf
+eu
 LL
 XY
 bH
-mY
+kf
 wV
 wV
 Tf
@@ -6189,43 +6358,43 @@ wV
 ig
 Sb
 wV
-kf
-kf
+eu
+eu
 hc
 wV
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (46,1,1) = {"
-xQ
-Dt
-pE
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 wV
 AW
 iY
 Wk
 HZ
-kf
+eu
 CU
-kf
-kf
+eu
+eu
 wV
-mY
-mY
-mY
+kf
+kf
+kf
 wV
 wV
 FA
@@ -6240,26 +6409,26 @@ bV
 kx
 Iy
 wV
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (47,1,1) = {"
-Ri
-dW
-yS
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 wV
 VU
 Op
@@ -6270,9 +6439,9 @@ va
 WZ
 lD
 wV
-mY
-mY
-mY
+kf
+kf
+kf
 wV
 vI
 Yc
@@ -6286,30 +6455,30 @@ wV
 yr
 tT
 wV
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
 "}
 (48,1,1) = {"
-An
-rN
-Ez
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 aX
 Wk
-kf
+eu
 Cv
 aX
 wV
@@ -6332,35 +6501,35 @@ Sm
 wV
 wV
 wV
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
 "}
 (49,1,1) = {"
-HU
-ad
-fv
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 aX
 Qt
 fr
 ul
 KW
-mY
-mY
+kf
+kf
 aX
 hi
 qW
@@ -6377,84 +6546,84 @@ TH
 Uw
 wV
 wV
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (50,1,1) = {"
-UI
-ms
-fv
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 wV
 VJ
 QL
 Op
 wV
-mY
-mY
+kf
+kf
 aX
-GA
+rS
 pL
 bk
 bV
 vK
 Wl
+eu
+IY
+eu
+wV
+wV
+wV
+wV
 kf
-QL
 kf
-wV
-wV
-wV
-wV
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (51,1,1) = {"
-GN
-KV
-fv
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 wV
 ny
 ny
 QK
 wV
-mY
-mY
+kf
+kf
 ov
 Bo
 Bj
@@ -6463,49 +6632,49 @@ oI
 jn
 aX
 Wk
-kf
-kf
+eu
+eu
 wV
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (52,1,1) = {"
-AD
-wN
-py
+Ki
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 aX
 NZ
-kf
+eu
 VU
 aX
-mY
-mY
+kf
+kf
 aX
 hP
 AW
-KE
+zt
 sY
 RG
 nC
@@ -6513,42 +6682,42 @@ eM
 bi
 bi
 wV
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (53,1,1) = {"
 Ki
 mX
 mX
 mX
-wV
-mY
-mY
-mY
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 OF
 rF
 Ji
 AW
 aX
-mY
-mY
+kf
+kf
 aX
 KB
 Mg
@@ -6558,91 +6727,91 @@ AX
 aX
 LD
 KE
+eu
+wV
+wV
+wV
+wV
+wV
+wV
+wV
+wV
 kf
-wV
-wV
-wV
-wV
-wV
-wV
-wV
-wV
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
 "}
 (54,1,1) = {"
-TW
-TW
-tE
-tE
-wV
-wV
-wV
-wV
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
+gj
+kf
+kf
+kf
 wV
 sg
-kf
-kf
+eu
+eu
 aX
-mY
-mY
+kf
+kf
 aX
 Iy
 WQ
 ks
-ox
-LP
+VX
+bB
 Ux
-kf
+eu
 Xo
 Wk
 wV
 nW
-kf
-kf
+eu
+eu
 kl
 QL
 gW
 wV
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
 "}
 (55,1,1) = {"
-TW
-tE
-tE
-tE
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
-mY
-mY
-mY
+kf
+kf
+kf
 wV
 Ql
-kf
+eu
 AK
 wV
-mY
-mY
+kf
+kf
 aX
 rb
 du
@@ -6651,45 +6820,45 @@ jR
 mk
 Ux
 Wk
-kf
+eu
 Vu
 wV
 vR
 QL
 AW
 DT
-kf
-kf
+eu
+eu
 wV
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
 "}
 (56,1,1) = {"
-TW
-tE
-tE
-TW
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
-mY
-mY
-mY
+kf
+kf
+kf
 wV
 Op
 aX
 eB
 wV
-mY
-mY
+kf
+kf
 wV
 aX
 aX
@@ -6706,90 +6875,90 @@ dC
 ZK
 iO
 AW
-kf
+eu
 wV
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
 "}
 (57,1,1) = {"
-TW
-tE
-xs
-TW
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
-mY
-mY
-mY
+kf
+kf
+kf
 wV
 cH
 LE
-kf
-wV
-mY
-mY
-wV
-mY
-mY
-mY
-mY
-mY
+eu
 wV
 kf
+kf
+wV
+kf
+kf
+kf
+kf
+kf
+wV
+eu
 KE
 Wk
 aX
 BC
 BP
-ox
+VX
 sY
 xt
 Bs
 aX
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
 "}
 (58,1,1) = {"
-eW
-xs
-xs
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
-gj
-mY
-mY
-mY
+kf
+kf
+kf
 wV
 wV
 nC
 Vh
 wV
-mY
-mY
+kf
+kf
 wV
-mY
-mY
-mY
-mY
-mY
+kf
+kf
+kf
+kf
+kf
 wV
 NV
 eT
@@ -6797,31 +6966,31 @@ QL
 aX
 BC
 Ou
-LP
+bB
 UA
 QL
-kf
+eu
 aX
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
 "}
 (59,1,1) = {"
-TW
-tE
-xs
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
-gj
-mY
+kf
 wV
 wV
 ka
@@ -6832,11 +7001,11 @@ wZ
 aX
 wV
 wV
-mY
-mY
-mY
-mY
-mY
+kf
+kf
+kf
+kf
+kf
 wV
 LD
 QL
@@ -6845,30 +7014,30 @@ wV
 yt
 HA
 WK
-kf
+eu
 LE
 Wk
 aX
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
 "}
 (60,1,1) = {"
-TW
-tE
-xs
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
-gj
-mY
+kf
 wV
 iy
 XG
@@ -6878,16 +7047,16 @@ VU
 WD
 hY
 aX
-mY
-mY
-mY
-mY
-mY
-mY
+kf
+kf
+kf
+kf
+kf
+kf
 wV
 uf
 Io
-ox
+VX
 wV
 wV
 bt
@@ -6899,21 +7068,21 @@ wV
 wV
 wV
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (61,1,1) = {"
-NY
-xs
-xs
-gj
+Ki
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+se
 gj
 wV
 yB
@@ -6922,7 +7091,7 @@ no
 Ux
 QL
 Wk
-kf
+eu
 AO
 kp
 wV
@@ -6936,78 +7105,78 @@ ML
 Nf
 Wk
 CD
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
 Uo
 CD
-kf
+eu
 mL
-kf
+eu
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (62,1,1) = {"
-NY
-tE
-xs
-gj
+Ki
+hD
+MP
+hD
+hD
+hD
+MP
+hD
+mX
+mX
+se
 gj
 wV
 pY
 AW
 QL
 Bc
-kf
+eu
 Vd
 WY
 QL
 BR
 wV
 EB
-kf
-kf
-GA
+eu
+eu
+rS
 hi
 jh
 BD
 qT
 QL
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
 QL
 QL
 Jq
 QL
-kf
-kf
+eu
+eu
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (63,1,1) = {"
-TW
-xs
-xs
-gj
+Lf
+JM
+Qy
+qi
+zQ
+kX
+Nm
+hD
+mX
+mX
+se
 gj
 wV
 ub
@@ -7016,45 +7185,45 @@ wV
 wV
 fF
 yj
-GA
+rS
 QL
-Fd
+Rt
 nC
 qu
 QL
-kf
+eu
 BL
 BD
 km
 mf
 mZ
 FY
-kf
+eu
 pv
 pv
-kf
-kf
-kf
+eu
+eu
+eu
 QL
-kf
-kf
-kf
+eu
+eu
+eu
 dZ
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (64,1,1) = {"
-TW
-tE
-xs
-gj
+xn
+JM
+wp
+Ho
+wC
+dF
+Fr
+hD
+mX
+mX
+se
 gj
 wV
 Lt
@@ -7067,46 +7236,46 @@ OI
 mp
 HP
 wV
-kf
+eu
 Ji
 xk
 Am
 Wk
-kf
+eu
 gq
 tJ
-kf
-kf
+eu
+eu
 UH
-kf
+eu
 LE
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (65,1,1) = {"
-NY
-xs
-xs
-TW
+tn
+MP
+hD
+hD
+xe
+hD
+hD
+MP
+hD
+mX
+se
 gj
 wV
 dN
 bv
-kf
+eu
 ZW
 AW
 aX
@@ -7134,70 +7303,70 @@ wV
 wV
 wV
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (66,1,1) = {"
-TW
-tE
-tE
-xs
+QC
+hD
+ln
+tI
+Dl
+kn
+VI
+SB
+wc
+mX
+se
 gj
-mY
+gj
 wV
 GE
 yT
 Ux
-kf
-kf
+eu
+eu
 RU
 NX
 aX
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
-kf
+eu
 Uo
-kf
+eu
 wV
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (67,1,1) = {"
-TW
-xs
-xs
-xs
+rk
+hD
+zI
+jg
+rq
+oG
+le
+Dh
+af
+mX
+se
 gj
-mY
+gj
 wV
 wV
 Bm
@@ -7207,185 +7376,183 @@ NE
 Dp
 aX
 wV
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
-kf
-kf
+eu
+eu
 wV
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (68,1,1) = {"
-eW
-tE
-xs
-tE
-TW
+OT
+JM
+cO
+VN
+Bz
+Yh
+nH
+of
+hD
+mX
+se
 gj
 gj
-mY
+kf
+kf
 wV
 wV
 wV
 wV
 wV
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
+kf
+kf
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
 Wk
 Hx
 wV
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (69,1,1) = {"
-TW
-xs
-xs
-tE
-xs
+XA
+hD
+jo
+EP
+Xj
+Dl
+TZ
+hD
+MP
+mX
+se
 gj
 gj
 gj
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
-kf
-kf
+eu
+eu
 wV
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (70,1,1) = {"
-TW
-tE
-xs
-xs
-xs
-TW
+QC
+hD
+IX
+oG
+le
+oG
+Mx
+hD
+mX
+mX
+se
 gj
 gj
 gj
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
-mY
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 km
-kf
-kf
+eu
+eu
 aX
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (71,1,1) = {"
-eW
-TW
-tE
-xs
-tE
-xs
+wP
+hD
+io
+rq
+OH
+oG
+aE
+MP
+mX
+mX
+se
 gj
 gj
 gj
@@ -7400,40 +7567,39 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
-mY
-mY
-mY
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
 qT
+eu
+aX
 kf
-aX
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (72,1,1) = {"
-NY
-TW
-tE
-xs
-xs
-xs
-TW
+xn
+hD
+Zt
+oG
+vm
+oG
+fY
+JM
+MD
+MD
+se
 gj
 gj
 gj
@@ -7447,43 +7613,46 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
-mY
-mY
-mY
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
 qT
 IQ
 aX
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (73,1,1) = {"
-NY
-TW
-TW
-tE
-xs
-tE
-NY
-eW
-TW
-sX
+qR
+JM
+TS
+vH
+tf
+Sf
+yP
+hD
+MD
+MD
+se
+se
+se
+se
+se
+se
+se
 gj
 gj
 gj
@@ -7494,43 +7663,43 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
-mY
-mY
-mY
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
 HA
 qT
 aX
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (74,1,1) = {"
-NY
-TW
-eW
-tE
-tE
-xs
-xs
-TW
-NY
-sX
+Ki
+hD
+hD
+vc
+vc
+vc
+hD
+MP
+vY
+vY
+vY
+vY
+vY
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7541,43 +7710,43 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
-mY
-mY
-mY
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
 JD
 qT
 aX
-mY
-mY
-mY
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
+kf
+kf
+kf
 "}
 (75,1,1) = {"
-NY
 TW
 TW
 TW
-tE
-xs
-tE
-xs
-NY
-sX
+TW
+TW
+TW
+TW
+TW
+vY
+vY
+vY
+vY
+vY
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7588,9 +7757,9 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
+gj
+kf
+kf
 wV
 wV
 wV
@@ -7602,29 +7771,29 @@ aX
 aX
 wV
 wV
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
 "}
 (76,1,1) = {"
-NY
 TW
-eW
 TW
-xs
-xs
-tE
-xs
-NY
-sX
+TW
+TW
+TW
+TW
+TW
+TW
+vY
+vY
+vY
+vY
+vY
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7635,43 +7804,43 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
+gj
+kf
+kf
 wV
 tO
-kf
-kf
-kf
+eu
+eu
+eu
 Uo
-kf
-kf
-kf
+eu
+eu
+eu
 tO
 wV
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
 "}
 (77,1,1) = {"
-NY
-NY
 TW
 TW
-tE
-xs
-xs
-tE
 TW
-sX
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7682,43 +7851,43 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
+gj
+kf
+kf
+wV
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 wV
 kf
 kf
 kf
 kf
-kf
-kf
-kf
-kf
-kf
-wV
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (78,1,1) = {"
-NY
-NY
 TW
 TW
-tE
-tE
-xs
-tE
-xs
-sX
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7729,43 +7898,43 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
-wV
+gj
 kf
+kf
+wV
+eu
 Wk
-kf
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 wV
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
 "}
 (79,1,1) = {"
-NY
 TW
 TW
 TW
 TW
-tE
-xs
-tE
-xs
-sX
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7776,43 +7945,43 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
+gj
+kf
+kf
+wV
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 wV
 kf
 kf
 kf
 kf
-kf
-kf
-kf
-kf
-kf
-wV
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (80,1,1) = {"
 TW
+jt
 TW
-NY
 TW
-eW
-tE
-tE
-xs
-xs
-sX
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7823,43 +7992,43 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
+gj
+kf
+kf
+wV
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 wV
 kf
 kf
 kf
 kf
-kf
-kf
-kf
-kf
-kf
-wV
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (81,1,1) = {"
-NY
-eW
-NY
+wY
+wY
 TW
 TW
 TW
-tE
-tE
-xs
-sX
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7870,43 +8039,43 @@ gj
 gj
 gj
 gj
-mY
-mY
-mY
+gj
+kf
+kf
 wV
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
 Wk
-kf
+eu
 qT
 wV
-mY
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
+kf
 "}
 (82,1,1) = {"
+wY
+TW
+TW
+jG
 TW
 TW
 TW
-NY
+jt
 TW
 TW
-tE
-tE
-xs
-sX
+TW
+TW
+TW
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7917,43 +8086,43 @@ gj
 gj
 gj
 gj
-mY
-mY
+gj
+kf
 wV
 wV
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 qT
 aX
 aX
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (83,1,1) = {"
+jG
 TW
 TW
 TW
 TW
-NY
 TW
-tE
-xs
-tE
-sX
+wY
+wY
+TW
+TW
+TW
+TW
+TW
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -7964,43 +8133,43 @@ gj
 gj
 gj
 gj
-mY
-mY
+gj
+kf
 wV
-kf
-kf
+eu
+eu
 tO
 Wk
-kf
-kf
-kf
+eu
+eu
+eu
 tO
-kf
+eu
 xj
 qT
 aX
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (84,1,1) = {"
 TW
+jG
+TW
+jG
+TW
+wY
+wY
+TW
+TW
+jG
 TW
 TW
 TW
-NY
-TW
-tE
-xs
-tE
-sX
+vY
+vY
+vY
+se
 gj
 gj
 gj
@@ -8011,31 +8180,24 @@ gj
 gj
 gj
 gj
-mY
-mY
+gj
+kf
 wV
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 qT
 qT
 hi
 aX
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (85,1,1) = {"
 TW
@@ -8043,48 +8205,60 @@ TW
 TW
 TW
 TW
+jG
+jG
 TW
 TW
-tE
-tE
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-mY
-mY
+TW
+TW
+TW
+TW
+vY
+vY
+vY
+se
+se
+se
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+kf
 aX
 qT
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
 Wk
-kf
+eu
 qT
-GA
+rS
 qT
 aX
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+BX
+kf
 "}
 (86,1,1) = {"
+jG
+TW
+TW
+jG
+TW
+TW
+TW
+jG
+TW
+jG
+TW
+jG
 TW
 TW
 TW
@@ -8092,44 +8266,32 @@ TW
 TW
 TW
 TW
-TW
-xs
-xs
-tE
-tE
-tE
-TW
-TW
-TW
-TW
-TW
-TW
-sX
-mY
-mY
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+kf
 aX
 qT
-kf
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 hi
 qT
 qT
 aX
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (87,1,1) = {"
 TW
@@ -8141,9 +8303,6 @@ TW
 TW
 TW
 TW
-xs
-xs
-xs
 TW
 TW
 TW
@@ -8151,34 +8310,49 @@ TW
 TW
 TW
 TW
-sX
-mY
-mY
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+kf
 aX
 xj
-kf
+eu
 Wk
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
 qT
 xj
 qT
 aX
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (88,1,1) = {"
+jG
+TW
+jG
+TW
+jG
+TW
+jG
+TW
+TW
+jG
+TW
+jG
 TW
 TW
 TW
@@ -8186,561 +8360,549 @@ TW
 TW
 TW
 TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-sX
-mY
-mY
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+kf
 aX
-GA
+rS
 qT
-kf
-kf
-kf
+eu
+eu
+eu
 Wk
-kf
-kf
+eu
+eu
 ML
-GA
+rS
 km
 aX
-mY
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
+kf
 "}
 (89,1,1) = {"
 TW
 TW
-lU
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-Cj
-ni
 TW
-sX
-mY
-mY
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+kf
 aX
-GA
+rS
 ML
 ML
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
 uf
 ML
-GA
+rS
 aX
 aX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (90,1,1) = {"
 TW
+wY
+wY
 TW
-rg
-Lj
-Lj
-Lj
-Lj
-Lj
-Lj
-Lj
-Lj
-Lj
-Lj
-Lj
-Lj
-Lj
-Oo
-ni
 TW
-sX
-mY
+TW
+jG
+TW
+jG
+TW
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 aX
 qT
 qT
 ML
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
 ML
 hi
 aX
 aX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (91,1,1) = {"
+jG
 TW
 TW
-hD
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-ON
-ni
 TW
-sX
-mY
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+jt
+TW
+TW
+jt
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
 qT
 Pu
-GA
-kf
-kf
-kf
-kf
-kf
-kf
+rS
+eu
+eu
+eu
+eu
+eu
+eu
 qT
-GA
+rS
 qT
 aX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (92,1,1) = {"
 TW
 TW
-hD
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-ON
-ni
 TW
-sX
-mY
+wY
+wY
+TW
+TW
+TW
+jG
+TW
+jG
+TW
+wY
+TW
+TW
+wY
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 km
 qT
 hi
 qT
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
 qT
 KP
 qT
 aX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (93,1,1) = {"
 TW
+wY
+wY
 TW
-hD
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-ON
-ni
 TW
-sX
-mY
+TW
+jG
+TW
+jG
+TW
+wY
+wY
+TW
+TW
+jG
+TW
+TW
+jG
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
-GA
+rS
 qT
 qT
-kf
-kf
-kf
+eu
+eu
+eu
 Wk
-kf
-kf
-kf
+eu
+eu
+eu
 hi
 qT
 aX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (94,1,1) = {"
 TW
+wY
+wY
 TW
-hD
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-ON
-ni
 TW
-sX
-mY
+TW
+jG
+TW
+jG
+TW
+jG
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
-GA
+rS
 qT
 qT
 tO
-kf
-kf
 eu
-kf
+eu
+eu
+eu
 tO
-kf
-kf
+XR
+eu
 qT
-GA
+rS
 aX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (95,1,1) = {"
 TW
 TW
-hD
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-ON
-ni
 TW
-sX
-mY
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+jG
+TW
+jG
+jG
+TW
+jG
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
-GA
+rS
 hi
-qT
-kf
-kf
-kf
+WA
+eu
+eu
+eu
 Wk
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
 qT
 xj
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (96,1,1) = {"
+jG
+TW
+jG
+TW
+jG
+TW
+jG
 TW
 TW
-hD
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-ON
-ni
+jG
 TW
-sX
-mY
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 aX
 qT
 xj
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 qT
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (97,1,1) = {"
 TW
 TW
-hD
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-Kz
-VY
-VY
-VY
-VY
-VY
-ON
-ni
 TW
-sX
-mY
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+jG
+TW
+TW
+jG
+TW
+TW
+jG
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 wV
 qT
 qT
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 qT
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (98,1,1) = {"
 TW
+wY
+wY
 TW
-rg
-if
-if
-if
-if
-if
-if
-if
-iV
-if
-if
-if
-if
-if
-Oo
-ni
 TW
-sX
-mY
+TW
+jG
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+wV
+eu
+eu
+eu
+Wk
+eu
+eu
+eu
+eu
+eu
+Wk
+eu
+eu
+eu
 wV
 kf
 kf
-kf
-Wk
-kf
-kf
-kf
-kf
-kf
-Wk
-kf
-kf
-kf
-wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (99,1,1) = {"
 TW
 TW
 Uk
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-VY
-Cj
-ni
+jG
 TW
-sX
-mY
+TW
+wY
+wY
+TW
+TW
+TW
+jG
+TW
+jG
+TW
+TW
+jG
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+wV
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 wV
 kf
 kf
-kf
-kf
-kf
-kf
-eg
-kf
-kf
-kf
-kf
-kf
-kf
-wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (100,1,1) = {"
 TW
@@ -8752,93 +8914,101 @@ TW
 TW
 TW
 TW
+wY
+wY
 TW
 TW
 TW
+jG
+TW
+jG
 TW
 TW
-TW
-TW
-TW
-TW
-TW
-sX
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 wV
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
+eu
 wV
 kf
 kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-kf
-wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (101,1,1) = {"
 TW
 TW
 TW
+jt
+TW
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+jG
 TW
 TW
 TW
 TW
 TW
 TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-sX
-mY
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 wV
-kf
-kf
-kf
-kf
-kf
+eu
+eu
+eu
+eu
+eu
 qT
 qT
 qT
 qT
-kf
-kf
+eu
+eu
 Wk
-kf
+eu
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (102,1,1) = {"
 TW
 TW
+wY
+wY
+TW
+TW
+jt
+TW
+TW
+jG
 TW
 TW
 TW
@@ -8848,43 +9018,41 @@ TW
 TW
 TW
 TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-sX
-mY
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 wV
 tO
-kf
-kf
-kf
-kf
-qT
+eu
+eu
+eu
+Wk
+bB
 qT
 KP
+bB
 qT
 qT
-qT
-kf
-kf
+eu
+eu
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (103,1,1) = {"
 TW
+jt
+wY
+TW
+TW
+wY
+wY
 TW
 TW
 TW
@@ -8894,71 +9062,72 @@ TW
 TW
 TW
 TW
-TW
-TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-mY
+se
+se
+se
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 wV
 Wk
-kf
-kf
+eu
+eu
 qT
+bB
 qT
+qo
+bB
 qT
+bB
 qT
-qT
-qT
-qT
-qT
-kf
+eu
 tO
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (104,1,1) = {"
+wY
+wY
+jG
+TW
+TW
+wY
+TW
+TW
+jG
 TW
 TW
 TW
+jt
 TW
 TW
 TW
-TW
-TW
-TW
-TW
-TW
-TW
-sX
+se
 gj
 gj
 gj
 gj
 gj
 gj
-sX
-mY
+gj
+gj
+gj
+gj
+gj
 wV
-kf
-kf
+eu
+eu
 qT
 xj
 qT
-qT
+bB
 qT
 qT
 qT
@@ -8967,112 +9136,107 @@ qT
 xj
 qT
 wV
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
+kf
 "}
 (105,1,1) = {"
+wY
+TW
+TW
+jG
+TW
+jG
 TW
 TW
 TW
 TW
 TW
+wY
+wY
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+wV
+eu
+qT
+qT
+qT
+qT
+qT
+qT
+qT
+qT
+qT
+qT
+qT
+qT
+wV
+wV
+wV
+"}
+(106,1,1) = {"
+jG
 TW
 TW
 TW
 TW
 TW
+jG
+TW
+jG
+TW
+wY
+wY
 TW
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+jG
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+wV
+wV
+wV
+wV
+wV
+QL
+QL
+QL
+QL
+QL
+wV
+wV
+wV
 wV
 wV
 kf
-qT
-qT
-qT
-qT
-qT
-qT
-qT
-qT
-qT
-qT
-qT
-qT
-wV
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-"}
-(106,1,1) = {"
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-TW
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-wV
-wV
-wV
-wV
-dZ
-ZO
-ZO
-ZO
-ZO
-ZO
-dZ
-wV
-wV
-wV
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+kf
 "}
 (107,1,1) = {"
 TW
+jG
+jG
 TW
 TW
 TW
@@ -9080,12 +9244,17 @@ TW
 TW
 TW
 TW
+jG
+jG
 TW
 TW
 TW
 TW
-TW
-sX
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9110,13 +9279,6 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (108,1,1) = {"
 TW
@@ -9124,15 +9286,22 @@ TW
 TW
 TW
 TW
+jG
+TW
+TW
+jG
 TW
 TW
 TW
+jG
 TW
+jG
 TW
-TW
-TW
-TW
-sX
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9157,15 +9326,13 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (109,1,1) = {"
+jG
+TW
+jG
+TW
+jG
 TW
 TW
 TW
@@ -9177,9 +9344,11 @@ TW
 TW
 TW
 TW
-TW
-TW
-sX
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9204,29 +9373,25 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (110,1,1) = {"
 TW
 TW
 TW
 TW
-Qx
+TW
+jG
+TW
+jG
+TW
+jG
+TW
+jG
 TW
 TW
+jG
 TW
-TW
-TW
-TW
-TW
-TW
-sX
+se
 gj
 gj
 gj
@@ -9237,13 +9402,17 @@ gj
 gj
 gj
 gj
-rE
+gj
+gj
+gj
+gj
+OR
 Bv
 YQ
 jQ
 xP
 fC
-ba
+GA
 Pb
 Ni
 gj
@@ -9251,15 +9420,13 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (111,1,1) = {"
+jG
+TW
+TW
+wY
+wY
 TW
 TW
 TW
@@ -9271,9 +9438,11 @@ TW
 TW
 TW
 TW
-TW
-TW
-sX
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9284,7 +9453,7 @@ gj
 gj
 gj
 Ni
-rE
+OR
 EC
 jQ
 YQ
@@ -9298,13 +9467,6 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (112,1,1) = {"
 TW
@@ -9313,14 +9475,21 @@ TW
 TW
 TW
 TW
+wY
+wY
 TW
 TW
 TW
+jG
+TW
+jG
 TW
 TW
-TW
-TW
-sX
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9335,18 +9504,11 @@ RJ
 Ml
 xL
 eO
-ba
+GA
 jQ
 oR
 QX
-rE
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+OR
 gj
 gj
 gj
@@ -9354,20 +9516,27 @@ gj
 gj
 "}
 (113,1,1) = {"
-NY
-NY
-eW
+TW
+wY
+wY
 TW
 TW
 TW
+jG
+TW
+jG
+TW
+jG
 TW
 TW
+jG
 TW
 TW
-TW
-TW
-TW
-sX
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9378,22 +9547,15 @@ gj
 gj
 gj
 Ni
-rE
+OR
 Ml
 pb
 eO
 Nw
-UC
+rT
 oR
 Ng
-rE
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+OR
 gj
 gj
 gj
@@ -9401,20 +9563,27 @@ gj
 gj
 "}
 (114,1,1) = {"
-TW
-NY
-TW
+wY
 TW
 TW
 TW
+jG
 TW
-TW
-TW
+jG
 TW
 TW
 TW
 TW
-sX
+TW
+TW
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9425,22 +9594,15 @@ gj
 gj
 gj
 Ni
-rE
+OR
 bc
-UC
+rT
 xL
 oF
 vL
-NH
+qh
 cf
-rE
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+OR
 gj
 gj
 gj
@@ -9448,20 +9610,23 @@ gj
 gj
 "}
 (115,1,1) = {"
-vy
+jG
+TW
+jG
+TW
+TW
+wY
+wY
 TW
 TW
 TW
+jG
 TW
+jG
 TW
+jG
 TW
-TW
-TW
-Qx
-TW
-TW
-TW
-sX
+se
 gj
 gj
 gj
@@ -9472,22 +9637,19 @@ gj
 gj
 gj
 gj
-rE
+gj
+gj
+gj
+gj
+OR
 DV
-UC
+rT
 pb
-UC
-UC
+rT
+rT
 eO
 Ng
-rE
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+OR
 gj
 gj
 gj
@@ -9495,20 +9657,27 @@ gj
 gj
 "}
 (116,1,1) = {"
-NY
 TW
 TW
-Qx
+jt
 TW
 TW
-TW
-TW
-eW
-TW
+jG
+jG
 TW
 TW
 TW
-sX
+TW
+TW
+TW
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9523,18 +9692,11 @@ Ni
 GL
 DV
 YQ
-UC
-VX
+rT
+dD
 Fs
 QX
-rE
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+OR
 gj
 gj
 gj
@@ -9542,20 +9704,27 @@ gj
 gj
 "}
 (117,1,1) = {"
-TW
-TW
-TW
-vy
-NY
-NY
+jG
 TW
 TW
 TW
 TW
 TW
 TW
+jG
 TW
-sX
+TW
+TW
+wY
+wY
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9571,17 +9740,10 @@ GL
 YQ
 jQ
 YQ
-UC
+rT
 Ba
 cf
-rE
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+OR
 gj
 gj
 gj
@@ -9590,19 +9752,26 @@ gj
 "}
 (118,1,1) = {"
 TW
-TW
-NY
-TW
-vy
+jG
 TW
 TW
+jG
 TW
 TW
 TW
 TW
 TW
 TW
-sX
+jG
+jG
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9627,29 +9796,29 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (119,1,1) = {"
-NY
-TW
-NY
-TW
-vy
+jG
 TW
 TW
-NY
 TW
+wY
+TW
+jG
 TW
 TW
 TW
 TW
-sX
+TW
+TW
+jG
+TW
+TW
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9674,29 +9843,29 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 "}
 (120,1,1) = {"
 TW
 TW
+jG
+TW
+jG
+TW
+TW
+TW
+jG
+TW
+jG
 TW
 TW
 TW
 TW
 TW
-TW
-TW
-TW
-TW
-Qx
-TW
-sX
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9716,13 +9885,6 @@ pb
 pb
 QX
 Ni
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 gj
 gj
 gj
@@ -9733,17 +9895,24 @@ gj
 TW
 TW
 TW
-NY
-NY
-TW
-TW
-NY
-Qx
-NY
 TW
 TW
 TW
-sX
+jG
+TW
+wY
+TW
+wY
+TW
+jG
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9763,13 +9932,6 @@ pb
 YQ
 QX
 Ni
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 gj
 gj
 gj
@@ -9780,17 +9942,24 @@ gj
 TW
 TW
 TW
-BY
+jG
+jG
 TW
 TW
 TW
+jG
+TW
+jG
 TW
 TW
 TW
+jG
 TW
-TW
-TW
-sX
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9807,16 +9976,9 @@ pb
 pb
 pc
 nX
-ba
+GA
 QX
 Ni
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 gj
 gj
 gj
@@ -9826,18 +9988,25 @@ gj
 (123,1,1) = {"
 TW
 TW
-Qx
-NY
-TW
-TW
-TW
-TI
-NY
 TW
 TW
 TW
 TW
-sX
+jG
+TW
+TW
+TW
+TW
+TW
+jG
+TW
+wY
+TW
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9853,17 +10022,10 @@ GL
 pb
 pb
 pb
-UC
-oF
+rT
+pb
 QX
 Ni
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 gj
 gj
 gj
@@ -9871,20 +10033,27 @@ gj
 gj
 "}
 (124,1,1) = {"
-TW
-TW
-TW
+jG
+jG
+jG
 NY
+jG
 TW
 TW
-NY
-NY
+jG
+jG
+jG
+jG
 TW
 TW
 TW
+jG
 TW
-TW
-sX
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9897,20 +10066,13 @@ gj
 gj
 Ni
 GL
-ba
+GA
 pb
 pb
 pb
 pb
 QX
 Ni
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 gj
 gj
 gj
@@ -9919,19 +10081,26 @@ gj
 "}
 (125,1,1) = {"
 TW
-eW
-TW
-eW
-TW
-vy
-NY
-NY
+wY
+wY
 TW
 TW
 TW
 TW
 TW
-sX
+TW
+TW
+TW
+TW
+jG
+TW
+TW
+TW
+se
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9944,20 +10113,13 @@ gj
 gj
 Ni
 GL
-nX
 pb
-pc
 pb
-sV
+Ba
+pb
+pb
 QX
 Ni
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 gj
 gj
 gj
@@ -9966,22 +10128,29 @@ gj
 "}
 (126,1,1) = {"
 TW
+jG
+jG
+TW
+TW
+jG
+TW
+TW
+jG
 NY
-NY
+jG
 TW
 TW
-vy
+jG
+jG
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
 gj
 gj
 gj
@@ -9991,20 +10160,13 @@ gj
 gj
 Ni
 GL
-XR
-ba
 pb
+pb
+Lj
 pb
 pb
 QX
 Ni
-gj
-gj
-gj
-gj
-gj
-gj
-gj
 gj
 gj
 gj
@@ -10013,22 +10175,22 @@ gj
 "}
 (127,1,1) = {"
 TW
+jG
+NY
+jG
 TW
+TW
+jG
 NY
 TW
 TW
-vy
 TW
-cI
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -10037,21 +10199,21 @@ gj
 gj
 gj
 gj
+fE
+gj
+gj
+gj
+gj
+gj
+Ni
 GL
 pb
-YQ
 pb
+pc
 pb
 pb
 QX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
 gj
 gj
 gj
@@ -10060,22 +10222,22 @@ gj
 "}
 (128,1,1) = {"
 TW
+wY
 TW
 TW
 TW
 TW
-Qx
+wY
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+TW
+jG
+TW
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -10084,21 +10246,21 @@ gj
 gj
 gj
 gj
+fE
+gj
+gj
+gj
+gj
+gj
+Ni
 GL
 pb
 pb
-pc
+Ba
 pb
 pb
 QX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
 gj
 gj
 gj
@@ -10107,22 +10269,22 @@ gj
 "}
 (129,1,1) = {"
 TW
+jG
 TW
 TW
-vy
 TW
+jG
+jG
+TW
+TW
+jG
+TW
+TW
+jG
 NY
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+se
 gj
 gj
 gj
@@ -10132,44 +10294,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
+GL
+rT
+GA
+pb
+pb
+pb
+QX
+Ni
+Ni
+Ni
+Ni
+Ni
 gj
 "}
 (130,1,1) = {"
 TW
 TW
-NY
 TW
 TW
-eW
+jG
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+jG
+TW
+TW
+TW
+wY
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -10179,44 +10341,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+pb
+pb
+pb
+pb
+pb
+Dk
+Dk
+Dk
+Dk
+Dk
+Ni
 gj
 "}
 (131,1,1) = {"
 TW
+wY
 TW
 TW
 TW
 TW
+wY
+TW
+wY
 TW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+jG
+jG
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -10226,91 +10388,91 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (132,1,1) = {"
 TW
-TW
-NY
-NY
-NY
+jG
 TW
 TW
-pZ
+jG
+TW
+jG
+TW
+jG
+TW
+jG
+TW
+TW
+TW
+jG
+TW
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+Ni
+Dk
+pb
+pb
 sX
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
 sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+pb
+Dk
+Ni
 gj
 "}
 (133,1,1) = {"
 TW
-TW
-vy
-TW
+jG
 TW
 TW
-Qx
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+jG
+TW
+jG
+TW
+TW
+TW
+TW
+wY
+TW
+wY
+TW
+se
 gj
 gj
 gj
@@ -10320,44 +10482,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+vb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (134,1,1) = {"
 TW
-NY
-BX
-NY
+wY
+TW
+jG
 TW
 TW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+wY
+TW
+jG
+TW
+jG
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -10367,44 +10529,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+fC
+fC
+rT
+Cj
+rT
+GA
+fC
+fC
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (135,1,1) = {"
+jG
+jG
 TW
 TW
 TW
-BY
+jG
 TW
 TW
+jG
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+jG
+TW
+jG
+TW
+TW
+se
 gj
 gj
 gj
@@ -10414,44 +10576,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+RJ
+Dk
+pb
+pb
+pb
+fC
+rT
+rT
+rT
+sV
+rT
+pb
+pb
+pb
+pb
+pb
+Dk
+RJ
 gj
 "}
 (136,1,1) = {"
-eW
+jG
 TW
 TW
-NY
+wY
+wY
+TW
+TW
+wY
+TW
+jG
 TW
 TW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+wY
+TW
+se
 gj
 gj
 gj
@@ -10461,44 +10623,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+rT
+rT
+rT
+GA
+rT
+rT
+rT
+pb
+fC
+pb
+pb
+Dk
+Ni
 gj
 "}
 (137,1,1) = {"
-eW
-TW
-vy
 TW
 TW
-eW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+jG
+jG
+TW
+TW
+jG
+TW
+TW
+TW
+jG
+TW
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -10508,44 +10670,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+fC
+GA
+Cj
+rT
+rT
+rT
+rT
+rT
+rT
+fC
+pb
+pb
+Dk
+Ni
 gj
 "}
 (138,1,1) = {"
 TW
 TW
-NY
-vy
 TW
-eW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+jG
+TW
+TW
+TW
+wY
+wY
+TW
+TW
+wY
+TW
+TW
+se
 gj
 gj
 gj
@@ -10555,24 +10717,24 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+fC
+pb
+rT
+Cj
+rT
+rT
+Cj
+rT
+GA
+fC
+fC
+pb
+Dk
+Ni
 gj
 "}
 (139,1,1) = {"
@@ -10583,16 +10745,16 @@ TW
 TW
 TW
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+jG
+jG
+TW
+TW
+jG
+TW
+TW
+se
 gj
 gj
 gj
@@ -10602,44 +10764,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+pb
+rT
+rT
+rT
+rT
+rT
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (140,1,1) = {"
 TW
 TW
+jG
+jG
+jG
+NY
+jG
+jG
+TW
+TW
+TW
+jG
 TW
 TW
 TW
 TW
-Qx
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+se
 gj
 gj
 gj
@@ -10649,29 +10811,33 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+fC
+fC
+pb
+sV
+rT
+rT
+sV
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (141,1,1) = {"
 TW
-NY
+jG
+jG
+TW
+TW
+jG
 TW
 TW
 TW
@@ -10679,7 +10845,10 @@ TW
 TW
 TW
 TW
-sX
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -10689,91 +10858,91 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+fC
+fC
+rT
+rT
+rT
+rT
+rT
+fC
+pb
+Dk
+Ni
 gj
 "}
 (142,1,1) = {"
+jG
 TW
+TW
+TW
+jG
+TW
+TW
+TW
+jG
+jG
+jG
 NY
+jG
+jG
 TW
-NY
-TW
-TW
-TW
-TW
-TW
+jG
+se
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+pb
+fC
+fC
+rT
+Cj
+rT
+pb
+fC
 sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Dk
+Ni
 gj
 "}
 (143,1,1) = {"
 TW
-NY
+jG
+TW
+TW
+jG
 TW
 TW
 TW
 TW
 TW
 TW
-Qx
-sX
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -10783,43 +10952,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+fC
+pb
+pb
+pb
+pb
+fC
+pb
+Dk
+Ni
 gj
 "}
 (144,1,1) = {"
 TW
-Qx
+TW
+TW
+jG
+TW
+TW
+TW
+jG
+jG
+jG
 NY
-NY
+jG
+jG
 TW
+jG
 TW
-TW
-TW
-TW
+se
 gj
 gj
 gj
@@ -10829,40 +10999,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+sX
+pb
+pb
+pb
+fC
+fC
+pb
+vb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (145,1,1) = {"
 TW
+jG
 TW
 TW
-vy
 TW
+TW
+jG
+TW
+TW
+TW
+jG
+TW
+jG
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -10872,44 +11046,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (146,1,1) = {"
-NY
-NY
-NY
-NY
-NY
+jG
+TW
+TW
+jG
+TW
+TW
+wY
+TW
+jG
+TW
+TW
+TW
+TW
+wY
+jG
+TW
+se
 gj
 gj
 gj
@@ -10919,53 +11093,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+Dk
+Dk
+Dk
+Dk
+GL
+pb
+iV
+iV
+iV
+pb
+ZS
+Dk
+Dk
+Dk
+Dk
+Ni
 gj
 "}
 (147,1,1) = {"
+wY
+jG
+TW
+TW
+jG
 TW
 TW
 TW
-GT
+jG
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+jt
+TW
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -10975,44 +11140,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
+GL
+pb
+pb
+pb
+pb
+pb
+QX
+Ni
+Ni
+Ni
+Ni
+Ni
 gj
 "}
 (148,1,1) = {"
+jG
 TW
 TW
-vy
-NY
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+wY
+TW
+jG
+TW
+TW
+TW
+wY
+wY
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -11027,18 +11192,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+pb
+pb
+pc
+nX
+GA
+QX
+Ni
 gj
 gj
 gj
@@ -11047,19 +11209,22 @@ gj
 "}
 (149,1,1) = {"
 TW
-NY
+jG
+jG
+TW
+jG
+TW
+jt
 TW
 TW
-NY
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+wY
+wY
+TW
+TW
+jG
+TW
+TW
+se
 gj
 gj
 gj
@@ -11074,18 +11239,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+pb
+pb
+pb
+rT
+pb
+QX
+Ni
 gj
 gj
 gj
@@ -11093,20 +11255,23 @@ gj
 gj
 "}
 (150,1,1) = {"
+jG
 TW
-Qx
 TW
-eW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+jG
+TW
+TW
+jG
+jG
+TW
+TW
+TW
+TW
+jG
+se
 gj
 gj
 gj
@@ -11121,18 +11286,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+GA
+pb
+pb
+pb
+pb
+QX
+Ni
 gj
 gj
 gj
@@ -11141,19 +11303,22 @@ gj
 "}
 (151,1,1) = {"
 TW
+jG
+TW
+jG
+jG
 TW
 TW
 TW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+jG
+TW
+jG
+TW
+TW
+se
 gj
 gj
 gj
@@ -11168,18 +11333,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+pb
+pb
+Ba
+pb
+rT
+QX
+Ni
 gj
 gj
 gj
@@ -11187,20 +11349,23 @@ gj
 gj
 "}
 (152,1,1) = {"
+jG
 TW
 TW
 TW
 TW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+jG
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -11215,18 +11380,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+pb
+pb
+fC
+pb
+rT
+QX
+Ni
 gj
 gj
 gj
@@ -11235,19 +11397,22 @@ gj
 "}
 (153,1,1) = {"
 TW
+jG
+jG
+NY
+jG
 TW
 TW
+jG
+wY
 TW
-Qx
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+jG
+TW
+TW
+jG
+TW
+TW
+se
 gj
 gj
 gj
@@ -11262,18 +11427,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+jQ
+pb
+pc
+fC
+ni
+QX
+Ni
 gj
 gj
 gj
@@ -11281,20 +11443,23 @@ gj
 gj
 "}
 (154,1,1) = {"
+jG
+TW
+wY
 TW
 TW
 TW
 TW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -11309,18 +11474,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+dD
+fC
+Ba
+fC
+jQ
+QX
+Ni
 gj
 gj
 gj
@@ -11329,19 +11491,22 @@ gj
 "}
 (155,1,1) = {"
 TW
+jG
+jG
 TW
 TW
-eW
+jG
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+TW
+jG
+TW
+jG
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -11356,18 +11521,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+jQ
+ON
+jQ
+nX
+oR
+QX
+Ni
 gj
 gj
 gj
@@ -11377,18 +11539,21 @@ gj
 (156,1,1) = {"
 TW
 TW
-vy
-eW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+TW
+TW
+jG
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -11403,18 +11568,15 @@ gj
 gj
 gj
 gj
+Ni
+GL
+jQ
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+jQ
+ON
+fC
+QX
+Ni
 gj
 gj
 gj
@@ -11423,19 +11585,22 @@ gj
 "}
 (157,1,1) = {"
 TW
+jG
+jG
 TW
-Qx
+jG
+TW
+jG
+TW
+jG
 TW
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+wY
+wY
+TW
+TW
+jG
+se
 gj
 gj
 gj
@@ -11450,17 +11615,14 @@ gj
 gj
 gj
 gj
+Ni
+GL
 gj
 gj
+if
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+pb
+QX
 gj
 gj
 gj
@@ -11472,17 +11634,20 @@ gj
 TW
 TW
 TW
-NY
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+TW
+TW
+jt
+TW
+TW
+jG
+jG
+TW
+TW
+wY
+se
 gj
 gj
 gj
@@ -11501,13 +11666,10 @@ gj
 gj
 gj
 gj
+rg
 gj
 gj
-gj
-gj
-gj
-gj
-gj
+Dk
 gj
 gj
 gj
@@ -11516,13 +11678,23 @@ gj
 gj
 "}
 (159,1,1) = {"
-NY
+jG
+jG
+jG
 TW
 TW
-NY
+TW
+jG
 TW
 TW
 TW
+TW
+TW
+TW
+jG
+TW
+jG
+se
 gj
 gj
 gj
@@ -11541,20 +11713,10 @@ gj
 gj
 gj
 gj
+rg
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+lU
 gj
 gj
 gj
@@ -11566,10 +11728,20 @@ gj
 TW
 TW
 TW
+jG
+TW
+TW
+TW
+jG
+TW
+TW
+jG
 TW
 TW
 TW
 TW
+TW
+se
 gj
 gj
 gj
@@ -11584,25 +11756,15 @@ gj
 gj
 gj
 gj
+Ni
+GL
+rT
+gj
+Oo
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+QX
+Ni
 gj
 gj
 gj
@@ -11612,11 +11774,21 @@ gj
 (161,1,1) = {"
 TW
 TW
-NY
-NY
+TW
+jG
 TW
 TW
 TW
+jG
+TW
+TW
+jt
+TW
+TW
+jG
+TW
+jG
+se
 gj
 gj
 gj
@@ -11631,25 +11803,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+rT
+pb
+pb
+rT
+rT
+QX
+Ni
 gj
 gj
 gj
@@ -11659,11 +11821,21 @@ gj
 (162,1,1) = {"
 TW
 TW
-NY
-NY
 TW
 TW
-Qx
+TW
+jG
+TW
+TW
+TW
+jG
+TW
+TW
+jt
+TW
+TW
+jG
+se
 gj
 gj
 gj
@@ -11678,25 +11850,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+rT
+rT
+pb
+jQ
+rT
+QX
+Ni
 gj
 gj
 gj
@@ -11704,13 +11866,23 @@ gj
 gj
 "}
 (163,1,1) = {"
-TW
-TW
-Qx
-TW
+jG
+jG
 TW
 TW
 TW
+wY
+TW
+jG
+TW
+TW
+TW
+wY
+wY
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -11725,25 +11897,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+rT
+rT
+rT
+jQ
+rT
+QX
+Ni
 gj
 gj
 gj
@@ -11753,10 +11915,21 @@ gj
 (164,1,1) = {"
 TW
 TW
-vy
 TW
-eW
+jG
 TW
+jG
+TW
+jt
+TW
+TW
+wY
+wY
+TW
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -11771,26 +11944,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+rT
+rT
+NH
+jQ
+rT
+QX
+Ni
 gj
 gj
 gj
@@ -11800,10 +11962,21 @@ gj
 (165,1,1) = {"
 TW
 TW
+jG
 TW
 TW
 TW
 TW
+jG
+TW
+TW
+jG
+jG
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -11818,26 +11991,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+rT
+rT
+jQ
+jQ
+rT
+QX
+Ni
 gj
 gj
 gj
@@ -11846,16 +12008,22 @@ gj
 "}
 (166,1,1) = {"
 TW
-BX
-NY
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+TW
+jG
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+jG
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -11870,21 +12038,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+rT
+rT
+jQ
+rT
+rT
+QX
+Ni
 gj
 gj
 gj
@@ -11892,17 +12054,23 @@ gj
 gj
 "}
 (167,1,1) = {"
+jG
+jG
+NY
 TW
 TW
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+jG
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -11917,21 +12085,15 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+GL
+rT
+rT
+jQ
+rT
+rT
+QX
+Ni
 gj
 gj
 gj
@@ -11939,17 +12101,23 @@ gj
 gj
 "}
 (168,1,1) = {"
+wY
+wY
+TW
+jG
+NY
+jG
 TW
 TW
-vy
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+jG
+wY
+TW
+jG
+TW
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -11959,44 +12127,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
+GL
+rT
+oR
+rT
+rT
+rT
+QX
+Ni
+Ni
+Ni
+Ni
+Ni
 gj
 "}
 (169,1,1) = {"
+jG
+jG
+TW
+wY
 TW
 TW
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -12006,44 +12174,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+rT
+jQ
+rT
+rT
+rT
+Dk
+Dk
+Dk
+Dk
+Dk
+Ni
 gj
 "}
 (170,1,1) = {"
 TW
-GT
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+jG
+TW
+TW
+jG
+TW
+TW
+TW
+TW
+jG
+TW
+jG
+TW
+jG
+se
 gj
 gj
 gj
@@ -12053,44 +12221,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+rT
+rT
+rT
+rT
+rT
+pb
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (171,1,1) = {"
+jG
+jG
 TW
-NY
-vy
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+TW
+TW
+TW
+jG
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -12100,44 +12268,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+rT
+jQ
+jQ
+rT
+rT
+pb
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (172,1,1) = {"
 TW
-NY
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+jG
+TW
+jG
+TW
+jG
+TW
+jG
+TW
+TW
+wY
+wY
+TW
+TW
+se
 gj
 gj
 gj
@@ -12147,44 +12315,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+vb
+pb
+pb
+rT
+jQ
+jQ
+jQ
+rT
+pb
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (173,1,1) = {"
+jG
+jG
 TW
 TW
-vy
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+TW
+TW
+TW
+TW
+jt
+TW
+TW
+jG
+jG
+TW
+TW
+se
 gj
 gj
 gj
@@ -12194,44 +12362,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+fC
+fC
+rT
+jQ
+rT
+rT
+ni
+fC
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (174,1,1) = {"
 TW
-Qx
 TW
-pZ
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+jG
+jG
+TW
+TW
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -12241,44 +12409,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+RJ
+Dk
+pb
+pb
+pb
+fC
+rT
+rT
+rT
+rT
+rT
+jQ
+rT
+pb
+pb
+pb
+Dk
+RJ
 gj
 "}
 (175,1,1) = {"
+jG
+jG
+TW
+TW
+jG
 TW
 TW
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+jG
+TW
+TW
+jG
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -12288,44 +12456,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+rT
+jQ
+rT
+rT
+rT
+rT
+rT
+rT
+fC
+pb
+pb
+Dk
+Ni
 gj
 "}
 (176,1,1) = {"
 TW
-Eo
 TW
-sX
-sX
-sX
-sX
-sX
-sX
-sX
-sX
+TW
+jG
+TW
+TW
+TW
+jG
+TW
+TW
+TW
+wY
+TW
+jG
+TW
+TW
+se
 gj
 gj
 gj
@@ -12335,40 +12503,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+fC
+rT
+rT
+rT
+rT
+rT
+rT
+VY
+rT
+fC
+pb
+pb
+Dk
+Ni
 gj
 "}
 (177,1,1) = {"
 TW
-vy
-NY
 TW
 TW
 TW
-sX
+TW
+jG
+TW
+TW
+TW
+jG
+TW
+jG
+TW
+TW
+TW
+jG
+se
 gj
 gj
 gj
@@ -12378,44 +12550,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+fC
+pb
+rT
+rT
+rT
+rT
+ZO
+jQ
+jQ
+fC
+fC
+pb
+Dk
+Ni
 gj
 "}
 (178,1,1) = {"
 TW
-eW
 TW
 TW
 TW
 TW
-sX
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+jG
+TW
+wY
+se
 gj
 gj
 gj
@@ -12425,44 +12597,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+rT
+pb
+rT
+rT
+jQ
+rT
+rT
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (179,1,1) = {"
 TW
-Eo
 TW
 TW
 TW
 TW
-sX
+TW
+TW
+TW
+TW
+TW
+jG
+jG
+TW
+TW
+TW
+jG
+se
 gj
 gj
 gj
@@ -12472,44 +12644,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+fC
+jQ
+pb
+rT
+rT
+jQ
+rT
+rT
+pb
+pb
+Dk
+RJ
 gj
 "}
 (180,1,1) = {"
+jG
+jG
+jG
 TW
-NY
 TW
 TW
 TW
-Qx
-sX
+TW
+TW
+TW
+TW
+TW
+TW
+jG
+TW
+TW
+se
 gj
 gj
 gj
@@ -12519,44 +12691,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+jQ
+jQ
+rT
+rT
+rT
+rT
+rT
+fC
+pb
+Dk
+Ni
 gj
 "}
 (181,1,1) = {"
 TW
+TW
+wY
+jG
+jG
+jG
+TW
+jG
+jG
+jG
 NY
+jG
 TW
 TW
-TW
-TW
-sX
+jG
+jG
+se
 gj
 gj
 gj
@@ -12566,44 +12738,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+pb
+fC
+jQ
+rT
+rT
+rT
+pb
+fC
+pb
+Dk
+Ni
 gj
 "}
 (182,1,1) = {"
 TW
-Qx
-NY
-NY
-eW
 TW
-sX
+jG
+TW
+wY
+wY
+TW
+TW
+wY
+wY
+TW
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -12613,44 +12785,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+fC
+pb
+pb
+pb
+pb
+fC
+pb
+Dk
+Ni
 gj
 "}
 (183,1,1) = {"
+jG
+jG
 TW
 TW
+jG
+jG
 TW
 TW
+jG
+jG
 TW
 TW
-sX
+jG
+TW
+TW
+jG
+se
 gj
 gj
 gj
@@ -12660,44 +12832,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+fC
+fC
+pb
+vb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (184,1,1) = {"
 TW
 TW
 TW
+jG
 TW
 TW
+wY
 TW
-sX
+jG
+NY
+jG
+TW
+TW
+jG
+NY
+TW
+se
 gj
 gj
 gj
@@ -12707,44 +12879,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+pb
+Dk
+Ni
 gj
 "}
 (185,1,1) = {"
+jG
+jG
 TW
 TW
 TW
-NY
-BX
+jG
+jG
 TW
-sX
+wY
+TW
+TW
+TW
+TW
+wY
+TW
+TW
+se
 gj
 gj
 gj
@@ -12754,44 +12926,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Dk
+Ni
 gj
 "}
 (186,1,1) = {"
 TW
 TW
+jG
+jG
+TW
+wY
+TW
+TW
+jG
 TW
 TW
 TW
+jG
+jG
 TW
-sX
+TW
+se
 gj
 gj
 gj
@@ -12801,54 +12973,44 @@ gj
 gj
 gj
 gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
+RJ
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
+Ni
 gj
 "}
 (187,1,1) = {"
+jG
+jG
 TW
-Qx
+TW
+jG
+jG
+jt
 TW
 TW
-GT
 TW
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+TW
+jG
+TW
+TW
+TW
+jG
+se
 gj
 gj
 gj
@@ -12881,21 +13043,21 @@ gj
 (188,1,1) = {"
 TW
 TW
+jG
+jG
 TW
 TW
 TW
 TW
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+wY
+TW
+TW
+TW
+TW
+wY
+TW
+wY
+se
 gj
 gj
 gj
@@ -12926,23 +13088,23 @@ gj
 gj
 "}
 (189,1,1) = {"
+jG
+jG
 TW
 TW
+jG
+TW
+jG
+TW
+jG
 TW
 TW
+jG
 TW
+jG
 TW
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+jG
+se
 gj
 gj
 gj
@@ -12973,23 +13135,23 @@ gj
 gj
 "}
 (190,1,1) = {"
-gj
+TW
+TW
+TW
+jG
 TW
 TW
 TW
 TW
-Qx
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+jG
+TW
+TW
+TW
+jG
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -13020,23 +13182,23 @@ gj
 gj
 "}
 (191,1,1) = {"
-gj
+jG
+jG
 TW
 TW
 TW
-eW
+jG
 TW
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+TW
+wY
+TW
+jG
+TW
+TW
+TW
+TW
+wY
+se
 gj
 gj
 gj
@@ -13067,23 +13229,23 @@ gj
 gj
 "}
 (192,1,1) = {"
-gj
-gj
-gj
 TW
 TW
 TW
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+jG
+TW
+wY
+TW
+jG
+jG
+TW
+TW
+TW
+jG
+TW
+TW
+jG
+se
 gj
 gj
 gj
@@ -13114,23 +13276,23 @@ gj
 gj
 "}
 (193,1,1) = {"
-gj
-gj
-gj
-gj
+jG
+jG
 TW
 TW
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+TW
+jG
+TW
+jG
+TW
+TW
+wY
+wY
+TW
+TW
+wY
+TW
+se
 gj
 gj
 gj
@@ -13161,23 +13323,23 @@ gj
 gj
 "}
 (194,1,1) = {"
-gj
-gj
-gj
-gj
-gj
 TW
-sX
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+TW
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+jG
+jG
+TW
+TW
+jG
+TW
+se
 gj
 gj
 gj
@@ -13208,23 +13370,23 @@ gj
 gj
 "}
 (195,1,1) = {"
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+jG
+jG
+TW
+TW
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+jG
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -13255,23 +13417,23 @@ gj
 gj
 "}
 (196,1,1) = {"
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+TW
+TW
+TW
+jG
+TW
+TW
+jG
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -13302,23 +13464,23 @@ gj
 gj
 "}
 (197,1,1) = {"
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+jG
+TW
+TW
+TW
+TW
+jG
+TW
+TW
+TW
+jG
+jG
+jG
+NY
+jG
+jG
+TW
+se
 gj
 gj
 gj
@@ -13349,23 +13511,23 @@ gj
 gj
 "}
 (198,1,1) = {"
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+TW
+TW
+jG
+TW
+TW
+TW
+jG
+jG
+jG
+NY
+jG
+jG
+TW
+TW
+TW
+TW
+se
 gj
 gj
 gj
@@ -13396,23 +13558,23 @@ gj
 gj
 "}
 (199,1,1) = {"
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
-gj
+se
+se
+se
+se
+se
+se
+se
+se
+se
+se
+se
+se
+se
+se
+se
+se
+se
 gj
 gj
 gj

@@ -226,6 +226,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/auto_detect, 24)
 
 	var/unlocked = FALSE
 	var/datum/train_station/station = null
+	var/current_code = ""
 
 /obj/machinery/computer/trainstation_control/Initialize(mapload, obj/item/circuitboard/C)
 	. = ..()
@@ -252,23 +253,110 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/auto_detect, 24)
 
 /obj/machinery/computer/trainstation_control/interact(mob/user, special_state)
 	. = ..()
-	if(unlocked)
-		return
-	if(world.time > next_clicksound && isliving(user))
-		next_clicksound = world.time + rand(50, 150)
-		playsound(src, SFX_KEYBOARD, 40)
-	if(!do_after(user, 3 SECONDS, src))
+	ui_interact(user)
+
+/obj/machinery/computer/trainstation_control/ui_interact(mob/user, datum/tgui/ui)
+	. = ..()
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "TrainStationControl")
+		ui.open()
+
+/obj/machinery/computer/trainstation_control/ui_data(mob/user)
+	var/list/data = list()
+	data["unlocked"] = unlocked
+	data["requires_password"] = station?.required_password
+	data["station_name"] = station?.name
+	data["entered_code"] = replacetextEx(current_code, ".", "*")
+	return data
+
+/obj/machinery/computer/trainstation_control/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	. = ..()
+	if(.)
 		return
 
-	unlock_station()
-	remove_filter("story_outline")
+	if(unlocked)
+		return TRUE
+	playsound(src, SFX_KEYBOARD, 40)
+
+	switch(action)
+		if("unlock")
+			if(station.required_password)
+				return TRUE
+			unlock_station()
+			return TRUE
+
+		if("digit")
+			if(!station.required_password)
+				return TRUE
+
+			var/dig = params["dig"]
+			if(!isnum(text2num(dig)))
+				return TRUE
+
+			if(length(current_code) >= 5)
+				return TRUE
+
+			current_code += dig
+			. = TRUE
+
+		if("clear")
+			if(!station.required_password)
+				return TRUE
+
+			current_code = ""
+			. = TRUE
+
+		if("enter")
+			if(!station.required_password)
+				return TRUE
+
+			if(!do_after(usr, 1 SECONDS, src))
+				return TRUE
+
+			if(!station.is_right_code(current_code))
+				balloon_alert(usr, "incorrect code!")
+				current_code = ""
+				return TRUE
+
+			unlock_station()
+			current_code = ""
+			return TRUE
 
 /obj/machinery/computer/trainstation_control/proc/unlock_station()
 	station.blocking_moving = FALSE
 	balloon_alert_to_viewers("Station unlocked!")
+	priority_announce("Station's magnetic locks were disabled. Traffic permitted.", station?.name)
 	SEND_SIGNAL(SStrain_controller, COMSIG_TRAINSTATION_UNLOCKED)
 	unlocked = TRUE
+	remove_filter("story_outline")
 
+/obj/item/paper/trainstation_password
+	name = "station security update"
+	default_raw_text = \
+	"<center><b>York-3 Higher Chamber Directive</b></center>\
+	<BR>\
+	Station: <b>%STATIONNAME%</b>\
+	<BR><BR>\
+	Magnetic interlock password has been changed.\
+	<BR>\
+	New code: <b>%STATIONPASSWORD%</b>\
+	<BR><BR>\
+	<b>CLASSIFIED – LEVEL III</b><BR>\
+	This document is confidential.<BR>\
+	Do not copy. Do not discuss. Do not leave unsecured.\
+	<BR><BR>\
+	<BR>\
+	— York-3 Metropolitan Council"
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | ACID_PROOF
+
+/obj/item/paper/trainstation_password/Initialize(mapload)
+	var/datum/train_station/current_station = SStrain_controller?.loaded_station
+	name = "[current_station.name] - security update"
+	default_raw_text = replacetext(default_raw_text, "%STATIONNAME%", current_station.name)
+	default_raw_text = replacetext(default_raw_text, "%STATIONPASSWORD%", current_station.get_password())
+	SSpoints_of_interest.make_point_of_interest(src)
+	return ..()
 
 
 /obj/machinery/computer/train_control_terminal
@@ -296,24 +384,30 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/auto_detect, 24)
 
 	data["read_only"] = read_only
 	data["is_moving"] = TC.is_moving()
-	data["train_engine_active"] = TC.train_engine.is_active()
+	data["train_engine_active"] = TC.train_engine?.is_active() || FALSE
 	data["current_station"] = TC.loaded_station?.name || "Unknown"
 	data["planned_station"] = TC.planned_to_load?.name || "None"
-	data["blocking"] = TC.loaded_station?.blocking_moving || FALSE
+	data["is_blocked"] = TC.loaded_station?.blocking_moving || FALSE
+	data["progress"] = TC.is_moving() && TC.total_travel_time > 0 ? 1 - (TC.time_to_next_station / TC.total_travel_time) : 0
+	data["time_remaining"] = TC.time_to_next_station || 0
+	data["time_per_map_unit"] = TC.time_per_map_unit
+
 	data["possible_next"] = list()
 	if(!TC.is_moving() && TC.loaded_station)
 		for(var/datum/train_station/next in TC.loaded_station.possible_next)
-			data["possible_next"] += list(
-				list(
-					"name" = next.name,
-					"type" = "[next.type]"
-				)
-			)
-	if(TC.is_moving() && TC.total_travel_time > 0)
-		data["progress"] = 1 - (TC.time_to_next_station / TC.total_travel_time)
-	else
-		data["progress"] = 0
-	data["time_remaining"] = TC.time_to_next_station || 0
+			data["possible_next"] += list(list(
+				"name" = next.name,
+				"type" = "[next.type]"
+			))
+
+	if(TC.global_map)
+		TC.global_map.update_train_position()
+
+	data["map_data"] = TC.global_map?.get_ui_data() || list(
+		"objects" = list(),
+		"paths" = list(),
+		"train" = list("x" = 500, "y" = 500, "angle" = 0)
+	)
 
 	return data
 
@@ -345,9 +439,21 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/auto_detect, 24)
 				TC.stop_moving()
 			return TRUE
 		if("choose_next")
-			var/station_type = text2path(params["station_type"])
+			var/raw_id = params["station_type"]
+			if(!istext(raw_id))
+				return
+
+			// Поддержка как "чистого" типа (/datum/train_station/...), так и id вида "/datum/train_station/...#N"
+			var/station_path_text = raw_id
+			var/hash_pos = findtext(raw_id, "#")
+			if(hash_pos)
+				// copytext конец не включителен, берём часть до '#'
+				station_path_text = copytext(raw_id, 1, hash_pos)
+
+			var/station_type = text2path(station_path_text)
 			if(!station_type)
 				return
+
 			var/datum/train_station/next = locate(station_type) in TC.known_stations
 			if(!next || !TC.loaded_station || !(next in TC.loaded_station.possible_next))
 				return
@@ -443,3 +549,29 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/auto_detect, 24)
 			D.lock()
 			balloon_alert(user, "You lock the train door with the master key.")
 		return TRUE
+
+/obj/effect/turf_decal/train_sigh
+	name = "Train sigh"
+	icon = 'modular_zvents/icons/structures/train_sigh.dmi'
+	icon_state = "sigh"
+
+/obj/structure/prop/big/military_nuke
+	name = "Military container"
+	desc = "An incredibly sturdy, locked container. What could be inside?"
+	icon = 'modular_zvents/icons/structures/props/goon/64x48.dmi'
+	anchored = FALSE
+	opacity = FALSE
+	density = TRUE
+	icon_state = "car-nukes"
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
+	flags_1 = SUPERMATTER_IGNORES_1
+	base_pixel_x = -16
+	pixel_x = -16
+
+/obj/structure/prop/big/military_nuke/examine(mob/user)
+	. = ..()
+	. += span_purple("This is an important cargo - it should not be lost.")
+
+/obj/structure/prop/big/military_nuke/Initialize(mapload)
+	. = ..()
+	SSpoints_of_interest.make_point_of_interest(src)

@@ -187,7 +187,7 @@
 	pixel_y = 4;
 	pixel_x = 10
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "bd" = (
@@ -246,7 +246,7 @@
 	pixel_x = -4;
 	pixel_y = 12
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "bN" = (
@@ -274,6 +274,14 @@
 	pixel_y = 8
 	},
 /turf/open/floor/iron/shuttle/exploration/blanktile,
+/area/trainstation/outdoor/station)
+"bS" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
 /area/trainstation/outdoor/station)
 "bU" = (
 /obj/item/gun/ballistic/automatic/c20r/sc_c20r,
@@ -370,6 +378,33 @@
 	},
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
+"cN" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor/station)
 "cR" = (
 /obj/effect/turf_decal/siding{
 	dir = 1;
@@ -409,7 +444,7 @@
 /area/trainstation/outdoor/station)
 "di" = (
 /obj/structure/flora/tree/massive/dead/style_2,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "dl" = (
@@ -442,7 +477,7 @@
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
 "dy" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "dC" = (
@@ -518,10 +553,28 @@
 /obj/structure/prop/general/bigroller_up2,
 /turf/open/floor/asphalt,
 /area/trainstation/outdoor/station)
+"dY" = (
+/obj/structure/rack/shelf,
+/obj/effect/turf_decal/delivery,
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
+/obj/effect/spawner/random/engineering/material_cheap,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/outdoor/station)
 "dZ" = (
 /obj/item/ammo_box/magazine/c40sol_rifle/drum/starts_empty,
 /obj/effect/decal/cleanable/blood,
 /turf/open/misc/asphalt/no_border,
+/area/trainstation/outdoor/station)
+"ea" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 9
+	},
+/obj/structure/table/reinforced,
+/obj/item/flashlight/lamp,
+/obj/effect/spawner/random/entertainment/deck,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner,
 /area/trainstation/outdoor/station)
 "eb" = (
 /obj/item/ammo_casing/b50cal{
@@ -574,6 +627,51 @@
 	},
 /obj/effect/decal/cleanable/blood,
 /turf/open/indestructible/meat,
+/area/trainstation/outdoor/station)
+"eo" = (
+/obj/structure/railing/unbreakable{
+	dir = 5
+	},
+/obj/structure/decorative{
+	density = 1;
+	anchored = 1;
+	name = "magnetic stasis emitter";
+	desc = "A machine that somehow fabricates hardlight using electrons. Seems to be impervious to conventional means of damage.";
+	icon = 'icons/obj/machines/modular_shield_generator.dmi';
+	icon_state = "charger_on_closed";
+	dir = 1;
+	uses_integrity = 0
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor/station)
+"ep" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/structure/closet/secure_closet/personal,
+/obj/effect/spawner/random/weapon,
+/obj/effect/spawner/random/medical/minor_healing,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/outdoor/station)
+"er" = (
+/obj/structure/prop/city/buildingventbig11_off{
+	name = "Generator"
+	},
+/obj/structure/railing{
+	dir = 2;
+	color = "#666666";
+	pixel_y = 0
+	},
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
+/turf/open/indestructible/dark/textured,
 /area/trainstation/outdoor/station)
 "es" = (
 /obj/structure/decorative{
@@ -736,6 +834,16 @@
 /obj/item/gun/ballistic/rifle/boltaction,
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
+"fm" = (
+/obj/effect/turf_decal/siding/dark/corner,
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 1
+	},
+/area/trainstation/outdoor/station)
 "fq" = (
 /obj/item/ammo_casing/a223,
 /obj/item/ammo_casing/c357{
@@ -759,6 +867,14 @@
 "fv" = (
 /obj/item/ammo_casing/c357,
 /turf/open/floor/plating/cobblestone,
+/area/trainstation/outdoor/station)
+"fy" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleinvertcorner_side{
+	dir = 4
+	},
 /area/trainstation/outdoor/station)
 "fz" = (
 /obj/structure/flora/tree/massive/dead/style_2,
@@ -974,7 +1090,7 @@
 "gJ" = (
 /obj/effect/mob_spawn/corpse/human/charredskeleton,
 /obj/effect/gibspawner/human,
-/mob/living/basic/corrupted_arachnid,
+/mob/living/basic/khara_mutant/arachnid,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "gM" = (
@@ -997,7 +1113,7 @@
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "gV" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/item/ammo_casing/a223,
 /turf/open/floor/iron/shuttle/exploration/blanktile,
 /area/trainstation/outdoor/station)
@@ -1054,7 +1170,9 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "hI" = (
-/turf/closed/wall/city/siding/red/style/style_1,
+/obj/effect/turf_decal/trimline/tram,
+/obj/machinery/light/floor/transport,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
 /area/trainstation/outdoor/station)
 "hK" = (
 /obj/structure/window/reinforced/fulltile/ice{
@@ -1063,8 +1181,8 @@
 /turf/closed/wall/city/siding,
 /area/trainstation/outdoor/station)
 "hM" = (
-/obj/structure/prop/big/laser_beam_loaded,
-/turf/open/misc/asteroid/snow/standard_air,
+/mob/living/basic/khara_mutant/reaper,
+/turf/open/floor/iron/shuttle/exploration/blanktile,
 /area/trainstation/outdoor/station)
 "hQ" = (
 /obj/effect/mob_spawn/corpse/human/charredskeleton,
@@ -1244,6 +1362,38 @@
 /obj/effect/decal/cleanable/blood/innards,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
+"iT" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 9
+	},
+/obj/machinery/light/red/directional/west,
+/obj/structure/closet/secure_closet/personal,
+/obj/item/clothing/under/syndicate/skyrat/overalls/unarmoured,
+/obj/effect/spawner/random/medical/minor_healing,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/spawner/random/entertainment/musical_instrument,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/outdoor/station)
+"iV" = (
+/obj/structure/decorative{
+	anchored = 1;
+	name = "flesh amoeba";
+	desc = "It's pulsing...";
+	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
+	icon_state = "blob_wall";
+	color = "#d66569"
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "flesh amoeba";
+	desc = "It's pulsing...";
+	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
+	icon_state = "blob_wall";
+	color = "#d66569";
+	dir = 1
+	},
+/turf/closed/indestructible/fakedoor,
+/area/trainstation/outdoor/station)
 "iW" = (
 /obj/effect/mob_spawn/corpse/human/charredskeleton,
 /obj/effect/decal/cleanable/blood/innards,
@@ -1316,6 +1466,18 @@
 "jx" = (
 /obj/effect/mob_spawn/ghost_role/flesh_spider,
 /turf/open/floor/asphalt,
+/area/trainstation/outdoor/station)
+"jz" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
 /area/trainstation/outdoor/station)
 "jB" = (
 /obj/structure/decorative{
@@ -1530,7 +1692,7 @@
 /obj/item/ammo_casing/c357{
 	dir = 8
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "kZ" = (
@@ -1539,26 +1701,6 @@
 	pixel_y = -9
 	},
 /turf/open/misc/dirt/icy_planet,
-/area/trainstation/outdoor/station)
-"li" = (
-/obj/structure/decorative{
-	anchored = 1;
-	name = "flesh amoeba";
-	desc = "It's pulsing...";
-	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
-	icon_state = "blob_wall";
-	color = "#d66569"
-	},
-/obj/structure/decorative{
-	anchored = 1;
-	name = "flesh amoeba";
-	desc = "It's pulsing...";
-	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
-	icon_state = "blob_wall";
-	color = "#d66569";
-	dir = 1
-	},
-/turf/closed/indestructible/fakedoor,
 /area/trainstation/outdoor/station)
 "lm" = (
 /obj/structure/decorative{
@@ -1670,7 +1812,7 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "lL" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/structure/flora/bush/fullgrass/style_random,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
@@ -1736,8 +1878,15 @@
 /obj/effect/mob_spawn/ghost_role/flesh_spider,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
+"mb" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/prop/general/highvoltagegrille_off,
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor/station)
 "mc" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
 "me" = (
@@ -1751,7 +1900,6 @@
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
 "mm" = (
-/obj/item/gun/ballistic/rifle/sniper_rifle,
 /turf/open/floor/iron/shuttle/exploration/corner,
 /area/trainstation/outdoor/station)
 "mn" = (
@@ -1786,7 +1934,7 @@
 /turf/closed/wall/city/siding/style/style_1,
 /area/trainstation/outdoor/station)
 "mD" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/effect/mob_spawn/ghost_role/flesh_spider,
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
@@ -1846,27 +1994,6 @@
 	pixel_x = 1
 	},
 /turf/open/misc/asphalt/no_border,
-/area/trainstation/outdoor/station)
-"mX" = (
-/obj/structure/decorative{
-	anchored = 1;
-	name = "flesh amoeba";
-	desc = "It's pulsing...";
-	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
-	icon_state = "blob_wall";
-	color = "#d66569";
-	dir = 4
-	},
-/obj/structure/decorative{
-	anchored = 1;
-	name = "flesh amoeba";
-	desc = "It's pulsing...";
-	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
-	icon_state = "blob_wall";
-	color = "#d66569";
-	dir = 8
-	},
-/turf/closed/indestructible/fakedoor,
 /area/trainstation/outdoor/station)
 "nb" = (
 /obj/structure/decorative{
@@ -1980,6 +2107,10 @@
 	},
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
+"nE" = (
+/obj/structure/sign/warning/electric_shock,
+/turf/closed/wall/city/siding/style/style_1,
+/area/trainstation/outdoor/station)
 "nF" = (
 /turf/closed/wall/city/siding,
 /area/trainstation/outdoor/station)
@@ -2074,7 +2205,7 @@
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "ov" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/floor/iron/shuttle/exploration/side{
 	dir = 1
 	},
@@ -2119,6 +2250,14 @@
 "oK" = (
 /obj/structure/prop/big/laser_beam_loaded,
 /turf/open/indestructible/meat,
+/area/trainstation/outdoor/station)
+"oR" = (
+/obj/effect/turf_decal/siding/dark,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/table/reinforced,
+/obj/item/storage/fancy/donut_box,
+/obj/effect/spawner/random/engineering/tool,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
 /area/trainstation/outdoor/station)
 "oS" = (
 /obj/structure/deployable_barricade/wooden{
@@ -2213,6 +2352,10 @@
 /obj/effect/decal/cleanable/blood,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
+"pn" = (
+/mob/living/basic/khara_mutant/reaper,
+/turf/open/misc/asteroid/snow/standard_air,
+/area/trainstation/outdoor/station)
 "pp" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -2271,6 +2414,12 @@
 	pixel_x = -1
 	},
 /turf/open/floor/iron/shuttle/exploration/blanktile,
+/area/trainstation/outdoor/station)
+"pB" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 9
+	},
+/turf/open/indestructible/dark/textured,
 /area/trainstation/outdoor/station)
 "pF" = (
 /obj/item/ammo_box/magazine/miecz/spawns_empty,
@@ -2442,6 +2591,12 @@
 /obj/effect/decal/cleanable/blood,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
+"qQ" = (
+/mob/living/basic/khara_mutant/reaper,
+/turf/open/indestructible/train_platform{
+	name = "Floor"
+	},
+/area/trainstation/outdoor/station)
 "qR" = (
 /obj/item/ammo_casing/shotgun/incendiary{
 	pixel_x = 15;
@@ -2462,6 +2617,36 @@
 /obj/effect/mob_spawn/corpse/human/charredskeleton,
 /obj/effect/gibspawner/human,
 /turf/open/floor/iron/shuttle/exploration/blanktile,
+/area/trainstation/outdoor/station)
+"qZ" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/decorative{
+	density = 1;
+	anchored = 1;
+	name = "magnetic stasis emitter";
+	desc = "A machine that somehow fabricates hardlight using electrons. Seems to be impervious to conventional means of damage.";
+	icon = 'icons/obj/machines/modular_shield_generator.dmi';
+	icon_state = "charger_on_closed";
+	dir = 1;
+	uses_integrity = 0
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
 /area/trainstation/outdoor/station)
 "rc" = (
 /obj/structure/decorative{
@@ -2507,6 +2692,13 @@
 	dir = 1
 	},
 /turf/closed/indestructible/fakedoor,
+/area/trainstation/outdoor/station)
+"rx" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/machinery/modular_computer/preset/civilian,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
 /area/trainstation/outdoor/station)
 "rD" = (
 /obj/structure/prop/general/roadbarrierwood{
@@ -2651,7 +2843,7 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "sE" = (
-/mob/living/basic/corrupted_arachnid,
+/mob/living/basic/khara_mutant/arachnid,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "sF" = (
@@ -2660,7 +2852,7 @@
 /turf/open/floor/asphalt,
 /area/trainstation/outdoor/station)
 "sG" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/structure/flora/tree/massive/dead/style_2,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
@@ -2761,7 +2953,7 @@
 	pixel_y = -5;
 	pixel_x = 4
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
 "tf" = (
@@ -2781,7 +2973,7 @@
 /area/trainstation/outdoor/station)
 "tm" = (
 /obj/item/ammo_box/magazine/miecz/spawns_empty,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "tq" = (
@@ -2811,7 +3003,6 @@
 	pixel_x = -16;
 	pixel_y = 11
 	},
-/obj/item/gun/ballistic/automatic/c20r/sc_c20r,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "tz" = (
@@ -2883,8 +3074,7 @@
 	color = "#d66569";
 	dir = 8
 	},
-/obj/machinery/door/poddoor/story,
-/turf/open/space/basic,
+/turf/closed/indestructible/fakedoor,
 /area/trainstation/outdoor/station)
 "tJ" = (
 /obj/effect/decal/cleanable/blood/drip{
@@ -2958,6 +3148,18 @@
 /obj/effect/mob_spawn/ghost_role/flesh_spider,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"tX" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/structure/table/reinforced,
+/obj/item/paper_bin,
+/obj/item/pen,
+/obj/item/folder/blue,
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/outdoor/station)
 "uc" = (
 /obj/effect/gibspawner/human,
 /obj/structure/decorative{
@@ -2972,7 +3174,7 @@
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "ud" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/floor/asphalt,
 /area/trainstation/outdoor/station)
 "ue" = (
@@ -2996,7 +3198,7 @@
 	pixel_y = -4;
 	pixel_x = -8
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "ul" = (
@@ -3032,8 +3234,6 @@
 	pixel_y = -14
 	},
 /turf/open/misc/asphalt/no_border,
-/area/trainstation/outdoor/station)
-"ur" = (
 /area/trainstation/outdoor/station)
 "us" = (
 /obj/structure/decorative{
@@ -3214,6 +3414,17 @@
 /obj/effect/gibspawner/human,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
+"vv" = (
+/obj/structure/decorative{
+	anchored = 1;
+	name = "flesh amoeba";
+	desc = "It's pulsing...";
+	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
+	icon_state = "blob_wall";
+	color = "#d66569"
+	},
+/turf/closed/indestructible/fakedoor,
+/area/trainstation/outdoor/station)
 "vw" = (
 /obj/structure/prop/city/buildingventbig12,
 /obj/effect/decal/cleanable/blood,
@@ -3233,7 +3444,7 @@
 /area/trainstation/outdoor/station)
 "vG" = (
 /obj/effect/decal/cleanable/blood/tracks,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "vH" = (
@@ -3286,7 +3497,7 @@
 	pixel_y = 4;
 	pixel_x = 10
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "vS" = (
@@ -3452,6 +3663,14 @@
 /obj/structure/deployable_barricade/wooden,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"wK" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/outdoor/station)
 "wM" = (
 /obj/effect/mob_spawn/corpse/human/charredskeleton,
 /obj/structure/decorative{
@@ -3538,17 +3757,6 @@
 	pixel_y = 2
 	},
 /turf/open/misc/asphalt/no_border,
-/area/trainstation/outdoor/station)
-"xi" = (
-/obj/structure/decorative{
-	anchored = 1;
-	name = "flesh amoeba";
-	desc = "It's pulsing...";
-	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
-	icon_state = "blob_floor";
-	color = "#d66569"
-	},
-/turf/closed/indestructible/fakedoor,
 /area/trainstation/outdoor/station)
 "xn" = (
 /obj/machinery/porta_turret/syndicate{
@@ -3681,6 +3889,10 @@
 	},
 /turf/open/floor/iron/shuttle/exploration/blanktile,
 /area/trainstation/outdoor/station)
+"xP" = (
+/mob/living/basic/khara_mutant/arachnid,
+/turf/open/floor/iron/shuttle/exploration/blanktile,
+/area/trainstation/outdoor/station)
 "xT" = (
 /obj/effect/decal/cleanable/blood/tracks{
 	dir = 10
@@ -3714,8 +3926,10 @@
 /turf/closed/wall/city/siding/red/style/style_3,
 /area/trainstation/outdoor/station)
 "yf" = (
-/obj/structure/prop/big/widowmaker,
-/turf/open/misc/asteroid/snow/standard_air,
+/obj/structure/chair/office/tactical{
+	dir = 1
+	},
+/turf/open/floor/catwalk_floor/iron_dark,
 /area/trainstation/outdoor/station)
 "yi" = (
 /obj/item/ammo_casing/mm20x138{
@@ -3776,6 +3990,13 @@
 "yA" = (
 /turf/closed/indestructible/fakedoor,
 /area/trainstation/outdoor/station)
+"yB" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/machinery/photocopier/prebuilt,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/outdoor/station)
 "yD" = (
 /turf/open/floor/iron/shuttle/exploration/blanktile,
 /area/trainstation/outdoor/station)
@@ -3806,6 +4027,16 @@
 	color = "#d66569"
 	},
 /turf/closed/indestructible/opshuttle,
+/area/trainstation/outdoor/station)
+"yM" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/effect/spawner/random/trash/box,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner,
 /area/trainstation/outdoor/station)
 "yR" = (
 /obj/structure/decorative{
@@ -3893,8 +4124,30 @@
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "zi" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/floor/plating/cobblestone,
+/area/trainstation/outdoor/station)
+"zk" = (
+/obj/structure/railing/unbreakable{
+	dir = 9
+	},
+/obj/structure/decorative{
+	density = 1;
+	anchored = 1;
+	name = "magnetic stasis emitter";
+	desc = "A machine that somehow fabricates hardlight using electrons. Seems to be impervious to conventional means of damage.";
+	icon = 'icons/obj/machines/modular_shield_generator.dmi';
+	icon_state = "charger_on_closed";
+	dir = 1;
+	uses_integrity = 0
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/turf/open/indestructible/plating,
 /area/trainstation/outdoor/station)
 "zn" = (
 /obj/effect/turf_decal/siding,
@@ -3905,8 +4158,12 @@
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
 "zD" = (
-/obj/item/gun/ballistic/shotgun/riot/sol,
-/turf/open/indestructible/meat,
+/obj/effect/turf_decal/siding/dark{
+	dir = 5
+	},
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 8
+	},
 /area/trainstation/outdoor/station)
 "zE" = (
 /obj/effect/decal/cleanable/blood/old,
@@ -3956,12 +4213,33 @@
 /area/trainstation/outdoor/station)
 "Ac" = (
 /obj/structure/prop/general/wymanhole,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "Ag" = (
 /obj/structure/prop/huge/tower/on,
 /turf/open/misc/asphalt/no_border,
+/area/trainstation/outdoor/station)
+"Al" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-2-4";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
 /area/trainstation/outdoor/station)
 "Am" = (
 /obj/item/ammo_casing/shotgun/incendiary{
@@ -3989,7 +4267,13 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "Aw" = (
-/turf/closed/wall/city/siding/red,
+/obj/structure/rack/shelf,
+/obj/effect/turf_decal/delivery,
+/obj/effect/turf_decal/siding/dark{
+	dir = 10
+	},
+/obj/effect/spawner/random/engineering,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
 /area/trainstation/outdoor/station)
 "Ax" = (
 /obj/effect/decal/cleanable/blood,
@@ -4046,7 +4330,7 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "AI" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/floor/iron/shuttle/exploration/side{
 	dir = 8
 	},
@@ -4217,7 +4501,7 @@
 	dir = 10;
 	pixel_y = 1
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "BJ" = (
@@ -4402,7 +4686,7 @@
 	pixel_x = 5;
 	pixel_y = 11
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "CU" = (
@@ -4414,7 +4698,7 @@
 	dir = 8;
 	pixel_x = -1
 	},
-/mob/living/basic/corrupted_arachnid,
+/mob/living/basic/khara_mutant/arachnid,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "CV" = (
@@ -4434,7 +4718,7 @@
 /area/trainstation/outdoor/station)
 "Db" = (
 /obj/effect/decal/cleanable/blood,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "Dc" = (
@@ -4526,7 +4810,7 @@
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "DD" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/effect/mob_spawn/ghost_role/flesh_spider,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
@@ -4601,6 +4885,16 @@
 	},
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"DZ" = (
+/obj/structure/decorative{
+	anchored = 1;
+	name = "flesh amoeba";
+	desc = "It's pulsing...";
+	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
+	icon_state = "blob_floor";
+	color = "#d66569"
+	},
+/area/trainstation/outdoor/station)
 "Ec" = (
 /obj/structure/prop/general/zenithplatform3,
 /obj/structure/railing/corner,
@@ -4660,6 +4954,27 @@
 /turf/open/indestructible/train_platform{
 	name = "Floor"
 	},
+/area/trainstation/outdoor/station)
+"EA" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-2-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
 /area/trainstation/outdoor/station)
 "EC" = (
 /obj/item/ammo_casing/b50cal{
@@ -4832,9 +5147,28 @@
 	},
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"Fl" = (
+/obj/effect/turf_decal/siding/dark,
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/microwave/engineering/cell_included,
+/obj/structure/table/reinforced,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 4
+	},
+/area/trainstation/outdoor/station)
 "Fm" = (
 /obj/effect/gibspawner/human,
 /turf/open/misc/asteroid/snow/standard_air,
+/area/trainstation/outdoor/station)
+"Fn" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/machinery/status_display/evac/directional/north,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
 /area/trainstation/outdoor/station)
 "Fo" = (
 /obj/effect/gibspawner/human,
@@ -4860,6 +5194,12 @@
 	pixel_y = -22
 	},
 /turf/open/misc/asphalt/no_border,
+/area/trainstation/outdoor/station)
+"Ft" = (
+/obj/machinery/door/airlock/shuttle/ferry{
+	name = "Magnetic interlock control"
+	},
+/turf/open/indestructible/dark/textured,
 /area/trainstation/outdoor/station)
 "Fw" = (
 /obj/structure/prop/general/wymanhole,
@@ -4903,7 +5243,7 @@
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "FU" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/effect/mob_spawn/ghost_role/flesh_spider,
 /turf/open/floor/asphalt,
 /area/trainstation/outdoor/station)
@@ -4949,15 +5289,14 @@
 /turf/open/floor/asphalt,
 /area/trainstation/outdoor/station)
 "Gf" = (
-/obj/structure/prop/big/single,
-/turf/open/misc/asteroid/snow/standard_air,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
 /area/trainstation/outdoor/station)
 "Gk" = (
 /obj/item/ammo_casing/shotgun/incendiary{
 	pixel_x = 9;
 	pixel_y = -2
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "Gm" = (
@@ -4990,14 +5329,28 @@
 	},
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
+"GC" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
+/obj/effect/spawner/random/structure/crate,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/outdoor/station)
 "GJ" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_y = 11
 	},
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"GK" = (
+/obj/effect/turf_decal/siding/dark,
+/obj/structure/table/reinforced,
+/obj/machinery/coffeemaker/impressa,
+/obj/item/storage/box/coffeepack,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/outdoor/station)
 "GO" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "GQ" = (
@@ -5010,7 +5363,6 @@
 /obj/effect/decal/cleanable/blood/tracks{
 	dir = 6
 	},
-/obj/item/gun/ballistic/automatic/c20r/sc_c20r,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "GT" = (
@@ -5044,7 +5396,7 @@
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "Ha" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/indestructible/train_platform,
 /area/trainstation/outdoor/station)
 "Hc" = (
@@ -5203,6 +5555,13 @@
 	},
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
+"Ie" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 5
+	},
+/obj/effect/spawner/random/trash/graffiti,
+/turf/open/indestructible/dark/textured,
+/area/trainstation/outdoor/station)
 "If" = (
 /obj/effect/mob_spawn/corpse/human/nanotrasenelitesoldier,
 /obj/structure/flora/bush/fullgrass/style_random,
@@ -5275,6 +5634,18 @@
 /obj/item/ammo_box/magazine/m12g/empty,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"IL" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/computer/trainstation_control{
+	dir = 8
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleinvertcorner_side{
+	dir = 8
+	},
+/area/trainstation/outdoor/station)
 "IM" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_y = 9
@@ -5297,13 +5668,22 @@
 	},
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"Je" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/structure/extinguisher_cabinet/directional/west,
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/outdoor/station)
 "Jf" = (
 /obj/item/ammo_casing/c38/hotshot{
 	dir = 4;
 	pixel_y = -6;
 	pixel_x = -9
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "Jg" = (
@@ -5320,8 +5700,10 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "Ji" = (
-/obj/machinery/computer/trainstation_control,
-/turf/open/floor/iron/shuttle/exploration/side,
+/obj/effect/turf_decal/siding/dark{
+	dir = 5
+	},
+/turf/open/indestructible/dark/textured,
 /area/trainstation/outdoor/station)
 "Jl" = (
 /obj/structure/decorative{
@@ -5388,6 +5770,19 @@
 	name = "Floor"
 	},
 /area/trainstation/outdoor/station)
+"JA" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/structure/table/reinforced,
+/obj/machinery/fax{
+	fax_name = "Head of Personnel's Office";
+	name = "Head of Personnel's Fax Machine"
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/outdoor/station)
 "JC" = (
 /obj/effect/decal/cleanable/blood/drip{
 	pixel_y = 9
@@ -5406,6 +5801,10 @@
 "JF" = (
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/plating/cobblestone,
+/area/trainstation/outdoor/station)
+"JH" = (
+/mob/living/basic/khara_mutant/spreader,
+/turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "JM" = (
 /obj/effect/turf_decal/siding{
@@ -5462,12 +5861,28 @@
 	},
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"Kk" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/obj/structure/prop/general/zcomputermachine_off{
+	desc = "A relatively low-tech solution for internal computing, internal network mail, and logging. This model appears to be quite old.";
+	name = "locked down stasis control terminal"
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor/station)
 "Kn" = (
 /obj/item/gun/ballistic/rifle/boltaction,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "Kq" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "Kv" = (
@@ -5528,8 +5943,7 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "KO" = (
-/obj/structure/prop/big/napalm,
-/turf/open/misc/asteroid/snow/standard_air,
+/turf/open/floor/catwalk_floor/iron_dark,
 /area/trainstation/outdoor/station)
 "KT" = (
 /obj/effect/mob_spawn/corpse/human/nanotrasenelitesoldier,
@@ -5590,6 +6004,10 @@
 /obj/structure/prop/big/laser_beam,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"Lu" = (
+/obj/effect/turf_decal/siding/dark,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
+/area/trainstation/outdoor/station)
 "Lw" = (
 /obj/item/ammo_casing/shotgun/incendiary{
 	pixel_x = 15;
@@ -5598,7 +6016,7 @@
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "Lz" = (
-/mob/living/basic/corrupted_arachnid,
+/mob/living/basic/khara_mutant/arachnid,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "LC" = (
@@ -5606,7 +6024,7 @@
 	pixel_x = -1;
 	pixel_y = -12
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "LD" = (
@@ -5662,6 +6080,22 @@
 	pixel_y = 7
 	},
 /turf/open/misc/asteroid/snow/standard_air,
+/area/trainstation/outdoor/station)
+"LW" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/structure/table/reinforced,
+/obj/item/flashlight/lamp,
+/obj/item/papercutter,
+/obj/item/pen,
+/obj/effect/spawner/random/engineering/tool,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 8
+	},
 /area/trainstation/outdoor/station)
 "LY" = (
 /obj/structure/prop/city/street_dmg_animated,
@@ -5724,7 +6158,7 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "Mj" = (
-/mob/living/basic/corrupted_arachnid,
+/mob/living/basic/khara_mutant/arachnid,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "Mn" = (
@@ -5786,7 +6220,7 @@
 /area/trainstation/outdoor/station)
 "MA" = (
 /obj/item/ammo_casing/a223,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "MC" = (
@@ -5865,6 +6299,14 @@
 /obj/effect/decal/cleanable/blood,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
+"MW" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 4
+	},
+/area/trainstation/outdoor/station)
 "MX" = (
 /obj/effect/mob_spawn/ghost_role/flesh_spider,
 /turf/open/indestructible/meat,
@@ -5875,6 +6317,11 @@
 	},
 /obj/effect/gibspawner/human,
 /turf/open/indestructible/meat,
+/area/trainstation/outdoor/station)
+"Nb" = (
+/obj/effect/turf_decal/siding/dark,
+/obj/item/radio/intercom/directional/south,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
 /area/trainstation/outdoor/station)
 "Nc" = (
 /obj/structure/prop/general/redalert,
@@ -5954,7 +6401,7 @@
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "Nl" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/floor/iron/shuttle/exploration/blanktile,
 /area/trainstation/outdoor/station)
 "Nm" = (
@@ -5979,6 +6426,44 @@
 	},
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
+"Nv" = (
+/obj/structure/railing/unbreakable{
+	dir = 1
+	},
+/obj/structure/emergency_shield/regenerating{
+	uses_integrity = 0;
+	pixel_y = 32;
+	name = "stasis field";
+	desc = "A stasis field that's holding the train in place. Seems to be projected by the stasis projector."
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222"
+	},
+/obj/structure/decorative{
+	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi';
+	icon_state = "l4-4-8";
+	anchored = 1;
+	name = "cable";
+	color = "#222222";
+	pixel_y = -14
+	},
+/turf/open/indestructible/plating,
+/area/trainstation/outdoor/station)
+"Nz" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/trainstation/outdoor/station)
 "NB" = (
 /obj/structure/decorative{
 	anchored = 1;
@@ -6001,7 +6486,7 @@
 	pixel_x = -7;
 	pixel_y = 2
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/effect/decal/cleanable/blood,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
@@ -6293,6 +6778,17 @@
 /obj/structure/prop/general/redalert,
 /turf/closed/wall/city/siding,
 /area/trainstation/outdoor/station)
+"Pd" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/machinery/modular_computer/preset/civilian{
+	dir = 4
+	},
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
+/area/trainstation/outdoor/station)
 "Pi" = (
 /obj/item/ammo_box/magazine/m12g/empty,
 /turf/open/misc/asphalt/no_border,
@@ -6324,6 +6820,17 @@
 	color = "#d66569"
 	},
 /turf/closed/wall/city/siding/style/style_2,
+/area/trainstation/outdoor/station)
+"Px" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/spawner/random/entertainment/lighter,
+/obj/effect/spawner/random/medical/medkit,
+/obj/structure/table/reinforced,
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
 /area/trainstation/outdoor/station)
 "Pz" = (
 /obj/structure/decorative{
@@ -6450,6 +6957,10 @@
 	},
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
+"QD" = (
+/obj/item/paper/trainstation_password,
+/turf/open/floor/iron/shuttle/exploration/blanktile,
+/area/trainstation/outdoor/station)
 "QI" = (
 /obj/effect/decal/cleanable/blood/tracks{
 	dir = 8;
@@ -6478,6 +6989,13 @@
 	pixel_x = -11
 	},
 /turf/open/misc/asteroid/snow/standard_air,
+/area/trainstation/outdoor/station)
+"QZ" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/obj/structure/filingcabinet/medical,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
 /area/trainstation/outdoor/station)
 "Rb" = (
 /obj/item/ammo_casing/shotgun/incendiary{
@@ -6595,7 +7113,7 @@
 /obj/structure/deployable_barricade/metal/plasteel{
 	dir = 8
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/indestructible/meat,
 /area/trainstation/outdoor/station)
 "RQ" = (
@@ -6624,7 +7142,7 @@
 /area/trainstation/outdoor/station)
 "RX" = (
 /obj/structure/flora/tree/massive/dead/style_3,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/structure/flora/bush/fullgrass/style_random,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
@@ -6791,6 +7309,7 @@
 	icon_state = "blob_floor";
 	color = "#d66569"
 	},
+/turf/closed/indestructible/fakedoor,
 /area/trainstation/outdoor/station)
 "SX" = (
 /obj/effect/mob_spawn/corpse/human/nanotrasenassaultsoldier,
@@ -6875,8 +7394,10 @@
 /turf/open/indestructible/train_platform,
 /area/trainstation/outdoor/station)
 "TV" = (
-/obj/item/gun/ballistic/rifle/boltaction,
-/turf/open/misc/asphalt/no_border,
+/obj/machinery/door/airlock/shuttle/ferry{
+	name = "Magnetic interlock control"
+	},
+/turf/open/indestructible/vault,
 /area/trainstation/outdoor/station)
 "TY" = (
 /obj/item/ammo_casing/shotgun/incendiary{
@@ -6903,11 +7424,16 @@
 /area/trainstation/outdoor/station)
 "Uh" = (
 /obj/item/ammo_box/magazine/miecz/spawns_empty,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "Us" = (
-/turf/closed/wall/city/siding/red/style,
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/status_display/evac/directional/east,
+/turf/open/indestructible/dark/textured,
 /area/trainstation/outdoor/station)
 "Uw" = (
 /obj/structure/decorative{
@@ -6945,6 +7471,22 @@
 	pixel_y = 10
 	},
 /turf/open/floor/iron/shuttle/exploration/blanktile,
+/area/trainstation/outdoor/station)
+"UB" = (
+/obj/structure/prop/city/buildingventbig11_off{
+	name = "Generator";
+	dir = 1;
+	pixel_x = -16
+	},
+/obj/structure/railing{
+	dir = 2;
+	color = "#666666";
+	pixel_y = 0
+	},
+/obj/effect/turf_decal/siding/dark{
+	dir = 10
+	},
+/turf/open/indestructible/dark/textured,
 /area/trainstation/outdoor/station)
 "UD" = (
 /obj/item/ammo_casing/c38{
@@ -6989,7 +7531,7 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "UV" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/structure/flora/bush/fullgrass/style_random,
 /obj/effect/decal/cleanable/blood,
 /turf/open/misc/asteroid/snow/standard_air,
@@ -7006,7 +7548,7 @@
 /obj/item/ammo_casing/mm20x138{
 	pixel_x = 18
 	},
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
 "Vh" = (
@@ -7014,10 +7556,8 @@
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "Vi" = (
-/obj/structure/prop/general/highvoltagegrille{
-	dir = 8
-	},
-/turf/open/misc/asteroid/snow/standard_air,
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/shuttle/exploration/doubleside,
 /area/trainstation/outdoor/station)
 "Vn" = (
 /obj/effect/mob_spawn/corpse/human/charredskeleton,
@@ -7041,7 +7581,7 @@
 /area/trainstation/outdoor/station)
 "Vw" = (
 /obj/effect/gibspawner/human,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "VA" = (
@@ -7311,7 +7851,7 @@
 "Xd" = (
 /obj/effect/gibspawner/human,
 /obj/item/ammo_box/magazine/m12g/empty,
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /turf/open/misc/asphalt/no_border,
 /area/trainstation/outdoor/station)
 "Xg" = (
@@ -7349,7 +7889,7 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "Xw" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/item/gun/ballistic/automatic/sniper_rifle,
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
@@ -7382,7 +7922,7 @@
 /turf/open/misc/asteroid/snow/standard_air,
 /area/trainstation/outdoor/station)
 "XH" = (
-/mob/living/basic/flesh_mutant_spider,
+/mob/living/basic/khara_mutant/flesh_spider,
 /obj/effect/decal/cleanable/blood,
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
@@ -7560,6 +8100,14 @@
 	},
 /turf/closed/wall/city/siding/red/style/style_2,
 /area/trainstation/outdoor/station)
+"YN" = (
+/obj/effect/turf_decal/siding{
+	pixel_y = 32;
+	dir = 4
+	},
+/mob/living/basic/khara_mutant/reaper,
+/turf/open/misc/asteroid/snow/standard_air,
+/area/trainstation/outdoor/station)
 "YO" = (
 /obj/item/ammo_casing/c357,
 /turf/open/indestructible/meat,
@@ -7575,6 +8123,15 @@
 	pixel_y = -3
 	},
 /turf/open/misc/asphalt/no_border,
+/area/trainstation/outdoor/station)
+"YS" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
+/obj/item/kirbyplants/random,
+/turf/open/floor/iron/shuttle/exploration/corner_invcorner{
+	dir = 1
+	},
 /area/trainstation/outdoor/station)
 "YT" = (
 /obj/structure/fence/interlink{
@@ -7610,16 +8167,17 @@
 	},
 /turf/open/misc/dirt/icy_planet,
 /area/trainstation/outdoor/station)
-"Zj" = (
-/obj/structure/decorative{
-	anchored = 1;
-	name = "flesh amoeba";
-	desc = "It's pulsing...";
-	icon = 'modular_skyrat/modules/mold/icons/blob_resin.dmi';
-	icon_state = "blob_wall";
-	color = "#d66569"
+"Zk" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
 	},
-/turf/closed/indestructible/fakedoor,
+/obj/structure/chair/office/tactical{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/shuttle/exploration/doubleside{
+	dir = 8
+	},
 /area/trainstation/outdoor/station)
 "Zu" = (
 /obj/structure/prop/tgmc_console4{
@@ -7645,6 +8203,16 @@
 	pixel_x = -20
 	},
 /turf/open/misc/asteroid/snow/standard_air,
+/area/trainstation/outdoor/station)
+"ZH" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 10
+	},
+/obj/structure/closet/secure_closet/personal,
+/obj/item/clothing/under/syndicate/skyrat/overalls/unarmoured,
+/obj/effect/spawner/random/special_lighter,
+/obj/effect/spawner/random/entertainment/plushie_delux,
+/turf/open/indestructible/dark/textured,
 /area/trainstation/outdoor/station)
 "ZK" = (
 /obj/structure/fence/interlink{
@@ -7841,16 +8409,16 @@ Rl
 FD
 Rl
 tT
-xi
-xi
+SW
+SW
 nX
 mR
 mR
 tT
 mR
 mR
-xi
-xi
+SW
+SW
 nX
 tT
 Rl
@@ -7904,7 +8472,7 @@ sh
 FQ
 SX
 yD
-yD
+hM
 qq
 yD
 fq
@@ -7944,12 +8512,12 @@ Rl
 Rl
 sh
 Ky
-yD
+QD
 qq
 px
 uS
 yD
-yD
+xP
 yD
 uZ
 xM
@@ -7985,7 +8553,7 @@ Rl
 Rl
 Rl
 sh
-Ji
+FQ
 yD
 yD
 HP
@@ -8090,7 +8658,7 @@ YX
 (10,1,1) = {"
 jt
 ec
-Zj
+vv
 ct
 ct
 ct
@@ -8117,7 +8685,7 @@ uf
 yD
 uS
 qq
-yD
+hM
 yD
 ov
 xM
@@ -8426,7 +8994,7 @@ YX
 (18,1,1) = {"
 oz
 Rl
-Zj
+vv
 ct
 ct
 ct
@@ -8894,9 +9462,9 @@ Tq
 tT
 Tq
 Tq
-xi
-xi
-xi
+SW
+SW
+SW
 Tq
 Tq
 WL
@@ -8944,7 +9512,7 @@ Rl
 Rl
 Rl
 Rl
-Ir
+Rl
 jn
 Rl
 Rl
@@ -9161,7 +9729,7 @@ Rl
 Rl
 Rl
 Rl
-Rl
+sE
 Rl
 Rl
 Rl
@@ -9248,7 +9816,7 @@ Rl
 Rl
 Rl
 Rl
-Rl
+pn
 jn
 Ir
 Rl
@@ -9284,7 +9852,7 @@ Rl
 Rl
 Rl
 aO
-Rl
+pn
 SK
 Rl
 Rl
@@ -9355,7 +9923,7 @@ ct
 ct
 ct
 AB
-TV
+Wk
 Wk
 Wk
 Wg
@@ -9457,11 +10025,11 @@ Rl
 Rl
 Rl
 Rl
+JH
 Rl
 Rl
 Rl
-Rl
-Rl
+sE
 Rl
 Rl
 Rl
@@ -9585,7 +10153,7 @@ JM
 HN
 kA
 JM
-HN
+YN
 JM
 kA
 JM
@@ -9663,7 +10231,7 @@ Rl
 Rl
 Rl
 Rl
-kA
+qQ
 kA
 kA
 kA
@@ -9694,7 +10262,7 @@ NY
 sZ
 jM
 Hx
-Zj
+vv
 ct
 ct
 ct
@@ -9858,7 +10426,7 @@ wj
 ct
 ct
 ct
-Zj
+vv
 Wk
 Pa
 yY
@@ -10322,7 +10890,7 @@ ct
 ct
 oz
 YL
-zD
+YL
 yI
 oz
 ct
@@ -10362,7 +10930,7 @@ wj
 ct
 ct
 ct
-xi
+SW
 Wk
 BM
 mB
@@ -10698,11 +11266,11 @@ wj
 ct
 ct
 ct
-xi
+SW
 iH
 Wk
 Wk
-li
+iV
 ct
 ct
 ct
@@ -10740,7 +11308,7 @@ wj
 ct
 ct
 ct
-eG
+yA
 VE
 ML
 kf
@@ -10866,11 +11434,11 @@ wj
 ct
 ct
 ct
-xi
+SW
 Rl
 nz
 Rl
-li
+iV
 ct
 ct
 ct
@@ -11047,7 +11615,7 @@ RG
 uM
 Kq
 bU
-li
+iV
 ct
 ct
 ct
@@ -11177,7 +11745,7 @@ ct
 ct
 ct
 ct
-li
+iV
 YL
 dy
 YL
@@ -11209,7 +11777,7 @@ aN
 aN
 ul
 Fp
-Zj
+vv
 ct
 ct
 ct
@@ -11219,7 +11787,7 @@ ct
 ct
 ct
 ct
-li
+iV
 MX
 uz
 KT
@@ -11251,7 +11819,7 @@ CP
 QT
 Mn
 wl
-Zj
+vv
 ct
 ct
 ct
@@ -11549,7 +12117,7 @@ Va
 Va
 MH
 Va
-li
+iV
 aA
 Va
 aA
@@ -11667,7 +12235,7 @@ Lp
 NM
 rF
 aN
-li
+iV
 ct
 ct
 ct
@@ -11735,7 +12303,7 @@ Wk
 yY
 qs
 Gb
-mX
+tI
 Gb
 Va
 Va
@@ -11793,7 +12361,7 @@ nd
 Xw
 Qm
 kF
-li
+iV
 ct
 ct
 ct
@@ -11827,10 +12395,10 @@ YX
 "}
 (99,1,1) = {"
 Va
-Rl
-Rl
-Rl
-Rl
+ct
+ct
+ct
+ct
 lm
 KN
 Wk
@@ -11849,7 +12417,7 @@ ct
 ct
 yA
 Wk
-Va
+yA
 ct
 ct
 ct
@@ -11869,11 +12437,11 @@ YX
 "}
 (100,1,1) = {"
 Va
-Rl
-Rl
-Rl
-Rl
-li
+ct
+ct
+ct
+ct
+iV
 tV
 wf
 mc
@@ -11911,10 +12479,10 @@ YX
 "}
 (101,1,1) = {"
 Gb
-Rl
-Rl
-Rl
-Rl
+ct
+ct
+ct
+ct
 kz
 bI
 Wk
@@ -11939,7 +12507,7 @@ ct
 ct
 ct
 ct
-SW
+DZ
 yo
 YL
 LN
@@ -11953,10 +12521,10 @@ YX
 "}
 (102,1,1) = {"
 Va
-Rl
-Rl
-Rl
-Rl
+ct
+ct
+ct
+ct
 nd
 nj
 Rl
@@ -12154,7 +12722,7 @@ Rl
 Yx
 Wk
 Rl
-xi
+SW
 ct
 ct
 ct
@@ -12264,7 +12832,7 @@ BZ
 Pr
 Wk
 ZE
-li
+iV
 ct
 ct
 Gb
@@ -12358,7 +12926,7 @@ Rl
 Va
 ct
 ct
-Zj
+vv
 Xj
 jj
 os
@@ -12397,7 +12965,7 @@ Va
 cY
 YL
 eg
-li
+iV
 ct
 ct
 Va
@@ -12645,7 +13213,7 @@ GZ
 nF
 nF
 Uw
-xi
+SW
 nF
 Uw
 nF
@@ -12696,7 +13264,7 @@ dQ
 aN
 aN
 Wk
-Zj
+vv
 ct
 ct
 ct
@@ -12810,7 +13378,7 @@ aN
 Ac
 Wk
 Wk
-li
+iV
 ct
 ct
 ct
@@ -13086,13 +13654,13 @@ YX
 YX
 "}
 (129,1,1) = {"
-ur
+nF
 ia
 ia
 ia
 ia
 ia
-ur
+nF
 Rl
 Bw
 Wh
@@ -15318,11 +15886,11 @@ TQ
 TQ
 UR
 TQ
-Kd
-gq
-Rl
-Rl
-gq
+TQ
+TQ
+TQ
+TQ
+TQ
 YX
 YX
 YX
@@ -15360,11 +15928,11 @@ UR
 TQ
 TQ
 TQ
-Kd
-Rl
-Rl
-Rl
-Rl
+TQ
+TQ
+TQ
+TQ
+TQ
 YX
 YX
 YX
@@ -15396,18 +15964,18 @@ Rl
 YX
 "}
 (184,1,1) = {"
-YX
-YX
-YX
-YX
-YX
-YX
-YX
+FG
+nF
+Va
+nF
+nF
+nF
+Va
+nF
+TQ
+TQ
+TQ
 Rl
-Rl
-gq
-Rl
-YX
 YX
 YX
 YX
@@ -15438,18 +16006,18 @@ Rl
 YX
 "}
 (185,1,1) = {"
-YX
-YX
-YX
-YX
-YX
-YX
-YX
+zk
+VX
+pB
+UB
+iT
+ep
+ZH
+nF
+TQ
+TQ
+TQ
 Rl
-Rl
-Rl
-YX
-YX
 YX
 YX
 YX
@@ -15480,19 +16048,19 @@ Rl
 YX
 "}
 (186,1,1) = {"
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
+Kk
+VX
+Ji
+er
+Ie
+Us
+GC
+nF
+TQ
+TQ
+TQ
 Rl
 Rl
-YX
-YX
-YX
 YX
 YX
 YX
@@ -15522,19 +16090,19 @@ Rl
 YX
 "}
 (187,1,1) = {"
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
+Al
+Va
+nF
+nF
+Ft
+nF
+nF
+Va
+nF
+TQ
+TQ
+Rl
+Rl
 YX
 YX
 YX
@@ -15564,19 +16132,19 @@ Rl
 YX
 "}
 (188,1,1) = {"
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
+mb
+nF
+ea
+tX
+wK
+Je
+MW
+Aw
+nE
+TQ
+TQ
+Rl
+Rl
 YX
 YX
 YX
@@ -15606,19 +16174,19 @@ Rl
 YX
 "}
 (189,1,1) = {"
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
+cN
+nF
+rx
+yf
+Nz
+KO
+Gf
+Lu
+TV
+TQ
+TQ
+Rl
+Rl
 YX
 YX
 YX
@@ -15648,6 +16216,19 @@ Rl
 YX
 "}
 (190,1,1) = {"
+qZ
+VX
+LW
+Pd
+JA
+bS
+fm
+dY
+nF
+TQ
+TQ
+Rl
+Rl
 YX
 YX
 YX
@@ -15658,23 +16239,10 @@ YX
 YX
 YX
 YX
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
+YX
+YX
+YX
+YX
 YX
 YX
 YX
@@ -15690,6 +16258,19 @@ Rl
 YX
 "}
 (191,1,1) = {"
+Nv
+nF
+yM
+Zk
+fy
+wK
+Fl
+nF
+Va
+TQ
+TQ
+Rl
+Rl
 YX
 YX
 YX
@@ -15700,23 +16281,10 @@ YX
 YX
 YX
 YX
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Gf
-yf
-KO
-Rl
+YX
+YX
+YX
+YX
 YX
 YX
 YX
@@ -15732,6 +16300,18 @@ Rl
 YX
 "}
 (192,1,1) = {"
+mb
+nF
+QZ
+KO
+Gf
+KO
+GK
+nF
+Rl
+Rl
+Rl
+Rl
 YX
 YX
 YX
@@ -15742,23 +16322,11 @@ YX
 YX
 YX
 YX
-Rl
-Us
-hI
-jt
-eG
-Rl
-aA
-Va
-VX
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
+YX
+YX
+YX
+YX
+YX
 YX
 YX
 YX
@@ -15774,33 +16342,33 @@ YX
 YX
 "}
 (193,1,1) = {"
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-YX
-Rl
-Us
+EA
+nF
+yB
+Nz
 hI
-jt
-eG
-Rl
-aA
+KO
+oR
 Va
-VX
 Rl
 Rl
 Rl
 Rl
-Rl
-Rl
-Rl
-Rl
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
 YX
 YX
 YX
@@ -15816,6 +16384,17 @@ YX
 YX
 "}
 (194,1,1) = {"
+Kk
+nF
+Fn
+KO
+Vi
+KO
+Nb
+VX
+Rl
+Rl
+Rl
 YX
 YX
 YX
@@ -15826,23 +16405,12 @@ YX
 YX
 YX
 YX
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-hM
-Rl
+YX
+YX
+YX
+YX
+YX
+YX
 YX
 YX
 YX
@@ -15858,6 +16426,15 @@ YX
 YX
 "}
 (195,1,1) = {"
+eo
+VX
+zD
+Px
+IL
+jz
+YS
+nF
+Rl
 YX
 YX
 YX
@@ -15868,23 +16445,14 @@ YX
 YX
 YX
 YX
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Lt
-Rl
-Rl
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
 YX
 YX
 YX
@@ -15900,6 +16468,14 @@ YX
 YX
 "}
 (196,1,1) = {"
+FG
+nF
+nF
+nF
+nF
+nF
+nF
+Va
 YX
 YX
 YX
@@ -15910,23 +16486,15 @@ YX
 YX
 YX
 YX
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
 YX
 YX
 YX
@@ -15952,23 +16520,23 @@ YX
 YX
 YX
 YX
-Rl
-wN
-Rl
-nF
-Rl
-Aw
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Vi
-Rl
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
 YX
 YX
 YX
@@ -15994,23 +16562,23 @@ YX
 YX
 YX
 YX
-Rl
-wN
-Rl
-nF
-Rl
-Aw
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Vi
-Rl
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
 YX
 YX
 YX
@@ -16036,23 +16604,23 @@ YX
 YX
 YX
 YX
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
-Rl
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
+YX
 YX
 YX
 YX
