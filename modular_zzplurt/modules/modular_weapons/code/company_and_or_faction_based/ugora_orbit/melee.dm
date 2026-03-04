@@ -22,8 +22,8 @@ Speaking of which, daisho are also fun :3
 /obj/item/storage/belt/secdaisho
 	name = "security saya"
 	desc = "A modified scabbard intended to hold a sword and a specialized baton at the same time"
-	icon = 'modular_zzplurt/master_files/icons/obj/clothing/job/belts.dmi'
-	worn_icon = 'modular_zzplurt/master_files/icons/mob/clothing/job/belt.dmi'
+	icon = 'modular_zzplurt/icons/obj/clothing/belts.dmi'
+	worn_icon = 'modular_zzplurt/icons/mob/clothing/belt.dmi'
 	icon_state = "secdaisho"
 	base_icon_state = "secdaisho"
 	worn_icon_state = "secdaisho"
@@ -34,15 +34,15 @@ Speaking of which, daisho are also fun :3
 	uses_advanced_reskins = TRUE
 	unique_reskin = list(
 		"Blue" = list(
-			RESKIN_ICON = 'modular_zzplurt/master_files/icons/obj/clothing/job/belts.dmi',
+			RESKIN_ICON = 'modular_zzplurt/icons/obj/clothing/belts.dmi',
 			RESKIN_ICON_STATE = "secdaisho",
-			RESKIN_WORN_ICON = 'modular_zzplurt/master_files/icons/mob/clothing/job/belt.dmi',
+			RESKIN_WORN_ICON = 'modular_zzplurt/icons/mob/clothing/belt.dmi',
 			RESKIN_WORN_ICON_STATE = "secdaisho"
 		),
 		"Black" = list(
-			RESKIN_ICON = 'modular_zzplurt/master_files/icons/obj/clothing/job/belts.dmi',
+			RESKIN_ICON = 'modular_zzplurt/icons/obj/clothing/belts.dmi',
 			RESKIN_ICON_STATE = "blackdaisho",
-			RESKIN_WORN_ICON = 'modular_zzplurt/master_files/icons/mob/clothing/job/belt.dmi',
+			RESKIN_WORN_ICON = 'modular_zzplurt/icons/mob/clothing/belt.dmi',
 			RESKIN_WORN_ICON_STATE = "blackdaisho"
 		)
 	)
@@ -161,7 +161,7 @@ He may be right afterall.
 	var/maximum_damage_bonus = 20
 
 /obj/item/melee/reverbing_blade/get_belt_overlay()
-	return mutable_appearance('modular_zzplurt/master_files/icons/obj/clothing/job/belts.dmi', "sword")
+	return mutable_appearance('modular_zzplurt/icons/obj/clothing/belts.dmi', "sword")
 
 /obj/item/melee/reverbing_blade/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK, damage_type = BRUTE)
 	if(attack_type == (PROJECTILE_ATTACK || OVERWHELMING_ATTACK))
@@ -390,7 +390,7 @@ He may be right afterall.
 	knockdown_time = 0 SECONDS //This does not knockdown. Doesn't need to.
 
 /obj/item/melee/baton/jitte/get_belt_overlay()
-	return mutable_appearance('modular_zzplurt/master_files/icons/obj/clothing/job/belts.dmi', "baton")
+	return mutable_appearance('modular_zzplurt/icons/obj/clothing/belts.dmi', "baton")
 
 /obj/item/melee/baton/jitte/additional_effects_non_cyborg(mob/living/target, mob/living/user)
 	target.set_confusion_if_lower(3 SECONDS)

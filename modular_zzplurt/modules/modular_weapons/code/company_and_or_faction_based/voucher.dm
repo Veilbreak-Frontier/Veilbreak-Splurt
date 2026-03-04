@@ -9,7 +9,7 @@ Kayian Janissary.
 /datum/voucher_set/yog_knights/daisho
 	name = "Security Daisho"
 	description = "A set of sword and baton with a dual sheath belt harness. This replaces your standard security belt"
-	icon = 'modular_zzplurt/master_files/icons/obj/clothing/job/belts.dmi'
+	icon = 'modular_zzplurt/icons/obj/clothing/belts.dmi'
 	icon_state = "secdaisho"
 	set_items = list(
 		/obj/item/storage/belt/secdaisho/full,
@@ -35,7 +35,7 @@ Kayian Janissary.
 
 /obj/item/melee_voucher/attack_self(mob/living/user)
 	var/list/melee_spawnables = list(
-		"Security Dual Sheath Belt" = image(icon = 'modular_zzplurt/master_files/icons/obj/clothing/job/belts.dmi', icon_state = "blackdaisho"),
+		"Security Dual Sheath Belt" = image(icon = 'modular_zzplurt/icons/obj/clothing/belts.dmi', icon_state = "blackdaisho"),
 		"Security Belt + Dagger, Recommended" = image(icon = 'icons/obj/clothing/belts.dmi', icon_state = "security"),
 	)
 	var/pick = show_radial_menu(user, src, melee_spawnables, radius = 36, require_near = TRUE, tooltips = TRUE)
