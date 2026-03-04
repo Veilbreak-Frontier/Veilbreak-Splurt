@@ -139,9 +139,9 @@ He may be right afterall.
 
 	icon_angle = -45
 
-	icon = 'modular_zzplurt/modules/modular_weapons/icons/obj/company_and_or_faction_based/ugora_orbit/sword32.dmi'
-	lefthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/sword_lefthand32.dmi'
-	righthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/sword_righthand32.dmi'
+	icon = 'modular_zzplurt/icons/obj/ugora_orbit/sword32.dmi'
+	lefthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/sword_lefthand32.dmi'
+	righthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/sword_righthand32.dmi'
 
 	block_chance = 33 //a 1 in 3 chance to block attack is ok.
 	force = 15
@@ -186,12 +186,12 @@ He may be right afterall.
 	name = "oscillating sword"
 	desc = "A long energy blade fielded by the Ugora regal guardian. These 'swords' lack sharp edges, that said, it is still extremely lightweight to swing and can burn target hit by it, and is easier to block incoming attack with."
 	desc_controls = "This sword inflicts bluespace scarring, occult target afflicted by this cannot jaunt or teleport!"
-	icon = 'modular_zzplurt/modules/modular_weapons/icons/obj/company_and_or_faction_based/ugora_orbit/sword.dmi'
+	icon = 'modular_zzplurt/icons/obj/ugora_orbit/sword.dmi'
 	icon_state = "secsword0"
 	inhand_icon_state = "secsword0"
 	worn_icon_state = "claymore"
-	lefthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/sword_lefthand.dmi'
-	righthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/sword_righthand.dmi'
+	lefthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/sword_lefthand.dmi'
+	righthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/sword_righthand.dmi'
 	block_chance = 50
 	armour_penetration = 25 //Yes we actually tested this. Even in best case scenario it still takes 10 hit to down. We have too low of a base damage to be an issue
 	force = 13 //low base damage, high ramp up. You use this for support.
@@ -227,11 +227,11 @@ He may be right afterall.
 /obj/item/knife/oscu_tanto
 	name = "\improper realta"
 	desc = "An electrified blade, designed by ugora orbit. These are used in frontier peacekeeping operation and for disciplinary action."
-	icon = 'modular_zzplurt/modules/modular_weapons/icons/obj/company_and_or_faction_based/ugora_orbit/tanto.dmi'
+	icon = 'modular_zzplurt/icons/obj/ugora_orbit/tanto.dmi'
 	icon_state = "tanto"
 	inhand_icon_state = "tantohand"
-	lefthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/tanto_lefthand.dmi'
-	righthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/tanto_righthand.dmi'
+	lefthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/tanto_lefthand.dmi'
+	righthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/tanto_righthand.dmi'
 	worn_icon_state = "knife"
 	force = 15
 	w_class = WEIGHT_CLASS_NORMAL //It's not exactly big but it's kind of long.
@@ -295,9 +295,9 @@ He may be right afterall.
 /obj/item/melee/sec_truncheon //I am reserving this as a different melee type incase I need to redesign it
 	name = "\improper blackjack" //Thief is a pretty cool game.
 	desc = "A short, easily concealed club weapons consisting of a dense weight attached to the end of a short shaft" //copied from wikipedia, feel free to put cooler one if you got it in mind, mhm?
-	icon = 'modular_zzplurt/modules/modular_weapons/icons/obj/company_and_or_faction_based/ugora_orbit/jitte.dmi'
-	lefthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/jitte_lefthand.dmi'
-	righthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/jitte_righthand.dmi'
+	icon = 'modular_zzplurt/icons/obj/ugora_orbit/jitte.dmi'
+	lefthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/jitte_lefthand.dmi'
+	righthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/jitte_righthand.dmi'
 	icon_state = "blackjack"
 	inhand_icon_state = "jitte"
 	worn_icon_state = "knife"
@@ -378,9 +378,9 @@ He may be right afterall.
 //Lower hit delay and lower stamina damage. Reward certain playstyle.
 /obj/item/melee/baton/jitte
 	name = "constrictor baton"
-	icon = 'modular_zzplurt/modules/modular_weapons/icons/obj/company_and_or_faction_based/ugora_orbit/jitte.dmi'
-	lefthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/jitte_lefthand.dmi'
-	righthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/jitte_righthand.dmi'
+	icon = 'modular_zzplurt/icons/obj/ugora_orbit/jitte.dmi'
+	lefthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/jitte_lefthand.dmi'
+	righthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/jitte_righthand.dmi'
 	icon_state = "jitte"
 	inhand_icon_state = "jitte"
 	desc = "A hard plastic-metal composite jitte to be used in combination with your sword. Not as effective at knocking down target. But can knock weapon out of target hands if they are staggered or facing away"

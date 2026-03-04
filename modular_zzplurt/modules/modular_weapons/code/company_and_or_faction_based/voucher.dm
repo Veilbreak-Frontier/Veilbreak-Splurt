@@ -27,7 +27,7 @@ Kayian Janissary.
 /obj/item/melee_voucher
 	name = "security utility belt voucher"
 	desc = "A card with basic identification marking on it, this one redeems security belts. Use in hand."
-	icon = 'modular_zzplurt/modules/modular_weapons/icons/obj/company_and_or_faction_based/ugora_orbit/voucher.dmi'
+	icon = 'modular_zzplurt/icons/obj/ugora_orbit/voucher.dmi'
 	icon_state = "melee_voucher"
 	w_class = WEIGHT_CLASS_SMALL
 	//Should we allow multiple usage? It could be handy for putting entire loadout into one with decrementing charge

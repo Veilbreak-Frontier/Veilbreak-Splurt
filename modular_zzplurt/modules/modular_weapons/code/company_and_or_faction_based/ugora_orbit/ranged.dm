@@ -17,7 +17,7 @@ With help of an aussie catgirl
 /obj/item/gun/energy/laser/energy_bow
 	name = "hardlight bow"
 	desc = "A modern version of the Ugoran Bow used by the Citadel"
-	icon = 'modular_zzplurt/modules/modular_weapons/icons/obj/company_and_or_faction_based/ugora_orbit/guns48x.dmi'
+	icon = 'modular_zzplurt/icons/obj/ugora_orbit/guns48x.dmi'
 
 	shaded_charge = FALSE
 	charge_sections = 1
@@ -26,9 +26,9 @@ With help of an aussie catgirl
 	inhand_icon_state = "yato"
 	base_icon_state = "thisfuckingbow"
 
-	lefthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/guns_lefthand.dmi'
-	righthand_file = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/guns_righthand.dmi'
-	worn_icon = 'modular_zzplurt/modules/modular_weapons/icons/mob/company_and_or_faction_based/ugora_orbit/guns_worn.dmi'
+	lefthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/guns_lefthand.dmi'
+	righthand_file = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/guns_righthand.dmi'
+	worn_icon = 'modular_zzplurt/icons/mob/inhands/weapons/ugora_orbit/guns_worn.dmi'
 	worn_icon_state = "yato"
 	ammo_type = list(/obj/item/ammo_casing/energy/hardlight_bow)
 	/// An ID for our drop discharge timer.

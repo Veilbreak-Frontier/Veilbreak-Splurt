@@ -6,7 +6,7 @@
 /obj/projectile/energy_arrow
 	name = "energy arrow"
 	desc = "IF YOU CAN READ THIS PLEASE CONTACT KALI ON DISCORD"
-	icon = 'modular_zzplurt/modules/modular_weapons/icons/obj/company_and_or_faction_based/ugora_orbit/projectile.dmi'
+	icon = 'modular_zzplurt/icons/obj/ugora_orbit/projectile.dmi'
 	icon_state = "arrow_energy"
 	damage = 30
 	armour_penetration = 25 //So that it is less likely to be blocked.
