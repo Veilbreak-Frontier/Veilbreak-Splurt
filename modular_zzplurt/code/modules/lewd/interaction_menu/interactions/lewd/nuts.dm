@@ -52,3 +52,139 @@
 		target_pleasure = abs(original_pleasure) * 1.5 // Masochists get 50% more pleasure from the pain
 	. = ..()
 	target_pleasure = original_pleasure
+
+
+// Ball/sac smothering interactions - smother target's face with testicles
+/datum/interaction/lewd/ball_smother
+	name = "Ball Smother"
+	description = "Smother their face with your balls. (Warning: Causes oxygen loss)"
+	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
+	user_required_parts = list(ORGAN_SLOT_TESTICLES = REQUIRE_GENITAL_EXPOSED)
+	target_arousal = 8
+	target_pleasure = 6
+	target_pain = 0
+	user_arousal = 6
+	user_pleasure = 6
+	user_pain = 0
+	sound_possible = list(
+		'modular_zzplurt/sound/interactions/squelch1.ogg',
+		'modular_zzplurt/sound/interactions/squelch2.ogg'
+	)
+	sound_range = 1
+	sound_use = TRUE
+
+/datum/interaction/lewd/ball_smother/act(mob/living/user, mob/living/target)
+	message = null
+
+	// Base values
+	target_arousal = 8
+	target_pleasure = 6
+	user_arousal = 6
+	user_pleasure = 6
+
+	switch(resolve_intent_name(user))
+		if("harm")
+			target_pain = 4
+			message = list(
+				"drops their heavy ballsack onto %TARGET%'s face, crushing their nose and blocking airways.",
+				"presses their testicles hard against %TARGET%'s mouth and nose, smothering them.",
+				"forces %TARGET%'s face into their balls, cutting off all air supply."
+			)
+		if("grab")
+			target_arousal += 3
+			target_pleasure += 2
+			user_arousal += 2
+			message = list(
+				"wraps their legs around %TARGET%'s head and pulls their balls over their face.",
+				"presses their sac against %TARGET%'s nose and mouth, smothering them.",
+				"grinds their balls over %TARGET%'s face, blocking their airways."
+			)
+		else // help
+			message = list(
+				"gently lowers their balls onto %TARGET%'s face.",
+				"carefully covers %TARGET%'s nose and mouth with their sac.",
+				"lays their testicles over %TARGET%'s face, a warm smother."
+			)
+
+	// Check for choke slut trait
+	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
+		target_arousal += 8
+		target_pleasure += 4
+		to_chat(target, span_purple("You can barely breathe with their balls on your face... it's incredible!"))
+
+	. = ..()
+
+/datum/interaction/lewd/ball_smother/post_interaction(mob/living/user, mob/living/target)
+	. = ..()
+	if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		var/stat_before = target.stat
+		target.adjust_oxy_loss(3)
+		if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+			message = list("%TARGET% passes out under %USER%'s ballsack.")
+
+
+/datum/interaction/lewd/ball_smother_deep
+	name = "Deep Ball Smother"
+	description = "Force their face into your sac. (Warning: Causes severe oxygen loss)"
+	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
+	user_required_parts = list(ORGAN_SLOT_TESTICLES = REQUIRE_GENITAL_EXPOSED)
+	target_arousal = 10
+	target_pleasure = 8
+	target_pain = 2
+	user_arousal = 8
+	user_pleasure = 6
+	user_pain = 0
+	sound_possible = list(
+		'modular_zzplurt/sound/interactions/squelch1.ogg',
+		'modular_zzplurt/sound/interactions/squelch2.ogg'
+	)
+	sound_range = 1
+	sound_use = TRUE
+
+/datum/interaction/lewd/ball_smother_deep/act(mob/living/user, mob/living/target)
+	message = null
+
+	// Base values
+	target_arousal = 10
+	target_pleasure = 8
+	user_arousal = 8
+	user_pleasure = 6
+
+	switch(resolve_intent_name(user))
+		if("harm")
+			target_pain = 4
+			message = list(
+				"shoves %TARGET%'s face deep into their ballsack, completely enveloping their head.",
+				"forces %TARGET%'s face into their sac, squeezing tight around their head.",
+				"wraps their heavy testicles around %TARGET%'s face, cutting off all air completely."
+			)
+		if("grab")
+			target_arousal += 4
+			target_pleasure += 3
+			user_arousal += 3
+			message = list(
+				"pulls %TARGET%'s head deep into their ballsack, completely covering their face.",
+				"wraps their legs around %TARGET%'s head and pushes them deep into their sac.",
+				"grinds %TARGET%'s face deep into their testicles, cutting off all air."
+			)
+		else // help
+			message = list(
+				"gently pushes %TARGET%'s face deep into their ballsack.",
+				"carefully guides %TARGET%'s head into their sac, covering their face completely.",
+				"lays %TARGET%'s face deep into their testicles, a warm enveloping smother."
+			)
+
+	// Check for choke slut trait
+	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
+		target_arousal += 10
+		target_pleasure += 6
+		to_chat(target, span_purple("You can't breathe at all! It's so hot! You need more!"))
+
+	. = ..()
+
+/datum/interaction/lewd/ball_smother_deep/post_interaction(mob/living/user, mob/living/target)
+	. = ..()
+	if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		var/stat_before = target.stat
+		target.adjust_oxy_loss(5)
+		if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
