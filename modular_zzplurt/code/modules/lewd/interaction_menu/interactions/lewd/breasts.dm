@@ -181,27 +181,16 @@
 
 /datum/interaction/lewd/breast_smother
 	name = "Breast Smother"
-	description = "Smother them with your breasts."
-	interaction_requires = list(
-		INTERACTION_REQUIRE_TARGET_MOUTH
-	)
+	description = "Smother them with your breasts. (Warning: Causes oxygen damage)"
+	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
 	user_required_parts = list(ORGAN_SLOT_BREASTS = REQUIRE_GENITAL_EXPOSED)
-	message = list(
-		"presses their breasts against %TARGET%'s face",
-		"smothers %TARGET%'s face with their tits",
-		"forces %TARGET%'s face between their breasts",
-		"pins %TARGET%'s head between their boobs"
-	)
-	user_messages = list(
-		"You feel %TARGET%'s face pressed between your breasts",
-		"You hold %TARGET%'s head against your chest",
-		"You keep %TARGET%'s face buried in your cleavage"
-	)
-	target_messages = list(
-		"Your face is pressed between %USER%'s breasts",
-		"%USER%'s tits smother your face",
-		"Your vision is filled with %USER%'s cleavage"
-	)
+	message = null
+	target_arousal = 6
+	target_pleasure = 4
+	target_pain = 0
+	user_arousal = 4
+	user_pleasure = 4
+	user_pain = 0
 	sound_possible = list(
 		'modular_zzplurt/sound/interactions/squelch1.ogg',
 		'modular_zzplurt/sound/interactions/squelch2.ogg',
@@ -209,10 +198,6 @@
 	)
 	sound_range = 1
 	sound_use = TRUE
-	user_pleasure = 0
-	target_pleasure = 0
-	user_arousal = 3
-	target_arousal = 3
 
 /datum/interaction/lewd/breast_smother/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	. = ..()
@@ -227,58 +212,91 @@
 
 	return TRUE
 
-
 /datum/interaction/lewd/breast_smother/act(mob/living/user, mob/living/target)
 	message = null
+	var/intent = resolve_intent_name(user)
 
-	// Base values
-	target_pleasure = 0
-	user_arousal = 3
-	target_arousal = 3
-
-	switch(resolve_intent_name(user))
+	switch(intent)
 		if("harm")
-			target_pain = 3
+			// Deep/Intense smother
+			target_pain = 4
+			target_arousal = 10
+			target_pleasure = 8
+			user_arousal = 8
+			user_pleasure = 6
 			message = list(
 				"presses their breasts hard against %TARGET%'s face, crushing their nose.",
-				"forces %TARGET%'s face deep into their cleavage, smothering them.",
-				"squeezes their breasts tight around %TARGET%'s face, blocking airways."
+				"forces %TARGET%'s face deep into their cleavage, smothering them completely.",
+				"squeezes their breasts tight around %TARGET%'s face, blocking airways.",
+				"grinds their chest down onto %TARGET%'s face, smothering them.",
+				"presses their full cleavage over %TARGET%'s face, cutting off all air.",
+				"wraps their arms around %TARGET%'s head and presses them into their chest.",
+				"crushes %TARGET%'s face between their breasts tightly.",
+				"shoves their cleavage into %TARGET%'s face forcefully."
 			)
 		if("grab")
-			target_arousal += 3
-			target_pleasure += 2
-			user_arousal += 2
+			// Moderate smother
+			target_arousal = 8
+			target_pleasure = 6
+			user_arousal = 6
+			user_pleasure = 5
 			message = list(
 				"wraps their arms around %TARGET%'s head, pulling them into their cleavage.",
 				"presses their breasts tight against %TARGET%'s face, smothering them.",
-				"grinds their chest into %TARGET%'s face, blocking their airways."
+				"grinds their chest into %TARGET%'s face, blocking their airways.",
+				"wraps their arms around %TARGET%'s head and squeezes them into their chest.",
+				"presses their cleavage firmly against %TARGET%'s face.",
+				"pulls %TARGET%'s face into their breasts.",
+				"holds %TARGET%'s head against their chest tightly.",
+				"presses their breasts over %TARGET%'s face."
 			)
 		else // help
+			// Gentle smother
 			message = list(
-				"presses their breasts against %TARGET%'s face",
-				"smothers %TARGET%'s face with their tits",
-				"forces %TARGET%'s face between their breasts"
+				"gently presses their breasts against %TARGET%'s face.",
+				"carefully covers %TARGET%'s face with their cleavage.",
+				"lays their breasts over %TARGET%'s face softly.",
+				"gently wraps their chest around %TARGET%'s face.",
+				"carefully lowers their breasts onto %TARGET%'s face.",
+				"gently places their cleavage over %TARGET%'s nose and mouth.",
+				"softly presses their chest against %TARGET%'s face.",
+				"gently settles their breasts over %TARGET%'s face."
 			)
 
 	// Check for choke slut trait
 	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
-		target_arousal += 8
-		target_pleasure += 4
-		to_chat(target, span_purple("You can barely breathe with their breasts on your face... it's incredible!"))
+		if(intent == "harm")
+			target_arousal += 10
+			target_pleasure += 6
+			to_chat(target, span_purple("You can't breathe with their breasts crushing your face... it's amazing!"))
+		else
+			target_arousal += 8
+			target_pleasure += 4
+			to_chat(target, span_purple("You can barely breathe with their breasts on your face... it's incredible!"))
 
 	. = ..()
 
-/datum/interaction/lewd/breastsmother/post_interaction(mob/living/carbon/human/user, mob/living/carbon/human/target)
+/datum/interaction/lewd/breast_smother/post_interaction(mob/living/user, mob/living/target)
 	. = ..()
 	if(!istype(user))
 		return
 
 	var/stat_before = target.stat
 	var/oxy_damage = 3
+
+	// Set oxy damage based on intent
+	switch(resolve_intent_name(user))
+		if("harm")
+			oxy_damage = 4
+		if("grab")
+			oxy_damage = 3
+		else
+			oxy_damage = 2
+
 	// Always apply oxy damage up to 45
 	if(target.get_oxy_loss() < 45)
 		target.adjust_oxy_loss(oxy_damage)
-	// Only apply additional damage if extmharm is enabled, as most people probably dont want to die by sex.
+	// Only apply additional damage if extmharm is enabled
 	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
 		target.adjust_oxy_loss(oxy_damage)
 

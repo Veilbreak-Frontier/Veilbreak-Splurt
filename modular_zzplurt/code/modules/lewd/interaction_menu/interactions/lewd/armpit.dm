@@ -82,27 +82,18 @@
 
 /datum/interaction/lewd/armpit_smother
 	name = "Armpit Smother"
-	description = "Press your armpit against their face."
+	description = "Press your armpit against their face. (Warning: Causes oxygen damage)"
 	interaction_requires = list(
 		INTERACTION_REQUIRE_TARGET_MOUTH,
 		INTERACTION_REQUIRE_SELF_TOPLESS
 	)
-	message = list(
-		"presses their armpit against %TARGET%'s face",
-		"smothers %TARGET%'s face with their pit",
-		"forces %TARGET%'s face into their underarm",
-		"pins %TARGET%'s head under their arm"
-	)
-	user_messages = list(
-		"You feel %TARGET%'s face pressed into your pit",
-		"You hold %TARGET%'s head against your underarm",
-		"You keep %TARGET%'s face buried in your armpit"
-	)
-	target_messages = list(
-		"Your face is pressed into %USER%'s armpit",
-		"%USER%'s underarm smothers your face",
-		"Your nose fills with the scent of %USER%'s pit"
-	)
+	message = null
+	target_arousal = 6
+	target_pleasure = 4
+	target_pain = 0
+	user_arousal = 4
+	user_pleasure = 4
+	user_pain = 0
 	sound_possible = list(
 		'modular_zzplurt/sound/interactions/squelch1.ogg',
 		'modular_zzplurt/sound/interactions/squelch2.ogg',
@@ -110,10 +101,6 @@
 	)
 	sound_range = 1
 	sound_use = TRUE
-	user_pleasure = 0
-	target_pleasure = 0
-	user_arousal = 3
-	target_arousal = 3
 
 /datum/interaction/lewd/armpit_smother/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	. = ..()
@@ -127,6 +114,95 @@
 		return FALSE
 
 	return TRUE
+
+/datum/interaction/lewd/armpit_smother/act(mob/living/user, mob/living/target)
+	message = null
+	var/intent = resolve_intent_name(user)
+
+	switch(intent)
+		if("harm")
+			// Deep/Intense smother
+			target_pain = 4
+			target_arousal = 10
+			target_pleasure = 8
+			user_arousal = 8
+			user_pleasure = 6
+			message = list(
+				"presses their armpit hard against %TARGET%'s face, smothering them.",
+				"forces %TARGET%'s face deep into their underarm, cutting off air.",
+				"grinds their pit against %TARGET%'s face, blocking airways.",
+				"presses their full weight down onto %TARGET%'s face with their armpit.",
+				"shoves their armpit forcefully against %TARGET%'s face.",
+				"crushes %TARGET%'s face under their arm tightly.",
+				"presses their underarm hard over %TARGET%'s nose and mouth.",
+				"forces %TARGET%'s face into their armpit aggressively."
+			)
+		if("grab")
+			// Moderate smother
+			target_arousal = 8
+			target_pleasure = 6
+			user_arousal = 6
+			user_pleasure = 5
+			message = list(
+				"wraps their arm around %TARGET%'s head, pulling them into their pit.",
+				"presses their armpit firmly against %TARGET%'s face.",
+				"grinds their pit against %TARGET%'s face.",
+				"wraps their arm around %TARGET%'s head tightly.",
+				"presses their underarm against %TARGET%'s face firmly.",
+				"pulls %TARGET%'s face into their armpit.",
+				"holds %TARGET%'s head against their pit tightly.",
+				"presses their arm over %TARGET%'s face."
+			)
+		else // help
+			// Gentle smother
+			message = list(
+				"gently presses their armpit against %TARGET%'s face.",
+				"carefully covers %TARGET%'s face with their pit.",
+				"lays their underarm over %TARGET%'s face softly.",
+				"gently wraps their arm around %TARGET%'s head.",
+				"carefully lowers their arm onto %TARGET%'s face.",
+				"gently places their pit over %TARGET%'s nose and mouth.",
+				"softly presses their underarm against %TARGET%'s face.",
+				"gently settles their armpit over %TARGET%'s face."
+			)
+
+	// Check for choke slut trait
+	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
+		if(intent == "harm")
+			target_arousal += 10
+			target_pleasure += 6
+			to_chat(target, span_purple("You can barely breathe with their armpit crushing your face... it's amazing!"))
+		else
+			target_arousal += 8
+			target_pleasure += 4
+			to_chat(target, span_purple("You can barely breathe with their armpit on your face... it's incredible!"))
+
+	. = ..()
+
+/datum/interaction/lewd/armpit_smother/post_interaction(mob/living/user, mob/living/target)
+	. = ..()
+	var/stat_before = target.stat
+	var/oxy_damage = 3
+
+	// Set oxy damage based on intent
+	switch(resolve_intent_name(user))
+		if("harm")
+			oxy_damage = 4
+		if("grab")
+			oxy_damage = 3
+		else
+			oxy_damage = 2
+
+	// Always apply oxy damage up to 45
+	if(target.get_oxy_loss() < 45)
+		target.adjust_oxy_loss(oxy_damage)
+	// Only apply additional damage if extmharm is enabled
+	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		target.adjust_oxy_loss(oxy_damage)
+
+	// Check if target just passed out
+	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+		message = list("%TARGET% passes out under %USER%'s armpit.")
 
 /datum/interaction/lewd/armpit_pitjob
 	name = "Give Pitjob"
