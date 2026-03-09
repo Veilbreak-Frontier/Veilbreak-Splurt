@@ -142,6 +142,19 @@
 	sound_range = 1
 	sound_use = TRUE
 
+/datum/interaction/lewd/belly_smother/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	. = ..()
+	if(!.)
+		return FALSE
+
+	// Check if smothering is enabled in preferences
+	if(!user.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(user) && !user.client && !SSinteractions.is_blacklisted(user)))
+		return FALSE
+	if(!target.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(target) && !target.client && !SSinteractions.is_blacklisted(target)))
+		return FALSE
+
+	return TRUE
+
 /datum/interaction/lewd/belly_smother/act(mob/living/user, mob/living/target)
 	message = null
 	target_arousal = 6
@@ -211,6 +224,19 @@
 	)
 	sound_range = 1
 	sound_use = TRUE
+
+/datum/interaction/lewd/belly_sit/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	. = ..()
+	if(!.)
+		return FALSE
+
+	// Check if smothering is enabled in preferences
+	if(!user.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(user) && !user.client && !SSinteractions.is_blacklisted(user)))
+		return FALSE
+	if(!target.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(target) && !target.client && !SSinteractions.is_blacklisted(target)))
+		return FALSE
+
+	return TRUE
 
 /datum/interaction/lewd/belly_sit/act(mob/living/user, mob/living/target)
 	message = null

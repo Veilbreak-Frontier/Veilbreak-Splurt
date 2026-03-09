@@ -16,7 +16,7 @@
 	))
 	cum_partner_text_overrides = list(CLIMAX_POSITION_USER = list(
 		"%CUMMING% cums all over your armpit",
-		"%CUMMING% shoots their load into your pit",
+		"%CUMMING% shoots your load into your pit",
 		"%CUMMING% covers your underarm in cum"
 	))
 	message = list(
@@ -115,6 +115,19 @@
 	user_arousal = 3
 	target_arousal = 3
 
+/datum/interaction/lewd/armpit_smother/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	. = ..()
+	if(!.)
+		return FALSE
+
+	// Check if smothering is enabled in preferences
+	if(!user.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(user) && !user.client && !SSinteractions.is_blacklisted(user)))
+		return FALSE
+	if(!target.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(target) && !target.client && !SSinteractions.is_blacklisted(target)))
+		return FALSE
+
+	return TRUE
+
 /datum/interaction/lewd/armpit_pitjob
 	name = "Give Pitjob"
 	description = "Jerk them off with your armpit."
@@ -130,7 +143,7 @@
 	))
 	cum_self_text_overrides = list(CLIMAX_POSITION_TARGET = list(
 		"%CUMMING% cums all over your armpit",
-		"%CUMMING% shoots their load into your pit",
+		"%CUMMING% shoots your load into your pit",
 		"%CUMMING% covers your underarm in cum"
 	))
 	cum_partner_text_overrides = list(CLIMAX_POSITION_TARGET = list(

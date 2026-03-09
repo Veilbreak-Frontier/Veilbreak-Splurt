@@ -166,4 +166,4 @@
 
 /datum/preference/toggle/erp/smothering
 	savefile_key = "smothering_pref"
-	default_value = TRUE
+	default_value = FALSE

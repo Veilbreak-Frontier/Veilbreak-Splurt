@@ -21,6 +21,19 @@
 	user_arousal = 6
 	target_arousal = 2
 
+/datum/interaction/lewd/thighs_penis/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	. = ..()
+	if(!.)
+		return FALSE
+
+	// Check if smothering is enabled in preferences
+	if(!user.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(user) && !user.client && !SSinteractions.is_blacklisted(user)))
+		return FALSE
+	if(!target.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(target) && !target.client && !SSinteractions.is_blacklisted(target)))
+		return FALSE
+
+	return TRUE
+
 /datum/interaction/lewd/thighs_penis/act(mob/living/user, mob/living/target)
 
  // this will change variables depending on intent. Experimental system, if people like it we can add it to the rest of interactions in the future.
@@ -93,6 +106,19 @@
 	target_pleasure = 0
 	user_arousal = 6
 	target_arousal = 2
+
+/datum/interaction/lewd/thighs_vagina/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	. = ..()
+	if(!.)
+		return FALSE
+
+	// Check if smothering is enabled in preferences
+	if(!user.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(user) && !user.client && !SSinteractions.is_blacklisted(user)))
+		return FALSE
+	if(!target.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(target) && !target.client && !SSinteractions.is_blacklisted(target)))
+		return FALSE
+
+	return TRUE
 
 /datum/interaction/lewd/thighs_vagina/act(mob/living/user, mob/living/target)
 // same system from above. Will join them into one with a parent switch case, or at least I'll try.

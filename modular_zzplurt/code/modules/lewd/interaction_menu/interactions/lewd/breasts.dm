@@ -179,7 +179,7 @@
 			var/target_message = list(pick(arousal_messages))
 			target.visible_message(span_lewd(replacetext(target_message, "%TARGET%", target)))
 
-/datum/interaction/lewd/breastsmother
+/datum/interaction/lewd/breast_smother
 	name = "Breast Smother"
 	description = "Smother them with your breasts."
 	interaction_requires = list(
@@ -214,7 +214,21 @@
 	user_arousal = 3
 	target_arousal = 3
 
-/datum/interaction/lewd/breastsmother/act(mob/living/user, mob/living/target)
+/datum/interaction/lewd/breast_smother/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	. = ..()
+	if(!.)
+		return FALSE
+
+	// Check if smothering is enabled in preferences
+	if(!user.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(user) && !user.client && !SSinteractions.is_blacklisted(user)))
+		return FALSE
+	if(!target.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(target) && !target.client && !SSinteractions.is_blacklisted(target)))
+		return FALSE
+
+	return TRUE
+
+
+/datum/interaction/lewd/breast_smother/act(mob/living/user, mob/living/target)
 	message = null
 
 	// Base values
