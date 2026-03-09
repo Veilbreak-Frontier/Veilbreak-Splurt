@@ -57,7 +57,7 @@
 // Ball/sac smothering interactions - smother target's face with testicles
 /datum/interaction/lewd/ball_smother
 	name = "Ball Smother"
-	description = "Smother their face with your balls. (Warning: Causes oxygen loss)"
+	description = "Smother their face with your balls. (Warning: Causes oxygen damage)"
 	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
 	user_required_parts = list(ORGAN_SLOT_TESTICLES = REQUIRE_GENITAL_EXPOSED)
 	target_arousal = 8
@@ -116,16 +116,22 @@
 
 /datum/interaction/lewd/ball_smother/post_interaction(mob/living/user, mob/living/target)
 	. = ..()
-	if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
-		var/stat_before = target.stat
-		target.adjust_oxy_loss(3)
-		if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
-			message = list("%TARGET% passes out under %USER%'s ballsack.")
+	var/stat_before = target.stat
+	var/oxy_damage = 3
+	// Always apply oxy damage up to 45
+	if(target.get_oxy_loss() < 45)
+		target.adjust_oxy_loss(oxy_damage)
+	// Only apply additional damage if extmharm is enabled
+	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		target.adjust_oxy_loss(oxy_damage)
+	// Check if target just passed out
+	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+		message = list("%TARGET% passes out under %USER%'s ballsack.")
 
 
 /datum/interaction/lewd/ball_smother_deep
 	name = "Deep Ball Smother"
-	description = "Force their face into your sac. (Warning: Causes severe oxygen loss)"
+	description = "Force their face into your sac. (Warning: Causes severe oxygen damage)"
 	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
 	user_required_parts = list(ORGAN_SLOT_TESTICLES = REQUIRE_GENITAL_EXPOSED)
 	target_arousal = 10
@@ -184,7 +190,14 @@
 
 /datum/interaction/lewd/ball_smother_deep/post_interaction(mob/living/user, mob/living/target)
 	. = ..()
-	if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
-		var/stat_before = target.stat
-		target.adjust_oxy_loss(5)
-		if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+	var/stat_before = target.stat
+	var/oxy_damage = 5
+	// Always apply oxy damage up to 45
+	if(target.get_oxy_loss() < 45)
+		target.adjust_oxy_loss(oxy_damage)
+	// Only apply additional damage if extmharm is enabled
+	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		target.adjust_oxy_loss(oxy_damage)
+	// Check if target just passed out
+	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+		message = list("%TARGET% passes out deep in %USER%'s ballsack.")

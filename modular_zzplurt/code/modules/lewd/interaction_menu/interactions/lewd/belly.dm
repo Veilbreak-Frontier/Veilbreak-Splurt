@@ -182,11 +182,17 @@
 
 /datum/interaction/lewd/belly_smother/post_interaction(mob/living/user, mob/living/target)
 	. = ..()
-	if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
-		var/stat_before = target.stat
-		target.adjust_oxy_loss(3)
-		if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
-			message = list("%TARGET% passes out under %USER%'s belly.")
+	var/stat_before = target.stat
+	var/oxy_damage = 3
+	// Always apply oxy damage up to 45
+	if(target.get_oxy_loss() < 45)
+		target.adjust_oxy_loss(oxy_damage)
+	// Only apply additional damage if extmharm is enabled
+	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		target.adjust_oxy_loss(oxy_damage)
+	// Check if target just passed out
+	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+		message = list("%TARGET% passes out under %USER%'s belly.")
 
 /datum/interaction/lewd/belly_sit
 	name = "Sit on Belly"
@@ -246,8 +252,14 @@
 
 /datum/interaction/lewd/belly_sit/post_interaction(mob/living/user, mob/living/target)
 	. = ..()
-	if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
-		var/stat_before = target.stat
-		target.adjust_oxy_loss(2)
-		if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
-			message = list("%TARGET% passes out under %USER%'s belly.")
+	var/stat_before = target.stat
+	var/oxy_damage = 2
+	// Always apply oxy damage up to 45
+	if(target.get_oxy_loss() < 45)
+		target.adjust_oxy_loss(oxy_damage)
+	// Only apply additional damage if extmharm is enabled
+	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		target.adjust_oxy_loss(oxy_damage)
+	// Check if target just passed out
+	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+		message = list("%TARGET% passes out under %USER%'s belly.")
