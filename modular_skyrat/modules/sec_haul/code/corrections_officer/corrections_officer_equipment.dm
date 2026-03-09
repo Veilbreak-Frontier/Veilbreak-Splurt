@@ -38,15 +38,15 @@
 	worn_icon = 'modular_skyrat/master_files/icons/mob/clothing/suit.dmi'
 	icon_state = "co_coat"
 	body_parts_covered = CHEST|ARMS
-	armor_type = /datum/armor/jacket_corrections_officer
+	armor_type = /datum/armor/armor_secjacket //SPLURT EDIT, ORIGINAL: armor_type = /datum/armor/jacket_corrections_officer
 
 
 // LOCKER
-
+/*SPLURT DELETION START
 /datum/armor/jacket_corrections_officer
 	melee = 10
 	melee = 10
-
+  SPLURT DELETION END */
 /obj/structure/closet/secure_closet/corrections_officer
 	name = "corrections officer riot gear"
 	icon = 'modular_skyrat/master_files/icons/obj/closet.dmi'
@@ -63,3 +63,4 @@
 	new /obj/item/clothing/head/helmet/toggleable/riot(src)
 	new /obj/item/shield/riot(src)
 	new /obj/item/clothing/under/rank/security/corrections_officer(src)
+	new /obj/item/clothing/glasses/hud/security/sunglasses(src) //SPLURT ADDITION
