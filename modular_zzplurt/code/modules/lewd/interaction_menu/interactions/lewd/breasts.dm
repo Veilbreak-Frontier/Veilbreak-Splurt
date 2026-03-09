@@ -214,14 +214,71 @@
 	user_arousal = 3
 	target_arousal = 3
 
+/datum/interaction/lewd/breastsmother/act(mob/living/user, mob/living/target)
+	message = null
+
+	// Base values
+	target_pleasure = 0
+	user_arousal = 3
+	target_arousal = 3
+
+	switch(resolve_intent_name(user))
+		if("harm")
+			target_pain = 3
+			message = list(
+				"presses their breasts hard against %TARGET%'s face, crushing their nose.",
+				"forces %TARGET%'s face deep into their cleavage, smothering them.",
+				"squeezes their breasts tight around %TARGET%'s face, blocking airways."
+			)
+		if("grab")
+			target_arousal += 3
+			target_pleasure += 2
+			user_arousal += 2
+			message = list(
+				"wraps their arms around %TARGET%'s head, pulling them into their cleavage.",
+				"presses their breasts tight against %TARGET%'s face, smothering them.",
+				"grinds their chest into %TARGET%'s face, blocking their airways."
+			)
+		else // help
+			message = list(
+				"presses their breasts against %TARGET%'s face",
+				"smothers %TARGET%'s face with their tits",
+				"forces %TARGET%'s face between their breasts"
+			)
+
+	// Check for choke slut trait
+	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
+		target_arousal += 8
+		target_pleasure += 4
+		to_chat(target, span_purple("You can barely breathe with their breasts on your face... it's incredible!"))
+
+	. = ..()
+
 /datum/interaction/lewd/breastsmother/post_interaction(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	. = ..()
 	if(!istype(user))
 		return
+
+	var/stat_before = target.stat
+	var/oxy_damage = 3
+	// Always apply oxy damage up to 45
+	if(target.get_oxy_loss() < 45)
+		target.adjust_oxy_loss(oxy_damage)
+	// Only apply additional damage if extmharm is enabled, as most people probably dont want to die by sex.
+	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		target.adjust_oxy_loss(oxy_damage)
+
+	// Additional arousal for choke sluts
+	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
+		target.adjust_arousal(oxy_damage * 2)
+
+	// Original user arousal bonus
 	if(prob((user.dna.features["sexual_potency"] * 5) + 15))
-		target.adjust_oxy_loss(2)
-		target.adjust_arousal(5)
 		user.adjust_arousal(8)
+
+	// Check if target just passed out
+	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+		message = list("%TARGET% passes out under %USER%'s breasts.")
 
 /datum/interaction/lewd/do_boobjob
 	name = "Give Boobjob"

@@ -173,7 +173,7 @@
 				"wraps their legs around %TARGET%'s head and pushes them deep into their sac.",
 				"grinds %TARGET%'s face deep into their testicles, cutting off all air."
 			)
-		else // help
+		else // help or gentle
 			message = list(
 				"gently pushes %TARGET%'s face deep into their ballsack.",
 				"carefully guides %TARGET%'s head into their sac, covering their face completely.",
