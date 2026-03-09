@@ -304,10 +304,6 @@
 	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
 		target.adjust_arousal(oxy_damage * 2)
 
-	// Original user arousal bonus
-	if(prob((user.dna.features["sexual_potency"] * 5) + 15))
-		user.adjust_arousal(8)
-
 	// Check if target just passed out
 	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
 		message = list("%TARGET% passes out under %USER%'s breasts.")

@@ -330,7 +330,7 @@
 // Only available for large tails (snake, leviathan, xeno, etc.)
 
 /datum/interaction/lewd/tail/tail_smother
-	name = "Tail Smother"
+	name = "Tail. Smother"
 	description = "Wrap your tail around their face. (Warning: Causes oxygen damage)"
 	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
 	user_required_parts = list(ORGAN_SLOT_TAIL = REQUIRE_GENITAL_ANY)
@@ -355,6 +355,7 @@
 
 	// Check if user has a large enough tail
 	if(!can_tail_smother(user))
+		to_chat(user, span_warning("Your tail isn't large enough to smother someone!"))
 		return FALSE
 
 	// Check if smothering is enabled in preferences
