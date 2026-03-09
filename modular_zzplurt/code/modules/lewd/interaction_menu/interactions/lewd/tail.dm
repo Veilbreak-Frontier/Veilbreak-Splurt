@@ -9,6 +9,40 @@
 	var/grab_text
 	var/harm_text
 
+// Helper function to check if tail is large enough for smothering
+/datum/interaction/lewd/tail/proc/can_tail_smother(mob/living/carbon/human/user)
+	if(!ishuman(user))
+		return FALSE
+
+	// Check all possible tail feature keys
+	var/list/tail_features = list(FEATURE_TAIL_GENERIC, FEATURE_TAIL_CAT, FEATURE_TAIL_LIZARD, FEATURE_TAIL_FISH, FEATURE_TAIL_MONKEY, FEATURE_TAIL_XENO)
+	var/tail_type = null
+
+	for(var/feature in tail_features)
+		tail_type = user.dna?.mutant_bodyparts[feature]?.[MUTANT_INDEX_NAME]
+		if(tail_type && tail_type != "None")
+			break
+
+	if(!tail_type || tail_type == "None")
+		return FALSE
+
+	// List of tail types that are large enough to smother
+	var/list/large_tails = list(
+		"Snake",
+		"Leviathan",
+		"Xeno",
+		"Ash Drake",
+		"Drake",
+		"Serpent",
+		"Hmph!",
+		"Null",
+		"Fish",
+		"Shark",
+		"Aquatic"
+	)
+
+	return tail_type in large_tails
+
 /datum/interaction/lewd/tail/act(mob/living/user, mob/living/target)
 	// Check for containers to collect fluids during interactions
 	var/obj/item/reagent_containers/liquid_container
@@ -287,3 +321,179 @@
 		target_arousal = 12
 		target_pleasure = 4
 	..()
+
+// Tail smothering interactions - smother target's face with tail
+// Only available for large tails (snake, leviathan, xeno, etc.)
+
+/datum/interaction/lewd/tail/tail_smother
+	name = "Tail Smother"
+	description = "Wrap your tail around their face. (Warning: Causes oxygen damage)"
+	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
+	user_required_parts = list(ORGAN_SLOT_TAIL = REQUIRE_GENITAL_ANY)
+	target_arousal = 6
+	target_pleasure = 4
+	target_pain = 0
+	user_arousal = 4
+	user_pleasure = 4
+	user_pain = 0
+	sound_possible = list(
+		'modular_zzplurt/sound/interactions/squelch1.ogg',
+		'modular_zzplurt/sound/interactions/squelch2.ogg'
+	)
+	sound_range = 1
+	sound_use = TRUE
+
+/datum/interaction/lewd/tail/tail_smother/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	. = ..()
+	if(!.)
+		return FALSE
+
+	// Check if user has a large enough tail
+	if(!can_tail_smother(user))
+		return FALSE
+
+	// Check if smothering is enabled in preferences
+	if(!user.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(user) && !user.client && !SSinteractions.is_blacklisted(user)))
+		return FALSE
+	if(!target.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(target) && !target.client && !SSinteractions.is_blacklisted(target)))
+		return FALSE
+
+	return TRUE
+
+/datum/interaction/lewd/tail/tail_smother/act(mob/living/user, mob/living/target)
+
+	switch(resolve_intent_name(user))
+		if("harm")
+			target_pain = 4
+			message = list(
+				"wraps their long tail tightly around %TARGET%'s face, cutting off all air.",
+				"coils their tail around %TARGET%'s head, squeezing hard and blocking airways.",
+				"constricts their tail around %TARGET%'s face, smothering them completely."
+			)
+		if("grab")
+			target_arousal += 3
+			target_pleasure += 2
+			user_arousal += 2
+			message = list(
+				"wraps their tail around %TARGET%'s face, covering nose and mouth.",
+				"loops their tail over %TARGET%'s face, limiting air flow.",
+				"coils their tail gently around %TARGET%'s head."
+			)
+		else
+			message = list(
+				"carefully wraps their tail around %TARGET%'s face.",
+				"gently encircles %TARGET%'s head with their tail.",
+				"wraps their tail around %TARGET%'s face, a warm constricting hold."
+			)
+
+	// Check for choke slut trait
+	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
+		target_arousal += 8
+		target_pleasure += 4
+		to_chat(target, span_purple("The pressure on your face is overwhelming... it's so tight!"))
+
+	. = ..()
+
+/datum/interaction/lewd/tail/tail_smother/post_interaction(mob/living/user, mob/living/target)
+	. = ..()
+	var/stat_before = target.stat
+	var/oxy_damage = 3
+	// Always apply oxy damage up to 45
+	if(target.get_oxy_loss() < 45)
+		target.adjust_oxy_loss(oxy_damage)
+	// Only apply additional damage if extmharm is enabled
+	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		target.adjust_oxy_loss(oxy_damage)
+	// Check if target just passed out
+	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+		message = list("%TARGET% passes out wrapped in %USER%'s tail.")
+
+/datum/interaction/lewd/tail/tail_smother_deep
+	name = "Deep Tail Smother"
+	description = "Coil your tail completely around their head. (Warning: Causes severe oxygen damage)"
+	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
+	user_required_parts = list(ORGAN_SLOT_TAIL = REQUIRE_GENITAL_ANY)
+	target_arousal = 10
+	target_pleasure = 6
+	target_pain = 2
+	user_arousal = 8
+	user_pleasure = 6
+	user_pain = 0
+	sound_possible = list(
+		'modular_zzplurt/sound/interactions/squelch1.ogg',
+		'modular_zzplurt/sound/interactions/squelch2.ogg'
+	)
+	sound_range = 1
+	sound_use = TRUE
+
+/datum/interaction/lewd/tail/tail_smother_deep/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	. = ..()
+	if(!.)
+		return FALSE
+
+	// Check if user has a large enough tail
+	if(!can_tail_smother(user))
+		return FALSE
+
+	// Check if smothering is enabled in preferences
+	if(!user.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(user) && !user.client && !SSinteractions.is_blacklisted(user)))
+		return FALSE
+	if(!target.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(target) && !target.client && !SSinteractions.is_blacklisted(target)))
+		return FALSE
+
+	return TRUE
+
+/datum/interaction/lewd/tail/tail_smother_deep/act(mob/living/user, mob/living/target)
+	message = null
+	target_arousal = 10
+	target_pleasure = 6
+	target_pain = 2
+	user_arousal = 8
+	user_pleasure = 6
+	user_pain = 0
+
+	switch(resolve_intent_name(user))
+		if("harm")
+			target_pain = 4
+			message = list(
+				"wraps their long tail multiple times around %TARGET%'s head, completely enveloping their face.",
+				"coils their tail tight around %TARGET%'s head, cutting off all air completely.",
+				"constricts their powerful tail around %TARGET%'s head, squeezing with deadly force."
+			)
+		if("grab")
+			target_arousal += 4
+			target_pleasure += 3
+			user_arousal += 3
+			message = list(
+				"wraps their tail multiple times around %TARGET%'s head, completely covering their face.",
+				"loops their tail over and under %TARGET%'s head, holding them tight.",
+				"coils their tail around %TARGET%'s head like a snake, cutting off all air."
+			)
+		else
+			message = list(
+				"carefully wraps their tail completely around %TARGET%'s head.",
+				"gently encircles %TARGET%'s entire head with their tail.",
+				"wraps their tail multiple times around %TARGET%'s head, a warm secure hold."
+			)
+
+	// Check for choke slut trait
+	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
+		target_arousal += 10
+		target_pleasure += 6
+		to_chat(target, span_purple("You can't breathe at all! The pressure is intense... it's amazing!"))
+
+	. = ..()
+
+/datum/interaction/lewd/tail/tail_smother_deep/post_interaction(mob/living/user, mob/living/target)
+	. = ..()
+	var/stat_before = target.stat
+	var/oxy_damage = 5
+	// Always apply oxy damage up to 45
+	if(target.get_oxy_loss() < 45)
+		target.adjust_oxy_loss(oxy_damage)
+	// Only apply additional damage if extmharm is enabled
+	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
+		target.adjust_oxy_loss(oxy_damage)
+	// Check if target just passed out
+	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
+		message = list("%TARGET% passes out wrapped tightly in %USER%'s tail.")

@@ -129,6 +129,7 @@
 	description = "Smother their face with your belly. (Warning: Causes oxygen damage)"
 	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
 	user_required_parts = list(ORGAN_SLOT_BELLY = REQUIRE_GENITAL_ANY)
+	message = null
 	target_arousal = 6
 	target_pleasure = 4
 	target_pain = 0
@@ -156,17 +157,12 @@
 	return TRUE
 
 /datum/interaction/lewd/belly_smother/act(mob/living/user, mob/living/target)
-	message = null
-	target_arousal = 6
-	target_pleasure = 4
-	user_arousal = 4
-	user_pleasure = 4
 
 	switch(resolve_intent_name(user))
 		if("harm")
 			target_pain = 4
 			message = list(
-				"drops their massive belly onto %TARGET%'s face, crushing them with their weight.",
+				"drops their belly onto %TARGET%'s face, crushing them with their weight.",
 				"presses their belly hard onto %TARGET%'s face, cutting off all air.",
 				"forces %TARGET%'s face deep into their soft flesh, smothering them completely."
 			)
@@ -197,89 +193,6 @@
 	. = ..()
 	var/stat_before = target.stat
 	var/oxy_damage = 3
-	// Always apply oxy damage up to 45
-	if(target.get_oxy_loss() < 45)
-		target.adjust_oxy_loss(oxy_damage)
-	// Only apply additional damage if extmharm is enabled
-	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
-		target.adjust_oxy_loss(oxy_damage)
-	// Check if target just passed out
-	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)
-		message = list("%TARGET% passes out under %USER%'s belly.")
-
-/datum/interaction/lewd/belly_sit
-	name = "Sit on Belly"
-	description = "Sit on your partner's face using your belly. (Warning: Causes oxygen damage)"
-	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
-	user_required_parts = list(ORGAN_SLOT_BELLY = REQUIRE_GENITAL_ANY)
-	target_arousal = 4
-	target_pleasure = 6
-	target_pain = 0
-	user_arousal = 6
-	user_pleasure = 4
-	user_pain = 0
-	sound_possible = list(
-		'modular_zzplurt/sound/interactions/squelch1.ogg',
-		'modular_zzplurt/sound/interactions/squelch2.ogg'
-	)
-	sound_range = 1
-	sound_use = TRUE
-
-/datum/interaction/lewd/belly_sit/allow_act(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	. = ..()
-	if(!.)
-		return FALSE
-
-	// Check if smothering is enabled in preferences
-	if(!user.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(user) && !user.client && !SSinteractions.is_blacklisted(user)))
-		return FALSE
-	if(!target.client?.prefs?.read_preference(/datum/preference/toggle/erp/smothering) && !(!ishuman(target) && !target.client && !SSinteractions.is_blacklisted(target)))
-		return FALSE
-
-	return TRUE
-
-/datum/interaction/lewd/belly_sit/act(mob/living/user, mob/living/target)
-	message = null
-	target_arousal = 4
-	target_pleasure = 6
-	user_arousal = 6
-	user_pleasure = 4
-
-	switch(resolve_intent_name(user))
-		if("harm")
-			target_pain = 4
-			message = list(
-				"drops their heavy belly onto %TARGET%'s face, crushing them.",
-				"presses their full belly weight onto %TARGET%'s face, smothering them.",
-				"uses %TARGET%'s face as a seat, pressing down hard."
-			)
-		if("grab")
-			target_arousal += 2
-			target_pleasure += 2
-			user_arousal += 2
-			message = list(
-				"pulls %TARGET%'s face into their belly, pressing down.",
-				"wraps their legs around %TARGET%'s head and settles their weight.",
-				"presses their belly against %TARGET%'s face."
-			)
-		else
-			message = list(
-				"gently lowers their belly onto %TARGET%'s face.",
-				"carefully sits on %TARGET%'s face with their belly.",
-				"positions their belly over %TARGET%'s face comfortably."
-			)
-
-	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
-		target_arousal += 6
-		target_pleasure += 4
-		to_chat(target, span_purple("Your face is trapped under their weight... you can't get enough air... but it's amazing!"))
-
-	. = ..()
-
-/datum/interaction/lewd/belly_sit/post_interaction(mob/living/user, mob/living/target)
-	. = ..()
-	var/stat_before = target.stat
-	var/oxy_damage = 2
 	// Always apply oxy damage up to 45
 	if(target.get_oxy_loss() < 45)
 		target.adjust_oxy_loss(oxy_damage)
