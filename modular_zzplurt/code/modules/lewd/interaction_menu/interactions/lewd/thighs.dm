@@ -22,12 +22,9 @@
 	target_arousal = 2
 
 /datum/interaction/lewd/thighs_penis/act(mob/living/user, mob/living/target)
-	message = null
 
-	// Base values
-	target_pleasure = 0
-	user_arousal = 6
-	target_arousal = 2
+ // this will change variables depending on intent. Experimental system, if people like it we can add it to the rest of interactions in the future.
+
 
 	switch(resolve_intent_name(user))
 		if("harm")
@@ -83,11 +80,7 @@
 	user_required_parts = list(ORGAN_SLOT_VAGINA = REQUIRE_GENITAL_EXPOSED)
 	cum_genital = list(CLIMAX_POSITION_USER = CLIMAX_VAGINA)
 	cum_target = list(CLIMAX_POSITION_USER = CLIMAX_TARGET_MOUTH)
-	message = list(
-		"presses their weight down onto %TARGET%'s face, blocking their vision completely.",
-		"rides %TARGET%'s face, grinding their wet pussy all over it.",
-		"grinds their pussy into %TARGET%'s face."
-	)
+	message = null
 	sound_possible = list(
 		'modular_zzplurt/sound/interactions/bj10.ogg',
 		'modular_zzplurt/sound/interactions/bj3.ogg',
@@ -102,13 +95,7 @@
 	target_arousal = 2
 
 /datum/interaction/lewd/thighs_vagina/act(mob/living/user, mob/living/target)
-	message = null
-
-	// Base values
-	target_pleasure = 0
-	user_arousal = 6
-	target_arousal = 2
-
+// same system from above. Will join them into one with a parent switch case, or at least I'll try.
 	switch(resolve_intent_name(user))
 		if("harm")
 			target_pain = 3
@@ -133,7 +120,7 @@
 				"grinds their pussy into %TARGET%'s face."
 			)
 
-	// Check for choke slut trait
+	// Check for choke slut trait (I dont think I can modularize this with my skills lowkey)
 	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
 		target_arousal += 8
 		target_pleasure += 4

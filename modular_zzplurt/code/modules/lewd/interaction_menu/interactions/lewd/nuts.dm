@@ -60,6 +60,7 @@
 	description = "Smother their face with your balls. (Warning: Causes oxygen damage)"
 	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
 	user_required_parts = list(ORGAN_SLOT_TESTICLES = REQUIRE_GENITAL_EXPOSED)
+	message = null // Message is set in the act proc depending on intent (i'll kill most of these stupid comments at integration. I like writing to myself huhuhu)
 	target_arousal = 8
 	target_pleasure = 6
 	target_pain = 0
@@ -74,13 +75,7 @@
 	sound_use = TRUE
 
 /datum/interaction/lewd/ball_smother/act(mob/living/user, mob/living/target)
-	message = null
 
-	// Base values
-	target_arousal = 8
-	target_pleasure = 6
-	user_arousal = 6
-	user_pleasure = 6
 
 	switch(resolve_intent_name(user))
 		if("harm")
@@ -130,10 +125,11 @@
 
 
 /datum/interaction/lewd/ball_smother_deep
-	name = "Deep Ball Smother"
+	name = "Deep Ball Smother" // more of everything. Will probably be replaced by harsher damage and arousal from the normal ball smother in the "harm" mode
 	description = "Force their face into your sac. (Warning: Causes severe oxygen damage)"
 	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
 	user_required_parts = list(ORGAN_SLOT_TESTICLES = REQUIRE_GENITAL_EXPOSED)
+	message = null
 	target_arousal = 10
 	target_pleasure = 8
 	target_pain = 2
@@ -148,13 +144,8 @@
 	sound_use = TRUE
 
 /datum/interaction/lewd/ball_smother_deep/act(mob/living/user, mob/living/target)
-	message = null
 
-	// Base values
-	target_arousal = 10
-	target_pleasure = 8
-	user_arousal = 8
-	user_pleasure = 6
+// experimental system, also implemented on breasts.dm and on thighs.dm, may kill breasts.dm one and adapt the already existing interaction. unsure.
 
 	switch(resolve_intent_name(user))
 		if("harm")
