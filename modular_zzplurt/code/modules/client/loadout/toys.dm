@@ -39,3 +39,29 @@
 	name = "Marketable Mutt Plushie"
 	item_path = /obj/item/toy/plush/red_mut
 	ckeywhitelist = null
+
+/datum/loadout_item/toys/mori
+	name = "SOB Kit"
+	item_path = /obj/item/storage/medkit/kit
+	ckeywhitelist = list("Mottedesstriets")
+
+/obj/item/storage/medkit/kit
+	icon_state = "oldfirstaid"
+	desc = "An old first aid kit used for storage now."
+
+/obj/item/storage/medkit/kit/PopulateContents()
+	if(empty)
+		return
+	var/static/items_inside = list(
+		/obj/item/skillchip/self_surgery = 1,
+		/obj/item/modular_computer/pda/pip = 1)
+	generate_items_inside(items_inside,src)
+
+/obj/item/modular_computer/pda/pip
+	name = "Custom Yip-Boi 6000"
+	icon = 'modular_zzplurt/icons/obj/yipbuddy.dmi'
+	icon_state = "yipboy"
+	post_init_icon_state = null
+	greyscale_config = null
+	greyscale_colors = null
+	long_ranged = TRUE

@@ -63,6 +63,8 @@
 	cost = PAYCHECK_CREW * 4
 	contains = list(/obj/item/paper_bin)
 
+// moved to imports for now -splurt edit
+/*
 /datum/supply_pack/goody/xenoarch_intern
 	name = "Xenoarchaeology Intern Skillchip"
 	desc = "A skillchip with all the information required to start dabbling in the fine art of interpreting xenoarchaeological finds. \
@@ -70,7 +72,7 @@
 			attempts at intellectual posturing, nor any actual job experience as a curator."
 	cost = PAYCHECK_CREW * 35 // 1750 credit goody? do bounties
 	contains = list(/obj/item/skillchip/xenoarch_magnifier)
-
+*/
 /datum/supply_pack/goody/scratching_stone
 	name = "Scratching Stone"
 	desc = "A high-grade sharpening stone made of specialized alloys, meant to sharpen razor-claws. Unfortunately, this particular one has by far seen better days."
@@ -194,7 +196,8 @@
 	contains = list(
 		/obj/item/nif_repair_kit,
 	)
-
+//moved to imports/pda app for now - splurt edit
+/*
 /datum/supply_pack/goody/money_sense_nifsoft
 	name = "Automatic Appraisal NIFSoft"
 	desc = "Contains a single Automatic Appraisal NIFSoft uploader disk."
@@ -226,7 +229,7 @@
 	contains = list(
 		/obj/item/disk/nifsoft_uploader/summoner,
 	)
-
+*/
 /datum/supply_pack/goody/firstaid_pouch
 	name = "Mini-Medkit First Aid Pouch"
 	desc = "Contains a single surplus first-aid pouch, complete with pocket clip. Repackaged with station-standard medical supplies, \

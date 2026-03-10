@@ -33,10 +33,12 @@
 		/obj/item/disk/nifsoft_uploader/shapeshifter = STOCK_NIFSOFT,
 		*/
 
-		// New software
+		// Moving to new consolodated list ((now PDA app later vendor specific to software))
+		/*
 		/obj/item/disk/nifsoft_uploader/dorms/nif_disrobe_disk = STOCK_NIFSOFT,
 		/obj/item/disk/nifsoft_uploader/nif_hide_backpack_disk = STOCK_NIFSOFT,
 		/obj/item/disk/nifsoft_uploader/dorms/nif_gfluid_disk = STOCK_NIFSOFT,
+		*/
 		/obj/item/skillchip/mk2pet = 2,
 	)
 
