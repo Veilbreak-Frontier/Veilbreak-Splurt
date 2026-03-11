@@ -65,3 +65,8 @@
 	greyscale_config = null
 	greyscale_colors = null
 	long_ranged = TRUE
+
+/datum/loadout_item/toys/willico
+	name = "Snarky Bnyunn Action Figure"
+	item_path = /obj/item/toy/figure/willico
+	ckeywhitelist = null
