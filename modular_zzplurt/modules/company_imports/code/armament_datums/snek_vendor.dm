@@ -6,13 +6,24 @@
 	subcategory = "NIF Items ((More Coming Soon™))"
 
 /datum/armament_entry/company_import/snekoil/nifsoft/sobnif
-	item_type = /obj/item/organ/cyberimp/brain/nif/sobnif
+	item_type = /obj/item/organ/cyberimp/brain/nif/standard/sobnif
 	cost = PAYCHECK_COMMAND * 50
 
 /datum/armament_entry/company_import/snekoil/nifsoft/money
 	item_type = /obj/item/disk/nifsoft_uploader/money_sense
 	cost = PAYCHECK_COMMAND * 15
 
+/datum/armament_entry/company_import/snekoil/nifsoft/disrobe
+	item_type = /obj/item/disk/nifsoft_uploader/dorms/nif_disrobe_disk
+	cost = PAYCHECK_COMMAND * 2
+
+/datum/armament_entry/company_import/snekoil/nifsoft/bpack
+	item_type = /obj/item/disk/nifsoft_uploader/nif_hide_backpack_disk
+	cost = PAYCHECK_COMMAND * 2
+
+/datum/armament_entry/company_import/snekoil/nifsoft/gfluid
+	item_type = /obj/item/disk/nifsoft_uploader/dorms/nif_gfluid_disk
+	cost = PAYCHECK_COMMAND * 2
 
 /datum/armament_entry/company_import/snekoil/chips
 	subcategory = "Skillchips"
@@ -20,18 +31,22 @@
 /datum/armament_entry/company_import/snekoil/chips/xeno
 	item_type = /obj/item/skillchip/xenoarch_magnifier
 	cost = PAYCHECK_COMMAND * 15
+	restricted = TRUE
 
 /datum/armament_entry/company_import/snekoil/chips/robo
 	item_type = /obj/item/skillchip/job/roboticist
 	cost = PAYCHECK_COMMAND * 15
+	restricted = TRUE
 
 /datum/armament_entry/company_import/snekoil/chips/engi
 	item_type = /obj/item/skillchip/job/engineer
 	cost = PAYCHECK_COMMAND * 15
+	restricted = TRUE
 
 /datum/armament_entry/company_import/snekoil/chips/miner
 	item_type = /obj/item/skillchip/job/miner
 	cost = PAYCHECK_COMMAND * 15
+	restricted = TRUE
 
 /datum/armament_entry/company_import/snekoil/chips/chef
 	item_type = /obj/item/skillchip/job/chef
@@ -44,6 +59,7 @@
 /datum/armament_entry/company_import/snekoil/chips/organ
 	item_type = /obj/item/skillchip/entrails_reader
 	cost = PAYCHECK_COMMAND * 15
+	restricted = TRUE
 
 /datum/armament_entry/company_import/snekoil/cyber
 	subcategory = "Augmentations ((More Soon™))"
