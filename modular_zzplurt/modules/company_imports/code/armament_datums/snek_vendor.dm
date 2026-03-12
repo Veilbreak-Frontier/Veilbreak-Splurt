@@ -87,7 +87,7 @@
 	subcategory = "Medical ((More Soon™))"
 
 /datum/armament_entry/company_import/snekoil/medical/ifak
-	item_type = /obj/item/storage/medkit/tactical
+	item_type = /obj/item/storage/medkit/sob
 	cost = PAYCHECK_COMMAND * 10
 
 /datum/armament_entry/company_import/snekoil/medical/grower
