@@ -9,7 +9,7 @@
 
 /obj/machinery/biogenerator/lizard_gas_colonial
 	name = "Colonial Marine Sequencer"
-	desc = "placeholder."
+	desc = "placeholder text."
 	icon = 'modular_zzplurt/icons/obj/machines/biogen.dmi'
 	circuit = null
 	anchored = FALSE

@@ -15,7 +15,7 @@
 	prompt_name = "a gas station manager"
 	outfit = /datum/outfit/lavaland_gasstation/manager
 	you_are_text = "You are the manager of a Lizard's Gas Station close to a mining facility."
-	flavour_text = "Graduating the Lizard's Gas prestigious university, whether by bad luck or poor decision on your part, you are now managing the most dangerous establishment!."
+	flavour_text = "Graduating the Lizard's Gas prestigious university, whether by bad luck or poor decision on your part, you are now managing the most dangerous establishment!"
 
 /datum/outfit/lavaland_gasstation
 	name = "Lizard Gas Station Attendant"
