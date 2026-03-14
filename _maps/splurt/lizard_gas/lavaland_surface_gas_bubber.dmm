@@ -274,6 +274,13 @@
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
 /area/ruin/thelizardsgas_lavaland)
+"fl" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
+/turf/open/misc/asteroid/basalt/lava_land_surface,
+/area/lavaland/surface/outdoors)
 "fQ" = (
 /obj/machinery/door/airlock/external/ruin{
 	id_tag = "lizardgasbolt"
@@ -916,6 +923,7 @@
 /obj/machinery/door/airlock/grunge{
 	name = "Plasma Hook-Up"
 	},
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/plating/lavaland_atmos,
 /area/ruin/thelizardsgas_lavaland)
 "rE" = (
@@ -1263,6 +1271,10 @@
 	dir = 8
 	},
 /area/ruin/thelizardsgas_lavaland)
+"wd" = (
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
+/turf/open/misc/asteroid/basalt/lava_land_surface,
+/area/lavaland/surface/outdoors)
 "wf" = (
 /obj/machinery/door/airlock/external/ruin{
 	id_tag = "lizardgasbolt"
@@ -4146,9 +4158,9 @@ cB
 Za
 BN
 Tk
-Tk
+wd
 BN
-uq
+fl
 Tk
 hr
 hr
