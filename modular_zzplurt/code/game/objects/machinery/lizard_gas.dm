@@ -54,7 +54,7 @@
 		/obj/item/stack/sheet/glass = 1)
 
 /obj/machinery/biogenerator/lizard_gas_ration
-	name = "Advanced Deforest Vendor"
+	name = "Advanced Supply Core"
 	desc = "placeholder text."
 	icon = 'modular_zzplurt/icons/obj/machines/biogen.dmi'
 	circuit = /obj/machinery/biogenerator/lizard_gas_ration
