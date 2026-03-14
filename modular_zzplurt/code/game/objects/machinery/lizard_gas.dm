@@ -43,3 +43,25 @@
 	show_categories = list(
 		RND_CATEGORY_DEFOREST_MEDICAL,
 	)
+
+/obj/item/circuitboard/machine/lizard_gas_ration
+	name = "Advanced Deforest Vendor"
+	build_path = /obj/machinery/biogenerator/lizard_gas_ration
+	req_components = list(
+		/datum/stock_part/matter_bin = 3,
+		/datum/stock_part/servo = 3,
+		/obj/item/stack/cable_coil = 1,
+		/obj/item/stack/sheet/glass = 1)
+
+/obj/machinery/biogenerator/lizard_gas_ration
+	name = "Advanced Deforest Vendor"
+	desc = "placeholder text."
+	icon = 'modular_zzplurt/icons/obj/machines/biogen.dmi'
+	circuit = /obj/machinery/biogenerator/lizard_gas_ration
+	anchored = FALSE
+	efficiency = 1
+	productivity = 2
+	max_items = 35
+	show_categories = list(
+		RND_CATEGORY_DEFOREST_MEDICAL,
+	)
