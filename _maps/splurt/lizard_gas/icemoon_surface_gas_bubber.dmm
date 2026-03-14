@@ -110,6 +110,7 @@
 /obj/machinery/door/airlock/grunge{
 	name = "Plasma Hook-Up"
 	},
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/plating/lavaland_atmos,
 /area/ruin/thelizardsgas_lavaland)
 "cK" = (
@@ -911,7 +912,9 @@
 /turf/open/floor/asphalt/lavaland/outdoors,
 /area/ruin/thelizardsgas_lavaland)
 "ns" = (
-/obj/machinery/door/window/left/directional/north,
+/obj/machinery/door/window/left/directional/north{
+	req_access = "ACCESS_LZGAS"
+	},
 /obj/effect/turf_decal/siding/dark{
 	dir = 9
 	},
@@ -2010,6 +2013,7 @@
 	name = "Manager's Office"
 	},
 /obj/structure/cable,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/dark/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "Fs" = (
@@ -2197,6 +2201,7 @@
 	name = "Break Room"
 	},
 /obj/structure/cable,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "HA" = (
@@ -2264,6 +2269,7 @@
 	cycle_id = "lizard-gas-back"
 	},
 /obj/effect/mapping_helpers/airlock/locked,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/smooth_large,
 /area/icemoon/underground/unexplored)
 "IN" = (
@@ -2326,6 +2332,7 @@
 	id = "lizardshutters"
 	},
 /obj/effect/mapping_helpers/airlock/locked,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/smooth_large,
 /area/ruin/thelizardsgas_lavaland)
 "JI" = (
@@ -2925,6 +2932,7 @@
 	name = "Utility Closet"
 	},
 /obj/structure/cable,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "Rv" = (
@@ -3209,14 +3217,19 @@
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "UB" = (
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
-/obj/machinery/door/window/right/directional/north,
-/obj/machinery/door/window/left/directional/south,
+/obj/machinery/door/window/right/directional/north{
+	req_access = "ACCESS_LZGAS"
+	},
+/obj/machinery/door/window/left/directional/south{
+	req_access = "ACCESS_LZGAS"
+	},
 /turf/open/floor/iron/smooth_large,
 /area/ruin/thelizardsgas_lavaland)
 "UL" = (
@@ -3426,6 +3439,7 @@
 	dir = 4
 	},
 /obj/structure/cable,
+/obj/effect/mob_spawn/ghost_role/human/lavaland_gasstation/manager,
 /turf/open/floor/iron/dark/smooth_edge{
 	dir = 4
 	},
@@ -3445,6 +3459,7 @@
 /obj/machinery/door/airlock/grunge{
 	name = "Break Room"
 	},
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "YE" = (
