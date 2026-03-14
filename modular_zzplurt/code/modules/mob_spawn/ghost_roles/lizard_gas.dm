@@ -14,8 +14,9 @@
 	name = "Gas Station Manager"
 	prompt_name = "a gas station manager"
 	outfit = /datum/outfit/lavaland_gasstation/manager
-	you_are_text = "You are the manager of a Lizard's Gas Station close to a mining facility."
-	flavour_text = "Graduating the Lizard's Gas prestigious university, whether by bad luck or poor decision on your part, you are now managing the most dangerous establishment!"
+	you_are_text = "You are the branch manager of a Lizard's Gas Station close to a mining facility."
+	flavour_text = "Years of working at Lizard's Gas finally paid off, and you been promoted to a Branch Manager! Sadly, your employer, failed to realize that there are hostile megafauna and tribes in the area, so make sure that you can defend yourself and your employees. Also sell stuff to people, occasionally."
+	important_text = "Care for your employees, they are irreplaceable! Do NOT let your workplace get damaged! Do not abandon it either! Being the manager, you are held to a higher standard."
 
 /datum/outfit/lavaland_gasstation
 	name = "Lizard Gas Station Attendant"
@@ -29,6 +30,7 @@
 
 /datum/outfit/lavaland_gasstation/manager
 	name = "Lizard Gas Station Manager"
+	back = /obj/item/storage/backpack/satchel/leather
 	backpack_contents = list(
 		/obj/item/storage/box/survival = 1,
 		/obj/item/crowbar = 1,
