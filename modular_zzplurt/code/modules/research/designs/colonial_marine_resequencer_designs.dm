@@ -183,7 +183,7 @@
 
 /datum/design/cmf_frontier_backpack
 	name = "Frontier Backpack"
-	id = "frontier_backpack"
+	id = "cmf_frontier_backpack"
 	build_type = BIOGENERATOR
 	materials = list(/datum/material/biomass = 150)
 	build_path = /obj/item/storage/backpack/industrial/frontier_colonist
@@ -191,7 +191,7 @@
 
 /datum/design/cmf_frontier_satchel
 	name = "Frontier Satchel"
-	id = "frontier_satchel"
+	id = "cmf_frontier_satchel"
 	build_type = BIOGENERATOR
 	materials = list(/datum/material/biomass = 150)
 	build_path = /obj/item/storage/backpack/industrial/frontier_colonist/satchel
