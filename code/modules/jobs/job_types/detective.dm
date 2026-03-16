@@ -56,6 +56,7 @@
 	id_trim = /datum/id_trim/job/detective
 	uniform = /obj/item/clothing/under/rank/security/detective
 	suit = /obj/item/clothing/suit/toggle/jacket/det_trench
+	accessory = /obj/item/clothing/accessory/bodycam
 	backpack_contents = list(
 		/obj/item/detective_scanner = 1,
 		/obj/item/melee/baton = 1,

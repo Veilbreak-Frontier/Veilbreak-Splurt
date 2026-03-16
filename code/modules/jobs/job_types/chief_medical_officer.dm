@@ -61,6 +61,7 @@
 	uniform = /obj/item/clothing/under/rank/medical/chief_medical_officer
 	suit = /obj/item/clothing/suit/toggle/labcoat/cmo
 	suit_store = /obj/item/flashlight/pen/paramedic
+	accessory = /obj/item/clothing/accessory/bodycam/head
 	backpack_contents = list(
 		/obj/item/melee/baton/telescopic/silver = 1,
 		)

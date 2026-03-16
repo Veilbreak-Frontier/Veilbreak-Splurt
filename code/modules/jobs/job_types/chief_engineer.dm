@@ -66,6 +66,7 @@
 	id = /obj/item/card/id/advanced/silver
 	id_trim = /datum/id_trim/job/chief_engineer
 	uniform = /obj/item/clothing/under/rank/engineering/chief_engineer
+	accessory = /obj/item/clothing/accessory/bodycam/head
 	backpack_contents = list(
 		/obj/item/melee/baton/telescopic/silver = 1,
 // 		/obj/item/construction/rcd/ce = 1, // BUBBER EDIT -> MOVED TO LOCKER

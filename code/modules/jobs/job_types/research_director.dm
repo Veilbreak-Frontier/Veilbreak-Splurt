@@ -61,6 +61,7 @@
 	id_trim = /datum/id_trim/job/research_director
 	uniform = /obj/item/clothing/under/rank/rnd/research_director/turtleneck
 	suit = /obj/item/clothing/suit/toggle/labcoat/research_director
+	accessory = /obj/item/clothing/accessory/bodycam/head
 	backpack_contents = list(
 		/obj/item/melee/baton/telescopic/silver = 1,
 		)

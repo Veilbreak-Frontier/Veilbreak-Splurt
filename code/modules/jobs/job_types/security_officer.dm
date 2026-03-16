@@ -229,6 +229,7 @@ GLOBAL_LIST_EMPTY(security_officer_distribution)
 	uniform = /obj/item/clothing/under/rank/security/officer
 	suit = /obj/item/clothing/suit/armor/vest/alt/sec
 	suit_store = /obj/item/gun/energy/e_gun/advtaser //BUBBER EDIT CHANGE - Original: /obj/item/gun/energy/disabler
+	accessory = /obj/item/clothing/accessory/bodycam
 	backpack_contents = list(
 		/obj/item/evidencebag = 1,
 		/obj/item/flashlight/seclite = 1, // BUBBER EDIT ADDITION

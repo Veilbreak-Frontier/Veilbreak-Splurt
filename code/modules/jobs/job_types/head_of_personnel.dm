@@ -97,6 +97,7 @@
 	id = /obj/item/card/id/advanced/platinum
 	id_trim = /datum/id_trim/job/head_of_personnel
 	uniform = /obj/item/clothing/under/rank/civilian/head_of_personnel
+	accessory = /obj/item/clothing/accessory/bodycam/head
 	backpack_contents = list(
 		/obj/item/melee/baton/telescopic/silver = 1,
 		)

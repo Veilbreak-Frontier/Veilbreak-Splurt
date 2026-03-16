@@ -66,6 +66,7 @@
 	id_trim = /datum/id_trim/job/captain
 	uniform = /obj/item/clothing/under/rank/captain
 	suit = /obj/item/clothing/suit/armor/vest/capcarapace
+	accessory = /obj/item/clothing/accessory/bodycam/head
 	backpack_contents = list(
 		/obj/item/melee/baton/telescopic/gold = 1,
 		/obj/item/station_charter = 1,

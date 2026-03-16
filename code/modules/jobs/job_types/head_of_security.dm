@@ -55,6 +55,7 @@
 	uniform = /obj/item/clothing/under/rank/security/head_of_security
 	suit = /obj/item/clothing/suit/armor/hos/trenchcoat
 	suit_store = /obj/item/gun/energy/e_gun //BUBBER EDIT - REVERTS SKYRAT REMOVAL
+	accessory = /obj/item/clothing/accessory/bodycam/head
 	backpack_contents = list(
 		/obj/item/evidencebag = 1,
 		/obj/item/melee/baton/security/loaded/hos = 1,
