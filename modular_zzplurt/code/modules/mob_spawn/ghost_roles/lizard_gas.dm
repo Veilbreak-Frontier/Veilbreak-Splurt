@@ -38,3 +38,8 @@
 		/obj/item/gun/ballistic/automatic/pistol/m1911 = 1,
 		/obj/item/ammo_box/magazine/m45 = 3,
 		)
+
+/obj/item/card/id/departmental_budget/lizgas
+	department_ID = ACCOUNT_LZGAS
+	department_name = ACCOUNT_LZGAS_NAME
+	icon_state = "srv_budget" // Green just like our lizard.

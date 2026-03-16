@@ -1,6 +1,8 @@
-/obj/item/circuitboard/machine/lizard_gas_colonial
+/obj/item/circuitboard/machine/biogenerator/lizard_gas_colonial
 	name = "Colonial Marine Resequencer"
 	build_path = /obj/machinery/biogenerator/lizard_gas_colonial
+	icon = 'modular_zzplurt/icons/obj/machines/resequencer.dmi'
+	icon_state = "circuitboard"
 	req_components = list(
 		/datum/stock_part/matter_bin = 2,
 		/datum/stock_part/servo = 2,
@@ -15,8 +17,7 @@
 		a variety, of materials to make up for the unreliable rate of deliveries to Lizard's Gas, at the cost of not being able to make the other items it \
 		is well known for producing."
 	icon = 'modular_zzplurt/icons/obj/machines/resequencer.dmi'
-	circuit = /obj/machinery/biogenerator/lizard_gas_colonial
-	anchored = FALSE
+	circuit = /obj/item/circuitboard/machine/biogenerator/lizard_gas_colonial
 	efficiency = 1
 	productivity = 1
 	max_items = 35
@@ -26,9 +27,11 @@
 		RND_CATEGORY_CMR_MATERIALS,
 	)
 
-/obj/item/circuitboard/machine/lizard_gas_medvendor
+/obj/item/circuitboard/machine/biogenerator/lizard_gas_medvendor
 	name = "DeForest Brand Bio-Regenerator"
 	build_path = /obj/machinery/biogenerator/lizard_gas_medvendor
+	icon = 'modular_zzplurt/icons/obj/machines/bioregenerator.dmi'
+	icon_state = "circuitboard"
 	req_components = list(
 		/datum/stock_part/matter_bin = 2,
 		/datum/stock_part/servo = 2,
@@ -41,8 +44,7 @@
 		various emergency medical supplies and injectors. This one has been customized to provide for the harsh needs \
 		of lavaland, mostly in the hopes of being able to sell the products to those who travel through it."
 	icon = 'modular_zzplurt/icons/obj/machines/bioregenerator.dmi'
-	circuit = /obj/machinery/biogenerator/lizard_gas_medvendor
-	anchored = FALSE
+	circuit = /obj/item/circuitboard/machine/biogenerator/lizard_gas_medvendor
 	efficiency = 1
 	productivity = 1
 	max_items = 35
@@ -53,9 +55,11 @@
 		RND_CATEGORY_DEFOREST_BLOOD,
 	)
 
-/obj/item/circuitboard/machine/lizard_gas_smartfridge
+/obj/item/circuitboard/machine/biogenerator/lizard_gas_smartfridge
 	name = "SmartFridge Organic Fabricator"
 	build_path = /obj/machinery/biogenerator/lizard_gas_smartfridge
+	icon = 'modular_zzplurt/icons/obj/machines/smartfridge_fab.dmi'
+	icon_state = "circuitboard"
 	req_components = list(
 		/datum/stock_part/matter_bin = 2,
 		/datum/stock_part/servo = 2,
@@ -69,8 +73,7 @@
 		This model has been customized for the day-to-day operations of a gas station, it contains an expanded stock of \
 		items, and ready to cook ingredients for serving customers on the spot, gas station quality guaranteed."
 	icon = 'modular_zzplurt/icons/obj/machines/smartfridge_fab.dmi'
-	circuit = /obj/machinery/biogenerator/lizard_gas_smartfridge
-	anchored = FALSE
+	circuit = /obj/item/circuitboard/machine/biogenerator/lizard_gas_smartfridge
 	efficiency = 1
 	productivity = 1
 	max_items = 35

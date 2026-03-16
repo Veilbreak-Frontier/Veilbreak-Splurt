@@ -1,9 +1,9 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "ax" = (
 /obj/structure/rack,
-/obj/item/flatpacked_machine{
+/obj/item/flatpacked_machine/sustenance_machine{
 	pixel_x = 0;
-	pixel_y = 5
+	pixel_y = 4
 	},
 /turf/open/floor/plating,
 /area/ruin/thelizardsgas_lavaland)
@@ -35,6 +35,8 @@
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "bk" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/carpet,
 /area/ruin/thelizardsgas_lavaland)
 "bK" = (
@@ -149,6 +151,8 @@
 	dir = 1;
 	color = "#595959"
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
@@ -443,6 +447,7 @@
 /obj/structure/sign/chalkboard_menu{
 	pixel_y = 32
 	},
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "gm" = (
@@ -749,6 +754,18 @@
 	baseturfs = /turf/open/floor/plating/lavaland_baseturf
 	},
 /area/ruin/thelizardsgas_lavaland)
+"lS" = (
+/obj/structure/cable,
+/obj/effect/turf_decal/siding/thinplating_new{
+	dir = 4;
+	color = "#595959"
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/turf/open/floor/iron{
+	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
+	},
+/area/ruin/thelizardsgas_lavaland)
 "lX" = (
 /obj/structure/cable,
 /obj/structure/railing,
@@ -911,7 +928,9 @@
 /turf/open/floor/asphalt/lavaland/outdoors,
 /area/ruin/thelizardsgas_lavaland)
 "ns" = (
-/obj/machinery/door/window/left/directional/north,
+/obj/machinery/door/window/left/directional/north{
+	req_access = list(9512)
+	},
 /obj/effect/turf_decal/siding/dark{
 	dir = 9
 	},
@@ -925,7 +944,8 @@
 	specialfunctions = 4;
 	normaldoorcontrol = 1;
 	id = "corpooffice";
-	name = "Door Bolt Control"
+	name = "Door Bolt Control";
+	req_access = list(9512)
 	},
 /turf/open/floor/iron/dark/smooth_corner,
 /area/ruin/thelizardsgas_lavaland)
@@ -1024,6 +1044,7 @@
 /obj/effect/turf_decal/siding/thinplating_new{
 	color = "#595959"
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /turf/open/floor/iron{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
@@ -1040,10 +1061,6 @@
 	},
 /area/ruin/thelizardsgas_lavaland)
 "pL" = (
-/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4{
-	dir = 8
-	},
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /obj/effect/turf_decal/siding/wideplating/dark/corner{
 	dir = 8
 	},
@@ -1054,6 +1071,8 @@
 /obj/effect/turf_decal/siding/thinplating_new{
 	color = "#595959"
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
@@ -1169,8 +1188,8 @@
 	},
 /obj/item/paper{
 	pixel_x = 7;
-	name = "Manager Note";
-	default_raw_text = "Good news! That little decrepit hut out front is finally, <B>legally</B> ours! Feel free to snoop around it if you find the time, and remember, time to lean means time to clean!<BR><BR>P.S, go into the backroom and set the nitrogen and oxygen pressure tanks to layer 3 with the multitool, the HVAC tech had no fucking clue what he was doing apparently!<BR><BR>-General Manager, Ra'Tahul Rekinov";
+	name = "Supply Shipment Note";
+	default_raw_text = "Good news, everyone. We have managed to secure a decently sized shipment of resources for you, which you can use along with the rapid construction fabricator you should have in the garage, along with the shipment itself. So, roll up your sleeves, and get to <B>expanding</B> as you see fit. Bring in that extra profit, become employee of the month material!<BR><BR>-Supply Manager, Jasper 'Jas' Statham";
 	pixel_y = 0
 	},
 /obj/item/screwdriver,
@@ -1182,6 +1201,9 @@
 	dir = 8;
 	color = "#595959";
 	icon_state = "siding_thinplating_end"
+	},
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4{
+	dir = 4
 	},
 /turf/open/floor/iron/large,
 /area/ruin/thelizardsgas_lavaland)
@@ -1358,6 +1380,7 @@
 /obj/machinery/coffeemaker/impressa{
 	pixel_x = 2
 	},
+/obj/machinery/atmospherics/components/unary/vent_pump/on/layer2,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "uC" = (
@@ -1398,6 +1421,7 @@
 /obj/effect/turf_decal/siding/wood{
 	dir = 8
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/wood,
 /area/ruin/thelizardsgas_lavaland)
 "vN" = (
@@ -1477,6 +1501,8 @@
 	dir = 8
 	},
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /turf/open/floor/wood/tile,
 /area/ruin/thelizardsgas_lavaland)
 "xB" = (
@@ -1513,6 +1539,8 @@
 	color = "#878787"
 	},
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron/large,
 /area/ruin/thelizardsgas_lavaland)
 "xO" = (
@@ -1672,7 +1700,8 @@
 	name = "Privacy Shutters";
 	icon_state = "tram";
 	base_icon_state = "tram";
-	pixel_x = 26
+	pixel_x = 26;
+	req_access = list(9512)
 	},
 /obj/effect/turf_decal/trimline/dark_green/filled/line{
 	dir = 6
@@ -1765,6 +1794,7 @@
 	id = "lizardshutters"
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /turf/open/floor/plating/lavaland_baseturf,
 /area/ruin/thelizardsgas_lavaland)
 "AD" = (
@@ -1943,17 +1973,17 @@
 /turf/open/floor/asphalt/lavaland/outdoors,
 /area/ruin/thelizardsgas_lavaland)
 "Eq" = (
-/obj/item/flatpacked_machine/organics_printer{
-	pixel_x = -18;
-	pixel_y = 7
-	},
 /obj/structure/table,
 /obj/item/flatpacked_machine/ore_silo{
 	pixel_x = 4;
-	pixel_y = 4
+	pixel_y = 5
 	},
 /obj/machinery/camera/autoname/directional/east{
 	network = list("lizardgas")
+	},
+/obj/item/flatpacked_machine{
+	pixel_x = -17;
+	pixel_y = 4
 	},
 /turf/open/floor/iron/shuttle/exploration/corner{
 	dir = 1
@@ -1983,6 +2013,7 @@
 	pixel_x = -7;
 	pixel_y = 1
 	},
+/obj/machinery/atmospherics/components/unary/vent_pump/on/layer2,
 /turf/open/floor/iron/shuttle/exploration/side{
 	dir = 1
 	},
@@ -2006,10 +2037,13 @@
 /area/ruin/thelizardsgas_lavaland)
 "Fr" = (
 /obj/machinery/door/airlock/grunge{
-	id_tag = "corpoffice";
+	id_tag = "corpooffice";
 	name = "Manager's Office"
 	},
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/dark/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "Fs" = (
@@ -2065,6 +2099,8 @@
 	color = "#878787"
 	},
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
@@ -2088,6 +2124,8 @@
 /obj/structure/cable,
 /obj/effect/decal/cleanable/dirt/dust,
 /obj/machinery/light/small/directional/south,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
@@ -2110,6 +2148,7 @@
 /area/ruin/thelizardsgas_lavaland)
 "GB" = (
 /obj/structure/bookcase/random,
+/obj/machinery/atmospherics/components/unary/vent_pump/on/layer2,
 /turf/open/floor/wood/large,
 /area/ruin/thelizardsgas_lavaland)
 "GH" = (
@@ -2190,6 +2229,18 @@
 	},
 /obj/item/clothing/gloves/color/yellow,
 /obj/item/clothing/gloves/color/yellow,
+/obj/item/clothing/suit/hooded/wintercoat,
+/obj/item/clothing/suit/hooded/wintercoat,
+/obj/item/clothing/suit/apron/chef/colorable_apron{
+	greyscale_colors = "#8e1dd6";
+	name = "Lizard Gas Apron";
+	desc = "A purple apron imprinted with the signature little green lizard of Lizard Gas! This cute outfit is surely reflected by its underpaid drop-out wearer."
+	},
+/obj/item/clothing/suit/apron/chef/colorable_apron{
+	greyscale_colors = "#8e1dd6";
+	name = "Lizard Gas Apron";
+	desc = "A purple apron imprinted with the signature little green lizard of Lizard Gas! This cute outfit is surely reflected by its underpaid drop-out wearer."
+	},
 /turf/open/floor/iron/dark/smooth_large,
 /area/ruin/thelizardsgas_lavaland)
 "Hw" = (
@@ -2197,6 +2248,9 @@
 	name = "Break Room"
 	},
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "HA" = (
@@ -2265,7 +2319,7 @@
 	},
 /obj/effect/mapping_helpers/airlock/locked,
 /turf/open/floor/iron/smooth_large,
-/area/icemoon/underground/unexplored)
+/area/ruin/thelizardsgas_lavaland)
 "IN" = (
 /obj/effect/turf_decal/siding/dark{
 	dir = 8
@@ -2276,12 +2330,30 @@
 /obj/effect/turf_decal/trimline/dark_green/filled/mid_joiner{
 	dir = 8
 	},
+/obj/structure/closet/secure_closet/wall{
+	pixel_x = -32;
+	name = "Manager's Locker";
+	req_access = list(9512)
+	},
+/obj/item/clothing/head/beret/science/rd{
+	desc = "A beret awarded to team members who have lasted a full year or more under the employment of the Lizard Gas brand! A pizza party is sure to be held on their anniversary.";
+	name = "Veteran Lizard Gas Beret"
+	},
+/obj/item/clothing/gloves/color/yellow,
+/obj/item/tank/internals/emergency_oxygen/double,
+/obj/item/clothing/mask/breath,
+/obj/item/gun/energy/recharge/kinetic_accelerator/glock,
+/obj/item/megaphone/cargo{
+	name = "manager's megaphone"
+	},
+/obj/item/card/id/departmental_budget/lizgas,
+/obj/item/cargo_teleporter,
+/obj/item/clothing/suit/hooded/wintercoat,
 /turf/open/floor/iron/dark/smooth_edge{
 	dir = 8
 	},
 /area/ruin/thelizardsgas_lavaland)
 "IX" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /obj/effect/turf_decal/siding/thinplating_new{
 	dir = 1;
 	color = "#595959"
@@ -2289,6 +2361,8 @@
 /obj/effect/turf_decal/siding/thinplating_new{
 	color = "#595959"
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
@@ -2409,13 +2483,17 @@
 /area/icemoon/underground/unexplored)
 "Kn" = (
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /turf/open/floor/iron{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
 /area/ruin/thelizardsgas_lavaland)
 "KX" = (
 /obj/structure/table/wood/fancy/green,
-/obj/machinery/door/window/right/directional/north,
+/obj/machinery/door/window/right/directional/north{
+	req_access = list(9512)
+	},
 /obj/effect/turf_decal/siding/dark{
 	dir = 1
 	},
@@ -2664,6 +2742,8 @@
 	color = "#595959";
 	dir = 8
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron/edge{
 	dir = 4
 	},
@@ -2709,13 +2789,15 @@
 	pixel_x = -6;
 	base_icon_state = "tram";
 	icon_state = "tram";
-	light_color = "#6496FA"
+	light_color = "#6496FA";
+	req_access = list(9512)
 	},
 /obj/machinery/button/door/directional/east{
 	pixel_y = 28;
 	name = "Reinforced Gate Toggle";
 	id = "lizardshutters_garage_reinforcement";
-	pixel_x = 6
+	pixel_x = 6;
+	req_access = list(9512)
 	},
 /turf/open/floor/iron/shuttle/exploration/corner,
 /area/ruin/thelizardsgas_lavaland)
@@ -2736,17 +2818,23 @@
 /area/ruin/thelizardsgas_lavaland)
 "NF" = (
 /obj/structure/rack,
-/obj/item/flatpacked_machine/organics_ration_printer{
-	pixel_x = 0;
+/obj/item/circuitboard/machine/biogenerator/lizard_gas_colonial{
+	pixel_x = 3;
 	pixel_y = 5
 	},
-/obj/item/flatpacked_machine/sustenance_machine{
-	pixel_x = -8;
-	pixel_y = 2
+/obj/item/circuitboard/machine/biogenerator/lizard_gas_medvendor{
+	pixel_x = -2;
+	pixel_y = 1
 	},
-/obj/item/circuitboard/machine/biogenerator/food_replicator{
-	pixel_x = 5;
-	pixel_y = -5
+/obj/item/circuitboard/machine/biogenerator/lizard_gas_smartfridge{
+	pixel_x = -6;
+	pixel_y = -3
+	},
+/obj/item/paper{
+	pixel_x = 7;
+	pixel_y = -4;
+	default_raw_text = "Great news folks, your station was picked as the lucky team to test out the brand new selection that our R&D boys been working on, you may be able to recognize a brand or two there, but do not worry. I been reassured by our legal team that the modifications we have made are perfectly legal for commercial use, as long as you <B>DO NOT</B> resell those boards. Anyway, try out those bad boys, they were designed to make each station completely self-sufficient and not have to rely on infrequent shipments to remote locations, and completely place any medical issues experienced inside the gas stations the sole responsibility of the staff within and not the chain as a whole, <B>innovation!</B><BR><BR>-Supply Manager, Jasper 'Jas' Statham";
+	name = "Circuitboard Shipment"
 	},
 /turf/open/floor/plating,
 /area/ruin/thelizardsgas_lavaland)
@@ -2758,6 +2846,8 @@
 	dir = 8;
 	color = "#595959"
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /turf/open/floor/iron{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
@@ -2794,6 +2884,10 @@
 /obj/effect/decal/cleanable/dirt/dust,
 /obj/machinery/duct,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 1;
+	filter_types = list(/datum/gas/oxygen)
+	},
 /turf/open/floor/plating/lavaland_atmos{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
@@ -2925,6 +3019,7 @@
 	name = "Utility Closet"
 	},
 /obj/structure/cable,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "Rv" = (
@@ -2974,6 +3069,9 @@
 	pixel_y = 4
 	},
 /obj/structure/curtain/bounty,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4{
+	dir = 4
+	},
 /turf/open/floor/iron/dark/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "RW" = (
@@ -3022,14 +3120,16 @@
 /obj/machinery/button/door/directional/east{
 	id = "lizardshutters";
 	pixel_y = 7;
-	name = "Privacy Shutters"
+	name = "Privacy Shutters";
+	req_access = list(9512)
 	},
 /obj/machinery/button/door/directional/east{
 	pixel_y = -3;
 	name = "Entrance Doorbolts";
 	id = "lizardgasbolt";
 	normaldoorcontrol = 1;
-	specialfunctions = 4
+	specialfunctions = 4;
+	req_access = list(9512)
 	},
 /obj/effect/turf_decal/siding/wideplating/dark/corner,
 /obj/effect/turf_decal/siding/thinplating_new{
@@ -3038,6 +3138,9 @@
 	},
 /obj/effect/turf_decal/siding/thinplating_new/corner{
 	color = "#595959";
+	dir = 8
+	},
+/obj/machinery/atmospherics/components/unary/vent_pump/on/layer2{
 	dir = 8
 	},
 /turf/open/floor/iron/large,
@@ -3074,6 +3177,7 @@
 	pixel_x = 1;
 	pixel_y = 5
 	},
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4,
 /turf/open/floor/iron/shuttle/exploration/side{
 	dir = 1
 	},
@@ -3163,7 +3267,7 @@
 	},
 /obj/item/paper{
 	pixel_x = 9;
-	default_raw_text = "Management decided that you guys need to attract more customers and to actually stay <B>convenient</B>. Solution? Quantum pads! Honestly, I have no clue what the science behind this stuff is, all I care is that it basically links two places together. So, if you get a customer who you <B>think</B> could <B>potentially</B> bring others along, hand it over to them along with a multitool, make sure it is linked properly. Then bam, way more customers! As it turns out there aren't any plasma-operated vehicles on lavaland, so we're expanding to space. <BR><BR> Stations, too. <BR><BR>Space Stations, too.<BR><BR>-Supply Manager, Jasper 'Jas' Statham";
+	default_raw_text = "Management decided that you guys need to attract more customers in a convenient, efficient, and especially <B>cost-cutting</B> method. Solution? Quantum pads! Honestly, I have no clue what the science behind this stuff is, all I care is that it basically links two places together. So, if you get a customer who you <B>think</B> could <B>potentially</B> bring others along, hand it over to them along with a multitool, make sure it is linked properly. As it turns out that the activity of plasma-operated vehicles on this ice moon is much lower than we predicted, so we're hoping trying to expand our trade with spacefaring folks will bring in that extra revenue we want.<BR><BR>-Supply Manager, Jasper 'Jas' Statham";
 	name = "Quantum Pad Shipment";
 	pixel_y = 7
 	},
@@ -3209,14 +3313,19 @@
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "UB" = (
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
-/obj/machinery/door/window/right/directional/north,
-/obj/machinery/door/window/left/directional/south,
+/obj/machinery/door/window/right/directional/north{
+	req_access = list(9512)
+	},
+/obj/machinery/door/window/left/directional/south{
+	req_access = list(9512)
+	},
 /turf/open/floor/iron/smooth_large,
 /area/ruin/thelizardsgas_lavaland)
 "UL" = (
@@ -3225,6 +3334,8 @@
 	color = "#878787"
 	},
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "Vc" = (
@@ -3278,9 +3389,6 @@
 	pixel_x = -7;
 	pixel_y = 4
 	},
-/obj/machinery/atmospherics/components/unary/vent_pump/on/layer2{
-	dir = 8
-	},
 /obj/effect/turf_decal/siding/thinplating_new{
 	dir = 1;
 	color = "#595959"
@@ -3288,6 +3396,8 @@
 /obj/effect/turf_decal/siding/thinplating_new{
 	color = "#595959"
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron{
 	baseturfs = /turf/open/misc/asteroid/basalt/lava_land_surface
 	},
@@ -3397,6 +3507,8 @@
 /obj/effect/turf_decal/siding/thinplating_new{
 	color = "#595959"
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer4,
 /turf/open/floor/iron/large,
 /area/ruin/thelizardsgas_lavaland)
 "XT" = (
@@ -3426,6 +3538,9 @@
 	dir = 4
 	},
 /obj/structure/cable,
+/obj/effect/mob_spawn/ghost_role/human/lavaland_gasstation/manager{
+	dir = 8
+	},
 /turf/open/floor/iron/dark/smooth_edge{
 	dir = 4
 	},
@@ -3445,6 +3560,7 @@
 /obj/machinery/door/airlock/grunge{
 	name = "Break Room"
 	},
+/obj/effect/mapping_helpers/airlock/access/all/lizard_gas,
 /turf/open/floor/iron/textured_large,
 /area/ruin/thelizardsgas_lavaland)
 "YE" = (
@@ -4150,7 +4266,7 @@ Vw
 ub
 Ho
 Zi
-pq
+IX
 bk
 bk
 cU
@@ -4217,7 +4333,7 @@ Rn
 OA
 OA
 Kc
-dw
+lS
 gm
 ZQ
 ub
