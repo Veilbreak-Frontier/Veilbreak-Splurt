@@ -72,6 +72,8 @@
 		Despite this, the existence of this weapon was a testament to the creativity of the people working for this company." \
 	)
 	register_context()
+//To whom it may concerns, Yes, this is essentially just me  venting out my frustration with working on the CMG for TG which was supposed to be done back in 2025
+//However the design requirement vs what I actually want got really complicated and we could not finalise it.
 
 /obj/item/gun/ballistic/automatic/wt458/give_manufacturer_examine()
 	AddElement(/datum/element/manufacturer_examine, COMPANY_NANOTRASEN)
