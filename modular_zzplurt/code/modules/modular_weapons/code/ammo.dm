@@ -10,6 +10,7 @@
 	multiple_sprite_use_base = TRUE
 	caliber = CALIBER_9X17MM
 	max_ammo = 30
+	multitype = FALSE
 
 /obj/item/ammo_box/magazine/mps5/ap
 	name = "\improper MP-S5 magazine (9x17mm AP)"

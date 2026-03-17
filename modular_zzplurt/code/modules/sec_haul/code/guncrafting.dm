@@ -7,7 +7,7 @@
 	result = /obj/item/gun/ballistic/automatic/wt458
 	reqs = list(
 		/obj/item/weaponcrafting/gunkit/wt458_kit = 1,
-		/obj/item/gun/ballistic/automatic/wt550 = 1,
+		/obj/item/gun/ballistic/automatic/wt550/security = 1,
 	)
 	time = 10 SECONDS
 	category = CAT_WEAPON_RANGED

@@ -4,7 +4,7 @@
 	id = "m9x17mm_mag"
 	build_type = PROTOLATHE | AWAY_LATHE
 	materials = list(
-		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 18, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 4
+		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 18, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 8
 	)
 	build_path = /obj/item/ammo_box/magazine/mps5
 	category = list(
@@ -19,7 +19,7 @@
 	id = "m9x17mm_mag_rubber"
 	build_type = PROTOLATHE | AWAY_LATHE
 	materials = list(
-		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 10, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 4
+		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 6, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 12
 	)
 	build_path = /obj/item/ammo_box/magazine/mps5/rubber
 	category = list(
@@ -34,7 +34,7 @@
 	id = "m9x17mm_mag_ihdf"
 	build_type = PROTOLATHE | AWAY_LATHE
 	materials = list(
-		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 6, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 8
+		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 4, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 8
 	)
 	build_path = /obj/item/ammo_box/magazine/mps5/ihdf
 	category = list(
@@ -49,7 +49,7 @@
 	id = "m9x17mm_mag_hp"
 	build_type = PROTOLATHE | AWAY_LATHE
 	materials = list(
-		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 12, /datum/material/silver = HALF_SHEET_MATERIAL_AMOUNT * 4, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 4
+		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 12, /datum/material/silver = HALF_SHEET_MATERIAL_AMOUNT * 6, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 8
 	)
 	build_path = /obj/item/ammo_box/magazine/mps5/hp
 	category = list(
@@ -64,7 +64,7 @@
 	id = "m9x17mm_mag_ap"
 	build_type = PROTOLATHE | AWAY_LATHE
 	materials = list(
-		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 8, /datum/material/titanium = SHEET_MATERIAL_AMOUNT * 2, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 4
+		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT * 8, /datum/material/titanium = SHEET_MATERIAL_AMOUNT * 8, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT * 8
 	)
 	build_path = /obj/item/ammo_box/magazine/mps5/ap
 	category = list(
