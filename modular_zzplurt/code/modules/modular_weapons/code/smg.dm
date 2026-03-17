@@ -48,6 +48,7 @@
 	mag_display = TRUE
 	mag_display_ammo = TRUE
 	empty_indicator = TRUE
+	fire_sound = 'modular_zzplurt/sound/items/weapons/gun/wt458.ogg'
 
 /obj/item/gun/ballistic/automatic/wt458/Initialize(mapload)
 	. = ..()

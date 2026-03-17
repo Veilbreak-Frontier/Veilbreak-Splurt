@@ -99,4 +99,3 @@
 	)
 	departmental_flags = DEPARTMENT_BITFLAG_SECURITY
 	autolathe_exportable = FALSE
-
