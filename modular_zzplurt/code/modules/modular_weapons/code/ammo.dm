@@ -115,3 +115,11 @@
 	shrapnel_type = null
 	sharpness = NONE
 	embed_type = null
+
+//WT550 4.6x30mm Override
+/obj/projectile/bullet/c46x30mm
+	wound_bonus = 0
+	armour_penetration = 10
+
+/obj/projectile/bullet/c46x30mm/ap
+	armour_penetration = 45
