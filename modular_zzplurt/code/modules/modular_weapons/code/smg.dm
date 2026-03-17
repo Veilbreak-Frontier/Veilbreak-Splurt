@@ -18,7 +18,7 @@
 
 /obj/item/gun/ballistic/automatic/mps5/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/automatic_fire, 0.18 SECONDS)
+	AddComponent(/datum/component/automatic_fire, 0.23 SECONDS)
 
 /obj/item/gun/ballistic/automatic/mps5/give_manufacturer_examine()
 	AddElement(/datum/element/manufacturer_examine, COMPANY_NANOTRASEN)

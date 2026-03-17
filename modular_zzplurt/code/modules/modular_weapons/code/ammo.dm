@@ -89,16 +89,16 @@
 
 /obj/projectile/bullet/c9x17mm/ihdf
 	name = "9x17mm IHDF bullet"
-	damage = 8
+	damage = 9
 	damage_type = STAMINA
 	embed_type = /datum/embedding/bullet/c9x17mm_ihdf
 
 /datum/embedding/bullet/c9x17mm_ihdf
-	embed_chance = 7
+	embed_chance = 20
 	fall_chance = 4
 	jostle_chance = 2
 	pain_mult = 3
-	pain_stam_pct = 0.3
+	pain_stam_pct = 1
 	ignore_throwspeed_threshold = TRUE
 	jostle_pain_mult = 4
 	rip_time = 1 SECONDS
@@ -111,7 +111,7 @@
 	ricochets_max = 3
 	ricochet_incidence_leeway = 0
 	ricochet_chance = 150
-	ricochet_decay_damage = 0.4
+	ricochet_decay_damage = 0.9
 	shrapnel_type = null
 	sharpness = NONE
 	embed_type = null
