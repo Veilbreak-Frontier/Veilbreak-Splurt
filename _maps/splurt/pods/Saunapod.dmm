@@ -26,10 +26,8 @@
 /turf/open/floor/wood,
 /area/misc/survivalpod)
 "o" = (
-/obj/machinery/computer/security/wooden_tv{
-	pixel_x = -1
-	},
 /obj/structure/wall_torch/spawns_lit/directional/north,
+/obj/machinery/jukebox/no_access,
 /turf/open/floor/wood,
 /area/misc/survivalpod)
 "p" = (
