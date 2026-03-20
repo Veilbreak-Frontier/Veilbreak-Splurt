@@ -878,7 +878,19 @@
 	//SPLURT EDIT START
 	to_chat(loc, span_userdanger("While you have chosen the security model, you are an auxiliary officer. You follow Space Law and your assigned objectives. \
 	While you may not be connected to the AI, you are still a machine. Keep this in mind when entering combat in support of your fellow officers. You should pull your punches if you need to."))
-	//SPLURT EDIT END
+
+/obj/item/robot_model/peacekeeper/respawn_consumable(mob/living/silicon/robot/cyborg, coeff = 1)
+	..()
+	var/obj/item/gun/energy/e_gun/advtaser/cyborg/taser = locate(/obj/item/gun/energy/e_gun/advtaser/cyborg) in basic_modules
+	if(taser)
+		if(taser.cell.charge < taser.cell.maxcharge)
+			. = TRUE
+			var/obj/item/ammo_casing/energy/shot = taser.ammo_type[taser.select]
+			taser.cell.give(shot.e_cost * coeff)
+			taser.update_appearance()
+		else
+			taser.charge_timer = 0
+//SPLURT EDIT END
 /obj/item/robot_model/security
 	name = "Security"
 	basic_modules = list(

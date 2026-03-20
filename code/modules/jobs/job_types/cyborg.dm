@@ -71,6 +71,7 @@
 //SPLURT ADDITION START - Security Cyborg Job
 /datum/job/cyborg/security
 	title = JOB_SECURITY_CYBORG
+	job_spawn_title = JOB_SECURITY_OFFICER
 	description = "Assist Security and the station, follow your laws."
 	alt_titles = list(JOB_SECURITY_CYBORG)
 	total_positions = 2
