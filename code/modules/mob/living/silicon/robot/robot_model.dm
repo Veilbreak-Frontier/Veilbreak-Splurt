@@ -243,7 +243,7 @@
 	//SPLURT ADDITION START
 	if(!forced && istype(cyborg))
 		if(cyborg.is_security_cyborg_role())
-			if(!ispath(new_config_type, /obj/item/robot_model/peacekeeper))
+			if(new_config_type != /obj/item/robot_model && !ispath(new_config_type, /obj/item/robot_model/peacekeeper))
 				to_chat(cyborg, span_warning("Security cyborgs are locked to the Peacekeeper module."))
 				return
 		else if(ispath(new_config_type, /obj/item/robot_model/peacekeeper))
