@@ -875,9 +875,10 @@
 
 /obj/item/robot_model/peacekeeper/do_transform_animation()
 	..()
+	//SPLURT EDIT START
 	to_chat(loc, span_userdanger("While you have chosen the security model, you are an auxiliary officer. You follow Space Law and your assigned objectives. \
-	 While you may not be connected to the AI, you are still a machine. Keep this in mind when entering combat in support of your fellow officers. You should pull your punches if you need to.")) //SPLURT EDIT, ORIGINAL: to_chat(loc, span_userdanger("Under Safeguard, you are an enforcer of the PEACE and preventer of HARM. You are not a security member and you are expected to follow orders and prevent harm above all else. Space law means nothing to you.")) // SKYRAT EDIT Changes verbiage off ASIMOV/HUMAN Focus
-
+	 While you may not be connected to the AI, you are still a machine. Keep this in mind when entering combat in support of your fellow officers. You should pull your punches if you need to."))
+	//SPLURT EDIT END
 /obj/item/robot_model/security
 	name = "Security"
 	basic_modules = list(
