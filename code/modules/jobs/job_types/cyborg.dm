@@ -82,18 +82,6 @@
 	antagonist_restricted = TRUE
 	restricted_antagonists = list("ALL")
 
-/datum/job/cyborg/security/get_job_ban_check_roles()
-	. = ..()
-	. |= JOB_CYBORG
-
-	var/datum/job_department/security/security_department = SSjob.get_department_type(/datum/job_department/security)
-	if(!security_department)
-		. |= JOB_SECURITY_OFFICER
-		return
-
-	for(var/datum/job/security_job as anything in security_department.get_jobban_jobs())
-		. |= security_job.title
-
 /datum/job/cyborg/security/after_spawn(mob/living/spawned, client/player_client)
 	return ..()
 //SPLURT ADDITION END
