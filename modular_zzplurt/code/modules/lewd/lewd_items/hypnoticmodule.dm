@@ -9,6 +9,9 @@
 	var/datum/quirk/hypnotic_borg/quirk = new
 	if(!quirk.add_to_holder(new_holder = borg, client_source = borg.client, announce = FALSE))
 		qdel(quirk)
+		return FALSE
+
+	return TRUE
 
 /obj/item/borg/upgrade/hypnoticmodule/deactivate(mob/living/silicon/robot/borg, mob/living/user)
 	. = ..()
@@ -34,12 +37,13 @@
 /datum/quirk/hypnotic_borg
 	name = "Hypnotic Optics"
 	desc = "Your optical displays and chassis presence are captivating to those susceptible to hypnosis."
-	hidden_quirk = TRUE
+	abstract_parent_type = /datum/quirk/hypnotic_borg
 	icon = FA_ICON_FACE_GRIN_HEARTS
 	value = 0
 	quirk_flags = QUIRK_HIDE_FROM_SCAN
 	gain_text = "Your optical glow sharpens."
 	lose_text = "Your optical glow dulls."
+	medical_record_text = "Unit exhibits unusually captivating optical behavior."
 	erp_quirk = TRUE
 	var/hypnotic_text
 	var/hypnotic_color
