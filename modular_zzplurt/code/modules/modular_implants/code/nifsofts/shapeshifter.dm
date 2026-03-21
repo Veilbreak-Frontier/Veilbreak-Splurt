@@ -8,3 +8,5 @@
 
 	// Allow on all NIF units
 	compatible_nifs = list(/obj/item/organ/cyberimp/brain/nif)
+	// SPLURT EDIT: Use preset-enabled alter_form/nif
+	action_to_grant = /datum/action/innate/alter_form/nif/preset
