@@ -94,6 +94,9 @@ GLOBAL_LIST_INIT_TYPED(quirk_blacklist, /list/datum/quirk, list(
 	list(/datum/quirk/item_quirk/addict/alcoholic, /datum/quirk/concubus),
 	list(/datum/quirk/item_quirk/addict/junkie, /datum/quirk/concubus),
 	list(/datum/quirk/item_quirk/addict/smoker, /datum/quirk/concubus),
+
+	// Never used them? Can't be new.
+	list(/datum/quirk/new_shooter,/datum/quirk/no_guns,/datum/quirk/bighands),
 	//SPLURT EDIT ADDITION END
 ))
 

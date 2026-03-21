@@ -208,9 +208,68 @@
 	else
 		playsound(src, fire_sound, fire_sound_volume, vary_fire_sound)
 
+/obj/item/gun/proc/recoil_viewpunch(mob/living/user, atom/pbtarget = null)
+	if (user.client && recoil && !tk_firing(user))
+		// roll to break arm
+		if(recoil>10)
+			var/recoil_disloc = rand((recoil-10),20)
+			if (user.has_quirk(/datum/quirk/frail) || user.has_quirk(/datum/quirk/micro))
+				recoil_disloc = recoil_disloc + 3
+			if (user.has_quirk(/datum/quirk/tough) || user.has_quirk(/datum/quirk/oversized))
+				recoil_disloc = recoil_disloc - 3
+			if (recoil_disloc > 15)
+				var/obj/item/bodypart/disloc_target = user.get_active_hand()
+				disloc_target.force_wound_upwards(/datum/wound/blunt/bone/moderate)
+
+		// viewpunch
+		if(HAS_TRAIT(user, TRAIT_NEW_SHOOTER) || recoil >= 5)
+			// i hope there's a better way to do this - orcawa
+			var/effective_recoil = recoil
+
+			if (user.has_quirk(/datum/quirk/oversized))
+				effective_recoil = effective_recoil*0.8
+			if (user.has_quirk(/datum/quirk/tough))
+				effective_recoil = effective_recoil*0.9
+			if (user.has_quirk(/datum/quirk/frail))
+				effective_recoil = effective_recoil*1.2
+			if (user.has_quirk(/datum/quirk/featherweight))
+				effective_recoil = effective_recoil*1.2
+
+			if (user.has_quirk(/datum/quirk/micro/smallest))
+				effective_recoil = effective_recoil*1.4
+			else if (user.has_quirk(/datum/quirk/micro/smaller))
+				effective_recoil = effective_recoil*1.2
+			else if (user.has_quirk(/datum/quirk/micro))
+				effective_recoil = effective_recoil*1.2
+
+			// apply punch to camera
+			var/client/uc = user.client
+			// get recoil vector
+			var/turf/src_turf = get_turf(src)
+			var/turf/target_turf = get_turf(pbtarget)
+
+			var/recoil_rand = rand(-3*recoil, 3*recoil)
+			var/vector/rv = vector(src_turf.x - target_turf.x, src_turf.y - target_turf.y) // recoil vector
+			rv = rv.Turn(recoil_rand)
+			rv.size = effective_recoil*0.9
+
+			animate( // kick
+				uc,
+				time = 0.05 SECONDS,
+				easing = CIRCULAR_EASING | EASE_IN,
+				pixel_x = rv.x*ICON_SIZE_ALL,
+				pixel_y = rv.y*ICON_SIZE_ALL
+			)
+			animate( // recovery
+				time = 0.1 SECONDS*effective_recoil,
+				easing = CIRCULAR_EASING | EASE_OUT,
+				pixel_x = 0,
+				pixel_y = 0
+			)
+			return TRUE
+	return FALSE
+
 /obj/item/gun/proc/shoot_live_shot(mob/living/user, pointblank = FALSE, atom/pbtarget = null, message = TRUE)
-	if(recoil && !tk_firing(user))
-		shake_camera(user, recoil + 1, recoil)
 	fire_sounds()
 	if(suppressed || !message)
 		return FALSE
@@ -255,6 +314,8 @@
 
 	if(chambered?.integrity_damage)
 		take_damage(chambered.integrity_damage, sound_effect = FALSE)
+
+	recoil_viewpunch(user, pbtarget)
 	return TRUE
 
 /obj/item/gun/atom_destruction(damage_flag)
