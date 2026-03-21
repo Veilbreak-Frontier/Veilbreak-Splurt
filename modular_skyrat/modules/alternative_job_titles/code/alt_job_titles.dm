@@ -273,6 +273,15 @@
 		"Synthetic",
 		"Servitor",
 	)
+//SPLURT ADDITION START
+/datum/job/cyborg/security
+	alt_titles = list(
+		"Security Cyborg",
+		"Safeguard Model",
+		"Synthetic Auxiliary Officer",
+		"Peacekeeper Model",
+	)
+//SPLURT ADDITION END
 
 /datum/job/detective
 	alt_titles = list(

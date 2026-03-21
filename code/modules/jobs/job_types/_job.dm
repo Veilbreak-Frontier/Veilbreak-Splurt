@@ -211,7 +211,6 @@
 /datum/job/proc/special_check_latejoin(client/latejoin)
 	return TRUE
 
-
 /mob/living/proc/on_job_equipping(datum/job/equipping, client/player_client)
 	return
 
