@@ -10123,6 +10123,7 @@
 #include "modular_zzplurt\code\game\objects\effects\overlays\packing_peanuts.dm"
 #include "modular_zzplurt\code\game\objects\effects\posters\contraband.dm"
 #include "modular_zzplurt\code\game\objects\effects\spawners\ai_spawner_removal.dm"
+#include "modular_zzplurt\code\game\objects\effects\spawners\random\engineering.dm"
 #include "modular_zzplurt\code\game\objects\items\armor_kits.dm"
 #include "modular_zzplurt\code\game\objects\items\cards_ids.dm"
 #include "modular_zzplurt\code\game\objects\items\emags.dm"
