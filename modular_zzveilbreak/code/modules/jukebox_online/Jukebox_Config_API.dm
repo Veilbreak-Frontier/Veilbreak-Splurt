@@ -1,8 +1,8 @@
 GLOBAL_LIST_EMPTY(jukebox_library_tracks)
 GLOBAL_VAR_INIT(jukebox_library_initialized, FALSE)
+GLOBAL_LIST_EMPTY(online_jukeboxes)
 GLOBAL_VAR_INIT(jukebox_api_url, "http://localhost:8001")
 GLOBAL_VAR_INIT(jukebox_api_status, FALSE)
-GLOBAL_VAR_INIT(jukebox_health_check_running, FALSE)
 GLOBAL_VAR_INIT(jukebox_last_check, 0)
 GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/jukebox_api_handler)
 
@@ -48,26 +48,10 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 		return
 	GLOB.jukebox_library_initialized = TRUE
 	load_jukebox_library()
-	start_jukebox_health_check_loop()
-
-/proc/start_jukebox_health_check_loop()
-	if(GLOB.jukebox_health_check_running)
-		return
-	GLOB.jukebox_health_check_running = TRUE
-	perform_health_check_loop()
-
-/proc/perform_health_check_loop()
-	if(!GLOB.jukebox_health_check_running)
-		return
-
-	if(GLOB.jukebox_api_handler)
-		GLOB.jukebox_api_handler.check_health_async()
-
-	addtimer(CALLBACK(GLOBAL_PROC, PROC_REF(perform_health_check_loop)), 600, TIMER_STOPPABLE | TIMER_UNIQUE)
 
 /proc/update_all_jukebox_uis()
-	for(var/obj/machinery/jukebox/online/jukebox in SSmachines.get_machines_by_type(/obj/machinery/jukebox/online))
-		jukebox.online_component?.ui?.update_ui()
+	for(var/datum/online_jukebox/juke in GLOB.online_jukeboxes)
+		juke.ui?.update_ui()
 
 /proc/perform_jukebox_health_check()
 	GLOB.jukebox_last_check = world.realtime
@@ -258,8 +242,22 @@ SUBSYSTEM_DEF(jukebox)
 	name = "Online Jukebox"
 	init_stage = INITSTAGE_MAIN
 	priority = FIRE_PRIORITY_ASSETS
-	flags = SS_NO_FIRE
+	flags = SS_KEEP_TIMING
+	wait = 10
+	var/next_health_check = 0
 
 /datum/controller/subsystem/jukebox/Initialize()
 	initialize_jukebox_library()
 	return SS_INIT_SUCCESS
+
+/datum/controller/subsystem/jukebox/fire()
+	if(world.time >= next_health_check)
+		if(GLOB.jukebox_api_handler)
+			GLOB.jukebox_api_handler.check_health_async()
+		next_health_check = world.time + 600
+
+	for(var/datum/online_jukebox/juke in GLOB.online_jukeboxes)
+		if(QDELETED(juke))
+			GLOB.online_jukeboxes -= juke
+			continue
+		juke.process_tick()
