@@ -1,4 +1,3 @@
-/*
 /datum/centcom_announcer/medbot
 	welcome_sounds = list('sound/announcer/medbot/welcome.ogg',
 		'sound/announcer/medbot/newAI.ogg')
@@ -20,4 +19,3 @@
 		ANNOUNCER_SHUTTLEDOCK = 'sound/announcer/medbot/shuttledock.ogg',
 		ANNOUNCER_SHUTTLERECALLED = 'sound/announcer/medbot/shuttlerecalled.ogg',
 		ANNOUNCER_SPANOMALIES = 'sound/announcer/medbot/spanomalies.ogg')
-*/

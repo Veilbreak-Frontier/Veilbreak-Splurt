@@ -1,4 +1,3 @@
-/*
 /datum/centcom_announcer/intern
 	welcome_sounds = list('sound/announcer/intern/welcome/1.ogg',
 		'sound/announcer/intern/welcome/2.ogg',
@@ -45,4 +44,3 @@
 		ANNOUNCER_SPANOMALIES = 'sound/announcer/intern/spanomalies.ogg')
 
 	custom_alert_message = span_alert("Please stand by for an important message from our new intern.<br>")
-*/

@@ -1,4 +1,3 @@
-/*
 /datum/centcom_announcer/intern/tibbets // GAY RAT
 	welcome_sounds = list('modular_zzplurt/sound/announcer/tibbets/welcomes/01.ogg',
 		'modular_zzplurt/sound/announcer/tibbets/welcomes/02.ogg',
@@ -95,4 +94,3 @@
 
 	//custom_alert_message = span_alert("Please stand by for an important message from our head rat.<br>")
 	custom_alert_message = null //Make it not obfuscate the content of the announcements
-*/
