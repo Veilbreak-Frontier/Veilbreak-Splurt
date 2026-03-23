@@ -15,7 +15,7 @@
 /datum/map_template/ghost_cafe_rooms/New(path, rename, cache)
 	. = ..()
 	if(LAZYLEN(ckeywhitelist) && !donator_tier)
-		donator_tier = DONATOR_TIER_1
+		donator_tier = DONATOR_TIER_NONE
 
 /datum/map_template/ghost_cafe_rooms/apartment
 	category = GHC_APARTMENT

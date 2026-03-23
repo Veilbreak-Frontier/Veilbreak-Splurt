@@ -543,7 +543,7 @@
 /turf/open/floor/carpet/red,
 /area/shuttle/escape)
 "hp" = (
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /obj/machinery/camera/directional/east{
 	c_tag = "NTSS Independence Ballroom"
 	},

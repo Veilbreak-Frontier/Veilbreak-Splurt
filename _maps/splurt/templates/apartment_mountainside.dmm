@@ -8658,7 +8658,7 @@
 /turf/open/floor/wood,
 /area/misc/hilbertshotel)
 "Yq" = (
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /obj/structure/marker_beacon/violet,
 /obj/structure/decorative{
 	icon = 'icons/obj/machines/wallmounts.dmi';

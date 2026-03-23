@@ -3,33 +3,33 @@
 /datum/loadout_item/inhand/donator/portal_fleshlight
 	name = "Portal Fleshlight and Underwear"
 	item_path = /obj/item/storage/box/portal_fleshlight
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 //Backpack
 /datum/loadout_item/inhand/donator/backpack/crocinpen
 	name = "Emergency aphrodisiac shot"
 	item_path = /obj/item/reagent_containers/hypospray/medipen/crocin
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 /datum/loadout_item/inhand/donator/backpack/succupen
 	name = "Succubus milk autoinjector"
 	item_path = /obj/item/reagent_containers/hypospray/medipen/breastgrowth
-	donator_tier = DONATOR_TIER_1
+	d//onator_tier = DONATOR_TIER_1
 
 /datum/loadout_item/inhand/donator/backpack/incupen
 	name = "Incubus draft autoinjector"
 	item_path = /obj/item/reagent_containers/hypospray/medipen/penisgrowth
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 /datum/loadout_item/inhand/donator/backpack/plushbox/deluxe
 	name = "Deluxe Plushie Choice Box"
 	item_path = /obj/item/choice_beacon/box/plushie/deluxe
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 /datum/loadout_item/inhand/donator/backpack/bdsm_whip
 	name = "Leather Whip"
 	item_path = /obj/item/clothing/mask/leatherwhip
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 //Uniform
 /*
@@ -42,34 +42,34 @@
 /datum/loadout_item/uniform/donator/victorian_purple
 	name = "Purple Victorian Suit"
 	item_path = /obj/item/clothing/under/rank/civilian/victorian_purple
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 //Suits
 /datum/loadout_item/suit/donator/hospitaller
 	name = "Crusader costume"
 	item_path = /obj/item/clothing/suit/chaplainsuit/armor/templar/hospitaller/no_armor
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 /datum/loadout_item/suit/donator/press_vest/unarmored
 	name = "Press vest"
 	item_path = /obj/item/clothing/suit/armor/vest/press/unarmored
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 //Head
 /datum/loadout_item/head/donator/crown/fancy
 	name = "Magnificent crown"
 	item_path = /obj/item/clothing/head/costume/crown/fancy
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 /datum/loadout_item/head/donator/press_helmet/unarmored
 	name = "Press helmet"
 	item_path = /obj/item/clothing/head/helmet/press/unarmored
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 /datum/loadout_item/head/donator/chaplain_helmet
 	name = "Crusader helmet"
 	item_path = /obj/item/clothing/head/helmet/chaplain/bland
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 //Shoes
 /*
@@ -121,4 +121,4 @@
 /datum/loadout_item/toys/donator/glitchy_protogen
 	name = "Glitchy Protogen Plush"
 	item_path = /obj/item/toy/plush/glitchy_protogen
-	donator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1

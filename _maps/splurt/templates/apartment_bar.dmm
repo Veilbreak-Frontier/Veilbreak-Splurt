@@ -255,7 +255,7 @@
 /turf/open/floor/carpet/royalblack,
 /area/misc/hilbertshotel)
 "Ji" = (
-/obj/machinery/jukebox/disco{
+/obj/machinery/jukebox/online{
 	anchored = 1;
 	req_one_access = null;
 	area_limited = 1

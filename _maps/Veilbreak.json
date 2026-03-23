@@ -1,0 +1,20 @@
+{
+    "version": 1,
+    "map_name": "Veilbreak",
+    "map_path": "veilbreak",
+    "map_file": "ssfrontier.dmm",
+    "shuttles": {
+        "emergency": "emergency_box",
+        "ferry": "ferry_fancy",
+        "cargo": "cargo_skyrat",
+        "whiteship": "whiteship_box",
+        "arrivals": "arrival_ssfrontier",
+        "arrivals_shuttle": "arrival_ssfrontier"
+    },
+    "job_changes": {
+        "prisoner": {
+            "total_positions": 4,
+            "spawn_positions": 4
+        }
+    }
+}

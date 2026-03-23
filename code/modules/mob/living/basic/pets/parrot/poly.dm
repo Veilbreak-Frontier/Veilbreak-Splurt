@@ -1,3 +1,4 @@
+/*
 /// Default poly, presumably died the last shift and has no special traits.
 #define POLY_DEFAULT "default"
 /// Poly has survived a number of rounds equivalent to the longest survival of his being.
@@ -246,3 +247,4 @@
 #undef POLY_CONSECUTIVE_ROUND
 #undef POLY_POSSESS_FILTER
 #undef POLY_POSSESS_GLOW
+*/
