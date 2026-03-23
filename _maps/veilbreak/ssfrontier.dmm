@@ -17210,7 +17210,7 @@
 /area/station/hallway/primary/central)
 "krC" = (
 /obj/machinery/camera/autoname/prison/directional/west,
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /turf/open/floor/iron/dark,
 /area/station/security/prison)
 "krO" = (

@@ -1,3 +1,4 @@
+/*
 /datum/disease/parrot_possession
 	name = "Parrot Possession"
 	max_stages = 1
@@ -51,3 +52,4 @@
 	SIGNAL_HANDLER
 	UnregisterSignal(source, list(COMSIG_PREQDELETED, COMSIG_MOVABLE_MOVED))
 	cure()
+*/
