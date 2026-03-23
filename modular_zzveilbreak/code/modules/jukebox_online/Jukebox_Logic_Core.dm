@@ -17,7 +17,6 @@
 	var/online_error_message = ""
 	var/datum/online_jukebox_ui/ui
 	var/atom/parent_atom
-	var/update_timer
 	var/last_ui_update = 0
 	var/ui_update_cooldown = 10
 	var/list/listeners = list()
@@ -28,19 +27,20 @@
 /datum/online_jukebox/New(atom/new_parent)
 	parent_atom = new_parent
 	if(isnull(sound_range))
-		sound_range = world.view
-		var/list/worldviewsize = getviewsize(sound_range)
-		x_cutoff = ceil(worldviewsize[1] * 1.25 / 2)
-		z_cutoff = ceil(worldviewsize[2] * 1.25 / 2)
+		sound_range = 15
+		x_cutoff = 15
+		z_cutoff = 15
 	ui = new /datum/online_jukebox_ui(src)
+
+	GLOB.online_jukeboxes += src
+
 	if(!GLOB.jukebox_library_initialized)
 		initialize_jukebox_library()
 
 /datum/online_jukebox/Destroy()
+	GLOB.online_jukeboxes -= src
 	stop_music()
 	QDEL_NULL(ui)
-	if(update_timer)
-		deltimer(update_timer)
 
 	if(listeners)
 		for(var/mob/M in listeners)
@@ -50,6 +50,23 @@
 
 	parent_atom = null
 	return ..()
+
+/datum/online_jukebox/proc/process_tick()
+	if(!playing_online || QDELETED(src))
+		return
+
+	if(ui && (world.time >= last_ui_update + ui_update_cooldown))
+		ui.update_ui()
+		last_ui_update = world.time
+
+	if(active_song_sound)
+		update_all()
+
+	if(world.time - track_start_time >= online_track_duration)
+		if(!sound_loops)
+			stop_music()
+		else
+			track_start_time = world.time
 
 /datum/online_jukebox/proc/get_ui_handler()
 	return ui
@@ -77,11 +94,9 @@
 	var/progress = world.time - track_start_time
 	if(progress >= online_track_duration)
 		if(sound_loops)
-			track_start_time = world.time
 			return 0
 		else
-			stop_music()
-			return 0
+			return online_track_duration
 	return progress
 
 /datum/online_jukebox/proc/play_library_track_on_success(url_hash, mob/user)
@@ -165,7 +180,6 @@
 			register_listener(nearby_listener)
 
 	record_jukebox_play(url_hash)
-	start_playback_updates()
 
 	ui?.update_ui()
 	return TRUE
@@ -181,9 +195,6 @@
 	online_track_hash = null
 	track_start_time = 0
 	online_error_message = ""
-	if(update_timer)
-		deltimer(update_timer)
-		update_timer = null
 	ui?.update_ui()
 
 /datum/online_jukebox/proc/set_new_volume(new_volume)
@@ -192,36 +203,6 @@
 		active_song_sound.volume = volume
 		update_all()
 	ui?.update_ui()
-
-/datum/online_jukebox/proc/start_playback_updates()
-	if(update_timer)
-		deltimer(update_timer)
-		update_timer = null
-	if(!playing_online)
-		return
-	update_playback_ui()
-
-/datum/online_jukebox/proc/update_playback_ui()
-	update_timer = null
-	if(!playing_online || QDELETED(src))
-		return
-
-	var/should_update_ui = (ui && (world.time >= last_ui_update + ui_update_cooldown))
-	if(should_update_ui)
-		ui.update_ui()
-		last_ui_update = world.time
-
-	if(active_song_sound)
-		update_all()
-
-	if(world.time - track_start_time >= online_track_duration)
-		if(!sound_loops)
-			stop_music()
-			return
-		else
-			track_start_time = world.time
-
-	update_timer = addtimer(CALLBACK(src, PROC_REF(update_playback_ui)), 10, TIMER_STOPPABLE)
 
 /datum/online_jukebox/proc/unlisten_all()
 	for(var/mob/listening in listeners)
