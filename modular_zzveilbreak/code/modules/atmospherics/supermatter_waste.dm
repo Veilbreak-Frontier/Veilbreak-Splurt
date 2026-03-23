@@ -85,12 +85,10 @@
             merged_gasmix.gases[/datum/gas/nitrous_oxide][MOLES] += tetriary_production
 
         if(/datum/gas/proto_nitrate)
-            // Input: Stable/Dry -> Output: Unstable/Wet
             merged_gasmix.assert_gases(/datum/gas/freon)
             merged_gasmix.gases[/datum/gas/freon][MOLES] += tetriary_production
 
         if(/datum/gas/zauker)
-            // Input: Death -> Output: Life/Safety
             merged_gasmix.assert_gases(/datum/gas/hypernoblium)
             merged_gasmix.gases[/datum/gas/hypernoblium][MOLES] += tetriary_production
 
