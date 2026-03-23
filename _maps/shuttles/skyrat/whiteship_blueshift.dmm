@@ -2659,7 +2659,7 @@
 "yT" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/firealarm/directional/north,
-/obj/machinery/jukebox,
+/obj/machinery/jukebox/online,
 /obj/effect/turf_decal/siding/wood,
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/alien/weeds,

@@ -2331,7 +2331,7 @@
 /turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/allamericandiner)
 "GF" = (
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_access = null
 	},
 /obj/machinery/firealarm/directional/north,

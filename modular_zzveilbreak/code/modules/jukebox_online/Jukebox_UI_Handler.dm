@@ -16,7 +16,7 @@
 
 /datum/online_jukebox_ui/ui_state(mob/user)
 	var/obj/machinery/jukebox/online/parent = jukebox?.parent_atom
-	return parent?.ui_status(user) || GLOB.default_state
+	return parent?.ui_state(user) || GLOB.default_state
 
 /datum/online_jukebox_ui/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)

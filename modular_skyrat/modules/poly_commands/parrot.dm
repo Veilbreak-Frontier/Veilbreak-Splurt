@@ -13,6 +13,7 @@
 /mob/living/basic/parrot/proc/check_command(message, speaker)
 	return FALSE // Simply return false for non-Poly parrots
 
+/*
 /mob/living/basic/parrot/poly/check_command(message, speaker)
 	var/mob/living/carbon/human/human_target = speaker
 	if(!istype(human_target))
@@ -29,7 +30,8 @@
 		return TRUE
 	else
 		return FALSE
-
+*/
+/*
 /mob/living/basic/parrot/toggle_perched(perched)
 	. = ..()
 	if(!perched)
@@ -62,3 +64,4 @@
 		buckled.unbuckle_mob(src, TRUE)
 		manual_emote("squawks and hops off of [human_target], flying away.")
 
+*/

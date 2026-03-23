@@ -590,7 +590,7 @@
 	dir = 4
 	},
 /obj/effect/decal/cleanable/cobweb/cobweb2,
-/obj/machinery/jukebox,
+/obj/machinery/jukebox/online,
 /turf/open/floor/wood{
 	icon_state = "wood_large"
 	},

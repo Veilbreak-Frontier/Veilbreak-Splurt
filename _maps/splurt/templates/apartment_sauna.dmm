@@ -428,7 +428,7 @@
 /turf/open/floor/carpet/red,
 /area/misc/hilbertshotel)
 "MT" = (
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_one_access = null;
 	area_limited = 1
 	},

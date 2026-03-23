@@ -3151,7 +3151,7 @@
 	dir = 8;
 	icon_state = "siding_plain_end"
 	},
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_access = list("syndicate");
 	anchored = 0
 	},

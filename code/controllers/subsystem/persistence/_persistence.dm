@@ -67,7 +67,7 @@ SUBSYSTEM_DEF(persistence)
 	var/list/queued_message_bottles
 
 /datum/controller/subsystem/persistence/Initialize()
-	load_poly()
+	//load_poly()
 	load_wall_engravings()
 	load_prisoner_tattoos()
 	load_trophies()
@@ -101,12 +101,13 @@ SUBSYSTEM_DEF(persistence)
 	save_panic_bunker() //SKYRAT EDIT ADDITION - PANICBUNKER
 
 ///Loads up Poly's speech buffer.
+/*
 /datum/controller/subsystem/persistence/proc/load_poly()
 	for(var/mob/living/basic/parrot/poly/bird in GLOB.alive_mob_list)
 		var/list/list_to_read = bird.get_static_list_of_phrases()
 		twitterize(list_to_read, "polytalk")
 		break //Who's been duping the bird?!
-
+*/
 /// Loads up the amount of times maps appeared to alter their appearance in voting and rotation.
 /datum/controller/subsystem/persistence/proc/load_recent_maps()
 	var/map_sav = FILE_RECENT_MAPS
@@ -147,3 +148,4 @@ SUBSYSTEM_DEF(persistence)
 
 #undef FILE_RECENT_MAPS
 #undef KEEP_ROUNDS_MAP
+

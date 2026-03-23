@@ -289,7 +289,7 @@
 /obj/effect/turf_decal/siding/wood{
 	dir = 5
 	},
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_one_access = null;
 	one_area_play = 1
 	},
