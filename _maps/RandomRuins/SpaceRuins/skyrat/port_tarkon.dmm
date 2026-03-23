@@ -777,7 +777,7 @@
 /obj/effect/turf_decal/tile/neutral/anticorner{
 	dir = 4
 	},
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /turf/open/floor/iron,
 /area/ruin/space/has_grav/port_tarkon/centerhall)
 "cN" = (

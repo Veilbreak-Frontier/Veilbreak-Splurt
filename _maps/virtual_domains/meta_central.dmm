@@ -4418,7 +4418,7 @@
 /area/virtual_domain)
 "Lz" = (
 /obj/effect/decal/cleanable/confetti,
-/obj/machinery/jukebox/disco{
+/obj/machinery/jukebox/online{
 	anchored = 1;
 	req_access = null
 	},

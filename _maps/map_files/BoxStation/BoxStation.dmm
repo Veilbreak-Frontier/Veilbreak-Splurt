@@ -29513,7 +29513,7 @@
 /obj/effect/turf_decal/siding/wood{
 	dir = 4
 	},
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /obj/structure/fish_mount/bar/directional/east,
 /turf/open/floor/stone,
 /area/station/service/bar)
@@ -66085,7 +66085,7 @@
 /turf/open/floor/iron/dark/textured_large,
 /area/station/hallway/primary/central)
 "rUx" = (
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /turf/open/floor/wood,
 /area/station/security/prison)
 "rUy" = (

@@ -471,7 +471,7 @@
 /area/ruin/space/has_grav/film_studio/dorms)
 "iB" = (
 /obj/structure/window/spawner/directional/west,
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /obj/effect/turf_decal/tile/dark/full,
 /turf/open/floor/iron/smooth,
 /area/ruin/space/has_grav/film_studio/dorms)

@@ -858,7 +858,7 @@
 /turf/open/floor/catwalk_floor,
 /area/misc/hilbertshotel)
 "ZE" = (
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /turf/open/floor/carpet/royalblue,
 /area/misc/hilbertshotel)
 "ZK" = (

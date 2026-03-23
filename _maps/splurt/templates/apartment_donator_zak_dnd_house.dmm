@@ -5146,7 +5146,7 @@
 	pixel_x = 0;
 	pixel_y = -32
 	},
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /turf/open/floor/carpet/green,
 /area/misc/hilbertshotel)
 "Pe" = (
