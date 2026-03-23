@@ -10646,4 +10646,5 @@
 #include "modular_zzplurt\modules\Nanotrasen_Stuff\Nanotrasen_trainer\nanotrasen_crew_trainer.dm"
 #include "modular_zzplurt\modules\primitive_production\code\primitive.dm"
 #include "modular_zzplurt\modules\synthx\code\bodyparts\internal_computer\internal_computer.dm"
+#include "modular_zzplurt\code\modules\lewd\interaction_menu\interactions\lewd\butt.dm"
 // END_INCLUDE

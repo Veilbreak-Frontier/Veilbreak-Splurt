@@ -300,9 +300,6 @@
 	else if(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No" || target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_extmharm) != "No")
 		target.adjust_oxy_loss(oxy_damage)
 
-	// Additional arousal for choke sluts
-	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
-		target.adjust_arousal(oxy_damage * 2)
 
 	// Check if target just passed out
 	if(target.stat == UNCONSCIOUS && stat_before != UNCONSCIOUS)

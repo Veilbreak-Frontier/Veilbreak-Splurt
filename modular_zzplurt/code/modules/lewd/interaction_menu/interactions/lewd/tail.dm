@@ -330,10 +330,41 @@
 // Only available for large tails (snake, leviathan, xeno, etc.)
 
 /datum/interaction/lewd/tail/tail_smother
-	name = "Tail. Smother"
+	name = "Tail Smother"
 	description = "Wrap your tail around their face. (Warning: Causes oxygen damage)"
+	unsafe_types = INTERACTION_HARMFUL
 	interaction_requires = list(INTERACTION_REQUIRE_TARGET_MOUTH)
 	user_required_parts = list(ORGAN_SLOT_TAIL = REQUIRE_GENITAL_ANY)
+	help_text = list(
+		"carefully wraps their tail around %TARGET%'s face.",
+		"gently encircles %TARGET%'s head with their tail.",
+		"wraps their tail around %TARGET%'s face, a warm constricting hold.",
+		"carefully wraps their tail completely around %TARGET%'s head.",
+		"gently encircles %TARGET%'s entire head with their tail.",
+		"wraps their tail multiple times around %TARGET%'s head, a warm secure hold.",
+		"gently coils their tail around %TARGET%'s face.",
+		"carefully wraps their tail over %TARGET%'s nose and mouth."
+	)
+	grab_text = list(
+		"wraps their tail around %TARGET%'s face, covering nose and mouth.",
+		"loops their tail over %TARGET%'s face, limiting air flow.",
+		"coils their tail gently around %TARGET%'s head.",
+		"wraps their tail multiple times around %TARGET%'s head, completely covering their face.",
+		"loops their tail over and under %TARGET%'s head, holding them tight.",
+		"coils their tail around %TARGET%'s head like a snake, cutting off all air.",
+		"wraps their tail firmly around %TARGET%'s face.",
+		"constricts their tail around %TARGET%'s head."
+	)
+	harm_text = list(
+		"wraps their long tail tightly around %TARGET%'s face, cutting off all air.",
+		"coils their tail around %TARGET%'s head, squeezing hard and blocking airways.",
+		"constricts their tail around %TARGET%'s face, smothering them completely.",
+		"wraps their long tail multiple times around %TARGET%'s head, completely enveloping their face.",
+		"coils their tail tight around %TARGET%'s head, cutting off all air completely.",
+		"constricts their powerful tail around %TARGET%'s head, squeezing with deadly force.",
+		"wraps their tail around %TARGET%'s face and squeezes tightly.",
+		"constricts their tail around %TARGET%'s head with crushing force."
+	)
 	message = null
 	target_arousal = 6
 	target_pleasure = 4
@@ -367,55 +398,30 @@
 	return TRUE
 
 /datum/interaction/lewd/tail/tail_smother/act(mob/living/user, mob/living/target)
-	message = null
 	var/intent = resolve_intent_name(user)
+
+	// Default values
+	target_arousal = 6
+	target_pleasure = 4
+	target_pain = 0
+	user_arousal = 4
+	user_pleasure = 4
+	user_pain = 0
 
 	switch(intent)
 		if("harm")
 			// Deep/Intense smother
 			target_pain = 6
-			target_arousal = 12
-			target_pleasure = 10
+			target_arousal = 10
+			target_pleasure = 8
 			user_arousal = 10
 			user_pleasure = 8
-			message = list(
-				"wraps their long tail tightly around %TARGET%'s face, cutting off all air.",
-				"coils their tail around %TARGET%'s head, squeezing hard and blocking airways.",
-				"constricts their tail around %TARGET%'s face, smothering them completely.",
-				"wraps their long tail multiple times around %TARGET%'s head, completely enveloping their face.",
-				"coils their tail tight around %TARGET%'s head, cutting off all air completely.",
-				"constricts their powerful tail around %TARGET%'s head, squeezing with deadly force.",
-				"wraps their tail around %TARGET%'s face and squeezes tightly.",
-				"constricts their tail around %TARGET%'s head with crushing force."
-			)
 		if("grab")
 			// Moderate smother
 			target_arousal = 10
 			target_pleasure = 8
 			user_arousal = 8
 			user_pleasure = 6
-			message = list(
-				"wraps their tail around %TARGET%'s face, covering nose and mouth.",
-				"loops their tail over %TARGET%'s face, limiting air flow.",
-				"coils their tail gently around %TARGET%'s head.",
-				"wraps their tail multiple times around %TARGET%'s head, completely covering their face.",
-				"loops their tail over and under %TARGET%'s head, holding them tight.",
-				"coils their tail around %TARGET%'s head like a snake, cutting off all air.",
-				"wraps their tail firmly around %TARGET%'s face.",
-				"constricts their tail around %TARGET%'s head."
-			)
-		else
-			// Gentle smother
-			message = list(
-				"carefully wraps their tail around %TARGET%'s face.",
-				"gently encircles %TARGET%'s head with their tail.",
-				"wraps their tail around %TARGET%'s face, a warm constricting hold.",
-				"carefully wraps their tail completely around %TARGET%'s head.",
-				"gently encircles %TARGET%'s entire head with their tail.",
-				"wraps their tail multiple times around %TARGET%'s head, a warm secure hold.",
-				"gently coils their tail around %TARGET%'s face.",
-				"carefully wraps their tail over %TARGET%'s nose and mouth."
-			)
 
 	// Check for choke slut trait
 	if(HAS_TRAIT(target, TRAIT_CHOKE_SLUT))
@@ -428,10 +434,13 @@
 			target_pleasure += 4
 			to_chat(target, span_purple("The pressure on your face is overwhelming... it's so tight!"))
 
+	message = null
 	. = ..()
 
 /datum/interaction/lewd/tail/tail_smother/post_interaction(mob/living/user, mob/living/target)
 	. = ..()
+	if(!istype(user))
+		return
 	var/stat_before = target.stat
 	var/oxy_damage = 3
 
