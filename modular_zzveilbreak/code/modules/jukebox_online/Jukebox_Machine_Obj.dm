@@ -38,11 +38,13 @@
 	return online_component?.ui?.ui_interact(user, ui)
 
 /obj/machinery/jukebox/online/ui_status(mob/user, datum/ui_state/state)
-	if(!anchored || isobserver(user))
+	if(!anchored)
 		return UI_CLOSE
 	return UI_INTERACTIVE
 
 /obj/machinery/jukebox/online/ui_state(mob/user)
+	if(isobserver(user))
+		return GLOB.default_state
 	return GLOB.physical_state
 
 /obj/machinery/jukebox/online/add_context(atom/source, list/context, obj/item/held_item, mob/user)

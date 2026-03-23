@@ -14,7 +14,7 @@
 /datum/loadout_item/inhand/donator/backpack/succupen
 	name = "Succubus milk autoinjector"
 	item_path = /obj/item/reagent_containers/hypospray/medipen/breastgrowth
-	d//onator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 /datum/loadout_item/inhand/donator/backpack/incupen
 	name = "Incubus draft autoinjector"
@@ -111,12 +111,12 @@
 /datum/loadout_item/toys/donator/ollie_plushie
 	name = "Foxcoon Plushie"
 	item_path = /obj/item/toy/plush/ollie
-	donator_only = FALSE //requested by donator
+	//donator_only = FALSE //requested by donator
 
 /datum/loadout_item/toys/donator/artificer_kobold
 	name = "Artificer Kobold"
 	item_path = /obj/item/toy/plush/artificer_kobold
-	donator_only = FALSE //requested by donator
+	//donator_only = FALSE //requested by donator
 
 /datum/loadout_item/toys/donator/glitchy_protogen
 	name = "Glitchy Protogen Plush"

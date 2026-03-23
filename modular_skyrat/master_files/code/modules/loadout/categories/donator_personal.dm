@@ -190,7 +190,7 @@
 /datum/loadout_item/pocket_items/brightcosmos
 	name = "Bright Cosmos cigar"
 	item_path = /obj/item/holocigarette/cigar
-	ckeywhitelist = list("lyricalpaws")
+	//ckeywhitelist = list("lyricalpaws")
 
 /datum/loadout_item/uniform/lannese
 	name = "Lannese Dress"
@@ -303,7 +303,7 @@
 /datum/loadout_item/toys/zappplush
 	name = "Lil' Zapp Plushie"
 	item_path = /obj/item/toy/plush/skyrat/zapp
-	donator_only = TRUE
+	//donator_only = TRUE
 
 /datum/loadout_item/pocket_items/tacticalbrush
 	name = "Tactical Brush"
@@ -367,7 +367,7 @@
 /datum/loadout_item/pocket_items/hypno_watch
 	name = "Pocket Watch"
 	item_path = /obj/item/clothing/accessory/hypno_watch
-	ckeywhitelist = list("slippyjoe")
+	//ckeywhitelist = list("slippyjoe")
 
 /datum/loadout_item/uniform/nt_idol
 	name = "NT Idol's Skirt"
