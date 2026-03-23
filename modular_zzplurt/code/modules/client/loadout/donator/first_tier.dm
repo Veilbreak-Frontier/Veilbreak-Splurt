@@ -14,7 +14,7 @@
 /datum/loadout_item/inhand/donator/backpack/succupen
 	name = "Succubus milk autoinjector"
 	item_path = /obj/item/reagent_containers/hypospray/medipen/breastgrowth
-	d//onator_tier = DONATOR_TIER_1
+	//donator_tier = DONATOR_TIER_1
 
 /datum/loadout_item/inhand/donator/backpack/incupen
 	name = "Incubus draft autoinjector"
