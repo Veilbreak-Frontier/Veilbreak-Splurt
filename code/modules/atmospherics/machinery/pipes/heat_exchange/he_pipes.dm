@@ -1,6 +1,6 @@
 /obj/machinery/atmospherics/pipe/heat_exchanging
-	var/minimum_temperature_difference = 20
-	var/thermal_conductivity = WINDOW_HEAT_TRANSFER_COEFFICIENT
+	var/minimum_temperature_difference = 0
+	var/thermal_conductivity = WINDOW_HEAT_TRANSFER_COEFFICIENT * 6
 	color = "#404040"
 	buckle_lying = NO_BUCKLE_LYING
 	var/icon_temperature = T20C //stop small changes in temperature causing icon refresh
@@ -12,6 +12,7 @@
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/Initialize(mapload)
 	. = ..()
+	RegisterSignal(src, COMSIG_UNDERTILE_UPDATED, PROC_REF(on_hide))
 
 	add_atom_colour("#404040", FIXED_COLOUR_PRIORITY)
 
