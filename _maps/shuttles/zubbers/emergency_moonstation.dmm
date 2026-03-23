@@ -1014,7 +1014,7 @@
 /turf/open/floor/mineral/titanium/white,
 /area/shuttle/escape)
 "Gh" = (
-/obj/machinery/jukebox,
+/obj/machinery/jukebox/online,
 /obj/machinery/status_display/shuttle/directional/south,
 /turf/open/floor/mineral/gold,
 /area/shuttle/escape/luxury)

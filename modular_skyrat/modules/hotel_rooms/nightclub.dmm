@@ -20,7 +20,7 @@
 /area/misc/hilbertshotel)
 "bS" = (
 /obj/structure/table/reinforced,
-/obj/machinery/jukebox,
+/obj/machinery/jukebox/online,
 /obj/structure/musician/piano/minimoog{
 	pixel_x = 15
 	},
@@ -441,7 +441,7 @@
 /turf/open/floor/iron,
 /area/misc/hilbertshotel)
 "Se" = (
-/obj/machinery/jukebox/disco{
+/obj/machinery/jukebox/online{
 	anchored = 1
 	},
 /turf/open/floor/light/colour_cycle/dancefloor_a,

@@ -226,7 +226,7 @@
 /turf/open/floor/iron/cafeteria,
 /area/misc/hilbertshotel)
 "bA" = (
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_one_access = null;
 	area_limited = 1
 	},
