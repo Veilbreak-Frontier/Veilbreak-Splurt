@@ -16,7 +16,7 @@
 
 /datum/online_jukebox_ui/ui_state(mob/user)
 	var/obj/machinery/jukebox/online/parent = jukebox?.parent_atom
-	return parent?.ui_state(user) || GLOB.default_state
+	return parent?.ui_status(user) || GLOB.default_state
 
 /datum/online_jukebox_ui/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
@@ -104,7 +104,7 @@
 
 		if("refresh_library")
 			load_jukebox_library()
-			jukebox.online_error_message = perform_jukebox_health_check() ? "Library refreshed and API is online" : "Library refreshed but API is offline"
+			jukebox.online_error_message = jukebox_api_healthy() ? "Library refreshed and API is online" : "Library refreshed but API is offline"
 			update_ui()
 			return TRUE
 
