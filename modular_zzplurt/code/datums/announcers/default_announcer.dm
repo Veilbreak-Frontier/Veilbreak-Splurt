@@ -1,3 +1,4 @@
+/*
 /datum/centcom_announcer/default/lait
 	welcome_sounds = list('modular_zzplurt/sound/announcer/lait/lait_welcome.ogg')
 	alert_sounds = list('modular_zzplurt/sound/announcer/lait/lait_attention.ogg')
@@ -49,3 +50,4 @@
 		ANNOUNCER_GRAVGENBLACKOUT = 'modular_zzplurt/sound/announcer/lait/lait_gravityoff.ogg',
 		ANNOUNCER_METEORWARNING = 'modular_zzplurt/sound/announcer/lait/lait_meteors.ogg'
 	)
+*/

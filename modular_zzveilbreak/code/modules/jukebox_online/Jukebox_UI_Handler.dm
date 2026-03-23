@@ -52,7 +52,10 @@
 /datum/online_jukebox_ui/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	if(!jukebox || QDELETED(jukebox))
 		return FALSE
+
 	if(isobserver(ui.user))
+		var/mob/dead/observer/G = ui.user
+		to_chat(G, span_warning("You can only monitor the jukebox as a ghost."))
 		return TRUE
 
 	var/mob/user = ui.user
