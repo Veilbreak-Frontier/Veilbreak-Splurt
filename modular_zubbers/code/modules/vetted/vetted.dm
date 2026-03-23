@@ -1,5 +1,3 @@
-GLOBAL_LIST_EMPTY(vetted_list_legacy)
-GLOBAL_PROTECT(vetted_list_legacy)
 GLOBAL_LIST_EMPTY(vetted_list)
 GLOBAL_PROTECT(vetted_list)
 
@@ -11,37 +9,56 @@ GLOBAL_PROTECT(vetted_list)
 
 /datum/controller/subsystem/player_ranks/proc/is_vetted(client/user, admin_bypass = TRUE)
 	if(!istype(user))
-		CRASH("Invalid user type provided to is_vetted(), expected 'client' and obtained '[user ? user.type : "null"]'.")
-	if(!isnull(user.is_vetted))
-		return user.is_vetted
-	if(get_user_vetted_status_hot(user.ckey))
-		user.is_vetted = TRUE
-		return user.is_vetted
-	else
-		user.is_vetted = FALSE
-		return user.is_vetted
+		return FALSE
+	return TRUE
+
+/datum/controller/subsystem/player_ranks/proc/get_user_vetted_status_hot(ckey_to_check)
+	return TRUE
 
 
+/datum/controller/subsystem/player_ranks/proc/add_to_vetted(client/C)
+	if(!C)
+		return
+	C.is_vetted = TRUE
+	GLOB.vetted_list |= C.ckey
 
-/datum/controller/subsystem/player_ranks/proc/get_user_vetted_status_hot(ckey)
+/*
+/datum/controller/subsystem/player_ranks/proc/get_user_vetted_status_hot(ckey_to_check, original_key)
 	if(IsAdminAdvancedProcCall())
 		return
 	if(!SSdbcore.Connect())
 		return
-	var/datum/db_query/query_load_player_rank = SSdbcore.NewQuery("SELECT ckey FROM vetted_list WHERE ckey = :ckey", list("ckey" = ckey))
+
+	var/sql_param = lowertext(ckey_to_check)
+
+	var/datum/db_query/query_load_player_rank = SSdbcore.NewQuery({"
+		SELECT ckey
+		FROM whitelist
+		WHERE LOWER(REPLACE(ckey, ' ', '')) = LOWER(:ckey)
+	"}, list("ckey" = sql_param))
+
 	if(!query_load_player_rank.warn_execute())
+		log_admin("VETTED ERROR: Database query failed for [original_key] (ckey: [ckey_to_check]).")
 		qdel(query_load_player_rank)
 		return
-	while(query_load_player_rank.NextRow())
-		var/ckey2 = ckey(query_load_player_rank.item[1])
-		. = ckey2
-	qdel(query_load_player_rank)
 
+	if(query_load_player_rank.NextRow())
+		log_admin("VETTED SUCCESS: [original_key] | ckey: [ckey_to_check] | SQL Search: [sql_param]")
+		. = TRUE
+	else
+		log_admin("VETTED FAILED: [original_key] | ckey: [ckey_to_check] | SQL Search: [sql_param]")
+		. = FALSE
+
+	qdel(query_load_player_rank)
+*/
+/*
 /datum/player_rank_controller/vetted/proc/convert_all_to_sql()
 	if(!SSdbcore.Connect())
 		return message_admins("Failed to connect to database. Unable to complete flat file to SQL conversion.")
 	for(var/ckey_ in GLOB.vetted_list_legacy)
 		add_player_to_sql(ckey_)
+
+
 
 /datum/player_rank_controller/vetted/proc/add_player_to_sql(ckey, admin_mob)
 	var/ckey_admin = "Conversion Script"
@@ -94,3 +111,4 @@ ADMIN_VERB(remove_vetted, R_ADMIN, "Remove user from Vetted", "Removes a user fr
 	if(length(user_del))
 		SSplayer_ranks.vetted_controller.remove_player(ckey = user_del)
 		message_admins("[usr] has removed [user_del] from the vetted databse.")
+*/

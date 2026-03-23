@@ -442,7 +442,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Quirks
 	save_data["all_quirks"] = all_quirks
 	save_character_skyrat(save_data, update) // SKYRAT EDIT ADDITION
-
+	save_custom_tattoo_data(save_data)
 	return TRUE
 
 /datum/preferences/proc/switch_to_slot(new_slot)
