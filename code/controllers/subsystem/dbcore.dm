@@ -337,9 +337,14 @@ SUBSYSTEM_DEF(dbcore)
 	#ifdef TGS
 	var/datum/tgs_api/v5/api = TGS_READ_GLOBAL(tgs)
 	if(istype(api))
-		var/list/runtime_info = api.vars["runtime_information"]
-		if(runtime_info && runtime_info["address"])
-			server_ip = runtime_info["address"]
+		var/list/tgs_info
+		if(api.vars.Find("runtime_information"))
+			tgs_info = api.vars["runtime_information"]
+		else if(api.vars.Find("information"))
+			tgs_info = api.vars["information"]
+
+		if(tgs_info && tgs_info["address"])
+			server_ip = tgs_info["address"]
 	#endif
 
 	if(server_ip == "127.0.0.1")
@@ -361,14 +366,7 @@ SUBSYSTEM_DEF(dbcore)
 	)
 
 	if(!query_round_initialize.Execute(async = FALSE))
-		var/error_report = "Unknown SQL Error (Check db_query datum vars)"
-
-		if(query_round_initialize.vars["err_msg"])
-			error_report = query_round_initialize.vars["err_msg"]
-		else if(query_round_initialize.vars["error_text"])
-			error_report = query_round_initialize.vars["error_text"]
-
-		world.log << "DATABASE ERROR: Round failed to initialize: [error_report]"
+		world.log << "DATABASE ERROR: Round failed to initialize."
 		GLOB.round_id = "ERR_[world.timeofday]"
 		qdel(query_round_initialize)
 		return
