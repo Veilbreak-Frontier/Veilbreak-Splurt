@@ -332,6 +332,7 @@ SUBSYSTEM_DEF(dbcore)
 	if(!Connect())
 		return
 
+	// Default to local loopback to satisfy the 'NO NULL' constraint in MariaDB
 	var/server_ip = "127.0.0.1"
 
 	#ifdef TGS
@@ -358,7 +359,9 @@ SUBSYSTEM_DEF(dbcore)
 	if(!server_ip || server_ip == "0")
 		server_ip = "127.0.0.1"
 
-	var/server_name = CONFIG_GET(string/serversqlname) || "Unknown Server"
+	var/server_name = CONFIG_GET(string/serversqlname)
+	if(length(server_name) > 32)
+		server_name = copytext(server_name, 1, 32)
 
 	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
 		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON(:internet_address), :port)",
@@ -366,7 +369,13 @@ SUBSYSTEM_DEF(dbcore)
 	)
 
 	if(!query_round_initialize.Execute(async = FALSE))
-		world.log << "DATABASE ERROR: Round failed to initialize."
+		var/error_report = "Unknown SQL Error"
+		if(query_round_initialize.vars.Find("err_msg"))
+			error_report = query_round_initialize.vars["err_msg"]
+		else if(query_round_initialize.vars.Find("error_text"))
+			error_report = query_round_initialize.vars["error_text"]
+
+		world.log << "DATABASE ERROR: Round failed to initialize: [error_report]"
 		GLOB.round_id = "ERR_[world.timeofday]"
 		qdel(query_round_initialize)
 		return
