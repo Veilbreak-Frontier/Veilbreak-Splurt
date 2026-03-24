@@ -66,9 +66,15 @@
 	RegisterSignal(src, COMSIG_ATOM_EXITED, PROC_REF(on_part_exited))
 
 /obj/item/storage/part_replacer/bluespace/interact_with_atom(obj/attacked_object, mob/living/user, list/modifiers)
-	. = ..()
-	if(. & ITEM_INTERACT_ANY_BLOCKER)
-		user.Beam(attacked_object, icon_state = "rped_upgrade", time = 0.5 SECONDS)
+    var/success = ..()
+
+    if(!(success & ITEM_INTERACT_ANY_BLOCKER))
+        return success
+
+    if(!QDELETED(attacked_object) && isturf(attacked_object.loc))
+        user.Beam(attacked_object, icon_state = "rped_upgrade", time = 0.5 SECONDS)
+
+    return success
 
 /obj/item/storage/part_replacer/bluespace/ranged_interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	return interact_with_atom(interacting_with, user, modifiers)

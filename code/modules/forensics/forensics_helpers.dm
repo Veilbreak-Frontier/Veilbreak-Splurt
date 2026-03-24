@@ -117,16 +117,21 @@
 	if (!islist(blood_DNA_to_add))
 		return .
 
+	var/list/sanitized_dna = list()
 	for (var/blood_key in blood_DNA_to_add)
 		if (islist(blood_key) || isnull(blood_DNA_to_add[blood_key]))
 			continue
+		sanitized_dna[blood_key] = blood_DNA_to_add[blood_key]
 
-		cached_blood_color = null
-		cached_blood_emissive = null
-		if (forensics)
-			forensics.inherit_new(blood_DNA = list("[blood_key]" = blood_DNA_to_add[blood_key]))
-		else
-			forensics = new(src, blood_DNA = list("[blood_key]" = blood_DNA_to_add[blood_key]))
+	if (!length(sanitized_dna))
+		return .
+
+	cached_blood_color = null
+	cached_blood_emissive = null
+	if (forensics)
+		forensics.inherit_new(blood_DNA = sanitized_dna)
+	else
+		forensics = new(src, blood_DNA = sanitized_dna)
 	return TRUE
 
 /obj/effect/decal/cleanable/blood/add_blood_DNA(list/blood_DNA_to_add, list/datum/disease/diseases)

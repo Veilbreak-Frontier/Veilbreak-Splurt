@@ -228,31 +228,31 @@
 /// Calculates and returns either an RGB or a matrix color for dried blood, depending on whever our current color is RGB or matrix
 /// Because BYOND does *not* like animating from text to matrix and vice versa
 /obj/effect/decal/cleanable/blood/proc/get_dried_color(base_color)
-    var/list/starting_color = rgb2num(base_color)
+	var/list/starting_color = rgb2num(base_color)
 
-    if (!starting_color)
-        starting_color = list(255, 255, 255)
+	if (!starting_color)
+		starting_color = list(255, 255, 255)
 
-    var/max_color = max(starting_color[1], starting_color[2], starting_color[3])
+	var/max_color = max(starting_color[1], starting_color[2], starting_color[3])
 
-    if(!max_color)
-        return "#050000"
+	if(!max_color)
+		return "#050000"
 
-    var/red_offset = 50 + (75 * (starting_color[1] / max_color))
-    var/green_offset = 50 + (75 * (starting_color[2] / max_color))
-    var/blue_offset = 50 + (75 * (starting_color[3] / max_color))
+	var/red_offset = 50 + (75 * (starting_color[1] / max_color))
+	var/green_offset = 50 + (75 * (starting_color[2] / max_color))
+	var/blue_offset = 50 + (75 * (starting_color[3] / max_color))
 
-    var/strength = starting_color[1] + starting_color[2] + starting_color[3]
-    if(strength <= 192)
-        red_offset *= 0.5
-        green_offset *= 0.5
-        blue_offset *= 0.5
+	var/strength = starting_color[1] + starting_color[2] + starting_color[3]
+	if(strength <= 192)
+		red_offset *= 0.5
+		green_offset *= 0.5
+		blue_offset *= 0.5
 
-    return rgb(
-        clamp(starting_color[1] - red_offset, 0, 255),
-        clamp(starting_color[2] - green_offset, 0, 255),
-        clamp(starting_color[3] - blue_offset, 0, 255),
-    )
+	return rgb(
+		clamp(starting_color[1] - red_offset, 0, 255),
+		clamp(starting_color[2] - green_offset, 0, 255),
+		clamp(starting_color[3] - blue_offset, 0, 255),
+	)
 
 /obj/effect/decal/cleanable/blood/old
 	bloodiness = 0
