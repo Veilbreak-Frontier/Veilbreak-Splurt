@@ -331,22 +331,34 @@ SUBSYSTEM_DEF(dbcore)
 
 	if(!Connect())
 		return
+	sleep(100)
 
 	var/server_name = CONFIG_GET(string/serversqlname)
 	if(length(server_name) > 32)
 		server_name = copytext(server_name, 1, 32)
 
+	var/server_ip = "127.0.0.1"
+
 	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON('127.0.0.1'), :port)",
-		list("server_name" = server_name, "port" = world.port)
+		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON(:internet_address), :port)",
+		list("server_name" = server_name, "internet_address" = server_ip, "port" = world.port)
 	)
 
-	if(query_round_initialize.Execute(async = FALSE))
-		GLOB.round_id = "[query_round_initialize.last_insert_id]"
+	if(!query_round_initialize.Execute(async = FALSE))
+		var/err = "Unknown SQL Error"
+		if(query_round_initialize.vars.Find("err_msg"))
+			err = query_round_initialize.vars["err_msg"]
 
-	if(!GLOB.round_id || GLOB.round_id == "0")
-		GLOB.round_id = "FAILED_[world.timeofday]"
-		world.log << "DATABASE ERROR: Could not get Round ID. Using fallback: [GLOB.round_id]"
+		world.log << "DATABASE ERROR: Round failed to initialize: [err]"
+		qdel(query_round_initialize)
+		return
+
+	var/new_id = query_round_initialize.last_insert_id
+	if(new_id)
+		GLOB.round_id = "[new_id]"
+		world.log << "Round [GLOB.round_id] initialized after stability gate."
+	else
+		GLOB.round_id = "ERR_NO_ID"
 
 	qdel(query_round_initialize)
 
