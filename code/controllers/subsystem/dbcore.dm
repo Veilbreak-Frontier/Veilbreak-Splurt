@@ -327,38 +327,59 @@ SUBSYSTEM_DEF(dbcore)
 		log_sql("Database is not enabled in configuration.")
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
-    CheckSchemaVersion()
+	CheckSchemaVersion()
 
-    if(!Connect())
-        return
+	if(!Connect())
+		return
 
-    var/server_ip = "0"
+	var/server_ip = "127.0.0.1"
 
-    #ifdef TGS
-    var/datum/tgs_api/v5/api = TGS_READ_GLOBAL(tgs)
-    if(istype(api))
-        var/list/runtime_info = api.vars["runtime_information"]
-        if(runtime_info && runtime_info["address"])
-            server_ip = runtime_info["address"]
-    #endif
+	#ifdef TGS
+	var/datum/tgs_api/v5/api = TGS_READ_GLOBAL(tgs)
+	if(istype(api))
+		var/list/runtime_info = api.vars["runtime_information"]
+		if(runtime_info && runtime_info["address"])
+			server_ip = runtime_info["address"]
+	#endif
 
-    if(!server_ip || server_ip == "0")
-        var/timeout = 50
-        while((!world.internet_address || world.internet_address == "0") && timeout > 0)
-            stoplag(1)
-            timeout--
-        server_ip = world.internet_address
+	if(server_ip == "127.0.0.1")
+		if(world.internet_address && world.internet_address != "0")
+			server_ip = world.internet_address
+		else
+			var/list/http = world.Export("http://icanhazip.com")
+			if(http && http["CONTENT"])
+				server_ip = trim(file2text(http["CONTENT"]))
 
-    if(!server_ip || server_ip == "0")
-        server_ip = "127.0.0.1"
+	if(!server_ip || server_ip == "0")
+		server_ip = "127.0.0.1"
 
-    var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-        "INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (Now(), :server_name, INET_ATON(:internet_address), :port)",
-        list("server_name" = CONFIG_GET(string/serversqlname), "internet_address" = server_ip, "port" = "[world.port]")
-    )
-    query_round_initialize.Execute(async = FALSE)
-    GLOB.round_id = "[query_round_initialize.last_insert_id]"
-    qdel(query_round_initialize)
+	var/server_name = CONFIG_GET(string/serversqlname) || "Unknown Server"
+
+	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
+		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON(:internet_address), :port)",
+		list("server_name" = server_name, "internet_address" = server_ip, "port" = world.port)
+	)
+
+	if(!query_round_initialize.Execute(async = FALSE))
+		var/error_report = "Unknown SQL Error (Check db_query datum vars)"
+
+		if(query_round_initialize.vars["err_msg"])
+			error_report = query_round_initialize.vars["err_msg"]
+		else if(query_round_initialize.vars["error_text"])
+			error_report = query_round_initialize.vars["error_text"]
+
+		world.log << "DATABASE ERROR: Round failed to initialize: [error_report]"
+		GLOB.round_id = "ERR_[world.timeofday]"
+		qdel(query_round_initialize)
+		return
+
+	var/new_id = query_round_initialize.last_insert_id
+	if(new_id)
+		GLOB.round_id = "[new_id]"
+	else
+		GLOB.round_id = "ERR_NO_ID"
+
+	qdel(query_round_initialize)
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
 	if(!Connect())
