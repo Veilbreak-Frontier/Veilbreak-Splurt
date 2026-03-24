@@ -116,63 +116,67 @@
  * Creates the beam effects and places them in a line from the origin to the target. Sets their rotation to make the beams face the target, too.
  */
 /datum/beam/proc/Draw()
+	if(QDELETED(origin) || QDELETED(target))
+		qdel(src)
+		return
+
 	if(SEND_SIGNAL(src, COMSIG_BEAM_BEFORE_DRAW) & BEAM_CANCEL_DRAW)
 		return
+
+	var/turf/origin_turf = get_turf(origin)
+	if(!origin_turf)
+		qdel(src)
+		return
+
 	var/origin_px = (isnull(override_origin_pixel_x) ? origin.pixel_x : override_origin_pixel_x) + origin.pixel_w
 	var/origin_py = (isnull(override_origin_pixel_y) ? origin.pixel_y : override_origin_pixel_y) + origin.pixel_z
 	var/target_px = (isnull(override_target_pixel_x) ? target.pixel_x : override_target_pixel_x) + target.pixel_w
 	var/target_py = (isnull(override_target_pixel_y) ? target.pixel_y : override_target_pixel_y) + target.pixel_z
+
 	var/Angle = get_angle_raw(origin.x, origin.y, origin_px, origin_py, target.x , target.y, target_px, target_py)
-	///var/Angle = round(get_angle(origin,target))
 	var/matrix/rot_matrix = matrix()
-	var/turf/origin_turf = get_turf(origin)
 	rot_matrix.Turn(Angle)
 
-	//Translation vector for origin and target
-	var/DX = (32*target.x+target_px)-(32*origin.x+origin_px)
-	var/DY = (32*target.y+target_py)-(32*origin.y+origin_py)
-	var/N = 0
-	var/length = round(sqrt((DX)**2+(DY)**2)) //hypotenuse of the triangle formed by target and origin's displacement
+	var/DX = (32 * target.x + target_px) - (32 * origin.x + origin_px)
+	var/DY = (32 * target.y + target_py) - (32 * origin.y + origin_py)
+	var/length = round(sqrt((DX)**2 + (DY)**2))
 
-	for(N in 0 to length-1 step 32)//-1 as we want < not <=, but we want the speed of X in Y to Z and step X
+	for(var/N in 0 to length - 1 step 32)
 		if(QDELETED(src))
 			break
+
 		var/obj/effect/ebeam/segment = new beam_type(origin_turf, src)
 		elements += segment
 
-		//ends are cropped by a transparent box icon of length-N pixel size laid over the visuals obj
-		if(N+32>length) //went past the target, we draw a box of space to cut away from the beam sprite so the icon actually ends at the center of the target sprite
-			var/icon/terminal_icon = new(icon, icon_state)//this means we exclude the overshooting object from the visual contents which does mean those visuals don't show up for the final bit of the beam...
-			terminal_icon.DrawBox(null,1,(length-N),32,32)//in the future if you want to improve this, remove the drawbox and instead use a 513 filter to cut away at the final object's icon
+		if(N + 32 > length)
+			var/icon/terminal_icon = new(icon, icon_state)
+			terminal_icon.DrawBox(null, 1, (length - N), 32, 32)
 			segment.icon = terminal_icon
 			segment.color = beam_color
 		else
 			set_subsegment_appearance(segment)
+
 		segment.transform = rot_matrix
 
-		//Calculate pixel offsets (If necessary)
-		var/Pixel_x
-		var/Pixel_y
-		if(DX == 0)
-			Pixel_x = 0
-		else
-			Pixel_x = round(sin(Angle)+32*sin(Angle)*(N+16)/32)
-		if(DY == 0)
-			Pixel_y = 0
-		else
-			Pixel_y = round(cos(Angle)+32*cos(Angle)*(N+16)/32)
+		var/Pixel_x = (DX == 0) ? 0 : round(sin(Angle) + 32 * sin(Angle) * (N + 16) / 32)
+		var/Pixel_y = (DY == 0) ? 0 : round(cos(Angle) + 32 * cos(Angle) * (N + 16) / 32)
 
-		//Position the effect so the beam is one continous line
 		var/final_x = segment.x
 		var/final_y = segment.y
-		if(abs(Pixel_x)>32)
-			final_x += Pixel_x > 0 ? round(Pixel_x/32) : CEILING(Pixel_x/32, 1)
+
+		if(abs(Pixel_x) > 32)
+			final_x += Pixel_x > 0 ? round(Pixel_x / 32) : CEILING(Pixel_x / 32, 1)
 			Pixel_x %= 32
-		if(abs(Pixel_y)>32)
-			final_y += Pixel_y > 0 ? round(Pixel_y/32) : CEILING(Pixel_y/32, 1)
+		if(abs(Pixel_y) > 32)
+			final_y += Pixel_y > 0 ? round(Pixel_y / 32) : CEILING(Pixel_y / 32, 1)
 			Pixel_y %= 32
 
-		segment.forceMove(locate(final_x, final_y, segment.z))
+		var/turf/destination = locate(final_x, final_y, segment.z)
+		if(!destination)
+			qdel(segment)
+			break
+
+		segment.forceMove(destination)
 		segment.pixel_x = origin_px + Pixel_x
 		segment.pixel_y = origin_py + Pixel_y
 		CHECK_TICK
