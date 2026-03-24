@@ -47,37 +47,38 @@ PROCESSING_SUBSYSTEM_DEF(personalities)
 
 /// Helper to check if the new personality type is incompatible with the passed list of personality types
 /datum/controller/subsystem/processing/personalities/proc/is_incompatible(list/personality_types, new_personality_type)
+	if(!length(personality_types))
+		return FALSE
+
 	if(!length(incompatibilities_by_group))
 		stack_trace("Checking personality incompatibilities before the incompatibility list was initialized?")
 		return FALSE
-	if(length(personality_types))
-		// No incompatibilities possible with no personalities
-		return FALSE
+
 	var/datum/personality/new_personality = personalities_by_type[new_personality_type]
-	if(!length(new_personality.groups))
-		// No groups, so no incompatibilities
+	if(!new_personality || !length(new_personality.groups))
 		return FALSE
 
-	// Filters all incompatibily groups against the new personality's groups
-	for(var/group, incompatibility_list in incompatibilities_by_group & new_personality.groups)
-		// Then checks if any personality type in the list is also in the group
+	for(var/group in new_personality.groups)
+		var/list/incompatibility_list = incompatibilities_by_group[group]
+
 		if(length(incompatibility_list & personality_types))
 			return TRUE
+
 	return FALSE
 
 /// Helper to select a random list of personalities, respecting incompatibilities. REturns a list of typepaths
 /datum/controller/subsystem/processing/personalities/proc/select_random_personalities(lower_end = 1, upper_end = CONFIG_GET(number/max_personalities))
-	var/list/personality_pool = personalities_by_type.Copy()
-	var/list/selected_personalities = list()
-	var/num = rand(lower_end, upper_end)
-	var/i = 1
-	while(i <= num)
-		if(!length(personality_pool))
-			break
-		var/picked_type = pick(personality_pool)
-		if(is_incompatible(selected_personalities, picked_type))
-			continue
-		selected_personalities += picked_type
-		personality_pool -= picked_type
-		i += 1
-	return selected_personalities
+    var/list/personality_pool = personalities_by_type.Copy()
+    var/list/selected_personalities = list()
+    var/target_num = rand(lower_end, upper_end)
+
+    while(selected_personalities.len < target_num && length(personality_pool))
+        var/picked_type = pick(personality_pool)
+        personality_pool -= picked_type
+
+        if(is_incompatible(selected_personalities, picked_type))
+            continue
+
+        selected_personalities += picked_type
+
+    return selected_personalities

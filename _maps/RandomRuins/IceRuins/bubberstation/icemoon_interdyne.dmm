@@ -4716,7 +4716,7 @@
 /turf/open/floor/iron,
 /area/ruin/syndicate_lava_base/medbay)
 "HA" = (
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_access = list("syndicate");
 	anchored = 0
 	},

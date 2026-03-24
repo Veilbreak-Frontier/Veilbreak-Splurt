@@ -59,13 +59,21 @@
  * This mob is asserted to have `mob_mood`.
  */
 /datum/personality/proc/apply_to_mob(mob/living/who)
-	SHOULD_CALL_PARENT(TRUE)
-	if(personality_trait)
-		ADD_TRAIT(who, personality_trait, PERSONALITY_TRAIT)
-	LAZYSET(who.personalities, type, TRUE)
-	if(processes)
-		SSpersonalities.processing_personalities[src] += who
+    SHOULD_CALL_PARENT(TRUE)
+    if(!who.mob_mood)
+        stack_trace("Attempted to apply personality [type] to [who] without a mood datum.")
+        return
 
+    if(personality_trait)
+        ADD_TRAIT(who, personality_trait, PERSONALITY_TRAIT)
+
+    LAZYSET(who.personalities, type, TRUE)
+
+    // ROOT CAUSE FIX: Register for deletion signal to clean up references immediately
+    RegisterSignal(who, COMSIG_QDELETING, PROC_REF(on_mob_deleting))
+
+    if(processes)
+        SSpersonalities.processing_personalities[src] += who
 /**
  * Called when removing this personality from a mob.
  *
@@ -75,24 +83,42 @@
  * This mob is asserted to have `mob_mood`.
  */
 /datum/personality/proc/remove_from_mob(mob/living/who)
-	SHOULD_CALL_PARENT(TRUE)
-	if(personality_trait)
-		REMOVE_TRAIT(who, personality_trait, PERSONALITY_TRAIT)
-	LAZYREMOVE(who.personalities, type)
-	if(processes)
-		SSpersonalities.processing_personalities[src] -= who
+    SHOULD_CALL_PARENT(TRUE)
+    if(personality_trait)
+        REMOVE_TRAIT(who, personality_trait, PERSONALITY_TRAIT)
+
+    LAZYREMOVE(who.personalities, type)
+
+    UnregisterSignal(who, COMSIG_QDELETING)
+    if(processes)
+        SSpersonalities.processing_personalities[src] -= who
 
 /datum/personality/process(seconds_per_tick)
-	for(var/mob/living/subject as anything in SSpersonalities.processing_personalities[src])
-		if(subject.stat >= UNCONSCIOUS || HAS_TRAIT(subject, TRAIT_NO_TRANSFORM))
-			continue
-		if(on_tick(subject, seconds_per_tick) != PROCESS_KILL)
-			continue
-		stack_trace("Personality [type] processed but did not override on_tick().")
-		SSpersonalities.processing_personalities -= src // stop tracking if we're done processing
-		return PROCESS_KILL
+    var/list/processing_list = SSpersonalities.processing_personalities[src]
 
-	return null
+    for(var/mob/living/subject as anything in processing_list)
+        if(!subject || QDELETED(subject))
+            processing_list -= subject
+            continue
+
+        if(subject.stat >= UNCONSCIOUS || HAS_TRAIT(subject, TRAIT_NO_TRANSFORM))
+            continue
+        if(on_tick(subject, seconds_per_tick) != PROCESS_KILL)
+            continue
+
+        stack_trace("Personality [type] processed but did not override on_tick().")
+        SSpersonalities.processing_personalities -= src
+        return PROCESS_KILL
+
+    return null
+/**
+ * Signal handler for COMSIG_QDELETING
+ * Ensures the singleton stops tracking a mob that is being deleted.
+ */
+/datum/personality/proc/on_mob_deleting(mob/living/source)
+    SIGNAL_HANDLER
+    remove_from_mob(source)
+
 
 /// Called every SSpersonality tick if `processes` is TRUE.
 /// Don't call parent if you override this, that's for error checking

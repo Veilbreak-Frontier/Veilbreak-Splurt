@@ -9060,7 +9060,7 @@
 "sy" = (
 /obj/machinery/light/directional/north,
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4,
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_access = list("syndicate");
 	anchored = 0
 	},

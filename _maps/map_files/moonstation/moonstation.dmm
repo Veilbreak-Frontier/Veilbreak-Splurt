@@ -67212,9 +67212,6 @@
 /area/station/commons/public_mining)
 "rUJ" = (
 /obj/item/kirbyplants/random,
-/mob/living/basic/parrot/poly{
-	name = "Mono"
-	},
 /obj/item/radio/intercom/command/directional/north,
 /obj/effect/turf_decal/tile/neutral{
 	dir = 8

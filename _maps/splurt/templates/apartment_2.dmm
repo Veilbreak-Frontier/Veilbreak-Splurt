@@ -119,7 +119,7 @@
 /area/misc/hilbertshotel)
 "bi" = (
 /obj/machinery/light/directional/east,
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_one_access = null;
 	area_limited = 1
 	},

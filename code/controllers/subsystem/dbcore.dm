@@ -331,12 +331,33 @@ SUBSYSTEM_DEF(dbcore)
 
 	if(!Connect())
 		return
-	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(/* SKYRAT EDIT CHANGE - MULTISERVER */
-		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (Now(), :server_name, INET_ATON(:internet_address), :port)",
-		list("server_name" = CONFIG_GET(string/serversqlname), "internet_address" = world.internet_address || "0", "port" = "[world.port]") // SKYRAT EDIT CHANGE - MULTISERVER
-	)
-	query_round_initialize.Execute(async = FALSE)
-	GLOB.round_id = "[query_round_initialize.last_insert_id]"
+
+	var/tgs_wait_limit = 15
+	while(!world.TgsAvailable() && tgs_wait_limit > 0)
+		sleep(10)
+		tgs_wait_limit--
+
+	if(!world.TgsAvailable())
+		var/raw_parameter = world.params["server_service_version"]
+		if(raw_parameter)
+			TGS_INFO_LOG("TGS Authentication not received. Aborting DB Round Init to prevent ghost entry.")
+			return
+
+	var/datum/tgs_api/v5/api = TGS_READ_GLOBAL(tgs)
+	if(istype(api) && api.reboot_mode != TGS_REBOOT_MODE_NORMAL)
+		TGS_INFO_LOG("Transitional Reboot Mode detected ([api.reboot_mode]). Skipping DB Init.")
+		return
+
+	var/server_name = CONFIG_GET(string/serversqlname)
+	if(length(server_name) > 32)
+		server_name = copytext(server_name, 1, 32)
+
+	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery("INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON('127.0.0.1'), :port)", list("server_name" = server_name, "port" = world.port))
+
+	if(query_round_initialize.Execute(async = FALSE))
+		GLOB.round_id = "[query_round_initialize.last_insert_id]"
+		TGS_INFO_LOG("Round [GLOB.round_id] initialized successfully.")
+
 	qdel(query_round_initialize)
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()

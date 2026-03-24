@@ -619,7 +619,7 @@
 /area/ruin/space/has_grav/derelictoutpost/dockedship/rename)
 "gs" = (
 /obj/machinery/light_switch/directional/north,
-/obj/machinery/jukebox,
+/obj/machinery/jukebox/online,
 /turf/open/floor/iron,
 /area/ruin/space/has_grav/derelictoutpost/bar)
 "gv" = (

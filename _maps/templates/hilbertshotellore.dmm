@@ -186,7 +186,7 @@
 /turf/open/indestructible/hoteltile,
 /area/misc/hilbertshotel)
 "aW" = (
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_access = null
 	},
 /turf/open/indestructible/hotelwood,

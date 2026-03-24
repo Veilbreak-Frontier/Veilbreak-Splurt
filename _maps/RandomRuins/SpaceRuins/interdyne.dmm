@@ -323,7 +323,7 @@
 /area/ruin/space/has_grav/interdyne)
 "ne" = (
 /obj/structure/cable,
-/obj/machinery/jukebox,
+/obj/machinery/jukebox/online,
 /turf/open/floor/mineral/plastitanium/red,
 /area/ruin/space/has_grav/interdyne)
 "nm" = (
