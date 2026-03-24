@@ -402,26 +402,17 @@ export const BubberChangelog = (props) => {
 
   const header = (
     <Section>
-      <h1>S.P.L.U.R.T-tg</h1> {/* SPLURT EDIT ADDITION: Changelog 3 */}
+      <h1>Veilbreak-Frontier</h1> {/* SPLURT EDIT ADDITION: Changelog 3 */}
       <p>
         <b>Thanks to: </b>
-        /tg/station 13, Effigy, Stellar Haven, Baystation 12, /vg/station,
-        NTstation, CDK Station devs, FacepunchStation, GoonStation devs, the
-        original Space Station 13 developers, and the countless others who have
-        contributed to the game.
-      </p>
-      <p>
-        {'Current organization members can be found '}
-        <a href="https://github.com/orgs/SPLURT-Station/people">here</a>
-        {', recent GitHub contributors can be found '}
-        <a href="https://github.com/SPLURT-Station/S.P.L.U.R.T-tg/pulse/monthly">
-          here
-        </a>
-        .
+        S.P.L.U.R.T, /tg/station 13, Effigy, Stellar Haven, Baystation 12,
+        /vg/station, NTstation, CDK Station devs, FacepunchStation, GoonStation
+        devs, the original Space Station 13 developers, and the countless others
+        who have contributed to the game.
       </p>
       <p>
         {'You can also join our discord '}
-        <a href="https://discord.com/invite/wynHVMzHzC">here</a>!
+        <a href="https://discord.gg/ychmq3tZQY">here</a>!
       </p>
       <DateDropdown
         dates={dates}
