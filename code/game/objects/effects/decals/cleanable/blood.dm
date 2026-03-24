@@ -228,32 +228,31 @@
 /// Calculates and returns either an RGB or a matrix color for dried blood, depending on whever our current color is RGB or matrix
 /// Because BYOND does *not* like animating from text to matrix and vice versa
 /obj/effect/decal/cleanable/blood/proc/get_dried_color(base_color)
-	var/list/starting_color = rgb2num(base_color)
+    var/list/starting_color = rgb2num(base_color)
 
-	if (!starting_color)
-		starting_color = list(255, 255, 255)
+    if (!starting_color)
+        starting_color = list(255, 255, 255)
 
-	// We want a fixed offset for a fixed drop in color intensity, plus a scaling offset based on our strongest color
-	// The scaling offset helps keep dark colors from turning black, while also ensurse bright colors don't stay super bright
-	var/max_color = max(starting_color[1], starting_color[2], starting_color[3])
-	var/red_offset = 50 + (75 * (starting_color[1] / max_color))
-	var/green_offset = 50 + (75 * (starting_color[2] / max_color))
-	var/blue_offset = 50 + (75 * (starting_color[3] / max_color))
+    var/max_color = max(starting_color[1], starting_color[2], starting_color[3])
 
-	// If the color is already decently dark, we should reduce the offsets even further
-	// This is intended to prevent already dark blood (mixed blood in particular) from becoming full black
-	var/strength = starting_color[1] + starting_color[2] + starting_color[3]
-	if(strength <= 192)
-		red_offset *= 0.5
-		green_offset *= 0.5
-		blue_offset *= 0.5
+    if(!max_color)
+        return "#050000"
 
-	// Finally, get this show on the road
-	return rgb(
-		clamp(starting_color[1] - red_offset, 0, 255),
-		clamp(starting_color[2] - green_offset, 0, 255),
-		clamp(starting_color[3] - blue_offset, 0, 255),
-	)
+    var/red_offset = 50 + (75 * (starting_color[1] / max_color))
+    var/green_offset = 50 + (75 * (starting_color[2] / max_color))
+    var/blue_offset = 50 + (75 * (starting_color[3] / max_color))
+
+    var/strength = starting_color[1] + starting_color[2] + starting_color[3]
+    if(strength <= 192)
+        red_offset *= 0.5
+        green_offset *= 0.5
+        blue_offset *= 0.5
+
+    return rgb(
+        clamp(starting_color[1] - red_offset, 0, 255),
+        clamp(starting_color[2] - green_offset, 0, 255),
+        clamp(starting_color[3] - blue_offset, 0, 255),
+    )
 
 /obj/effect/decal/cleanable/blood/old
 	bloodiness = 0
