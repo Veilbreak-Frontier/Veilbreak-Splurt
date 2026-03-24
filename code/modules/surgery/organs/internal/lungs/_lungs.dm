@@ -161,6 +161,8 @@
 	add_gas_reaction(/datum/gas/nitrium, while_present = PROC_REF(too_much_nitrium))
 	add_gas_reaction(/datum/gas/tritium, while_present = PROC_REF(too_much_tritium))
 	add_gas_reaction(/datum/gas/zauker, while_present = PROC_REF(too_much_zauker))
+	add_gas_reaction(/datum/gas/goblin, while_present = PROC_REF(consume_goblin)) // modular_zubbers
+	add_gas_reaction(/datum/gas/delirium, while_present = PROC_REF(consume_delirium)) // modular_zzveilbreak
 
 ///Simply exists so that you don't keep any alerts from your previous lack of lungs.
 /obj/item/organ/lungs/on_mob_insert(mob/living/carbon/receiver, special = FALSE, movement_flags)

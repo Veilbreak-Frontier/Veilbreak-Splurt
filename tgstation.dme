@@ -10709,6 +10709,7 @@
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_portal_object.dm"
 #include "modular_zzveilbreak\code\modules\GAGS\greyscale_configs.dm"
 #include "modular_zzveilbreak\code\modules\hallucinations\delirium_pulse.dm"
+#include "modular_zzveilbreak\code\modules\surgery\organs\internal\lungs\delirium_breath.dm"
 #include "modular_zzveilbreak\code\modules\interraction_overrides\veilbreak_overrides.dm"
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_Config_API.dm"
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_Logic_Core.dm"
