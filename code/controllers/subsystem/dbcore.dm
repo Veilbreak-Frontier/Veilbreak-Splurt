@@ -331,34 +331,44 @@ SUBSYSTEM_DEF(dbcore)
 
 	if(!Connect())
 		return
-	sleep(100)
+
+	#ifdef TGS
+	sleep(50)
+
+	var/datum/tgs_api/v5/api = TGS_READ_GLOBAL(tgs)
+	if(istype(api))
+		if(api.vars.Find("reboot_mode") && api.vars["reboot_mode"] != 0)
+			world.log << "TGS: Transitional process detected. Skipping DB Initialization."
+			return
+	#else
+	sleep(20)
+	#endif
+
+	if(GLOB.round_id && !findtext(GLOB.round_id, "ERR"))
+		return
 
 	var/server_name = CONFIG_GET(string/serversqlname)
 	if(length(server_name) > 32)
 		server_name = copytext(server_name, 1, 32)
 
-	var/server_ip = "127.0.0.1"
-
 	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON(:internet_address), :port)",
-		list("server_name" = server_name, "internet_address" = server_ip, "port" = world.port)
+		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON('127.0.0.1'), :port)",
+		list("server_name" = server_name, "port" = world.port)
 	)
 
 	if(!query_round_initialize.Execute(async = FALSE))
-		var/err = "Unknown SQL Error"
+		var/err = "SQL Error"
 		if(query_round_initialize.vars.Find("err_msg"))
 			err = query_round_initialize.vars["err_msg"]
-
-		world.log << "DATABASE ERROR: Round failed to initialize: [err]"
+		world.log << "DATABASE ERROR: [err]"
 		qdel(query_round_initialize)
 		return
 
 	var/new_id = query_round_initialize.last_insert_id
 	if(new_id)
 		GLOB.round_id = "[new_id]"
-		world.log << "Round [GLOB.round_id] initialized after stability gate."
 	else
-		GLOB.round_id = "ERR_NO_ID"
+		GLOB.round_id = "ERR_[world.timeofday]"
 
 	qdel(query_round_initialize)
 
