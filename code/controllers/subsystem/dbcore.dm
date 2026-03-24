@@ -332,19 +332,18 @@ SUBSYSTEM_DEF(dbcore)
 	if(!Connect())
 		return
 
-	#ifdef TGS
-	sleep(50)
+	var/tgs_wait_limit = 10
+	while(!world.TgsAvailable() && tgs_wait_limit > 0)
+		sleep(10)
+		tgs_wait_limit--
+
+	if(!world.TgsAvailable())
+		TGS_INFO_LOG("TGS Authentication not received. Aborting DB Round Init to prevent phantom entry.")
+		return
 
 	var/datum/tgs_api/v5/api = TGS_READ_GLOBAL(tgs)
-	if(istype(api))
-		if(api.vars.Find("reboot_mode") && api.vars["reboot_mode"] != 0)
-			world.log << "TGS: Transitional process detected. Skipping DB Initialization."
-			return
-	#else
-	sleep(20)
-	#endif
-
-	if(GLOB.round_id && !findtext(GLOB.round_id, "ERR"))
+	if(istype(api) && api.reboot_mode != TGS_REBOOT_MODE_NORMAL)
+		TGS_INFO_LOG("Transitional Reboot Mode detected ([api.reboot_mode]). Skipping DB Init.")
 		return
 
 	var/server_name = CONFIG_GET(string/serversqlname)
@@ -356,19 +355,9 @@ SUBSYSTEM_DEF(dbcore)
 		list("server_name" = server_name, "port" = world.port)
 	)
 
-	if(!query_round_initialize.Execute(async = FALSE))
-		var/err = "SQL Error"
-		if(query_round_initialize.vars.Find("err_msg"))
-			err = query_round_initialize.vars["err_msg"]
-		world.log << "DATABASE ERROR: [err]"
-		qdel(query_round_initialize)
-		return
-
-	var/new_id = query_round_initialize.last_insert_id
-	if(new_id)
-		GLOB.round_id = "[new_id]"
-	else
-		GLOB.round_id = "ERR_[world.timeofday]"
+	if(query_round_initialize.Execute(async = FALSE))
+		GLOB.round_id = "[query_round_initialize.last_insert_id]"
+		TGS_INFO_LOG("Round [GLOB.round_id] initialized successfully.")
 
 	qdel(query_round_initialize)
 
