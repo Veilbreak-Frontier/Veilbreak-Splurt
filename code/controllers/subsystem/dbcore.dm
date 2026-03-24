@@ -327,17 +327,28 @@ SUBSYSTEM_DEF(dbcore)
 		log_sql("Database is not enabled in configuration.")
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
-	CheckSchemaVersion()
+    CheckSchemaVersion()
 
-	if(!Connect())
-		return
-	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(/* SKYRAT EDIT CHANGE - MULTISERVER */
-		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (Now(), :server_name, INET_ATON(:internet_address), :port)",
-		list("server_name" = CONFIG_GET(string/serversqlname), "internet_address" = world.internet_address || "0", "port" = "[world.port]") // SKYRAT EDIT CHANGE - MULTISERVER
-	)
-	query_round_initialize.Execute(async = FALSE)
-	GLOB.round_id = "[query_round_initialize.last_insert_id]"
-	qdel(query_round_initialize)
+    if(!Connect())
+        return
+
+    var/server_ip = "0"
+    #ifdef TGS
+    var/datum/tgs_instance_info/instance = TgsInstanceInfo()
+    if(instance && instance.address)
+        server_ip = instance.address
+    #endif
+
+    if(server_ip == "0")
+        server_ip = world.internet_address || "0"
+
+    var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
+        "INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (Now(), :server_name, INET_ATON(:internet_address), :port)",
+        list("server_name" = CONFIG_GET(string/serversqlname), "internet_address" = server_ip, "port" = "[world.port]")
+    )
+    query_round_initialize.Execute(async = FALSE)
+    GLOB.round_id = "[query_round_initialize.last_insert_id]"
+    qdel(query_round_initialize)
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
 	if(!Connect())
