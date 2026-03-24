@@ -333,14 +333,24 @@ SUBSYSTEM_DEF(dbcore)
         return
 
     var/server_ip = "0"
+
     #ifdef TGS
-    var/datum/tgs_instance_info/instance = TgsInstanceInfo()
-    if(instance && instance.address)
-        server_ip = instance.address
+    var/datum/tgs_api/v5/api = TGS_READ_GLOBAL(tgs)
+    if(istype(api))
+        var/list/runtime_info = api.vars["runtime_information"]
+        if(runtime_info && runtime_info["address"])
+            server_ip = runtime_info["address"]
     #endif
 
-    if(server_ip == "0")
-        server_ip = world.internet_address || "0"
+    if(!server_ip || server_ip == "0")
+        var/timeout = 50
+        while((!world.internet_address || world.internet_address == "0") && timeout > 0)
+            stoplag(1)
+            timeout--
+        server_ip = world.internet_address
+
+    if(!server_ip || server_ip == "0")
+        server_ip = "127.0.0.1"
 
     var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
         "INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (Now(), :server_name, INET_ATON(:internet_address), :port)",
