@@ -332,59 +332,21 @@ SUBSYSTEM_DEF(dbcore)
 	if(!Connect())
 		return
 
-	// Default to local loopback to satisfy the 'NO NULL' constraint in MariaDB
-	var/server_ip = "127.0.0.1"
-
-	#ifdef TGS
-	var/datum/tgs_api/v5/api = TGS_READ_GLOBAL(tgs)
-	if(istype(api))
-		var/list/tgs_info
-		if(api.vars.Find("runtime_information"))
-			tgs_info = api.vars["runtime_information"]
-		else if(api.vars.Find("information"))
-			tgs_info = api.vars["information"]
-
-		if(tgs_info && tgs_info["address"])
-			server_ip = tgs_info["address"]
-	#endif
-
-	if(server_ip == "127.0.0.1")
-		if(world.internet_address && world.internet_address != "0")
-			server_ip = world.internet_address
-		else
-			var/list/http = world.Export("http://icanhazip.com")
-			if(http && http["CONTENT"])
-				server_ip = trim(file2text(http["CONTENT"]))
-
-	if(!server_ip || server_ip == "0")
-		server_ip = "127.0.0.1"
-
 	var/server_name = CONFIG_GET(string/serversqlname)
 	if(length(server_name) > 32)
 		server_name = copytext(server_name, 1, 32)
 
 	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON(:internet_address), :port)",
-		list("server_name" = server_name, "internet_address" = server_ip, "port" = world.port)
+		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON('127.0.0.1'), :port)",
+		list("server_name" = server_name, "port" = world.port)
 	)
 
-	if(!query_round_initialize.Execute(async = FALSE))
-		var/error_report = "Unknown SQL Error"
-		if(query_round_initialize.vars.Find("err_msg"))
-			error_report = query_round_initialize.vars["err_msg"]
-		else if(query_round_initialize.vars.Find("error_text"))
-			error_report = query_round_initialize.vars["error_text"]
+	if(query_round_initialize.Execute(async = FALSE))
+		GLOB.round_id = "[query_round_initialize.last_insert_id]"
 
-		world.log << "DATABASE ERROR: Round failed to initialize: [error_report]"
-		GLOB.round_id = "ERR_[world.timeofday]"
-		qdel(query_round_initialize)
-		return
-
-	var/new_id = query_round_initialize.last_insert_id
-	if(new_id)
-		GLOB.round_id = "[new_id]"
-	else
-		GLOB.round_id = "ERR_NO_ID"
+	if(!GLOB.round_id || GLOB.round_id == "0")
+		GLOB.round_id = "FAILED_[world.timeofday]"
+		world.log << "DATABASE ERROR: Could not get Round ID. Using fallback: [GLOB.round_id]"
 
 	qdel(query_round_initialize)
 
