@@ -1,4 +1,3 @@
-/*
 /obj/item/reagent_containers/cup
 	var/beingChugged = FALSE // For checking
 
@@ -23,4 +22,3 @@
 		beingChugged = FALSE
 		return .
 	return ..()
-*/

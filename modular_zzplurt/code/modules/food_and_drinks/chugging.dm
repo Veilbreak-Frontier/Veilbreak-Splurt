@@ -1,3 +1,4 @@
+/*
 /obj/item/reagent_containers/cup/glass
 	var/beingChugged = FALSE // For checking
 
@@ -34,3 +35,4 @@
 	. = ..()
 
 	gulp_size = original_gulp_size
+*/

@@ -115,16 +115,18 @@
 	if (isnull(blood_DNA_to_add) || !length(blood_DNA_to_add))
 		return .
 	if (!islist(blood_DNA_to_add))
-		CRASH("add_blood_DNA on [src] ([type]) has been passed a non-list blood_DNA_to_add ([blood_DNA_to_add])!")
+		return .
+
 	for (var/blood_key in blood_DNA_to_add)
-		if (isnull(blood_DNA_to_add[blood_key]))
-			CRASH("add_blood_DNA on [src] ([type]) has been passed bad blood_DNA_to_add ([blood_key] - [blood_DNA_to_add[blood_key]] key-value pair)!")
-	cached_blood_color = null
-	cached_blood_emissive = null
-	if (forensics)
-		forensics.inherit_new(blood_DNA = blood_DNA_to_add)
-	else
-		forensics = new(src, blood_DNA = blood_DNA_to_add)
+		if (islist(blood_key) || isnull(blood_DNA_to_add[blood_key]))
+			continue
+
+		cached_blood_color = null
+		cached_blood_emissive = null
+		if (forensics)
+			forensics.inherit_new(blood_DNA = list("[blood_key]" = blood_DNA_to_add[blood_key]))
+		else
+			forensics = new(src, blood_DNA = list("[blood_key]" = blood_DNA_to_add[blood_key]))
 	return TRUE
 
 /obj/effect/decal/cleanable/blood/add_blood_DNA(list/blood_DNA_to_add, list/datum/disease/diseases)
