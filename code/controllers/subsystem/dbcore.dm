@@ -328,7 +328,11 @@ SUBSYSTEM_DEF(dbcore)
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
     CheckSchemaVersion()
-    if(!Connect())
+
+    if(!VerifyConnection())
+        log_world("DB_WAIT: Connection established, but session is not ready. Waiting...")
+        spawn(20)
+            InitializeRound()
         return
 
     if(!world.TgsAvailable())
@@ -336,14 +340,7 @@ SUBSYSTEM_DEF(dbcore)
             InitializeRound()
         return
 
-    var/datum/db_query/query_heartbeat = SSdbcore.NewQuery("SELECT 1")
-    if(!query_heartbeat.Execute(async = FALSE))
-        log_world("DB_ERROR: Connection heartbeat failed. Server may be authenticating. Retrying...")
-        qdel(query_heartbeat)
-        spawn(30)
-            InitializeRound()
-        return
-    qdel(query_heartbeat)
+    log_world("DB_INFO: Session verified. Proceeding with Round Initialization...")
 
     var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
         "INSERT INTO [format_table_name("round")] (initialize_datetime, server_ip, server_port) VALUES (NOW(), '0.0.0.0', :port)",
@@ -351,26 +348,28 @@ SUBSYSTEM_DEF(dbcore)
     )
 
     if(!query_round_initialize.Execute(async = FALSE))
-        var/err = last_error ? last_error : "Empty Error (Session Handshake Failure)"
-        log_world("DB_ERROR: INSERT failed. Error: [err]. Retrying...")
+        log_world("DB_ERROR: INSERT failed (Session likely timed out). Retrying...")
         qdel(query_round_initialize)
         spawn(50)
             InitializeRound()
         return
 
-    var/new_id = query_round_initialize.last_insert_id
+    GLOB.round_id = query_round_initialize.last_insert_id
     qdel(query_round_initialize)
 
-    if(!new_id || new_id == "0")
-        spawn(50)
-            InitializeRound()
-        return
-
-    GLOB.round_id = new_id
     log_world("DB_SUCCESS: Round ID [GLOB.round_id] claimed.")
-
     spawn(1)
         update_placeholders_async()
+
+/datum/controller/subsystem/dbcore/proc/VerifyConnection()
+    if(!Connect())
+        return FALSE
+
+    var/datum/db_query/ping = SSdbcore.NewQuery("SELECT 1")
+    var/success = ping.Execute(async = FALSE)
+    qdel(ping)
+
+    return success
 
 /datum/controller/subsystem/dbcore/proc/update_placeholders_async()
     if(!GLOB.round_id)
