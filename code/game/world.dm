@@ -127,7 +127,8 @@ GLOBAL_VAR(restart_counter)
  */
 /world/New()
 	InitTgs()
-
+	if(TgsAvailable())
+		TgsInitializationComplete()
 	log_world("World loaded at [time_stamp()]!")
 
 	// From a really fucking old commit (91d7150)
