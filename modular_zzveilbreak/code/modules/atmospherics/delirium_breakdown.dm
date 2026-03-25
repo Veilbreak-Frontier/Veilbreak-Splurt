@@ -1,7 +1,7 @@
 #define SET_REACTION_RESULTS(amount) air.reaction_results[type] = amount
 
 /// Temperature (kelvin) at which delirium forces a breakdown to gas "recipe" products.
-#define DELIRIUM_BREAKDOWN_MIN_TEMP 300000
+#define DELIRIUM_BREAKDOWN_MIN_TEMP 30
 
 /datum/gas_reaction/delirium_breakdown
 	name = "Delirium High-Temp Breakdown"
