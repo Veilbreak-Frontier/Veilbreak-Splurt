@@ -327,46 +327,49 @@ SUBSYSTEM_DEF(dbcore)
 		log_sql("Database is not enabled in configuration.")
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
-	CheckSchemaVersion()
+    CheckSchemaVersion()
 
-	if(!Connect())
-		return
+    if(!Connect())
+        return
 
-	var/datum/db_query/query_round_existing = SSdbcore.NewQuery(
-		"SELECT id, initialize_datetime, start_datetime, end_datetime \
-		FROM [format_table_name("round")] \
-		WHERE server_name = :server_name \
-			AND server_port = :port \
-		ORDER BY id DESC \
-		LIMIT 1",
-		list(
-			"server_name" = CONFIG_GET(string/serversqlname),
-			"port" = "[world.port]"
-		)
-	)
-	query_round_existing.Execute()
-	if(query_round_existing.NextRow())
-		var/existing_id = query_round_existing.item[1]
-		var/existing_start = query_round_existing.item[3]
-		var/existing_end = query_round_existing.item[4]
+    var/server_name = CONFIG_GET(string/serversqlname)
+    var/port = world.port
+    var/table = format_table_name("round")
 
-		if(!existing_start && !existing_end)
-			GLOB.round_id = "[existing_id]"
-			qdel(query_round_existing)
-			return
-	qdel(query_round_existing)
+    var/datum/db_query/query_round_existing = SSdbcore.NewQuery(
+        "SELECT id FROM [table] \
+        WHERE server_name = :server_name \
+            AND server_port = :port \
+            AND start_datetime IS NULL \
+            AND end_datetime IS NULL \
+        ORDER BY id DESC \
+        LIMIT 1",
+        list("server_name" = server_name, "port" = port)
+    )
 
-	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (Now(), :server_name, INET_ATON(:internet_address), :port)",
-		list(
-			"server_name" = CONFIG_GET(string/serversqlname),
-			"internet_address" = world.internet_address || "0",
-			"port" = "[world.port]"
-		)
-	)
-	query_round_initialize.Execute(async = FALSE)
-	GLOB.round_id = "[query_round_initialize.last_insert_id]"
-	qdel(query_round_initialize)
+    if(query_round_existing.Execute(async = FALSE) && query_round_existing.NextRow())
+        var/existing_id = query_round_existing.item[1]
+        if(existing_id)
+            GLOB.round_id = "[existing_id]"
+            log_world("DB_INFO: Recovered Round ID [GLOB.round_id] after crash/restart.")
+            qdel(query_round_existing)
+            return
+
+    qdel(query_round_existing)
+
+    var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
+        "INSERT INTO [table] (initialize_datetime, server_name, server_ip, server_port) \
+        VALUES (NOW(), :server_name, INET_ATON('127.0.0.1'), :port)",
+        list("server_name" = server_name, "port" = port)
+    )
+
+    if(query_round_initialize.Execute(async = FALSE))
+        var/new_id = query_round_initialize.last_insert_id
+        if(new_id)
+            GLOB.round_id = "[new_id]"
+            log_world("DB_SUCCESS: New Round ID [GLOB.round_id] claimed.")
+
+    qdel(query_round_initialize)
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
 	if(!Connect())
