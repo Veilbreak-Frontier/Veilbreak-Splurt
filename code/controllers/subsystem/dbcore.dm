@@ -328,7 +328,6 @@ SUBSYSTEM_DEF(dbcore)
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
     CheckSchemaVersion()
-
     if(!Connect())
         return
 
@@ -372,6 +371,34 @@ SUBSYSTEM_DEF(dbcore)
 
     spawn(1)
         update_placeholders_async()
+
+/datum/controller/subsystem/dbcore/proc/update_placeholders_async()
+    if(!GLOB.round_id)
+        return
+
+    log_world("DB_ASYNC: Resolving external IP via rust-g...")
+
+    var/response = rustg_http_request_blocking(RUSTG_HTTP_METHOD_GET, "https://api.ipify.org", "", "", "")
+
+    var/real_ip = "0.0.0.0"
+    if(response)
+        real_ip = trim(response, 15)
+        log_world("DB_ASYNC: rust-g returned IP: [real_ip]")
+    else
+        log_world("DB_ASYNC_WARNING: rust-g request failed. Using fallback.")
+
+    if(!real_ip || findtext(real_ip, ":") || real_ip == "0.0.0.0")
+        real_ip = (world.internet_address && world.internet_address != "127.0.0.1") ? world.internet_address : "0.0.0.0"
+
+    var/datum/db_query/query_update = SSdbcore.NewQuery(
+        "UPDATE [format_table_name("round")] SET server_ip = :ip WHERE id = :id",
+        list("ip" = real_ip, "id" = GLOB.round_id)
+    )
+
+    if(!query_update.Execute(async = TRUE))
+        log_world("DB_ASYNC_ERROR: Failed to update Round [GLOB.round_id] metadata: [last_error]")
+
+    qdel(query_update)
 
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
