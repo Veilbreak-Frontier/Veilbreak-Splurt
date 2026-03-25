@@ -327,74 +327,25 @@ SUBSYSTEM_DEF(dbcore)
 		log_sql("Database is not enabled in configuration.")
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
-    CheckSchemaVersion()
+	CheckSchemaVersion()
 
-    if(!VerifyConnection())
-        spawn(20)
-            InitializeRound()
-        return
+	if(!Connect())
+		return
 
-    if(!world.TgsAvailable())
-        spawn(10)
-            InitializeRound()
-        return
+	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
+		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON('127.0.0.1'), :port)",
+		list(
+			"server_name" = CONFIG_GET(string/serversqlname),
+			"port" = world.port
+		)
+	)
 
-    var/table_name = format_table_name("round")
+	query_round_initialize.Execute(async = FALSE)
+	var/new_id = query_round_initialize.last_insert_id
+	if(new_id && new_id != "0")
+		GLOB.round_id = "[new_id]"
 
-    var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-        "INSERT INTO [table_name] (initialize_datetime, server_ip, server_port) VALUES (NOW(), INET_ATON('0.0.0.0'), :port)",
-        list("port" = world.port)
-    )
-
-    if(!query_round_initialize.Execute(async = FALSE))
-        var/err = last_error ? last_error : "Check MariaDB logs for INET_ATON failure"
-        log_world("DB_CRITICAL: INSERT failed on table '[table_name]'. Error: [err]")
-        qdel(query_round_initialize)
-        spawn(100)
-            InitializeRound()
-        return
-
-    GLOB.round_id = query_round_initialize.last_insert_id
-    qdel(query_round_initialize)
-
-    log_world("DB_SUCCESS: Round ID [GLOB.round_id] claimed.")
-
-    spawn(1)
-        update_placeholders_async()
-
-/datum/controller/subsystem/dbcore/proc/VerifyConnection()
-    if(!Connect())
-        return FALSE
-
-    var/datum/db_query/ping = SSdbcore.NewQuery("SELECT 1")
-    var/success = ping.Execute(async = FALSE)
-    qdel(ping)
-
-    return success
-
-/datum/controller/subsystem/dbcore/proc/update_placeholders_async()
-    if(!GLOB.round_id)
-        return
-
-    var/response = rustg_http_request_blocking(RUSTG_HTTP_METHOD_GET, "https://api.ipify.org", "", "", "")
-    var/real_ip = "0.0.0.0"
-
-    if(response)
-        real_ip = trim(response, 15)
-
-    if(!real_ip || findtext(real_ip, ":") || real_ip == "0.0.0.0")
-        real_ip = (world.internet_address && world.internet_address != "127.0.0.1") ? world.internet_address : "0.0.0.0"
-
-    var/datum/db_query/query_update = SSdbcore.NewQuery(
-        "UPDATE [format_table_name("round")] SET server_ip = INET_ATON(:ip) WHERE id = :id",
-        list("ip" = real_ip, "id" = GLOB.round_id)
-    )
-
-    if(!query_update.Execute(async = TRUE))
-        log_world("DB_ASYNC_ERROR: Failed to update Round [GLOB.round_id] metadata: [last_error]")
-
-    qdel(query_update)
-
+	qdel(query_round_initialize)
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
 	if(!Connect())
