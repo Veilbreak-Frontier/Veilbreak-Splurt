@@ -331,6 +331,7 @@ SUBSYSTEM_DEF(dbcore)
 
 	if(!Connect())
 		return
+
 	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(/* SKYRAT EDIT CHANGE - MULTISERVER */
 		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (Now(), :server_name, INET_ATON(:internet_address), :port)",
 		list("server_name" = CONFIG_GET(string/serversqlname), "internet_address" = world.internet_address || "0", "port" = "[world.port]") // SKYRAT EDIT CHANGE - MULTISERVER

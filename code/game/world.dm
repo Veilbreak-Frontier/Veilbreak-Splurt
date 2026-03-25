@@ -126,26 +126,26 @@ GLOBAL_VAR(restart_counter)
  * All atoms in both compiled and uncompiled maps are initialized()
  */
 /world/New()
-	InitTgs()
-	if(TgsAvailable())
-		TgsInitializationComplete()
-	log_world("World loaded at [time_stamp()]!")
+    InitTgs()
+    if(TgsAvailable())
+        TgsInitializationComplete()
 
-	// From a really fucking old commit (91d7150)
-	// I wanted to move it but I think this needs to be after /world/New is called but before any sleeps?
-	// - Dominion/Cyberboss
-	GLOB.timezoneOffset = world.timezone * 36000
+    log_world("World loaded at [time_stamp()]!")
 
-	config.Load(params[OVERRIDE_CONFIG_DIRECTORY_PARAMETER])
+    GLOB.timezoneOffset = world.timezone * 36000
 
-	ConfigLoaded()
+    config.Load(params[OVERRIDE_CONFIG_DIRECTORY_PARAMETER])
+    ConfigLoaded()
 
-	if(NO_INIT_PARAMETER in params)
-		return
+    if(NO_INIT_PARAMETER in params)
+        return
 
-	Master.Initialize(10, FALSE, TRUE)
+    if(SSdbcore)
+        SSdbcore.InitializeRound()
 
-	RunUnattendedFunctions()
+    Master.Initialize(10, FALSE, TRUE)
+
+    RunUnattendedFunctions()
 
 /// Initializes TGS and loads the returned revising info into GLOB.revdata
 /world/proc/InitTgs()
