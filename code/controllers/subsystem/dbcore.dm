@@ -327,25 +327,33 @@ SUBSYSTEM_DEF(dbcore)
 		log_sql("Database is not enabled in configuration.")
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
-	CheckSchemaVersion()
+    CheckSchemaVersion()
 
-	if(!Connect())
-		return
+    if(world.TgsAvailable())
+        world.TgsInitializationComplete()
 
-	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON('127.0.0.1'), :port)",
-		list(
-			"server_name" = CONFIG_GET(string/serversqlname),
-			"port" = world.port
-		)
-	)
+    if(!Connect())
+        return
 
-	query_round_initialize.Execute(async = FALSE)
-	var/new_id = query_round_initialize.last_insert_id
-	if(new_id && new_id != "0")
-		GLOB.round_id = "[new_id]"
+    spawn(1)
+        var/table_name = format_table_name("round")
+        var/server_name = CONFIG_GET(string/serversqlname)
+        var/server_port = world.port
 
-	qdel(query_round_initialize)
+        var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
+            "INSERT INTO [table_name] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON('127.0.0.1'), :port)",
+            list("server_name" = server_name, "port" = server_port)
+        )
+
+        if(query_round_initialize.Execute(async = FALSE))
+            var/new_id = query_round_initialize.last_insert_id
+            if(new_id && new_id != "0")
+                GLOB.round_id = "[new_id]"
+                log_world("DB_SUCCESS: Round ID [GLOB.round_id] claimed successfully.")
+        else
+            log_world("DB_ERROR: Round claim failed: [last_error]")
+
+        qdel(query_round_initialize)
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
 	if(!Connect())
