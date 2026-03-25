@@ -24,17 +24,14 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 	var/static/jukebox_dir_cache
 	if(jukebox_dir_cache)
 		return jukebox_dir_cache
-	var/base_dir = global.config?.directory || "config"
-	var/list/candidates = list(
-		"[base_dir]/jukebox_music",
-		"/srv/tgstation_instances/livenew/Configuration/GameStaticFiles/[base_dir]/jukebox_music",
-		"/srv/tgstation_instances/livenew/Game/Live/[base_dir]/jukebox_music"
-	)
-	for(var/cand in candidates)
-		if(fexists(cand))
-			jukebox_dir_cache = cand
-			return cand
-	jukebox_dir_cache = "[base_dir]/jukebox_music"
+
+	var/shared_path = "/srv/tgstation_instances/livenew/Configuration/GameStaticFiles/config/jukebox_music"
+
+	if(fexists(shared_path))
+		jukebox_dir_cache = shared_path
+		return shared_path
+
+	jukebox_dir_cache = "config/jukebox_music"
 	return jukebox_dir_cache
 
 /proc/get_jukebox_sounds_dir()
