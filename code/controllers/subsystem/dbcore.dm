@@ -330,7 +330,6 @@ SUBSYSTEM_DEF(dbcore)
     CheckSchemaVersion()
 
     if(!VerifyConnection())
-        log_world("DB_WAIT: Connection established, but session is not ready. Waiting...")
         spawn(20)
             InitializeRound()
         return
@@ -340,17 +339,18 @@ SUBSYSTEM_DEF(dbcore)
             InitializeRound()
         return
 
-    log_world("DB_INFO: Session verified. Proceeding with Round Initialization...")
+    var/table_name = format_table_name("round")
 
     var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-        "INSERT INTO [format_table_name("round")] (initialize_datetime, server_ip, server_port) VALUES (NOW(), '0.0.0.0', :port)",
+        "INSERT INTO [table_name] (initialize_datetime, server_ip, server_port) VALUES (NOW(), INET_ATON('0.0.0.0'), :port)",
         list("port" = world.port)
     )
 
     if(!query_round_initialize.Execute(async = FALSE))
-        log_world("DB_ERROR: INSERT failed (Session likely timed out). Retrying...")
+        var/err = last_error ? last_error : "Check MariaDB logs for INET_ATON failure"
+        log_world("DB_CRITICAL: INSERT failed on table '[table_name]'. Error: [err]")
         qdel(query_round_initialize)
-        spawn(50)
+        spawn(100)
             InitializeRound()
         return
 
@@ -358,6 +358,7 @@ SUBSYSTEM_DEF(dbcore)
     qdel(query_round_initialize)
 
     log_world("DB_SUCCESS: Round ID [GLOB.round_id] claimed.")
+
     spawn(1)
         update_placeholders_async()
 
@@ -375,22 +376,17 @@ SUBSYSTEM_DEF(dbcore)
     if(!GLOB.round_id)
         return
 
-    log_world("DB_ASYNC: Resolving external IP via rust-g...")
-
     var/response = rustg_http_request_blocking(RUSTG_HTTP_METHOD_GET, "https://api.ipify.org", "", "", "")
-
     var/real_ip = "0.0.0.0"
+
     if(response)
         real_ip = trim(response, 15)
-        log_world("DB_ASYNC: rust-g returned IP: [real_ip]")
-    else
-        log_world("DB_ASYNC_WARNING: rust-g request failed. Using fallback.")
 
     if(!real_ip || findtext(real_ip, ":") || real_ip == "0.0.0.0")
         real_ip = (world.internet_address && world.internet_address != "127.0.0.1") ? world.internet_address : "0.0.0.0"
 
     var/datum/db_query/query_update = SSdbcore.NewQuery(
-        "UPDATE [format_table_name("round")] SET server_ip = :ip WHERE id = :id",
+        "UPDATE [format_table_name("round")] SET server_ip = INET_ATON(:ip) WHERE id = :id",
         list("ip" = real_ip, "id" = GLOB.round_id)
     )
 
