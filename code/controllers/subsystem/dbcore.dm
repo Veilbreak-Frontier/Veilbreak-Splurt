@@ -328,17 +328,23 @@ SUBSYSTEM_DEF(dbcore)
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
     CheckSchemaVersion()
+
     if(!Connect())
-        log_world("DB_ERROR: InitializeRound failed - No database connection.")
         return
 
     if(!world.TgsAvailable())
-        log_world("DB_WAIT: TGS API not available yet. Retrying in 1s...")
         spawn(10)
             InitializeRound()
         return
 
-    log_world("DB_INFO: TGS API available. Proceeding with Round Initialization...")
+    var/datum/db_query/query_heartbeat = SSdbcore.NewQuery("SELECT 1")
+    if(!query_heartbeat.Execute(async = FALSE))
+        log_world("DB_ERROR: Connection heartbeat failed. Server may be authenticating. Retrying...")
+        qdel(query_heartbeat)
+        spawn(30)
+            InitializeRound()
+        return
+    qdel(query_heartbeat)
 
     var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
         "INSERT INTO [format_table_name("round")] (initialize_datetime, server_ip, server_port) VALUES (NOW(), '0.0.0.0', :port)",
@@ -346,8 +352,8 @@ SUBSYSTEM_DEF(dbcore)
     )
 
     if(!query_round_initialize.Execute(async = FALSE))
-        var/err = last_error
-        log_world("DB_ERROR: INSERT failed. Error: [err]. Retrying in 5s...")
+        var/err = last_error ? last_error : "Empty Error (Session Handshake Failure)"
+        log_world("DB_ERROR: INSERT failed. Error: [err]. Retrying...")
         qdel(query_round_initialize)
         spawn(50)
             InitializeRound()
@@ -356,45 +362,16 @@ SUBSYSTEM_DEF(dbcore)
     var/new_id = query_round_initialize.last_insert_id
     qdel(query_round_initialize)
 
-    if(!new_id || new_id == "0" || new_id == "")
-        log_world("DB_ERROR: INSERT succeeded but last_insert_id was invalid. Retrying...")
+    if(!new_id || new_id == "0")
         spawn(50)
             InitializeRound()
         return
 
     GLOB.round_id = new_id
-    log_world("DB_SUCCESS: Round ID [GLOB.round_id] claimed. Starting rust-g metadata sync...")
+    log_world("DB_SUCCESS: Round ID [GLOB.round_id] claimed.")
 
     spawn(1)
         update_placeholders_async()
-
-/datum/controller/subsystem/dbcore/proc/update_placeholders_async()
-    if(!GLOB.round_id)
-        return
-
-    log_world("DB_ASYNC: Resolving external IP via rust-g...")
-
-    var/response = rustg_http_request_blocking(RUSTG_HTTP_METHOD_GET, "https://api.ipify.org", "", "", "")
-
-    var/real_ip = "0.0.0.0"
-    if(response)
-        real_ip = trim(response, 15)
-        log_world("DB_ASYNC: rust-g returned IP: [real_ip]")
-    else
-        log_world("DB_ASYNC_WARNING: rust-g request failed. Using fallback.")
-
-    if(!real_ip || findtext(real_ip, ":") || real_ip == "0.0.0.0")
-        real_ip = (world.internet_address && world.internet_address != "127.0.0.1") ? world.internet_address : "0.0.0.0"
-
-    var/datum/db_query/query_update = SSdbcore.NewQuery(
-        "UPDATE [format_table_name("round")] SET server_ip = :ip WHERE id = :id",
-        list("ip" = real_ip, "id" = GLOB.round_id)
-    )
-
-    if(!query_update.Execute(async = TRUE))
-        log_world("DB_ASYNC_ERROR: Failed to update Round [GLOB.round_id] metadata: [last_error]")
-
-    qdel(query_update)
 
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
