@@ -327,60 +327,74 @@ SUBSYSTEM_DEF(dbcore)
 		log_sql("Database is not enabled in configuration.")
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
-	CheckSchemaVersion()
-	if(!Connect())
-		return
+    CheckSchemaVersion()
+    if(!Connect())
+        log_world("DB_ERROR: InitializeRound failed - No database connection.")
+        return
 
-	if(!world.TgsAvailable())
-		spawn(10)
-			InitializeRound()
-		return
+    if(!world.TgsAvailable())
+        log_world("DB_WAIT: TGS API not available yet. Retrying in 1s...")
+        spawn(10)
+            InitializeRound()
+        return
 
-	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_ip, server_port) VALUES (NOW(), '0.0.0.0', :port)",
-		list("port" = world.port)
-	)
+    log_world("DB_INFO: TGS API available. Proceeding with Round Initialization...")
 
-	if(!query_round_initialize.Execute(async = FALSE))
-		qdel(query_round_initialize)
-		spawn(50)
-			InitializeRound()
-		return
+    var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
+        "INSERT INTO [format_table_name("round")] (initialize_datetime, server_ip, server_port) VALUES (NOW(), '0.0.0.0', :port)",
+        list("port" = world.port)
+    )
 
-	GLOB.round_id = query_round_initialize.last_insert_id
-	qdel(query_round_initialize)
+    if(!query_round_initialize.Execute(async = FALSE))
+        var/err = last_error
+        log_world("DB_ERROR: INSERT failed. Error: [err]. Retrying in 5s...")
+        qdel(query_round_initialize)
+        spawn(50)
+            InitializeRound()
+        return
 
-	if(!GLOB.round_id || GLOB.round_id == "0")
-		spawn(50)
-			InitializeRound()
-		return
+    var/new_id = query_round_initialize.last_insert_id
+    qdel(query_round_initialize)
 
-	log_world("Round [GLOB.round_id] claimed via TGS API. Syncing metadata...")
+    if(!new_id || new_id == "0" || new_id == "")
+        log_world("DB_ERROR: INSERT succeeded but last_insert_id was invalid. Retrying...")
+        spawn(50)
+            InitializeRound()
+        return
 
-	spawn(1)
-		update_placeholders_async()
+    GLOB.round_id = new_id
+    log_world("DB_SUCCESS: Round ID [GLOB.round_id] claimed. Starting rust-g metadata sync...")
+
+    spawn(1)
+        update_placeholders_async()
 
 /datum/controller/subsystem/dbcore/proc/update_placeholders_async()
-	if(!GLOB.round_id)
-		return
+    if(!GLOB.round_id)
+        return
 
-	var/response = rustg_http_request_blocking("GET", "https://api.ipify.org", "", "", "")
+    log_world("DB_ASYNC: Resolving external IP via rust-g...")
 
-	var/real_ip = "0.0.0.0"
-	if(response)
-		real_ip = trim(response, 15)
+    var/response = rustg_http_request_blocking(RUSTG_HTTP_METHOD_GET, "https://api.ipify.org", "", "", "")
 
-	if(!real_ip || findtext(real_ip, ":") || real_ip == "0.0.0.0")
-		real_ip = (world.internet_address && world.internet_address != "127.0.0.1") ? world.internet_address : "0.0.0.0"
+    var/real_ip = "0.0.0.0"
+    if(response)
+        real_ip = trim(response, 15)
+        log_world("DB_ASYNC: rust-g returned IP: [real_ip]")
+    else
+        log_world("DB_ASYNC_WARNING: rust-g request failed. Using fallback.")
 
-	var/datum/db_query/query_update = SSdbcore.NewQuery(
-		"UPDATE [format_table_name("round")] SET server_ip = :ip WHERE id = :id",
-		list("ip" = real_ip, "id" = GLOB.round_id)
-	)
+    if(!real_ip || findtext(real_ip, ":") || real_ip == "0.0.0.0")
+        real_ip = (world.internet_address && world.internet_address != "127.0.0.1") ? world.internet_address : "0.0.0.0"
 
-	query_update.Execute(async = TRUE)
-	qdel(query_update)
-	log_world("Round [GLOB.round_id] IP successfully updated to [real_ip].")
+    var/datum/db_query/query_update = SSdbcore.NewQuery(
+        "UPDATE [format_table_name("round")] SET server_ip = :ip WHERE id = :id",
+        list("ip" = real_ip, "id" = GLOB.round_id)
+    )
+
+    if(!query_update.Execute(async = TRUE))
+        log_world("DB_ASYNC_ERROR: Failed to update Round [GLOB.round_id] metadata: [last_error]")
+
+    qdel(query_update)
 
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
