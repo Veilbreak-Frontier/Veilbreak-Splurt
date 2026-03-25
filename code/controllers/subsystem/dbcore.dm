@@ -368,6 +368,16 @@ SUBSYSTEM_DEF(dbcore)
 	GLOB.round_id = "[query_round_initialize.last_insert_id]"
 	qdel(query_round_initialize)
 
+/datum/controller/subsystem/dbcore/proc/SetRoundStart()
+	if(!Connect())
+		return
+	var/datum/db_query/query_round_start = SSdbcore.NewQuery(
+		"UPDATE [format_table_name("round")] SET start_datetime = Now() WHERE id = :round_id",
+		list("round_id" = GLOB.round_id)
+	)
+	query_round_start.Execute()
+	qdel(query_round_start)
+
 /datum/controller/subsystem/dbcore/proc/SetRoundEnd()
 	if(!Connect())
 		return
