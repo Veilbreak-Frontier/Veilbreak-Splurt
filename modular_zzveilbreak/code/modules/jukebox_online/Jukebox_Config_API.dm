@@ -24,17 +24,14 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 	var/static/jukebox_dir_cache
 	if(jukebox_dir_cache)
 		return jukebox_dir_cache
-	var/base_dir = global.config?.directory || "config"
-	var/list/candidates = list(
-		"[base_dir]/jukebox_music",
-		"/srv/tgstation_instances/live/Configuration/GameStaticFiles/[base_dir]/jukebox_music",
-		"/srv/tgstation_instances/live/Game/Live/[base_dir]/jukebox_music"
-	)
-	for(var/cand in candidates)
-		if(fexists(cand))
-			jukebox_dir_cache = cand
-			return cand
-	jukebox_dir_cache = "[base_dir]/jukebox_music"
+
+	var/shared_path = "/srv/tgstation_instances/livenew/Configuration/GameStaticFiles/config/jukebox_music"
+
+	if(fexists(shared_path))
+		jukebox_dir_cache = shared_path
+		return shared_path
+
+	jukebox_dir_cache = "config/jukebox_music"
 	return jukebox_dir_cache
 
 /proc/get_jukebox_sounds_dir()
@@ -142,14 +139,18 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 
 /proc/check_and_prune_library()
 	if(length(GLOB.jukebox_library_tracks) < 50)
-		return
+		return TRUE
+
 	var/list/sorted = get_sorted_library_tracks()
 	var/list/to_remove = sorted[length(sorted)]
 	var/remove_hash = to_remove["url_hash"]
+
+	GLOB.jukebox_library_tracks -= remove_hash
+
 	var/datum/http_request/request = new()
 	request.prepare(RUSTG_HTTP_METHOD_DELETE, "[GLOB.jukebox_api_url]/remove_track/[remove_hash]", "", "")
 	request.begin_async()
-	GLOB.jukebox_library_tracks -= remove_hash
+	return TRUE
 
 /proc/jukebox_api_healthy()
 	return GLOB.jukebox_api_status
@@ -220,22 +221,24 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 	var/datum/online_jukebox/jukebox = req_data["jukebox"]
 	var/datum/weakref/user_ref = req_data["user"]
 	var/mob/user = user_ref?.resolve()
+
 	if(QDELETED(jukebox))
 		return
+
 	if(response.errored || response.status_code != 200)
 		jukebox.online_error_message = "API Error ([response.status_code])"
-		if(user)
-			to_chat(user, span_warning("Jukebox Download Failed: [jukebox.online_error_message]"))
 	else
 		var/list/result = json_decode(response.body)
 		if(result?["success"])
+			check_and_prune_library()
+
 			load_jukebox_library()
+
 			jukebox.play_library_track_on_success(result["url_hash"], user)
 			update_all_jukebox_uis()
 		else
 			jukebox.online_error_message = result?["error"] || "Unknown API error"
-			if(user)
-				to_chat(user, span_warning("Jukebox Download Failed: [jukebox.online_error_message]"))
+
 	jukebox.ui?.update_ui()
 
 SUBSYSTEM_DEF(jukebox)
