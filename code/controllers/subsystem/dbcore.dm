@@ -332,33 +332,45 @@ SUBSYSTEM_DEF(dbcore)
 	if(!Connect())
 		return
 
-	var/tgs_wait_limit = 15
-	while(!world.TgsAvailable() && tgs_wait_limit > 0)
-		sleep(10)
-		tgs_wait_limit--
+	var/resolved_ip = (world.internet_address && world.internet_address != "127.0.0.1") ? world.internet_address : "0.0.0.0"
 
-	if(!world.TgsAvailable())
-		var/raw_parameter = world.params["server_service_version"]
-		if(raw_parameter)
-			TGS_INFO_LOG("TGS Authentication not received. Aborting DB Round Init to prevent ghost entry.")
-			return
+	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
+		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_ip, server_port) VALUES (NOW(), :internet_address, :port)",
+		list("internet_address" = resolved_ip, "port" = world.port)
+	)
 
-	var/datum/tgs_api/v5/api = TGS_READ_GLOBAL(tgs)
-	if(istype(api) && api.reboot_mode != TGS_REBOOT_MODE_NORMAL)
-		TGS_INFO_LOG("Transitional Reboot Mode detected ([api.reboot_mode]). Skipping DB Init.")
+	if(!query_round_initialize.Execute(async = FALSE))
+		qdel(query_round_initialize)
 		return
 
-	var/server_name = CONFIG_GET(string/serversqlname)
-	if(length(server_name) > 32)
-		server_name = copytext(server_name, 1, 32)
-
-	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery("INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (NOW(), :server_name, INET_ATON('127.0.0.1'), :port)", list("server_name" = server_name, "port" = world.port))
-
-	if(query_round_initialize.Execute(async = FALSE))
-		GLOB.round_id = "[query_round_initialize.last_insert_id]"
-		TGS_INFO_LOG("Round [GLOB.round_id] initialized successfully.")
-
+	GLOB.round_id = query_round_initialize.last_insert_id
 	qdel(query_round_initialize)
+
+	log_world("Round [GLOB.round_id] initialized. Starting background IP resolution...")
+
+	spawn(50)
+		update_round_ip_background()
+
+/datum/controller/subsystem/dbcore/proc/update_round_ip_background()
+	if(!GLOB.round_id)
+		return
+
+	var/list/http = world.Export("https://api.ipify.org")
+	var/new_ip = ""
+
+	if(http && http["CONTENT"])
+		new_ip = trim(file2text(http["CONTENT"]), 15)
+
+	if(!new_ip || new_ip == "0.0.0.0" || findtext(new_ip, ":"))
+		return
+
+	var/datum/db_query/query_update_ip = SSdbcore.NewQuery(
+		"UPDATE [format_table_name("round")] SET server_ip = :ip WHERE id = :id",
+		list("ip" = new_ip, "id" = GLOB.round_id)
+	)
+	query_update_ip.Execute(async = TRUE)
+	qdel(query_update_ip)
+
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
 	if(!Connect())
