@@ -332,23 +332,41 @@ SUBSYSTEM_DEF(dbcore)
 	if(!Connect())
 		return
 
-	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(/* SKYRAT EDIT CHANGE - MULTISERVER */
+	var/datum/db_query/query_round_existing = SSdbcore.NewQuery(
+		"SELECT id, initialize_datetime, start_datetime, end_datetime \
+		FROM [format_table_name("round")] \
+		WHERE server_name = :server_name \
+			AND server_port = :port \
+		ORDER BY id DESC \
+		LIMIT 1",
+		list(
+			"server_name" = CONFIG_GET(string/serversqlname),
+			"port" = "[world.port]"
+		)
+	)
+	query_round_existing.Execute()
+	if(query_round_existing.NextRow())
+		var/existing_id = query_round_existing.item[1]
+		var/existing_start = query_round_existing.item[3]
+		var/existing_end = query_round_existing.item[4]
+
+		if(!existing_start && !existing_end)
+			GLOB.round_id = "[existing_id]"
+			qdel(query_round_existing)
+			return
+	qdel(query_round_existing)
+
+	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
 		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_name, server_ip, server_port) VALUES (Now(), :server_name, INET_ATON(:internet_address), :port)",
-		list("server_name" = CONFIG_GET(string/serversqlname), "internet_address" = world.internet_address || "0", "port" = "[world.port]") // SKYRAT EDIT CHANGE - MULTISERVER
+		list(
+			"server_name" = CONFIG_GET(string/serversqlname),
+			"internet_address" = world.internet_address || "0",
+			"port" = "[world.port]"
+		)
 	)
 	query_round_initialize.Execute(async = FALSE)
 	GLOB.round_id = "[query_round_initialize.last_insert_id]"
 	qdel(query_round_initialize)
-
-/datum/controller/subsystem/dbcore/proc/SetRoundStart()
-	if(!Connect())
-		return
-	var/datum/db_query/query_round_start = SSdbcore.NewQuery(
-		"UPDATE [format_table_name("round")] SET start_datetime = Now() WHERE id = :round_id",
-		list("round_id" = GLOB.round_id)
-	)
-	query_round_start.Execute()
-	qdel(query_round_start)
 
 /datum/controller/subsystem/dbcore/proc/SetRoundEnd()
 	if(!Connect())
