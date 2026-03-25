@@ -126,14 +126,16 @@ GLOBAL_VAR(restart_counter)
  * All atoms in both compiled and uncompiled maps are initialized()
  */
 /world/New()
-	InitTgs()
-
 	log_world("World loaded at [time_stamp()]!")
+	log_world("BOOT_MARKER: world.New() called at [time_stamp()]")
 
 	// From a really fucking old commit (91d7150)
 	// I wanted to move it but I think this needs to be after /world/New is called but before any sleeps?
 	// - Dominion/Cyberboss
 	GLOB.timezoneOffset = world.timezone * 36000
+
+	// First possible sleep()
+	InitTgs()
 
 	config.Load(params[OVERRIDE_CONFIG_DIRECTORY_PARAMETER])
 
@@ -150,6 +152,7 @@ GLOBAL_VAR(restart_counter)
 /world/proc/InitTgs()
 	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
 	GLOB.revdata.load_tgs_info()
+	world.TgsInitializationComplete()
 
 /// Runs after config is loaded but before Master is initialized
 /world/proc/ConfigLoaded()
