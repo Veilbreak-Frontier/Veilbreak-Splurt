@@ -15,6 +15,7 @@
 	requirements = list(
 		/datum/gas/plasma = MINIMUM_MOLE_COUNT,
 		/datum/gas/oxygen = MINIMUM_MOLE_COUNT,
+		/datum/gas/healium = MINIMUM_MOLE_COUNT,
 		"MIN_TEMP" = FUSION_MINIMUM_TEMPERATURE
 	)
 
