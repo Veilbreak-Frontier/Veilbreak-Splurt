@@ -10692,6 +10692,7 @@
 #include "modular_zzveilbreak\code\modules\atmospherics\fusion_reaction.dm"
 #include "modular_zzveilbreak\code\modules\atmospherics\gas_machinery.dm"
 #include "modular_zzveilbreak\code\modules\atmospherics\gas_recipes.dm"
+#include "modular_zzveilbreak\code\modules\atmospherics\delirium_breakdown.dm"
 #include "modular_zzveilbreak\code\modules\atmospherics\quark_matter.dm"
 #include "modular_zzveilbreak\code\modules\atmospherics\supermatter_waste.dm"
 //#include "modular_zzveilbreak\code\modules\atmospherics\components\binary\mole_pump.dm"
