@@ -328,48 +328,59 @@ SUBSYSTEM_DEF(dbcore)
 
 /datum/controller/subsystem/dbcore/proc/InitializeRound()
 	CheckSchemaVersion()
-
 	if(!Connect())
 		return
 
-	var/resolved_ip = (world.internet_address && world.internet_address != "127.0.0.1") ? world.internet_address : "0.0.0.0"
+	if(!world.TgsAvailable())
+		spawn(10)
+			InitializeRound()
+		return
 
 	var/datum/db_query/query_round_initialize = SSdbcore.NewQuery(
-		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_ip, server_port) VALUES (NOW(), :internet_address, :port)",
-		list("internet_address" = resolved_ip, "port" = world.port)
+		"INSERT INTO [format_table_name("round")] (initialize_datetime, server_ip, server_port) VALUES (NOW(), '0.0.0.0', :port)",
+		list("port" = world.port)
 	)
 
 	if(!query_round_initialize.Execute(async = FALSE))
 		qdel(query_round_initialize)
+		spawn(50)
+			InitializeRound()
 		return
 
 	GLOB.round_id = query_round_initialize.last_insert_id
 	qdel(query_round_initialize)
 
-	log_world("Round [GLOB.round_id] initialized. Starting background IP resolution...")
+	if(!GLOB.round_id || GLOB.round_id == "0")
+		spawn(50)
+			InitializeRound()
+		return
 
-	spawn(50)
-		update_round_ip_background()
+	log_world("Round [GLOB.round_id] claimed via TGS API. Syncing metadata...")
 
-/datum/controller/subsystem/dbcore/proc/update_round_ip_background()
+	spawn(1)
+		update_placeholders_async()
+
+/datum/controller/subsystem/dbcore/proc/update_placeholders_async()
 	if(!GLOB.round_id)
 		return
 
-	var/list/http = world.Export("https://api.ipify.org")
-	var/new_ip = ""
+	var/response = rustg_http_request_blocking("GET", "https://api.ipify.org", "", "", "")
 
-	if(http && http["CONTENT"])
-		new_ip = trim(file2text(http["CONTENT"]), 15)
+	var/real_ip = "0.0.0.0"
+	if(response)
+		real_ip = trim(response, 15)
 
-	if(!new_ip || new_ip == "0.0.0.0" || findtext(new_ip, ":"))
-		return
+	if(!real_ip || findtext(real_ip, ":") || real_ip == "0.0.0.0")
+		real_ip = (world.internet_address && world.internet_address != "127.0.0.1") ? world.internet_address : "0.0.0.0"
 
-	var/datum/db_query/query_update_ip = SSdbcore.NewQuery(
+	var/datum/db_query/query_update = SSdbcore.NewQuery(
 		"UPDATE [format_table_name("round")] SET server_ip = :ip WHERE id = :id",
-		list("ip" = new_ip, "id" = GLOB.round_id)
+		list("ip" = real_ip, "id" = GLOB.round_id)
 	)
-	query_update_ip.Execute(async = TRUE)
-	qdel(query_update_ip)
+
+	query_update.Execute(async = TRUE)
+	qdel(query_update)
+	log_world("Round [GLOB.round_id] IP successfully updated to [real_ip].")
 
 
 /datum/controller/subsystem/dbcore/proc/SetRoundStart()
