@@ -151,9 +151,6 @@ GLOBAL_VAR(restart_counter)
 /// Initializes TGS and loads the returned revising info into GLOB.revdata
 /world/proc/InitTgs()
 	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
-	if(TgsAvailable())
-		world.TgsInitializationComplete()
-		log_world("TGS_SIGNAL: InitializationComplete sent to Watchdog.")
 	GLOB.revdata.load_tgs_info()
 
 
