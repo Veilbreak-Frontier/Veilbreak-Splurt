@@ -466,17 +466,22 @@ ADMIN_VERB(reset_ooc_color, R_FUN, "Reset Player OOC Color", "Returns player OOC
 
 	prefs.savefile.export_json_to_client(usr, ckey)
 
-/client/proc/import_preferences()
-    set name = "Import Preferences"
-    set desc = "Import your preferences from a JSON file. This overwrites current settings."
-    set category = "OOC"
+/client/verb/import_preferences()
+	set name = "Import Preferences"
+	set category = "OOC"
+	set desc = "Import a JSON file to recover your character slots and settings."
 
-    if(!prefs || !prefs.savefile)
-        return
+	if(!prefs || !prefs.savefile)
+		return
 
-    if(prefs.savefile.import_json_from_client(src.mob))
-        prefs.load_preferences()
-        tgui_alert(src.mob, "Preferences successfully imported and reloaded.", "Import Successful")
+	if(prefs.savefile.import_json_from_client(src))
+
+		prefs.load_preferences()
+
+		to_chat(src, span_notice("<b>Recovery Successful:</b> Your characters and settings have been reloaded."))
+
+		log_admin("[key_name(src)] imported/recovered a JSON preferences file.")
+		message_admins("[key_name_admin(src)] imported a JSON preferences file.")
 
 /client/verb/map_vote_tally_count()
 	set name = "Show Map Vote Tallies"

@@ -124,54 +124,67 @@ GENERAL_PROTECT_DATUM(/datum/json_savefile)
 	other_savefile.tree = tree.Copy()
 
 /datum/json_savefile/proc/import_json_from_client(mob/requester)
-    if(!istype(requester) || !path)
-        return FALSE
+	if(!istype(requester) || !path)
+		return FALSE
 
-    var/uploaded_file = input(requester, "Select a JSON preferences file.", "Import Preferences") as null|file
-    if(!uploaded_file)
-        return FALSE
+	var/uploaded_file = input(requester, "Select a JSON preferences file to recover.", "Import Preferences") as null|file
+	if(!uploaded_file)
+		return FALSE
 
-    var/json_text = file2text(uploaded_file)
-    var/list/new_tree
+	var/json_text = file2text(uploaded_file)
+	var/list/new_tree
+	try
+		new_tree = json_decode(json_text)
+	catch(var/exception/err)
+		tgui_alert(requester, "The file is not valid JSON: [err]", "Import Error")
+		return FALSE
 
-    try
-        new_tree = json_decode(json_text)
-    catch(var/exception/err)
-        tgui_alert(requester, "Invalid JSON format: [err]", "Import Error")
-        return FALSE
+	if(!islist(new_tree))
+		tgui_alert(requester, "Import failed: JSON must be a list of settings.", "Import Error")
+		return FALSE
 
-    if(!islist(new_tree))
-        tgui_alert(requester, "JSON must be an associative list/object.", "Import Error")
-        return FALSE
+	new_tree = best_effort_recovery(new_tree)
 
-    // Run the sanity check
-    new_tree = validate_import(new_tree)
+	if(tgui_alert(requester, "Parsed [length(new_tree)] settings. This will overwrite your current characters. Proceed?", "Confirm Recovery", list("Cancel", "Yes")) != "Yes")
+		return FALSE
 
-    if(tgui_alert(requester, "Importing will overwrite all current settings. Proceed?", "Confirm", list("Cancel", "Yes")) != "Yes")
-        return FALSE
+	tree = new_tree
+	save()
+	return TRUE
 
-    tree = new_tree
-    save()
-    return TRUE
+/datum/json_savefile/proc/validate_import(list/data)
+	var/static/list/forbidden = list("admin_rank", "p_flags", "last_ip", "last_id")
+	for(var/key in data)
+		if(key in forbidden)
+			data -= key
+	return data
 
+/datum/json_savefile/proc/best_effort_recovery(list/data)
+	var/static/list/forbidden = list("admin_rank", "p_flags", "last_ip", "last_id", "bypass_antag_limit")
 
-/datum/json_savefile/proc/validate_import(list/new_data)
-    var/static/list/blacklisted_keys = list("admin_rank", "p_flags", "last_ip", "last_id", "antag_tickets")
+	for(var/key in data)
+		if(key in forbidden)
+			data -= key
+			continue
 
-    for(var/key in new_data)
-        if(key in blacklisted_keys)
-            new_data -= key
-            continue
+		var/val = data[key]
 
-        var/val = new_data[key]
+		if(key == "antag_tickets" || key == "master_erp_pref" || key == "clientfps")
+			if(istext(val))
+				data[key] = text2num(val) || 0
+			else if(!isnum(val))
+				data[key] = 0
 
-        switch(key)
-            if("antag_tickets", "master_erp_pref", "clientfps")
-                if(!isnum(val))
-                    new_data[key] = text2num(val) || 0
+		if(findtext(key, "character") == 1)
+			if(!islist(val))
+				data -= key
+				continue
 
-            if("ooccolor", "asaycolor", "ic_chat_color")
-                if(!istext(val) || length(val) > 7)
-                    new_data[key] = "#ffffff"
+			if(!val["real_name"])
+				val["real_name"] = "Recovered Character"
 
-    return new_data
+			for(var/color_key in list("ooccolor", "asaycolor", "ic_chat_color"))
+				if(val[color_key] && !findtext(val[color_key], "#") == 1)
+					val[color_key] = "#[val[color_key]]"
+
+	return data
