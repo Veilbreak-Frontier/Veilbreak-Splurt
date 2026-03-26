@@ -45,11 +45,14 @@
 			augment_limb_styles -= key
 
 	features = SANITIZE_LIST(save_data["features"])
+	if(!features)
+		features = list()
 
-	if(save_data["custom_tattoos"])
-		if(!features)
-			features = list()
-		features["custom_tattoos"] = save_data["custom_tattoos"]
+	features["custom_tattoos_loaded"] = null
+
+	var/list/raw_tattoos = save_data["custom_tattoos"] || features["custom_tattoos"] || features["tattoos_data"]
+	if(length(raw_tattoos))
+		features["custom_tattoos"] = raw_tattoos
 
 	mutant_bodyparts = SANITIZE_LIST(save_data["mutant_bodyparts"])
 	body_markings = update_markings(SANITIZE_LIST(save_data["body_markings"]))
