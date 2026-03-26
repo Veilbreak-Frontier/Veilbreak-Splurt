@@ -123,29 +123,32 @@ GENERAL_PROTECT_DATUM(/datum/json_savefile)
 /datum/json_savefile/proc/copy_to_savefile(datum/json_savefile/other_savefile)
 	other_savefile.tree = tree.Copy()
 
-/datum/json_savefile/proc/import_json_from_client(mob/requester)
+/datum/json_savefile/proc/import_json_from_client(client/requester)
 	if(!istype(requester) || !path)
 		return FALSE
 
-	var/uploaded_file = input(requester, "Select a JSON preferences file to recover.", "Import Preferences") as null|file
+	var/uploaded_file = input(requester, "Select your preferences JSON to recover.", "Import Preferences") as null|file
+
 	if(!uploaded_file)
 		return FALSE
 
 	var/json_text = file2text(uploaded_file)
 	var/list/new_tree
+
 	try
 		new_tree = json_decode(json_text)
 	catch(var/exception/err)
-		tgui_alert(requester, "The file is not valid JSON: [err]", "Import Error")
+		tgui_alert(requester, "The file structure is corrupted: [err]", "Import Error")
 		return FALSE
 
 	if(!islist(new_tree))
-		tgui_alert(requester, "Import failed: JSON must be a list of settings.", "Import Error")
+		tgui_alert(requester, "Import failed: JSON root must be a list of settings.", "Import Error")
 		return FALSE
 
 	new_tree = best_effort_recovery(new_tree)
 
-	if(tgui_alert(requester, "Parsed [length(new_tree)] settings. This will overwrite your current characters. Proceed?", "Confirm Recovery", list("Cancel", "Yes")) != "Yes")
+	var/example_char = new_tree["character1"] ? new_tree["character1"]["real_name"] : "Unknown"
+	if(tgui_alert(requester, "Successfully parsed characters (Found: [example_char]). Overwrite your current save?", "Confirm Recovery", list("Cancel", "Yes")) != "Yes")
 		return FALSE
 
 	tree = new_tree
@@ -182,9 +185,5 @@ GENERAL_PROTECT_DATUM(/datum/json_savefile)
 
 			if(!val["real_name"])
 				val["real_name"] = "Recovered Character"
-
-			for(var/color_key in list("ooccolor", "asaycolor", "ic_chat_color"))
-				if(val[color_key] && !findtext(val[color_key], "#") == 1)
-					val[color_key] = "#[val[color_key]]"
 
 	return data

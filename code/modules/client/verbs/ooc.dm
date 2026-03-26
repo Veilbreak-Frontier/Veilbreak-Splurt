@@ -469,9 +469,10 @@ ADMIN_VERB(reset_ooc_color, R_FUN, "Reset Player OOC Color", "Returns player OOC
 /client/verb/import_preferences()
 	set name = "Import Preferences"
 	set category = "OOC"
-	set desc = "Import a JSON file to recover your character slots and settings."
+	set desc = "Upload a JSON file to recover your character slots and settings."
 
 	if(!prefs || !prefs.savefile)
+		to_chat(src, span_danger("Preference system not ready."))
 		return
 
 	if(prefs.savefile.import_json_from_client(src))
