@@ -44,15 +44,18 @@
 		if(!GLOB.robotic_styles_list[augment_limb_styles[key]])
 			augment_limb_styles -= key
 
-	features = SANITIZE_LIST(save_data["features"])
+	var/list/raw_features = save_data["features"]
+	features = SANITIZE_LIST(raw_features)
+
 	if(!features)
 		features = list()
 
 	features["custom_tattoos_loaded"] = null
 
-	var/list/raw_tattoos = save_data["custom_tattoos"] || features["custom_tattoos"] || features["tattoos_data"]
-	if(length(raw_tattoos))
-		features["custom_tattoos"] = raw_tattoos
+	if(islist(raw_features))
+		var/list/tatt_source = raw_features["custom_tattoos"] || raw_features["tattoos_data"]
+		if(length(tatt_source))
+			features["custom_tattoos"] = tatt_source
 
 	mutant_bodyparts = SANITIZE_LIST(save_data["mutant_bodyparts"])
 	body_markings = update_markings(SANITIZE_LIST(save_data["body_markings"]))

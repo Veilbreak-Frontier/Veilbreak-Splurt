@@ -34,6 +34,21 @@
 
 	if(!features)
 		features = list()
+
+	features["custom_tattoos"] = tattoo_data
+	features -= "custom_tattoos_loaded"
+
+	if(!length(tattoo_data))
+		if(features && islist(features["custom_tattoos"]) && length(features["custom_tattoos"]))
+			if(save_data)
+				save_data["custom_tattoos"] = features["custom_tattoos"]
+		return
+
+	if(save_data)
+		save_data["custom_tattoos"] = tattoo_data
+
+	if(!features)
+		features = list()
 	features["custom_tattoos"] = tattoo_data
 	features -= "custom_tattoos_loaded"
 
@@ -51,19 +66,18 @@
 		if(!islist(tattoo_info))
 			continue
 
-		var/final_artist = tattoo_info["artist"]
-		var/final_design = tattoo_info["design"]
-		var/body_part = tattoo_info["body_part"]
-		var/final_color = tattoo_info["color"]
-		var/final_layer = tattoo_info["layer"]
-		var/final_is_signature = tattoo_info["is_signature"]
-		var/final_font = tattoo_info["font"]
-		var/final_flair = tattoo_info["flair"]
-		var/date_applied = tattoo_info["date_applied"]
-
-		var/datum/custom_tattoo/T = new(final_artist, final_design, body_part, final_color, final_layer, final_is_signature, final_font, final_flair)
-		if(date_applied)
-			T.date_applied = sanitize_text(date_applied)
+		var/datum/custom_tattoo/T = new(
+			tattoo_info["artist"],
+			tattoo_info["design"],
+			tattoo_info["body_part"],
+			tattoo_info["color"],
+			tattoo_info["layer"],
+			tattoo_info["is_signature"],
+			tattoo_info["font"],
+			tattoo_info["flair"]
+		)
+		if(tattoo_info["date_applied"])
+			T.date_applied = tattoo_info["date_applied"]
 
 		loaded_tattoos += T
 
@@ -75,11 +89,10 @@
 
 	H.custom_body_tattoos.Cut()
 
-	var/list/saved_tattoos = features["custom_tattoos_loaded"]
-	if(!islist(saved_tattoos) || !length(saved_tattoos))
+	if(!islist(features["custom_tattoos_loaded"]) || !length(features["custom_tattoos_loaded"]))
 		load_custom_tattoo_data()
-		saved_tattoos = features["custom_tattoos_loaded"]
 
+	var/list/saved_tattoos = features["custom_tattoos_loaded"]
 	if(!islist(saved_tattoos))
 		return
 
@@ -91,4 +104,3 @@
 			var/datum/custom_tattoo/new_tattoo = new(T.artist, T.design, T.body_part, T.color, T.layer, T.is_signature, T.font, T.flair)
 			new_tattoo.date_applied = T.date_applied
 			H.add_custom_tattoo(new_tattoo)
-	H.regenerate_icons()
