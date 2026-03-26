@@ -1,8 +1,6 @@
 /mob/Login()
-	. = ..()
-
 	if(!ishuman(src) || !client?.prefs)
-		return .
+		return ..()
 
 	var/mob/living/carbon/human/H = src
 	var/datum/preferences/prefs = client.prefs
@@ -16,4 +14,4 @@
 	if(LAZYLEN(prefs.features["custom_tattoos_loaded"]))
 		prefs.apply_custom_tattoos_to_mob(H)
 
-	return .
+	. = ..()
