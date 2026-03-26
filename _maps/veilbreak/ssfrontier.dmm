@@ -3984,6 +3984,14 @@
 	pixel_x = 7;
 	pixel_y = 1
 	},
+/obj/item/stamp{
+	pixel_x = -9;
+	pixel_y = 11
+	},
+/obj/item/stamp/denied{
+	pixel_x = -9;
+	pixel_y = 5
+	},
 /turf/open/floor/carpet/purple,
 /area/station/command/heads_quarters/rd)
 "csd" = (
@@ -15342,6 +15350,17 @@
 	},
 /obj/machinery/recharger{
 	pixel_x = 9
+	},
+/obj/item/stamp{
+	pixel_x = 7;
+	pixel_y = 9
+	},
+/obj/item/stamp/denied{
+	pixel_y = 9
+	},
+/obj/item/stamp/centcom{
+	pixel_y = -2;
+	pixel_x = 7
 	},
 /turf/open/floor/carpet/royalblack,
 /area/station/command/heads_quarters/nt_rep)
@@ -28468,6 +28487,15 @@
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 4
 	},
+/obj/item/stamp/head/ce,
+/obj/item/stamp{
+	pixel_x = -9;
+	pixel_y = 11
+	},
+/obj/item/stamp/denied{
+	pixel_x = -9;
+	pixel_y = 5
+	},
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/ce)
 "pMq" = (
@@ -28744,6 +28772,18 @@
 /area/station/security/prison)
 "pUf" = (
 /obj/structure/table/reinforced,
+/obj/item/stamp/head/cmo,
+/obj/item/stamp{
+	pixel_x = -9;
+	pixel_y = 11
+	},
+/obj/item/stamp/denied{
+	pixel_x = -9;
+	pixel_y = 5
+	},
+/obj/item/paper_bin/carbon{
+	pixel_x = 8
+	},
 /turf/open/floor/carpet/blue,
 /area/station/command/heads_quarters/cmo)
 "pUl" = (
@@ -29242,6 +29282,15 @@
 /obj/item/paper_bin{
 	pixel_x = 3;
 	pixel_y = 3
+	},
+/obj/item/stamp/head/hop,
+/obj/item/stamp{
+	pixel_x = -9;
+	pixel_y = 11
+	},
+/obj/item/stamp/denied{
+	pixel_x = -5;
+	pixel_y = 9
 	},
 /turf/open/floor/wood/parquet,
 /area/station/command/heads_quarters/hop)
@@ -33202,6 +33251,18 @@
 	},
 /obj/structure/table/reinforced,
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
+/obj/item/stamp{
+	pixel_x = -9;
+	pixel_y = 11
+	},
+/obj/item/stamp/denied{
+	pixel_x = -9;
+	pixel_y = 5
+	},
+/obj/item/stamp/head/qm{
+	pixel_y = 13;
+	pixel_x = 8
+	},
 /turf/open/floor/carpet/orange,
 /area/station/command/heads_quarters/qm)
 "szS" = (
@@ -33662,6 +33723,14 @@
 	pixel_x = -6
 	},
 /obj/structure/disposalpipe/segment,
+/obj/item/stamp{
+	pixel_x = -6;
+	pixel_y = 9
+	},
+/obj/item/stamp/denied{
+	pixel_y = 2;
+	pixel_x = 8
+	},
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/hos)
 "sIO" = (

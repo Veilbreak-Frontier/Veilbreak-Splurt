@@ -380,18 +380,21 @@
 	return button
 
 /datum/action/proc/SetId(atom/movable/screen/movable/action_button/our_button, mob/owner)
-	//button id generation
+	if(!our_button || !owner || !owner.hud_used)
+		return
+
 	var/bitfield = 0
 	for(var/datum/action/action in owner.actions)
-		if(action == src) // This could be us, which is dumb
+		if(action == src)
 			continue
+
 		var/atom/movable/screen/movable/action_button/button = action.viewers[owner.hud_used]
-		if(action.name == name && button.id)
+		if(button && action.name == name && button.id)
 			bitfield |= button.id
 
-	bitfield = ~bitfield // Flip our possible ids, so we can check if we've found a unique one
-	for(var/i in 0 to 23) // We get 24 possible bitflags in dm
-		var/bitflag = 1 << i // Shift us over one
+	bitfield = ~bitfield
+	for(var/i in 0 to 23)
+		var/bitflag = 1 << i
 		if(bitfield & bitflag)
 			our_button.id = bitflag
 			return

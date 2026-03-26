@@ -346,6 +346,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 	var/tree_key = "character[slot]"
 	var/list/save_data = savefile.get_entry(tree_key)
+	if(save_data["custom_tattoos"])
+		if(!features)
+			features = list()
+		features["custom_tattoos"] = save_data["custom_tattoos"]
 	var/data_validity_integer = check_savedata_version(save_data)
 	if(IS_DATA_OBSOLETE(data_validity_integer)) //fatal, can't load any data
 		return FALSE

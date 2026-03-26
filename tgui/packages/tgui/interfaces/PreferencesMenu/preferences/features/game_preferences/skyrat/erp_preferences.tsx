@@ -158,6 +158,13 @@ export const new_genitalia_growth_pref: FeatureToggle = {
   component: CheckboxInput,
 };
 
+export const allow_bodywriting_pref: FeatureToggle = {
+  name: 'Allow Bodywriting',
+  category: 'ERP',
+  description: 'Toggles whether you can have tattoos applied or removed',
+  component: CheckboxInput,
+};
+
 export const vore_overlays: FeatureToggle = {
   name: 'Vore Overlays',
   category: 'ERP',

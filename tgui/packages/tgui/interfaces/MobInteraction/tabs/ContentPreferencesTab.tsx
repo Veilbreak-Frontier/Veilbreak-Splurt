@@ -22,6 +22,7 @@ type ContentPrefsInfo = {
   autoemote_pref: boolean;
   genitalia_removal_pref: boolean;
   new_genitalia_growth_pref: boolean;
+  allow_bodywriting: boolean;
   // SPLURT additions
   butt_enlargement_pref: boolean;
   butt_shrinkage_pref: boolean;
@@ -33,7 +34,7 @@ type ContentPrefsInfo = {
   cumflates_partners_pref: boolean;
   knotting_pref: boolean;
   knots_partners_pref: boolean;
-  // Vore prefs
+    // Vore prefs
   vore_enable_pref: boolean;
   vore_overlays: boolean;
   vore_overlay_options: boolean;
@@ -78,6 +79,8 @@ export const ContentPreferencesTab = ({
     cumflates_partners_pref,
     knotting_pref,
     knots_partners_pref,
+    // Veilbreak additions
+    allow_bodywriting,
     // Vore prefs
     vore_enable_pref,
     vore_overlays,
@@ -245,6 +248,12 @@ export const ContentPreferencesTab = ({
             knots_partners_pref,
             'knots Partners',
             'Your character knots partners.',
+          )}
+          {renderToggle(
+            'allow_bodywriting',
+            allow_bodywriting,
+            'Allow Bodywriting',
+            'Lets people tattoo you or remove tattoos.',
           )}
 
           {/* Vore Preferences */}

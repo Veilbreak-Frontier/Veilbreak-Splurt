@@ -44,12 +44,23 @@
 		if(!GLOB.robotic_styles_list[augment_limb_styles[key]])
 			augment_limb_styles -= key
 
-	features = SANITIZE_LIST(save_data["features"])
+	var/list/raw_features = save_data["features"]
+	features = SANITIZE_LIST(raw_features)
+
+	if(!features)
+		features = list()
+
+	features["custom_tattoos_loaded"] = null
+
+	if(islist(raw_features))
+		var/list/source = raw_features["custom_tattoos"] || raw_features["tattoos_data"]
+		if(length(source))
+			features["custom_tattoos"] = source
+
 	mutant_bodyparts = SANITIZE_LIST(save_data["mutant_bodyparts"])
 	body_markings = update_markings(SANITIZE_LIST(save_data["body_markings"]))
 	mismatched_customization = save_data["mismatched_customization"]
 	allow_advanced_colors = save_data["allow_advanced_colors"]
-
 	alt_job_titles = save_data["alt_job_titles"]
 
 	general_record = sanitize_text(general_record)
@@ -62,27 +73,21 @@
 	for(var/language in save_languages)
 		var/value = save_languages[language]
 		save_languages -= language
-
 		if(istext(language))
 			language = _text2path(language)
 		save_languages[language] = value
 	languages = save_languages
 
 	tgui_prefs_migration = save_data["tgui_prefs_migration"]
-	if(!tgui_prefs_migration && save_data["modular_version"] && save_data["modular_version"] < MODULAR_SAVEFILE_VERSION_MAX) // BUBBER EDIT - if we're missing version from migration, then the char is new. Won't be able to migrate either.
-		to_chat(parent, custom_boxed_message("red_box", span_bolddanger("PREFERENCE MIGRATION BEGINNING.\
-		\nDO NOT INTERACT WITH YOUR PREFERENCES UNTIL THIS PROCESS HAS BEEN COMPLETED.\
-		\nDO NOT DISCONNECT UNTIL THIS PROCESS HAS BEEN COMPLETED.\
-		")))
+	if(!tgui_prefs_migration && save_data["modular_version"] && save_data["modular_version"] < MODULAR_SAVEFILE_VERSION_MAX)
 		migrate_skyrat(save_data)
 		addtimer(CALLBACK(src, PROC_REF(check_migration)), 10 SECONDS)
 
 	food_preferences = SANITIZE_LIST(save_data["food_preferences"])
 	var/skyrat_update = savefile_needs_update_skyrat(save_data)
 	if(skyrat_update >= 0)
-		update_character_skyrat(skyrat_update, save_data) // needs_update == savefile_version if we need an update (positive integer)
+		update_character_skyrat(skyrat_update, save_data)
 		save_character(TRUE)
-
 
 /// Brings a savefile up to date with modular preferences. Called if savefile_needs_update_skyrat() returned a value higher than 0
 /datum/preferences/proc/update_character_skyrat(current_version, list/save_data)
