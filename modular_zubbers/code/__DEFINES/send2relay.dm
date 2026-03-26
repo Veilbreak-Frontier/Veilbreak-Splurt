@@ -1,3 +1,4 @@
+/*
 // SPLURT STATION EDIT: START
 #define US_EAST_RELAY_ADDR "byond://us-east.splurt.space:42069"
 #define US_WEST_RELAY_ADDR "byond://us-west.splurt.space:42069"
@@ -57,3 +58,4 @@
 #undef SINGAPORE_RELAY
 #undef EU_RELAY
 #undef NO_RELAY
+*/
