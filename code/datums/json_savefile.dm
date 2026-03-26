@@ -122,3 +122,41 @@ GENERAL_PROTECT_DATUM(/datum/json_savefile)
 /// Copies the entire tree to another json savefile datum, overwriting whatever was in the other datum before.
 /datum/json_savefile/proc/copy_to_savefile(datum/json_savefile/other_savefile)
 	other_savefile.tree = tree.Copy()
+
+/datum/json_savefile/proc/import_json_from_client(client/requester)
+	if(!istype(requester) || !path)
+		return FALSE
+
+	var/uploaded_file = input(requester, "Select your preferences JSON to recover.", "Import Preferences") as null|file
+	if(!uploaded_file)
+		return FALSE
+
+	var/json_text = file2text(uploaded_file)
+	var/list/new_tree
+	try
+		new_tree = json_decode(json_text)
+	catch(var/exception/err)
+		tgui_alert(requester, "The file structure is corrupted: [err]", "Import Error")
+		return FALSE
+
+	if(!islist(new_tree))
+		return FALSE
+
+	new_tree = best_effort_recovery(new_tree)
+
+	if(tgui_alert(requester, "Successfully parsed characters. Overwrite your active character slot?", "Confirm Recovery", list("Cancel", "Yes")) != "Yes")
+		return FALSE
+
+	tree = new_tree
+	save()
+	return TRUE
+
+/datum/json_savefile/proc/best_effort_recovery(list/data)
+	var/static/list/forbidden = list("admin_rank", "p_flags", "last_ip", "last_id")
+	for(var/key in data)
+		if(key in forbidden)
+			data -= key
+			continue
+		if(findtext(key, "character") == 1 && !islist(data[key]))
+			data -= key
+	return data

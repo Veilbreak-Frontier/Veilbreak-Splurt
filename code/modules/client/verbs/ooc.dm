@@ -466,6 +466,33 @@ ADMIN_VERB(reset_ooc_color, R_FUN, "Reset Player OOC Color", "Returns player OOC
 
 	prefs.savefile.export_json_to_client(usr, ckey)
 
+/client/verb/import_preferences()
+	set name = "Import Preferences"
+	set category = "OOC"
+	set desc = "Upload a JSON file to recover your character slots and settings."
+
+	if(!prefs || !prefs.savefile)
+		return
+
+	if(prefs.savefile.import_json_from_client(src))
+		prefs.load_preferences()
+
+		if(!prefs.load_character(1))
+			prefs.randomise_appearance_prefs()
+
+		if(prefs.character_preview_view)
+			prefs.character_preview_view.update_body()
+
+		if(tgui_panel)
+			tgui_panel.emotes_send_list()
+
+		var/new_name = prefs.read_preference(/datum/preference/name/real_name) || "Unknown"
+
+		to_chat(src, span_notice("<b>Recovery Successful:</b> Slot 1 overwritten. Active character: [new_name]."))
+
+		log_admin("[key_name(src)] imported and overwrote their active character slot.")
+		message_admins("[key_name_admin(src)] imported and overwrote their active character slot.")
+
 /client/verb/map_vote_tally_count()
 	set name = "Show Map Vote Tallies"
 	set desc = "View the current map vote tally counts."
