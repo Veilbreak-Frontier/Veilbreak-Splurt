@@ -53,15 +53,14 @@
 	features["custom_tattoos_loaded"] = null
 
 	if(islist(raw_features))
-		var/list/tatt_source = raw_features["custom_tattoos"] || raw_features["tattoos_data"]
-		if(length(tatt_source))
-			features["custom_tattoos"] = tatt_source
+		var/list/source = raw_features["custom_tattoos"] || raw_features["tattoos_data"]
+		if(length(source))
+			features["custom_tattoos"] = source
 
 	mutant_bodyparts = SANITIZE_LIST(save_data["mutant_bodyparts"])
 	body_markings = update_markings(SANITIZE_LIST(save_data["body_markings"]))
 	mismatched_customization = save_data["mismatched_customization"]
 	allow_advanced_colors = save_data["allow_advanced_colors"]
-
 	alt_job_titles = save_data["alt_job_titles"]
 
 	general_record = sanitize_text(general_record)
@@ -74,7 +73,6 @@
 	for(var/language in save_languages)
 		var/value = save_languages[language]
 		save_languages -= language
-
 		if(istext(language))
 			language = _text2path(language)
 		save_languages[language] = value
@@ -82,10 +80,6 @@
 
 	tgui_prefs_migration = save_data["tgui_prefs_migration"]
 	if(!tgui_prefs_migration && save_data["modular_version"] && save_data["modular_version"] < MODULAR_SAVEFILE_VERSION_MAX)
-		to_chat(parent, custom_boxed_message("red_box", span_bolddanger("PREFERENCE MIGRATION BEGINNING.\
-		\nDO NOT INTERACT WITH YOUR PREFERENCES UNTIL THIS PROCESS HAS BEEN COMPLETED.\
-		\nDO NOT DISCONNECT UNTIL THIS PROCESS HAS BEEN COMPLETED.\
-		")))
 		migrate_skyrat(save_data)
 		addtimer(CALLBACK(src, PROC_REF(check_migration)), 10 SECONDS)
 

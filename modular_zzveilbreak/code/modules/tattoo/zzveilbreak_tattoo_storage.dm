@@ -3,14 +3,14 @@
 	if(parent?.mob && ishuman(parent.mob))
 		H = parent.mob
 
-	var/list/tattoo_data = list()
+	var/list/tattoo_serialization = list()
 
 	if(H && !QDELETED(H))
 		for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
 			if(!istype(T) || QDELETED(T))
 				continue
 
-			var/list/T_data = list(
+			var/list/T_dict = list(
 				"artist" = T.artist,
 				"design" = T.design,
 				"body_part" = T.body_part,
@@ -21,67 +21,53 @@
 				"font" = T.font,
 				"flair" = T.flair
 			)
-			tattoo_data += list(T_data)
+			tattoo_serialization += list(T_dict)
 
-	if(!length(tattoo_data))
+	if(!length(tattoo_serialization))
 		if(features && islist(features["custom_tattoos"]) && length(features["custom_tattoos"]))
 			if(save_data)
 				save_data["custom_tattoos"] = features["custom_tattoos"]
 		return
 
 	if(save_data)
-		save_data["custom_tattoos"] = tattoo_data
+		save_data["custom_tattoos"] = tattoo_serialization
 
 	if(!features)
 		features = list()
 
-	features["custom_tattoos"] = tattoo_data
-	features -= "custom_tattoos_loaded"
-
-	if(!length(tattoo_data))
-		if(features && islist(features["custom_tattoos"]) && length(features["custom_tattoos"]))
-			if(save_data)
-				save_data["custom_tattoos"] = features["custom_tattoos"]
-		return
-
-	if(save_data)
-		save_data["custom_tattoos"] = tattoo_data
-
-	if(!features)
-		features = list()
-	features["custom_tattoos"] = tattoo_data
+	features["custom_tattoos"] = tattoo_serialization
 	features -= "custom_tattoos_loaded"
 
 /datum/preferences/proc/load_custom_tattoo_data()
 	if(!features)
 		features = list()
 
-	var/list/tattoo_data = features["custom_tattoos"]
-	if(!islist(tattoo_data))
+	var/list/tattoo_serialization = features["custom_tattoos"]
+	if(!islist(tattoo_serialization))
 		return
 
-	var/list/loaded_tattoos = list()
-	for(var/i in 1 to length(tattoo_data))
-		var/list/tattoo_info = tattoo_data[i]
-		if(!islist(tattoo_info))
+	var/list/reconstructed_objects = list()
+	for(var/i in 1 to length(tattoo_serialization))
+		var/list/data = tattoo_serialization[i]
+		if(!islist(data))
 			continue
 
 		var/datum/custom_tattoo/T = new(
-			tattoo_info["artist"],
-			tattoo_info["design"],
-			tattoo_info["body_part"],
-			tattoo_info["color"],
-			tattoo_info["layer"],
-			tattoo_info["is_signature"],
-			tattoo_info["font"],
-			tattoo_info["flair"]
+			data["artist"],
+			data["design"],
+			data["body_part"],
+			data["color"],
+			data["layer"],
+			data["is_signature"],
+			data["font"],
+			data["flair"]
 		)
-		if(tattoo_info["date_applied"])
-			T.date_applied = tattoo_info["date_applied"]
+		if(data["date_applied"])
+			T.date_applied = data["date_applied"]
 
-		loaded_tattoos += T
+		reconstructed_objects += T
 
-	features["custom_tattoos_loaded"] = loaded_tattoos
+	features["custom_tattoos_loaded"] = reconstructed_objects
 
 /datum/preferences/proc/apply_custom_tattoos_to_mob(mob/living/carbon/human/H)
 	if(!istype(H))
@@ -92,15 +78,15 @@
 	if(!islist(features["custom_tattoos_loaded"]) || !length(features["custom_tattoos_loaded"]))
 		load_custom_tattoo_data()
 
-	var/list/saved_tattoos = features["custom_tattoos_loaded"]
-	if(!islist(saved_tattoos))
+	var/list/stored = features["custom_tattoos_loaded"]
+	if(!islist(stored))
 		return
 
-	for(var/datum/custom_tattoo/T as anything in saved_tattoos)
+	for(var/datum/custom_tattoo/T as anything in stored)
 		if(istype(T) && !QDELETED(T))
 			if(!is_custom_tattoo_bodypart_existing(H, T.body_part))
 				continue
 
-			var/datum/custom_tattoo/new_tattoo = new(T.artist, T.design, T.body_part, T.color, T.layer, T.is_signature, T.font, T.flair)
-			new_tattoo.date_applied = T.date_applied
-			H.add_custom_tattoo(new_tattoo)
+			var/datum/custom_tattoo/copy = new(T.artist, T.design, T.body_part, T.color, T.layer, T.is_signature, T.font, T.flair)
+			copy.date_applied = T.date_applied
+			H.add_custom_tattoo(copy)
