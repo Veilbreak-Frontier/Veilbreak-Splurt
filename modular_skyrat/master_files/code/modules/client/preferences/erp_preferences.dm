@@ -129,6 +129,9 @@
 /datum/preference/toggle/erp/new_genitalia_growth
 	savefile_key = "new_genitalia_growth_pref"
 
+/datum/preference/toggle/erp/allow_bodywriting
+	savefile_key = "allow_bodywriting_pref"
+
 /datum/preference/choiced/erp_status
 	category = PREFERENCE_CATEGORY_NON_CONTEXTUAL
 	savefile_identifier = PREFERENCE_CHARACTER

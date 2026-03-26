@@ -32,6 +32,8 @@
 		"knotting_pref" = /datum/preference/toggle/erp/knotting,
 		"knots_partners_pref" = /datum/preference/toggle/erp/knots_partners,
 		"favorite_interactions" = /datum/preference/blob/favorite_interactions, // Not a toggle but it shouldn't cause any issues
+		// Veilbreak additions
+		"allow_bodywriting" = /datum/preference/toggle/erp/allow_bodywriting,
 		// Vore prefs
 		"vore_enable_pref" = /datum/preference/toggle/erp/vore_enable,
 		"vore_overlays" = /datum/preference/toggle/erp/vore_overlays,
