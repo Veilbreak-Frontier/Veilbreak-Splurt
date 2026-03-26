@@ -25,10 +25,12 @@
 
 	if(!length(tattoo_data))
 		if(features && islist(features["custom_tattoos"]) && length(features["custom_tattoos"]))
-			save_data["custom_tattoos"] = features["custom_tattoos"]
+			if(save_data)
+				save_data["custom_tattoos"] = features["custom_tattoos"]
 		return
 
-	save_data["custom_tattoos"] = tattoo_data
+	if(save_data)
+		save_data["custom_tattoos"] = tattoo_data
 
 	if(!features)
 		features = list()
