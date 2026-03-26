@@ -12,27 +12,23 @@
 	processing_flags = START_PROCESSING_ON_INIT
 
 	/// Processing speed in seconds
-	var/processing_speed = 70 SECONDS
+	var/processing_speed = 6 SECONDS
 	/// Remote materials component for silo linking
 	var/datum/component/remote_materials/materials
 	/// List of all available ores that can be produced
-	var/list/available_ores = list(
-		/obj/item/stack/sheet/iron,
-		/obj/item/stack/sheet/glass,
-		/obj/item/stack/sheet/mineral/plasma,
-		/obj/item/stack/sheet/mineral/silver,
-		/obj/item/stack/sheet/mineral/titanium,
-		/obj/item/stack/sheet/mineral/uranium,
-		/obj/item/stack/sheet/mineral/gold,
-		/obj/item/stack/sheet/mineral/diamond,
-		/obj/item/stack/sheet/mineral/plastitanium,
-		/obj/item/stack/sheet/bluespace_crystal,
-		/obj/item/stack/sheet/plastic,
-		/obj/item/stack/sheet/iron,
-		/obj/item/stack/sheet/glass,
-		/obj/item/stack/sheet/iron,
-		/obj/item/stack/sheet/glass,
-	)
+	var/static/list/available_ores = list(
+    /obj/item/stack/sheet/iron = 100,
+    /obj/item/stack/sheet/glass = 80,
+    /obj/item/stack/sheet/plastic = 50,
+    /obj/item/stack/sheet/mineral/plasma = 30,
+    /obj/item/stack/sheet/mineral/silver = 25,
+    /obj/item/stack/sheet/mineral/titanium = 20,
+    /obj/item/stack/sheet/mineral/uranium = 15,
+    /obj/item/stack/sheet/mineral/gold = 10,
+    /obj/item/stack/sheet/mineral/diamond = 5,
+    /obj/item/stack/sheet/mineral/plastitanium = 5,
+    /obj/item/stack/sheet/bluespace_crystal = 2
+)
 	COOLDOWN_DECLARE(process_cooldown)
 
 /obj/machinery/void_miner/Initialize(mapload)
@@ -47,9 +43,9 @@
 /obj/machinery/void_miner/RefreshParts()
 	. = ..()
 
-	processing_speed = 70 SECONDS
+	processing_speed = 6 SECONDS
 	for(var/datum/stock_part/servo/servo_part in component_parts)
-		processing_speed -= (servo_part.tier * (2 SECONDS))
+		processing_speed -= (servo_part.tier * (0.5 SECONDS))
 	processing_speed = CEILING(processing_speed, 1)
 
 /obj/machinery/void_miner/update_overlays()
@@ -94,7 +90,7 @@
 	if(!materials?.mat_container)
 		return
 
-	var/chosen_ore = pick(available_ores)
+	var/chosen_ore = pick_weight(available_ores)
 	var/obj/item/stack/sheet/chosen_stack = new chosen_ore(null, 1)
 
 	// Insert the stack into the silo
