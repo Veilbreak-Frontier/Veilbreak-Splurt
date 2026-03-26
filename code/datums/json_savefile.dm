@@ -128,13 +128,11 @@ GENERAL_PROTECT_DATUM(/datum/json_savefile)
 		return FALSE
 
 	var/uploaded_file = input(requester, "Select your preferences JSON to recover.", "Import Preferences") as null|file
-
 	if(!uploaded_file)
 		return FALSE
 
 	var/json_text = file2text(uploaded_file)
 	var/list/new_tree
-
 	try
 		new_tree = json_decode(json_text)
 	catch(var/exception/err)
@@ -142,48 +140,23 @@ GENERAL_PROTECT_DATUM(/datum/json_savefile)
 		return FALSE
 
 	if(!islist(new_tree))
-		tgui_alert(requester, "Import failed: JSON root must be a list of settings.", "Import Error")
 		return FALSE
 
 	new_tree = best_effort_recovery(new_tree)
 
-	var/example_char = new_tree["character1"] ? new_tree["character1"]["real_name"] : "Unknown"
-	if(tgui_alert(requester, "Successfully parsed characters (Found: [example_char]). Overwrite your current save?", "Confirm Recovery", list("Cancel", "Yes")) != "Yes")
+	if(tgui_alert(requester, "Successfully parsed characters. Overwrite your active character slot?", "Confirm Recovery", list("Cancel", "Yes")) != "Yes")
 		return FALSE
 
 	tree = new_tree
 	save()
 	return TRUE
 
-/datum/json_savefile/proc/validate_import(list/data)
+/datum/json_savefile/proc/best_effort_recovery(list/data)
 	var/static/list/forbidden = list("admin_rank", "p_flags", "last_ip", "last_id")
 	for(var/key in data)
 		if(key in forbidden)
 			data -= key
-	return data
-
-/datum/json_savefile/proc/best_effort_recovery(list/data)
-	var/static/list/forbidden = list("admin_rank", "p_flags", "last_ip", "last_id", "bypass_antag_limit")
-
-	for(var/key in data)
-		if(key in forbidden)
-			data -= key
 			continue
-
-		var/val = data[key]
-
-		if(key == "antag_tickets" || key == "master_erp_pref" || key == "clientfps")
-			if(istext(val))
-				data[key] = text2num(val) || 0
-			else if(!isnum(val))
-				data[key] = 0
-
-		if(findtext(key, "character") == 1)
-			if(!islist(val))
-				data -= key
-				continue
-
-			if(!val["real_name"])
-				val["real_name"] = "Recovered Character"
-
+		if(findtext(key, "character") == 1 && !islist(data[key]))
+			data -= key
 	return data
