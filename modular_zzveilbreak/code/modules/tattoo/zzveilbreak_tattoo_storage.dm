@@ -1,30 +1,36 @@
 // Save/load custom tattoos to the preferences system (character-level storage).
 
-/datum/preferences/proc/save_custom_tattoo_data()
-	if(!parent?.mob)
-		return
+/datum/preferences/proc/save_custom_tattoo_data(list/save_data)
+	var/mob/living/carbon/human/H
+	if(parent?.mob && ishuman(parent.mob))
+		H = parent.mob
 
-	var/mob/living/carbon/human/H = parent.mob
-	if(!istype(H) || QDELETED(H))
+	if(!H)
+		if(features && features["custom_tattoos"])
+			save_data["custom_tattoos"] = features["custom_tattoos"]
 		return
 
 	var/list/tattoo_data = list()
 	for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
-		if(istype(T) && !QDELETED(T))
-			tattoo_data += list(list(
-				"artist" = T.artist,
-				"design" = T.design,
-				"body_part" = T.body_part,
-				"color" = T.color,
-				"date_applied" = T.date_applied,
-				"layer" = T.layer,
-				"is_signature" = T.is_signature,
-				"font" = T.font,
-				"flair" = T.flair // NEW: Save flair
-			))
+		if(!istype(T) || QDELETED(T))
+			continue
 
-	// Store in features which gets saved automatically with preferences
-	features["custom_tattoos"] = tattoo_data
+		var/list/T_data = list(
+			"artist" = T.artist,
+			"design" = T.design,
+			"body_part" = T.body_part,
+			"color" = T.color,
+			"date_applied" = T.date_applied,
+			"layer" = T.layer,
+			"is_signature" = T.is_signature,
+			"font" = T.font,
+			"flair" = T.flair
+		)
+		tattoo_data += list(T_data)
+
+	save_data["custom_tattoos"] = tattoo_data
+	if(features)
+		features["custom_tattoos"] = tattoo_data
 
 /datum/preferences/proc/load_custom_tattoo_data()
 	if(!features)
@@ -35,26 +41,35 @@
 		return
 
 	var/list/loaded_tattoos = list()
-	for(var/i in 1 to length(tattoo_data))
-		var/list/tattoo_info = tattoo_data[i]
+	var/list/legacy_flair_map = list(
+		"flair_1" = "pink",
+		"flair_2" = "userlove",
+		"flair_3" = "brown",
+		"flair_4" = "cyan",
+		"flair_5" = "orange",
+		"flair_6" = "yellow",
+		"flair_7" = "subtle",
+		"flair_8" = "velvet",
+		"flair_9" = "velvet_notice",
+		"flair_10" = "glossy"
+	)
+
+	for(var/list/tattoo_info in tattoo_data)
 		if(!islist(tattoo_info))
+			continue
+
+		var/body_part = tattoo_info["body_part"]
+		if(!body_part || !is_custom_tattoo_bodypart_valid(body_part))
 			continue
 
 		var/artist = tattoo_info["artist"]
 		var/design = tattoo_info["design"]
-		var/body_part = tattoo_info["body_part"]
 		var/color = tattoo_info["color"]
 		var/layer = tattoo_info["layer"]
 		var/date_applied = tattoo_info["date_applied"]
 		var/is_signature = tattoo_info["is_signature"]
 		var/font = tattoo_info["font"]
-		var/flair = tattoo_info["flair"] // NEW: Load flair
-
-		if(!body_part)
-			continue
-
-		if(!is_custom_tattoo_bodypart_valid(body_part))
-			continue
+		var/flair = tattoo_info["flair"]
 
 		var/final_artist = artist ? sanitize_text(artist) : "Unknown Artist"
 		var/final_design = design ? sanitize_text(design) : "An intricate design"
@@ -62,25 +77,12 @@
 		var/final_layer = sanitize_integer(layer, CUSTOM_TATTOO_LAYER_UNDER, CUSTOM_TATTOO_LAYER_OVER, CUSTOM_TATTOO_LAYER_NORMAL)
 		var/final_is_signature = is_signature ? TRUE : FALSE
 		var/final_font = (font && (font in GLOB.custom_tattoo_fonts)) ? font : PEN_FONT
-		// Validate flair. Allow legacy flair_# ids for backwards compatibility by mapping them to class names.
+
 		var/final_flair = null
-		if(flair && (flair in GLOB.custom_tattoo_flairs))
-			final_flair = flair
-		else
-			// Legacy mapping from old flair IDs to class names
-			var/list/legacy_flair_map = list(
-				"flair_1" = "pink",
-				"flair_2" = "userlove",
-				"flair_3" = "brown",
-				"flair_4" = "cyan",
-				"flair_5" = "orange",
-				"flair_6" = "yellow",
-				"flair_7" = "subtle",
-				"flair_8" = "velvet",
-				"flair_9" = "velvet_notice",
-				"flair_10" = "glossy"
-			)
-			if(flair && (flair in legacy_flair_map))
+		if(flair)
+			if(flair in GLOB.custom_tattoo_flairs)
+				final_flair = flair
+			else if(flair in legacy_flair_map)
 				final_flair = legacy_flair_map[flair]
 
 		var/datum/custom_tattoo/T = new(final_artist, final_design, body_part, final_color, final_layer, final_is_signature, final_font, final_flair)
@@ -89,7 +91,6 @@
 
 		loaded_tattoos += T
 
-	// Store the actual tattoo objects for runtime use
 	features["custom_tattoos_loaded"] = loaded_tattoos
 
 /datum/preferences/proc/apply_custom_tattoos_to_mob(mob/living/carbon/human/H)
