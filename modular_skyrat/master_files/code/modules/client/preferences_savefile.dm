@@ -45,6 +45,12 @@
 			augment_limb_styles -= key
 
 	features = SANITIZE_LIST(save_data["features"])
+
+	if(save_data["custom_tattoos"])
+		if(!features)
+			features = list()
+		features["custom_tattoos"] = save_data["custom_tattoos"]
+
 	mutant_bodyparts = SANITIZE_LIST(save_data["mutant_bodyparts"])
 	body_markings = update_markings(SANITIZE_LIST(save_data["body_markings"]))
 	mismatched_customization = save_data["mismatched_customization"]
@@ -69,7 +75,7 @@
 	languages = save_languages
 
 	tgui_prefs_migration = save_data["tgui_prefs_migration"]
-	if(!tgui_prefs_migration && save_data["modular_version"] && save_data["modular_version"] < MODULAR_SAVEFILE_VERSION_MAX) // BUBBER EDIT - if we're missing version from migration, then the char is new. Won't be able to migrate either.
+	if(!tgui_prefs_migration && save_data["modular_version"] && save_data["modular_version"] < MODULAR_SAVEFILE_VERSION_MAX)
 		to_chat(parent, custom_boxed_message("red_box", span_bolddanger("PREFERENCE MIGRATION BEGINNING.\
 		\nDO NOT INTERACT WITH YOUR PREFERENCES UNTIL THIS PROCESS HAS BEEN COMPLETED.\
 		\nDO NOT DISCONNECT UNTIL THIS PROCESS HAS BEEN COMPLETED.\
@@ -80,9 +86,8 @@
 	food_preferences = SANITIZE_LIST(save_data["food_preferences"])
 	var/skyrat_update = savefile_needs_update_skyrat(save_data)
 	if(skyrat_update >= 0)
-		update_character_skyrat(skyrat_update, save_data) // needs_update == savefile_version if we need an update (positive integer)
+		update_character_skyrat(skyrat_update, save_data)
 		save_character(TRUE)
-
 
 /// Brings a savefile up to date with modular preferences. Called if savefile_needs_update_skyrat() returned a value higher than 0
 /datum/preferences/proc/update_character_skyrat(current_version, list/save_data)

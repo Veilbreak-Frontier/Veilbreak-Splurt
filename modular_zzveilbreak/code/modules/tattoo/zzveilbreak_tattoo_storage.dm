@@ -1,36 +1,38 @@
-// Save/load custom tattoos to the preferences system (character-level storage).
-
 /datum/preferences/proc/save_custom_tattoo_data(list/save_data)
 	var/mob/living/carbon/human/H
 	if(parent?.mob && ishuman(parent.mob))
 		H = parent.mob
 
-	if(!H)
-		if(features && features["custom_tattoos"])
+	var/list/tattoo_data = list()
+
+	if(H && !QDELETED(H))
+		for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
+			if(!istype(T) || QDELETED(T))
+				continue
+
+			var/list/T_data = list(
+				"artist" = T.artist,
+				"design" = T.design,
+				"body_part" = T.body_part,
+				"color" = T.color,
+				"date_applied" = T.date_applied,
+				"layer" = T.layer,
+				"is_signature" = T.is_signature,
+				"font" = T.font,
+				"flair" = T.flair
+			)
+			tattoo_data += list(T_data)
+
+	if(!length(tattoo_data))
+		if(features && islist(features["custom_tattoos"]) && length(features["custom_tattoos"]))
 			save_data["custom_tattoos"] = features["custom_tattoos"]
 		return
 
-	var/list/tattoo_data = list()
-	for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
-		if(!istype(T) || QDELETED(T))
-			continue
-
-		var/list/T_data = list(
-			"artist" = T.artist,
-			"design" = T.design,
-			"body_part" = T.body_part,
-			"color" = T.color,
-			"date_applied" = T.date_applied,
-			"layer" = T.layer,
-			"is_signature" = T.is_signature,
-			"font" = T.font,
-			"flair" = T.flair
-		)
-		tattoo_data += list(T_data)
-
 	save_data["custom_tattoos"] = tattoo_data
-	if(features)
-		features["custom_tattoos"] = tattoo_data
+
+	if(!features)
+		features = list()
+	features["custom_tattoos"] = tattoo_data
 
 /datum/preferences/proc/load_custom_tattoo_data()
 	if(!features)
