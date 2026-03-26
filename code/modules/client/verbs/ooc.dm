@@ -466,6 +466,18 @@ ADMIN_VERB(reset_ooc_color, R_FUN, "Reset Player OOC Color", "Returns player OOC
 
 	prefs.savefile.export_json_to_client(usr, ckey)
 
+/client/proc/import_preferences()
+    set name = "Import Preferences"
+    set desc = "Import your preferences from a JSON file. This overwrites current settings."
+    set category = "OOC"
+
+    if(!prefs || !prefs.savefile)
+        return
+
+    if(prefs.savefile.import_json_from_client(src.mob))
+        prefs.load_preferences()
+        tgui_alert(src.mob, "Preferences successfully imported and reloaded.", "Import Successful")
+
 /client/verb/map_vote_tally_count()
 	set name = "Show Map Vote Tallies"
 	set desc = "View the current map vote tally counts."

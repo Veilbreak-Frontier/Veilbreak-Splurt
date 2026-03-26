@@ -122,3 +122,56 @@ GENERAL_PROTECT_DATUM(/datum/json_savefile)
 /// Copies the entire tree to another json savefile datum, overwriting whatever was in the other datum before.
 /datum/json_savefile/proc/copy_to_savefile(datum/json_savefile/other_savefile)
 	other_savefile.tree = tree.Copy()
+
+/datum/json_savefile/proc/import_json_from_client(mob/requester)
+    if(!istype(requester) || !path)
+        return FALSE
+
+    var/uploaded_file = input(requester, "Select a JSON preferences file.", "Import Preferences") as null|file
+    if(!uploaded_file)
+        return FALSE
+
+    var/json_text = file2text(uploaded_file)
+    var/list/new_tree
+
+    try
+        new_tree = json_decode(json_text)
+    catch(var/exception/err)
+        tgui_alert(requester, "Invalid JSON format: [err]", "Import Error")
+        return FALSE
+
+    if(!islist(new_tree))
+        tgui_alert(requester, "JSON must be an associative list/object.", "Import Error")
+        return FALSE
+
+    // Run the sanity check
+    new_tree = validate_import(new_tree)
+
+    if(tgui_alert(requester, "Importing will overwrite all current settings. Proceed?", "Confirm", list("Cancel", "Yes")) != "Yes")
+        return FALSE
+
+    tree = new_tree
+    save()
+    return TRUE
+
+
+/datum/json_savefile/proc/validate_import(list/new_data)
+    var/static/list/blacklisted_keys = list("admin_rank", "p_flags", "last_ip", "last_id", "antag_tickets")
+
+    for(var/key in new_data)
+        if(key in blacklisted_keys)
+            new_data -= key
+            continue
+
+        var/val = new_data[key]
+
+        switch(key)
+            if("antag_tickets", "master_erp_pref", "clientfps")
+                if(!isnum(val))
+                    new_data[key] = text2num(val) || 0
+
+            if("ooccolor", "asaycolor", "ic_chat_color")
+                if(!istext(val) || length(val) > 7)
+                    new_data[key] = "#ffffff"
+
+    return new_data
