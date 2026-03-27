@@ -3,12 +3,14 @@
 	icon = 'icons/map_icons/items/encryptionkey.dmi'
 	icon_state = "/obj/item/encryptionkey/headset_com"
 	post_init_icon_state = "cypherkey_cube"
+	special_channels = RADIO_SPECIAL_CENTCOM
 	channels = list(RADIO_CHANNEL_IAA = 1, RADIO_CHANNEL_CENTCOM = 1, RADIO_CHANNEL_COMMAND = 1)
 	greyscale_config = /datum/greyscale_config/encryptionkey_cube
 	greyscale_colors = "#2597C4#D3D3D3"
 
 /obj/item/encryptionkey/headset_iaa/head
 	name = "Nanotrasen executive's radio encryption key"
+	special_channels = RADIO_SPECIAL_CENTCOM
 	channels = list(RADIO_CHANNEL_IAA = 1, RADIO_CHANNEL_CENTCOM = 1, RADIO_CHANNEL_COMMAND = 1)
 	greyscale_colors = "#2597C4#FFD351"
 
