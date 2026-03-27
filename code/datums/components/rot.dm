@@ -83,12 +83,16 @@
 	qdel(src)
 
 /datum/component/rot/proc/check_reagent(datum/reagents/source)
-	SIGNAL_HANDLER
+    SIGNAL_HANDLER
 
-	if(source.has_reagent(/datum/reagent/toxin/formaldehyde, 15) || source.has_reagent(/datum/reagent/cryostylane))
-		rest(REAGENT_BLOCKER)
-		return
-	start_up(REAGENT_BLOCKER)
+    if(!source)
+        start_up(REAGENT_BLOCKER)
+        return
+
+    if(source.has_reagent(/datum/reagent/toxin/formaldehyde, 15) || source.has_reagent(/datum/reagent/cryostylane))
+        rest(REAGENT_BLOCKER)
+        return
+    start_up(REAGENT_BLOCKER)
 
 /datum/component/rot/proc/check_for_temperature(datum/source, old_temp, new_temp)
 	SIGNAL_HANDLER

@@ -3,8 +3,8 @@
 		return
 
 	losebreath = 0
-	breathing_loop.stop() //This would've happened eventually but it's nice to make it stop immediatelly in this case
-	reagents.end_metabolization(src)
+	breathing_loop?.stop() //This would've happened eventually but it's nice to make it stop immediatelly in this case
+	reagents?.end_metabolization(src)
 
 	. = ..()
 

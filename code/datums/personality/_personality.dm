@@ -70,7 +70,7 @@
     LAZYSET(who.personalities, type, TRUE)
 
     // ROOT CAUSE FIX: Register for deletion signal to clean up references immediately
-    RegisterSignal(who, COMSIG_QDELETING, PROC_REF(on_mob_deleting))
+    RegisterSignal(who, COMSIG_QDELETING, PROC_REF(on_mob_deleting), override = TRUE)
 
     if(processes)
         SSpersonalities.processing_personalities[src] += who
@@ -103,12 +103,12 @@
 
         if(subject.stat >= UNCONSCIOUS || HAS_TRAIT(subject, TRAIT_NO_TRANSFORM))
             continue
-        if(on_tick(subject, seconds_per_tick) != PROCESS_KILL)
-            continue
 
-        stack_trace("Personality [type] processed but did not override on_tick().")
-        SSpersonalities.processing_personalities -= src
-        return PROCESS_KILL
+        var/res = on_tick(subject, seconds_per_tick)
+
+        if(res == PROCESS_KILL)
+            processing_list -= subject
+            continue
 
     return null
 /**
