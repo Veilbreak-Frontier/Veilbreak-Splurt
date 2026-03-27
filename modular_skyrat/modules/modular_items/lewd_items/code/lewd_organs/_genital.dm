@@ -1,7 +1,7 @@
 /obj/item/organ/genital
 	/// The maximum amount of fluid that can be stored in the genital.
 	/// should only be used during generation/maximum size updates
-	var/internal_fluid_maximum = 0
+	var/internal_fluid_maximum = 10
 
 	/// The datum to be used for the tracked fluid, should it need to be added to a fluid container.
 	var/internal_fluid_datum
