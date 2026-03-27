@@ -69,8 +69,8 @@ handles linking back and forth.
 		if (silo)
 			silo.connect_receptacle(src, parent)
 			if(!(mat_container_flags & MATCONTAINER_NO_INSERT))
-				RegisterSignal(parent, COMSIG_ATOM_ITEM_INTERACTION, PROC_REF(on_item_insert))
-				RegisterSignal(parent, COMSIG_ATOM_ITEM_INTERACTION_SECONDARY, PROC_REF(on_secondary_insert))
+				RegisterSignal(parent, COMSIG_ATOM_ITEM_INTERACTION, PROC_REF(on_item_insert), override=TRUE)
+				RegisterSignal(parent, COMSIG_ATOM_ITEM_INTERACTION_SECONDARY, PROC_REF(on_secondary_insert), override=TRUE)
 
 	if (!mat_container && allow_standalone)
 		_MakeLocal()
@@ -161,8 +161,8 @@ handles linking back and forth.
 			qdel(mat_container)
 		new_silo.connect_receptacle(src, parent)
 		if(!(mat_container_flags & MATCONTAINER_NO_INSERT))
-			RegisterSignal(parent, COMSIG_ATOM_ITEM_INTERACTION, PROC_REF(on_item_insert))
-			RegisterSignal(parent, COMSIG_ATOM_ITEM_INTERACTION_SECONDARY, PROC_REF(on_secondary_insert))
+			RegisterSignal(parent, COMSIG_ATOM_ITEM_INTERACTION, PROC_REF(on_item_insert), override=TRUE)
+			RegisterSignal(parent, COMSIG_ATOM_ITEM_INTERACTION_SECONDARY, PROC_REF(on_secondary_insert), override=TRUE)
 		to_chat(user, span_notice("You connect [parent] to [silo] from the multitool's buffer."))
 		return ITEM_INTERACT_SUCCESS
 

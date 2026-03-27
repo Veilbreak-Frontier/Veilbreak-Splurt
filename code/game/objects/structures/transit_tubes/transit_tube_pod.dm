@@ -20,8 +20,10 @@
 	air_contents.temperature = T20C
 
 /obj/structure/transit_tube_pod/Destroy()
-	empty_pod()
-	return ..()
+    UnregisterSignal(src, list(COMSIG_MOVELOOP_PREPROCESS_CHECK, COMSIG_MOVELOOP_POSTPROCESS, COMSIG_QDELETING))
+    empty_pod()
+    current_tube = null
+    return ..()
 
 /obj/structure/transit_tube_pod/update_icon_state()
 	icon_state = contents.len ? occupied_icon_state : initial(icon_state)
@@ -142,24 +144,32 @@
 	engine.direction = next_dir
 	engine.set_delay(enter_delay + exit_delay)
 
-/obj/structure/transit_tube_pod/proc/engine_finish()
-	set_density(TRUE)
-	moving = FALSE
+/obj/structure/transit_tube_pod/proc/engine_finish(datum/move_loop/source)
+    SIGNAL_HANDLER
+    if(QDELING(src))
+        return
 
-	var/obj/structure/transit_tube/TT = locate(/obj/structure/transit_tube) in loc
-	//landed on a turf without transit tube or not in our direction
-	if(!TT || (!(dir in TT.tube_dirs) && !(REVERSE_DIR(dir) in TT.tube_dirs)))
-		outside_tube()
+    set_density(TRUE)
+    moving = FALSE
+
+    var/obj/structure/transit_tube/TT = locate(/obj/structure/transit_tube) in loc
+    if(!TT || (!(dir in TT.tube_dirs) && !(REVERSE_DIR(dir) in TT.tube_dirs)))
+        outside_tube()
 
 /obj/structure/transit_tube_pod/proc/outside_tube()
-	var/list/savedcontents = contents.Copy()
-	var/saveddir = dir
-	var/turf/destination = get_edge_target_turf(src,saveddir)
-	visible_message(span_warning("[src] ejects its insides out!"))
-	deconstruct(FALSE)//we automatically deconstruct the pod
-	for(var/i in savedcontents)
-		var/atom/movable/AM = i
-		AM.throw_at(destination,rand(1,3),5)
+    if(QDELING(src))
+        return
+
+    var/list/savedcontents = contents.Copy()
+    var/saveddir = dir
+    var/turf/destination = get_edge_target_turf(src, saveddir)
+    visible_message(span_warning("[src] ejects its insides out!"))
+
+    deconstruct(FALSE)
+
+    for(var/i in savedcontents)
+        var/atom/movable/AM = i
+        AM.throw_at(destination, rand(1, 3), 5)
 
 /obj/structure/transit_tube_pod/return_air()
 	return air_contents
