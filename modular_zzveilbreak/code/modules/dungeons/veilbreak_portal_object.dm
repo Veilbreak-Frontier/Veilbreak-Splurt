@@ -55,6 +55,9 @@
 		target.post_transfer(AM)
 
 /obj/machinery/portal/Destroy()
+	if(linked_console)
+		linked_console.linked_portal = null
+		linked_console = null
 	emergency_ejection()
 	if(bumper)
 		qdel(bumper)
@@ -65,10 +68,15 @@
 		return
 	var/turf/eject_to = get_step(src, SOUTH) || src.loc
 	var/z_to_clear = target.dungeon_z_level
+
 	for(var/mob/M in GLOB.mob_list)
 		if(M.z == z_to_clear && !isobserver(M))
 			M.forceMove(eject_to)
+
 	target.cleanup_z_level_completely(z_to_clear, eject_to)
+	target = null
+	transport_active = FALSE
+	update_appearance()
 
 /obj/effect/portal_bumper
 	name = "portal energy field"
