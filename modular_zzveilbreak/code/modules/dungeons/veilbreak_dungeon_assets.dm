@@ -45,14 +45,3 @@
 	icon_state = "portal_frame"
 	anchored = TRUE
 	density = TRUE
-
-/obj/structure/gateway_exit/Initialize(mapload)
-	. = ..()
-	add_overlay("portal_effect")
-
-/obj/structure/gateway_exit/attack_hand(mob/user)
-	. = ..()
-	var/obj/machinery/computer/portal_control/C = locate() in world
-	if(C)
-		user.forceMove(get_turf(C))
-		to_chat(user, "The anchor pulls you back through the void.")
