@@ -1,5 +1,6 @@
 /obj/machinery/portal
 	name = "Dimensional Portal"
+	desc = "A massive ring of superconducting magnets and exotic matter emitters."
 	icon = 'icons/obj/machines/gateway.dmi'
 	icon_state = "portal_frame"
 	density = FALSE
@@ -11,6 +12,7 @@
 	active_power_usage = PORTAL_ACTIVE_POWER_USAGE
 	var/transport_active = FALSE
 	var/datum/portal_destination/veilbreak/target
+	var/obj/machinery/computer/portal_control/linked_console
 	var/obj/effect/portal_bumper/bumper
 
 /obj/machinery/portal/Initialize(mapload)

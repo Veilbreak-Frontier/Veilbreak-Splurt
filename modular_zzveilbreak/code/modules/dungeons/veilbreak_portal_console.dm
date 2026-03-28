@@ -75,3 +75,19 @@
 	generation_in_progress = FALSE
 	say("Stabilization Error: [reason]")
 	playsound(src, 'sound/machines/buzz/buzz-sigh.ogg', 50, TRUE)
+
+
+/obj/machinery/computer/portal_control/proc/rescan_for_portal()
+    var/obj/machinery/portal/found_portal
+
+    for(var/obj/machinery/portal/P in orange(3, src))
+        if(P.machine_stat & (BROKEN|NOPOWER))
+            continue
+        found_portal = P
+        break
+
+    if(found_portal)
+        src.linked_portal = found_portal
+        found_portal.linked_console = src
+        return TRUE
+    return FALSE
