@@ -5,7 +5,7 @@
 	veilbreak_spawn_mobs(z_level)
 	CHECK_TICK
 
-	veilbreak_init_ai(z_level) // Initial setup
+	veilbreak_init_ai(z_level)
 	CHECK_TICK
 
 	veilbreak_init_areas_power(z_level)
@@ -80,6 +80,9 @@
 	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
 	var/i = 0
 	for(var/turf/open/T in z_turfs)
+		if(!T.air)
+			T.air = new /datum/gas_mixture
+
 		T.Initalize_Atmos(0)
 		i++
 		if(i % 50 == 0)
@@ -89,12 +92,15 @@
 	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
 	var/i = 0
 	for(var/turf/T in z_turfs)
-		if(!T.lighting_object && !T.space_lit)
+		if(T.lighting_object)
+			continue
+
+		if(!T.space_lit)
 			new /datum/lighting_object(T)
+
 		i++
 		if(i % 100 == 0)
 			CHECK_TICK
-	SSlighting.create_all_lighting_objects()
 
 	SSlighting.create_all_lighting_objects()
 
