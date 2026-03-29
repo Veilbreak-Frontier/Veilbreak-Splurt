@@ -162,21 +162,25 @@
 		CHECK_TICK
 
 /datum/portal_destination/veilbreak/proc/force_lighting_initialization(z_level)
-	if(!SSlighting || !SSlighting.initialized)
-		return
+    if(!SSlighting)
+        return
 
-	var/objects_created = 0
-	for(var/turf/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
-		if(!T.space_lit && !T.lighting_object)
-			new /datum/lighting_object(T)
-			objects_created++
+    var/turfs_processed = 0
 
-		T.update_appearance()
+    for(var/turf/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
+        turfs_processed++
 
-		if(objects_created % 100 == 0)
-			CHECK_TICK
+        var/area/A = T.loc
+        if(!A || !A.static_lighting)
+            continue
 
-	SSlighting.create_all_lighting_objects()
+        if(!T.lighting_object && !T.space_lit)
+            new /datum/lighting_object(T)
+
+        if(turfs_processed % 500 == 0)
+            CHECK_TICK
+
+    SSlighting.fire(FALSE, TRUE)
 
 
 /datum/portal_destination/veilbreak/proc/initialize_enhanced_smoothing(z_level)
