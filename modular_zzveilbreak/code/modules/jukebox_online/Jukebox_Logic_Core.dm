@@ -177,13 +177,15 @@
 	if(!playing_online && !active_song_sound)
 		return
 
-	for(var/mob/M in GLOB.player_list)
-		if(M?.client)
+	playing_online = FALSE
+
+	for(var/mob/M in listeners)
+		if(M.client)
 			M.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
 
-	playing_online = FALSE
+	listeners.Cut()
+
 	active_song_sound = null
-	unlisten_all()
 
 	online_track_url = null
 	online_track_name = null
@@ -191,6 +193,11 @@
 	online_track_hash = null
 	track_start_time = 0
 	online_error_message = ""
+
+	var/obj/machinery/jukebox/online/parent = parent_atom
+	if(istype(parent))
+		parent.update_appearance()
+
 	ui?.update_ui()
 
 /datum/online_jukebox/proc/set_new_volume(new_volume)
