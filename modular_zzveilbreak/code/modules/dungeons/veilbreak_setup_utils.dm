@@ -1,6 +1,8 @@
 /proc/veilbreak_initialize_zlevel(z_level, list/metadata)
 	var/list/turfs = Z_TURFS(z_level)
 
+	Master.StartLoadingMap()
+
 	SSatoms.InitializeAtoms(turfs)
 	CHECK_TICK
 
@@ -16,92 +18,14 @@
 	veilbreak_init_power_local(z_level)
 	CHECK_TICK
 
-	veilbreak_init_ai_local(turfs)
-	CHECK_TICK
-
 	veilbreak_activate_return_portal(z_level, metadata)
+
+	Master.StopLoadingMap()
 
 	for(var/turf/T in turfs)
 		T.update_appearance(UPDATE_ICON)
 
 	return TRUE
-
-/proc/veilbreak_init_atmos_local(list/turfs)
-	var/i = 0
-	for(var/turf/open/OT in turfs)
-		i++
-		if(!istype(OT))
-			continue
-
-		if(!OT.air)
-			OT.air = new /datum/gas_mixture()
-
-		if(OT.initial_gas_mix)
-			var/datum/gas_mixture/parsed = SSair.parse_gas_string(OT.initial_gas_mix)
-			if(parsed)
-				OT.air.copy_from(parsed)
-				qdel(parsed)
-
-		OT.air.archive()
-
-		if(!(OT in SSair.active_turfs))
-			SSair.active_turfs += OT
-
-		if(i % 100 == 0)
-			CHECK_TICK
-
-/proc/veilbreak_init_lighting_local(list/turfs)
-	var/i = 0
-	for(var/turf/T in turfs)
-		i++
-		if(T.lighting_object)
-			continue
-
-		var/area/A = T.loc
-		if(!A || !A.static_lighting)
-			continue
-
-		new /datum/lighting_object(T)
-
-		if(i % 200 == 0)
-			CHECK_TICK
-
-	SSlighting.fire(resumed = FALSE, init_tick_checks = FALSE)
-
-/proc/veilbreak_init_smoothing_local(list/turfs)
-	var/i = 0
-	for(var/turf/T in turfs)
-		i++
-		if(T.smoothing_groups || T.canSmoothWith)
-			SSicon_smooth.add_to_queue(T)
-
-		for(var/obj/O in T)
-			if(O.smoothing_groups)
-				SSicon_smooth.add_to_queue(O)
-
-		if(i % 150 == 0)
-			CHECK_TICK
-
-/proc/veilbreak_init_power_local(z_level)
-	var/list/cables = list()
-	for(var/obj/structure/cable/C in world)
-		if(C.z == z_level)
-			cables += C
-
-	if(length(cables))
-		SSmachines.setup_template_powernets(cables)
-
-/proc/veilbreak_init_ai_local(list/turfs)
-	var/i = 0
-	for(var/turf/T in turfs)
-		for(var/mob/living/L in T)
-			i++
-			if(L.ai_controller)
-				L.ai_controller.set_ai_status(AI_STATUS_ON)
-
-		if(i >= 20)
-			i = 0
-			CHECK_TICK
 
 /proc/veilbreak_activate_return_portal(z_level, list/metadata)
 	var/obj/machinery/portal/exit_portal
@@ -140,7 +64,8 @@
 				if(!isobserver(AM))
 					AM.forceMove(ejection_turf)
 				continue
-			qdel(AM)
+			if(!isturf(AM))
+				qdel(AM)
 
 		T.ChangeTurf(/turf/open/space)
 		if(i % 100 == 0)
@@ -148,3 +73,46 @@
 
 	if(dest_datum)
 		qdel(dest_datum)
+
+/proc/veilbreak_init_atmos_local(list/turfs)
+	var/list/to_add = list()
+	for(var/turf/open/OT in turfs)
+		if(!istype(OT) || istype(OT, /turf/open/space))
+			continue
+		if(!OT.air)
+			OT.air = new /datum/gas_mixture()
+		if(OT.initial_gas_mix)
+			var/datum/gas_mixture/parsed = SSair.parse_gas_string(OT.initial_gas_mix)
+			if(parsed)
+				OT.air.copy_from(parsed)
+				qdel(parsed)
+		OT.air.archive()
+		to_add += OT
+
+	if(length(to_add))
+		SSair.active_turfs |= to_add
+
+/proc/veilbreak_init_lighting_local(list/turfs)
+	for(var/turf/T in turfs)
+		if(T.lighting_object)
+			continue
+		var/area/A = T.loc
+		if(A?.static_lighting)
+			new /datum/lighting_object(T)
+	SSlighting.fire(resumed = FALSE, init_tick_checks = FALSE)
+
+/proc/veilbreak_init_smoothing_local(list/turfs)
+	for(var/turf/T in turfs)
+		if(T.smoothing_groups || T.canSmoothWith)
+			SSicon_smooth.add_to_queue(T)
+		for(var/obj/O in T)
+			if(O.smoothing_groups)
+				SSicon_smooth.add_to_queue(O)
+
+/proc/veilbreak_init_power_local(z_level)
+	var/list/cables = list()
+	for(var/obj/structure/cable/C in world)
+		if(C.z == z_level)
+			cables += C
+	if(length(cables))
+		SSmachines.setup_template_powernets(cables)
