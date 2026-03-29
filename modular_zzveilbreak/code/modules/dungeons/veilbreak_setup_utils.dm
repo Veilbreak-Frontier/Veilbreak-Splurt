@@ -30,6 +30,9 @@
 	var/i = 0
 	for(var/turf/open/OT in turfs)
 		i++
+		if(!istype(OT))
+			continue
+
 		if(!OT.air)
 			OT.air = new /datum/gas_mixture()
 
@@ -38,6 +41,8 @@
 			if(parsed)
 				OT.air.copy_from(parsed)
 				qdel(parsed)
+
+		OT.air.archive()
 
 		if(!(OT in SSair.active_turfs))
 			SSair.active_turfs += OT
@@ -49,12 +54,12 @@
 	var/i = 0
 	for(var/turf/T in turfs)
 		i++
+		if(T.lighting_object)
+			continue
+
 		var/area/A = T.loc
 		if(!A || !A.static_lighting)
 			continue
-
-		if(T.lighting_object)
-			qdel(T.lighting_object)
 
 		new /datum/lighting_object(T)
 
