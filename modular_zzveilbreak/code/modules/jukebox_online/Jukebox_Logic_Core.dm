@@ -143,31 +143,28 @@
 /datum/online_jukebox/proc/play_library_track_internal(url_hash, mob/user)
 	var/list/track_data = GLOB.jukebox_library_tracks[url_hash]
 	if(!track_data)
-		online_error_message = "Track not found in library"
-		ui?.update_ui()
 		return FALSE
 
 	stop_music()
 
-	online_track_url = track_data["url"]
 	online_track_name = track_data["track_name"]
 	online_track_duration = track_data["duration"] * 10
-	online_track_hash = url_hash
 	playing_online = TRUE
 	track_start_time = world.time
 
-	var/sounds_dir = get_jukebox_sounds_dir()
-	var/sound_path = "[sounds_dir]/[url_hash].ogg"
+	var/sound_path = "[get_jukebox_sounds_dir()]/[url_hash].ogg"
 	var/area/juke_area = get_area(parent_atom)
 
-	active_song_sound = sound(file(sound_path))
-	active_song_sound.channel = CHANNEL_ONLINE_JUKEBOX
-	active_song_sound.priority = 255
-	active_song_sound.falloff = 2
-	active_song_sound.volume = volume
-	active_song_sound.environment = juke_area?.sound_environment || SOUND_ENVIRONMENT_NONE
-	active_song_sound.repeat = sound_loops
-	active_song_sound.status = SOUND_STREAM
+	var/sound/S = sound(file(sound_path))
+	S.channel = CHANNEL_ONLINE_JUKEBOX
+	S.priority = 255
+	S.falloff = 2
+	S.volume = volume
+	S.environment = juke_area?.sound_environment || SOUND_ENVIRONMENT_NONE
+	S.repeat = sound_loops
+	S.status = SOUND_STREAM
+
+	active_song_sound = S
 
 	for(var/mob/nearby in hearers(sound_range, parent_atom))
 		register_listener(nearby)
@@ -260,20 +257,25 @@
 	var/turf/listener_turf = get_turf(listener)
 	var/pref_volume = listener.client.prefs.read_preference(/datum/preference/numeric/volume/sound_jukebox)
 
-	if(!pref_volume || HAS_TRAIT(listener, TRAIT_DEAF) || !sound_turf || !listener_turf || sound_turf.z != listener_turf.z)
+	var/too_far = FALSE
+	if(!sound_turf || !listener_turf || sound_turf.z != listener_turf.z)
+		too_far = TRUE
+	else
+		var/dist_x = abs(sound_turf.x - listener_turf.x)
+		var/dist_y = abs(sound_turf.y - listener_turf.y)
+		if(dist_x > x_cutoff || dist_y > z_cutoff)
+			too_far = TRUE
+
+	if(too_far || !pref_volume || HAS_TRAIT(listener, TRAIT_DEAF))
 		listener.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
+		listeners[listener] &= ~SOUND_UPDATE
 		return
 
-	var/dist_x = sound_turf.x - listener_turf.x
-	var/dist_z = sound_turf.y - listener_turf.y
+	var/sound/sending = sound(active_song_sound)
+	sending.x = sound_turf.x - listener_turf.x
+	sending.z = sound_turf.y - listener_turf.y
+	sending.volume = volume * (pref_volume / 100)
 
-	if(abs(dist_x) > x_cutoff || abs(dist_z) > z_cutoff)
-		listener.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
-		return
+	sending.status = active_song_sound.status | (listeners[listener] & SOUND_UPDATE)
 
-	active_song_sound.x = dist_x
-	active_song_sound.z = dist_z
-	active_song_sound.volume = volume * (pref_volume / 100)
-	active_song_sound.status = listeners[listener] | SOUND_UPDATE
-
-	SEND_SOUND(listener, active_song_sound)
+	SEND_SOUND(listener, sending)
