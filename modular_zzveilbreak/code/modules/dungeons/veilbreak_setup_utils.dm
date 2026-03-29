@@ -2,6 +2,14 @@
 	SSatoms.InitializeAtoms(Z_TURFS(z_level))
 	CHECK_TICK
 
+	var/list/all_turfs = Z_TURFS(z_level)
+	var/t_count = 0
+	for(var/turf/T in all_turfs)
+		T.update_appearance(UPDATE_ICON)
+		t_count++
+		if(t_count % 100 == 0)
+			CHECK_TICK
+
 	veilbreak_spawn_mobs(z_level)
 	CHECK_TICK
 
@@ -81,9 +89,13 @@
 	var/i = 0
 	for(var/turf/open/T in z_turfs)
 		if(!T.air)
-			T.air = new /datum/gas_mixture
+			T.air = new /datum/gas_mixture()
 
 		T.Initalize_Atmos(0)
+
+		if(T.air && T.initial_gas_mix)
+			SSair.preprocess_gas_string(T.air, T.initial_gas_mix)
+
 		i++
 		if(i % 50 == 0)
 			CHECK_TICK
@@ -93,14 +105,17 @@
 	var/i = 0
 	for(var/turf/T in z_turfs)
 		if(T.lighting_object)
-			continue
+			qdel(T.lighting_object)
 
-		if(!T.space_lit)
-			new /datum/lighting_object(T)
+		new /datum/lighting_object(T)
+
+		T.update_appearance()
 
 		i++
 		if(i % 100 == 0)
 			CHECK_TICK
+
+	SSlighting.create_all_lighting_objects()
 
 	SSlighting.create_all_lighting_objects()
 
