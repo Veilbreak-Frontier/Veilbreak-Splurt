@@ -28,9 +28,9 @@
 /datum/online_jukebox/New(atom/new_parent)
 	parent_atom = new_parent
 	if(isnull(sound_range))
-		sound_range = 18
-		x_cutoff = 18
-		z_cutoff = 18
+		sound_range = 15
+		x_cutoff = 15
+		z_cutoff = 15
 	ui = new /datum/online_jukebox_ui(src)
 
 	GLOB.online_jukeboxes += src
@@ -172,18 +172,14 @@
 	active_song_sound = online_sound
 
 	if(parent_atom)
-		assigned_channel = active_song_sound.channel
-
-		for(var/mob/M in GLOB.player_list)
-			if(M?.client)
-				M.stop_sound_channel(assigned_channel)
-
 		var/list/nearby = get_hearers_in_view(sound_range, parent_atom, RECURSIVE_CONTENTS_CLIENT_MOBS)
 		for(var/mob/nearby_listener in nearby)
 			register_listener(nearby_listener)
 
-	record_jukebox_play(url_hash)
+		if(active_song_sound)
+			assigned_channel = active_song_sound.channel
 
+	record_jukebox_play(url_hash)
 	ui?.update_ui()
 	return TRUE
 
@@ -270,7 +266,6 @@
 
 	var/turf/sound_turf = get_turf(parent_atom)
 	var/turf/listener_turf = get_turf(listener)
-
 	var/new_mute_flags = NONE
 
 	var/pref_volume = listener.client.prefs.read_preference(/datum/preference/numeric/volume/sound_jukebox)
@@ -302,5 +297,6 @@
 	if(current_status & SOUND_UPDATE)
 		active_song_sound.status |= SOUND_UPDATE
 
+	active_song_sound.channel = assigned_channel
 	SEND_SOUND(listener, active_song_sound)
 	listeners[listener] |= SOUND_UPDATE
