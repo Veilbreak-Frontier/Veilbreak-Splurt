@@ -3,8 +3,7 @@
 
 	Master.StartLoadingMap()
 
-	veilbreak_phase_0_data_prime(turfs)
-	CHECK_TICK
+	veilbreak_phase_0_atomic_data_prime(turfs)
 
 	SSatoms.InitializeAtoms(turfs)
 	CHECK_TICK
@@ -21,10 +20,8 @@
 
 	return TRUE
 
-/proc/veilbreak_phase_0_data_prime(list/turfs)
-	var/i = 0
+/proc/veilbreak_phase_0_atomic_data_prime(list/turfs)
 	for(var/turf/open/OT in turfs)
-		i++
 		if(!istype(OT) || istype(OT, /turf/open/space))
 			continue
 
@@ -38,9 +35,6 @@
 				qdel(parsed)
 
 		OT.air.archive()
-
-		if(i % 150 == 0)
-			CHECK_TICK
 
 /proc/veilbreak_phase_1_subsystem_registration(list/turfs, z_level)
 	var/i = 0
@@ -63,12 +57,8 @@
 		for(var/obj/O in T)
 			if(O.smoothing_groups)
 				SSicon_smooth.add_to_queue(O)
-			if(isliving(O))
-				var/mob/living/L = O
-				if(L.ai_controller)
-					L.ai_controller.set_ai_status(AI_STATUS_ON)
 
-		if(i % 100 == 0)
+		if(i % 125 == 0)
 			CHECK_TICK
 
 	if(length(atmos_to_add))
