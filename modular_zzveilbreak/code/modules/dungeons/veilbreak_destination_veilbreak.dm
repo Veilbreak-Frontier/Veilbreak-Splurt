@@ -107,7 +107,7 @@
 	if(cleanup_in_progress)
 		return
 	cleanup_in_progress = TRUE
-	veilbreak_cleanup_zlevel(z_level, ejection_turf, src)
+	//veilbreak_cleanup_zlevel(z_level, ejection_turf, src)
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)
 	generating = FALSE
