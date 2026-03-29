@@ -47,8 +47,8 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 	load_jukebox_library()
 
 /proc/update_all_jukebox_uis()
-	for(var/datum/online_jukebox/juke in GLOB.online_jukeboxes)
-		juke.ui?.update_ui()
+	for(var/datum/online_jukebox/J in GLOB.online_jukeboxes)
+		J.ui?.update_ui()
 
 /proc/perform_jukebox_health_check()
 	GLOB.jukebox_last_check = world.realtime

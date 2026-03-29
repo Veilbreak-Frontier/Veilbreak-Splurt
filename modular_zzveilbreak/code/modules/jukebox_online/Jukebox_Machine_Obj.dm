@@ -29,6 +29,8 @@
 	return ..()
 
 /obj/machinery/jukebox/online/interact(mob/user)
+	if(online_component)
+		online_component.ui.ui_interact(user)
 	if(isobserver(user))
 		to_chat(user, span_warning("You cannot interact with the jukebox as an observer!"))
 		return
