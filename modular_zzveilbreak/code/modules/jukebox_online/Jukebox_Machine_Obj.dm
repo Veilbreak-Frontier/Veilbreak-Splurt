@@ -62,24 +62,23 @@
 		if(!anchored)
 			online_component?.stop_music()
 			if(music_player)
-				var/cleanup_channel = music_player.active_song_sound?.channel
+				var/legacy_channel = music_player.active_song_sound?.channel || CHANNEL_JUKEBOX
 				music_player.active_song_sound = null
-				if(cleanup_channel)
-					for(var/mob/M in GLOB.player_list)
-						if(M?.client)
-							M.stop_sound_channel(cleanup_channel)
+				for(var/mob/M in GLOB.player_list)
+					if(M?.client)
+						M.stop_sound_channel(legacy_channel)
 		return TRUE
 	return ..()
+
 
 /obj/machinery/jukebox/online/power_change()
 	. = ..()
 	if(machine_stat & NOPOWER)
 		online_component?.stop_music()
 		if(music_player)
-			var/cleanup_channel = music_player.active_song_sound?.channel
+			var/legacy_channel = music_player.active_song_sound?.channel || CHANNEL_JUKEBOX
 			music_player.active_song_sound = null
-			if(cleanup_channel)
-				for(var/mob/M in GLOB.player_list)
-					if(M?.client)
-						M.stop_sound_channel(cleanup_channel)
+			for(var/mob/M in GLOB.player_list)
+				if(M?.client)
+					M.stop_sound_channel(legacy_channel)
 	update_appearance()

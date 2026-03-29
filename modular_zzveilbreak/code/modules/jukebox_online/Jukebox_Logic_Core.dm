@@ -1,4 +1,4 @@
-#define CHANNEL_ONLINE_JUKEBOX CHANNEL_JUKEBOX
+GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 
 #define MUTE_DEAF (1<<0)
 #define MUTE_PREF (1<<1)
@@ -34,11 +34,10 @@
 	ui = new /datum/online_jukebox_ui(src)
 	GLOB.online_jukeboxes += src
 
-	var/static/next_jukebox_channel = 900
-	assigned_channel = next_jukebox_channel
-	next_jukebox_channel++
-	if(next_jukebox_channel > 1000)
-		next_jukebox_channel = 900
+	assigned_channel = GLOB.next_jukebox_channel_id
+	GLOB.next_jukebox_channel_id++
+	if(GLOB.next_jukebox_channel_id > 1010)
+		GLOB.next_jukebox_channel_id = 900
 
 	if(!GLOB.jukebox_library_initialized)
 		initialize_jukebox_library()
@@ -190,17 +189,18 @@
 	return TRUE
 
 /datum/online_jukebox/proc/stop_music()
-	if(active_song_sound)
-		unlisten_all()
-		active_song_sound = null
+	if(!playing_online && !active_song_sound)
+		return
 
 	if(assigned_channel)
 		for(var/mob/M in GLOB.player_list)
 			if(M?.client)
 				M.stop_sound_channel(assigned_channel)
-		assigned_channel = 0
 
 	playing_online = FALSE
+	active_song_sound = null
+	unlisten_all()
+
 	online_track_url = null
 	online_track_name = null
 	online_track_duration = 0
@@ -272,37 +272,27 @@
 
 	var/turf/sound_turf = get_turf(parent_atom)
 	var/turf/listener_turf = get_turf(listener)
-	var/new_mute_flags = NONE
 
 	var/pref_volume = listener.client.prefs.read_preference(/datum/preference/numeric/volume/sound_jukebox)
-	if(!pref_volume)
-		new_mute_flags |= MUTE_PREF
 
-	if(HAS_TRAIT(listener, TRAIT_DEAF))
-		new_mute_flags |= MUTE_DEAF
-
-	if(!sound_turf || !listener_turf || sound_turf.z != listener_turf.z)
-		new_mute_flags |= MUTE_RANGE
+	var/should_mute = FALSE
+	if(!pref_volume || HAS_TRAIT(listener, TRAIT_DEAF) || !sound_turf || !listener_turf || sound_turf.z != listener_turf.z)
+		should_mute = TRUE
 	else
-		var/new_x = sound_turf.x - listener_turf.x
-		var/new_z = sound_turf.y - listener_turf.y
-		if(abs(new_x) > x_cutoff || abs(new_z) > z_cutoff)
-			new_mute_flags |= MUTE_RANGE
-		else
-			active_song_sound.x = new_x
-			active_song_sound.z = new_z
-			active_song_sound.volume = volume * (pref_volume / 100)
+		var/dist_x = abs(sound_turf.x - listener_turf.x)
+		var/dist_y = abs(sound_turf.y - listener_turf.y)
+		if(dist_x > x_cutoff || dist_y > z_cutoff)
+			should_mute = TRUE
 
-	if(new_mute_flags)
-		listeners[listener] |= SOUND_MUTE
-	else
-		listeners[listener] &= ~SOUND_MUTE
+	if(should_mute)
+		listener.stop_sound_channel(assigned_channel)
+		return
 
-	var/current_status = listeners[listener]
-	active_song_sound.status = current_status
-	if(current_status & SOUND_UPDATE)
-		active_song_sound.status |= SOUND_UPDATE
+	var/sound/S = sound(active_song_sound)
+	S.channel = assigned_channel
+	S.x = sound_turf.x - listener_turf.x
+	S.z = sound_turf.y - listener_turf.y
+	S.volume = volume * (pref_volume / 100)
+	S.status |= SOUND_UPDATE
 
-	active_song_sound.channel = assigned_channel
-	SEND_SOUND(listener, active_song_sound)
-	listeners[listener] |= SOUND_UPDATE
+	SEND_SOUND(listener, S)
