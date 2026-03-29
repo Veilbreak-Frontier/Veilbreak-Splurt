@@ -278,15 +278,17 @@
 			too_far = TRUE
 
 	if(too_far || !pref_volume || HAS_TRAIT(listener, TRAIT_DEAF))
-		listener.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
-		listeners[listener] &= ~SOUND_UPDATE
+		deregister_listener(listener)
 		return
 
 	var/sound/sending = sound(active_song_sound)
-	sending.x = sound_turf.x - listener_turf.x
-	sending.z = sound_turf.y - listener_turf.y
-	sending.volume = volume * (pref_volume / 100)
+	sending.channel = CHANNEL_ONLINE_JUKEBOX
 
+	sending.x = sound_turf.x - listener_turf.x
+	sending.y = sound_turf.y - listener_turf.y
+	sending.z = 0
+
+	sending.volume = volume * (pref_volume / 100)
 	sending.status = active_song_sound.status | (listeners[listener] & SOUND_UPDATE)
 
 	SEND_SOUND(listener, sending)
