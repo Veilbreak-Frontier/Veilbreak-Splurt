@@ -81,10 +81,22 @@
 /datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)
 	if(generated)
 		return
-	veilbreak_initialize_zlevel(dungeon_z_level, metadata)
-	generated = TRUE
+
 	generating = FALSE
 	generation_progress = 100
+
+	SSatoms.InitializeAtoms(Z_TURFS(dungeon_z_level))
+
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_spawn_mobs, dungeon_z_level), 0.5 SECONDS)
+
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_areas_power, dungeon_z_level), 1 SECONDS)
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_air, dungeon_z_level), 1.5 SECONDS)
+
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_smoothing, dungeon_z_level), 2 SECONDS)
+
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_final_ai_prep, dungeon_z_level), 3 SECONDS)
+
+	generated = TRUE
 	if(connected_control_computer)
 		connected_control_computer.on_generation_success()
 	target_turf = get_target_turf()

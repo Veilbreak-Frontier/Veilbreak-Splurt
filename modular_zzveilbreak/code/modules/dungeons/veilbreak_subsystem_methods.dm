@@ -31,27 +31,26 @@
 			var/obj/machinery/door/D = M
 			D.update_appearance()
 		processed++
-		if(processed % 100 == 0)
+		if(processed % 50 == 0)
 			CHECK_TICK
 
 /proc/veilbreak_init_smoothing(z_level)
 	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
-	for(var/i in 1 to length(z_turfs))
-		var/turf/T = z_turfs[i]
-
-		if(T.smoothing_flags & USES_SMOOTHING)
-			SSicon_smooth.add_to_queue(T)
-
-		for(var/obj/O in T)
-			if(O.smoothing_flags & USES_SMOOTHING)
-				SSicon_smooth.add_to_queue(O)
-
-		if(i % 500 == 0)
+	var/i = 0
+	for(var/turf/T in z_turfs)
+		T.smooth_icon()
+		i++
+		if(i % 100 == 0)
 			CHECK_TICK
 
 /proc/veilbreak_final_ai_prep(z_level)
-	for(var/mob/living/basic/M in GLOB.basic_mobs)
-		if(M.z != z_level || QDELETED(M))
+	for(var/mob/living/basic/void_creature/V in world)
+		if(V.z != z_level)
 			continue
-		if(M.ai_controller)
-			M.ai_controller.set_ai_status(AI_STATUS_ON)
+
+		if(!(V in GLOB.basic_mobs))
+			GLOB.basic_mobs += V
+
+		if(V.ai_controller)
+			V.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, null)
+		CHECK_TICK

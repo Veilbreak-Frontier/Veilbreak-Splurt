@@ -1,14 +1,16 @@
 /proc/veilbreak_initialize_zlevel(z_level, list/metadata)
-	veilbreak_spawn_mobs(z_level)
-	veilbreak_init_ai(z_level)
-	veilbreak_init_areas_power(z_level)
-	veilbreak_init_machinery(z_level)
-	veilbreak_init_lighting(z_level)
-	veilbreak_init_smoothing(z_level)
-	veilbreak_activate_return_portal(z_level, metadata)
+	SSatoms.InitializeAtoms(Z_TURFS(z_level))
 
-	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_air, z_level), 2 SECONDS)
-	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_final_ai_prep, z_level), 3 SECONDS)
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_spawn_mobs, z_level), 5)
+
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_areas_power, z_level), 10)
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_air, z_level), 12)
+
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_machinery, z_level), 15)
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_smoothing, z_level), 20)
+
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_activate_return_portal, z_level, metadata), 25)
+	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_final_ai_prep, z_level), 30)
 
 /proc/veilbreak_spawn_mobs(z_level)
 	var/processed = 0
@@ -57,22 +59,23 @@
 			CHECK_TICK
 
 /proc/veilbreak_init_air(z_level)
-	if(!SSair || !SSair.initialized)
-		return
 	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
-	for(var/i in 1 to length(z_turfs))
-		var/turf/open/T = z_turfs[i]
-		if(istype(T))
-			T.Initalize_Atmos(0)
-		if(i % 200 == 0)
+	var/i = 0
+	for(var/turf/open/T in z_turfs)
+		T.Initalize_Atmos(0)
+		i++
+		if(i % 50 == 0)
 			CHECK_TICK
 
 /proc/veilbreak_init_lighting(z_level)
-	if(!SSlighting || !SSlighting.initialized)
-		return
-	for(var/turf/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
+	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
+	var/i = 0
+	for(var/turf/T in z_turfs)
 		if(!T.lighting_object)
 			new /datum/lighting_object(T)
+		i++
+		if(i % 100 == 0)
+			CHECK_TICK
 	SSlighting.create_all_lighting_objects()
 
 /proc/veilbreak_activate_return_portal(z_level, list/metadata)
