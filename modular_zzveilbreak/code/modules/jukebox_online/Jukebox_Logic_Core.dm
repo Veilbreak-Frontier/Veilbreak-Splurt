@@ -1,5 +1,4 @@
-GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
-
+#define CHANNEL_ONLINE_JUKEBOX CHANNEL_JUKEBOX
 #define MUTE_DEAF (1<<0)
 #define MUTE_PREF (1<<1)
 #define MUTE_RANGE (1<<2)
@@ -23,7 +22,6 @@ GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 	var/sound_range
 	var/x_cutoff
 	var/z_cutoff
-	var/assigned_channel = 0
 
 /datum/online_jukebox/New(atom/new_parent)
 	parent_atom = new_parent
@@ -34,11 +32,6 @@ GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 	ui = new /datum/online_jukebox_ui(src)
 	GLOB.online_jukeboxes += src
 
-	assigned_channel = GLOB.next_jukebox_channel_id
-	GLOB.next_jukebox_channel_id++
-	if(GLOB.next_jukebox_channel_id > 1010)
-		GLOB.next_jukebox_channel_id = 900
-
 	if(!GLOB.jukebox_library_initialized)
 		initialize_jukebox_library()
 
@@ -46,13 +39,6 @@ GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 	GLOB.online_jukeboxes -= src
 	stop_music()
 	QDEL_NULL(ui)
-
-	if(listeners)
-		for(var/mob/M in listeners)
-			deregister_listener(M)
-		listeners.Cut()
-		listeners = null
-
 	parent_atom = null
 	return ..()
 
@@ -163,7 +149,7 @@ GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 	var/sound_path = "[sounds_dir]/[url_hash].ogg"
 
 	var/sound/online_sound = sound(file(sound_path))
-	online_sound.channel = assigned_channel
+	online_sound.channel = CHANNEL_ONLINE_JUKEBOX
 	online_sound.priority = 255
 	online_sound.falloff = 2
 	online_sound.volume = volume
@@ -178,7 +164,7 @@ GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 	if(parent_atom)
 		for(var/mob/M in GLOB.player_list)
 			if(M?.client)
-				M.stop_sound_channel(assigned_channel)
+				M.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
 
 		var/list/nearby = get_hearers_in_view(sound_range, parent_atom, RECURSIVE_CONTENTS_CLIENT_MOBS)
 		for(var/mob/nearby_listener in nearby)
@@ -192,10 +178,9 @@ GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 	if(!playing_online && !active_song_sound)
 		return
 
-	if(assigned_channel)
-		for(var/mob/M in GLOB.player_list)
-			if(M?.client)
-				M.stop_sound_channel(assigned_channel)
+	for(var/mob/M in GLOB.player_list)
+		if(M?.client)
+			M.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
 
 	playing_online = FALSE
 	active_song_sound = null
@@ -217,9 +202,9 @@ GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 	ui?.update_ui()
 
 /datum/online_jukebox/proc/unlisten_all()
-	for(var/mob/listening in listeners)
-		deregister_listener(listening)
-	active_song_sound = null
+	for(var/mob/M in listeners)
+		deregister_listener(M)
+	listeners.Cut()
 
 /datum/online_jukebox/proc/update_all()
 	for(var/mob/listening in listeners)
@@ -254,8 +239,7 @@ GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 		return
 
 	listeners -= no_longer_listening
-	if(assigned_channel)
-		no_longer_listening.stop_sound_channel(assigned_channel)
+	no_longer_listening.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
 
 	UnregisterSignal(no_longer_listening, list(
 		COMSIG_MOB_LOGIN,
@@ -285,11 +269,11 @@ GLOBAL_VAR_INIT(next_jukebox_channel_id, 900)
 			should_mute = TRUE
 
 	if(should_mute)
-		listener.stop_sound_channel(assigned_channel)
+		listener.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
 		return
 
 	var/sound/S = sound(active_song_sound)
-	S.channel = assigned_channel
+	S.channel = CHANNEL_ONLINE_JUKEBOX
 	S.x = sound_turf.x - listener_turf.x
 	S.z = sound_turf.y - listener_turf.y
 	S.volume = volume * (pref_volume / 100)

@@ -62,11 +62,10 @@
 		if(!anchored)
 			online_component?.stop_music()
 			if(music_player)
-				var/legacy_channel = music_player.active_song_sound?.channel || CHANNEL_JUKEBOX
 				music_player.active_song_sound = null
 				for(var/mob/M in GLOB.player_list)
 					if(M?.client)
-						M.stop_sound_channel(legacy_channel)
+						M.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
 		return TRUE
 	return ..()
 
