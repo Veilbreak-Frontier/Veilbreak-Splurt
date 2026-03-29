@@ -62,9 +62,12 @@
 		if(!anchored)
 			online_component?.stop_music()
 			if(music_player)
+				var/cleanup_channel = music_player.active_song_sound?.channel
 				music_player.active_song_sound = null
-				for(var/mob/M in GLOB.player_list)
-					M.stop_sound_channel(CHANNEL_JUKEBOX)
+				if(cleanup_channel)
+					for(var/mob/M in GLOB.player_list)
+						if(M?.client)
+							M.stop_sound_channel(cleanup_channel)
 		return TRUE
 	return ..()
 
@@ -73,9 +76,12 @@
 	if(machine_stat & NOPOWER)
 		online_component?.stop_music()
 		if(music_player)
+			var/cleanup_channel = music_player.active_song_sound?.channel
 			music_player.active_song_sound = null
-			for(var/mob/M in GLOB.player_list)
-				M.stop_sound_channel(CHANNEL_JUKEBOX)
+			if(cleanup_channel)
+				for(var/mob/M in GLOB.player_list)
+					if(M?.client)
+						M.stop_sound_channel(cleanup_channel)
 	update_appearance()
 
 /obj/machinery/jukebox/online/Moved(atom/old_loc, dir, forced)

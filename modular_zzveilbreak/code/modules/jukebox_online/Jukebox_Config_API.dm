@@ -135,7 +135,6 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 	request.prepare(RUSTG_HTTP_METHOD_POST, "[GLOB.jukebox_api_url]/record_play/[url_hash]", "", "")
 	request.begin_async()
 	check_and_prune_library()
-	update_all_jukebox_uis()
 
 /proc/check_and_prune_library()
 	if(length(GLOB.jukebox_library_tracks) < 50)

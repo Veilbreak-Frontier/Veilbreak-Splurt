@@ -23,13 +23,14 @@
 	var/sound_range
 	var/x_cutoff
 	var/z_cutoff
+	var/assigned_channel = 0
 
 /datum/online_jukebox/New(atom/new_parent)
 	parent_atom = new_parent
 	if(isnull(sound_range))
-		sound_range = 15
-		x_cutoff = 15
-		z_cutoff = 15
+		sound_range = 18
+		x_cutoff = 18
+		z_cutoff = 18
 	ui = new /datum/online_jukebox_ui(src)
 
 	GLOB.online_jukeboxes += src
@@ -158,7 +159,7 @@
 	var/sound_path = "[sounds_dir]/[url_hash].ogg"
 
 	var/sound/online_sound = sound(file(sound_path))
-	online_sound.channel = CHANNEL_ONLINE_JUKEBOX
+	online_sound.channel = 0
 	online_sound.priority = 255
 	online_sound.falloff = 2
 	online_sound.volume = volume
@@ -171,9 +172,11 @@
 	active_song_sound = online_sound
 
 	if(parent_atom)
+		assigned_channel = active_song_sound.channel
+
 		for(var/mob/M in GLOB.player_list)
 			if(M?.client)
-				M.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
+				M.stop_sound_channel(assigned_channel)
 
 		var/list/nearby = get_hearers_in_view(sound_range, parent_atom, RECURSIVE_CONTENTS_CLIENT_MOBS)
 		for(var/mob/nearby_listener in nearby)
@@ -188,6 +191,13 @@
 	if(active_song_sound)
 		unlisten_all()
 		active_song_sound = null
+
+	if(assigned_channel)
+		for(var/mob/M in GLOB.player_list)
+			if(M?.client)
+				M.stop_sound_channel(assigned_channel)
+		assigned_channel = 0
+
 	playing_online = FALSE
 	online_track_url = null
 	online_track_name = null
@@ -242,7 +252,8 @@
 		return
 
 	listeners -= no_longer_listening
-	no_longer_listening.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
+	if(assigned_channel)
+		no_longer_listening.stop_sound_channel(assigned_channel)
 
 	UnregisterSignal(no_longer_listening, list(
 		COMSIG_MOB_LOGIN,
