@@ -167,7 +167,8 @@
 	active_song_sound = S
 
 	for(var/mob/nearby in hearers(sound_range, parent_atom))
-		register_listener(nearby)
+		if(nearby.client)
+			register_listener(nearby)
 
 	record_jukebox_play(url_hash)
 	ui?.update_ui()
@@ -178,24 +179,23 @@
 		return
 
 	playing_online = FALSE
-
-	for(var/mob/M in listeners)
-		if(M.client)
-			M.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
-
-	listeners.Cut()
-
 	active_song_sound = null
+
+	var/list/current_listeners = listeners.Copy()
+	for(var/mob/M in current_listeners)
+		deregister_listener(M)
 
 	online_track_url = null
 	online_track_name = null
 	online_track_duration = 0
 	online_track_hash = null
 	track_start_time = 0
-	online_error_message = ""
 
 	var/obj/machinery/jukebox/online/parent = parent_atom
 	if(istype(parent))
+		if(parent.music_player)
+			parent.music_player.unlisten_all()
+			parent.music_player.active_song_sound = null
 		parent.update_appearance()
 
 	ui?.update_ui()
@@ -245,7 +245,11 @@
 		return
 
 	listeners -= no_longer_listening
-	no_longer_listening.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
+
+	var/sound/stop_cmd = sound(null)
+	stop_cmd.channel = CHANNEL_ONLINE_JUKEBOX
+	stop_cmd.priority = 255
+	SEND_SOUND(no_longer_listening, stop_cmd)
 
 	UnregisterSignal(no_longer_listening, list(
 		COMSIG_MOB_LOGIN,
