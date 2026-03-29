@@ -1,16 +1,34 @@
 /proc/veilbreak_initialize_zlevel(z_level, list/metadata)
 	SSatoms.InitializeAtoms(Z_TURFS(z_level))
+	CHECK_TICK
 
-	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_spawn_mobs, z_level), 5)
+	veilbreak_spawn_mobs(z_level)
+	CHECK_TICK
 
-	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_areas_power, z_level), 10)
-	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_air, z_level), 12)
+	veilbreak_init_ai(z_level) // Initial setup
+	CHECK_TICK
 
-	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_machinery, z_level), 15)
-	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_init_smoothing, z_level), 20)
+	veilbreak_init_areas_power(z_level)
+	CHECK_TICK
 
-	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_activate_return_portal, z_level, metadata), 25)
-	addtimer(CALLBACK(GLOBAL_PROC, .proc/veilbreak_final_ai_prep, z_level), 30)
+	veilbreak_init_machinery(z_level)
+	CHECK_TICK
+
+	veilbreak_init_air_blocking(z_level)
+	CHECK_TICK
+
+	veilbreak_init_lighting_blocking(z_level)
+	CHECK_TICK
+
+	veilbreak_init_smoothing(z_level)
+	CHECK_TICK
+
+	veilbreak_activate_return_portal(z_level, metadata)
+	CHECK_TICK
+
+	veilbreak_final_ai_prep(z_level)
+
+	return TRUE
 
 /proc/veilbreak_spawn_mobs(z_level)
 	var/processed = 0
@@ -58,7 +76,7 @@
 		if(processed % 25 == 0)
 			CHECK_TICK
 
-/proc/veilbreak_init_air(z_level)
+/proc/veilbreak_init_air_blocking(z_level)
 	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
 	var/i = 0
 	for(var/turf/open/T in z_turfs)
@@ -67,15 +85,17 @@
 		if(i % 50 == 0)
 			CHECK_TICK
 
-/proc/veilbreak_init_lighting(z_level)
+/proc/veilbreak_init_lighting_blocking(z_level)
 	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
 	var/i = 0
 	for(var/turf/T in z_turfs)
-		if(!T.lighting_object)
+		if(!T.lighting_object && !T.space_lit)
 			new /datum/lighting_object(T)
 		i++
 		if(i % 100 == 0)
 			CHECK_TICK
+	SSlighting.create_all_lighting_objects()
+
 	SSlighting.create_all_lighting_objects()
 
 /proc/veilbreak_activate_return_portal(z_level, list/metadata)

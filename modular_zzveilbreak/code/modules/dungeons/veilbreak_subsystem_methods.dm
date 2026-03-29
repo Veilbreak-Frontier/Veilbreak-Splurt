@@ -44,13 +44,18 @@
 			CHECK_TICK
 
 /proc/veilbreak_final_ai_prep(z_level)
-	for(var/mob/living/basic/void_creature/V in world)
-		if(V.z != z_level)
+	var/verified_count = 0
+	for(var/mob/living/L in world)
+		if(L.z != z_level || !L.ai_controller)
 			continue
 
-		if(!(V in GLOB.basic_mobs))
-			GLOB.basic_mobs += V
+		if(!(L in GLOB.basic_mobs))
+			GLOB.basic_mobs += L
 
-		if(V.ai_controller)
-			V.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, null)
-		CHECK_TICK
+		L.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, null)
+
+		L.ai_controller.set_ai_status(AI_STATUS_ON)
+
+		verified_count++
+		if(verified_count % 20 == 0)
+			CHECK_TICK
