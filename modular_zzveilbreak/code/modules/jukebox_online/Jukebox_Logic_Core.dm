@@ -32,8 +32,13 @@
 		x_cutoff = 15
 		z_cutoff = 15
 	ui = new /datum/online_jukebox_ui(src)
-
 	GLOB.online_jukeboxes += src
+
+	var/static/next_jukebox_channel = 900
+	assigned_channel = next_jukebox_channel
+	next_jukebox_channel++
+	if(next_jukebox_channel > 1000)
+		next_jukebox_channel = 900
 
 	if(!GLOB.jukebox_library_initialized)
 		initialize_jukebox_library()
@@ -159,7 +164,7 @@
 	var/sound_path = "[sounds_dir]/[url_hash].ogg"
 
 	var/sound/online_sound = sound(file(sound_path))
-	online_sound.channel = 0
+	online_sound.channel = assigned_channel
 	online_sound.priority = 255
 	online_sound.falloff = 2
 	online_sound.volume = volume
@@ -172,12 +177,13 @@
 	active_song_sound = online_sound
 
 	if(parent_atom)
+		for(var/mob/M in GLOB.player_list)
+			if(M?.client)
+				M.stop_sound_channel(assigned_channel)
+
 		var/list/nearby = get_hearers_in_view(sound_range, parent_atom, RECURSIVE_CONTENTS_CLIENT_MOBS)
 		for(var/mob/nearby_listener in nearby)
 			register_listener(nearby_listener)
-
-		if(active_song_sound)
-			assigned_channel = active_song_sound.channel
 
 	record_jukebox_play(url_hash)
 	ui?.update_ui()
