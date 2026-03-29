@@ -17,9 +17,9 @@
 	var/datum/component/remote_materials/materials
 	/// List of all available ores that can be produced
 	var/static/list/available_ores = list(
-    /obj/item/stack/sheet/iron = 100,
+    /obj/item/stack/sheet/iron = 80,
     /obj/item/stack/sheet/glass = 80,
-    /obj/item/stack/sheet/plastic = 50,
+    /obj/item/stack/sheet/plastic = 12,
     /obj/item/stack/sheet/mineral/plasma = 30,
     /obj/item/stack/sheet/mineral/silver = 25,
     /obj/item/stack/sheet/mineral/titanium = 20,

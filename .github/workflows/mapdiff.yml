@@ -1,0 +1,50 @@
+name: Map Diff (Pages)
+on: [pull_request]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  mapdiff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: pip install git+https://github.com/tgstation/MapDiffBot.git
+
+      - name: Run MapDiffBot
+        run: python -m mapdiffbot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy Images to GH Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./map_diffs
+          destination_dir: pr-${{ github.event.number }}
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNum = context.issue.number;
+            const repo = context.repo.repo;
+            const owner = context.repo.owner;
+            const url = `https://${owner}.github.io/${repo}/pr-${prNum}/diff.png`;
+            github.rest.issues.createComment({
+              issue_number: prNum,
+              owner: owner,
+              repo: repo,
+              body: `### Map Changes Detected\n![Map Diff](${url})`
+            })
