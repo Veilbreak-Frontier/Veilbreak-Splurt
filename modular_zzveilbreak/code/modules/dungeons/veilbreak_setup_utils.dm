@@ -1,123 +1,102 @@
 /proc/veilbreak_initialize_zlevel(z_level, list/metadata)
-	SSatoms.InitializeAtoms(Z_TURFS(z_level))
+	var/list/turfs = Z_TURFS(z_level)
+
+	SSatoms.InitializeAtoms(turfs)
 	CHECK_TICK
 
-	var/list/all_turfs = Z_TURFS(z_level)
-	var/t_count = 0
-	for(var/turf/T in all_turfs)
-		T.update_appearance(UPDATE_ICON)
-		t_count++
-		if(t_count % 100 == 0)
-			CHECK_TICK
-
-	veilbreak_spawn_mobs(z_level)
+	veilbreak_init_atmos_local(turfs)
 	CHECK_TICK
 
-	veilbreak_init_ai(z_level)
+	veilbreak_init_lighting_local(turfs)
 	CHECK_TICK
 
-	veilbreak_init_areas_power(z_level)
+	veilbreak_init_smoothing_local(turfs)
 	CHECK_TICK
 
-	veilbreak_init_machinery(z_level)
+	veilbreak_init_power_local(z_level)
 	CHECK_TICK
 
-	veilbreak_init_air_blocking(z_level)
-	CHECK_TICK
-
-	veilbreak_init_lighting_blocking(z_level)
-	CHECK_TICK
-
-	veilbreak_init_smoothing(z_level)
+	veilbreak_init_ai_local(turfs)
 	CHECK_TICK
 
 	veilbreak_activate_return_portal(z_level, metadata)
-	CHECK_TICK
 
-	veilbreak_final_ai_prep(z_level)
+	for(var/turf/T in turfs)
+		T.update_appearance(UPDATE_ICON)
 
 	return TRUE
 
-/proc/veilbreak_spawn_mobs(z_level)
-	var/processed = 0
-	for(var/obj/effect/mob_placeholder/P in world)
-		if(P.z != z_level)
-			continue
-
-		processed++
-		var/turf/T = get_turf(P)
-		if(!T)
-			qdel(P)
-			continue
-
-		if(!P.mob_type)
-			P.determine_mob_type_from_self()
-
-		var/mob/living/new_mob = new P.mob_type(T)
-		if(new_mob)
-			if(P.mob_faction)
-				new_mob.faction = P.mob_faction.Copy()
-			if(P.mob_name && P.mob_name != "mob placeholder")
-				new_mob.name = P.mob_name
-			var/datum/ai_controller/controller_path = initial(new_mob.ai_controller)
-			if(ispath(controller_path))
-				new_mob.ai_controller = new controller_path(new_mob)
-			if(!(new_mob in GLOB.basic_mobs))
-				GLOB.basic_mobs += new_mob
-		qdel(P)
-		if(processed % 50 == 0)
-			CHECK_TICK
-
-/proc/veilbreak_init_ai(z_level)
-	var/processed = 0
-	for(var/mob/living/basic/M in world)
-		if(M.z != z_level)
-			continue
-		if(!M.ai_controller)
-			var/datum/ai_controller/controller_path = initial(M.ai_controller)
-			if(ispath(controller_path))
-				M.ai_controller = new controller_path(M)
-		if(M.ai_controller)
-			M.ai_controller.pawn = M
-			M.ai_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET] = null
-		processed++
-		if(processed % 25 == 0)
-			CHECK_TICK
-
-/proc/veilbreak_init_air_blocking(z_level)
-	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
+/proc/veilbreak_init_atmos_local(list/turfs)
 	var/i = 0
-	for(var/turf/open/T in z_turfs)
-		if(!T.air)
-			T.air = new /datum/gas_mixture()
-
-		T.Initalize_Atmos(0)
-
-		if(T.air && T.initial_gas_mix)
-			SSair.preprocess_gas_string(T.air, T.initial_gas_mix)
-
+	for(var/turf/open/OT in turfs)
 		i++
-		if(i % 50 == 0)
+		if(!OT.air)
+			OT.air = new /datum/gas_mixture()
+
+		if(OT.initial_gas_mix)
+			var/datum/gas_mixture/parsed = SSair.parse_gas_string(OT.initial_gas_mix)
+			if(parsed)
+				OT.air.copy_from(parsed)
+				qdel(parsed)
+
+		if(!(OT in SSair.active_turfs))
+			SSair.active_turfs += OT
+
+		if(i % 100 == 0)
 			CHECK_TICK
 
-/proc/veilbreak_init_lighting_blocking(z_level)
-	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
+/proc/veilbreak_init_lighting_local(list/turfs)
 	var/i = 0
-	for(var/turf/T in z_turfs)
+	for(var/turf/T in turfs)
+		i++
+		var/area/A = T.loc
+		if(!A || !A.static_lighting)
+			continue
+
 		if(T.lighting_object)
 			qdel(T.lighting_object)
 
 		new /datum/lighting_object(T)
 
-		T.update_appearance()
-
-		i++
-		if(i % 100 == 0)
+		if(i % 200 == 0)
 			CHECK_TICK
 
-	SSlighting.create_all_lighting_objects()
+	SSlighting.fire(resumed = FALSE, init_tick_checks = FALSE)
 
-	SSlighting.create_all_lighting_objects()
+/proc/veilbreak_init_smoothing_local(list/turfs)
+	var/i = 0
+	for(var/turf/T in turfs)
+		i++
+		if(T.smoothing_groups || T.canSmoothWith)
+			SSicon_smooth.add_to_queue(T)
+
+		for(var/obj/O in T)
+			if(O.smoothing_groups)
+				SSicon_smooth.add_to_queue(O)
+
+		if(i % 150 == 0)
+			CHECK_TICK
+
+/proc/veilbreak_init_power_local(z_level)
+	var/list/cables = list()
+	for(var/obj/structure/cable/C in world)
+		if(C.z == z_level)
+			cables += C
+
+	if(length(cables))
+		SSmachines.setup_template_powernets(cables)
+
+/proc/veilbreak_init_ai_local(list/turfs)
+	var/i = 0
+	for(var/turf/T in turfs)
+		for(var/mob/living/L in T)
+			i++
+			if(L.ai_controller)
+				L.ai_controller.set_ai_status(AI_STATUS_ON)
+
+		if(i >= 20)
+			i = 0
+			CHECK_TICK
 
 /proc/veilbreak_activate_return_portal(z_level, list/metadata)
 	var/obj/machinery/portal/exit_portal
@@ -128,9 +107,10 @@
 		exit_portal = locate(/obj/machinery/portal) in range(2, origin)
 
 	if(!exit_portal)
-		for(var/turf/T in block(locate(1,1,z_level), locate(world.maxx, world.maxy, z_level)))
+		for(var/turf/T in Z_TURFS(z_level))
 			exit_portal = locate(/obj/machinery/portal) in T
-			if(exit_portal) break
+			if(exit_portal)
+				break
 
 	var/obj/machinery/portal/S = GLOB.station_veilbreak_portal
 	if(exit_portal && istype(S))
@@ -139,26 +119,27 @@
 		back_home.generated = TRUE
 		exit_portal.target = back_home
 		exit_portal.transport_active = TRUE
-		exit_portal.update_appearance()
+		exit_portal.update_appearance(UPDATE_ICON)
 
 /proc/veilbreak_cleanup_zlevel(z_level, turf/ejection_turf, datum/portal_destination/veilbreak/dest_datum)
 	var/obj/machinery/portal/S = GLOB.station_veilbreak_portal
 	if(istype(S))
 		S.transport_active = FALSE
-		S.update_appearance()
+		S.update_appearance(UPDATE_ICON)
 
-	var/list/z_turfs = block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level))
+	var/list/z_turfs = Z_TURFS(z_level)
 	for(var/i in 1 to length(z_turfs))
 		var/turf/T = z_turfs[i]
-		for(var/atom/movable/AM in T)
+		for(var/atom/movable/AM as anything in T.contents)
 			if(ismob(AM))
 				if(!isobserver(AM))
 					AM.forceMove(ejection_turf)
-			else
-				qdel(AM)
+				continue
+			qdel(AM)
 
 		T.ChangeTurf(/turf/open/space)
-		if(i % 500 == 0)
+		if(i % 100 == 0)
 			CHECK_TICK
 
-	qdel(dest_datum)
+	if(dest_datum)
+		qdel(dest_datum)
