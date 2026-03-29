@@ -3,33 +3,26 @@
 
 	Master.StartLoadingMap()
 
+	veilbreak_phase_0_data_prime(turfs)
+	CHECK_TICK
+
 	SSatoms.InitializeAtoms(turfs)
 	CHECK_TICK
 
-	veilbreak_init_atmos_local(turfs)
+	veilbreak_phase_1_subsystem_registration(turfs, z_level)
 	CHECK_TICK
-
-	veilbreak_init_lighting_local(turfs)
-	CHECK_TICK
-
-	veilbreak_init_smoothing_local(turfs)
-	CHECK_TICK
-
-	veilbreak_init_power_local(z_level)
-	CHECK_TICK
-
-	veilbreak_activate_return_portal(z_level, metadata)
 
 	Master.StopLoadingMap()
+
+	veilbreak_activate_return_portal(z_level, metadata)
 
 	for(var/turf/T in turfs)
 		T.update_appearance(UPDATE_ICON)
 
 	return TRUE
 
-/proc/veilbreak_init_atmos_local(list/turfs)
+/proc/veilbreak_phase_0_data_prime(list/turfs)
 	var/i = 0
-	var/list/to_add = list()
 	for(var/turf/open/OT in turfs)
 		i++
 		if(!istype(OT) || istype(OT, /turf/open/space))
@@ -45,54 +38,50 @@
 				qdel(parsed)
 
 		OT.air.archive()
-		to_add += OT
 
-		if(i % 100 == 0)
+		if(i % 150 == 0)
 			CHECK_TICK
 
-	if(length(to_add))
-		SSair.active_turfs |= to_add
-
-/proc/veilbreak_init_lighting_local(list/turfs)
+/proc/veilbreak_phase_1_subsystem_registration(list/turfs, z_level)
 	var/i = 0
+	var/list/atmos_to_add = list()
+
 	for(var/turf/T in turfs)
 		i++
-		if(T.lighting_object)
-			continue
 
-		var/area/A = T.loc
-		if(!A || !A.static_lighting)
-			continue
+		if(istype(T, /turf/open) && !istype(T, /turf/open/space))
+			atmos_to_add += T
 
-		new /datum/lighting_object(T)
+		if(!T.lighting_object)
+			var/area/A = T.loc
+			if(A && A.static_lighting)
+				new /datum/lighting_object(T)
 
-		if(i % 200 == 0)
-			CHECK_TICK
-
-	SSlighting.fire(resumed = FALSE, init_tick_checks = FALSE)
-
-/proc/veilbreak_init_smoothing_local(list/turfs)
-	var/i = 0
-	for(var/turf/T in turfs)
-		i++
 		if(T.smoothing_groups || T.canSmoothWith)
 			SSicon_smooth.add_to_queue(T)
 
 		for(var/obj/O in T)
 			if(O.smoothing_groups)
 				SSicon_smooth.add_to_queue(O)
+			if(isliving(O))
+				var/mob/living/L = O
+				if(L.ai_controller)
+					L.ai_controller.set_ai_status(AI_STATUS_ON)
 
-		if(i % 150 == 0)
+		if(i % 100 == 0)
 			CHECK_TICK
 
-/proc/veilbreak_init_power_local(z_level)
+	if(length(atmos_to_add))
+		SSair.active_turfs |= atmos_to_add
+
 	var/list/cables = list()
 	for(var/obj/structure/cable/C in world)
 		if(C.z == z_level)
 			cables += C
-
 	if(length(cables))
 		SSmachines.setup_template_powernets(cables)
+
+	SSlighting.fire(resumed = FALSE, init_tick_checks = FALSE)
 
 /proc/veilbreak_activate_return_portal(z_level, list/metadata)
 	var/obj/machinery/portal/exit_portal
@@ -119,7 +108,6 @@
 	if(istype(S))
 		S.transport_active = FALSE
 		S.update_appearance(UPDATE_ICON)
-
 	var/list/z_turfs = Z_TURFS(z_level)
 	for(var/i in 1 to length(z_turfs))
 		var/turf/T = z_turfs[i]
