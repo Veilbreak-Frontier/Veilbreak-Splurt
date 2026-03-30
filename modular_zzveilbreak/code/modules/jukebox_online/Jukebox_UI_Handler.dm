@@ -12,7 +12,7 @@
 	return ..()
 
 /datum/online_jukebox_ui/ui_host(mob/user)
-	return jukebox?.parent_atom || src
+    return jukebox?.parent_atom || src
 
 /datum/online_jukebox_ui/ui_state(mob/user)
 	var/obj/machinery/jukebox/online/parent = jukebox?.parent_atom
@@ -50,6 +50,8 @@
 	return data
 
 /datum/online_jukebox_ui/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	if(..())
+		return TRUE
 	if(!jukebox || QDELETED(jukebox))
 		return FALSE
 
@@ -59,6 +61,8 @@
 		return TRUE
 
 	var/mob/user = ui.user
+	if(user && jukebox.parent_atom && get_dist(user, jukebox.parent_atom) > 1 && !isobserver(user))
+		return FALSE
 	switch(action)
 		if("play_online", "download_url")
 			var/url = params["url"]
@@ -118,3 +122,5 @@
 		return
 	last_update = world.time
 	SStgui.update_uis(src)
+
+

@@ -18,11 +18,9 @@
 	var/id_str = "[request_id]"
 	var/datum/portal_destination/veilbreak/destination = active_requests[id_str]
 	var/datum/http_request/request = active_requests["[id_str]_req"]
-
 	if(!istype(destination) || QDELETED(destination) || !request)
 		cleanup_request(id_str)
 		return FALSE
-
 	if(!request.is_complete())
 		var/start_time = active_requests["[id_str]_time"]
 		if(world.time - start_time > DUNGEON_GENERATOR_TIMEOUT)
@@ -30,38 +28,26 @@
 			cleanup_request(id_str)
 			return FALSE
 		return TRUE
-
 	var/datum/http_response/response = request.into_response()
-	if(!response)
-		destination.generation_failed("Empty API Response")
-		cleanup_request(id_str)
-		return FALSE
-
-	if(response.status_code != 200)
+	if(!response || response.status_code != 200)
 		destination.generation_failed("HTTP [response.status_code]: [response.body]")
 		cleanup_request(id_str)
 		return FALSE
-
 	var/list/json_data = json_decode(response.body)
 	if(json_data?["status"] != "success" || length(json_data?["dmm_content"]) <= 100)
 		destination.generation_failed("API Error: Invalid or insufficient map data")
 		cleanup_request(id_str)
 		return FALSE
-
 	if(destination)
 		destination.generation_complete(json_data)
-
 		if(length(SSatoms.initialized_state))
 			var/source = SSatoms.get_initialized_source()
-			SSicon_smooth.free_deferred(source)
-
-		SSicon_smooth.can_fire = TRUE
-		SSlighting.can_fire = TRUE
-
+			if(source)
+				SSatoms.map_loader_stop(source)
 	cleanup_request(id_str)
-	return TRUE
+	return FALSE
 
 /datum/http_dungeon_generator/proc/cleanup_request(id_str)
-	active_requests -= id_str
-	active_requests -= "[id_str]_req"
-	active_requests -= "[id_str]_time"
+	active_requests.Remove(id_str)
+	active_requests.Remove("[id_str]_req")
+	active_requests.Remove("[id_str]_time")

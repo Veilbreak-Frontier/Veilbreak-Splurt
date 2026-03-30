@@ -27,28 +27,44 @@
 	var/datum/portal_destination/veilbreak/V = linked_portal?.target
 	data["portal_present"] = !!linked_portal
 	data["portal_active"] = linked_portal?.transport_active
-	data["portal_status"] = (linked_portal && linked_portal.powered() && linked_portal.anchored)
+	data["portal_status"] = (linked_portal && (linked_portal.machine_stat & (NOPOWER|BROKEN)) == 0 && linked_portal.anchored)
 	data["generation_in_progress"] = generation_in_progress
-	data["cleanup_in_progress"] = V ? V.cleanup_in_progress : FALSE
+	data["cleanup_in_progress"] = V?.cleanup_in_progress || FALSE
+	data["generation_progress"] = V?.generation_progress || 0
+	data["can_generate"] = (linked_portal && !generation_in_progress && (!V || !V.generated))
+	data["portal_name"] = linked_portal?.name
 	if(V)
-		data["current_target"] = list("name" = V.name)
-		data["generation_status"] = V.generating ? "generating" : "ready"
-		data["generation_progress"] = V.generation_progress
-		data["can_generate"] = !V.generating && !V.generated
+		data["generation_status"] = V.generating ? "generating" : (V.generated ? "stable" : "idle")
+		data["current_target"] = list("name" = V.generated ? V.name : "0")
 	else
-		data["generation_status"] = "offline"
-		data["can_generate"] = !generation_in_progress
+		data["generation_status"] = "idle"
+		data["current_target"] = null
 	return data
 
-/obj/machinery/computer/portal_control/ui_act(action, list/params, datum/tgui/ui)
+/obj/machinery/computer/portal_control/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	if(..())
 		return
+
 	switch(action)
+		if("linkup")
+			var/found = rescan_for_portal()
+			if(found)
+				say("Dimensional matrix synchronized with hardware.")
+			else
+				say("No compatible portal signature detected in local range.")
+			return TRUE
+
+		if("deactivate")
+			if(linked_portal && linked_portal.transport_active)
+				var/datum/portal_destination/veilbreak/V = linked_portal.target
+				if(V)
+					V.cleanup_z_level_completely(V.dungeon_z_level, get_step(linked_portal, SOUTH))
+				linked_portal.transport_active = FALSE
+				linked_portal.update_appearance()
+			return TRUE
+
 		if("generate_new")
-			if(generation_in_progress)
-				return TRUE
-			if(!linked_portal || QDELETED(linked_portal))
-				say("Error: No local dimensional portal detected.")
+			if(generation_in_progress || !linked_portal || linked_portal.transport_active)
 				return TRUE
 			var/datum/portal_destination/veilbreak/V = new()
 			V.connected_control_computer = src
@@ -59,12 +75,19 @@
 				return TRUE
 			generation_in_progress = TRUE
 			return TRUE
+
+		if("recalibrate")
+			var/datum/portal_destination/veilbreak/V = linked_portal?.target
+			if(V && V.generated)
+				V.cleanup_z_level_completely(V.dungeon_z_level, get_step(linked_portal, SOUTH))
+			return TRUE
 	return FALSE
 
 /obj/machinery/computer/portal_control/proc/on_generation_success()
 	generation_in_progress = FALSE
 	playsound(src, 'sound/machines/ping.ogg', 50, TRUE)
 	if(linked_portal)
+		linked_portal.transport_active = TRUE
 		linked_portal.update_appearance()
 
 /obj/machinery/computer/portal_control/proc/on_generation_failed(reason)
@@ -72,14 +95,17 @@
 	say("Stabilization Error: [reason]")
 	playsound(src, 'sound/machines/buzz/buzz-sigh.ogg', 50, TRUE)
 
-/obj/item/circuitboard/computer/portal_control
-	name = "Circuit board (Portal Control Console)"
-	build_path = /obj/machinery/computer/portal_control
 
-/datum/design/board/portal_control
-	name = "Portal Control Console Board"
-	desc = "Allows for the construction of circuit boards used to build a Portal Control Console."
-	id = "portal_control"
-	build_path = /obj/item/circuitboard/computer/portal_control
-	category = list(RND_CATEGORY_COMPUTER + RND_SUBCATEGORY_COMPUTER_ENGINEERING)
-	departmental_flags = DEPARTMENT_BITFLAG_ENGINEERING
+/obj/machinery/computer/portal_control/proc/rescan_for_portal()
+	var/obj/machinery/portal/found_portal
+	for(var/obj/machinery/portal/P in range(3, src))
+		if(P.machine_stat & (BROKEN|NOPOWER))
+			continue
+		found_portal = P
+		break
+
+	if(found_portal)
+		linked_portal = found_portal
+		found_portal.linked_console = src
+		return TRUE
+	return FALSE

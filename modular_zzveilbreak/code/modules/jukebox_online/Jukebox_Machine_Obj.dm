@@ -29,6 +29,8 @@
 	return ..()
 
 /obj/machinery/jukebox/online/interact(mob/user)
+	if(online_component)
+		online_component.ui.ui_interact(user)
 	if(isobserver(user))
 		to_chat(user, span_warning("You cannot interact with the jukebox as an observer!"))
 		return
@@ -64,20 +66,20 @@
 			if(music_player)
 				music_player.active_song_sound = null
 				for(var/mob/M in GLOB.player_list)
-					M.stop_sound_channel(CHANNEL_JUKEBOX)
+					if(M?.client)
+						M.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
 		return TRUE
 	return ..()
+
 
 /obj/machinery/jukebox/online/power_change()
 	. = ..()
 	if(machine_stat & NOPOWER)
 		online_component?.stop_music()
 		if(music_player)
+			var/legacy_channel = music_player.active_song_sound?.channel || CHANNEL_JUKEBOX
 			music_player.active_song_sound = null
 			for(var/mob/M in GLOB.player_list)
-				M.stop_sound_channel(CHANNEL_JUKEBOX)
+				if(M?.client)
+					M.stop_sound_channel(legacy_channel)
 	update_appearance()
-
-/obj/machinery/jukebox/online/Moved(atom/old_loc, dir, forced)
-	. = ..()
-	online_component?.update_all()
