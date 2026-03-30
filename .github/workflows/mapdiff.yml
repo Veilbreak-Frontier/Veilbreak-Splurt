@@ -9,7 +9,7 @@ jobs:
   mapdiff:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Game Repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -19,13 +19,22 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install Dependencies
-        run: pip install git+https://github.com/tgstation/MapDiffBot.git
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup MapDiffBot
+        run: |
+          git clone https://github.com/tgstation/MapDiffBot.git bot
+          pip install -r bot/requirements.txt
+          cargo install dmm-tools --version 0.3.0
 
       - name: Run MapDiffBot
-        run: python -m mapdiffbot
+        run: |
+          # Run from the game root, but tell Python where the bot code is
+          PYTHONPATH=$PYTHONPATH:$(pwd)/bot python3 -m mapdiffbot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DMM_TOOLS_PATH: /home/runner/.cargo/bin/dmm-render
 
       - name: Deploy Images to GH Pages
         uses: peaceiris/actions-gh-pages@v3
