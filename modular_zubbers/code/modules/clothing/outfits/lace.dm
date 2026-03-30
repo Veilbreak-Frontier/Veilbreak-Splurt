@@ -19,6 +19,7 @@
 	righthand_file = 'modular_zubbers/icons/mob/inhands/lace_righthand.dmi'
 	icon_state = "lilacheels"
 	inhand_icon_state = "lilacheels"
+	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON
 
 /obj/item/clothing/shoes/heels/drag/lace/Initialize(mapload)
 	. = ..()
