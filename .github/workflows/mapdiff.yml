@@ -24,14 +24,15 @@ jobs:
 
       - name: Setup MapDiffBot
         run: |
-          git clone https://github.com/tgstation/MapDiffBot.git bot
-          pip install -r bot/requirements.txt
+          git clone https://github.com/tgstation/MapDiffBot.git
+          pip install -r MapDiffBot/requirements.txt
           cargo install dmm-tools --version 0.3.0
 
       - name: Run MapDiffBot
         run: |
-          # Run from the game root, but tell Python where the bot code is
-          PYTHONPATH=$PYTHONPATH:$(pwd)/bot python3 -m mapdiffbot
+          # Add the cloned bot folder to Python's search path
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/MapDiffBot
+          python3 -m mapdiffbot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DMM_TOOLS_PATH: /home/runner/.cargo/bin/dmm-render
