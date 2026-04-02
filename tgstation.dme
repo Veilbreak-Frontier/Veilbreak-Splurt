@@ -10681,6 +10681,7 @@
 #include "modular_zzveilbreak\code\game\objects\items\pendants.dm"
 #include "modular_zzveilbreak\code\game\objects\items\voidring.dm"
 #include "modular_zzveilbreak\code\game\objects\items\voidshard.dm"
+#include "modular_zzveilbreak\code\game\objects\items\elder_atmosian_upgrades.dm"
 #include "modular_zzveilbreak\code\game\spells\ignite.dm"
 #include "modular_zzveilbreak\code\game\tiles\void_tile.dm"
 #include "modular_zzveilbreak\code\modules\antagonists\succubus\succubus.dm"
