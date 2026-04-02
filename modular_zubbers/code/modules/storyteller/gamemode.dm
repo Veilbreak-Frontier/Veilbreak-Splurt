@@ -715,7 +715,6 @@ SUBSYSTEM_DEF(gamemode)
 /datum/controller/subsystem/gamemode/proc/storyteller_vote_choices()
 	var/client_amount = GLOB.clients.len
 	var/list/choices = list()
-	var/list/vote_message = list()
 	for(var/storyteller_type in storytellers)
 		var/datum/storyteller/storyboy = storytellers[storyteller_type]
 		/// Prevent repeating storytellers
@@ -726,12 +725,6 @@ SUBSYSTEM_DEF(gamemode)
 		if((storyboy.population_min && storyboy.population_min > client_amount) || (storyboy.population_max && storyboy.population_max < client_amount))
 			continue
 		choices += storyboy.name
-		///Because the vote subsystem is dumb and does not support any descriptions, we dump them into world.
-		vote_message += "<b>[storyboy.name]</b>"
-		vote_message += "[storyboy.desc]"
-		vote_message += ""
-	var/finalized_message = "[vote_message.Join("\n")]"
-	to_chat(world, vote_font(fieldset_block("Storyteller Vote", "[finalized_message]", "boxed_message purple_box")))
 	return choices
 
 /datum/controller/subsystem/gamemode/proc/storyteller_vote_result(winner_name)
