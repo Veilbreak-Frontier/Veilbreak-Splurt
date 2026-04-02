@@ -40,7 +40,6 @@
 		return FALSE
 	if(destination)
 		destination.generation_complete(json_data)
-
 	cleanup_request(id_str)
 	return TRUE
 

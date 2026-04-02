@@ -10,6 +10,7 @@
 	var/last_progress_update = 0
 	var/obj/machinery/computer/portal_control/connected_control_computer
 	var/list/last_generation_data
+	var/temp_map_file
 
 /datum/portal_destination/veilbreak/proc/start_generation(mob/feedback_target)
 	if(generating || generated || current_request_id)
@@ -44,50 +45,53 @@
 	last_generation_data = json_data.Copy()
 	var/dmm_content = json_data["dmm_content"]
 	var/list/metadata = json_data["metadata"]
-
 	if(!dmm_content || length(dmm_content) < 100)
 		generation_failed("Invalid map data")
 		return
-
-	var/datum/space_level/S = SSmapping.add_new_zlevel("Veilbreak", list(ZTRAIT_RESERVED = TRUE, ZTRAIT_AWAY = TRUE, ZTRAIT_MINING = TRUE))
+	var/list/traits = list(
+		ZTRAIT_RESERVED = TRUE,
+		ZTRAIT_AWAY = TRUE,
+		ZTRAIT_MINING = TRUE,
+		ZTRAIT_NOPHASE = TRUE,
+		ZTRAIT_NOXRAY = TRUE,
+		ZTRAIT_GRAVITY = 1
+	)
+	var/datum/space_level/S = SSmapping.add_new_zlevel("Veilbreak - [world.time]", traits)
 	if(!S)
 		generation_failed("Z-Level allocation failed")
 		return
-
 	dungeon_z_level = S.z_value
 	GLOB.portal_dungeon_z_level = dungeon_z_level
 	SSmapping.update_plane_tracking(S)
-
 	load_dmm_with_ticks(dmm_content, metadata)
 
 /datum/portal_destination/veilbreak/proc/load_dmm_with_ticks(dmm_content, list/metadata)
-	var/loader_source = "veilbreak_[dungeon_z_level]"
-	SSatoms.map_loader_begin(loader_source)
+	temp_map_file = "[VEILBREAK_TEMP_MAP_PREFIX][dungeon_z_level].dmm"
+	text2file(dmm_content, temp_map_file)
+	var/datum/parsed_map/map_loader = new(temp_map_file)
+	var/list/bounds = map_loader.load(
+		x = 1,
+		y = 1,
+		z = dungeon_z_level,
+		no_changeturf = FALSE,
+		place_on_top = FALSE,
+		new_z = TRUE
+	)
+	fdel(temp_map_file)
+	temp_map_file = null
+	if(!bounds)
+		generation_failed("Map loading failed")
+		return
+	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
 
-	var/datum/parsed_map/PM = new(dmm_content)
-	var/list/loaded_atoms = PM.load(1, 1, dungeon_z_level, no_changeturf = FALSE)
-
-	var/z_offset = SSmapping.z_level_to_plane_offset[dungeon_z_level]
-	for(var/i in 1 to length(loaded_atoms))
-		var/atom/A = loaded_atoms[i]
-		if(!A || QDELETED(A))
-			continue
-		A.plane = initial(A.plane) - (21 * z_offset)
-		if(i % 200 == 0)
-			CHECK_TICK
-
-	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata, loader_source), 1 SECONDS)
-
-/datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata, loader_id)
+/datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)
 	if(generated)
 		return
 	veilbreak_initialize_zlevel(dungeon_z_level, metadata)
-	SSatoms.map_loader_stop(loader_id)
 	generating = FALSE
 	generated = TRUE
 	if(connected_control_computer)
 		connected_control_computer.on_generation_success()
-
 	target_turf = get_target_turf()
 
 /datum/portal_destination/veilbreak/proc/post_transfer(atom/movable/AM)
@@ -100,16 +104,49 @@
 	if(cleanup_in_progress)
 		return
 	cleanup_in_progress = TRUE
-	//veilbreak_cleanup_zlevel(z_level, ejection_turf, src)
+	var/cleaned = 0
+	for(var/mob/M in GLOB.mob_list)
+		if(M.z == z_level && !isobserver(M))
+			if(ejection_turf)
+				M.forceMove(ejection_turf)
+			else
+				qdel(M)
+			cleaned++
+			if(cleaned % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+				CHECK_TICK
+	cleaned = 0
+	for(var/obj/O in world)
+		if(O.z == z_level && O != src && !istype(O, /obj/effect/landmark))
+			qdel(O)
+			cleaned++
+			if(cleaned % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+				CHECK_TICK
+	cleaned = 0
+	for(var/turf/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
+		if(T && T.z == z_level)
+			qdel(T)
+			cleaned++
+			if(cleaned % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
+				CHECK_TICK
+	var/datum/space_level/level_to_remove = SSmapping.z_list[z_level]
+	if(level_to_remove)
+		level_to_remove.traits[ZTRAIT_RESERVED] = FALSE
+		level_to_remove.traits[ZTRAIT_AWAY] = FALSE
+		level_to_remove.traits[ZTRAIT_MINING] = FALSE
+	if(GLOB.portal_dungeon_z_level == z_level)
+		GLOB.portal_dungeon_z_level = null
+	cleanup_in_progress = FALSE
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)
 	generating = FALSE
 	generated = FALSE
 	generation_progress = 0
 	current_request_id = 0
+	if(temp_map_file && fexists(temp_map_file))
+		fdel(temp_map_file)
+		temp_map_file = null
 	if(connected_control_computer)
 		connected_control_computer.on_generation_failed(reason)
-
 
 /datum/portal_destination/veilbreak/proc/get_target_turf()
 	if(!dungeon_z_level)

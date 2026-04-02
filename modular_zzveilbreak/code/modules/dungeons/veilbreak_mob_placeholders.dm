@@ -13,15 +13,13 @@
 
 /obj/effect/mob_placeholder/Initialize(mapload)
 	. = ..()
-
 	var/turf/T = get_turf(src)
 	if(!T)
 		return INITIALIZE_HINT_QDEL
-
 	if(!SSmapping.level_trait(T.z, PORTAL_TRAIT_DUNGEON))
 		spawn_mob()
 		return INITIALIZE_HINT_QDEL
-
+	spawn_z_level = T.z
 	return INITIALIZE_HINT_NORMAL
 
 /obj/effect/mob_placeholder/proc/determine_mob_type_from_self()
@@ -38,7 +36,6 @@
 				mob_type = /mob/living/basic/void_creature/voidling
 			if("boss", "megafauna", "inai")
 				mob_type = /mob/living/simple_animal/hostile/megafauna/inai
-
 	if(!mob_type)
 		switch(icon_state)
 			if("void_bug")
@@ -51,8 +48,10 @@
 /obj/effect/mob_placeholder/proc/spawn_mob()
 	if(!mob_type)
 		determine_mob_type_from_self()
-
 	var/turf/T = get_turf(src)
+	if(!T)
+		qdel(src)
+		return
 	var/mob/living/L = new mob_type(T)
 	if(L)
 		if(mob_faction)
@@ -61,4 +60,4 @@
 			L.name = mob_name
 		if(!(L in GLOB.basic_mobs))
 			GLOB.basic_mobs += L
-	return L
+	qdel(src)

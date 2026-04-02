@@ -28,16 +28,6 @@
 	category = list(RND_CATEGORY_COMPUTER + RND_SUBCATEGORY_COMPUTER_ENGINEERING)
 	departmental_flags = DEPARTMENT_BITFLAG_ENGINEERING
 
-/turf/open/floor/veilbreak
-	name = "void-touched floor"
-	icon = 'icons/turf/floors.dmi'
-	icon_state = "floor"
-
-/turf/closed/wall/veilbreak
-	name = "void-compressed wall"
-	icon = 'icons/turf/walls.dmi'
-	icon_state = "wall"
-
 /obj/structure/gateway_exit
 	name = "dimensional anchor"
 	desc = "Returns travelers to their origin point."
