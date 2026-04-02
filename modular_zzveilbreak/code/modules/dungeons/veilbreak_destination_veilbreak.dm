@@ -70,10 +70,17 @@
 	text2file(dmm_content, temp_map_file)
 	var/datum/parsed_map/map_loader = new(temp_map_file)
 	var/list/bounds = map_loader.load(
-		x = 1,
-		y = 1,
-		z = dungeon_z_level,
+		x_offset = 1,
+		y_offset = 1,
+		z_offset = dungeon_z_level,
+		crop_map = FALSE,
 		no_changeturf = FALSE,
+		x_lower = -INFINITY,
+		x_upper = INFINITY,
+		y_lower = -INFINITY,
+		y_upper = INFINITY,
+		z_lower = -INFINITY,
+		z_upper = INFINITY,
 		place_on_top = FALSE,
 		new_z = TRUE
 	)
