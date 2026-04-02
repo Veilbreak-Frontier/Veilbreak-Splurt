@@ -37,7 +37,11 @@
 
 /datum/portal_destination/veilbreak/proc/initialize_atoms_on_z_level(z_level)
 	if(SSatoms.initialized)
-		SSatoms.InitializeAtoms(Z_TURFS(z_level))
+		var/list/atoms_to_init = list()
+		for(var/atom/A in world)
+			if(A.z == z_level)
+				atoms_to_init += A
+		SSatoms.InitializeAtoms(atoms_to_init)
 
 /datum/portal_destination/veilbreak/proc/replace_map_mobs_with_placeholders(z_level)
 
@@ -141,25 +145,20 @@
 	addtimer(CALLBACK(src, .proc/actually_initialize_air, z_level), 2 SECONDS)
 
 /datum/portal_destination/veilbreak/proc/actually_initialize_air(z_level)
-	var/initialized_count = 0
-	for(var/turf/open/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
-		var/datum/gas_mixture/air = T.return_air()
-		if(!air)
-			T.Initalize_Atmos(0)
-			T.immediate_calculate_adjacent_turfs()
-		initialized_count++
+	var/list/turfs_to_init = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
+	var/count = 0
+	for(var/turf/open/T in turfs_to_init)
+		T.air = null
 
-		if(initialized_count % 50 == 0)
+		SSair.active_turfs += T
+		count++
+		if(count % 100 == 0)
 			CHECK_TICK
 
-	var/activated_count = 0
-	for(var/turf/open/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
-		if(!T.excited && !T.blocks_air)
-			SSair.add_to_active(T)
-			activated_count++
-			if(activated_count >= 100)
-				break
-		CHECK_TICK
+	for(var/turf/T in turfs_to_init)
+		T.immediate_calculate_adjacent_turfs()
+		if(prob(5))
+			CHECK_TICK
 
 /datum/portal_destination/veilbreak/proc/force_lighting_initialization(z_level)
     if(!SSlighting)

@@ -12,20 +12,8 @@ GLOBAL_LIST_EMPTY(basic_mobs)
 GLOBAL_DATUM(dungeon_generator, /datum/http_dungeon_generator)
 
 /proc/subsystems_ready_for_portals(feedback_target)
-	if(!SSmapping?.initialized)
+	if(!SSmapping?.initialized || !SSatoms?.initialized || !SSair?.initialized || !SSicon_smooth?.initialized)
 		if(feedback_target)
-			to_chat(feedback_target, "Mapping Subsystem not ready.")
-		return FALSE
-	if(!SSatoms?.initialized)
-		if(feedback_target)
-			to_chat(feedback_target, "Atom Subsystem not ready.")
-		return FALSE
-	if(!SSair?.initialized)
-		if(feedback_target)
-			to_chat(feedback_target, "Atmospherics Subsystem not ready.")
-		return FALSE
-	if(world.time < 30 SECONDS)
-		if(feedback_target)
-			to_chat(feedback_target, "Dimensional stability initializing... [300 - world.time]ds remaining.")
+			to_chat(feedback_target, "Orbital stabilization systems are still spooling...")
 		return FALSE
 	return TRUE

@@ -49,7 +49,10 @@
 	if(SSmapping.level_trait(src.z, PORTAL_TRAIT_DUNGEON))
 		destination_turf = get_step(GLOB.station_veilbreak_portal, SOUTH)
 	else
-		destination_turf = target.get_target_turf()
+
+		var/datum/portal_destination/veilbreak/V = target
+		destination_turf = V.get_target_turf()
+
 	if(destination_turf)
 		AM.forceMove(destination_turf)
 		target.post_transfer(AM)

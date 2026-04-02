@@ -40,12 +40,9 @@
 		return FALSE
 	if(destination)
 		destination.generation_complete(json_data)
-		if(length(SSatoms.initialized_state))
-			var/source = SSatoms.get_initialized_source()
-			if(source)
-				SSatoms.map_loader_stop(source)
+
 	cleanup_request(id_str)
-	return FALSE
+	return TRUE
 
 /datum/http_dungeon_generator/proc/cleanup_request(id_str)
 	active_requests.Remove(id_str)

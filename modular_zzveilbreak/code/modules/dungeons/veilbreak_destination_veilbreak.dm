@@ -44,58 +44,51 @@
 	last_generation_data = json_data.Copy()
 	var/dmm_content = json_data["dmm_content"]
 	var/list/metadata = json_data["metadata"]
+
 	if(!dmm_content || length(dmm_content) < 100)
 		generation_failed("Invalid map data")
 		return
-	var/datum/space_level/S = SSmapping.add_new_zlevel("Veilbreak", list(ZTRAIT_RESERVED = TRUE))
+
+	var/datum/space_level/S = SSmapping.add_new_zlevel("Veilbreak", list(ZTRAIT_RESERVED = TRUE, ZTRAIT_AWAY = TRUE, ZTRAIT_MINING = TRUE))
 	if(!S)
 		generation_failed("Z-Level allocation failed")
 		return
+
 	dungeon_z_level = S.z_value
 	GLOB.portal_dungeon_z_level = dungeon_z_level
 	SSmapping.update_plane_tracking(S)
+
 	load_dmm_with_ticks(dmm_content, metadata)
 
 /datum/portal_destination/veilbreak/proc/load_dmm_with_ticks(dmm_content, list/metadata)
-	SSatoms.map_loader_begin("veilbreak_[dungeon_z_level]")
-	if(SSair.initialized)
-		SSair.StartLoadingMap()
+	var/loader_source = "veilbreak_[dungeon_z_level]"
+	SSatoms.map_loader_begin(loader_source)
+
 	var/datum/parsed_map/PM = new(dmm_content)
-	SSatoms.initialized_state += list(list(src, INITIALIZATION_INNEW_MAPLOAD))
 	var/list/loaded_atoms = PM.load(1, 1, dungeon_z_level, no_changeturf = FALSE)
-	if(SSair.initialized)
-		SSair.StopLoadingMap()
-	SSatoms.map_loader_stop("veilbreak_[dungeon_z_level]")
-	SSatoms.initialized_state.Cut(length(SSatoms.initialized_state))
+
 	var/z_offset = SSmapping.z_level_to_plane_offset[dungeon_z_level]
 	for(var/i in 1 to length(loaded_atoms))
 		var/atom/A = loaded_atoms[i]
 		if(!A || QDELETED(A))
 			continue
-		if(!SSmapping.plane_offset_blacklist["[initial(A.plane)]"])
-			A.plane = initial(A.plane) - (PLANE_RANGE * z_offset)
-		if(i % 500 == 0)
+		A.plane = initial(A.plane) - (21 * z_offset)
+		if(i % 200 == 0)
 			CHECK_TICK
-	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
 
-/datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)
+	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata, loader_source), 1 SECONDS)
+
+/datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata, loader_id)
 	if(generated)
 		return
-
-	generating = FALSE
-	generation_progress = 100
-
 	veilbreak_initialize_zlevel(dungeon_z_level, metadata)
-
+	SSatoms.map_loader_stop(loader_id)
+	generating = FALSE
 	generated = TRUE
 	if(connected_control_computer)
 		connected_control_computer.on_generation_success()
-	target_turf = get_target_turf()
 
-/datum/portal_destination/veilbreak/proc/get_target_turf()
-	if(!dungeon_z_level)
-		return null
-	return locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)
+	target_turf = get_target_turf()
 
 /datum/portal_destination/veilbreak/proc/post_transfer(atom/movable/AM)
 	if(ismob(AM))
@@ -116,3 +109,9 @@
 	current_request_id = 0
 	if(connected_control_computer)
 		connected_control_computer.on_generation_failed(reason)
+
+
+/datum/portal_destination/veilbreak/proc/get_target_turf()
+	if(!dungeon_z_level)
+		return null
+	return locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)

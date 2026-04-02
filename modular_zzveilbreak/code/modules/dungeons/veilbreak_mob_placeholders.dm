@@ -14,22 +14,12 @@
 /obj/effect/mob_placeholder/Initialize(mapload)
 	. = ..()
 
-	if(!mob_type)
-		determine_mob_type_from_self()
-
 	var/turf/T = get_turf(src)
 	if(!T)
 		return INITIALIZE_HINT_QDEL
 
 	if(!SSmapping.level_trait(T.z, PORTAL_TRAIT_DUNGEON))
-		var/mob/living/L = new mob_type(T)
-		if(L)
-			if(mob_faction)
-				L.faction = mob_faction.Copy()
-			if(mob_name && mob_name != "mob placeholder")
-				L.name = mob_name
-			if(!(L in GLOB.basic_mobs))
-				GLOB.basic_mobs += L
+		spawn_mob()
 		return INITIALIZE_HINT_QDEL
 
 	return INITIALIZE_HINT_NORMAL
@@ -57,3 +47,18 @@
 				mob_type = /mob/living/basic/void_creature/consumed_pathfinder
 			else
 				mob_type = /mob/living/basic/void_creature/voidling
+
+/obj/effect/mob_placeholder/proc/spawn_mob()
+	if(!mob_type)
+		determine_mob_type_from_self()
+
+	var/turf/T = get_turf(src)
+	var/mob/living/L = new mob_type(T)
+	if(L)
+		if(mob_faction)
+			L.faction = mob_faction.Copy()
+		if(mob_name && mob_name != "mob placeholder")
+			L.name = mob_name
+		if(!(L in GLOB.basic_mobs))
+			GLOB.basic_mobs += L
+	return L
