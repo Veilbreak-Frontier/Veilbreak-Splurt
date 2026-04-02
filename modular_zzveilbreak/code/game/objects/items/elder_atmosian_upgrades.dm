@@ -72,3 +72,30 @@
 		qdel(tool)
 		return ITEM_INTERACT_SUCCESS
 	return ..()
+
+/obj/item/fireaxe/metal_h2_axe/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(istype(tool, /obj/item/voidshard))
+		if(name == "Void-Infused [initial(name)]")
+			to_chat(user, "<span class='warning'>\The [src] is already infused with the void!</span>")
+			return ITEM_INTERACT_BLOCKING
+
+		to_chat(user, "<span class='notice'>You crush \the [tool] against \the [src], infusing it with void energy!</span>")
+		playsound(loc, 'modular_zzveilbreak/sound/effects/shard-infusion.mp3', 50, 1)
+
+		name = "Void-Infused [initial(name)]"
+		desc = "[initial(desc)] The blade hums with dark, purple energy, eager to strike down the void."
+		color = "#8a2be2"
+		light_range = 2
+		light_power = 0.5
+		light_color = "#8a2be2"
+
+		qdel(tool)
+		return ITEM_INTERACT_SUCCESS
+	return ..()
+
+/obj/item/fireaxe/metal_h2_axe/attack(mob/living/target, mob/living/user, def_zone)
+	if(name == "Void-Infused [initial(name)]" && isliving(target) && (FACTION_VOID in target.faction))
+		target.apply_damage(20, BRUTE, def_zone)
+		to_chat(user, "<span class='warning'>\The [src] burns [target] with void energy!</span>")
+	return ..()
+
