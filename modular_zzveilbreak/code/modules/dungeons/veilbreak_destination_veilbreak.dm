@@ -70,22 +70,23 @@
 	load_dmm_with_ticks(dmm_content, metadata)
 
 /datum/portal_destination/veilbreak/proc/load_dmm_with_ticks(dmm_content, list/metadata)
-	temp_map_file = "[VEILBREAK_TEMP_MAP_PREFIX][dungeon_z_level]_[world.timeofday].dmm"
-	text2file(dmm_content, temp_map_file)
-	if(!fexists(temp_map_file))
+	var/temp_file = "data/veilbreak_[dungeon_z_level]_[world.timeofday]_[rand(1, 99999)].dmm"
+	var/success = text2file(dmm_content, temp_file)
+	if(!success || !fexists(temp_file))
 		generation_failed("Failed to create temp map file")
 		return
-	var/datum/parsed_map/map_loader = new(temp_map_file)
-	if(!map_loader || !map_loader.bounds)
-		fdel(temp_map_file)
-		temp_map_file = null
+
+	var/datum/parsed_map/map_loader = new(temp_file)
+	if(!map_loader)
+		fdel(temp_file)
+		generation_failed("Failed to create parsed_map object")
+		return
+
+	if(!map_loader.bounds)
+		fdel(temp_file)
 		generation_failed("Invalid map file structure - no bounds")
 		return
-	if(map_loader.key_len == 0)
-		fdel(temp_map_file)
-		temp_map_file = null
-		generation_failed("Invalid map file structure - no keys found")
-		return
+
 	var/list/bounds = map_loader.load(
 		x_offset = 1,
 		y_offset = 1,
@@ -101,15 +102,31 @@
 		place_on_top = FALSE,
 		new_z = TRUE
 	)
-	fdel(temp_map_file)
-	temp_map_file = null
+
+	fdel(temp_file)
+
 	if(!bounds)
-		generation_failed("Map loading failed - load() returned null")
+		generation_failed("Map loading failed - no bounds returned")
 		return
-	if(bounds[MAP_MINX] > bounds[MAP_MAXX] || bounds[MAP_MINY] > bounds[MAP_MAXY])
-		generation_failed("Map loading failed - invalid bounds")
-		return
+
 	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
+
+/datum/portal_destination/veilbreak/proc/generation_failed(reason)
+	generating = FALSE
+	generated = FALSE
+	generation_progress = 0
+	current_request_id = 0
+	if(temp_map_file && fexists(temp_map_file))
+		fdel(temp_map_file)
+		temp_map_file = null
+	if(connected_control_computer)
+		connected_control_computer.on_generation_failed(reason)
+
+/world/New()
+	. = ..()
+	for(var/file in flist("data/"))
+		if(findtext(file, "veilbreak_") && findtext(file, ".dmm"))
+			fdel("data/[file]")
 
 /datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)
 	if(generated)
@@ -177,17 +194,6 @@
 	if(GLOB.portal_dungeon_z_level == z_level)
 		GLOB.portal_dungeon_z_level = null
 	cleanup_in_progress = FALSE
-
-/datum/portal_destination/veilbreak/proc/generation_failed(reason)
-	generating = FALSE
-	generated = FALSE
-	generation_progress = 0
-	current_request_id = 0
-	if(temp_map_file && fexists(temp_map_file))
-		fdel(temp_map_file)
-		temp_map_file = null
-	if(connected_control_computer)
-		connected_control_computer.on_generation_failed(reason)
 
 /datum/portal_destination/veilbreak/proc/get_target_turf()
 	if(!dungeon_z_level)
