@@ -24,8 +24,12 @@
 
 /obj/machinery/void_infuser/attackby(obj/item/W, mob/living/user, params)
 	if(istype(W, /obj/item/voidshard) || W.w_class <= WEIGHT_CLASS_BULKY)
-		if(contents.len >= 2)
-			to_chat(user, "<span class='warning'>\The [src] is full!</span>")
+		var/loaded_count = 0
+		for(var/obj/item/I in contents)
+			if(I == circuit || (component_parts && (I in component_parts))) continue
+			loaded_count++
+		if(loaded_count >= 2)
+			to_chat(user, "<span class='warning'>\\The [src] is full!</span>")
 			return TRUE
 		if(is_infusing)
 			to_chat(user, "<span class='warning'>\The [src] is busy infusing!</span>")
@@ -52,6 +56,7 @@
 	var/has_target = FALSE
 
 	for(var/obj/item/I in contents)
+		if(I == circuit || (component_parts && (I in component_parts))) continue
 		var/list/item_data = list()
 		item_data["name"] = I.name
 		item_data["ref"] = REF(I)
@@ -90,7 +95,7 @@
 	switch(action)
 		if("eject")
 			var/obj/item/target = locate(params["ref"]) in contents
-			if(!target)
+			if(!target || target == circuit || (component_parts && (target in component_parts)))
 				return TRUE
 			target.forceMove(drop_location())
 			to_chat(user, "<span class='notice'>You eject \the [target] from \the [src].</span>")
@@ -100,6 +105,7 @@
 			var/obj/item/voidshard/shard = locate(/obj/item/voidshard) in contents
 			var/obj/item/target_item
 			for(var/obj/item/I in contents)
+				if(I == circuit || (component_parts && (I in component_parts))) continue
 				if(I != shard)
 					target_item = I
 					break
@@ -154,6 +160,7 @@
 		to_chat(user, "<span class='warning'>\The [src] buzzes angrily. The infusion failed. \The [target_item] might not be compatible or is already infused.</span>")
 
 	for(var/obj/item/I in contents)
+		if(I == circuit || (component_parts && (I in component_parts))) continue
 		I.forceMove(drop_location())
 
 	is_infusing = FALSE
