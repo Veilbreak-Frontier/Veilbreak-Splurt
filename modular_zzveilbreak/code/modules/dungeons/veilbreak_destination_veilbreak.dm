@@ -56,27 +56,36 @@
 		ZTRAIT_NOXRAY = TRUE,
 		ZTRAIT_GRAVITY = 1
 	)
-	var/datum/space_level/S = SSmapping.add_new_zlevel("Veilbreak - [world.time]", traits)
+	var/level_name = metadata["map_name"]
+	if(!level_name)
+		level_name = "Veilbreak - [world.timeofday]"
+	var/datum/space_level/S = SSmapping.add_new_zlevel(level_name, traits)
 	if(!S)
 		generation_failed("Z-Level allocation failed")
 		return
 	dungeon_z_level = S.z_value
 	GLOB.portal_dungeon_z_level = dungeon_z_level
 	SSmapping.update_plane_tracking(S)
+	name = level_name
 	load_dmm_with_ticks(dmm_content, metadata)
 
 /datum/portal_destination/veilbreak/proc/load_dmm_with_ticks(dmm_content, list/metadata)
-	temp_map_file = "[VEILBREAK_TEMP_MAP_PREFIX][dungeon_z_level].dmm"
+	temp_map_file = "[VEILBREAK_TEMP_MAP_PREFIX][dungeon_z_level]_[world.timeofday].dmm"
 	text2file(dmm_content, temp_map_file)
-
+	if(!fexists(temp_map_file))
+		generation_failed("Failed to create temp map file")
+		return
 	var/datum/parsed_map/map_loader = new(temp_map_file)
-
-	if(!map_loader.bounds)
+	if(!map_loader || !map_loader.bounds)
 		fdel(temp_map_file)
 		temp_map_file = null
-		generation_failed("Invalid map file structure")
+		generation_failed("Invalid map file structure - no bounds")
 		return
-
+	if(map_loader.key_len == 0)
+		fdel(temp_map_file)
+		temp_map_file = null
+		generation_failed("Invalid map file structure - no keys found")
+		return
 	var/list/bounds = map_loader.load(
 		x_offset = 1,
 		y_offset = 1,
@@ -92,14 +101,14 @@
 		place_on_top = FALSE,
 		new_z = TRUE
 	)
-
 	fdel(temp_map_file)
 	temp_map_file = null
-
 	if(!bounds)
-		generation_failed("Map loading failed - no bounds returned")
+		generation_failed("Map loading failed - load() returned null")
 		return
-
+	if(bounds[MAP_MINX] > bounds[MAP_MAXX] || bounds[MAP_MINY] > bounds[MAP_MAXY])
+		generation_failed("Map loading failed - invalid bounds")
+		return
 	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
 
 /datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)

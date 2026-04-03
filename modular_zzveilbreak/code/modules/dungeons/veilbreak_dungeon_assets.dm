@@ -28,6 +28,7 @@
 	category = list(RND_CATEGORY_COMPUTER + RND_SUBCATEGORY_COMPUTER_ENGINEERING)
 	departmental_flags = DEPARTMENT_BITFLAG_ENGINEERING
 
+
 /obj/structure/gateway_exit
 	name = "dimensional anchor"
 	desc = "Returns travelers to their origin point."

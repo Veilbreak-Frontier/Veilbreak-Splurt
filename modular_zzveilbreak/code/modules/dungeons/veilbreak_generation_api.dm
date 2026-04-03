@@ -4,7 +4,8 @@
 
 /datum/http_dungeon_generator/proc/generate_dungeon(datum/portal_destination/veilbreak/destination, width = 100, height = 100)
 	var/request_id = ++current_request_id
-	var/url = "[DUNGEON_GENERATOR_URL][DUNGEON_GENERATE_ENDPOINT]?width=[width]&height=[height]&seed=[rand(1,1000000)]&format=json"
+	var/seed = rand(1, 1000000)
+	var/url = "[DUNGEON_GENERATOR_URL][DUNGEON_GENERATE_ENDPOINT]?width=[width]&height=[height]&seed=[seed]&format=json"
 	var/datum/http_request/request = new()
 	request.prepare(RUSTG_HTTP_METHOD_GET, url, "", "")
 	request.begin_async()
@@ -12,6 +13,7 @@
 	active_requests[id_str] = destination
 	active_requests["[id_str]_req"] = request
 	active_requests["[id_str]_time"] = world.time
+	active_requests["[id_str]_seed"] = seed
 	return request_id
 
 /datum/http_dungeon_generator/proc/check_request(request_id)
@@ -34,10 +36,18 @@
 		cleanup_request(id_str)
 		return FALSE
 	var/list/json_data = json_decode(response.body)
-	if(json_data?["status"] != "success" || length(json_data?["dmm_content"]) <= 100)
+	if(!json_data || json_data["status"] != "success")
+		destination.generation_failed("API Error: Invalid response")
+		cleanup_request(id_str)
+		return FALSE
+	var/dmm_content = json_data["dmm_content"]
+	if(!dmm_content || length(dmm_content) <= 100)
 		destination.generation_failed("API Error: Invalid or insufficient map data")
 		cleanup_request(id_str)
 		return FALSE
+	var/list/metadata = json_data["metadata"]
+	if(!metadata)
+		metadata = list()
 	if(destination)
 		destination.generation_complete(json_data)
 	cleanup_request(id_str)
@@ -47,3 +57,4 @@
 	active_requests.Remove(id_str)
 	active_requests.Remove("[id_str]_req")
 	active_requests.Remove("[id_str]_time")
+	active_requests.Remove("[id_str]_seed")

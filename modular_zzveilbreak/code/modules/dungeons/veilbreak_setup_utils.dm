@@ -107,25 +107,20 @@
 /datum/portal_destination/veilbreak/proc/force_lighting_initialization(z_level)
 	if(!SSlighting)
 		return
-
 	var/list/turfs_to_init = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
 	var/count = 0
-
 	for(var/turf/T in turfs_to_init)
 		if(!T)
 			continue
-
 		var/area/A = T.loc
 		if(A && A.static_lighting && !T.space_lit && !T.lighting_object)
 			var/datum/lighting_object/LO = new(T)
 			if(LO)
 				LO.needs_update = TRUE
 				SSlighting.objects_queue |= LO
-
 		count++
 		if(count % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
 			CHECK_TICK
-
 	if(length(SSlighting.objects_queue) && SSlighting.can_fire)
 		SSlighting.can_fire = TRUE
 

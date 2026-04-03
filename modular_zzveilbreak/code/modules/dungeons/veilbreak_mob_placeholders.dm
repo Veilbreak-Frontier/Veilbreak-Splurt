@@ -16,13 +16,15 @@
 	var/turf/T = get_turf(src)
 	if(!T)
 		return INITIALIZE_HINT_QDEL
-	if(!SSmapping.level_trait(T.z, PORTAL_TRAIT_DUNGEON))
+	if(!SSmapping.level_trait(T.z, ZTRAIT_AWAY) && !SSmapping.level_trait(T.z, ZTRAIT_MINING))
 		spawn_mob()
 		return INITIALIZE_HINT_QDEL
 	spawn_z_level = T.z
 	return INITIALIZE_HINT_NORMAL
 
 /obj/effect/mob_placeholder/proc/determine_mob_type_from_self()
+	if(mob_type)
+		return
 	if(name && name != "mob placeholder")
 		var/name_lower = lowertext(name)
 		switch(name_lower)
@@ -48,6 +50,9 @@
 /obj/effect/mob_placeholder/proc/spawn_mob()
 	if(!mob_type)
 		determine_mob_type_from_self()
+	if(!mob_type)
+		qdel(src)
+		return
 	var/turf/T = get_turf(src)
 	if(!T)
 		qdel(src)
