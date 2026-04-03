@@ -94,10 +94,10 @@
 	var/list/turfs_to_init = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
 	var/count = 0
 	for(var/turf/open/T in turfs_to_init)
-		if(T.air)
+		if(T && T.air)
 			SSair.add_to_active(T)
 			for(var/turf/adjacent in T.atmos_adjacent_turfs)
-				if(adjacent.z == z_level)
+				if(adjacent && adjacent.z == z_level)
 					T.atmos_adjacent_turfs |= adjacent
 					adjacent.atmos_adjacent_turfs |= T
 		count++
@@ -107,36 +107,47 @@
 /datum/portal_destination/veilbreak/proc/force_lighting_initialization(z_level)
 	if(!SSlighting)
 		return
+
+	var/list/turfs_to_init = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
 	var/count = 0
-	for(var/turf/T in block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level)))
+
+	for(var/turf/T in turfs_to_init)
+		if(!T)
+			continue
+
 		var/area/A = T.loc
 		if(A && A.static_lighting && !T.space_lit && !T.lighting_object)
-			new /datum/lighting_object(T)
+			var/datum/lighting_object/LO = new(T)
+			if(LO)
+				LO.needs_update = TRUE
+				SSlighting.objects_queue |= LO
+
 		count++
 		if(count % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
 			CHECK_TICK
-	SSlighting.objects_queue |= block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
+
+	if(length(SSlighting.objects_queue) && SSlighting.can_fire)
+		SSlighting.can_fire = TRUE
 
 /datum/portal_destination/veilbreak/proc/initialize_enhanced_smoothing(z_level)
 	if(!SSicon_smooth || !SSicon_smooth.initialized)
 		return
 	var/count = 0
 	for(var/turf/closed/wall/wall in world)
-		if(wall.z == z_level)
+		if(wall && wall.z == z_level)
 			SSicon_smooth.add_to_queue(wall)
 			count++
 			if(count % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
 				CHECK_TICK
-	if(!SSicon_smooth.can_fire)
+	if(length(SSicon_smooth.smooth_queue) && !SSicon_smooth.can_fire)
 		SSicon_smooth.can_fire = TRUE
 
 /datum/portal_destination/veilbreak/proc/final_ai_activation(z_level)
 	var/activated = 0
 	for(var/mob/living/basic/mob in world)
-		if(mob.z != z_level)
-			continue
-		if(mob.ai_controller && mob.ai_controller.pawn == mob)
-			mob.ai_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET] = null
-			activated++
+		if(mob && mob.z == z_level)
+			if(mob.ai_controller && mob.ai_controller.pawn == mob)
+				mob.ai_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET] = null
+				activated++
 		if(activated % VEILBREAK_MOB_SPAWN_BATCH_SIZE == 0)
 			CHECK_TICK

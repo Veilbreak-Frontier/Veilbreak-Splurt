@@ -68,7 +68,15 @@
 /datum/portal_destination/veilbreak/proc/load_dmm_with_ticks(dmm_content, list/metadata)
 	temp_map_file = "[VEILBREAK_TEMP_MAP_PREFIX][dungeon_z_level].dmm"
 	text2file(dmm_content, temp_map_file)
+
 	var/datum/parsed_map/map_loader = new(temp_map_file)
+
+	if(!map_loader.bounds)
+		fdel(temp_map_file)
+		temp_map_file = null
+		generation_failed("Invalid map file structure")
+		return
+
 	var/list/bounds = map_loader.load(
 		x_offset = 1,
 		y_offset = 1,
@@ -84,21 +92,38 @@
 		place_on_top = FALSE,
 		new_z = TRUE
 	)
+
 	fdel(temp_map_file)
 	temp_map_file = null
+
 	if(!bounds)
-		generation_failed("Map loading failed")
+		generation_failed("Map loading failed - no bounds returned")
 		return
+
 	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
 
 /datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)
 	if(generated)
 		return
+
+	if(!dungeon_z_level)
+		generating = FALSE
+		generation_failed("No dungeon Z-level assigned")
+		return
+
+	var/turf/validation_turf = locate(1, 1, dungeon_z_level)
+	if(!validation_turf)
+		generating = FALSE
+		generation_failed("Z-level has no turfs")
+		return
+
 	veilbreak_initialize_zlevel(dungeon_z_level, metadata)
 	generating = FALSE
 	generated = TRUE
+
 	if(connected_control_computer)
 		connected_control_computer.on_generation_success()
+
 	target_turf = get_target_turf()
 
 /datum/portal_destination/veilbreak/proc/post_transfer(atom/movable/AM)
