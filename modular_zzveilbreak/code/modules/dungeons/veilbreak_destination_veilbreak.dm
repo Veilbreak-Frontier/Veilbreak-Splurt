@@ -70,18 +70,10 @@
 	load_dmm_with_ticks(dmm_content, metadata)
 
 /datum/portal_destination/veilbreak/proc/load_dmm_with_ticks(dmm_content, list/metadata)
-	var/temp_file = "data/veilbreak_[dungeon_z_level]_[world.timeofday]_[rand(1, 99999)].dmm"
-	var/success = text2file(dmm_content, temp_file)
-	if(!success || !fexists(temp_file))
-		generation_failed("Failed to create temp map file")
-		return
+	var/temp_file = "data/veilbreak_[dungeon_z_level]_[world.timeofday].dmm"
+	text2file(dmm_content, temp_file)
 
 	var/datum/parsed_map/map_loader = new(temp_file)
-	if(!map_loader)
-		fdel(temp_file)
-		generation_failed("Failed to create parsed_map object")
-		return
-
 	if(!map_loader.bounds)
 		fdel(temp_file)
 		generation_failed("Invalid map file structure - no bounds")
