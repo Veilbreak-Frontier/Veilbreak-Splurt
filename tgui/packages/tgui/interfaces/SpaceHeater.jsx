@@ -38,7 +38,7 @@ export const SpaceHeater = (props) => {
                 icon={data.on ? 'power-off' : 'times'}
                 content={data.on ? 'On' : 'Off'}
                 selected={data.on}
-                disabled={!data.hasPowercell}
+                disabled={!data.hasPowercell && !data.apcPowered}
                 onClick={() => act('power')}
               />
             </>
