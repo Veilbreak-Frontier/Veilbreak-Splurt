@@ -99,11 +99,25 @@
 	. += "\The [src] is [on ? "on" : "off"], and the hatch is [panel_open ? "open" : "closed"]."
 	if(cell)
 		. += "The charge meter reads [cell ? round(cell.percent(), 1) : 0]%."
+	else if(can_use_apc_power())
+		. += span_notice("It has no cell installed, but it is drawing power from the room's APC while wrenched down.")
 	else
 		. += span_warning("There is no power cell installed.")
 	if(in_range(user, src) || isobserver(user))
 		. += heating_examine()
 		. += span_notice("<b>Right-click</b> to toggle [on ? "off" : "on"].")
+
+/// Powered room equipment when wrenched down; cell still works when unanchored or as supplemental draw.
+/obj/machinery/space_heater/proc/can_use_apc_power()
+	return anchored && powered(ignore_use_power = TRUE)
+
+/// Cell and/or APC — whatever lets the heater run this tick.
+/obj/machinery/space_heater/proc/has_power_for_operation()
+	if(can_use_apc_power())
+		return TRUE
+	if(!QDELETED(cell) && cell.charge())
+		return TRUE
+	return FALSE
 
 ///Returns the heating power of this machine as an examine
 /obj/machinery/space_heater/proc/heating_examine()
@@ -130,7 +144,8 @@
 	return ..()
 
 /obj/machinery/space_heater/process_atmos()
-	if(!on || !is_operational || QDELETED(cell) || cell.charge <= 1)
+	var/apc_power = can_use_apc_power()
+	if(!on || !is_operational || (!apc_power && (QDELETED(cell) || cell.charge <= 1)))
 		if (on) // If it's broken, turn it off too
 			on = FALSE
 			update_appearance()
@@ -160,7 +175,13 @@
 
 	var/list/turfs = (local_turf.atmos_adjacent_turfs || list()) + local_turf
 	var/required_energy = abs(enviroment.temperature - target_temperature) * enviroment.heat_capacity()
-	required_energy = min(required_energy, heating_energy, (cell.charge * efficiency) / length(turfs))
+	var/max_electrical = 0
+	if(apc_power)
+		max_electrical += available_energy()
+	if(!QDELETED(cell) && cell.charge > 0)
+		max_electrical += cell.charge
+	var/max_thermal = max_electrical ? (max_electrical * efficiency) / length(turfs) : 0
+	required_energy = min(required_energy, heating_energy, max_thermal)
 	if(required_energy < 1)
 		return
 
@@ -174,7 +195,13 @@
 		var/datum/gas_mixture/turf_gasmix = turf.return_air()
 		turf_gasmix.temperature += delta_energy / turf_gasmix.heat_capacity()
 		air_update_turf(FALSE, FALSE)
-	cell.use((required_energy * length(turfs)) / efficiency, force = TRUE)
+	var/electrical_cost = (required_energy * length(turfs)) / efficiency
+	if(apc_power && electrical_cost >= 1)
+		var/apc_spent = use_energy(electrical_cost, force = TRUE)
+		if(apc_spent)
+			electrical_cost -= apc_spent
+	if(electrical_cost >= 1 && !QDELETED(cell))
+		cell.use(electrical_cost, force = TRUE)
 
 /obj/machinery/space_heater/RefreshParts()
 	. = ..()
@@ -251,6 +278,7 @@
 	data["on"] = on
 	data["mode"] = set_mode
 	data["hasPowercell"] = !!cell
+	data["apcPowered"] = can_use_apc_power()
 	data["chemHacked"] = FALSE
 	if(cell)
 		data["powerLevel"] = round(cell.percent(), 1)
@@ -300,14 +328,16 @@
 				. = TRUE
 
 /obj/machinery/space_heater/proc/toggle_power(user)
+	var/was_on = on
 	on = !on
 	mode = HEATER_MODE_STANDBY
+	if(on && !has_power_for_operation())
+		on = FALSE
 	if(!isnull(user))
-		if(QDELETED(cell))
-			balloon_alert(user, "no cell!")
-		else if(!cell.charge())
-			balloon_alert(user, "no charge!")
-		else if(!is_operational)
+		if(!was_on && !on)
+			balloon_alert(user, "no power!")
+		else if(on && !is_operational)
+			on = FALSE
 			balloon_alert(user, "not operational!")
 		else
 			balloon_alert(user, "turned [on ? "on" : "off"]")

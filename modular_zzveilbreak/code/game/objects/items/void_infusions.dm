@@ -4,6 +4,7 @@
 /datum/void_infusion_recipe
 	var/target_type
 	var/name_prefix = "Void-Infused"
+	var/infusion_color = "#c8a4e9"
 
 /datum/void_infusion_recipe/proc/matches(obj/item/target)
 	if(!istype(target, target_type))
@@ -15,10 +16,10 @@
 /datum/void_infusion_recipe/proc/apply(obj/item/target)
 	target.name = "[name_prefix] [initial(target.name)]"
 	target.desc = "[initial(target.desc)] It pulses faintly with dark, purple energy."
-	target.color = "#8a2be2" // Voidshard purple glow
+	target.color = infusion_color // Voidshard purple glow
 	target.light_range = 2
 	target.light_power = 0.5
-	target.light_color = "#8a2be2"
+	target.light_color = infusion_color
 	return TRUE
 
 /datum/void_infusion_recipe/elder_atmosian_suit
@@ -45,13 +46,13 @@
 /datum/void_infusion_recipe/hydro_duffel/apply(obj/item/storage/backpack/hydro_duffel/target)
 	target.name = "[name_prefix] [initial(target.name)]"
 	target.desc = "[initial(target.desc)] It pulses faintly with dark, purple energy, seeming bigger on the inside."
-	target.color = "#8a2be2"
+	target.color = infusion_color
 	target.light_range = 2
 	target.light_power = 0.5
-	target.light_color = "#8a2be2"
+	target.light_color = infusion_color
 	if(target.atom_storage)
-		target.atom_storage.max_slots += 10
-		target.atom_storage.max_total_storage += 50
+		target.atom_storage.max_slots += 5
+		target.atom_storage.max_total_storage += 25
 		target.atom_storage.max_specific_storage = WEIGHT_CLASS_GIGANTIC
 	return TRUE
 
@@ -61,14 +62,62 @@
 /datum/void_infusion_recipe/metal_h2_axe/apply(obj/item/fireaxe/metal_h2_axe/target)
 	target.name = "[name_prefix] [initial(target.name)]"
 	target.desc = "[initial(target.desc)] The blade hums with dark, purple energy, eager to strike down the void."
-	target.color = "#8a2be2"
+	target.color = infusion_color
 	target.light_range = 2
 	target.light_power = 0.5
-	target.light_color = "#8a2be2"
+	target.light_color = infusion_color
 	return TRUE
+
+/datum/void_infusion_recipe/kinetic_accelerator
+	target_type = /obj/item/gun/energy/recharge/kinetic_accelerator
+
+/datum/void_infusion_recipe/kinetic_accelerator/apply(obj/item/gun/energy/recharge/kinetic_accelerator/target)
+	target.name = "[name_prefix] [initial(target.name)]"
+	target.desc = "[initial(target.desc)] Dark energy coils through the core; bolts strike harder and tear deeper into creatures of the void."
+	target.color = infusion_color
+	target.light_range = 2
+	target.light_power = 0.5
+	target.light_color = infusion_color
+	target.void_infusion_damage_bonus = 10
+	target.void_infusion_antivoid_bonus = 20
+	return TRUE
+
+/obj/item/gun/energy/recharge/kinetic_accelerator
+	/// Bonus projectile damage from void infusion (all targets).
+	var/void_infusion_damage_bonus = 0
+	/// Extra damage vs mobs in FACTION_VOID; applied when the bolt pre-hits a living target.
+	var/void_infusion_antivoid_bonus = 0
+
+/obj/item/gun/energy/recharge/kinetic_accelerator/modify_projectile(obj/projectile/kinetic/kinetic_projectile)
+	kinetic_projectile.kinetic_gun = src
+	for(var/obj/item/borg/upgrade/modkit/modkit_upgrade as anything in modkits)
+		modkit_upgrade.modify_projectile(kinetic_projectile)
+	kinetic_projectile.bonus_vs_void = void_infusion_antivoid_bonus
+	if(void_infusion_damage_bonus)
+		kinetic_projectile.damage += void_infusion_damage_bonus
+
+/obj/projectile/kinetic
+	var/bonus_vs_void = 0
+
+/obj/projectile/kinetic/prehit_pierce(atom/target)
+	if(is_type_in_typecache(target, kinetic_gun?.ignored_mob_types))
+		return PROJECTILE_PIERCE_PHASE
+	. = ..()
+	if(. == PROJECTILE_PIERCE_PHASE)
+		return
+	for(var/obj/item/borg/upgrade/modkit/modkit_upgrade as anything in kinetic_gun?.modkits)
+		modkit_upgrade.projectile_prehit(src, target, kinetic_gun)
+	if(!pressure_decrease_active && !lavaland_equipment_pressure_check(get_turf(target)))
+		name = "weakened [name]"
+		damage = damage * pressure_decrease
+		pressure_decrease_active = TRUE
+	if(bonus_vs_void && isliving(target))
+		var/mob/living/living_target = target
+		if(FACTION_VOID in living_target.faction)
+			damage += bonus_vs_void
 
 /obj/item/fireaxe/metal_h2_axe/attack(mob/living/target, mob/living/user, def_zone)
 	if(findtext(name, "Void-Infused") && isliving(target) && (FACTION_VOID in target.faction))
-		target.apply_damage(20, BRUTE, def_zone)
-		to_chat(user, "<span class='warning'>\The [src] burns [target] with void energy!</span>")
+		target.apply_damage(12, BRUTE, def_zone)
+		to_chat(user, "<span class='warning'>\\The [src] burns [target] with void energy!</span>")
 	return ..()

@@ -79,8 +79,7 @@ GLOBAL_LIST_INIT(delirious_table, list(
 	"They said you were strong. I see no proof of that here.",
 	"You wanted someone to notice you. Congratulations — I have.",
 	"You’re trembling again. It’s almost beautiful.",
-	"You’ve gone too far to still call this curiosity.",
-	"Would you like me to tell you how this ends? No, you wouldn’t."
+	"You’ve gone too far to still call this curiosity."
 	))
 
 
