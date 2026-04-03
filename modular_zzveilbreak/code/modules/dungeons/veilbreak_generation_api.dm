@@ -45,6 +45,11 @@
 		destination.generation_failed("API Error: Invalid or insufficient map data")
 		cleanup_request(id_str)
 		return FALSE
+	dmm_content = replacetext(dmm_content, "\\n", "\n")
+	dmm_content = replacetext(dmm_content, "\\t", "\t")
+	dmm_content = replacetext(dmm_content, "\\\"", "\"")
+	dmm_content = replacetext(dmm_content, "\\\\", "\\")
+	json_data["dmm_content"] = dmm_content
 	var/list/metadata = json_data["metadata"]
 	if(!metadata)
 		metadata = list()
