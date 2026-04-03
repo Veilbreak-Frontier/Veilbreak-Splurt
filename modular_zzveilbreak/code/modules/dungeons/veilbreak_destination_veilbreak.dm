@@ -73,41 +73,64 @@
 	var/temp_file = "data/veilbreak_[dungeon_z_level]_[world.timeofday].dmm"
 	text2file(dmm_content, temp_file)
 
-	log_world("Veilbreak Debug: File written to [temp_file]")
+	var/datum/parsed_map/map_loader = new()
+	map_loader.original_path = temp_file
+	map_loader.map_format = "tgm"
+	map_loader.key_len = 2
 
-	var/datum/parsed_map/map_loader = new(temp_file)
+	var/file_content = file2text(temp_file)
+	map_loader.grid_models = list()
+	map_loader.gridSets = list()
 
-	log_world("Veilbreak Debug: map_loader exists = [!!map_loader]")
-	log_world("Veilbreak Debug: map_loader.bounds = [map_loader.bounds ? "exists" : "null"]")
-	log_world("Veilbreak Debug: map_loader.map_format = [map_loader.map_format]")
-	log_world("Veilbreak Debug: map_loader.key_len = [map_loader.key_len]")
-	log_world("Veilbreak Debug: map_loader.line_len = [map_loader.line_len]")
-	log_world("Veilbreak Debug: grid_models count = [length(map_loader.grid_models)]")
-	log_world("Veilbreak Debug: gridSets count = [length(map_loader.gridSets)]")
+	var/list/lines = splittext(file_content, "\n")
+	var/in_key = FALSE
+	var/current_key = ""
+	var/current_value = ""
 
-	if(length(map_loader.gridSets) > 0)
-		var/datum/grid_set/gs = map_loader.gridSets[1]
-		log_world("Veilbreak Debug: First gridSet xcrd=[gs.xcrd], ycrd=[gs.ycrd], zcrd=[gs.zcrd]")
-		log_world("Veilbreak Debug: gridLines count = [length(gs.gridLines)]")
-		if(length(gs.gridLines) > 0)
-			var/first_line = gs.gridLines[1]
-			log_world("Veilbreak Debug: First gridLine length = [length(first_line)]")
-			log_world("Veilbreak Debug: First 50 chars = [copytext(first_line, 1, 50)]")
+	for(var/line in lines)
+		if(!in_key && findtext(line, "\"") && findtext(line, " = ("))
+			var/quote_start = findtext(line, "\"")
+			var/quote_end = findtext(line, "\"", quote_start + 1)
+			if(quote_start && quote_end)
+				current_key = copytext(line, quote_start + 1, quote_end)
+				current_value = ""
+				in_key = TRUE
+				var/paren_start = findtext(line, "(", quote_end)
+				if(paren_start)
+					current_value += copytext(line, paren_start + 1)
+		else if(in_key && findtext(line, ")"))
+			current_value += line
+			map_loader.grid_models[current_key] = current_value
+			in_key = FALSE
+			current_key = ""
+			current_value = ""
+		else if(in_key)
+			current_value += line + "\n"
+		else if(findtext(line, "(1,1,1) = {"))
+			var/brace_pos = findtext(line, "{")
+			if(brace_pos)
+				var/grid_start = findtext(line, "\"", brace_pos)
+				if(grid_start)
+					var/grid_content = copytext(line, grid_start + 1)
+					var/list/grid_lines = splittext(grid_content, "\"")
+					var/datum/grid_set/gset = new()
+					gset.xcrd = 1
+					gset.ycrd = 1
+					gset.zcrd = 1
+					gset.gridLines = list()
+					for(var/i in 1 to length(grid_lines) step 2)
+						if(i <= length(grid_lines))
+							gset.gridLines += grid_lines[i]
+					map_loader.gridSets += gset
+					map_loader.line_len = length(gset.gridLines[1])
+					map_loader.bounds = list(1, 1, 1, map_loader.line_len, length(gset.gridLines), 1)
+					map_loader.parsed_bounds = map_loader.bounds.Copy()
 
 	if(!map_loader.bounds)
-		var/key_list = ""
-		for(var/key in map_loader.grid_models)
-			if(length(key_list) > 0)
-				key_list += ","
-			key_list += key
-		log_world("Veilbreak Debug: Defined keys: [key_list]")
 		fdel(temp_file)
 		generation_failed("Invalid map file structure - no bounds")
 		return
 
-	log_world("Veilbreak Debug: Bounds = [map_loader.bounds[1]],[map_loader.bounds[2]],[map_loader.bounds[3]] to [map_loader.bounds[4]],[map_loader.bounds[5]],[map_loader.bounds[6]]")
-
-	Master.StartLoadingMap()
 	var/list/bounds = map_loader.load(
 		x_offset = 1,
 		y_offset = 1,
@@ -123,16 +146,11 @@
 		place_on_top = FALSE,
 		new_z = TRUE
 	)
-	Master.StopLoadingMap()
-
-	log_world("Veilbreak Debug: load() returned [bounds ? "bounds" : "null"]")
-	if(bounds)
-		log_world("Veilbreak Debug: bounds = [bounds[1]],[bounds[2]],[bounds[3]] to [bounds[4]],[bounds[5]],[bounds[6]]")
 
 	fdel(temp_file)
 
 	if(!bounds)
-		generation_failed("Map loading failed - load() returned null")
+		generation_failed("Map loading failed - no bounds returned")
 		return
 
 	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
