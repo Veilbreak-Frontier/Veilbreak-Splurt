@@ -73,24 +73,83 @@
 	var/temp_file = "data/veilbreak_[dungeon_z_level]_[world.timeofday].dmm"
 	text2file(dmm_content, temp_file)
 
-	var/datum/parsed_map/map_loader = load_map(temp_file, 1, 1, dungeon_z_level, FALSE, FALSE, -INFINITY, INFINITY, -INFINITY, INFINITY, -INFINITY, INFINITY, FALSE, TRUE)
+	log_world("Veilbreak Debug: File written to [temp_file]")
+
+	var/datum/parsed_map/map_loader = new(temp_file)
+
+	log_world("Veilbreak Debug: map_loader exists = [!!map_loader]")
+	log_world("Veilbreak Debug: map_loader.bounds = [map_loader.bounds ? "exists" : "null"]")
+	log_world("Veilbreak Debug: map_loader.map_format = [map_loader.map_format]")
+	log_world("Veilbreak Debug: map_loader.key_len = [map_loader.key_len]")
+	log_world("Veilbreak Debug: map_loader.line_len = [map_loader.line_len]")
+	log_world("Veilbreak Debug: grid_models count = [length(map_loader.grid_models)]")
+	log_world("Veilbreak Debug: gridSets count = [length(map_loader.gridSets)]")
+
+	if(length(map_loader.gridSets) > 0)
+		var/datum/grid_set/gs = map_loader.gridSets[1]
+		log_world("Veilbreak Debug: First gridSet xcrd=[gs.xcrd], ycrd=[gs.ycrd], zcrd=[gs.zcrd]")
+		log_world("Veilbreak Debug: gridLines count = [length(gs.gridLines)]")
+		if(length(gs.gridLines) > 0)
+			var/first_line = gs.gridLines[1]
+			log_world("Veilbreak Debug: First gridLine length = [length(first_line)]")
+			log_world("Veilbreak Debug: First 50 chars = [copytext(first_line, 1, 50)]")
+
+	if(!map_loader.bounds)
+		var/key_list = ""
+		for(var/key in map_loader.grid_models)
+			if(length(key_list) > 0)
+				key_list += ","
+			key_list += key
+		log_world("Veilbreak Debug: Defined keys: [key_list]")
+		fdel(temp_file)
+		generation_failed("Invalid map file structure - no bounds")
+		return
+
+	log_world("Veilbreak Debug: Bounds = [map_loader.bounds[1]],[map_loader.bounds[2]],[map_loader.bounds[3]] to [map_loader.bounds[4]],[map_loader.bounds[5]],[map_loader.bounds[6]]")
+
+	Master.StartLoadingMap()
+	var/list/bounds = map_loader.load(
+		x_offset = 1,
+		y_offset = 1,
+		z_offset = dungeon_z_level,
+		crop_map = FALSE,
+		no_changeturf = FALSE,
+		x_lower = -INFINITY,
+		x_upper = INFINITY,
+		y_lower = -INFINITY,
+		y_upper = INFINITY,
+		z_lower = -INFINITY,
+		z_upper = INFINITY,
+		place_on_top = FALSE,
+		new_z = TRUE
+	)
+	Master.StopLoadingMap()
+
+	log_world("Veilbreak Debug: load() returned [bounds ? "bounds" : "null"]")
+	if(bounds)
+		log_world("Veilbreak Debug: bounds = [bounds[1]],[bounds[2]],[bounds[3]] to [bounds[4]],[bounds[5]],[bounds[6]]")
 
 	fdel(temp_file)
 
-	if(!map_loader || !map_loader.bounds)
-		generation_failed("Map loading failed")
+	if(!bounds)
+		generation_failed("Map loading failed - load() returned null")
 		return
 
 	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)
+	log_world("Veilbreak Generation Failed: [reason]")
+	log_world("Veilbreak Debug State: generating=[generating], generated=[generated], z_level=[dungeon_z_level]")
+
 	generating = FALSE
 	generated = FALSE
 	generation_progress = 0
 	current_request_id = 0
+
 	if(temp_map_file && fexists(temp_map_file))
 		fdel(temp_map_file)
 		temp_map_file = null
+
 	if(connected_control_computer)
 		connected_control_computer.on_generation_failed(reason)
 
