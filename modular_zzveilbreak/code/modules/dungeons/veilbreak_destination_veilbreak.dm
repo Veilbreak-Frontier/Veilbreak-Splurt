@@ -73,87 +73,77 @@
 	var/temp_file = "data/veilbreak_[dungeon_z_level]_[world.timeofday].dmm"
 	text2file(dmm_content, temp_file)
 
-	var/datum/parsed_map/map_loader = new()
-	map_loader.original_path = temp_file
-	map_loader.map_format = "tgm"
-	map_loader.key_len = 2
-
+	var/list/grid_lines = list()
+	var/list/key_values = list()
 	var/file_content = file2text(temp_file)
-	map_loader.grid_models = list()
-	map_loader.gridSets = list()
 
 	var/list/lines = splittext(file_content, "\n")
-	var/in_key = FALSE
+	var/in_grid = FALSE
 	var/current_key = ""
 	var/current_value = ""
 
 	for(var/line in lines)
-		if(!in_key && findtext(line, "\"") && findtext(line, " = ("))
+		if(findtext(line, "(1,1,1) = {"))
+			in_grid = TRUE
+			continue
+		if(in_grid && findtext(line, "}"))
+			break
+		if(in_grid)
+			var/trimmed = trim(line)
+			if(length(trimmed) >= 2)
+				var/first_char = copytext(trimmed, 1, 2)
+				var/last_char = copytext(trimmed, length(trimmed))
+				if(first_char == "\"" && last_char == "\"")
+					grid_lines += copytext(trimmed, 2, -1)
+		else if(findtext(line, "\"") && findtext(line, " = ("))
 			var/quote_start = findtext(line, "\"")
 			var/quote_end = findtext(line, "\"", quote_start + 1)
 			if(quote_start && quote_end)
 				current_key = copytext(line, quote_start + 1, quote_end)
-				current_value = ""
-				in_key = TRUE
 				var/paren_start = findtext(line, "(", quote_end)
 				if(paren_start)
-					current_value += copytext(line, paren_start + 1)
-		else if(in_key && findtext(line, ")"))
-			current_value += line
-			map_loader.grid_models[current_key] = current_value
-			in_key = FALSE
-			current_key = ""
-			current_value = ""
-		else if(in_key)
-			current_value += line + "\n"
-		else if(findtext(line, "(1,1,1) = {"))
-			var/brace_pos = findtext(line, "{")
-			if(brace_pos)
-				var/grid_start = findtext(line, "\"", brace_pos)
-				if(grid_start)
-					var/grid_content = copytext(line, grid_start + 1)
-					var/list/grid_lines = splittext(grid_content, "\"")
-					var/datum/grid_set/gset = new()
-					gset.xcrd = 1
-					gset.ycrd = 1
-					gset.zcrd = 1
-					gset.gridLines = list()
-					for(var/i in 1 to length(grid_lines) step 2)
-						if(i <= length(grid_lines))
-							gset.gridLines += grid_lines[i]
-					map_loader.gridSets += gset
-					map_loader.line_len = length(gset.gridLines[1])
-					map_loader.bounds = list(1, 1, 1, map_loader.line_len, length(gset.gridLines), 1)
-					map_loader.parsed_bounds = map_loader.bounds.Copy()
+					current_value = copytext(line, paren_start + 1)
+					var/paren_end = findtext(current_value, ")")
+					if(paren_end)
+						current_value = copytext(current_value, 1, paren_end)
+						key_values[current_key] = current_value
+						current_key = ""
+						current_value = ""
 
-	if(!map_loader.bounds)
+	var/height = length(grid_lines)
+	if(height == 0)
 		fdel(temp_file)
-		generation_failed("Invalid map file structure - no bounds")
+		generation_failed("No grid data found")
 		return
 
-	var/list/bounds = map_loader.load(
-		x_offset = 1,
-		y_offset = 1,
-		z_offset = dungeon_z_level,
-		crop_map = FALSE,
-		no_changeturf = FALSE,
-		x_lower = -INFINITY,
-		x_upper = INFINITY,
-		y_lower = -INFINITY,
-		y_upper = INFINITY,
-		z_lower = -INFINITY,
-		z_upper = INFINITY,
-		place_on_top = FALSE,
-		new_z = TRUE
-	)
+	var/width = length(grid_lines[1])
+
+	for(var/y in 1 to height)
+		var/row = grid_lines[y]
+		for(var/x in 1 to width)
+			var/key = copytext(row, x, x + 1)
+			var/value = key_values[key]
+			if(!value)
+				continue
+			var/turf/T = locate(x, y, dungeon_z_level)
+			if(!T)
+				var/list/path_parts = splittext(value, ",")
+				var/turf_path = text2path(trim(path_parts[1]))
+				if(turf_path && ispath(turf_path, /turf))
+					T = turf_path
+					var/area_path = text2path(trim(path_parts[2]))
+					if(area_path && ispath(area_path, /area))
+						var/area/A = new area_path()
+						A.contents += T
+					T = new turf_path(T)
 
 	fdel(temp_file)
 
-	if(!bounds)
-		generation_failed("Map loading failed - no bounds returned")
-		return
+	generated = TRUE
+	if(connected_control_computer)
+		connected_control_computer.on_generation_success()
 
-	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
+	target_turf = get_target_turf()
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)
 	log_world("Veilbreak Generation Failed: [reason]")
