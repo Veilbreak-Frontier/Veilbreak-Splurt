@@ -35,26 +35,40 @@
 		destination.generation_failed("HTTP [response.status_code]: [response.body]")
 		cleanup_request(id_str)
 		return FALSE
+
+	log_world("Veilbreak API: Raw response body length: [length(response.body)]")
+	log_world("Veilbreak API: Raw response first 300 chars:")
+	log_world(copytext(response.body, 1, 300))
+
 	var/list/json_data = json_decode(response.body)
 	if(!json_data || json_data["status"] != "success")
 		destination.generation_failed("API Error: Invalid response")
 		cleanup_request(id_str)
 		return FALSE
+
 	var/dmm_content = json_data["dmm_content"]
+	log_world("Veilbreak API: After json_decode, dmm_content length: [length(dmm_content)]")
+	log_world("Veilbreak API: First 300 chars after decode:")
+	log_world(copytext(dmm_content, 1, 300))
+	log_world("Veilbreak API: Contains newline character 0x0A? [findtext(dmm_content, "\n") ? "YES" : "NO"]")
+	log_world("Veilbreak API: Contains literal backslash-n? [findtext(dmm_content, "\\n") ? "YES" : "NO"]")
+
 	if(!dmm_content || length(dmm_content) <= 100)
 		destination.generation_failed("API Error: Invalid or insufficient map data")
 		cleanup_request(id_str)
 		return FALSE
+
 	dmm_content = replacetext(dmm_content, "\\n", "\n")
 	dmm_content = replacetext(dmm_content, "\\t", "\t")
 	dmm_content = replacetext(dmm_content, "\\\"", "\"")
-	dmm_content = replacetext(dmm_content, "\\\\", "\\")
-	json_data["dmm_content"] = dmm_content
-	var/list/metadata = json_data["metadata"]
-	if(!metadata)
-		metadata = list()
+
+	var/list/new_json_data = list()
+	new_json_data["status"] = json_data["status"]
+	new_json_data["dmm_content"] = dmm_content
+	new_json_data["metadata"] = json_data["metadata"]
+
 	if(destination)
-		destination.generation_complete(json_data)
+		destination.generation_complete(new_json_data)
 	cleanup_request(id_str)
 	return TRUE
 
