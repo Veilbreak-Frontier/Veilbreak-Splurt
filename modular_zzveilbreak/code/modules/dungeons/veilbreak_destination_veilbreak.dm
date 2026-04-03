@@ -73,32 +73,12 @@
 	var/temp_file = "data/veilbreak_[dungeon_z_level]_[world.timeofday].dmm"
 	text2file(dmm_content, temp_file)
 
-	var/datum/parsed_map/map_loader = new(temp_file)
-	if(!map_loader.bounds)
-		fdel(temp_file)
-		generation_failed("Invalid map file structure - no bounds")
-		return
-
-	var/list/bounds = map_loader.load(
-		x_offset = 1,
-		y_offset = 1,
-		z_offset = dungeon_z_level,
-		crop_map = FALSE,
-		no_changeturf = FALSE,
-		x_lower = -INFINITY,
-		x_upper = INFINITY,
-		y_lower = -INFINITY,
-		y_upper = INFINITY,
-		z_lower = -INFINITY,
-		z_upper = INFINITY,
-		place_on_top = FALSE,
-		new_z = TRUE
-	)
+	var/datum/parsed_map/map_loader = load_map(temp_file, 1, 1, dungeon_z_level, FALSE, FALSE, -INFINITY, INFINITY, -INFINITY, INFINITY, -INFINITY, INFINITY, FALSE, TRUE)
 
 	fdel(temp_file)
 
-	if(!bounds)
-		generation_failed("Map loading failed - no bounds returned")
+	if(!map_loader || !map_loader.bounds)
+		generation_failed("Map loading failed")
 		return
 
 	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
