@@ -44,7 +44,6 @@
 /obj/machinery/computer/portal_control/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	if(..())
 		return
-
 	switch(action)
 		if("linkup")
 			var/found = rescan_for_portal()
@@ -53,7 +52,6 @@
 			else
 				say("No compatible portal signature detected in local range.")
 			return TRUE
-
 		if("deactivate")
 			if(linked_portal && linked_portal.transport_active)
 				var/datum/portal_destination/veilbreak/V = linked_portal.target
@@ -62,7 +60,6 @@
 				linked_portal.transport_active = FALSE
 				linked_portal.update_appearance()
 			return TRUE
-
 		if("generate_new")
 			if(generation_in_progress || !linked_portal || linked_portal.transport_active)
 				return TRUE
@@ -75,7 +72,6 @@
 				return TRUE
 			generation_in_progress = TRUE
 			return TRUE
-
 		if("recalibrate")
 			var/datum/portal_destination/veilbreak/V = linked_portal?.target
 			if(V && V.generated)
@@ -95,7 +91,6 @@
 	say("Stabilization Error: [reason]")
 	playsound(src, 'sound/machines/buzz/buzz-sigh.ogg', 50, TRUE)
 
-
 /obj/machinery/computer/portal_control/proc/rescan_for_portal()
 	var/obj/machinery/portal/found_portal
 	for(var/obj/machinery/portal/P in range(3, src))
@@ -103,7 +98,6 @@
 			continue
 		found_portal = P
 		break
-
 	if(found_portal)
 		linked_portal = found_portal
 		found_portal.linked_console = src

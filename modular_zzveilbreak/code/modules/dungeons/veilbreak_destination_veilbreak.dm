@@ -10,6 +10,7 @@
 	var/last_progress_update = 0
 	var/obj/machinery/computer/portal_control/connected_control_computer
 	var/list/last_generation_data
+	var/temp_map_file
 
 /datum/portal_destination/veilbreak/proc/start_generation(mob/feedback_target)
 	if(generating || generated || current_request_id)
@@ -47,55 +48,148 @@
 	if(!dmm_content || length(dmm_content) < 100)
 		generation_failed("Invalid map data")
 		return
-	var/datum/space_level/S = SSmapping.add_new_zlevel("Veilbreak", list(ZTRAIT_RESERVED = TRUE))
+	var/list/traits = list(
+		ZTRAIT_RESERVED = TRUE,
+		ZTRAIT_AWAY = TRUE,
+		ZTRAIT_MINING = TRUE,
+		ZTRAIT_NOPHASE = TRUE,
+		ZTRAIT_NOXRAY = TRUE,
+		ZTRAIT_GRAVITY = 1
+	)
+	var/level_name = metadata["map_name"]
+	if(!level_name)
+		level_name = "Veilbreak - [world.timeofday]"
+	var/datum/space_level/S = SSmapping.add_new_zlevel(level_name, traits)
 	if(!S)
 		generation_failed("Z-Level allocation failed")
 		return
 	dungeon_z_level = S.z_value
 	GLOB.portal_dungeon_z_level = dungeon_z_level
 	SSmapping.update_plane_tracking(S)
+	name = level_name
 	load_dmm_with_ticks(dmm_content, metadata)
 
 /datum/portal_destination/veilbreak/proc/load_dmm_with_ticks(dmm_content, list/metadata)
-	SSatoms.map_loader_begin("veilbreak_[dungeon_z_level]")
-	if(SSair.initialized)
-		SSair.StartLoadingMap()
-	var/datum/parsed_map/PM = new(dmm_content)
-	SSatoms.initialized_state += list(list(src, INITIALIZATION_INNEW_MAPLOAD))
-	var/list/loaded_atoms = PM.load(1, 1, dungeon_z_level, no_changeturf = FALSE)
-	if(SSair.initialized)
-		SSair.StopLoadingMap()
-	SSatoms.map_loader_stop("veilbreak_[dungeon_z_level]")
-	SSatoms.initialized_state.Cut(length(SSatoms.initialized_state))
-	var/z_offset = SSmapping.z_level_to_plane_offset[dungeon_z_level]
-	for(var/i in 1 to length(loaded_atoms))
-		var/atom/A = loaded_atoms[i]
-		if(!A || QDELETED(A))
+	var/temp_file = "data/veilbreak_[dungeon_z_level]_[world.timeofday].dmm"
+	text2file(dmm_content, temp_file)
+
+	var/list/grid_lines = list()
+	var/list/key_values = list()
+	var/file_content = file2text(temp_file)
+
+	var/list/lines = splittext(file_content, "\n")
+	var/in_grid = FALSE
+	var/current_key = ""
+	var/current_value = ""
+
+	for(var/line in lines)
+		if(findtext(line, "(1,1,1) = {"))
+			in_grid = TRUE
 			continue
-		if(!SSmapping.plane_offset_blacklist["[initial(A.plane)]"])
-			A.plane = initial(A.plane) - (PLANE_RANGE * z_offset)
-		if(i % 500 == 0)
-			CHECK_TICK
-	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
+		if(in_grid && findtext(line, "}"))
+			break
+		if(in_grid)
+			var/trimmed = trim(line)
+			if(length(trimmed) >= 2)
+				var/first_char = copytext(trimmed, 1, 2)
+				var/last_char = copytext(trimmed, length(trimmed))
+				if(first_char == "\"" && last_char == "\"")
+					grid_lines += copytext(trimmed, 2, -1)
+		else if(findtext(line, "\"") && findtext(line, " = ("))
+			var/quote_start = findtext(line, "\"")
+			var/quote_end = findtext(line, "\"", quote_start + 1)
+			if(quote_start && quote_end)
+				current_key = copytext(line, quote_start + 1, quote_end)
+				var/paren_start = findtext(line, "(", quote_end)
+				if(paren_start)
+					current_value = copytext(line, paren_start + 1)
+					var/paren_end = findtext(current_value, ")")
+					if(paren_end)
+						current_value = copytext(current_value, 1, paren_end)
+						key_values[current_key] = current_value
+						current_key = ""
+						current_value = ""
+
+	var/height = length(grid_lines)
+	if(height == 0)
+		fdel(temp_file)
+		generation_failed("No grid data found")
+		return
+
+	var/width = length(grid_lines[1])
+
+	for(var/y in 1 to height)
+		var/row = grid_lines[y]
+		for(var/x in 1 to width)
+			var/key = copytext(row, x, x + 1)
+			var/value = key_values[key]
+			if(!value)
+				continue
+			var/turf/T = locate(x, y, dungeon_z_level)
+			if(!T)
+				var/list/path_parts = splittext(value, ",")
+				var/turf_path = text2path(trim(path_parts[1]))
+				if(turf_path && ispath(turf_path, /turf))
+					T = turf_path
+					var/area_path = text2path(trim(path_parts[2]))
+					if(area_path && ispath(area_path, /area))
+						var/area/A = new area_path()
+						A.contents += T
+					T = new turf_path(T)
+
+	fdel(temp_file)
+
+	generated = TRUE
+	if(connected_control_computer)
+		connected_control_computer.on_generation_success()
+
+	target_turf = get_target_turf()
+
+/datum/portal_destination/veilbreak/proc/generation_failed(reason)
+	log_world("Veilbreak Generation Failed: [reason]")
+	log_world("Veilbreak Debug State: generating=[generating], generated=[generated], z_level=[dungeon_z_level]")
+
+	generating = FALSE
+	generated = FALSE
+	generation_progress = 0
+	current_request_id = 0
+
+	if(temp_map_file && fexists(temp_map_file))
+		fdel(temp_map_file)
+		temp_map_file = null
+
+	if(connected_control_computer)
+		connected_control_computer.on_generation_failed(reason)
+
+/world/New()
+	. = ..()
+	for(var/file in flist("data/"))
+		if(findtext(file, "veilbreak_") && findtext(file, ".dmm"))
+			fdel("data/[file]")
 
 /datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)
 	if(generated)
 		return
 
-	generating = FALSE
-	generation_progress = 100
+	if(!dungeon_z_level)
+		generating = FALSE
+		generation_failed("No dungeon Z-level assigned")
+		return
+
+	var/turf/validation_turf = locate(1, 1, dungeon_z_level)
+	if(!validation_turf)
+		generating = FALSE
+		generation_failed("Z-level has no turfs")
+		return
 
 	veilbreak_initialize_zlevel(dungeon_z_level, metadata)
-
+	generating = FALSE
 	generated = TRUE
+
 	if(connected_control_computer)
 		connected_control_computer.on_generation_success()
-	target_turf = get_target_turf()
 
-/datum/portal_destination/veilbreak/proc/get_target_turf()
-	if(!dungeon_z_level)
-		return null
-	return locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)
+	target_turf = get_target_turf()
 
 /datum/portal_destination/veilbreak/proc/post_transfer(atom/movable/AM)
 	if(ismob(AM))
@@ -107,12 +201,40 @@
 	if(cleanup_in_progress)
 		return
 	cleanup_in_progress = TRUE
-	//veilbreak_cleanup_zlevel(z_level, ejection_turf, src)
+	var/cleaned = 0
+	for(var/mob/M in GLOB.mob_list)
+		if(M.z == z_level && !isobserver(M))
+			if(ejection_turf)
+				M.forceMove(ejection_turf)
+			else
+				qdel(M)
+			cleaned++
+			if(cleaned % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+				CHECK_TICK
+	cleaned = 0
+	for(var/obj/O in world)
+		if(O.z == z_level && O != src && !istype(O, /obj/effect/landmark))
+			qdel(O)
+			cleaned++
+			if(cleaned % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+				CHECK_TICK
+	cleaned = 0
+	for(var/turf/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
+		if(T && T.z == z_level)
+			qdel(T)
+			cleaned++
+			if(cleaned % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
+				CHECK_TICK
+	var/datum/space_level/level_to_remove = SSmapping.z_list[z_level]
+	if(level_to_remove)
+		level_to_remove.traits[ZTRAIT_RESERVED] = FALSE
+		level_to_remove.traits[ZTRAIT_AWAY] = FALSE
+		level_to_remove.traits[ZTRAIT_MINING] = FALSE
+	if(GLOB.portal_dungeon_z_level == z_level)
+		GLOB.portal_dungeon_z_level = null
+	cleanup_in_progress = FALSE
 
-/datum/portal_destination/veilbreak/proc/generation_failed(reason)
-	generating = FALSE
-	generated = FALSE
-	generation_progress = 0
-	current_request_id = 0
-	if(connected_control_computer)
-		connected_control_computer.on_generation_failed(reason)
+/datum/portal_destination/veilbreak/proc/get_target_turf()
+	if(!dungeon_z_level)
+		return null
+	return locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)

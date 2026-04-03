@@ -47,9 +47,13 @@
 		return
 	var/turf/destination_turf
 	if(SSmapping.level_trait(src.z, PORTAL_TRAIT_DUNGEON))
-		destination_turf = get_step(GLOB.station_veilbreak_portal, SOUTH)
+		if(GLOB.station_veilbreak_portal)
+			destination_turf = get_step(GLOB.station_veilbreak_portal, SOUTH)
+		else
+			destination_turf = get_step(src, SOUTH)
 	else
-		destination_turf = target.get_target_turf()
+		var/datum/portal_destination/veilbreak/V = target
+		destination_turf = V.get_target_turf()
 	if(destination_turf)
 		AM.forceMove(destination_turf)
 		target.post_transfer(AM)
@@ -68,11 +72,9 @@
 		return
 	var/turf/eject_to = get_step(src, SOUTH) || src.loc
 	var/z_to_clear = target.dungeon_z_level
-
 	for(var/mob/M in GLOB.mob_list)
 		if(M.z == z_to_clear && !isobserver(M))
 			M.forceMove(eject_to)
-
 	target.cleanup_z_level_completely(z_to_clear, eject_to)
 	target = null
 	transport_active = FALSE
@@ -86,8 +88,8 @@
 	invisibility = 101
 	var/obj/machinery/portal/parent_portal
 
-/obj/effect/portal_bumper/New(loc, obj/machinery/portal/P)
-	..()
+/obj/effect/portal_bumper/Initialize(loc, obj/machinery/portal/P)
+	. = ..()
 	parent_portal = P
 
 /obj/effect/portal_bumper/Crossed(atom/movable/AM)

@@ -13,28 +13,18 @@
 
 /obj/effect/mob_placeholder/Initialize(mapload)
 	. = ..()
-
-	if(!mob_type)
-		determine_mob_type_from_self()
-
 	var/turf/T = get_turf(src)
 	if(!T)
 		return INITIALIZE_HINT_QDEL
-
-	if(!SSmapping.level_trait(T.z, PORTAL_TRAIT_DUNGEON))
-		var/mob/living/L = new mob_type(T)
-		if(L)
-			if(mob_faction)
-				L.faction = mob_faction.Copy()
-			if(mob_name && mob_name != "mob placeholder")
-				L.name = mob_name
-			if(!(L in GLOB.basic_mobs))
-				GLOB.basic_mobs += L
+	if(!SSmapping.level_trait(T.z, ZTRAIT_AWAY) && !SSmapping.level_trait(T.z, ZTRAIT_MINING))
+		spawn_mob()
 		return INITIALIZE_HINT_QDEL
-
+	spawn_z_level = T.z
 	return INITIALIZE_HINT_NORMAL
 
 /obj/effect/mob_placeholder/proc/determine_mob_type_from_self()
+	if(mob_type)
+		return
 	if(name && name != "mob placeholder")
 		var/name_lower = lowertext(name)
 		switch(name_lower)
@@ -48,7 +38,6 @@
 				mob_type = /mob/living/basic/void_creature/voidling
 			if("boss", "megafauna", "inai")
 				mob_type = /mob/living/simple_animal/hostile/megafauna/inai
-
 	if(!mob_type)
 		switch(icon_state)
 			if("void_bug")
@@ -57,3 +46,23 @@
 				mob_type = /mob/living/basic/void_creature/consumed_pathfinder
 			else
 				mob_type = /mob/living/basic/void_creature/voidling
+
+/obj/effect/mob_placeholder/proc/spawn_mob()
+	if(!mob_type)
+		determine_mob_type_from_self()
+	if(!mob_type)
+		qdel(src)
+		return
+	var/turf/T = get_turf(src)
+	if(!T)
+		qdel(src)
+		return
+	var/mob/living/L = new mob_type(T)
+	if(L)
+		if(mob_faction)
+			L.faction = mob_faction.Copy()
+		if(mob_name && mob_name != "mob placeholder")
+			L.name = mob_name
+		if(!(L in GLOB.basic_mobs))
+			GLOB.basic_mobs += L
+	qdel(src)

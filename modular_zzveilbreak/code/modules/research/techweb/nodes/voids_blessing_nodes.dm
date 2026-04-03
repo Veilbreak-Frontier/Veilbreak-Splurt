@@ -10,6 +10,7 @@
 	design_ids = list(
 		"void_miner",
 		"entropic_converter",
+		"void_infuser_board",
 	)
 
 /* Temporarily disabled: Void's Influence node uses WIP machines
