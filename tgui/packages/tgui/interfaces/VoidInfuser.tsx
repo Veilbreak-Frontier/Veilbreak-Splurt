@@ -1,4 +1,4 @@
-import { Box, Button, Image, NoticeBox, Section } from 'tgui-core/components';
+import { Box, Button, Image, NoticeBox, ProgressBar, Section } from 'tgui-core/components';
 import type { BooleanLike } from 'tgui-core/react';
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
@@ -12,6 +12,7 @@ type ItemData = {
 
 type Data = {
   is_infusing: BooleanLike;
+  infusion_progress: number;
   can_infuse: BooleanLike;
   items: ItemData[];
 };
@@ -20,6 +21,7 @@ export const VoidInfuser = (props) => {
   const { act, data } = useBackend<Data>();
   const {
     is_infusing,
+    infusion_progress,
     can_infuse,
     items = [],
   } = data;
@@ -29,7 +31,15 @@ export const VoidInfuser = (props) => {
       <Window.Content>
         <Section title="Machine Status" textAlign="center">
           {is_infusing ? (
-            <NoticeBox info>Infusion in progress...</NoticeBox>
+            <Box>
+              <NoticeBox info mb={2}>Infusion in progress...</NoticeBox>
+              <ProgressBar
+                value={infusion_progress}
+                minValue={0}
+                maxValue={1}
+                color="purple"
+              />
+            </Box>
           ) : (
             <NoticeBox success>Ready</NoticeBox>
           )}

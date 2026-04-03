@@ -6,6 +6,8 @@
 	density = TRUE
 	anchored = TRUE
 	var/is_infusing = FALSE
+	var/infusion_start_time = 0
+	var/infusion_duration = 5 SECONDS
 
 /obj/machinery/void_infuser/attackby(obj/item/W, mob/living/user, params)
 	if(istype(W, /obj/item/voidshard) || W.w_class <= WEIGHT_CLASS_BULKY)
@@ -30,6 +32,7 @@
 /obj/machinery/void_infuser/ui_data(mob/user)
 	var/list/data = list()
 	data["is_infusing"] = is_infusing
+	data["infusion_progress"] = is_infusing ? clamp((world.time - infusion_start_time) / infusion_duration, 0, 1) : 0
 	
 	var/list/items = list()
 	var/has_shard = FALSE
@@ -84,6 +87,7 @@
 				return TRUE
 				
 			is_infusing = TRUE
+			infusion_start_time = world.time
 			to_chat(user, "<span class='notice'>\The [src] starts humming as it prepares the infusion...</span>")
 			
 			// Force UI update so it shows as infusing
@@ -93,33 +97,41 @@
 			return TRUE
 
 /obj/machinery/void_infuser/proc/do_infuse(mob/user, obj/item/voidshard/shard, obj/item/target_item)
-	if(do_after(user, 3 SECONDS, target=src))
+	var/loops = round(infusion_duration / (0.5 SECONDS))
+	for(var/i in 1 to loops)
+		sleep(0.5 SECONDS)
 		if(!(shard in contents) || !(target_item in contents))
-			is_infusing = FALSE
-			SStgui.update_uis(src)
-			return
+			break
+		SStgui.update_uis(src)
 
-		var/success = FALSE
-		var/datum/void_infusion_recipe/recipe
-		for(var/T in subtypesof(/datum/void_infusion_recipe))
-			var/datum/void_infusion_recipe/R = new T()
-			if(R.matches(target_item))
-				recipe = R
-				break
-		
-		if(recipe)
-			success = recipe.apply(target_item)
-			if(success)
-				playsound(loc, 'modular_zzveilbreak/sound/effects/shard-infusion.mp3', 50, 1)
-				qdel(shard)
+	if(!(shard in contents) || !(target_item in contents))
+		is_infusing = FALSE
+		infusion_start_time = 0
+		SStgui.update_uis(src)
+		return
 
+	var/success = FALSE
+	var/datum/void_infusion_recipe/recipe
+	for(var/T in subtypesof(/datum/void_infusion_recipe))
+		var/datum/void_infusion_recipe/R = new T()
+		if(R.matches(target_item))
+			recipe = R
+			break
+	
+	if(recipe)
+		success = recipe.apply(target_item)
 		if(success)
-			to_chat(user, "<span class='notice'>\The [src] dings successfully! The infusion is complete.</span>")
-		else
-			to_chat(user, "<span class='warning'>\The [src] buzzes angrily. The infusion failed. \The [target_item] might not be compatible or is already infused.</span>")
+			playsound(loc, 'modular_zzveilbreak/sound/effects/shard-infusion.mp3', 50, 1)
+			qdel(shard)
+
+	if(success)
+		to_chat(user, "<span class='notice'>\The [src] dings successfully! The infusion is complete.</span>")
+	else
+		to_chat(user, "<span class='warning'>\The [src] buzzes angrily. The infusion failed. \The [target_item] might not be compatible or is already infused.</span>")
+	
+	for(var/obj/item/I in contents)
+		I.forceMove(drop_location())
 		
-		for(var/obj/item/I in contents)
-			I.forceMove(drop_location())
-			
 	is_infusing = FALSE
+	infusion_start_time = 0
 	SStgui.update_uis(src)
