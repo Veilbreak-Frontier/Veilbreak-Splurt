@@ -121,3 +121,54 @@
 		target.apply_damage(12, BRUTE, def_zone)
 		to_chat(user, "<span class='warning'>\\The [src] burns [target] with void energy!</span>")
 	return ..()
+
+// --- Void-infused heated rebar crossbow: mob-only heat bursts (no turf/obj ex_act). One burst per projectile hit (each pierce counts). ---
+
+/datum/void_infusion_recipe/heated_rebar_crossbow
+	target_type = /obj/item/gun/ballistic/rifle/rebarxbow
+
+/datum/void_infusion_recipe/heated_rebar_crossbow/apply(obj/item/gun/ballistic/rifle/rebarxbow/target)
+	..()
+	target.desc += " Each shot detonates with a snap of contained heat."
+	target.void_heat_infused = TRUE
+	return TRUE
+
+/obj/item/gun/ballistic/rifle/rebarxbow
+	/// When TRUE (void infusion), rebar projectiles trigger a small mob-only burn burst on each impact.
+	var/void_heat_infused = FALSE
+
+/obj/item/ammo_casing/rebar/ready_proj(atom/target, mob/living/user, quiet, zone_override = "", atom/fired_from)
+	. = ..()
+	if(!loaded_projectile || !istype(loaded_projectile, /obj/projectile/bullet/rebar))
+		return
+	var/obj/item/gun/ballistic/rifle/rebarxbow/bow = fired_from
+	if(!istype(bow) || !bow.void_heat_infused)
+		return
+	var/obj/projectile/bullet/rebar/bolt = loaded_projectile
+	bolt.void_heat_burst = TRUE
+
+/obj/projectile/bullet/rebar
+	/// Set when fired from a void-infused rebar crossbow; triggers [/proc/void_crossbow_heat_burst] on each [/obj/projectile/bullet/rebar/proc/on_hit].
+	var/void_heat_burst = FALSE
+
+/obj/projectile/bullet/rebar/on_hit(atom/target, blocked = 0, pierce_hit)
+	. = ..()
+	if(!void_heat_burst || . == BULLET_ACT_BLOCK || blocked >= 100)
+		return
+	var/turf/epicenter = get_turf(target)
+	if(epicenter)
+		void_crossbow_heat_burst(epicenter)
+
+/// Applies a tight heat "explosion" to living mobs in range only — no station damage.
+/proc/void_crossbow_heat_burst(turf/epicenter)
+	if(!epicenter)
+		return
+	new /obj/effect/temp_visual/kinetic_blast(epicenter)
+	playsound(epicenter, 'sound/effects/explosion/explosion1.ogg', 35, TRUE)
+
+	for(var/mob/living/victim in orange(1, epicenter))
+		if(victim.stat == DEAD)
+			continue
+		var/dist = get_dist(victim, epicenter)
+		var/damage = dist ? 8 : 15
+		victim.apply_damage(damage, BURN, spread_damage = TRUE, wound_bonus = CANT_WOUND)

@@ -1,26 +1,37 @@
 #define SET_REACTION_RESULTS(amount) air.reaction_results[type] = amount
 
+/// Fusion (and plasmafire handoff) begins at this temperature when healium is present as a catalyst.
 #define FUSION_MINIMUM_TEMPERATURE 80000
+/// Without healium, fusion only starts at this temperature so ordinary plasma fires do not accidentally fuse.
+#define FUSION_UNCATALYZED_MIN_TEMPERATURE 120000
 #define FUSION_QUARK_MATTER_THRESHOLD 800000
 #define FUSION_LEVEL_TEMP_STEP 75000
 #define FUSION_BASE_BURN_RATE_DIVISOR 15
 
+/proc/fusion_mixture_ready(datum/gas_mixture/air, temperature)
+	var/list/healium_gas = air.gases[/datum/gas/healium]
+	if(healium_gas && healium_gas[MOLES] >= MINIMUM_MOLE_COUNT)
+		return TRUE
+	return temperature >= FUSION_UNCATALYZED_MIN_TEMPERATURE
+
 /datum/gas_reaction/fusion
 	name = "Fusion"
 	id = "fusion"
-	priority_group = 4
+	/// Runs before PRIORITY_FIRE so plasmafire can see reaction_results when fusion actually reacted.
+	priority_group = PRIORITY_POST_FORMATION
 	expands_hotspot = TRUE
 
 /datum/gas_reaction/fusion/init_reqs()
 	requirements = list(
 		/datum/gas/plasma = MINIMUM_MOLE_COUNT,
 		/datum/gas/oxygen = MINIMUM_MOLE_COUNT,
-		/datum/gas/healium = MINIMUM_MOLE_COUNT,
 		"MIN_TEMP" = FUSION_MINIMUM_TEMPERATURE
 	)
 
 /datum/gas_reaction/fusion/react(datum/gas_mixture/air, atom/holder)
 	var/temperature = air.temperature
+	if(!fusion_mixture_ready(air, temperature))
+		return NO_REACTION
 	var/old_heat_capacity = air.heat_capacity()
 	var/plasma_moles = air.gases[/datum/gas/plasma][MOLES]
 	var/oxygen_moles = air.gases[/datum/gas/oxygen][MOLES]
@@ -90,8 +101,8 @@
 
 	return .
 
-// At fusion temperatures, plasma burn is replaced by fusion - suppress normal plasmafire so fusion's level-scaled energy is the only one applied
+// Plasmafire only suppressed when fusion actually reacted this tick (reaction_results set in fusion/react).
 /datum/gas_reaction/plasmafire/react(datum/gas_mixture/air, datum/holder)
-	if(air.temperature >= FUSION_MINIMUM_TEMPERATURE)
+	if(air.reaction_results[/datum/gas_reaction/fusion])
 		return NO_REACTION
 	return ..()

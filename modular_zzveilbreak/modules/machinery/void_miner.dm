@@ -2,7 +2,7 @@
 /// A miner that produces random ores from the void, requires only power and silo link
 /obj/machinery/void_miner
 	name = "void miner"
-	desc = "A mysterious machine that draws materials from the void itself. Requires power and a connection to the ore silo to function."
+	desc = "A mysterious machine that draws materials from the void itself. Only one miner will work."
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "stacker"
 	density = TRUE
@@ -66,6 +66,12 @@
 		. += span_warning("[src] requires a connection to the ore silo to function. Use a multitool to link it.")
 	if(machine_stat & NOPOWER)
 		. += span_warning("[src] requires power to function.")
+	var/turf/here = get_turf(src)
+	if(here && materials?.mat_container && !(machine_stat & (NOPOWER|BROKEN)) && anchored && !panel_open)
+		var/obj/machinery/void_miner/dominant = get_dominant_void_miner_on_z(here.z)
+		if(dominant && dominant != src)
+			. += span_warning("Another void miner on this z-level is already channeling the void; only one can operate per level.")
+
 
 /obj/machinery/void_miner/proc/check_factors()
 	if(!COOLDOWN_FINISHED(src, process_cooldown))
@@ -82,6 +88,10 @@
 
 	// Must have silo connection
 	if(!materials?.mat_container)
+		return FALSE
+
+	// Only one void miner may draw from the void per z-level (deterministic tie-break by ref)
+	if(!is_dominant_void_miner_on_z())
 		return FALSE
 
 	return TRUE
@@ -104,6 +114,13 @@
 		visible_message(span_warning("[src] beeps: Silo connection lost, material ejected."))
 
 	qdel(chosen_stack)
+
+/// Among eligible void miners on this z, only the one with the lowest ref() may process (stable for the round).
+/obj/machinery/void_miner/proc/is_dominant_void_miner_on_z()
+	var/turf/here = get_turf(src)
+	if(!here)
+		return FALSE
+	return get_dominant_void_miner_on_z(here.z) == src
 
 /obj/machinery/void_miner/process()
 	if(!check_factors())
@@ -153,3 +170,22 @@
 		RND_CATEGORY_MACHINE + RND_SUBCATEGORY_MACHINE_ENGINEERING
 	)
 	departmental_flags = DEPARTMENT_BITFLAG_SCIENCE | DEPARTMENT_BITFLAG_CARGO | DEPARTMENT_BITFLAG_ENGINEERING
+
+/proc/get_dominant_void_miner_on_z(z_level)
+	var/obj/machinery/void_miner/best
+	var/best_ref
+	for(var/obj/machinery/void_miner/candidate as anything in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/void_miner))
+		var/turf/there = get_turf(candidate)
+		if(!there || there.z != z_level)
+			continue
+		if(candidate.machine_stat & (NOPOWER|BROKEN))
+			continue
+		if(!candidate.anchored || candidate.panel_open)
+			continue
+		if(!candidate.materials?.mat_container)
+			continue
+		var/candidate_ref = ref(candidate)
+		if(!best || candidate_ref < best_ref)
+			best = candidate
+			best_ref = candidate_ref
+	return best
