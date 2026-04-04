@@ -17,7 +17,8 @@
 /datum/gas_reaction/fusion
 	name = "Fusion"
 	id = "fusion"
-	priority_group = 4
+	/// Runs before PRIORITY_FIRE so plasmafire can see reaction_results when fusion actually reacted.
+	priority_group = PRIORITY_POST_FORMATION
 	expands_hotspot = TRUE
 
 /datum/gas_reaction/fusion/init_reqs()
@@ -100,8 +101,8 @@
 
 	return .
 
-// When fusion actually runs, plasma burn is replaced by fusion - suppress plasmafire only then (avoids dead air between 80k and uncatalyzed fusion)
+// Plasmafire only suppressed when fusion actually reacted this tick (reaction_results set in fusion/react).
 /datum/gas_reaction/plasmafire/react(datum/gas_mixture/air, datum/holder)
-	if(air.temperature >= FUSION_MINIMUM_TEMPERATURE && fusion_mixture_ready(air, air.temperature))
+	if(air.reaction_results[/datum/gas_reaction/fusion])
 		return NO_REACTION
 	return ..()
