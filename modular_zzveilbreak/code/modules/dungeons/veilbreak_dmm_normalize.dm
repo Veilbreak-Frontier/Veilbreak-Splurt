@@ -136,7 +136,7 @@
 	var/key_len = length(keys_ordered[1])
 	for(var/check_key in keys_ordered)
 		if(length(check_key) != key_len)
-			log_world("Veilbreak DMM normalize: inconsistent tile key lengths ([key_len] vs [length(check_key)]), cannot normalize")
+			log_world("Veilbreak DMM normalize: inconsistent tile key lengths ([key_len] vs [length(check_key)]). BYOND requires one width for all keys; use fixed-width keys in the HTTP generator (e.g. all 2-char when >52 unique tiles).")
 			return null
 
 	var/static/regex/alpha_only_tile_key = new(@"^[a-zA-Z]+$")
