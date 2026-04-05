@@ -96,15 +96,21 @@
 
 /datum/portal_destination/veilbreak/proc/load_dmm_with_ticks(dmm_content, list/metadata, newly_created_z)
 	log_world("Veilbreak Debug: load_dmm_with_ticks started (parsed_map + initTemplateBounds)")
+	var/normalized = veilbreak_normalize_dmm_for_parsed_map(dmm_content)
+	if(isnull(normalized))
+		generation_failed("Dungeon map uses invalid tile keys (mixed lengths); check generator output")
+		return
+
 	var/temp_file = "data/veilbreak_dungeon_[world.time]_[rand(1, 999999)].dmm"
-	text2file(dmm_content, temp_file)
+	text2file(normalized, temp_file)
 	if(!fexists(temp_file))
 		generation_failed("Could not write temporary dungeon map file")
 		return
 
 	var/datum/parsed_map/parsed = new(file(temp_file))
 	if(!parsed?.bounds)
-		log_world("Veilbreak Debug: parsed_map could not parse DMM (missing bounds)")
+		log_world("Veilbreak Debug: parsed_map could not parse DMM (missing bounds); first ~500 chars after normalize:")
+		log_world(copytext(normalized, 1, 500))
 		fdel(temp_file)
 		generation_failed("Dungeon map parse failed")
 		return
