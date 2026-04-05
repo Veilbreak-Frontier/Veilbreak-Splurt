@@ -213,8 +213,7 @@
 	log_world("Veilbreak Debug: FINAL - loaded [loaded] turfs, failed [failed] tiles")
 	log_world("Veilbreak Debug: Z-level [dungeon_z_level] should now have dungeon")
 
-	// Verify the Z-level has turfs
-	var/verify_turf = locate(1, 1, dungeon_z_level)
+	var/turf/verify_turf = locate(1, 1, dungeon_z_level)
 	if(verify_turf)
 		log_world("Veilbreak Debug: verification - turf exists at (1,1,[dungeon_z_level]) of type [verify_turf.type]")
 	else
