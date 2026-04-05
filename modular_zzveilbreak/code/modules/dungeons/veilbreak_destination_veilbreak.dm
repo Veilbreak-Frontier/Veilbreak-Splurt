@@ -92,61 +92,61 @@
 	log_world("Veilbreak Debug: load_dmm_with_ticks started")
 	var/temp_file = "data/veilbreak_temp_[dungeon_z_level].dmm"
 	text2file(dmm_content, temp_file)
-	log_world("Veilbreak Debug: temp file written to [temp_file]")
 
 	var/file_content = file2text(temp_file)
-	log_world("Veilbreak Debug: file_content length = [length(file_content)]")
-
 	var/list/lines = splittext(file_content, "\n")
-	log_world("Veilbreak Debug: split into [length(lines)] lines")
 
 	var/list/grid_lines = list()
 	var/list/key_values = list()
 	var/in_grid = FALSE
-	var/key_count = 0
-	var/grid_line_count = 0
+	var/in_key = FALSE
+	var/current_key = ""
+	var/current_value = ""
 
 	for(var/line in lines)
 		if(findtext(line, "(1,1,1) = {"))
-			log_world("Veilbreak Debug: found grid start at line [grid_line_count + key_count]")
 			in_grid = TRUE
 			continue
-		if(in_grid && findtext(line, "}"))
-			log_world("Veilbreak Debug: found grid end, total grid lines = [length(grid_lines)]")
-			break
+
 		if(in_grid)
+			if(findtext(line, "}"))
+				break
 			var/trimmed = trim(line)
 			if(length(trimmed) >= 2)
 				var/first_char = copytext(trimmed, 1, 2)
 				var/last_char = copytext(trimmed, length(trimmed))
 				if(first_char == "\"" && last_char == "\"")
-					var/row_content = copytext(trimmed, 2, -1)
-					grid_lines += row_content
-					grid_line_count++
-					if(grid_line_count <= 3)
-						log_world("Veilbreak Debug: grid row [grid_line_count] length = [length(row_content)]")
-		else if(findtext(line, "\"") && findtext(line, " = ("))
+					grid_lines += copytext(trimmed, 2, -1)
+			continue
+
+		if(!in_key && findtext(line, "\"") && findtext(line, " = ("))
 			var/quote_start = findtext(line, "\"")
 			var/quote_end = findtext(line, "\"", quote_start + 1)
 			if(quote_start && quote_end)
-				var/key = copytext(line, quote_start + 1, quote_end)
+				current_key = copytext(line, quote_start + 1, quote_end)
 				var/paren_start = findtext(line, "(", quote_end)
 				if(paren_start)
-					var/value = copytext(line, paren_start + 1)
-					var/paren_end = findtext(value, ")")
-					if(paren_end)
-						value = copytext(value, 1, paren_end)
-						key_values[key] = value
-						key_count++
-						if(key_count <= 5)
-							log_world("Veilbreak Debug: key '[key]' = [copytext(value, 1, 50)]...")
+					current_value = copytext(line, paren_start + 1)
+					in_key = TRUE
+			continue
+
+		if(in_key)
+			if(findtext(line, ")"))
+				current_value += " " + trim(line)
+				var/paren_end = findtext(current_value, ")")
+				if(paren_end)
+					current_value = copytext(current_value, 1, paren_end)
+					key_values[current_key] = current_value
+					in_key = FALSE
+					current_key = ""
+					current_value = ""
+			else
+				current_value += " " + trim(line)
 
 	fdel(temp_file)
-	log_world("Veilbreak Debug: temp file deleted")
 
 	var/height = length(grid_lines)
 	if(height == 0)
-		log_world("Veilbreak Debug: ERROR - no grid lines found")
 		generation_failed("No grid data found")
 		return
 
@@ -155,7 +155,6 @@
 	log_world("Veilbreak Debug: found [length(key_values)] unique keys")
 
 	var/loaded = 0
-	var/failed = 0
 
 	for(var/y in 1 to height)
 		var/row = grid_lines[y]
@@ -163,59 +162,49 @@
 			var/key = copytext(row, x, x + 1)
 			var/value = key_values[key]
 			if(!value)
-				failed++
 				continue
 
 			var/list/path_parts = splittext(value, ",")
 			var/turf_path = null
-			var/area_path = null
 			var/list/obj_paths = list()
 
 			for(var/part in path_parts)
 				var/trimmed_path = trim(part)
 				if(findtext(trimmed_path, "/turf/"))
 					turf_path = text2path(trimmed_path)
-					if(!turf_path)
-						log_world("Veilbreak Debug: WARNING - invalid turf path [trimmed_path]")
 				else if(findtext(trimmed_path, "/area/"))
-					area_path = text2path(trimmed_path)
+					var/area_path = text2path(trimmed_path)
+					if(area_path)
+						var/area/A = new area_path()
+						var/turf/T = locate(x, y, dungeon_z_level)
+						if(T)
+							A.contents += T
 				else
 					var/obj_path = text2path(trimmed_path)
 					if(obj_path && ispath(obj_path, /obj))
 						obj_paths += obj_path
 
 			if(!turf_path)
-				failed++
 				continue
 
 			var/turf/T = locate(x, y, dungeon_z_level)
 			if(!T)
 				T = new turf_path(locate(x, y, dungeon_z_level))
-				if(!T)
-					log_world("Veilbreak Debug: ERROR - failed to create turf at [x],[y],[dungeon_z_level]")
-					failed++
-					continue
 			else if(T.type != turf_path)
 				T.ChangeTurf(turf_path)
-
-			if(area_path && !T.loc)
-				var/area/A = new area_path()
-				A.contents += T
 
 			for(var/obj_path in obj_paths)
 				new obj_path(T)
 
 			loaded++
 			if(loaded % 500 == 0)
-				log_world("Veilbreak Debug: loaded [loaded] turfs so far")
 				CHECK_TICK
 
-	log_world("Veilbreak Debug: FINAL - loaded [loaded] turfs, failed [failed] tiles")
-	log_world("Veilbreak Debug: Z-level [dungeon_z_level] should now have dungeon")
+	log_world("Veilbreak Debug: FINAL - loaded [loaded] turfs")
 
 	var/turf/verify_turf = locate(1, 1, dungeon_z_level)
 	if(verify_turf)
-		log_world("Veilbreak Debug: verification - turf exists at (1,1,[dungeon_z_level]) of type [verify_turf.type]")
+		log_world("Veilbreak Debug: verification - turf exists at (1,1,[dungeon_z_level])")
 	else
 		log_world("Veilbreak Debug: verification FAILED - no turf at (1,1,[dungeon_z_level])")
 
