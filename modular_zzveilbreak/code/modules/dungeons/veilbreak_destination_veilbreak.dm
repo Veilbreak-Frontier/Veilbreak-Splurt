@@ -9,6 +9,8 @@
 	var/turf/target_turf
 	var/last_progress_update = 0
 	var/obj/machinery/computer/portal_control/connected_control_computer
+	/// Station portal used when this pocket was opened (console-linked; preferred over GLOB for return trips).
+	var/obj/machinery/portal/spawn_station_portal
 	var/list/last_generation_data
 	var/temp_map_file
 
@@ -22,6 +24,7 @@
 		return FALSE
 	generating = TRUE
 	generation_progress = 0
+	spawn_station_portal = connected_control_computer?.linked_portal
 	if(!GLOB.dungeon_generator)
 		log_world("Veilbreak Debug: creating new dungeon_generator")
 		GLOB.dungeon_generator = new /datum/http_dungeon_generator()
@@ -173,6 +176,7 @@
 	veilbreak_initialize_zlevel(dungeon_z_level, metadata)
 	generating = FALSE
 	generated = TRUE
+	veilbreak_sync_portal_pair()
 
 	var/turf/center = locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)
 	log_world("Veilbreak Debug: center of dungeon at [center ? "[center.x],[center.y],[center.z]" : "null"]")
@@ -240,11 +244,54 @@
 		temp_map_file = null
 	if(connected_control_computer)
 		connected_control_computer.on_generation_failed(reason)
+	spawn_station_portal = null
+
+/// Binds the control console's station portal to this destination and wires every portal on the dungeon Z to return there.
+/datum/portal_destination/veilbreak/proc/veilbreak_sync_portal_pair()
+	var/obj/machinery/portal/station = spawn_station_portal
+	if(QDELETED(station))
+		station = null
+	if(!station && connected_control_computer)
+		station = connected_control_computer.linked_portal
+	if(QDELETED(station))
+		station = null
+	if(!station)
+		station = GLOB.station_veilbreak_portal
+	if(QDELETED(station))
+		log_world("Veilbreak Warning: veilbreak_sync_portal_pair — no valid station portal; link the controller then recalibrate.")
+		return
+	GLOB.station_veilbreak_portal = station
+	station.target = src
+	station.transport_active = TRUE
+	station.update_appearance()
+	var/linked = 0
+	for(var/obj/machinery/portal/dungeon_portal in world)
+		if(dungeon_portal.z != dungeon_z_level || QDELETED(dungeon_portal))
+			continue
+		dungeon_portal.setup_as_return_portal(station)
+		linked++
+	if(linked)
+		log_world("Veilbreak Debug: linked [linked] dungeon portal(s) to station portal at [station.x],[station.y],[station.z]")
+	else
+		log_world("Veilbreak Warning: veilbreak_sync_portal_pair — no /obj/machinery/portal on dungeon Z [dungeon_z_level]")
 
 /datum/portal_destination/veilbreak/proc/get_target_turf()
 	if(!dungeon_z_level)
 		log_world("Veilbreak Debug: get_target_turf - no dungeon_z_level")
 		return null
+	var/list/meta = last_generation_data?["metadata"]
+	if(istype(meta))
+		var/list/kp = meta["key_positions"]
+		if(istype(kp))
+			var/list/gw = kp["gateway"]
+			if(istype(gw))
+				var/gx = gw["x"]
+				var/gy = gw["y"]
+				if(isnum(gx) && isnum(gy))
+					var/turf/G = locate(round(gx), round(gy), dungeon_z_level)
+					if(G)
+						log_world("Veilbreak Debug: get_target_turf (gateway) [G.x],[G.y],[G.z]")
+						return G
 	var/turf/T = locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)
-	log_world("Veilbreak Debug: get_target_turf returning [T ? "[T.x],[T.y],[T.z]" : "null"]")
+	log_world("Veilbreak Debug: get_target_turf (fallback center) [T ? "[T.x],[T.y],[T.z]" : "null"]")
 	return T

@@ -9,12 +9,17 @@
 #define VEILBREAK_CLEANUP_BATCH_SIZE 50
 #define VEILBREAK_MOB_SPAWN_BATCH_SIZE 25
 #define VEILBREAK_TURF_PROCESS_BATCH_SIZE 100
-#define PORTAL_TRAIT_DUNGEON list(ZTRAIT_AWAY, ZTRAIT_MINING)
 
+/// Dungeon pocket Z must satisfy BOTH traits. Use level_has_all_traits(z, PORTAL_TRAIT_DUNGEON) — not level_trait(z, list).
 GLOBAL_VAR(station_veilbreak_portal)
 GLOBAL_VAR(portal_dungeon_z_level)
 GLOBAL_LIST_EMPTY(basic_mobs)
 GLOBAL_DATUM(dungeon_generator, /datum/http_dungeon_generator)
+
+/proc/is_veilbreak_portal_dungeon_z(z)
+	if(!isnum(z) || z < 1 || z > world.maxz || !SSmapping?.z_list || z > length(SSmapping.z_list))
+		return FALSE
+	return SSmapping.level_has_all_traits(z, PORTAL_TRAIT_DUNGEON)
 
 /proc/subsystems_ready_for_portals(feedback_target)
 	if(!SSmapping?.initialized)

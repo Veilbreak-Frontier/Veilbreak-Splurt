@@ -20,22 +20,26 @@
 	var/turf/T = get_step(get_step(src, EAST), NORTH)
 	bumper = new /obj/effect/portal_bumper(T, src)
 	var/turf/curr_turf = get_turf(src)
-	if(curr_turf && (SSmapping.level_trait(curr_turf.z, PORTAL_TRAIT_DUNGEON)))
+	if(curr_turf && is_veilbreak_portal_dungeon_z(curr_turf.z))
 		setup_as_return_portal()
 	else
 		GLOB.station_veilbreak_portal = src
 
-/obj/machinery/portal/proc/setup_as_return_portal()
+/// @param station_portal The station-side portal players should return to; falls back to GLOB.station_veilbreak_portal.
+/obj/machinery/portal/proc/setup_as_return_portal(obj/machinery/portal/station_portal)
 	transport_active = TRUE
 	use_power = NO_POWER_USE
-	if(GLOB.station_veilbreak_portal)
-		var/obj/machinery/portal/P = GLOB.station_veilbreak_portal
-		var/datum/portal_destination/veilbreak/home = new()
-		home.generated = TRUE
-		home.dungeon_z_level = z
-		home.target_turf = get_turf(P)
-		target = home
-		update_appearance()
+	var/obj/machinery/portal/P = station_portal
+	if(!P || QDELETED(P))
+		P = GLOB.station_veilbreak_portal
+	if(!P || QDELETED(P))
+		return
+	var/datum/portal_destination/veilbreak/home = new()
+	home.generated = TRUE
+	home.dungeon_z_level = z
+	home.target_turf = get_step(P, SOUTH)
+	target = home
+	update_appearance()
 
 /obj/machinery/portal/update_overlays()
 	. = ..()
@@ -46,7 +50,7 @@
 	if(!target || !transport_active || !target.generated)
 		return
 	var/turf/destination_turf
-	if(SSmapping.level_trait(src.z, PORTAL_TRAIT_DUNGEON))
+	if(is_veilbreak_portal_dungeon_z(src.z))
 		if(GLOB.station_veilbreak_portal)
 			destination_turf = get_step(GLOB.station_veilbreak_portal, SOUTH)
 		else
