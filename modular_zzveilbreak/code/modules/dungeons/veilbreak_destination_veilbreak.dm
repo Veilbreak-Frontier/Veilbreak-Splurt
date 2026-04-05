@@ -102,6 +102,12 @@
 		generation_failed("Dungeon map uses invalid tile keys (mixed lengths); check generator output")
 		return
 
+	var/static/regex/regex_has_map_grid = new(@'\(\d+,\d+,\d+\)\s*=\s*\{\"')
+	if(!regex_has_map_grid.Find(normalized))
+		log_world("Veilbreak Debug: normalized dmm has no (x,y,z) = {\" grid — only tile definitions are not enough")
+		generation_failed("Dungeon map is missing a grid: after all \"x\"=(...) definitions, append e.g. (1,1,1)={\"<rows of keys>\"} (see _maps templates)")
+		return
+
 	var/datum/parsed_map/parsed = new(normalized)
 	if(!parsed?.bounds)
 		log_world("Veilbreak Debug: parsed_map could not parse DMM (missing bounds); first ~500 chars after normalize:")
