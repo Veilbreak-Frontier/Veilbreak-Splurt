@@ -1932,7 +1932,7 @@
 /area/station/maintenance/solars/starboard/aft)
 "bah" = (
 /obj/structure/chalkboard,
-/turf/closed/wall,
+/turf/closed/wall/r_wall,
 /area/station/command/heads_quarters/nt_rep)
 "baz" = (
 /obj/machinery/light/floor,
@@ -5740,10 +5740,6 @@
 /obj/effect/turf_decal/siding/wideplating_new/dark/end,
 /turf/open/floor/iron/dark,
 /area/station/service/chapel)
-"cYw" = (
-/obj/machinery/void_miner,
-/turf/open/floor/iron/smooth_large,
-/area/station/engineering/main)
 "cYE" = (
 /obj/structure/railing{
 	dir = 1
@@ -6263,18 +6259,7 @@
 /turf/open/floor/iron/dark,
 /area/station/service/chapel)
 "dlp" = (
-/obj/structure/table/reinforced,
-/obj/item/pen/blue{
-	pixel_x = -6
-	},
-/obj/item/paper{
-	pixel_x = 6
-	},
-/obj/item/popsicle_stick{
-	name = "talking stick"
-	},
-/obj/machinery/light/directional/north,
-/obj/structure/sign/calendar/directional/north,
+/obj/structure/fireplace,
 /turf/open/floor/carpet/royalblack,
 /area/station/command/heads_quarters/nt_rep)
 "dlt" = (
@@ -17297,6 +17282,16 @@
 	pixel_x = 9
 	},
 /obj/structure/cable,
+/obj/structure/table/reinforced,
+/obj/item/paper{
+	pixel_x = 6
+	},
+/obj/item/popsicle_stick{
+	name = "talking stick"
+	},
+/obj/item/pen/blue{
+	pixel_x = -6
+	},
 /turf/open/floor/carpet/royalblack,
 /area/station/command/heads_quarters/nt_rep)
 "iXS" = (
@@ -18066,8 +18061,8 @@
 /turf/open/floor/iron/dark,
 /area/station/hallway/primary/central)
 "jxt" = (
-/obj/machinery/power/entropic_converter,
 /obj/structure/cable,
+/obj/machinery/void_miner,
 /turf/open/floor/iron/smooth_large,
 /area/station/engineering/main)
 "jxC" = (
@@ -18141,8 +18136,6 @@
 /turf/open/floor/iron/dark,
 /area/station/cargo/storage)
 "jzk" = (
-/obj/machinery/light/floor,
-/obj/machinery/void_miner,
 /obj/machinery/camera/directional/north{
 	c_tag = "Engineering SMES";
 	dir = 8
@@ -22470,6 +22463,7 @@
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 4
 	},
+/obj/machinery/vending/wardrobe/atmos_wardrobe,
 /turf/open/floor/iron/dark,
 /area/station/engineering/atmos)
 "lBC" = (
@@ -24757,9 +24751,6 @@
 /obj/structure/sign/poster/random/directional/south,
 /turf/open/floor/iron/dark,
 /area/station/hallway/secondary/entry)
-"mGn" = (
-/turf/closed/wall,
-/area/station/command/heads_quarters/nt_rep)
 "mGq" = (
 /obj/machinery/light/floor,
 /turf/open/floor/mineral/plastitanium,
@@ -26074,7 +26065,6 @@
 /area/station/medical/pharmacy)
 "nnr" = (
 /obj/machinery/light_switch/directional/south,
-/obj/machinery/power/entropic_converter,
 /obj/structure/cable,
 /obj/machinery/light/directional/south,
 /turf/open/floor/iron/smooth_large,
@@ -29456,6 +29446,7 @@
 /area/station/hallway/primary/central)
 "oWC" = (
 /obj/structure/chair/comfy/black,
+/obj/structure/sign/calendar/directional/north,
 /turf/open/floor/wood/parquet,
 /area/station/command/heads_quarters/nt_rep)
 "oWG" = (
@@ -76723,8 +76714,8 @@ xvv
 xvv
 xvv
 vEX
+vEX
 dlp
-cVC
 jFY
 iXN
 vEX
@@ -77237,7 +77228,7 @@ vEX
 gtH
 gBD
 vEX
-mGn
+vEX
 cVC
 cVC
 qBM
@@ -79421,7 +79412,7 @@ rPE
 rPE
 hJs
 kcr
-jxt
+xyg
 xyg
 yih
 rPE
@@ -80459,8 +80450,8 @@ uNO
 mOD
 mOD
 jzk
-cYw
-cYw
+mOD
+mOD
 aft
 wEb
 mOD
