@@ -47,6 +47,10 @@
 			current_request_id = 0
 
 /datum/portal_destination/veilbreak/proc/generation_complete(list/json_data)
+	if(generated || cleanup_in_progress)
+		log_world("Veilbreak Debug: generation_complete skipped - generated=[generated], cleanup=[cleanup_in_progress]")
+		return
+
 	log_world("Veilbreak Debug: generation_complete called")
 	last_generation_data = json_data.Copy()
 	var/dmm_content = json_data["dmm_content"]
@@ -242,11 +246,12 @@
 			M.client.move_delay = max(world.time + 5, M.client.move_delay)
 
 /datum/portal_destination/veilbreak/proc/cleanup_z_level_completely(z_level, turf/ejection_turf)
-	log_world("Veilbreak Debug: cleanup_z_level_completely called for Z-level [z_level]")
 	if(cleanup_in_progress)
 		log_world("Veilbreak Debug: cleanup already in progress")
 		return
 	cleanup_in_progress = TRUE
+	log_world("Veilbreak Debug: cleanup_z_level_completely called for Z-level [z_level]")
+
 	var/cleaned = 0
 	for(var/mob/M in GLOB.mob_list)
 		if(M.z == z_level && !isobserver(M))
@@ -258,6 +263,7 @@
 			if(cleaned % 50 == 0)
 				CHECK_TICK
 	log_world("Veilbreak Debug: cleaned [cleaned] mobs")
+
 	cleaned = 0
 	for(var/obj/O in world)
 		if(O.z == z_level && O != src)
@@ -266,14 +272,16 @@
 			if(cleaned % 100 == 0)
 				CHECK_TICK
 	log_world("Veilbreak Debug: cleaned [cleaned] objects")
+
 	cleaned = 0
 	for(var/turf/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
 		if(T && T.z == z_level)
-			qdel(T)
+			T.ChangeTurf(/turf/open/space/basic)
 			cleaned++
 			if(cleaned % 200 == 0)
 				CHECK_TICK
-	log_world("Veilbreak Debug: cleaned [cleaned] turfs")
+	log_world("Veilbreak Debug: reset [cleaned] turfs to space")
+
 	cleanup_in_progress = FALSE
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)

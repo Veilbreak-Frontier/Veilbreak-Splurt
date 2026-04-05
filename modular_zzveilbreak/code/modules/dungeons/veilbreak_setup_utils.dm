@@ -19,31 +19,49 @@
 	addtimer(CALLBACK(src, .proc/final_ai_activation, z_level), 3 SECONDS)
 
 /datum/portal_destination/veilbreak/proc/replace_map_mobs_with_placeholders(z_level)
+	var/count = 0
 	for(var/obj/effect/mob_placeholder/placeholder in world)
-		if(placeholder.z != z_level)
-			continue
-		CHECK_TICK
+		if(placeholder.z == z_level)
+			count++
+			if(count <= 5)
+				log_world("Veilbreak Debug: Found placeholder at [placeholder.x],[placeholder.y],[placeholder.z] with mob_type=[placeholder.mob_type]")
+			CHECK_TICK
+	log_world("Veilbreak Debug: replace_map_mobs_with_placeholders found [count] placeholders on Z-level [z_level]")
 
 /datum/portal_destination/veilbreak/proc/spawn_mobs_from_placeholders(z_level)
 	var/placeholders_processed = 0
 	for(var/obj/effect/mob_placeholder/placeholder in world)
 		if(placeholder.z != z_level)
 			continue
+
 		placeholders_processed++
 		var/turf/spawn_turf = get_turf(placeholder)
 		if(!spawn_turf)
+			log_world("Veilbreak Debug: Placeholder at [placeholder.x],[placeholder.y],[placeholder.z] has no turf")
 			continue
+
 		if(!placeholder.mob_type)
 			placeholder.determine_mob_type_from_self()
+
+		if(!placeholder.mob_type)
+			log_world("Veilbreak Debug: Placeholder at [placeholder.x],[placeholder.y],[placeholder.z] has no mob_type")
+			continue
+
+		log_world("Veilbreak Debug: Spawning [placeholder.mob_type] at [placeholder.x],[placeholder.y],[placeholder.z]")
 		var/mob/living/new_mob = new placeholder.mob_type(spawn_turf)
 		if(new_mob)
 			if(placeholder.mob_faction)
 				new_mob.faction = placeholder.mob_faction.Copy()
 			if(placeholder.mob_name && placeholder.mob_name != "mob placeholder")
 				new_mob.name = placeholder.mob_name
+			if(!(new_mob in GLOB.basic_mobs))
+				GLOB.basic_mobs += new_mob
 		qdel(placeholder)
+
 		if(placeholders_processed % VEILBREAK_MOB_SPAWN_BATCH_SIZE == 0)
 			CHECK_TICK
+
+	log_world("Veilbreak Debug: spawn_mobs_from_placeholders processed [placeholders_processed] placeholders on Z-level [z_level]")
 
 /datum/portal_destination/veilbreak/proc/force_ai_registration(z_level)
 	var/registered = 0
