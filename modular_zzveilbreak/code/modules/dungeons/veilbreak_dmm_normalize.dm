@@ -1,5 +1,8 @@
 /// BYOND /datum/parsed_map only accepts tile keys matching [a-zA-Z]+ and coords like (1,1,1) with no spaces.
 /// External dungeon generators often emit numeric keys or "(1, 1, 1)" — normalize before parse.
+///
+/// The parser regex requires each model to end with ) then newline before the next "key" or (1,1,1) grid.
+/// Grid blobs may only contain [a-zA-Z\n] — spaces between row keys must be removed.
 
 /proc/cmp_veilbreak_dmm_key_length_desc(a, b)
 	return length(b) - length(a)
@@ -57,6 +60,43 @@
 		out = copytext(out, 1, grid_start) + remapped + copytext(out, close)
 	return out
 
+/// parsed_map coord regex only allows letters and newlines inside the grid string.
+/proc/veilbreak_dmm_strip_spaces_in_grid_blocks(dmm_text)
+	var/out = dmm_text
+	var/static/regex/rx_block = new(@'\((\d+),(\d+),(\d+)\)\s*=\s*\{\"')
+	var/safety = 0
+	var/tab = ascii2text(9)
+	while(++safety < 10000)
+		if(!rx_block.Find(out, 1))
+			break
+		var/grid_start = rx_block.index + length(rx_block.match)
+		var/close = findtext(out, "\"}", grid_start)
+		if(!close)
+			break
+		var/inner = copytext(out, grid_start, close)
+		var/list/lines = splittext(inner, "\n")
+		var/list/out_lines = list()
+		for(var/raw_line in lines)
+			var/line = trim(raw_line)
+			if(!length(line))
+				out_lines += raw_line
+				continue
+			line = replacetext(line, " ", "")
+			line = replacetext(line, tab, "")
+			out_lines += line
+		var/new_inner = jointext(out_lines, "\n")
+		out = copytext(out, 1, grid_start) + new_inner + copytext(out, close)
+	return out
+
+/// Insert newlines so each model ends with )\n (required by reader.dm dmm_regex).
+/proc/veilbreak_dmm_fix_compact_model_layout(dmm_text)
+	var/out = dmm_text
+	var/static/regex/rx_def_chain = new(@'\)[ \t]+\"([a-zA-Z]+)\"\s*=\s*\(')
+	out = rx_def_chain.Replace(out, ")\n\"$1\" = (")
+	var/static/regex/rx_grid_start = new(@'\)\s*\((\d+,\d+,\d+)\)\s*=\s*\{\"')
+	out = rx_grid_start.Replace(out, ")\n($1) = {\"")
+	return out
+
 /// Returns normalized DMM text, or null if tile keys have inconsistent lengths (cannot fix safely).
 /proc/veilbreak_normalize_dmm_for_parsed_map(dmm_content)
 	if(!length(dmm_content))
@@ -68,10 +108,14 @@
 		out = copytext(out, first_quote)
 	out = replacetext(out, ascii2text(13), "")
 
+	out = veilbreak_dmm_fix_compact_model_layout(out)
+
 	var/static/regex/regex_coord_spaces = new(@"\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)")
 	out = regex_coord_spaces.Replace(out, "($1,$2,$3)")
 	var/static/regex/regex_loose_grid_open = new(@'\)\s*=\s*\{\s*\"')
 	out = regex_loose_grid_open.Replace(out, ") = {\"")
+
+	out = veilbreak_dmm_strip_spaces_in_grid_blocks(out)
 
 	var/list/keys_ordered = list()
 	var/list/seen = list()
@@ -117,4 +161,5 @@
 		out = replacetext(out, "\"[old_k]\" = (", "\"[new_k]\" = (")
 
 	out = veilbreak_remap_all_coord_grids(out, key_len, old_to_new)
+	out = veilbreak_dmm_strip_spaces_in_grid_blocks(out)
 	return out
