@@ -32,7 +32,7 @@
 		var/obj/machinery/portal/P = GLOB.station_veilbreak_portal
 		var/datum/portal_destination/veilbreak/home = new()
 		home.generated = TRUE
-		home.dungeon_z_level = P.z
+		home.dungeon_z_level = z
 		home.target_turf = get_turf(P)
 		target = home
 		update_appearance()
