@@ -92,6 +92,7 @@
 		name = level_name
 		log_world("Veilbreak Debug: created Z-level [dungeon_z_level] with name [level_name]")
 
+	veilbreak_init_runtime_space_turfs(dungeon_z_level)
 	load_dmm_with_ticks(dmm_content, metadata, newly_created_z)
 
 /datum/portal_destination/veilbreak/proc/load_dmm_with_ticks(dmm_content, list/metadata, newly_created_z)
@@ -134,6 +135,8 @@
 	init_bounds.initTemplateBounds(parsed.bounds)
 	smooth_zlevel(dungeon_z_level)
 	fdel(temp_file)
+
+	veilbreak_init_runtime_space_turfs(dungeon_z_level)
 
 	log_world("Veilbreak Debug: map load finished; bounds [parsed.bounds[MAP_MINX]],[parsed.bounds[MAP_MINY]],[parsed.bounds[MAP_MINZ]] -> [parsed.bounds[MAP_MAXX]],[parsed.bounds[MAP_MAXY]],[parsed.bounds[MAP_MAXZ]]")
 

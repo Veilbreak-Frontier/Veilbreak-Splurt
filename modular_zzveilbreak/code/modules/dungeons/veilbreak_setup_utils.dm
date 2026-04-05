@@ -1,3 +1,20 @@
+/// world.incrementMaxZ() creates /turf/open/space/basic tiles. basic/New() skips parent; at runtime they never
+/// get /turf/open/space/Initialize, so they lack starlight overlays and correct PLANE_SPACE offsets (frozen static stars).
+/// ChangeTurf(/turf/open/space/basic) rewrites to /turf/open/space — this mirrors that fix for raw basic turfs.
+/proc/veilbreak_init_runtime_space_turfs(z_level)
+	if(!z_level || z_level < 1 || z_level > world.maxz)
+		return
+	var/processed = 0
+	for(var/turf/open/space/space_turf as anything in Z_TURFS(z_level))
+		if(!istype(space_turf, /turf/open/space/basic))
+			continue
+		if(space_turf.flags_1 & INITIALIZED_1)
+			continue
+		space_turf.Initialize(mapload = TRUE)
+		processed++
+		if(processed % 150 == 0)
+			CHECK_TICK
+
 /datum/portal_destination/veilbreak/proc/veilbreak_initialize_zlevel(z_level, list/metadata)
 	replace_map_mobs_with_placeholders(z_level)
 	CHECK_TICK
