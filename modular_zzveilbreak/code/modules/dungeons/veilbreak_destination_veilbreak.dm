@@ -102,19 +102,16 @@
 		generation_failed("Dungeon map uses invalid tile keys (mixed lengths); check generator output")
 		return
 
-	var/temp_file = "data/veilbreak_dungeon_[world.time]_[rand(1, 999999)].dmm"
-	text2file(normalized, temp_file)
-	if(!fexists(temp_file))
-		generation_failed("Could not write temporary dungeon map file")
-		return
-
-	var/datum/parsed_map/parsed = new(file(temp_file))
+	var/datum/parsed_map/parsed = new(normalized)
 	if(!parsed?.bounds)
 		log_world("Veilbreak Debug: parsed_map could not parse DMM (missing bounds); first ~500 chars after normalize:")
 		log_world(copytext(normalized, 1, 500))
-		fdel(temp_file)
 		generation_failed("Dungeon map parse failed")
 		return
+
+	if(parsed.map_format == "tgm" && parsed.key_len && parsed.line_len > parsed.key_len)
+		log_world("Veilbreak Debug: grid rows are DMM-style (line_len=[parsed.line_len] > key_len=[parsed.key_len]); forcing DMM loader (TGM would mis-read rows)")
+		parsed.map_format = "dmm"
 
 	var/load_ok = parsed.load(
 		1,
@@ -126,7 +123,6 @@
 	)
 	if(!load_ok)
 		log_world("Veilbreak Debug: parsed_map.load failed")
-		fdel(temp_file)
 		generation_failed("Dungeon map load failed")
 		return
 
@@ -134,7 +130,6 @@
 	var/datum/map_template/init_bounds = new(null, (metadata && metadata["map_name"]) ? metadata["map_name"] : name)
 	init_bounds.initTemplateBounds(parsed.bounds)
 	smooth_zlevel(dungeon_z_level)
-	fdel(temp_file)
 
 	veilbreak_init_runtime_space_turfs(dungeon_z_level)
 

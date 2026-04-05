@@ -91,6 +91,8 @@
 /// Insert newlines so each model ends with )\n (required by reader.dm dmm_regex).
 /proc/veilbreak_dmm_fix_compact_model_layout(dmm_text)
 	var/out = dmm_text
+	var/static/regex/rx_tight_defs = new(@'\)\"([a-zA-Z]+)\"\s*=\s*\(')
+	out = rx_tight_defs.Replace(out, ")\n\"$1\" = (")
 	var/static/regex/rx_def_chain = new(@'\)[ \t]+\"([a-zA-Z]+)\"\s*=\s*\(')
 	out = rx_def_chain.Replace(out, ")\n\"$1\" = (")
 	var/static/regex/rx_grid_start = new(@'\)\s*\((\d+,\d+,\d+)\)\s*=\s*\{\"')
