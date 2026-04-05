@@ -165,3 +165,19 @@
 	out = veilbreak_remap_all_coord_grids(out, key_len, old_to_new)
 	out = veilbreak_dmm_strip_spaces_in_grid_blocks(out)
 	return out
+
+/// HTTP generators often send only "key"=(/turf,/area) defs. BYOND needs a (1,1,1)={"..."} grid; fill with the first defined key (repeated).
+/proc/veilbreak_dmm_append_placeholder_grid(dmm_text, width, height)
+	var/fill_key = "a"
+	var/static/regex/rx_first_key = new(@'"([a-zA-Z]+)"\s*=\s*\(')
+	if(rx_first_key.Find(dmm_text, 1))
+		fill_key = rx_first_key.group[1]
+
+	var/list/rows = list()
+	var/row = ""
+	for(var/tile_x in 1 to width)
+		row += fill_key
+	for(var/tile_y in 1 to height)
+		rows += row
+	var/body = jointext(rows, "\n")
+	return "[dmm_text]\n(1,1,1) = {\"\n[body]\n\"}\n"

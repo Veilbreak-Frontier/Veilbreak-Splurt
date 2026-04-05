@@ -104,9 +104,18 @@
 
 	var/static/regex/regex_has_map_grid = new(@'\(\d+,\d+,\d+\)\s*=\s*\{\"')
 	if(!regex_has_map_grid.Find(normalized))
-		log_world("Veilbreak Debug: normalized dmm has no (x,y,z) = {\" grid — only tile definitions are not enough")
-		generation_failed("Dungeon map is missing a grid: after all \"x\"=(...) definitions, append e.g. (1,1,1)={\"<rows of keys>\"} (see _maps templates)")
-		return
+		var/grid_w = DUNGEON_WIDTH
+		var/grid_h = DUNGEON_HEIGHT
+		if(metadata)
+			if(metadata["width"])
+				grid_w = clamp(text2num(metadata["width"]) || grid_w, 1, world.maxx)
+			if(metadata["height"])
+				grid_h = clamp(text2num(metadata["height"]) || grid_h, 1, world.maxy)
+		log_world("Veilbreak Warning: API sent no map grid; appending [grid_w]x[grid_h] placeholder (first tile key). Add a real (1,1,1)={\"...\"} section in the service for real layouts.")
+		normalized = veilbreak_dmm_append_placeholder_grid(normalized, grid_w, grid_h)
+		if(!regex_has_map_grid.Find(normalized))
+			generation_failed("Dungeon map still invalid after placeholder grid")
+			return
 
 	var/datum/parsed_map/parsed = new(normalized)
 	if(!parsed?.bounds)
