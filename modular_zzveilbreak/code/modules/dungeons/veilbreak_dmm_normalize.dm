@@ -42,42 +42,42 @@
 	return jointext(out_lines, "\n")
 
 /proc/veilbreak_remap_all_coord_grids(dmm_text, key_len, list/old_to_new)
-	var/. = dmm_text
+	var/out = dmm_text
 	var/static/regex/rx_block = new(@'\((\d+),(\d+),(\d+)\)\s*=\s*\{\"')
 	var/safety = 0
 	while(++safety < 10000)
-		if(!rx_block.Find(., 1))
+		if(!rx_block.Find(out, 1))
 			break
 		var/grid_start = rx_block.index + length(rx_block.match)
-		var/close = findtext(., "\"}", grid_start)
+		var/close = findtext(out, "\"}", grid_start)
 		if(!close)
 			break
-		var/inner = copytext(., grid_start, close)
+		var/inner = copytext(out, grid_start, close)
 		var/remapped = veilbreak_remap_grid_block_inner(inner, key_len, old_to_new)
-		. = copytext(., 1, grid_start) + remapped + copytext(., close)
-	return .
+		out = copytext(out, 1, grid_start) + remapped + copytext(out, close)
+	return out
 
 /// Returns normalized DMM text, or null if tile keys have inconsistent lengths (cannot fix safely).
 /proc/veilbreak_normalize_dmm_for_parsed_map(dmm_content)
 	if(!length(dmm_content))
 		return null
 
-	var/. = dmm_content
-	var/first_quote = findtext(., "\"")
+	var/out = dmm_content
+	var/first_quote = findtext(out, "\"")
 	if(first_quote > 1)
-		. = copytext(., first_quote)
-	. = replacetext(., "\r", "")
+		out = copytext(out, first_quote)
+	out = replacetext(out, ascii2text(13), "")
 
 	var/static/regex/regex_coord_spaces = new(@"\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)")
-	. = regex_coord_spaces.Replace(., "($1,$2,$3)")
+	out = regex_coord_spaces.Replace(out, "($1,$2,$3)")
 	var/static/regex/regex_loose_grid_open = new(@'\)\s*=\s*\{\s*\"')
-	. = regex_loose_grid_open.Replace(., ") = {\"")
+	out = regex_loose_grid_open.Replace(out, ") = {\"")
 
 	var/list/keys_ordered = list()
 	var/list/seen = list()
 	var/static/regex/regex_map_key = new(@'"([a-zA-Z0-9_]+)"\s*=\s*\(', "g")
 	var/find_pos = 1
-	while(regex_map_key.Find(., find_pos))
+	while(regex_map_key.Find(out, find_pos))
 		var/k = regex_map_key.group[1]
 		if(!seen[k])
 			seen[k] = TRUE
@@ -85,7 +85,7 @@
 		find_pos = regex_map_key.next
 
 	if(!length(keys_ordered))
-		return .
+		return out
 
 	var/key_len = length(keys_ordered[1])
 	for(var/check_key in keys_ordered)
@@ -101,7 +101,7 @@
 			break
 
 	if(!need_remap)
-		return .
+		return out
 
 	var/new_len = max(key_len, veilbreak_needed_alpha_key_length(length(keys_ordered)))
 	var/list/old_to_new = list()
@@ -114,7 +114,7 @@
 
 	for(var/old_k in sorted_old)
 		var/new_k = old_to_new[old_k]
-		. = replacetext(., "\"[old_k]\" = (", "\"[new_k]\" = (")
+		out = replacetext(out, "\"[old_k]\" = (", "\"[new_k]\" = (")
 
-	. = veilbreak_remap_all_coord_grids(., key_len, old_to_new)
-	return .
+	out = veilbreak_remap_all_coord_grids(out, key_len, old_to_new)
+	return out
