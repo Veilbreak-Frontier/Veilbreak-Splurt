@@ -427,13 +427,15 @@
 		return FALSE
 
 	if(HAS_TRAIT(slipper, TRAIT_WATER_BREATHING))
-		var/is_water = FALSE
+		var/water_found = FALSE
 
-		var/obj/effect/abstract/liquid_turf/L = locate() in src
-		if(L?.reagents?.has_reagent(/datum/reagent/water))
-			is_water = TRUE
+		if(liquids && liquids.reagents && liquids.reagents.has_reagent(/datum/reagent/water))
+			water_found = TRUE
 
-		if(is_water)
+		if(!water_found && slippable && slippable.reagents && slippable.reagents.has_reagent(/datum/reagent/water))
+			water_found = TRUE
+
+		if(water_found)
 			return FALSE
 
 	var/slide_distance = 4
