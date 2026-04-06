@@ -426,12 +426,6 @@
 	if(!has_gravity(src))
 		return FALSE
 
-	if(HAS_TRAIT(slipper, TRAIT_WATER_BREATHING))
-		if(istype(slippable, /obj/effect/abstract/liquid_turf))
-			var/obj/effect/abstract/liquid_turf/liquid = slippable
-			if(liquid.reagent_list[/datum/reagent/water])
-				return FALSE
-
 	var/slide_distance = 4
 	if(lube & SLIDE_ICE)
 		// Ice slides only go 1 tile, this is so you will slip across ice until you reach a non-slip tile
