@@ -57,17 +57,16 @@
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/jukebox/online/wrench_act(mob/living/user, obj/item/tool)
-	if(online_component?.playing_online || music_player?.active_song_sound)
-		to_chat(user, span_warning("Stop the music before moving the jukebox!"))
-		return TRUE
 	if(default_unfasten_wrench(user, tool))
 		if(!anchored)
-			online_component?.stop_music()
+			if(online_component)
+				online_component.stop_music()
 			if(music_player)
 				music_player.active_song_sound = null
 				for(var/mob/M in GLOB.player_list)
 					if(M?.client)
 						M.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
+		update_appearance()
 		return TRUE
 	return ..()
 

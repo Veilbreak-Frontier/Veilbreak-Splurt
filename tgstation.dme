@@ -10703,6 +10703,7 @@
 #include "modular_zzveilbreak\code\modules\cargo\veilbreak_import_exports.dm"
 #include "modular_zzveilbreak\code\modules\client\preferences\ignite_incantation.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_configuration.dm"
+#include "modular_zzveilbreak\code\modules\dungeons\veilbreak_dmm_normalize.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_destination_veilbreak.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_generation_api.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_mob_placeholders.dm"

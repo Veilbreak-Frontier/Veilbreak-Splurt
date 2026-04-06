@@ -13,6 +13,7 @@
 	for(var/obj/machinery/portal/P in orange(3, src))
 		if(!QDELETED(P))
 			linked_portal = P
+			resync_veilbreak_portals_if_active()
 			return TRUE
 	return FALSE
 
@@ -101,5 +102,14 @@
 	if(found_portal)
 		linked_portal = found_portal
 		found_portal.linked_console = src
+		resync_veilbreak_portals_if_active()
 		return TRUE
 	return FALSE
+
+/// If a pocket is already open, re-bind return portals after the console finds a different linked portal.
+/obj/machinery/computer/portal_control/proc/resync_veilbreak_portals_if_active()
+	var/datum/portal_destination/veilbreak/V = linked_portal?.target
+	if(!istype(V) || !V.generated || !V.dungeon_z_level)
+		return
+	V.spawn_station_portal = linked_portal
+	V.veilbreak_sync_portal_pair()
