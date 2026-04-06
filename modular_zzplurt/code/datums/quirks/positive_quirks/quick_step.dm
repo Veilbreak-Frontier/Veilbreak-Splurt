@@ -7,7 +7,7 @@
     lose_text = span_danger("You feel less determined. What's the rush, man?")
     medical_record_text = "Patient scored highly on racewalking tests."
     icon = FA_ICON_PERSON_RUNNING
-    var/last_state = FALSE
+    var/last_state = null // Using null for initial check
 
 /datum/quirk/quick_step/add(client/client_source)
     . = ..()
@@ -26,14 +26,14 @@
 
     var/is_walking = (L.move_intent == MOVE_INTENT_WALK)
 
-    if(is_walking)
-        L.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/quick_step, multiplicative_slowdown = -1.5, update = FALSE)
-    else
-        L.remove_movespeed_modifier(/datum/movespeed_modifier/quick_step, update = FALSE)
-
     if(is_walking != last_state)
-        var/current_mod = L.cached_multiplicative_slowdown
-        to_chat(L, span_boldnotice("DEBUG: Quick Step [is_walking ? "ACTIVE" : "INACTIVE"] | Total Multiplier: [current_mod]"))
+        if(is_walking)
+            L.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/quick_step, multiplicative_slowdown = -0.5, update = FALSE)
+            to_chat(L, span_boldnotice("DEBUG: Walking detected. Applying -0.5 speed boost."))
+        else
+            L.remove_movespeed_modifier(/datum/movespeed_modifier/quick_step, update = FALSE)
+            to_chat(L, span_boldnotice("DEBUG: Running detected. Quirk modifier REMOVED."))
+
         last_state = is_walking
 
 /datum/movespeed_modifier/quick_step
