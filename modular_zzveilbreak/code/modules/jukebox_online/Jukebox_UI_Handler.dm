@@ -55,14 +55,18 @@
 	if(!jukebox || QDELETED(jukebox))
 		return FALSE
 
-	if(isobserver(ui.user))
-		var/mob/dead/observer/G = ui.user
-		to_chat(G, span_warning("You can only monitor the jukebox as a ghost."))
-		return TRUE
-
 	var/mob/user = ui.user
-	if(user && jukebox.parent_atom && get_dist(user, jukebox.parent_atom) > 1 && !isobserver(user))
+	var/obj/machinery/jukebox/online/parent_obj = jukebox.parent_atom
+
+	if(action == "play_online" || action == "download_url" || action == "play_library")
+		if(istype(parent_obj) && !parent_obj.anchored)
+			jukebox.online_error_message = "The jukebox must be anchored to play music!"
+			update_ui()
+			return TRUE
+
+	if(user && parent_obj && get_dist(user, parent_obj) > 1 && !isobserver(user))
 		return FALSE
+
 	switch(action)
 		if("play_online", "download_url")
 			var/url = params["url"]
@@ -117,6 +121,7 @@
 
 	return FALSE
 
+	
 /datum/online_jukebox_ui/proc/update_ui()
 	if(world.time < last_update + update_cooldown)
 		return

@@ -145,6 +145,12 @@
 	if(!track_data)
 		return FALSE
 
+	var/obj/machinery/jukebox/online/parent_obj = parent_atom
+	if(istype(parent_obj) && !parent_obj.anchored)
+		online_error_message = "The jukebox must be secured to the floor to play music!"
+		ui?.update_ui()
+		return FALSE
+
 	stop_music()
 
 	online_track_name = track_data["track_name"]
@@ -266,7 +272,6 @@
 
 	var/turf/sound_turf = get_turf(parent_atom)
 	var/turf/listener_turf = get_turf(listener)
-	var/pref_volume = listener.client.prefs.read_preference(/datum/preference/numeric/volume/sound_jukebox)
 
 	var/too_far = FALSE
 	if(!sound_turf || !listener_turf || sound_turf.z != listener_turf.z)
@@ -277,17 +282,17 @@
 		if(dist_x > x_cutoff || dist_y > z_cutoff)
 			too_far = TRUE
 
+	var/pref_volume = listener.client.prefs.read_preference(/datum/preference/numeric/volume/sound_jukebox)
+
 	if(too_far || !pref_volume || HAS_TRAIT(listener, TRAIT_DEAF))
 		deregister_listener(listener)
 		return
 
 	var/sound/sending = sound(active_song_sound)
 	sending.channel = CHANNEL_ONLINE_JUKEBOX
-
 	sending.x = sound_turf.x - listener_turf.x
 	sending.y = sound_turf.y - listener_turf.y
 	sending.z = 0
-
 	sending.volume = volume * (pref_volume / 100)
 	sending.status = active_song_sound.status | (listeners[listener] & SOUND_UPDATE)
 
