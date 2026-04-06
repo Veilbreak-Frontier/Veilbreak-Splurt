@@ -16,7 +16,8 @@
 
 /datum/quirk/quick_step/remove()
     UnregisterSignal(quirk_holder, COMSIG_MOB_MOVESPEED_UPDATED)
-    quirk_holder.remove_movespeed_modifier("quirk_quickstep", update = TRUE)
+    quirk_holder.remove_movespeed_modifier(/datum/movespeed_modifier/quick_step)
+    quirk_holder.update_movespeed()
     . = ..()
 
 /datum/quirk/quick_step/proc/handle_speed_update(mob/living/L)
@@ -33,6 +34,8 @@
             L.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/quick_step, multiplicative_slowdown = -0.5, update = FALSE)
         else
             L.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/quick_step, multiplicative_slowdown = 0, update = FALSE)
+
+            addtimer(CALLBACK(L, TYPE_PROC_REF(/mob, update_movespeed)), 0)
 
 /datum/movespeed_modifier/quick_step
     variable = TRUE
