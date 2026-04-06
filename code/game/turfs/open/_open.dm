@@ -427,16 +427,10 @@
 		return FALSE
 
 	if(HAS_TRAIT(slipper, TRAIT_WATER_BREATHING))
-		var/water_found = FALSE
-
-		if(liquids && liquids.reagents && liquids.reagents.has_reagent(/datum/reagent/water))
-			water_found = TRUE
-
-		if(!water_found && slippable && slippable.reagents && slippable.reagents.has_reagent(/datum/reagent/water))
-			water_found = TRUE
-
-		if(water_found)
-			return FALSE
+		if(istype(slippable, /obj/effect/abstract/liquid_turf))
+			var/obj/effect/abstract/liquid_turf/liquid = slippable
+			if(liquid.reagent_list[/datum/reagent/water])
+				return FALSE
 
 	var/slide_distance = 4
 	if(lube & SLIDE_ICE)
