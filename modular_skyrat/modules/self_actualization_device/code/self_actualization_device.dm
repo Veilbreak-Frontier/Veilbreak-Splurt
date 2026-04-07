@@ -204,38 +204,46 @@
 
 /// Ejects the occupant after asking them if they want to accept the rejuvenation. If yes, they exit as their preferences character.
 /obj/machinery/self_actualization_device/proc/eject_new_you()
-	player_consent = NO_CONSENT
-	set_light(l_on = FALSE)
-	sound_loop.stop()
-	processing = FALSE
-	if(state_open || !occupant || !powered())
-		return
+    player_consent = NO_CONSENT
+    set_light(l_on = FALSE)
+    sound_loop.stop()
+    processing = FALSE
+    if(state_open || !occupant || !powered())
+        return
 
-	var/mob/living/carbon/human/patient = occupant
-	var/original_name = patient.dna.real_name
+    var/mob/living/carbon/human/patient = occupant
+    var/original_name = patient.dna.real_name
 
-	patient.client?.prefs?.safe_transfer_prefs_to_with_damage(patient, visuals_only = TRUE)
-	patient.dna.update_dna_identity()
-	// SPLURT ADDITION START - Fix of naga with shoes
-	var/taur_mode = patient.get_taur_mode()
-	if((taur_mode & STYLE_TAUR_SNAKE) && (patient.shoes))
-		patient.dropItemToGround(patient.shoes, TRUE)
-	// SPLURT ADDITION END - Fix of naga with shoes
-	patient.updateappearance()
-	patient.wash(CLEAN_SCRUB)
-	if(patient.dna.real_name != original_name)
-		log_game("[key_name(patient)] has used the Self-Actualization Device at [loc_name(src)], changed the name of their character. \
-		Original Name: [original_name], New Name: [patient.dna.real_name].")
-	else
-		log_game("[key_name(patient)] has used the Self-Actualization Device at [loc_name(src)].")
+    patient.client?.prefs?.safe_transfer_prefs_to_with_damage(patient, visuals_only = TRUE)
+    patient.dna.update_dna_identity()
 
-	playsound(src, 'sound/machines/microwave/microwave-end.ogg', 100, FALSE)
-	say("Procedure complete! Enjoy your life being a new you!")
-	if(isethereal(patient.dna.species))
-		var/datum/species/ethereal/ethereal = patient.dna.species
-		ethereal.refresh_light_color(patient)
-	open_machine()
-	SSquirks.OverrideQuirks(patient, patient.client)
+    var/taur_mode = patient.get_taur_mode()
+    if((taur_mode & STYLE_TAUR_SNAKE) && (patient.shoes))
+        patient.dropItemToGround(patient.shoes, TRUE)
+
+    patient.updateappearance()
+
+    var/obj/item/organ/taur_body/T = patient.get_organ_slot(ORGAN_SLOT_EXTERNAL_TAUR)
+    if(T)
+        T.on_mob_remove(patient)
+        T.on_mob_insert(patient)
+
+    patient.wash(CLEAN_SCRUB)
+
+    if(patient.dna.real_name != original_name)
+        log_game("[key_name(patient)] has used the Self-Actualization Device at [loc_name(src)], changed the name of their character. Original Name: [original_name], New Name: [patient.dna.real_name].")
+    else
+        log_game("[key_name(patient)] has used the Self-Actualization Device at [loc_name(src)].")
+
+    playsound(src, 'sound/machines/microwave/microwave-end.ogg', 100, FALSE)
+    say("Procedure complete! Enjoy your life being a new you!")
+
+    if(isethereal(patient.dna.species))
+        var/datum/species/ethereal/ethereal = patient.dna.species
+        ethereal.refresh_light_color(patient)
+
+    open_machine()
+    SSquirks.OverrideQuirks(patient, patient.client)
 
 /// Ejection and shut down of the machine, used before the preferences have been applied to the player. Damage optional.
 /obj/machinery/self_actualization_device/proc/eject_old_you(damaged_goods = FALSE)
