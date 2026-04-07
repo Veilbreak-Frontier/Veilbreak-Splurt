@@ -5,7 +5,6 @@
 	surgery_flags = SURGERY_SELF_OPERABLE
 	target_mobtypes = list(/mob/living/carbon/human)
 	var/list/self_surgery_possible_locs = list()
-	/// Cached list of tattoos we can currently remove
 	var/list/accessible_tattoos
 
 /datum/surgery/custom_tattoo_removal/New(atom/surgery_target, surgery_location, surgery_bodypart)
@@ -23,15 +22,44 @@
 	if(!length(self_surgery_possible_locs))
 		self_surgery_possible_locs = possible_locs.Copy()
 
+/datum/surgery/custom_tattoo_removal/mechanic
+	name = "Custom Tattoo Erasure (Mechanical)"
+	steps = list(
+		/datum/surgery_step/mechanic_open,
+		/datum/surgery_step/mechanic_unwrench,
+		/datum/surgery_step/prepare_electronics,
+		/datum/surgery_step/cauterize_custom_tattoo,
+		/datum/surgery_step/mechanic_wrench,
+		/datum/surgery_step/mechanic_close
+	)
+	target_mobtypes = list(/mob/living/carbon/human)
+	requires_bodypart_type = BODYTYPE_ROBOTIC | BODYTYPE_NANO
+
+/datum/surgery/custom_tattoo_removal/mechanic/can_start(mob/user, mob/living/carbon/target)
+	if(!issynthetic(target))
+		return FALSE
+	return ..()
+
 /datum/surgery/custom_tattoo_removal/can_start(mob/user, mob/living/patient)
 	if(!..())
 		return FALSE
-	if(!istype(patient, /mob/living/carbon/human))
+
+	if(!ishuman(patient))
 		return FALSE
+
 	var/mob/living/carbon/human/H = patient
+
+	if(issynthetic(H))
+		if(src.type != /datum/surgery/custom_tattoo_removal/mechanic)
+			return FALSE
+	else
+		if(src.type == /datum/surgery/custom_tattoo_removal/mechanic)
+			return FALSE
+
 	var/list/tattoos = get_accessible_custom_tattoos(H)
 	if(!length(tattoos))
 		return FALSE
+
 	accessible_tattoos = tattoos
 	return TRUE
 
@@ -157,12 +185,15 @@
 	if(!operated_tattoo)
 		to_chat(user, span_warning("There is no custom tattoo to remove!"))
 		return FALSE
+
 	var/mob/living/carbon/human/H = target
 	if(!istype(H) || QDELETED(operated_tattoo) || !(operated_tattoo in H.custom_body_tattoos))
 		to_chat(user, span_warning("The tattoo appears to have already been removed!"))
 		return FALSE
+
 	var/burn_damage = 5
 	var/tool_message = "carefully"
+
 	if(istype(tool, /obj/item/cautery))
 		burn_damage = 8
 		tool_message = "precisely with the cautery"
@@ -178,9 +209,11 @@
 	else if(istype(tool, /obj/item/weldingtool))
 		burn_damage = 35
 		tool_message = "aggressively with the welding tool, causing severe burns"
+
 	if(H.remove_custom_tattoo(operated_tattoo))
 		var/effective_zone = operated_tattoo.body_part || target_zone
 		var/body_part_desc = get_custom_tattoo_body_part_description(effective_zone)
+
 		display_results(
 			user,
 			target,
@@ -188,18 +221,24 @@
 			span_notice("[user] successfully removes the custom tattoo from your [body_part_desc] [tool_message]!"),
 			span_notice("[user] successfully works on your [body_part_desc]!"),
 		)
+
 		var/obj/item/bodypart/BP = H.get_bodypart(effective_zone)
 		if(BP)
-			BP.receive_damage(burn = burn_damage)
-			if(burn_damage >= 30)
-				BP.check_wounding(60, WOUND_BURN, target_zone)
-			else if(burn_damage >= 20)
-				BP.check_wounding(40, WOUND_BURN, target_zone)
-			else if(burn_damage >= 10)
-				BP.check_wounding(25, WOUND_BURN, target_zone)
+			if(IS_ROBOTIC_LIMB(BP) || IS_NANO_LIMB(BP))
+				BP.receive_damage(brute = 0, fire = burn_damage)
+			else
+				BP.receive_damage(burn = burn_damage)
+				if(burn_damage >= 30)
+					BP.check_wounding(60, WOUND_BURN, target_zone)
+				else if(burn_damage >= 20)
+					BP.check_wounding(40, WOUND_BURN, target_zone)
+				else if(burn_damage >= 10)
+					BP.check_wounding(25, WOUND_BURN, target_zone)
+
 		log_combat(user, target, "removed a custom tattoo from", addition="TATTOO: [operated_tattoo.design] | TOOL: [tool.name]")
 	else
 		to_chat(user, span_warning("Failed to remove the custom tattoo!"))
+
 	return ..()
 
 /datum/surgery_step/cauterize_custom_tattoo/failure(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery, fail_prob = 0)

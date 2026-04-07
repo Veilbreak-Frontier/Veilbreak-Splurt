@@ -26,11 +26,12 @@
 	return ..()
 
 /obj/item/custom_tattoo_kit/attack(mob/living/target, mob/living/user, params)
-	if(!ishuman(target))
+	if(!iscarbon(target))
 		return ..()
+
 	var/mob/living/carbon/human/human_target = target
 
-	if(!human_target.client?.prefs?.read_preference(/datum/preference/toggle/erp/allow_bodywriting))
+	if(human_target.client && !human_target.client.prefs?.read_preference(/datum/preference/toggle/erp/allow_bodywriting))
 		to_chat(user, span_warning("[human_target] doesn't allow body modifications!"))
 		return TRUE
 
@@ -118,13 +119,11 @@
 		to_chat(user, span_warning("UI data lost during application."))
 		return FALSE
 
-	// Auto-detect signature format based on %s
 	var/is_signature_format = findtext(ui_data.artist_name, "%s")
 	var/final_artist = ui_data.artist_name
 	if(is_signature_format)
 		final_artist = replacetext(final_artist, "%s", user.name)
 
-	// Create tattoo using the ui_data parameters
 	var/datum/custom_tattoo/new_tattoo = new(
 		final_artist,
 		ui_data.tattoo_design,
@@ -139,23 +138,26 @@
 	if(current_target.add_custom_tattoo(new_tattoo))
 		ink_uses = max(0, ink_uses - 1)
 
-		// Apply Brute Damage
 		var/major_zone_string = get_major_body_zone_string_for_tattoo_zone(ui_data.zone)
 		var/damage_amount = 20
 
-		// Apply the damage (20 BRUTE) to the major body zone (e.g., "precise_groin" for an organ tattoo)
-		current_target.apply_damage(damage_amount, BRUTE, major_zone_string)
-		to_chat(current_target, span_warning("The intense process causes a deep, sharp pain, and the area feels bruised and sore."))
+		var/damage_type = BRUTE
+		var/pain_message = span_warning("The intense process causes a deep, sharp pain, and the area feels bruised and raw.")
+
+		if(issynthetic(current_target))
+			damage_type = FIRE
+			pain_message = span_warning("Your internal sensors pulse with heat warnings as the needle etches into your plating.")
+
+		current_target.apply_damage(damage_amount, damage_type, major_zone_string)
+		to_chat(current_target, pain_message)
 
 		next_use = world.time + 2 SECONDS
 		current_target.regenerate_icons()
 		update_appearance()
 
-		// Clear design but keep zone selected
 		ui_data.artist_name = ""
 		ui_data.tattoo_design = ""
 
-		// Refresh UI
 		SStgui.update_uis(src)
 		to_chat(user, span_green("Tattoo applied successfully!"))
 		return TRUE
