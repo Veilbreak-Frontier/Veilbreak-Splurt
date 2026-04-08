@@ -16,9 +16,6 @@
 	var/turf/T = get_turf(src)
 	if(!T)
 		return INITIALIZE_HINT_QDEL
-	if(!is_veilbreak_portal_dungeon_z(T.z))
-		spawn_mob()
-		return INITIALIZE_HINT_QDEL
 	spawn_z_level = T.z
 	return INITIALIZE_HINT_NORMAL
 

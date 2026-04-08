@@ -246,34 +246,39 @@
 		connected_control_computer.on_generation_failed(reason)
 	spawn_station_portal = null
 
-/// Binds the control console's station portal to this destination and wires every portal on the dungeon Z to return there.
 /datum/portal_destination/veilbreak/proc/veilbreak_sync_portal_pair()
 	var/obj/machinery/portal/station = spawn_station_portal
 	if(QDELETED(station))
-		station = null
-	if(!station && connected_control_computer)
-		station = connected_control_computer.linked_portal
+		station = connected_control_computer?.linked_portal
 	if(QDELETED(station))
-		station = null
-	if(!station)
 		station = GLOB.station_veilbreak_portal
-	if(QDELETED(station))
-		log_world("Veilbreak Warning: veilbreak_sync_portal_pair — no valid station portal; link the controller then recalibrate.")
+
+	if(!station || QDELETED(station))
+		log_world("Veilbreak Warning: No valid station portal found.")
 		return
+
 	GLOB.station_veilbreak_portal = station
 	station.target = src
 	station.transport_active = TRUE
 	station.update_appearance()
+
 	var/linked = 0
-	for(var/obj/machinery/portal/dungeon_portal in world)
-		if(dungeon_portal.z != dungeon_z_level || QDELETED(dungeon_portal))
-			continue
-		dungeon_portal.setup_as_return_portal(station)
-		linked++
+
+	for(var/turf/T in Z_TURFS(dungeon_z_level))
+		for(var/obj/machinery/portal/dungeon_portal in T)
+			if(QDELETED(dungeon_portal))
+				continue
+
+			dungeon_portal.setup_as_return_portal(station)
+			linked++
+
+		if(T.x % 100 == 0 && T.y == 1)
+			CHECK_TICK
+
 	if(linked)
 		log_world("Veilbreak Debug: linked [linked] dungeon portal(s) to station portal at [station.x],[station.y],[station.z]")
 	else
-		log_world("Veilbreak Warning: veilbreak_sync_portal_pair — no /obj/machinery/portal on dungeon Z [dungeon_z_level]")
+		log_world("Veilbreak Warning: No /obj/machinery/portal found on dungeon Z [dungeon_z_level]")
 
 /datum/portal_destination/veilbreak/proc/get_target_turf()
 	if(!dungeon_z_level)
