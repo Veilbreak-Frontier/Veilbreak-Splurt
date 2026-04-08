@@ -22,10 +22,7 @@
 		bumper = new /obj/effect/portal_bumper(T, src)
 
 	var/turf/curr_turf = get_turf(src)
-	if(!curr_turf)
-		return
-
-	if(is_veilbreak_portal_dungeon_z(curr_turf.z))
+	if(curr_turf && is_veilbreak_portal_dungeon_z(curr_turf.z))
 		transport_active = FALSE
 		return
 

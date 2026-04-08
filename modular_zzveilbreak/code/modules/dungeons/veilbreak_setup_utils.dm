@@ -18,23 +18,41 @@
 /datum/portal_destination/veilbreak/proc/veilbreak_initialize_zlevel(z_level, list/metadata, current_step = 1)
 	switch(current_step)
 		if(1)
+			if(z_level > 0 && z_level <= length(SSmapping.z_list))
+				var/datum/space_level/SL = SSmapping.z_list[z_level]
+				if(SL)
+					SL.traits[ZTRAIT_AWAY] = TRUE
+					SL.traits[ZTRAIT_MINING] = TRUE
+
 			atmos_freeze_z_level(z_level)
 			cleanup_z_level_completely(z_level)
 
 		if(2)
 			if(temp_map_file)
 				var/datum/parsed_map/PM = new(temp_map_file)
-				PM.load(1, 1, z_level)
+				PM.load(1, 1, z_level, no_init = TRUE)
 
 		if(3)
-			spawn_mobs_from_placeholders(z_level)
+			var/list/atoms_to_init = list()
+			for(var/turf/T in Z_TURFS(z_level))
+				atoms_to_init += T
+				for(var/atom/movable/AM in T)
+					atoms_to_init += AM
+
+			SSatoms.InitializeAtoms(atoms_to_init)
+
+			replace_map_mobs_with_placeholders(z_level)
 
 		if(4)
-			initialize_areas_and_power(z_level)
+			spawn_mobs_from_placeholders(z_level)
+
 		if(5)
+			initialize_areas_and_power(z_level)
 			initialize_machinery(z_level)
+
 		if(6)
 			force_lighting_initialization(z_level)
+			initialize_enhanced_smoothing(z_level)
 
 		if(7)
 			generated = TRUE
@@ -42,7 +60,7 @@
 
 			atmos_resume_z_level(z_level)
 
-			veilbreak_sync_portal_pair()
+			addtimer(CALLBACK(src, .proc/veilbreak_sync_portal_pair), 2)
 
 			if(connected_control_computer)
 				connected_control_computer.on_generation_success()
@@ -65,21 +83,11 @@
 /datum/portal_destination/veilbreak/proc/atmos_freeze_z_level(z_level)
 	if(!SSair)
 		return
-
 	for(var/turf/T in SSair.active_turfs)
 		if(T.z == z_level)
 			SSair.active_turfs -= T
-
-	for(var/turf/T in SSair.rebuild_queue)
-		if(T.z == z_level)
-			SSair.rebuild_queue -= T
-
-	for(var/turf/T in SSair.expansion_queue)
-		if(T.z == z_level)
-			SSair.expansion_queue -= T
-
 	for(var/datum/excited_group/EG in SSair.excited_groups)
-		if(EG.turf_list.len)
+		if(length(EG.turf_list))
 			var/turf/check = EG.turf_list[1]
 			if(check && check.z == z_level)
 				qdel(EG)
