@@ -28,11 +28,10 @@
 			cleanup_z_level_completely(z_level)
 
 		if(2)
-			if(temp_map_file)
-				var/datum/parsed_map/PM = new(temp_map_file)
-				PM.load(1, 1, z_level)
-			else
-				return
+			// Map content is already loaded in load_dmm_with_ticks().
+			// Re-loading here duplicates map-placed atoms (mobs, bosses, gateways, etc).
+			// Keep this step as a compatibility no-op in the staggered pipeline.
+			CHECK_TICK
 
 		if(3)
 			replace_map_mobs_with_placeholders(z_level)
@@ -109,6 +108,20 @@
 
 		if(!placeholder.mob_type)
 			log_world("Veilbreak Debug: Placeholder at [placeholder.x],[placeholder.y],[placeholder.z] has no mob_type")
+			continue
+
+		// Defensive dedupe: skip spawning if a mob of the same type already occupies this turf.
+		var/already_present = FALSE
+		for(var/mob/living/existing in spawn_turf)
+			if(ispath(placeholder.mob_type) && istype(existing, placeholder.mob_type))
+				already_present = TRUE
+				break
+
+		if(already_present)
+			log_world("Veilbreak Debug: Skipping duplicate spawn of [placeholder.mob_type] at [placeholder.x],[placeholder.y],[placeholder.z]")
+			qdel(placeholder)
+			if(placeholders_processed % VEILBREAK_MOB_SPAWN_BATCH_SIZE == 0)
+				CHECK_TICK
 			continue
 
 		log_world("Veilbreak Debug: Spawning [placeholder.mob_type] at [placeholder.x],[placeholder.y],[placeholder.z]")

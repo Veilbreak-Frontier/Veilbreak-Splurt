@@ -102,7 +102,7 @@
 	log_world("Veilbreak Debug: load_dmm_with_ticks started (parsed_map + initTemplateBounds)")
 	var/normalized = veilbreak_normalize_dmm_for_parsed_map(dmm_content)
 	if(isnull(normalized))
-		generation_failed("Dungeon DMM rejected: tile keys must all be the same length (BYOND parsed_map). Regenerate with veilbreak_mapgen.py v4.2+ (fixed-width keys) or reduce unique tile types.")
+		generation_failed("Dungeon DMM rejected: tile keys must all be the same length (BYOND parsed_map). Regenerate with tools.veilbreak_mapgen.api service (fixed-width keys) or reduce unique tile types.")
 		return
 
 	var/static/regex/regex_has_map_grid = new(@'\(\d+,\d+,\d+\)\s*=\s*\{\"')
