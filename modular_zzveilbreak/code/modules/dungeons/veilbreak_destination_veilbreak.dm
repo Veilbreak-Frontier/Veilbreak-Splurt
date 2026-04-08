@@ -189,42 +189,40 @@
 		return
 	cleanup_in_progress = TRUE
 
-	if(SSair)
-		for(var/turf/T in SSair.active_turfs)
-			if(T.z == z_level)
-				SSair.active_turfs -= T
-
-		for(var/datum/excited_group/EG in SSair.excited_groups)
-			if(EG.turf_list.len)
-				var/turf/check = EG.turf_list[1]
-				if(check && check.z == z_level)
-					qdel(EG)
-
 	var/cleaned_mobs = 0
 	var/cleaned_objs = 0
 
 	for(var/turf/T in Z_TURFS(z_level))
 		for(var/atom/movable/AM in T)
-			if(QDELETED(AM) || istype(AM, /mob/dead/observer))
+			if(QDELETED(AM))
 				continue
 
-			if(istype(AM, /mob))
-				if(ejection_turf)
-					AM.forceMove(ejection_turf)
-				else
-					qdel(AM)
-				cleaned_mobs++
-			else
-				qdel(AM)
-				cleaned_objs++
+			if(istype(AM, /mob/living))
+				var/mob/living/L = AM
 
-		T.ChangeTurf(/turf/open/space/basic)
+				if(L.ai_controller)
+					var/datum/ai_controller/AC = L.ai_controller
+					L.ai_controller = null
+					qdel(AC)
+
+				if(ejection_turf && !isobserver(L))
+					L.forceMove(ejection_turf)
+					cleaned_mobs++
+					continue
+
+			qdel(AM)
+			if(AM && !QDELETED(AM))
+				AM.moveToNullspace()
+
+			cleaned_objs++
+
+		T.ChangeTurf(/turf/open/space/basic, flags = CHANGETURF_INHERIT_AIR)
 
 		if(T.x == world.maxx && T.y % 10 == 0)
 			CHECK_TICK
 
-	log_world("Veilbreak Debug: Cleanup complete. Mobs: [cleaned_mobs], Objs: [cleaned_objs]")
 	cleanup_in_progress = FALSE
+	log_world("Veilbreak: Cleanup finished. Mobs: [cleaned_mobs], Objs: [cleaned_objs]")
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)
 	log_world("Veilbreak Generation Failed: [reason]")

@@ -60,7 +60,7 @@
 
 			atmos_resume_z_level(z_level)
 
-			addtimer(CALLBACK(src, .proc/veilbreak_sync_portal_pair), 2)
+			addtimer(CALLBACK(src, .proc/veilbreak_sync_portal_pair), 5)
 
 			if(connected_control_computer)
 				connected_control_computer.on_generation_success()
@@ -83,9 +83,11 @@
 /datum/portal_destination/veilbreak/proc/atmos_freeze_z_level(z_level)
 	if(!SSair)
 		return
+
 	for(var/turf/T in SSair.active_turfs)
 		if(T.z == z_level)
 			SSair.active_turfs -= T
+
 	for(var/datum/excited_group/EG in SSair.excited_groups)
 		if(length(EG.turf_list))
 			var/turf/check = EG.turf_list[1]
