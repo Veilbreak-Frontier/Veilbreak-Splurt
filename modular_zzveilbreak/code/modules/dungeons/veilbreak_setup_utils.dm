@@ -23,7 +23,7 @@
 		if(2)
 			if(temp_map_file)
 				var/datum/parsed_map/PM = new(temp_map_file)
-				PM.load(1, 1, z_level, no_init = FALSE)
+				PM.load(1, 1, z_level)
 		if(3)
 			replace_map_mobs_with_placeholders(z_level)
 		if(4)
@@ -43,17 +43,18 @@
 			generating = FALSE
 
 			atmos_resume_z_level(z_level)
-
 			veilbreak_sync_portal_pair()
+
+			target_turf = get_target_turf()
 
 			if(connected_control_computer)
 				connected_control_computer.on_generation_success()
 
 			addtimer(CALLBACK(src, .proc/final_ai_activation, z_level), 3 SECONDS)
+			log_world("Veilbreak: Generation fully complete and portals synced.")
 			return
 
-	var/next_step = current_step + 1
-	addtimer(CALLBACK(src, .proc/veilbreak_initialize_zlevel, z_level, metadata, next_step), 1)
+	addtimer(CALLBACK(src, .proc/veilbreak_initialize_zlevel, z_level, metadata, current_step + 1), 1)
 
 /datum/portal_destination/veilbreak/proc/replace_map_mobs_with_placeholders(z_level)
 	var/count = 0

@@ -162,11 +162,12 @@
 	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
 
 /datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)
-    if(generated || !dungeon_z_level)
-        generating = FALSE
-        return
+	if(generating || generated)
+		return
 
-    veilbreak_initialize_zlevel(dungeon_z_level, metadata, 1)
+	generating = TRUE
+	log_world("Veilbreak: Starting staggered initialization for Z [dungeon_z_level]")
+	veilbreak_initialize_zlevel(dungeon_z_level, metadata, 1)
 
 /datum/portal_destination/veilbreak/proc/post_transfer(atom/movable/AM)
 	if(ismob(AM))
