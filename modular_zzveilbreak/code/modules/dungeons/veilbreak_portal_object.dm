@@ -29,7 +29,7 @@
 		transport_active = FALSE
 		return
 
-	if(!GLOB.station_veilbreak_portal || GLOB.station_veilbreak_portal == src)
+	if(!GLOB.station_veilbreak_portal)
 		GLOB.station_veilbreak_portal = src
 
 /// @param station_portal The station-side portal players should return to; falls back to GLOB.station_veilbreak_portal.

@@ -20,38 +20,34 @@
 		if(1)
 			atmos_freeze_z_level(z_level)
 			cleanup_z_level_completely(z_level)
+
 		if(2)
 			if(temp_map_file)
 				var/datum/parsed_map/PM = new(temp_map_file)
 				PM.load(1, 1, z_level)
+
 		if(3)
-			replace_map_mobs_with_placeholders(z_level)
-		if(4)
 			spawn_mobs_from_placeholders(z_level)
-		if(5)
+
+		if(4)
 			initialize_areas_and_power(z_level)
-		if(6)
+		if(5)
 			initialize_machinery(z_level)
-		if(7)
-			force_air_initialization(z_level)
-		if(8)
+		if(6)
 			force_lighting_initialization(z_level)
-		if(9)
-			initialize_enhanced_smoothing(z_level)
-		if(10)
+
+		if(7)
 			generated = TRUE
 			generating = FALSE
 
 			atmos_resume_z_level(z_level)
-			veilbreak_sync_portal_pair()
 
-			target_turf = get_target_turf()
+			veilbreak_sync_portal_pair()
 
 			if(connected_control_computer)
 				connected_control_computer.on_generation_success()
 
-			addtimer(CALLBACK(src, .proc/final_ai_activation, z_level), 3 SECONDS)
-			log_world("Veilbreak: Generation fully complete and portals synced.")
+			log_world("Veilbreak: Pocket Z-[z_level] stabilized and portals synced.")
 			return
 
 	addtimer(CALLBACK(src, .proc/veilbreak_initialize_zlevel, z_level, metadata, current_step + 1), 1)
