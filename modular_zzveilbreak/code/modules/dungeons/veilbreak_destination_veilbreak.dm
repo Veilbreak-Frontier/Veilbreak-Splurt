@@ -55,6 +55,10 @@
 		return
 
 	log_world("Veilbreak Debug: generation_complete called")
+	// HTTP request is done; release "generating" so finalize_dungeon_generation can start
+	// staggered init steps (which toggle generating back on while they run).
+	generating = FALSE
+	current_request_id = 0
 	last_generation_data = json_data.Copy()
 	var/dmm_content = json_data["dmm_content"]
 	var/list/metadata = json_data["metadata"]

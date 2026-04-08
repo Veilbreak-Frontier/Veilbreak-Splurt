@@ -58,8 +58,15 @@
 				var/datum/portal_destination/veilbreak/V = linked_portal.target
 				if(V)
 					V.cleanup_z_level_completely(V.dungeon_z_level, get_step(linked_portal, SOUTH))
+					V.generated = FALSE
+					V.generating = FALSE
+					V.current_request_id = 0
+					V.spawn_station_portal = null
+					linked_portal.target = null
+					qdel(V)
 				linked_portal.transport_active = FALSE
 				linked_portal.update_appearance()
+			generation_in_progress = FALSE
 			return TRUE
 		if("generate_new")
 			if(generation_in_progress || !linked_portal || linked_portal.transport_active)
