@@ -30,17 +30,11 @@
 		if(2)
 			if(temp_map_file)
 				var/datum/parsed_map/PM = new(temp_map_file)
-				PM.load(1, 1, z_level, no_init = TRUE)
+				PM.load(1, 1, z_level)
+			else
+				return
 
 		if(3)
-			var/list/atoms_to_init = list()
-			for(var/turf/T in Z_TURFS(z_level))
-				atoms_to_init += T
-				for(var/atom/movable/AM in T)
-					atoms_to_init += AM
-
-			SSatoms.InitializeAtoms(atoms_to_init)
-
 			replace_map_mobs_with_placeholders(z_level)
 
 		if(4)
@@ -83,11 +77,9 @@
 /datum/portal_destination/veilbreak/proc/atmos_freeze_z_level(z_level)
 	if(!SSair)
 		return
-
 	for(var/turf/T in SSair.active_turfs)
 		if(T.z == z_level)
 			SSair.active_turfs -= T
-
 	for(var/datum/excited_group/EG in SSair.excited_groups)
 		if(length(EG.turf_list))
 			var/turf/check = EG.turf_list[1]
@@ -99,7 +91,6 @@
 		return
 	for(var/turf/open/T in Z_TURFS(z_level))
 		SSair.add_to_active(T)
-
 
 /datum/portal_destination/veilbreak/proc/spawn_mobs_from_placeholders(z_level)
 	var/placeholders_processed = 0

@@ -189,9 +189,6 @@
 		return
 	cleanup_in_progress = TRUE
 
-	var/cleaned_mobs = 0
-	var/cleaned_objs = 0
-
 	for(var/turf/T in Z_TURFS(z_level))
 		for(var/atom/movable/AM in T)
 			if(QDELETED(AM))
@@ -207,14 +204,11 @@
 
 				if(ejection_turf && !isobserver(L))
 					L.forceMove(ejection_turf)
-					cleaned_mobs++
 					continue
 
 			qdel(AM)
 			if(AM && !QDELETED(AM))
 				AM.moveToNullspace()
-
-			cleaned_objs++
 
 		T.ChangeTurf(/turf/open/space/basic, flags = CHANGETURF_INHERIT_AIR)
 
@@ -222,7 +216,6 @@
 			CHECK_TICK
 
 	cleanup_in_progress = FALSE
-	log_world("Veilbreak: Cleanup finished. Mobs: [cleaned_mobs], Objs: [cleaned_objs]")
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)
 	log_world("Veilbreak Generation Failed: [reason]")
