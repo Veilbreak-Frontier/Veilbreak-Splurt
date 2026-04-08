@@ -25,7 +25,8 @@
 					SL.traits[ZTRAIT_MINING] = TRUE
 
 			atmos_freeze_z_level(z_level)
-			cleanup_z_level_completely(z_level)
+			// Do not cleanup here: this staggered init runs after load_dmm_with_ticks(),
+			// and cleaning now would erase the freshly loaded dungeon map.
 
 		if(2)
 			// Map content is already loaded in load_dmm_with_ticks().
