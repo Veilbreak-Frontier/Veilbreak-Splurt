@@ -16,41 +16,44 @@
 			CHECK_TICK
 
 /datum/portal_destination/veilbreak/proc/veilbreak_initialize_zlevel(z_level, list/metadata, current_step = 1)
-    switch(current_step)
-        if(1)
-            cleanup_z_level_completely(z_level)
-        if(2)
-            replace_map_mobs_with_placeholders(z_level)
-        if(3)
-            spawn_mobs_from_placeholders(z_level)
-        if(4)
-            force_ai_registration(z_level)
-        if(5)
-            initialize_areas_and_power(z_level)
-        if(6)
-            initialize_machinery(z_level)
-        if(7)
-            force_air_initialization(z_level)
-        if(8)
-            force_lighting_initialization(z_level)
-        if(9)
-            initialize_enhanced_smoothing(z_level)
-        if(10)
-            generated = TRUE
-            generating = FALSE
+	switch(current_step)
+		if(1)
+			atmos_freeze_z_level(z_level)
+			cleanup_z_level_completely(z_level)
+		if(2)
+			if(temp_map_file)
+				var/datum/parsed_map/PM = new(temp_map_file)
+				PM.load(1, 1, z_level, no_init = FALSE)
+		if(3)
+			replace_map_mobs_with_placeholders(z_level)
+		if(4)
+			spawn_mobs_from_placeholders(z_level)
+		if(5)
+			initialize_areas_and_power(z_level)
+		if(6)
+			initialize_machinery(z_level)
+		if(7)
+			force_air_initialization(z_level)
+		if(8)
+			force_lighting_initialization(z_level)
+		if(9)
+			initialize_enhanced_smoothing(z_level)
+		if(10)
+			generated = TRUE
+			generating = FALSE
 
-            veilbreak_sync_portal_pair()
+			atmos_resume_z_level(z_level)
 
-            target_turf = get_target_turf()
+			veilbreak_sync_portal_pair()
 
-            if(connected_control_computer)
-                connected_control_computer.on_generation_success()
+			if(connected_control_computer)
+				connected_control_computer.on_generation_success()
 
-            addtimer(CALLBACK(src, .proc/final_ai_activation, z_level), 3 SECONDS)
-            return
+			addtimer(CALLBACK(src, .proc/final_ai_activation, z_level), 3 SECONDS)
+			return
 
-    var/next_step = current_step + 1
-    addtimer(CALLBACK(src, .proc/veilbreak_initialize_zlevel, z_level, metadata, next_step), 1)
+	var/next_step = current_step + 1
+	addtimer(CALLBACK(src, .proc/veilbreak_initialize_zlevel, z_level, metadata, next_step), 1)
 
 /datum/portal_destination/veilbreak/proc/replace_map_mobs_with_placeholders(z_level)
 	var/count = 0
@@ -61,6 +64,35 @@
 				log_world("Veilbreak Debug: Found placeholder at [placeholder.x],[placeholder.y],[placeholder.z] with mob_type=[placeholder.mob_type]")
 			CHECK_TICK
 	log_world("Veilbreak Debug: replace_map_mobs_with_placeholders found [count] placeholders on Z-level [z_level]")
+
+/datum/portal_destination/veilbreak/proc/atmos_freeze_z_level(z_level)
+	if(!SSair)
+		return
+
+	for(var/turf/T in SSair.active_turfs)
+		if(T.z == z_level)
+			SSair.active_turfs -= T
+
+	for(var/turf/T in SSair.rebuild_queue)
+		if(T.z == z_level)
+			SSair.rebuild_queue -= T
+
+	for(var/turf/T in SSair.expansion_queue)
+		if(T.z == z_level)
+			SSair.expansion_queue -= T
+
+	for(var/datum/excited_group/EG in SSair.excited_groups)
+		if(EG.turf_list.len)
+			var/turf/check = EG.turf_list[1]
+			if(check && check.z == z_level)
+				qdel(EG)
+
+/datum/portal_destination/veilbreak/proc/atmos_resume_z_level(z_level)
+	if(!SSair)
+		return
+	for(var/turf/open/T in Z_TURFS(z_level))
+		SSair.add_to_active(T)
+
 
 /datum/portal_destination/veilbreak/proc/spawn_mobs_from_placeholders(z_level)
 	var/placeholders_processed = 0

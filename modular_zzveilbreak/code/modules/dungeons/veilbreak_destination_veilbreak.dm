@@ -185,41 +185,44 @@
 
 /datum/portal_destination/veilbreak/proc/cleanup_z_level_completely(z_level, turf/ejection_turf)
 	if(cleanup_in_progress)
-		log_world("Veilbreak Debug: cleanup already in progress")
 		return
 	cleanup_in_progress = TRUE
-	log_world("Veilbreak Debug: cleanup_z_level_completely called for Z-level [z_level]")
 
-	var/cleaned = 0
-	for(var/mob/M in GLOB.mob_list)
-		if(M.z == z_level && !isobserver(M))
-			if(ejection_turf)
-				M.forceMove(ejection_turf)
+	if(SSair)
+		for(var/turf/T in SSair.active_turfs)
+			if(T.z == z_level)
+				SSair.active_turfs -= T
+
+		for(var/datum/excited_group/EG in SSair.excited_groups)
+			if(EG.turf_list.len)
+				var/turf/check = EG.turf_list[1]
+				if(check && check.z == z_level)
+					qdel(EG)
+
+	var/cleaned_mobs = 0
+	var/cleaned_objs = 0
+
+	for(var/turf/T in Z_TURFS(z_level))
+		for(var/atom/movable/AM in T)
+			if(QDELETED(AM) || istype(AM, /mob/dead/observer))
+				continue
+
+			if(istype(AM, /mob))
+				if(ejection_turf)
+					AM.forceMove(ejection_turf)
+				else
+					qdel(AM)
+				cleaned_mobs++
 			else
-				qdel(M)
-			cleaned++
-			if(cleaned % 50 == 0)
-				CHECK_TICK
-	log_world("Veilbreak Debug: cleaned [cleaned] mobs")
+				qdel(AM)
+				cleaned_objs++
 
-	cleaned = 0
-	for(var/obj/O in world)
-		if(O.z == z_level && O != src)
-			qdel(O)
-			cleaned++
-			if(cleaned % 100 == 0)
-				CHECK_TICK
-	log_world("Veilbreak Debug: cleaned [cleaned] objects")
+		T.ChangeTurf(/turf/open/space/basic)
 
-	cleaned = 0
-	for(var/turf/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
-		if(T && T.z == z_level)
-			T.ChangeTurf(/turf/open/space/basic)
-			cleaned++
-			if(cleaned % 200 == 0)
-				CHECK_TICK
-	log_world("Veilbreak Debug: reset [cleaned] turfs to space")
+		if(T.x == world.maxx && T.y % 10 == 0)
+			CHECK_TICK
 
+	log_world("Veilbreak Debug: Cleanup complete. Mobs: [cleaned_mobs], Objs: [cleaned_objs]")
 	cleanup_in_progress = FALSE
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)

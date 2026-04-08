@@ -18,14 +18,19 @@
 /obj/machinery/portal/Initialize(mapload)
 	. = ..()
 	var/turf/T = get_step(get_step(src, EAST), NORTH)
-	bumper = new /obj/effect/portal_bumper(T, src)
+	if(T)
+		bumper = new /obj/effect/portal_bumper(T, src)
+
 	var/turf/curr_turf = get_turf(src)
-	if(curr_turf && is_veilbreak_portal_dungeon_z(curr_turf.z))
-		setup_as_return_portal()
-	else
-		// ONLY set this if there isn't one already, or if we are on the station
-		if(!GLOB.station_veilbreak_portal)
-			GLOB.station_veilbreak_portal = src
+	if(!curr_turf)
+		return
+
+	if(is_veilbreak_portal_dungeon_z(curr_turf.z))
+		transport_active = FALSE
+		return
+
+	if(!GLOB.station_veilbreak_portal || GLOB.station_veilbreak_portal == src)
+		GLOB.station_veilbreak_portal = src
 
 /// @param station_portal The station-side portal players should return to; falls back to GLOB.station_veilbreak_portal.
 /obj/machinery/portal/proc/setup_as_return_portal(obj/machinery/portal/station_portal)
