@@ -16,31 +16,41 @@
 			CHECK_TICK
 
 /datum/portal_destination/veilbreak/proc/veilbreak_initialize_zlevel(z_level, list/metadata, current_step = 1)
-	switch(current_step)
-		if(1)
-			replace_map_mobs_with_placeholders(z_level)
-		if(2)
-			spawn_mobs_from_placeholders(z_level)
-		if(3)
-			force_ai_registration(z_level)
-		if(4)
-			initialize_areas_and_power(z_level)
-		if(5)
-			initialize_machinery(z_level)
-		if(6)
-			force_air_initialization(z_level)
-		if(7)
-			force_lighting_initialization(z_level)
-		if(8)
-			initialize_enhanced_smoothing(z_level)
-		if(9)
-			generated = TRUE
-			addtimer(CALLBACK(src, .proc/final_ai_activation, z_level), 3 SECONDS)
-			return
+    switch(current_step)
+        if(1)
+            cleanup_z_level_completely(z_level)
+        if(2)
+            replace_map_mobs_with_placeholders(z_level)
+        if(3)
+            spawn_mobs_from_placeholders(z_level)
+        if(4)
+            force_ai_registration(z_level)
+        if(5)
+            initialize_areas_and_power(z_level)
+        if(6)
+            initialize_machinery(z_level)
+        if(7)
+            force_air_initialization(z_level)
+        if(8)
+            force_lighting_initialization(z_level)
+        if(9)
+            initialize_enhanced_smoothing(z_level)
+        if(10)
+            generated = TRUE
+            generating = FALSE
 
-	var/next_step = current_step + 1
+            veilbreak_sync_portal_pair()
 
-	addtimer(CALLBACK(src, .proc/veilbreak_initialize_zlevel, z_level, metadata, next_step), 1)
+            target_turf = get_target_turf()
+
+            if(connected_control_computer)
+                connected_control_computer.on_generation_success()
+
+            addtimer(CALLBACK(src, .proc/final_ai_activation, z_level), 3 SECONDS)
+            return
+
+    var/next_step = current_step + 1
+    addtimer(CALLBACK(src, .proc/veilbreak_initialize_zlevel, z_level, metadata, next_step), 1)
 
 /datum/portal_destination/veilbreak/proc/replace_map_mobs_with_placeholders(z_level)
 	var/count = 0

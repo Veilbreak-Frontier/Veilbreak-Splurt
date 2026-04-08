@@ -23,7 +23,9 @@
 	if(curr_turf && is_veilbreak_portal_dungeon_z(curr_turf.z))
 		setup_as_return_portal()
 	else
-		GLOB.station_veilbreak_portal = src
+		// ONLY set this if there isn't one already, or if we are on the station
+		if(!GLOB.station_veilbreak_portal)
+			GLOB.station_veilbreak_portal = src
 
 /// @param station_portal The station-side portal players should return to; falls back to GLOB.station_veilbreak_portal.
 /obj/machinery/portal/proc/setup_as_return_portal(obj/machinery/portal/station_portal)

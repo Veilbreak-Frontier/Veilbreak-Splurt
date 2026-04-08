@@ -162,36 +162,26 @@
 	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
 
 /datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)
-	log_world("Veilbreak Debug: finalize_dungeon_generation called")
-	if(generated)
-		log_world("Veilbreak Debug: already generated, skipping")
-		return
-	if(!dungeon_z_level)
-		log_world("Veilbreak Debug: no dungeon_z_level")
-		generating = FALSE
-		generation_failed("No dungeon Z-level assigned")
-		return
+    if(generated || !dungeon_z_level)
+        generating = FALSE
+        return
 
-	log_world("Veilbreak Debug: initializing Z-level [dungeon_z_level]")
-	veilbreak_initialize_zlevel(dungeon_z_level, metadata)
-	generating = FALSE
-	generated = TRUE
-	veilbreak_sync_portal_pair()
-
-	var/turf/center = locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)
-	log_world("Veilbreak Debug: center of dungeon at [center ? "[center.x],[center.y],[center.z]" : "null"]")
-
-	if(connected_control_computer)
-		log_world("Veilbreak Debug: notifying control computer of success")
-		connected_control_computer.on_generation_success()
-	target_turf = get_target_turf()
-	log_world("Veilbreak Debug: target_turf = [target_turf ? "[target_turf.x],[target_turf.y],[target_turf.z]" : "null"]")
+    veilbreak_initialize_zlevel(dungeon_z_level, metadata, 1)
 
 /datum/portal_destination/veilbreak/proc/post_transfer(atom/movable/AM)
 	if(ismob(AM))
 		var/mob/M = AM
 		if(M.client)
 			M.client.move_delay = max(world.time + 5, M.client.move_delay)
+
+/datum/portal_destination/veilbreak/proc/clear_z_level_atoms(z_level)
+	for(var/turf/T in Z_TURFS(z_level))
+		for(var/atom/movable/AM in T)
+			if(istype(AM, /mob/dead/observer))
+				continue
+			qdel(AM)
+		if(T.x % 100 == 0)
+			CHECK_TICK
 
 /datum/portal_destination/veilbreak/proc/cleanup_z_level_completely(z_level, turf/ejection_turf)
 	if(cleanup_in_progress)
