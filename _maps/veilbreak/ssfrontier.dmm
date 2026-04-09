@@ -900,15 +900,6 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/science/circuits)
-"aAs" = (
-/obj/effect/turf_decal/siding/wideplating_new/dark/corner{
-	dir = 4
-	},
-/obj/effect/turf_decal/trimline/brown/line{
-	pixel_x = -16
-	},
-/turf/open/floor/iron/dark,
-/area/station/cargo/storage)
 "aAN" = (
 /obj/structure/table,
 /obj/item/stock_parts/subspace/filter,
@@ -2119,14 +2110,6 @@
 	pixel_y = -5;
 	icon_state = "setup_medium_box"
 	},
-/obj/item/shell/bot{
-	name = "veilbreak server";
-	desc = "Ye' ol' reliable server. 0 days without incidents!";
-	anchored = 1;
-	pixel_x = 7;
-	pixel_y = 6;
-	icon_state = "setup_medium_box"
-	},
 /obj/item/shell/server{
 	name = "veilbreak server";
 	desc = "Ye' ol' reliable server. 0 days without incidents!";
@@ -2522,7 +2505,14 @@
 /turf/open/floor/iron/dark,
 /area/station/cargo/bitrunning/den)
 "bsd" = (
-/obj/machinery/computer/portal_control,
+/obj/item/shell/server{
+	name = "veilbreak server";
+	desc = "Ye' ol' reliable server. 0 days without incidents!";
+	anchored = 1;
+	pixel_x = 7;
+	pixel_y = 1;
+	icon_state = "setup_stationary"
+	},
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "bsh" = (
@@ -2905,9 +2895,6 @@
 /turf/open/floor/iron/dark,
 /area/station/command/bridge)
 "bDM" = (
-/obj/effect/turf_decal/trimline/brown/corner{
-	pixel_x = -16
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 8
 	},
@@ -3211,15 +3198,6 @@
 /obj/machinery/monkey_recycler,
 /turf/open/floor/engine,
 /area/station/science/xenobiology)
-"bNN" = (
-/obj/effect/turf_decal/siding/wideplating_new/dark/corner{
-	dir = 1
-	},
-/obj/effect/turf_decal/trimline/brown/line{
-	pixel_x = -16
-	},
-/turf/open/floor/iron/dark,
-/area/station/cargo/storage)
 "bNT" = (
 /obj/machinery/light/directional/east,
 /obj/effect/turf_decal/box/white/corners{
@@ -4151,6 +4129,24 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/hallway/secondary/entry)
+"clO" = (
+/obj/item/cardboard_cutout{
+	starting_cutout = "Private Security Officer"
+	},
+/obj/structure/decorative{
+	icon_state = "voidwalker";
+	icon = 'icons/mob/simple/voidwalker.dmi';
+	color = "#36373a";
+	dir = 4;
+	anchored = 1;
+	name = "shadow";
+	desc = "It's just there, minding its own business. Don't mind it.";
+	alpha = 125;
+	pixel_x = -12;
+	pixel_y = -9
+	},
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "clP" = (
 /obj/effect/turf_decal/tile/dark_red,
 /obj/effect/turf_decal/siding/wideplating_new/dark{
@@ -4338,10 +4334,6 @@
 	cell = /obj/item/stock_parts/power_store/cell/high;
 	pixel_x = 0;
 	pixel_y = -30
-	},
-/obj/effect/turf_decal/trimline/brown/corner{
-	dir = 1;
-	pixel_x = 16
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/structure/cable,
@@ -4801,9 +4793,6 @@
 /turf/open/floor/iron/white,
 /area/station/medical/medbay/central)
 "cBs" = (
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 4
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 4
 	},
@@ -5223,6 +5212,21 @@
 /obj/machinery/firealarm/directional/east,
 /turf/open/floor/iron/white,
 /area/station/medical/chemistry)
+"cKm" = (
+/obj/structure/decorative{
+	icon_state = "voidwalker";
+	icon = 'icons/mob/simple/voidwalker.dmi';
+	color = "#36373a";
+	dir = 8;
+	anchored = 1;
+	name = "shadow";
+	desc = "It's just there, minding its own business. Don't mind it.";
+	alpha = 125;
+	pixel_x = 9;
+	pixel_y = -6
+	},
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "cKY" = (
 /obj/effect/spawner/structure/window,
 /obj/machinery/door/poddoor/preopen{
@@ -5380,10 +5384,7 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/machinery/door/poddoor/shutters/window{
-	id = "gatewayshutters";
-	name = "Gateway Chamber Shutters"
-	},
+/obj/structure/holosign/barrier,
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "cOj" = (
@@ -6097,6 +6098,17 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/common/cryopods)
+"dil" = (
+/obj/item/shell/bot{
+	name = "veilbreak server";
+	desc = "Ye' ol' reliable server. 0 days without incidents!";
+	anchored = 1;
+	pixel_x = 7;
+	pixel_y = -5;
+	icon_state = "setup_medium_box"
+	},
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "dim" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2{
@@ -6224,7 +6236,7 @@
 	req_access = list("engineering")
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/cyan/hidden/layer4,
-/turf/closed/wall/r_wall,
+/turf/open/floor/plating,
 /area/station/engineering/atmos)
 "dkg" = (
 /obj/structure/toilet,
@@ -7440,9 +7452,6 @@
 	},
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment,
-/obj/effect/turf_decal/trimline/brown/line{
-	pixel_x = -16
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark/corner{
 	dir = 1
 	},
@@ -10674,9 +10683,6 @@
 /turf/open/floor/plating,
 /area/station/maintenance/starboard/aft)
 "fDL" = (
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 10
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 8
 	},
@@ -10924,9 +10930,6 @@
 /area/station/cargo/bitrunning/den)
 "fKc" = (
 /obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/obj/effect/turf_decal/trimline/brown/line{
 	dir = 4
 	},
 /obj/effect/turf_decal/siding/wideplating_new/dark/corner{
@@ -12069,6 +12072,25 @@
 /obj/machinery/holopad,
 /turf/open/floor/iron,
 /area/station/commons/dorms)
+"gnl" = (
+/obj/item/shell/bot{
+	name = "veilbreak server";
+	desc = "Ye' ol' reliable server. 0 days without incidents!";
+	anchored = 1;
+	pixel_x = 7;
+	pixel_y = -5;
+	icon_state = "setup_medium_box"
+	},
+/obj/item/shell/bot{
+	name = "veilbreak server";
+	desc = "Ye' ol' reliable server. 0 days without incidents!";
+	anchored = 1;
+	pixel_x = 7;
+	pixel_y = 6;
+	icon_state = "setup_medium_box"
+	},
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "gnv" = (
 /obj/structure/chair{
 	dir = 8
@@ -14214,15 +14236,6 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/engineering/supermatter/room)
-"hyD" = (
-/obj/effect/turf_decal/trimline/brown/line{
-	pixel_x = -16
-	},
-/obj/effect/turf_decal/siding/wideplating_new/dark{
-	dir = 1
-	},
-/turf/open/floor/iron/dark,
-/area/station/cargo/storage)
 "hza" = (
 /obj/item/assembly/signaler{
 	pixel_y = 8
@@ -16353,6 +16366,10 @@
 /obj/machinery/portable_atmospherics/pump,
 /turf/open/floor/iron/dark,
 /area/station/science/ordnance/storage)
+"iAT" = (
+/obj/machinery/mining_weather_monitor/directional/north,
+/turf/open/floor/iron/dark,
+/area/station/cargo/office)
 "iAZ" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2{
 	dir = 8
@@ -16465,9 +16482,6 @@
 	name = "Incoming Mail";
 	req_access = list("cargo");
 	dir = 8
-	},
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 4
 	},
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 4
@@ -17452,9 +17466,6 @@
 /turf/open/floor/fake_snow/safe,
 /area/station/hallway/secondary/exit)
 "jbY" = (
-/obj/effect/turf_decal/trimline/brown/line{
-	pixel_x = -16
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark/corner{
 	dir = 4
 	},
@@ -18082,9 +18093,6 @@
 /turf/open/floor/iron/dark,
 /area/station/science/ordnance/freezerchamber)
 "jzg" = (
-/obj/effect/turf_decal/trimline/brown/line{
-	pixel_x = -16
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark/corner{
 	dir = 4
 	},
@@ -18272,7 +18280,6 @@
 /turf/open/floor/wood,
 /area/station/service/library)
 "jFw" = (
-/obj/effect/turf_decal/bot_white,
 /obj/structure/marker_beacon/burgundy,
 /obj/machinery/gateway,
 /turf/open/floor/wood/parquet,
@@ -19069,7 +19076,22 @@
 /area/station/maintenance/starboard/fore)
 "kde" = (
 /obj/structure/cable,
-/obj/effect/spawner/random/trash/caution_sign,
+/obj/item/shell/server{
+	name = "veilbreak server";
+	desc = "Ye' ol' reliable server. 0 days without incidents!";
+	anchored = 1;
+	pixel_x = -11;
+	pixel_y = 1;
+	icon_state = "setup_stationary"
+	},
+/obj/item/shell/bot{
+	name = "veilbreak server";
+	desc = "Ye' ol' reliable server. 0 days without incidents!";
+	anchored = 1;
+	pixel_x = 7;
+	pixel_y = -5;
+	icon_state = "setup_medium_box"
+	},
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "kdE" = (
@@ -19119,9 +19141,6 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/effect/landmark/navigate_destination,
 /obj/structure/cable,
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 4
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 4
 	},
@@ -22431,7 +22450,7 @@
 /area/station/commons/fitness/recreation)
 "lCe" = (
 /obj/machinery/atmos_shield_gen/active,
-/obj/structure/fans/tiny/invisible,
+/obj/structure/fans/tiny/forcefield,
 /turf/open/floor/iron/dark,
 /area/station/cargo/storage)
 "lCf" = (
@@ -22712,16 +22731,6 @@
 /obj/machinery/power/apc/auto_name/directional/north,
 /turf/open/floor/engine,
 /area/station/science/xenobiology)
-"lKE" = (
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 8;
-	pixel_y = 16
-	},
-/obj/effect/turf_decal/siding/wideplating_new/dark{
-	dir = 4
-	},
-/turf/open/floor/iron/dark,
-/area/station/cargo/storage)
 "lKM" = (
 /obj/item/kirbyplants/random,
 /obj/effect/turf_decal/tile/purple{
@@ -23025,14 +23034,6 @@
 	pixel_y = 1;
 	icon_state = "setup_stationary"
 	},
-/obj/item/shell/server{
-	name = "veilbreak server";
-	desc = "Ye' ol' reliable server. 0 days without incidents!";
-	anchored = 1;
-	pixel_x = 7;
-	pixel_y = 1;
-	icon_state = "setup_stationary"
-	},
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "lTk" = (
@@ -23308,7 +23309,6 @@
 /area/station/engineering/main)
 "maH" = (
 /obj/structure/cable,
-/obj/machinery/computer/gateway_control,
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "maL" = (
@@ -25552,14 +25552,6 @@
 /turf/open/floor/iron/dark,
 /area/station/engineering/atmos)
 "naS" = (
-/obj/effect/turf_decal/trimline/brown/corner{
-	pixel_y = 16;
-	pixel_x = -16
-	},
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 1;
-	pixel_x = 16
-	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2{
 	dir = 8
@@ -26544,7 +26536,6 @@
 /area/station/engineering/supermatter)
 "nCx" = (
 /obj/structure/cable,
-/obj/effect/turf_decal/trimline/brown/line,
 /turf/open/floor/iron/dark/side,
 /area/station/cargo/storage)
 "nCN" = (
@@ -27156,9 +27147,6 @@
 /turf/open/floor/carpet/blue,
 /area/station/medical/psychology)
 "nSv" = (
-/obj/effect/turf_decal/trimline/brown/line{
-	pixel_x = -16
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark/corner{
 	dir = 1
 	},
@@ -27279,9 +27267,6 @@
 	},
 /area/station/science/xenobiology)
 "nVQ" = (
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 8
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 8
 	},
@@ -27763,6 +27748,10 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /turf/open/floor/iron,
 /area/station/science/lab)
+"ogC" = (
+/obj/structure/holosign/barrier,
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "ogY" = (
 /obj/structure/hedge/opaque,
 /obj/structure/railing{
@@ -28675,6 +28664,14 @@
 	department = "Gateway";
 	name = "Gateway Requests Console"
 	},
+/obj/item/shell/server{
+	name = "veilbreak server";
+	desc = "Ye' ol' reliable server. 0 days without incidents!";
+	anchored = 1;
+	pixel_x = -8;
+	pixel_y = 1;
+	icon_state = "setup_stationary"
+	},
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "oId" = (
@@ -29393,6 +29390,24 @@
 	},
 /turf/open/floor/wood/tile,
 /area/station/common/pool/sauna)
+"oWV" = (
+/obj/structure/railing{
+	dir = 9
+	},
+/obj/structure/decorative{
+	icon_state = "voidwalker";
+	icon = 'icons/mob/simple/voidwalker.dmi';
+	color = "#36373a";
+	dir = 8;
+	anchored = 1;
+	name = "shadow";
+	desc = "It's just there, minding its own business. Don't mind it.";
+	alpha = 125;
+	pixel_x = 9;
+	pixel_y = -6
+	},
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "oWW" = (
 /obj/structure/cable,
 /obj/effect/turf_decal/trimline/blue/filled/mid_joiner{
@@ -30340,6 +30355,23 @@
 /obj/structure/cable,
 /turf/open/floor/iron/dark,
 /area/station/cargo/bitrunning/den)
+"prB" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2{
+	dir = 8
+	},
+/obj/structure/cable,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/weather/snow/corner{
+	dir = 1;
+	color = "#999999"
+	},
+/turf/open/floor/iron/dark/side{
+	dir = 1
+	},
+/area/station/hallway/secondary/exit)
 "prE" = (
 /obj/machinery/button/door{
 	id = "kitchen";
@@ -30886,7 +30918,7 @@
 /turf/open/floor/plating,
 /area/station/maintenance/fore)
 "pFB" = (
-/obj/structure/fans/tiny/invisible,
+/obj/structure/fans/tiny/forcefield,
 /turf/open/floor/iron/dark,
 /area/station/cargo/storage)
 "pFM" = (
@@ -31289,10 +31321,6 @@
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment{
 	dir = 4
-	},
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 8;
-	pixel_y = 16
 	},
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 4
@@ -31733,7 +31761,33 @@
 /area/station/hallway/primary/central)
 "qds" = (
 /obj/structure/cable,
-/obj/machinery/computer/crew,
+/obj/item/cardboard_cutout{
+	starting_cutout = "Private Security Officer"
+	},
+/obj/structure/decorative{
+	icon_state = "voidwalker";
+	icon = 'icons/mob/simple/voidwalker.dmi';
+	color = "#36373a";
+	dir = 4;
+	anchored = 1;
+	name = "shadow";
+	desc = "It's just there, minding its own business. Don't mind it.";
+	alpha = 125;
+	pixel_x = -12;
+	pixel_y = -9
+	},
+/obj/structure/decorative{
+	icon_state = "voidwalker";
+	icon = 'icons/mob/simple/voidwalker.dmi';
+	color = "#36373a";
+	dir = 8;
+	anchored = 1;
+	name = "shadow";
+	desc = "It's just there, minding its own business. Don't mind it.";
+	alpha = 125;
+	pixel_x = 9;
+	pixel_y = -6
+	},
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "qdC" = (
@@ -32039,14 +32093,6 @@
 /turf/open/floor/iron/dark,
 /area/station/medical/morgue)
 "qjJ" = (
-/obj/effect/turf_decal/trimline/brown/corner{
-	dir = 1;
-	pixel_y = -16
-	},
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 8;
-	pixel_y = 16
-	},
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 4
 	},
@@ -32771,6 +32817,12 @@
 	},
 /turf/open/floor/plating,
 /area/station/maintenance/starboard/aft)
+"qBh" = (
+/obj/item/cardboard_cutout{
+	starting_cutout = "Private Security Officer"
+	},
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "qBM" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/airalarm/directional/south,
@@ -32890,7 +32942,7 @@
 /obj/machinery/atmos_shield_gen/active{
 	dir = 1
 	},
-/obj/structure/fans/tiny/invisible,
+/obj/structure/fans/tiny/forcefield,
 /turf/open/floor/iron/dark,
 /area/station/cargo/storage)
 "qFi" = (
@@ -35169,6 +35221,7 @@
 	name = "Gateway"
 	},
 /obj/effect/mapping_helpers/airlock/access/any/command/general,
+/obj/structure/holosign/barrier,
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "rQX" = (
@@ -35273,19 +35326,6 @@
 /obj/structure/chair/stool/bar/directional/north,
 /turf/open/floor/iron/checker,
 /area/station/maintenance/port/aft)
-"rVC" = (
-/obj/effect/turf_decal/trimline/brown/corner{
-	dir = 8;
-	pixel_x = 16
-	},
-/obj/effect/turf_decal/trimline/brown/line{
-	pixel_x = -16
-	},
-/obj/effect/turf_decal/siding/wideplating_new/dark{
-	dir = 4
-	},
-/turf/open/floor/iron/dark,
-/area/station/cargo/storage)
 "rVH" = (
 /obj/structure/table/reinforced,
 /obj/machinery/door/window/left/directional/north{
@@ -36366,15 +36406,6 @@
 	},
 /turf/open/floor/wood,
 /area/station/service/barber)
-"sAf" = (
-/obj/effect/turf_decal/siding/wideplating_new/dark{
-	dir = 1
-	},
-/obj/effect/turf_decal/trimline/brown/line{
-	pixel_x = -16
-	},
-/turf/open/floor/iron/dark,
-/area/station/cargo/storage)
 "sAx" = (
 /obj/machinery/fax{
 	fax_name = "Engineering Lobby";
@@ -36607,10 +36638,6 @@
 /obj/machinery/camera/autoname/directional/east{
 	network = list("ss13","cargo");
 	c_tag = "Cargo Bay"
-	},
-/obj/effect/turf_decal/trimline/brown/line{
-	dir = 8;
-	pixel_y = 16
 	},
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 4
@@ -41222,7 +41249,6 @@
 /turf/open/floor/iron/dark,
 /area/station/medical/virology)
 "uOt" = (
-/obj/effect/turf_decal/trimline/brown/line,
 /turf/open/floor/iron/dark/side,
 /area/station/cargo/storage)
 "uOG" = (
@@ -41887,6 +41913,10 @@
 	},
 /turf/open/floor/iron/white,
 /area/station/service/barber)
+"vfm" = (
+/obj/effect/turf_decal/bot_white/right,
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "vfs" = (
 /obj/machinery/firealarm/directional/north,
 /obj/machinery/light/directional/north,
@@ -44033,6 +44063,21 @@
 	dir = 4
 	},
 /area/station/hallway/primary/central)
+"wow" = (
+/obj/structure/decorative{
+	icon_state = "voidwalker";
+	icon = 'icons/mob/simple/voidwalker.dmi';
+	color = "#36373a";
+	dir = 4;
+	anchored = 1;
+	name = "shadow";
+	desc = "It's just there, minding its own business. Don't mind it.";
+	alpha = 125;
+	pixel_x = -12;
+	pixel_y = -9
+	},
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "woz" = (
 /obj/effect/landmark/start/prisoner,
 /turf/open/floor/iron/dark,
@@ -44686,6 +44731,10 @@
 	},
 /turf/open/floor/carpet/blue,
 /area/station/hallway/primary/central)
+"wFD" = (
+/obj/effect/turf_decal/bot_white/left,
+/turf/open/floor/wood/parquet,
+/area/station/command/gateway)
 "wFE" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
 /obj/machinery/light/floor,
@@ -47446,6 +47495,9 @@
 /obj/machinery/cell_charger,
 /obj/item/radio/intercom/directional/north,
 /obj/effect/turf_decal/bot,
+/obj/item/radio/weather_monitor{
+	pixel_y = 15
+	},
 /turf/open/floor/iron/textured,
 /area/station/cargo/storage)
 "yaU" = (
@@ -47474,7 +47526,6 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/structure/disposalpipe/segment,
 /obj/effect/landmark/start/customs_agent,
-/obj/effect/turf_decal/trimline/brown/line,
 /turf/open/floor/iron/dark/side,
 /area/station/cargo/storage)
 "ybK" = (
@@ -73536,7 +73587,7 @@ rUK
 rUK
 iPu
 qrO
-aAs
+jzg
 kNu
 nbx
 eEh
@@ -73793,7 +73844,7 @@ rUK
 rUK
 eKF
 hoI
-sAf
+koL
 eEh
 nbx
 eEh
@@ -74050,7 +74101,7 @@ rUK
 rUK
 iPu
 sUH
-bNN
+nSv
 eEh
 nbx
 eEh
@@ -74564,7 +74615,7 @@ xEg
 rUK
 eKF
 awF
-hyD
+koL
 kNu
 nbx
 eEh
@@ -75335,7 +75386,7 @@ rtF
 rUK
 eKF
 hoI
-hyD
+koL
 hFf
 jeC
 eEh
@@ -75600,7 +75651,7 @@ jtV
 hBb
 naS
 sFD
-lKE
+qjJ
 pQC
 qjJ
 dNd
@@ -75849,7 +75900,7 @@ lTP
 sgz
 sGV
 aPr
-rVC
+qjJ
 cBs
 kep
 cBs
@@ -76614,7 +76665,7 @@ aXY
 eqP
 klw
 eEG
-fhi
+iAT
 fhi
 juL
 fhi
@@ -91775,7 +91826,7 @@ rWg
 qOH
 wkG
 bsd
-sdi
+dil
 pgJ
 jOz
 nec
@@ -92030,9 +92081,9 @@ xvv
 pgJ
 fMu
 leJ
-cdq
+cKm
 oia
-sdi
+clO
 gSN
 jOz
 tyg
@@ -92286,12 +92337,12 @@ xvv
 xvv
 pgJ
 jhI
-ciX
-wMR
+sdi
+vfm
 mPM
 jCq
-gSN
-jOz
+ogC
+prB
 ceA
 aVv
 axl
@@ -92543,12 +92594,12 @@ xvv
 xvv
 pgJ
 uVt
-sdi
-sdi
+wow
+qBh
 bWc
 hXt
 cOf
-jOz
+prB
 nec
 tyg
 tak
@@ -92799,13 +92850,13 @@ xvv
 xvv
 xvv
 pgJ
-rWg
-qOH
-wkG
+oWV
+cdq
+wFD
 maH
 aUO
-gSN
-jOz
+ogC
+prB
 jqD
 umr
 bOw
@@ -93058,9 +93109,9 @@ xvv
 pgJ
 fMu
 jFw
-cdq
-kde
 sdi
+kde
+oia
 gSN
 jOz
 ukz
@@ -93571,8 +93622,8 @@ xvv
 xvv
 pgJ
 pgJ
-bfx
-lSz
+gnl
+bsd
 wcA
 oHJ
 pgJ
