@@ -18,11 +18,15 @@
 /obj/machinery/portal/Initialize(mapload)
 	. = ..()
 	var/turf/T = get_step(get_step(src, EAST), NORTH)
-	bumper = new /obj/effect/portal_bumper(T, src)
+	if(T)
+		bumper = new /obj/effect/portal_bumper(T, src)
+
 	var/turf/curr_turf = get_turf(src)
 	if(curr_turf && is_veilbreak_portal_dungeon_z(curr_turf.z))
-		setup_as_return_portal()
-	else
+		transport_active = FALSE
+		return
+
+	if(!GLOB.station_veilbreak_portal)
 		GLOB.station_veilbreak_portal = src
 
 /// @param station_portal The station-side portal players should return to; falls back to GLOB.station_veilbreak_portal.

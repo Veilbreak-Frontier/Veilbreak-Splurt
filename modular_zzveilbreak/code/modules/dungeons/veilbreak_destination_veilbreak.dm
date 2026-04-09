@@ -55,6 +55,10 @@
 		return
 
 	log_world("Veilbreak Debug: generation_complete called")
+	// HTTP request is done; release "generating" so finalize_dungeon_generation can start
+	// staggered init steps (which toggle generating back on while they run).
+	generating = FALSE
+	current_request_id = 0
 	last_generation_data = json_data.Copy()
 	var/dmm_content = json_data["dmm_content"]
 	var/list/metadata = json_data["metadata"]
@@ -102,7 +106,7 @@
 	log_world("Veilbreak Debug: load_dmm_with_ticks started (parsed_map + initTemplateBounds)")
 	var/normalized = veilbreak_normalize_dmm_for_parsed_map(dmm_content)
 	if(isnull(normalized))
-		generation_failed("Dungeon DMM rejected: tile keys must all be the same length (BYOND parsed_map). Regenerate with veilbreak_mapgen.py v4.2+ (fixed-width keys) or reduce unique tile types.")
+		generation_failed("Dungeon DMM rejected: tile keys must all be the same length (BYOND parsed_map). Regenerate with tools.veilbreak_mapgen.api service (fixed-width keys) or reduce unique tile types.")
 		return
 
 	var/static/regex/regex_has_map_grid = new(@'\(\d+,\d+,\d+\)\s*=\s*\{\"')
@@ -162,30 +166,12 @@
 	addtimer(CALLBACK(src, .proc/finalize_dungeon_generation, metadata), 1 SECONDS)
 
 /datum/portal_destination/veilbreak/proc/finalize_dungeon_generation(list/metadata)
-	log_world("Veilbreak Debug: finalize_dungeon_generation called")
-	if(generated)
-		log_world("Veilbreak Debug: already generated, skipping")
-		return
-	if(!dungeon_z_level)
-		log_world("Veilbreak Debug: no dungeon_z_level")
-		generating = FALSE
-		generation_failed("No dungeon Z-level assigned")
+	if(generating || generated)
 		return
 
-	log_world("Veilbreak Debug: initializing Z-level [dungeon_z_level]")
-	veilbreak_initialize_zlevel(dungeon_z_level, metadata)
-	generating = FALSE
-	generated = TRUE
-	veilbreak_sync_portal_pair()
-
-	var/turf/center = locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)
-	log_world("Veilbreak Debug: center of dungeon at [center ? "[center.x],[center.y],[center.z]" : "null"]")
-
-	if(connected_control_computer)
-		log_world("Veilbreak Debug: notifying control computer of success")
-		connected_control_computer.on_generation_success()
-	target_turf = get_target_turf()
-	log_world("Veilbreak Debug: target_turf = [target_turf ? "[target_turf.x],[target_turf.y],[target_turf.z]" : "null"]")
+	generating = TRUE
+	log_world("Veilbreak: Starting staggered initialization for Z [dungeon_z_level]")
+	veilbreak_initialize_zlevel(dungeon_z_level, metadata, 1)
 
 /datum/portal_destination/veilbreak/proc/post_transfer(atom/movable/AM)
 	if(ismob(AM))
@@ -193,42 +179,45 @@
 		if(M.client)
 			M.client.move_delay = max(world.time + 5, M.client.move_delay)
 
+/datum/portal_destination/veilbreak/proc/clear_z_level_atoms(z_level)
+	for(var/turf/T in Z_TURFS(z_level))
+		for(var/atom/movable/AM in T)
+			if(istype(AM, /mob/dead/observer))
+				continue
+			qdel(AM)
+		if(T.x % 100 == 0)
+			CHECK_TICK
+
 /datum/portal_destination/veilbreak/proc/cleanup_z_level_completely(z_level, turf/ejection_turf)
 	if(cleanup_in_progress)
-		log_world("Veilbreak Debug: cleanup already in progress")
 		return
 	cleanup_in_progress = TRUE
-	log_world("Veilbreak Debug: cleanup_z_level_completely called for Z-level [z_level]")
 
-	var/cleaned = 0
-	for(var/mob/M in GLOB.mob_list)
-		if(M.z == z_level && !isobserver(M))
-			if(ejection_turf)
-				M.forceMove(ejection_turf)
-			else
-				qdel(M)
-			cleaned++
-			if(cleaned % 50 == 0)
-				CHECK_TICK
-	log_world("Veilbreak Debug: cleaned [cleaned] mobs")
+	for(var/turf/T in Z_TURFS(z_level))
+		for(var/atom/movable/AM in T)
+			if(QDELETED(AM))
+				continue
 
-	cleaned = 0
-	for(var/obj/O in world)
-		if(O.z == z_level && O != src)
-			qdel(O)
-			cleaned++
-			if(cleaned % 100 == 0)
-				CHECK_TICK
-	log_world("Veilbreak Debug: cleaned [cleaned] objects")
+			if(istype(AM, /mob/living))
+				var/mob/living/L = AM
 
-	cleaned = 0
-	for(var/turf/T in block(locate(1, 1, z_level), locate(world.maxx, world.maxy, z_level)))
-		if(T && T.z == z_level)
-			T.ChangeTurf(/turf/open/space/basic)
-			cleaned++
-			if(cleaned % 200 == 0)
-				CHECK_TICK
-	log_world("Veilbreak Debug: reset [cleaned] turfs to space")
+				if(L.ai_controller)
+					var/datum/ai_controller/AC = L.ai_controller
+					L.ai_controller = null
+					qdel(AC)
+
+				if(ejection_turf && !isobserver(L))
+					L.forceMove(ejection_turf)
+					continue
+
+			qdel(AM)
+			if(AM && !QDELETED(AM))
+				AM.moveToNullspace()
+
+		T.ChangeTurf(/turf/open/space/basic, flags = CHANGETURF_INHERIT_AIR)
+
+		if(T.x == world.maxx && T.y % 10 == 0)
+			CHECK_TICK
 
 	cleanup_in_progress = FALSE
 
@@ -246,34 +235,39 @@
 		connected_control_computer.on_generation_failed(reason)
 	spawn_station_portal = null
 
-/// Binds the control console's station portal to this destination and wires every portal on the dungeon Z to return there.
 /datum/portal_destination/veilbreak/proc/veilbreak_sync_portal_pair()
 	var/obj/machinery/portal/station = spawn_station_portal
 	if(QDELETED(station))
-		station = null
-	if(!station && connected_control_computer)
-		station = connected_control_computer.linked_portal
+		station = connected_control_computer?.linked_portal
 	if(QDELETED(station))
-		station = null
-	if(!station)
 		station = GLOB.station_veilbreak_portal
-	if(QDELETED(station))
-		log_world("Veilbreak Warning: veilbreak_sync_portal_pair — no valid station portal; link the controller then recalibrate.")
+
+	if(!station || QDELETED(station))
+		log_world("Veilbreak Warning: No valid station portal found.")
 		return
+
 	GLOB.station_veilbreak_portal = station
 	station.target = src
 	station.transport_active = TRUE
 	station.update_appearance()
+
 	var/linked = 0
-	for(var/obj/machinery/portal/dungeon_portal in world)
-		if(dungeon_portal.z != dungeon_z_level || QDELETED(dungeon_portal))
-			continue
-		dungeon_portal.setup_as_return_portal(station)
-		linked++
+
+	for(var/turf/T in Z_TURFS(dungeon_z_level))
+		for(var/obj/machinery/portal/dungeon_portal in T)
+			if(QDELETED(dungeon_portal))
+				continue
+
+			dungeon_portal.setup_as_return_portal(station)
+			linked++
+
+		if(T.x % 100 == 0 && T.y == 1)
+			CHECK_TICK
+
 	if(linked)
 		log_world("Veilbreak Debug: linked [linked] dungeon portal(s) to station portal at [station.x],[station.y],[station.z]")
 	else
-		log_world("Veilbreak Warning: veilbreak_sync_portal_pair — no /obj/machinery/portal on dungeon Z [dungeon_z_level]")
+		log_world("Veilbreak Warning: No /obj/machinery/portal found on dungeon Z [dungeon_z_level]")
 
 /datum/portal_destination/veilbreak/proc/get_target_turf()
 	if(!dungeon_z_level)

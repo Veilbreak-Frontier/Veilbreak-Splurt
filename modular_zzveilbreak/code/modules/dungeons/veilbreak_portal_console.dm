@@ -58,8 +58,15 @@
 				var/datum/portal_destination/veilbreak/V = linked_portal.target
 				if(V)
 					V.cleanup_z_level_completely(V.dungeon_z_level, get_step(linked_portal, SOUTH))
+					V.generated = FALSE
+					V.generating = FALSE
+					V.current_request_id = 0
+					V.spawn_station_portal = null
+					linked_portal.target = null
+					qdel(V)
 				linked_portal.transport_active = FALSE
 				linked_portal.update_appearance()
+			generation_in_progress = FALSE
 			return TRUE
 		if("generate_new")
 			if(generation_in_progress || !linked_portal || linked_portal.transport_active)
@@ -93,18 +100,21 @@
 	playsound(src, 'sound/machines/buzz/buzz-sigh.ogg', 50, TRUE)
 
 /obj/machinery/computer/portal_control/proc/rescan_for_portal()
-	var/obj/machinery/portal/found_portal
-	for(var/obj/machinery/portal/P in range(3, src))
-		if(P.machine_stat & (BROKEN|NOPOWER))
-			continue
-		found_portal = P
-		break
-	if(found_portal)
-		linked_portal = found_portal
-		found_portal.linked_console = src
-		resync_veilbreak_portals_if_active()
-		return TRUE
-	return FALSE
+    var/obj/machinery/portal/found_portal
+    for(var/obj/machinery/portal/P in range(3, src))
+        if(QDELETED(P) || (P.machine_stat & (BROKEN|NOPOWER)))
+            continue
+        found_portal = P
+        break
+
+    if(found_portal)
+        linked_portal = found_portal
+        found_portal.linked_console = src
+        var/datum/portal_destination/veilbreak/V = found_portal.target
+        if(!V || !V.generated)
+            found_portal.transport_active = FALSE
+        return TRUE
+    return FALSE
 
 /// If a pocket is already open, re-bind return portals after the console finds a different linked portal.
 /obj/machinery/computer/portal_control/proc/resync_veilbreak_portals_if_active()
