@@ -46,9 +46,21 @@
 	var/datum/portal_destination/veilbreak/home = new()
 	home.generated = TRUE
 	home.dungeon_z_level = z
+
+	if(target && istype(target, /datum/portal_destination/veilbreak))
+		var/datum/portal_destination/veilbreak/V = target
+		home.gateway_location = V.gateway_location
+
 	home.target_turf = get_step(P, SOUTH)
 	home.spawn_station_portal = P
 	target = home
+
+	if(home.gateway_location)
+		var/gx = home.gateway_location["x"]
+		var/gy = home.gateway_location["y"]
+		log_world("Veilbreak Debug: Dungeon portal at ([x],[y],[z]) linked to gateway at ([gx],[gy],[z])")
+	else
+		log_world("Veilbreak Warning: No gateway location found in metadata")
 
 	if(P)
 		if(!P.target || !istype(P.target, /datum/portal_destination/veilbreak))
@@ -87,7 +99,14 @@
 	else
 		var/datum/portal_destination/veilbreak/V = target
 		if(V)
-			destination_turf = V.get_target_turf()
+			if(V.gateway_location && V.dungeon_z_level)
+				var/gx = V.gateway_location["x"]
+				var/gy = V.gateway_location["y"]
+				destination_turf = locate(round(gx), round(gy), V.dungeon_z_level)
+				if(!destination_turf)
+					destination_turf = V.get_target_turf()
+			else
+				destination_turf = V.get_target_turf()
 
 	if(destination_turf)
 		AM.forceMove(destination_turf)

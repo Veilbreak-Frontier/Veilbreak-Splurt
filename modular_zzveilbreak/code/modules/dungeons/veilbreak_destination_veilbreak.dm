@@ -9,10 +9,10 @@
 	var/turf/target_turf
 	var/last_progress_update = 0
 	var/obj/machinery/computer/portal_control/connected_control_computer
-	/// Station portal used when this pocket was opened (console-linked; preferred over GLOB for return trips).
 	var/obj/machinery/portal/spawn_station_portal
 	var/list/last_generation_data
 	var/temp_map_file
+	var/list/gateway_location = null
 
 /datum/portal_destination/veilbreak/proc/start_generation(mob/feedback_target)
 	log_world("Veilbreak Debug: start_generation called")
@@ -55,13 +55,19 @@
 		return
 
 	log_world("Veilbreak Debug: generation_complete called")
-	// HTTP request is done; release "generating" so finalize_dungeon_generation can start
-	// staggered init steps (which toggle generating back on while they run).
 	generating = FALSE
 	current_request_id = 0
 	last_generation_data = json_data.Copy()
 	var/dmm_content = json_data["dmm_content"]
 	var/list/metadata = json_data["metadata"]
+
+	if(metadata && metadata["key_positions"] && metadata["key_positions"]["gateway"])
+		var/list/gateway = metadata["key_positions"]["gateway"]
+		gateway_location = list("x" = gateway["x"], "y" = gateway["y"])
+		log_world("Veilbreak Debug: Gateway location stored at ([gateway_location["x"]],[gateway_location["y"]])")
+	else
+		gateway_location = null
+		log_world("Veilbreak Debug: No gateway location found in metadata")
 
 	log_world("Veilbreak Debug: dmm_content length = [length(dmm_content)]")
 
@@ -281,11 +287,11 @@
 				continue
 
 			dungeon_portal.setup_as_return_portal(station)
-
 			dungeon_portal.is_dungeon_portal = TRUE
 
 			if(dungeon_portal.target && istype(dungeon_portal.target, /datum/portal_destination/veilbreak))
 				var/datum/portal_destination/veilbreak/dest = dungeon_portal.target
+				dest.gateway_location = gateway_location
 				dest.spawn_station_portal = station
 
 			linked++
@@ -295,13 +301,21 @@
 
 	if(linked)
 		log_world("Veilbreak Debug: linked [linked] dungeon portal(s) to station portal at [station.x],[station.y],[station.z]")
+		if(gateway_location)
+			log_world("Veilbreak Debug: Gateway location set to ([gateway_location["x"]],[gateway_location["y"]]) on Z-level [dungeon_z_level]")
 	else
 		log_world("Veilbreak Warning: No /obj/machinery/portal found on dungeon Z [dungeon_z_level]")
 
 /datum/portal_destination/veilbreak/proc/get_target_turf()
-	if(!dungeon_z_level)
-		log_world("Veilbreak Debug: get_target_turf - no dungeon_z_level")
-		return null
+	if(gateway_location && dungeon_z_level)
+		var/gx = gateway_location["x"]
+		var/gy = gateway_location["y"]
+		if(isnum(gx) && isnum(gy))
+			var/turf/G = locate(round(gx), round(gy), dungeon_z_level)
+			if(G)
+				log_world("Veilbreak Debug: get_target_turf (gateway) [G.x],[G.y],[G.z]")
+				return G
+
 	var/list/meta = last_generation_data?["metadata"]
 	if(istype(meta))
 		var/list/kp = meta["key_positions"]
@@ -313,8 +327,9 @@
 				if(isnum(gx) && isnum(gy))
 					var/turf/G = locate(round(gx), round(gy), dungeon_z_level)
 					if(G)
-						log_world("Veilbreak Debug: get_target_turf (gateway) [G.x],[G.y],[G.z]")
+						log_world("Veilbreak Debug: get_target_turf (gateway via metadata) [G.x],[G.y],[G.z]")
 						return G
+
 	var/turf/T = locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)
 	log_world("Veilbreak Debug: get_target_turf (fallback center) [T ? "[T.x],[T.y],[T.z]" : "null"]")
 	return T

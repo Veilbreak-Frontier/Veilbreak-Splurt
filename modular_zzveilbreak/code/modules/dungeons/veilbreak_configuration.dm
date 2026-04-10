@@ -8,7 +8,7 @@
 #define VEILBREAK_TEMP_MAP_PREFIX "data/veilbreak_temp_"
 #define VEILBREAK_CLEANUP_BATCH_SIZE 50
 #define VEILBREAK_MOB_SPAWN_BATCH_SIZE 25
-#define VEILBREAK_TURF_PROCESS_BATCH_SIZE 100
+#define VEILBREAK_TURF_PROCESS_BATCH_SIZE 50
 
 /// Dungeon pocket Z must satisfy BOTH traits. Use level_has_all_traits(z, PORTAL_TRAIT_DUNGEON) — not level_trait(z, list).
 GLOBAL_VAR(station_veilbreak_portal)
