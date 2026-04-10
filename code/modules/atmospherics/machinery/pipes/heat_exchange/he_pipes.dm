@@ -39,7 +39,7 @@
 	if(tile_moles <= 0)
 		return thermal_conductivity
 
-	return thermal_conductivity * ((tile_moles+100) / MOLES_CELLSTANDARD)
+	return thermal_conductivity * ((tile_moles+50) / MOLES_CELLSTANDARD)
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/process_atmos()
 	var/environment_temperature = 0
