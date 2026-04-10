@@ -18,12 +18,6 @@
 
 /obj/machinery/portal/Initialize(mapload)
 	. = ..()
-
-	var/turf/center_turf = get_turf(src)
-	if(center_turf)
-		bumper = new /obj/effect/portal_bumper(center_turf, src)
-		log_world("Veilbreak Debug: Created bumper at [center_turf.x],[center_turf.y],[center_turf.z] (center of portal visual)")
-
 	var/turf/curr_turf = get_turf(src)
 	if(curr_turf && is_veilbreak_portal_dungeon_z(curr_turf.z))
 		is_dungeon_portal = TRUE
@@ -50,19 +44,13 @@
 	home.dungeon_z_level = z
 
 	if(target && istype(target, /datum/portal_destination/veilbreak))
-		var/datum/portal_destination/veilbreak/V = target
-		home.gateway_location = V.gateway_location  // Copy gateway location
+		var/datum/portal_destination/veilbreak/source = target
+		if(source.gateway_location)
+			home.gateway_location = source.gateway_location.Copy()
 
 	home.target_turf = get_step(P, SOUTH)
 	home.spawn_station_portal = P
 	target = home
-
-	if(home.gateway_location)
-		var/gx = home.gateway_location["x"]
-		var/gy = home.gateway_location["y"]
-		log_world("Veilbreak Debug: Dungeon portal at ([x],[y],[z]) linked to gateway at ([gx],[gy],[z])")
-	else
-		log_world("Veilbreak Warning: No gateway location found in metadata")
 
 	if(P)
 		if(!P.target || !istype(P.target, /datum/portal_destination/veilbreak))
@@ -70,7 +58,10 @@
 		P.transport_active = TRUE
 		P.update_appearance()
 
+	activate_bumpers()
+
 	update_appearance()
+	log_world("Veilbreak Debug: Dungeon portal at ([x],[y],[z]) fully configured and bumpers activated")
 
 /obj/machinery/portal/update_overlays()
 	. = ..()
@@ -122,6 +113,7 @@
 	emergency_ejection()
 	if(bumper)
 		qdel(bumper)
+		bumper = null
 	return ..()
 
 /obj/machinery/portal/proc/emergency_ejection()
@@ -178,3 +170,18 @@
 	. = ..()
 	if(parent_portal && parent_portal.transport_active)
 		parent_portal.transfer(AM)
+
+
+/obj/machinery/portal/proc/activate_bumpers()
+	if(bumper)
+		qdel(bumper)
+		bumper = null
+
+	var/turf/center_turf = get_turf(src)
+	if(center_turf)
+		bumper = new /obj/effect/portal_bumper(center_turf, src)
+		log_world("Veilbreak Debug: Activated bumper for portal at [center_turf.x],[center_turf.y],[center_turf.z] - transport_active=[transport_active]")
+		return TRUE
+
+	log_world("Veilbreak Error: Could not create bumper for portal at [x],[y],[z] - no turf found")
+	return FALSE

@@ -312,6 +312,9 @@
 	station.transport_active = TRUE
 	station.update_appearance()
 
+	station.activate_bumpers()
+	log_world("Veilbreak Debug: Station portal at ([station.x],[station.y],[station.z]) bumpers activated")
+
 	var/linked = 0
 	var/actual_portal_x = null
 	var/actual_portal_y = null
@@ -326,17 +329,12 @@
 
 			if(dungeon_portal.target && istype(dungeon_portal.target, /datum/portal_destination/veilbreak))
 				var/datum/portal_destination/veilbreak/dest = dungeon_portal.target
-
-				dest.gateway_location = list(
-					"world_x" = dungeon_portal.x,
-					"world_y" = dungeon_portal.y
-				)
+				dest.gateway_location = list("world_x" = dungeon_portal.x, "world_y" = dungeon_portal.y)
 				dest.spawn_station_portal = station
 				dest.dungeon_z_level = dungeon_z_level
 
 				actual_portal_x = dungeon_portal.x
 				actual_portal_y = dungeon_portal.y
-				log_world("Veilbreak Debug: Set dungeon portal destination to ACTUAL portal position at ([dungeon_portal.x],[dungeon_portal.y],[dungeon_portal.z])")
 
 			linked++
 
@@ -347,8 +345,6 @@
 		log_world("Veilbreak Debug: linked [linked] dungeon portal(s) to station portal at [station.x],[station.y],[station.z]")
 		if(actual_portal_x && actual_portal_y)
 			log_world("Veilbreak Debug: Gateway set to ACTUAL portal position ([actual_portal_x],[actual_portal_y]) on Z-level [dungeon_z_level]")
-		else
-			log_world("Veilbreak Warning: Could not find actual portal position, using metadata gateway")
 	else
 		log_world("Veilbreak Warning: No /obj/machinery/portal found on dungeon Z [dungeon_z_level]")
 
