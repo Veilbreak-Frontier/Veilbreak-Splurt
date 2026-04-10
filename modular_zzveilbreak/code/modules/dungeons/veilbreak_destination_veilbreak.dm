@@ -313,6 +313,8 @@
 	station.update_appearance()
 
 	var/linked = 0
+	var/actual_portal_x = null
+	var/actual_portal_y = null
 
 	for(var/turf/T in Z_TURFS(dungeon_z_level))
 		for(var/obj/machinery/portal/dungeon_portal in T)
@@ -324,8 +326,17 @@
 
 			if(dungeon_portal.target && istype(dungeon_portal.target, /datum/portal_destination/veilbreak))
 				var/datum/portal_destination/veilbreak/dest = dungeon_portal.target
-				dest.gateway_location = gateway_location
+
+				dest.gateway_location = list(
+					"world_x" = dungeon_portal.x,
+					"world_y" = dungeon_portal.y
+				)
 				dest.spawn_station_portal = station
+				dest.dungeon_z_level = dungeon_z_level
+
+				actual_portal_x = dungeon_portal.x
+				actual_portal_y = dungeon_portal.y
+				log_world("Veilbreak Debug: Set dungeon portal destination to ACTUAL portal position at ([dungeon_portal.x],[dungeon_portal.y],[dungeon_portal.z])")
 
 			linked++
 
@@ -334,8 +345,10 @@
 
 	if(linked)
 		log_world("Veilbreak Debug: linked [linked] dungeon portal(s) to station portal at [station.x],[station.y],[station.z]")
-		if(gateway_location)
-			log_world("Veilbreak Debug: Gateway location set to ([gateway_location["x"]],[gateway_location["y"]]) on Z-level [dungeon_z_level]")
+		if(actual_portal_x && actual_portal_y)
+			log_world("Veilbreak Debug: Gateway set to ACTUAL portal position ([actual_portal_x],[actual_portal_y]) on Z-level [dungeon_z_level]")
+		else
+			log_world("Veilbreak Warning: Could not find actual portal position, using metadata gateway")
 	else
 		log_world("Veilbreak Warning: No /obj/machinery/portal found on dungeon Z [dungeon_z_level]")
 
@@ -346,21 +359,24 @@
 		var/gx = gateway_location["world_x"]
 		var/gy = gateway_location["world_y"]
 
-		if(isnull(gx) || isnull(gy))
-			gx = gateway_location["local_x"]
-			gy = gateway_location["local_y"]
-			if(map_offset_x > 1 || map_offset_y > 1)
-				gx = gx + map_offset_x - 1
-				gy = gy + map_offset_y - 1
-				log_world("Veilbreak Debug: Applied offset to gateway: local([gateway_location["local_x"]],[gateway_location["local_y"]]) -> world([gx],[gy])")
-
 		if(isnum(gx) && isnum(gy))
 			var/turf/G = locate(round(gx), round(gy), dungeon_z_level)
 			if(G)
-				log_world("Veilbreak Debug: get_target_turf (gateway) [G.x],[G.y],[G.z]")
+				log_world("Veilbreak Debug: get_target_turf returning ACTUAL portal at ([gx],[gy],[dungeon_z_level])")
 				return G
 			else
-				log_world("Veilbreak Debug: Gateway turf not found at world ([gx],[gy],[dungeon_z_level])")
+				log_world("Veilbreak Debug: Portal turf not found at world ([gx],[gy],[dungeon_z_level])")
+
+		gx = gateway_location["local_x"]
+		gy = gateway_location["local_y"]
+		if(isnum(gx) && isnum(gy))
+			if(map_offset_x > 1 || map_offset_y > 1)
+				gx = gx + map_offset_x - 1
+				gy = gy + map_offset_y - 1
+			var/turf/G = locate(round(gx), round(gy), dungeon_z_level)
+			if(G)
+				log_world("Veilbreak Debug: get_target_turf returning offset gateway at ([gx],[gy],[dungeon_z_level])")
+				return G
 
 	var/list/meta = last_generation_data?["metadata"]
 	if(istype(meta))
@@ -376,13 +392,14 @@
 				if(isnum(gx) && isnum(gy))
 					var/turf/G = locate(round(gx), round(gy), dungeon_z_level)
 					if(G)
-						log_world("Veilbreak Debug: get_target_turf (metadata gateway) [G.x],[G.y],[G.z]")
+						log_world("Veilbreak Debug: get_target_turf returning metadata gateway at ([gx],[gy],[dungeon_z_level])")
 						return G
 
+	// Final fallback to center
 	var/center_x = round(DUNGEON_WIDTH / 2) + map_offset_x - 1
 	var/center_y = round(DUNGEON_HEIGHT / 2) + map_offset_y - 1
 	var/turf/T = locate(center_x, center_y, dungeon_z_level)
-	log_world("Veilbreak Debug: get_target_turf (fallback center) [T ? "[T.x],[T.y],[T.z]" : "null"]")
+	log_world("Veilbreak Debug: get_target_turf returning fallback center at [T ? "[T.x],[T.y],[T.z]" : "null"]")
 	return T
 
 /datum/portal_destination/veilbreak/proc/should_eject_mob(mob/living/L)
