@@ -406,27 +406,22 @@
 	if(!istype(L))
 		return FALSE
 
-	if(istype(L, /mob/living/carbon/human))
-		if(L.client || (L.mind && L.mind.active))
-			return TRUE
-		if(L.stat == DEAD && (L.mind || L.client))
-			return TRUE
-
-	if(istype(L, /mob/living/silicon/robot))
-		return TRUE
-
-	if(istype(L, /mob/living/silicon/ai))
-		return TRUE
-
-	if(istype(L, /mob/living/brain))
-		var/mob/living/brain/brain_mob = L
-		if(brain_mob.client || (brain_mob.mind && brain_mob.mind.active))
-			return TRUE
-
 	if(L.client)
 		return TRUE
 
 	if(L.mind && L.mind.active)
+		return TRUE
+
+	if(istype(L, /mob/living/carbon/human))
+		return TRUE
+
+	if(istype(L, /mob/living/silicon/robot))
+		return TRUE
+
+	if(istype(L, /mob/living/brain))
+		return TRUE
+
+	if(L.stat == DEAD && (L.mind || L.client))
 		return TRUE
 
 	return FALSE
