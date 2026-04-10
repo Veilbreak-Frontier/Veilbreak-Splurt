@@ -1,6 +1,6 @@
 /obj/machinery/atmospherics/pipe/heat_exchanging
 	var/minimum_temperature_difference = 0
-	var/thermal_conductivity = WINDOW_HEAT_TRANSFER_COEFFICIENT * 6
+	var/thermal_conductivity = 1.2
 	color = "#404040"
 	buckle_lying = NO_BUCKLE_LYING
 	var/icon_temperature = T20C //stop small changes in temperature causing icon refresh
@@ -20,6 +20,26 @@
 	if(istype(target, /obj/machinery/atmospherics/pipe/heat_exchanging) != HE_type_check)
 		return FALSE
 	. = ..()
+
+/obj/machinery/atmospherics/pipe/heat_exchanging/proc/get_tile_moles(turf/local_turf)
+	if(!istype(local_turf, /turf/open))
+		return 0
+	if(islava(local_turf))
+		return 0
+	if(local_turf.liquids && local_turf.liquids.liquid_state >= LIQUID_STATE_FOR_HEAT_EXCHANGERS)
+		return 0
+
+	var/datum/gas_mixture/tile_air = local_turf.return_air()
+	if(!tile_air)
+		return 0
+	return tile_air.total_moles()
+
+/obj/machinery/atmospherics/pipe/heat_exchanging/proc/get_thermal_conductivity_for_turf(turf/local_turf)
+	var/tile_moles = get_tile_moles(local_turf)
+	if(tile_moles <= 0)
+		return thermal_conductivity
+
+	return thermal_conductivity * ((tile_moles+100) / MOLES_CELLSTANDARD)
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/process_atmos()
 	var/environment_temperature = 0
@@ -41,7 +61,7 @@
 	else
 		environment_temperature = local_turf.temperature
 	if(abs(environment_temperature-pipe_air.temperature) > minimum_temperature_difference)
-		parent.temperature_interact(local_turf, volume, thermal_conductivity)
+		parent.temperature_interact(local_turf, volume, get_thermal_conductivity_for_turf(local_turf))
 
 
 	//heatup/cooldown any mobs buckled to ourselves based on our temperature
