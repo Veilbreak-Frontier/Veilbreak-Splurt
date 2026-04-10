@@ -100,21 +100,21 @@
 	playsound(src, 'sound/machines/buzz/buzz-sigh.ogg', 50, TRUE)
 
 /obj/machinery/computer/portal_control/proc/rescan_for_portal()
-    var/obj/machinery/portal/found_portal
-    for(var/obj/machinery/portal/P in range(3, src))
-        if(QDELETED(P) || (P.machine_stat & (BROKEN|NOPOWER)))
-            continue
-        found_portal = P
-        break
+	var/obj/machinery/portal/found_portal
+	for(var/obj/machinery/portal/P in range(3, src))
+		if(QDELETED(P) || (P.machine_stat & (BROKEN|NOPOWER)))
+			continue
+		found_portal = P
+		break
 
-    if(found_portal)
-        linked_portal = found_portal
-        found_portal.linked_console = src
-        var/datum/portal_destination/veilbreak/V = found_portal.target
-        if(!V || !V.generated)
-            found_portal.transport_active = FALSE
-        return TRUE
-    return FALSE
+	if(found_portal)
+		linked_portal = found_portal
+		found_portal.linked_console = src
+		var/datum/portal_destination/veilbreak/V = found_portal.target
+		if(!V || !V.generated)
+			found_portal.transport_active = FALSE
+		return TRUE
+	return FALSE
 
 /// If a pocket is already open, re-bind return portals after the console finds a different linked portal.
 /obj/machinery/computer/portal_control/proc/resync_veilbreak_portals_if_active()

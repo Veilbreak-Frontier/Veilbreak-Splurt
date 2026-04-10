@@ -12,7 +12,7 @@
 			continue
 		space_turf.Initialize(mapload = TRUE)
 		processed++
-		if(processed % 150 == 0)
+		if(processed % 50 == 0)
 			CHECK_TICK
 
 /datum/portal_destination/veilbreak/proc/veilbreak_initialize_zlevel(z_level, list/metadata, current_step = 1)
