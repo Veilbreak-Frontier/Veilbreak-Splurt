@@ -198,17 +198,37 @@
 			if(QDELETED(AM))
 				continue
 
+			var/should_eject = FALSE
+			var/atom/movable/to_eject = null
+
 			if(istype(AM, /mob/living))
 				var/mob/living/L = AM
+				if(should_eject_mob(L))
+					should_eject = TRUE
+					to_eject = L
 
+			if(istype(AM, /obj/item/organ/brain))
+				var/obj/item/organ/brain/brain_organ = AM
+				if(brain_organ.brainmob && (brain_organ.brainmob.client || brain_organ.brainmob.mind))
+					should_eject = TRUE
+					to_eject = brain_organ
+
+			if(istype(AM, /obj/item/mmi))
+				var/obj/item/mmi/mmi = AM
+				if(mmi.brainmob && (mmi.brainmob.client || mmi.brainmob.mind))
+					should_eject = TRUE
+					to_eject = mmi
+
+			if(should_eject && ejection_turf && to_eject)
+				to_eject.forceMove(ejection_turf)
+				continue
+
+			if(istype(AM, /mob/living))
+				var/mob/living/L = AM
 				if(L.ai_controller)
 					var/datum/ai_controller/AC = L.ai_controller
 					L.ai_controller = null
 					qdel(AC)
-
-				if(ejection_turf && !isobserver(L))
-					L.forceMove(ejection_turf)
-					continue
 
 			qdel(AM)
 			if(AM && !QDELETED(AM))
@@ -231,6 +251,8 @@
 	if(temp_map_file && fexists(temp_map_file))
 		fdel(temp_map_file)
 		temp_map_file = null
+	if(dungeon_z_level)
+		cleanup_z_level_completely(dungeon_z_level, null)
 	if(connected_control_computer)
 		connected_control_computer.on_generation_failed(reason)
 	spawn_station_portal = null
@@ -259,6 +281,13 @@
 				continue
 
 			dungeon_portal.setup_as_return_portal(station)
+
+			dungeon_portal.is_dungeon_portal = TRUE
+
+			if(dungeon_portal.target && istype(dungeon_portal.target, /datum/portal_destination/veilbreak))
+				var/datum/portal_destination/veilbreak/dest = dungeon_portal.target
+				dest.spawn_station_portal = station
+
 			linked++
 
 		if(T.x % 100 == 0 && T.y == 1)
@@ -289,3 +318,69 @@
 	var/turf/T = locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), dungeon_z_level)
 	log_world("Veilbreak Debug: get_target_turf (fallback center) [T ? "[T.x],[T.y],[T.z]" : "null"]")
 	return T
+
+
+/datum/portal_destination/veilbreak/proc/should_eject_mob(mob/living/L)
+	if(!istype(L))
+		return FALSE
+
+	if(istype(L, /mob/living/carbon/human))
+		if(L.client || (L.mind && L.mind.active))
+			return TRUE
+		if(L.stat == DEAD && (L.mind || L.client))
+			return TRUE
+
+	if(istype(L, /mob/living/silicon/robot))
+		return TRUE
+
+	if(istype(L, /mob/living/silicon/ai))
+		return TRUE
+
+	if(istype(L, /mob/living/brain))
+		var/mob/living/brain/brain_mob = L
+		if(brain_mob.client || (brain_mob.mind && brain_mob.mind.active))
+			return TRUE
+
+	if(L.client)
+		return TRUE
+
+	if(L.mind && L.mind.active)
+		return TRUE
+
+	return FALSE
+
+
+/datum/portal_destination/veilbreak/proc/is_player_corpse(mob/living/L)
+	if(!istype(L))
+		return FALSE
+
+	if(L.stat != DEAD)
+		return FALSE
+
+	if(istype(L, /mob/living/carbon/human))
+		return TRUE
+
+	if(istype(L, /mob/living/silicon/robot))
+		return TRUE
+
+	if(istype(L, /mob/living/brain))
+		return TRUE
+
+	return FALSE
+
+
+/datum/portal_destination/veilbreak/proc/is_debrained(mob/living/carbon/human/H)
+	if(!istype(H))
+		return FALSE
+
+	var/obj/item/organ/brain/brain = H.get_organ_slot(ORGAN_SLOT_BRAIN)
+	if(!brain)
+		return TRUE
+
+	if(brain.organ_flags & ORGAN_FAILING)
+		return TRUE
+
+	if(brain.organ_flags & ORGAN_FROZEN)
+		return TRUE
+
+	return FALSE
