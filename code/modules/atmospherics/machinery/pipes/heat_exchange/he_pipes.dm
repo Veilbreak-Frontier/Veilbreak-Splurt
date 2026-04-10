@@ -1,6 +1,6 @@
 /obj/machinery/atmospherics/pipe/heat_exchanging
 	var/minimum_temperature_difference = 0
-	var/thermal_conductivity = 1.2
+	var/thermal_conductivity = 1
 	color = "#404040"
 	buckle_lying = NO_BUCKLE_LYING
 	var/icon_temperature = T20C //stop small changes in temperature causing icon refresh
@@ -15,6 +15,10 @@
 	RegisterSignal(src, COMSIG_UNDERTILE_UPDATED, PROC_REF(on_hide))
 
 	add_atom_colour("#404040", FIXED_COLOUR_PRIORITY)
+
+/obj/machinery/atmospherics/pipe/heat_exchanging/examine(mob/user)
+	. = ..()
+	. += span_notice("Effective thermal conductivity: [round(get_thermal_conductivity_for_turf(get_turf(src)), 0.001)].")
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/is_connectable(obj/machinery/atmospherics/pipe/heat_exchanging/target, given_layer, HE_type_check = TRUE)
 	if(istype(target, /obj/machinery/atmospherics/pipe/heat_exchanging) != HE_type_check)
