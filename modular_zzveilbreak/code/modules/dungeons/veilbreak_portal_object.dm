@@ -162,8 +162,13 @@
 		log_world("Veilbreak Error: Could not create bumper for portal at [x],[y],[z] - no turf found")
 		return FALSE
 
-	bumper = new /obj/effect/portal_bumper(portal_turf, src)
-	log_world("Veilbreak Debug: Activated bumper for portal at [portal_turf.x],[portal_turf.y],[portal_turf.z] - transport_active=[transport_active]")
+	var/turf/center_turf = locate(portal_turf.x - 1, portal_turf.y - 1, portal_turf.z)
+	if(!center_turf)
+		center_turf = portal_turf
+		log_world("Veilbreak Warning: Using portal turf as bumper location")
+
+	bumper = new /obj/effect/portal_bumper(center_turf, src)
+	log_world("Veilbreak Debug: Activated bumper for portal at visual center [center_turf.x],[center_turf.y],[center_turf.z] - transport_active=[transport_active]")
 	return TRUE
 
 
