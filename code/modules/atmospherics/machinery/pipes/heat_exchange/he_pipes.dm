@@ -1,3 +1,8 @@
+/// Mole-based conductivity uses `1 + (this - 1) * n/(n+K)` — approaches this multiplier as tile moles → ∞
+#define HE_PIPE_CONDUCTIVITY_MOLE_CAP 2.5
+/// Moles at which extra air is halfway between 1x and HE_PIPE_CONDUCTIVITY_MOLE_CAP (one standard cell of gas)
+#define HE_PIPE_CONDUCTIVITY_MOLE_K MOLES_CELLSTANDARD
+
 /obj/machinery/atmospherics/pipe/heat_exchanging
 	var/minimum_temperature_difference = 0
 	var/thermal_conductivity = 1
@@ -39,11 +44,9 @@
 	return tile_air.total_moles()
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/proc/get_thermal_conductivity_for_turf(turf/local_turf)
-	var/tile_moles = get_tile_moles(local_turf)
-	if(tile_moles <= 0)
-		return thermal_conductivity
-
-	return thermal_conductivity * ((tile_moles+50) / MOLES_CELLSTANDARD)
+	var/tile_moles = max(get_tile_moles(local_turf), 0)
+	var/mole_mult = 1 + (HE_PIPE_CONDUCTIVITY_MOLE_CAP - 1) * (tile_moles / (tile_moles + HE_PIPE_CONDUCTIVITY_MOLE_K))
+	return thermal_conductivity * mole_mult
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/process_atmos()
 	var/environment_temperature = 0
