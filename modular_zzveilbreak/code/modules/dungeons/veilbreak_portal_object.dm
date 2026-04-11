@@ -90,13 +90,12 @@
 	else
 		var/datum/portal_destination/veilbreak/V = target
 		if(V)
-			if(V.gateway_location && V.dungeon_z_level)
-				var/gx = V.gateway_location["x"]
-				var/gy = V.gateway_location["y"]
-				destination_turf = locate(round(gx), round(gy), V.dungeon_z_level)
-				if(!destination_turf)
-					destination_turf = V.get_target_turf()
-			else
+			if(V.gateway_location)
+				var/gx = V.gateway_location["world_x"]
+				var/gy = V.gateway_location["world_y"]
+				if(isnum(gx) && isnum(gy))
+					destination_turf = locate(gx, gy, V.dungeon_z_level)
+			if(!destination_turf)
 				destination_turf = V.get_target_turf()
 
 	if(destination_turf)
