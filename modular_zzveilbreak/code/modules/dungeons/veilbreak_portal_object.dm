@@ -158,7 +158,7 @@
 	name = "portal energy field"
 	icon = 'icons/obj/machines/gateway.dmi'
 	icon_state = "portal_effect"
-	density = TRUE
+	density = FALSE
 	invisibility = 0
 	var/obj/machinery/portal/parent_portal
 
@@ -178,7 +178,10 @@
 		qdel(bumper)
 		bumper = null
 
-	var/turf/center_turf = get_turf(src)
+	var/turf/center_turf = get_step(get_step(src, WEST), SOUTH)
+	if(!center_turf)
+		center_turf = get_turf(src)
+
 	if(center_turf)
 		bumper = new /obj/effect/portal_bumper(center_turf, src)
 		log_world("Veilbreak Debug: Activated bumper for portal at [center_turf.x],[center_turf.y],[center_turf.z] - transport_active=[transport_active]")
