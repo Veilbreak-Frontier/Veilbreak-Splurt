@@ -176,7 +176,7 @@
 	name = "portal energy field"
 	icon = 'icons/obj/machines/gateway.dmi'
 	icon_state = "portal_effect"
-	density = FALSE
+	density = TRUE
 	invisibility = 0
 	var/obj/machinery/portal/parent_portal
 
@@ -185,6 +185,11 @@
 	parent_portal = P
 
 /obj/effect/portal_bumper/Crossed(atom/movable/AM)
+	. = ..()
+	if(parent_portal && parent_portal.transport_active)
+		parent_portal.transfer(AM)
+
+/obj/effect/portal_bumper/Bumped(atom/movable/AM)
 	. = ..()
 	if(parent_portal && parent_portal.transport_active)
 		parent_portal.transfer(AM)
