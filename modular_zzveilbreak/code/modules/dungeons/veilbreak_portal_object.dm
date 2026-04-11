@@ -165,10 +165,9 @@
 	var/turf/center_turf = locate(portal_turf.x - 1, portal_turf.y - 1, portal_turf.z)
 	if(!center_turf)
 		center_turf = portal_turf
-		log_world("Veilbreak Warning: Using portal turf as bumper location")
 
 	bumper = new /obj/effect/portal_bumper(center_turf, src)
-	log_world("Veilbreak Debug: Activated bumper for portal at visual center [center_turf.x],[center_turf.y],[center_turf.z] - transport_active=[transport_active]")
+	log_world("Veilbreak Debug: Activated bumper at visual center [center_turf.x],[center_turf.y],[center_turf.z]")
 	return TRUE
 
 
@@ -184,12 +183,14 @@
 	. = ..()
 	parent_portal = P
 
-/obj/effect/portal_bumper/Crossed(atom/movable/AM)
-	. = ..()
-	if(parent_portal && parent_portal.transport_active)
-		parent_portal.transfer(AM)
-
 /obj/effect/portal_bumper/Bumped(atom/movable/AM)
 	. = ..()
 	if(parent_portal && parent_portal.transport_active)
-		parent_portal.transfer(AM)
+		if(ismob(AM) && !isobserver(AM))
+			parent_portal.transfer(AM)
+
+/obj/effect/portal_bumper/Crossed(atom/movable/AM)
+	. = ..()
+	if(parent_portal && parent_portal.transport_active)
+		if(ismob(AM) && !isobserver(AM))
+			parent_portal.transfer(AM)
