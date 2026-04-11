@@ -28,25 +28,6 @@
 		GLOB.station_veilbreak_portal = src
 	is_dungeon_portal = FALSE
 
-/obj/machinery/portal/proc/activate_bumpers()
-	if(bumper)
-		qdel(bumper)
-		bumper = null
-
-	var/turf/portal_turf = get_turf(src)
-	if(!portal_turf)
-		log_world("Veilbreak Error: No turf for portal at [x],[y],[z]")
-		return FALSE
-
-	var/turf/center_turf = locate(portal_turf.x - 1, portal_turf.y - 1, portal_turf.z)
-	if(!center_turf)
-		center_turf = portal_turf
-		log_world("Veilbreak Warning: Using portal turf as bumper location")
-
-	bumper = new /obj/effect/portal_bumper(center_turf, src)
-	log_world("Veilbreak Debug: Activated bumper at [center_turf.x],[center_turf.y],[center_turf.z]")
-	return TRUE
-
 /obj/machinery/portal/proc/setup_as_return_portal(obj/machinery/portal/station_portal)
 	transport_active = TRUE
 	is_dungeon_portal = TRUE
@@ -79,7 +60,7 @@
 
 	activate_bumpers()
 	update_appearance()
-	log_world("Veilbreak Debug: Dungeon portal at ([x],[y],[z]) fully configured")
+	log_world("Veilbreak Debug: Dungeon portal at ([x],[y],[z]) fully configured and bumpers activated")
 
 /obj/machinery/portal/update_overlays()
 	. = ..()
@@ -109,7 +90,14 @@
 	else
 		var/datum/portal_destination/veilbreak/V = target
 		if(V)
-			destination_turf = V.get_target_turf()
+			if(V.gateway_location && V.dungeon_z_level)
+				var/gx = V.gateway_location["x"]
+				var/gy = V.gateway_location["y"]
+				destination_turf = locate(round(gx), round(gy), V.dungeon_z_level)
+				if(!destination_turf)
+					destination_turf = V.get_target_turf()
+			else
+				destination_turf = V.get_target_turf()
 
 	if(destination_turf)
 		AM.forceMove(destination_turf)
@@ -134,6 +122,7 @@
 	var/turf/eject_to = get_step(src, SOUTH)
 	if(!eject_to)
 		eject_to = get_turf(src)
+		log_world("Veilbreak Warning: Could not find turf south of station portal, using portal turf")
 
 	var/z_to_clear = target.dungeon_z_level
 	log_world("Veilbreak: Emergency ejecting players from Z-level [z_to_clear] to [eject_to ? "[eject_to.x],[eject_to.y],[eject_to.z]" : "null"]")
@@ -142,27 +131,47 @@
 	for(var/mob/M in GLOB.mob_list)
 		if(M.z == z_to_clear)
 			if(M.client || (M.mind && M.mind.active))
+				log_world("Veilbreak: Ejecting [M.name] ([M.key]) from [M.x],[M.y],[M.z] to [eject_to.x],[eject_to.y],[eject_to.z]")
 				M.forceMove(eject_to)
 				ejected_count++
-			else if(istype(M, /mob/living/carbon/human) && M.stat == DEAD && (M.mind || M.client))
-				M.forceMove(eject_to)
-				ejected_count++
+			else if(istype(M, /mob/living/carbon/human) && M.stat == DEAD)
+				var/mob/living/carbon/human/H = M
+				if(H.mind || H.client)
+					log_world("Veilbreak: Ejecting corpse of [H.name] from [H.x],[H.y],[H.z]")
+					H.forceMove(eject_to)
+					ejected_count++
 			else if(istype(M, /mob/living/silicon/robot))
+				log_world("Veilbreak: Ejecting borg [M.name] from [M.x],[M.y],[M.z]")
 				M.forceMove(eject_to)
 				ejected_count++
 
-	log_world("Veilbreak: Ejected [ejected_count] mobs")
+	log_world("Veilbreak: Ejected [ejected_count] mobs from dungeon Z-level")
+
 	target.cleanup_z_level_completely(z_to_clear, eject_to)
 	target = null
 	transport_active = FALSE
 	update_appearance()
+
+/obj/machinery/portal/proc/activate_bumpers()
+	if(bumper)
+		qdel(bumper)
+		bumper = null
+
+	var/turf/portal_turf = get_turf(src)
+	if(!portal_turf)
+		log_world("Veilbreak Error: Could not create bumper for portal at [x],[y],[z] - no turf found")
+		return FALSE
+
+	bumper = new /obj/effect/portal_bumper(portal_turf, src)
+	log_world("Veilbreak Debug: Activated bumper for portal at [portal_turf.x],[portal_turf.y],[portal_turf.z] - transport_active=[transport_active]")
+	return TRUE
 
 
 /obj/effect/portal_bumper
 	name = "portal energy field"
 	icon = 'icons/obj/machines/gateway.dmi'
 	icon_state = "portal_effect"
-	density = TRUE
+	density = FALSE
 	invisibility = 0
 	var/obj/machinery/portal/parent_portal
 
@@ -170,10 +179,7 @@
 	. = ..()
 	parent_portal = P
 
-/obj/effect/portal_bumper/Bumped(atom/movable/arriving_object)
+/obj/effect/portal_bumper/Crossed(atom/movable/AM)
 	. = ..()
-	if(!parent_portal || !parent_portal.transport_active)
-		return
-	if(!ismob(arriving_object) || isobserver(arriving_object))
-		return
-	parent_portal.transfer(arriving_object)
+	if(parent_portal && parent_portal.transport_active)
+		parent_portal.transfer(AM)
