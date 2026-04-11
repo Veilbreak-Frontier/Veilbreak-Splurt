@@ -159,8 +159,9 @@
 	icon = 'icons/obj/machines/gateway.dmi'
 	icon_state = "portal_effect"
 	density = TRUE
-	invisibility = 101
+	invisibility = 0
 	var/obj/machinery/portal/parent_portal
+
 
 /obj/effect/portal_bumper/Initialize(loc, obj/machinery/portal/P)
 	. = ..()
@@ -169,8 +170,8 @@
 /obj/effect/portal_bumper/Crossed(atom/movable/AM)
 	. = ..()
 	if(parent_portal && parent_portal.transport_active)
-		parent_portal.transfer(AM)
-
+		if(ismob(AM) && !isobserver(AM))
+			parent_portal.transfer(AM)
 
 /obj/machinery/portal/proc/activate_bumpers()
 	if(bumper)
@@ -185,3 +186,9 @@
 
 	log_world("Veilbreak Error: Could not create bumper for portal at [x],[y],[z] - no turf found")
 	return FALSE
+
+/obj/effect/portal_bumper/Bump(atom/movable/AM)
+	. = ..()
+	if(parent_portal && parent_portal.transport_active)
+		if(ismob(AM) && !isobserver(AM))
+			parent_portal.transfer(AM)
