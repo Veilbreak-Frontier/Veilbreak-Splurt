@@ -38,7 +38,7 @@
 		log_world("Veilbreak Error: No turf for portal at [x],[y],[z]")
 		return FALSE
 
-	var/turf/center_turf = locate(portal_turf.x + 1, portal_turf.y - 1, portal_turf.z)
+	var/turf/center_turf = locate(portal_turf.x - 1, portal_turf.y - 1, portal_turf.z)
 	if(!center_turf)
 		center_turf = portal_turf
 		log_world("Veilbreak Warning: Using portal turf as bumper location")
