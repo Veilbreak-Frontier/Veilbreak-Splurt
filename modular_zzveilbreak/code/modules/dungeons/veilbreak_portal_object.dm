@@ -174,6 +174,9 @@
 	icon_state = "portal_effect"
 	density = TRUE
 	invisibility = 0
+	/// Match /obj/machinery/portal so portal_effect aligns with the shifted gateway art.
+	pixel_x = -32
+	pixel_y = -32
 	var/obj/machinery/portal/parent_portal
 
 /obj/effect/portal_bumper/Initialize(loc, obj/machinery/portal/P)

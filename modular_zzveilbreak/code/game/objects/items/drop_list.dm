@@ -7,7 +7,8 @@ var/list/voidling_loot_table = list(
     /obj/item/stack/sheet/mineral/silver = 10,
     /obj/item/stack/sheet/plasteel = 30,
     /obj/item/clothing/neck/aether_pendant = 0.1,  // 0.1% chance
-    /obj/item/clothing/neck/life_pendant = 0.1  // 0.1% chance
+    /obj/item/clothing/neck/life_pendant = 0.1,
+	/obj/item/voidshard = 1 
 )
 
 var/list/inai_drops = list(
@@ -39,6 +40,14 @@ var/list/consumed_pathfinder_drops = list(
 	/obj/item/clothing/gloves/ring/voidring = 29,
 	/obj/item/stack/sheet/bluespace_crystal = 60
 )
+
+/// One roll when a /obj/structure/closet/crate/veilbreak_lootbox is first opened. Voidshard is the common pull; pendants are deliberately rarer.
+var/list/veilbreak_lootbox_table = list(
+	/obj/item/voidshard = 58,
+	/obj/item/clothing/neck/aether_pendant = 21,
+	/obj/item/clothing/neck/life_pendant = 21,
+)
+
 // Function to pick loot from a table (call this in mob death proc if needed)
 /proc/pick_loot_from_table(list/loot_table)
     var/total_weight = 0

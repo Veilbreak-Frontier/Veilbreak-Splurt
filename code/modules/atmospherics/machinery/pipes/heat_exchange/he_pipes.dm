@@ -1,5 +1,5 @@
 /// Mole-based conductivity uses `1 + (this - 1) * n/(n+K)` — approaches this multiplier as tile moles → ∞
-#define HE_PIPE_CONDUCTIVITY_MOLE_CAP 2.5
+#define HE_PIPE_CONDUCTIVITY_MOLE_CAP 6
 /// Moles at which extra air is halfway between 1x and HE_PIPE_CONDUCTIVITY_MOLE_CAP (one standard cell of gas)
 #define HE_PIPE_CONDUCTIVITY_MOLE_K MOLES_CELLSTANDARD
 

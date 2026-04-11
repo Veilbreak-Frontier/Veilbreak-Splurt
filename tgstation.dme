@@ -10677,6 +10677,7 @@
 #include "modular_zzveilbreak\code\game\controllers\void_ai.dm"
 #include "modular_zzveilbreak\code\game\objects\items\bags_overides.dm"
 #include "modular_zzveilbreak\code\game\objects\items\drop_list.dm"
+#include "modular_zzveilbreak\code\game\objects\structures\veilbreak_lootbox.dm"
 #include "modular_zzveilbreak\code\game\objects\items\lore_texts.dm"
 #include "modular_zzveilbreak\code\game\objects\items\pendants.dm"
 #include "modular_zzveilbreak\code\game\objects\items\voidring.dm"
