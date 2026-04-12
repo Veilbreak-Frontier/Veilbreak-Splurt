@@ -38,6 +38,7 @@
 		var/loot = pick_loot_from_table(melos_vecare_drops)
 		if(loot)
 			new loot(loc)
+		new /obj/item/paper/lore/melos_story(loc)
 		var/msg = pick(death_messages)
 		visible_message("<span style='color:#8a2be2; font-style:italic; '>[msg]</span>")
 		..()

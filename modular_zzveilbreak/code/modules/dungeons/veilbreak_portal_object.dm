@@ -59,7 +59,6 @@
 		P.update_appearance()
 
 	activate_bumpers()
-
 	update_appearance()
 	log_world("Veilbreak Debug: Dungeon portal at ([x],[y],[z]) fully configured and bumpers activated")
 
@@ -67,7 +66,6 @@
 	. = ..()
 	if(transport_active)
 		. += "portal_light"
-
 
 /obj/machinery/portal/proc/transfer(atom/movable/AM)
 	if(!target || !transport_active || !target.generated)
@@ -92,13 +90,12 @@
 	else
 		var/datum/portal_destination/veilbreak/V = target
 		if(V)
-			if(V.gateway_location && V.dungeon_z_level)
-				var/gx = V.gateway_location["x"]
-				var/gy = V.gateway_location["y"]
-				destination_turf = locate(round(gx), round(gy), V.dungeon_z_level)
-				if(!destination_turf)
-					destination_turf = V.get_target_turf()
-			else
+			if(V.gateway_location)
+				var/gx = V.gateway_location["world_x"]
+				var/gy = V.gateway_location["world_y"]
+				if(isnum(gx) && isnum(gy))
+					destination_turf = locate(gx, gy, V.dungeon_z_level)
+			if(!destination_turf)
 				destination_turf = V.get_target_turf()
 
 	if(destination_turf)
@@ -154,34 +151,46 @@
 	transport_active = FALSE
 	update_appearance()
 
+/obj/machinery/portal/proc/activate_bumpers()
+	if(bumper)
+		qdel(bumper)
+		bumper = null
+
+	var/turf/portal_turf = get_turf(src)
+	if(!portal_turf)
+		log_world("Veilbreak Error: Could not create bumper for portal at [x],[y],[z] - no turf found")
+		return FALSE
+
+	var/turf/center_turf = portal_turf
+
+	bumper = new /obj/effect/portal_bumper(center_turf, src)
+	log_world("Veilbreak Debug: Activated bumper at visual center [center_turf.x],[center_turf.y],[center_turf.z]")
+	return TRUE
+
+
 /obj/effect/portal_bumper
 	name = "portal energy field"
 	icon = 'icons/obj/machines/gateway.dmi'
 	icon_state = "portal_effect"
 	density = TRUE
-	invisibility = 101
+	invisibility = 0
+	/// Match /obj/machinery/portal so portal_effect aligns with the shifted gateway art.
+	pixel_x = -32
+	pixel_y = -32
 	var/obj/machinery/portal/parent_portal
 
 /obj/effect/portal_bumper/Initialize(loc, obj/machinery/portal/P)
 	. = ..()
 	parent_portal = P
 
+/obj/effect/portal_bumper/Bumped(atom/movable/AM)
+	. = ..()
+	if(parent_portal && parent_portal.transport_active)
+		if(ismob(AM) && !isobserver(AM))
+			parent_portal.transfer(AM)
+
 /obj/effect/portal_bumper/Crossed(atom/movable/AM)
 	. = ..()
 	if(parent_portal && parent_portal.transport_active)
-		parent_portal.transfer(AM)
-
-
-/obj/machinery/portal/proc/activate_bumpers()
-	if(bumper)
-		qdel(bumper)
-		bumper = null
-
-	var/turf/center_turf = get_turf(src)
-	if(center_turf)
-		bumper = new /obj/effect/portal_bumper(center_turf, src)
-		log_world("Veilbreak Debug: Activated bumper for portal at [center_turf.x],[center_turf.y],[center_turf.z] - transport_active=[transport_active]")
-		return TRUE
-
-	log_world("Veilbreak Error: Could not create bumper for portal at [x],[y],[z] - no turf found")
-	return FALSE
+		if(ismob(AM) && !isobserver(AM))
+			parent_portal.transfer(AM)

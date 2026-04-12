@@ -349,29 +349,20 @@
 		log_world("Veilbreak Warning: No /obj/machinery/portal found on dungeon Z [dungeon_z_level]")
 
 /datum/portal_destination/veilbreak/proc/get_target_turf()
-	log_world("Veilbreak Debug: get_target_turf called - dungeon_z_level=[dungeon_z_level]")
-
 	if(gateway_location && dungeon_z_level)
 		var/gx = gateway_location["world_x"]
 		var/gy = gateway_location["world_y"]
-
 		if(isnum(gx) && isnum(gy))
-			var/turf/G = locate(round(gx), round(gy), dungeon_z_level)
+			var/turf/G = locate(gx, gy, dungeon_z_level)
 			if(G)
-				log_world("Veilbreak Debug: get_target_turf returning ACTUAL portal at ([gx],[gy],[dungeon_z_level])")
 				return G
-			else
-				log_world("Veilbreak Debug: Portal turf not found at world ([gx],[gy],[dungeon_z_level])")
-
-		gx = gateway_location["local_x"]
-		gy = gateway_location["local_y"]
-		if(isnum(gx) && isnum(gy))
-			if(map_offset_x > 1 || map_offset_y > 1)
-				gx = gx + map_offset_x - 1
-				gy = gy + map_offset_y - 1
-			var/turf/G = locate(round(gx), round(gy), dungeon_z_level)
+		var/local_x = gateway_location["x"]
+		var/local_y = gateway_location["y"]
+		if(isnum(local_x) && isnum(local_y))
+			var/world_x = local_x + map_offset_x - 1
+			var/world_y = local_y + map_offset_y - 1
+			var/turf/G = locate(world_x, world_y, dungeon_z_level)
 			if(G)
-				log_world("Veilbreak Debug: get_target_turf returning offset gateway at ([gx],[gy],[dungeon_z_level])")
 				return G
 
 	var/list/meta = last_generation_data?["metadata"]
@@ -391,7 +382,6 @@
 						log_world("Veilbreak Debug: get_target_turf returning metadata gateway at ([gx],[gy],[dungeon_z_level])")
 						return G
 
-	// Final fallback to center
 	var/center_x = round(DUNGEON_WIDTH / 2) + map_offset_x - 1
 	var/center_y = round(DUNGEON_HEIGHT / 2) + map_offset_y - 1
 	var/turf/T = locate(center_x, center_y, dungeon_z_level)

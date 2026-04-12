@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button, Input, Section, Stack } from 'tgui-core/components';
 import { isEscape } from 'tgui-core/keys';
 import { clamp } from 'tgui-core/math';
@@ -19,6 +18,13 @@ type Data = {
 export function LootPanel(props) {
   const { act, data } = useBackend<Data>();
   const { contents = [], searching } = data;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      act('refresh');
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [act]);
 
   // limitations: items with different stack counts, charges etc.
   const contentsByPathName = useMemo(() => {
