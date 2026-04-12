@@ -124,29 +124,45 @@
 		log_world("Veilbreak Warning: Could not find turf south of station portal, using portal turf")
 
 	var/z_to_clear = target.dungeon_z_level
-	log_world("Veilbreak: Emergency ejecting players from Z-level [z_to_clear] to [eject_to ? "[eject_to.x],[eject_to.y],[eject_to.z]" : "null"]")
+	log_world("Veilbreak: Emergency ejecting from Z-level [z_to_clear] to [eject_to ? "[eject_to.x],[eject_to.y],[eject_to.z]" : "null"]")
 
 	var/ejected_count = 0
-	for(var/mob/M in GLOB.mob_list)
-		if(M.z == z_to_clear)
-			if(M.client || (M.mind && M.mind.active))
-				log_world("Veilbreak: Ejecting [M.name] ([M.key]) from [M.x],[M.y],[M.z] to [eject_to.x],[eject_to.y],[eject_to.z]")
-				M.forceMove(eject_to)
-				ejected_count++
-			else if(istype(M, /mob/living/carbon/human) && M.stat == DEAD)
-				var/mob/living/carbon/human/H = M
-				if(H.mind || H.client)
-					log_world("Veilbreak: Ejecting corpse of [H.name] from [H.x],[H.y],[H.z]")
-					H.forceMove(eject_to)
-					ejected_count++
-			else if(istype(M, /mob/living/silicon/robot))
-				log_world("Veilbreak: Ejecting borg [M.name] from [M.x],[M.y],[M.z]")
-				M.forceMove(eject_to)
-				ejected_count++
 
-	log_world("Veilbreak: Ejected [ejected_count] mobs from dungeon Z-level")
+	for(var/mob/M in GLOB.mob_list)
+		if(M.z != z_to_clear)
+			continue
+		if(LAZYFIND(M.faction, FACTION_VOID))
+			log_world("Veilbreak: Preserving void mob [M.name] ([M.type]) at [M.x],[M.y],[M.z]")
+			continue
+		log_world("Veilbreak: Ejecting [M.name] ([M.key]) from [M.x],[M.y],[M.z]")
+		M.forceMove(eject_to)
+		M.throw_at(get_step(eject_to, SOUTH), 5, 2, M)
+		ejected_count++
+		if(ejected_count % 50 == 0)
+			CHECK_TICK
+
+	for(var/obj/item/mmi/mmi in world)
+		if(mmi.z == z_to_clear && mmi.brainmob && (mmi.brainmob.client || mmi.brainmob.mind))
+			log_world("Veilbreak: Ejecting MMI containing [mmi.brainmob.name]")
+			mmi.forceMove(eject_to)
+			mmi.throw_at(get_step(eject_to, SOUTH), 5, 2, mmi)
+			ejected_count++
+			if(ejected_count % 50 == 0)
+				CHECK_TICK
+
+	for(var/obj/item/organ/brain/brain in world)
+		if(brain.z == z_to_clear && brain.brainmob && (brain.brainmob.client || brain.brainmob.mind))
+			log_world("Veilbreak: Ejecting brain organ of [brain.brainmob.name]")
+			brain.forceMove(eject_to)
+			brain.throw_at(get_step(eject_to, SOUTH), 5, 2, brain)
+			ejected_count++
+			if(ejected_count % 50 == 0)
+				CHECK_TICK
+
+	log_world("Veilbreak: Ejected [ejected_count] mobs/items from dungeon Z-level")
 
 	target.cleanup_z_level_completely(z_to_clear, eject_to)
+
 	target = null
 	transport_active = FALSE
 	update_appearance()
