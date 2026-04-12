@@ -104,6 +104,9 @@
 			AltClickOn(A)
 		return
 	if(LAZYACCESS(modifiers, CTRL_CLICK))
+		if(LAZYACCESS(modifiers, RIGHT_CLICK))
+			if(CtrlRightClickOn(A))
+				return
 		CtrlClickOn(A)
 		return
 
