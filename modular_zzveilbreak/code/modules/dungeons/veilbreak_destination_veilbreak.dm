@@ -82,6 +82,10 @@
 	if(dungeon_z_level && dungeon_z_level <= world.maxz)
 		log_world("Veilbreak Debug: reusing existing Z-level [dungeon_z_level]")
 		cleanup_z_level_completely(dungeon_z_level, null)
+		var/reuse_level_name = (metadata && metadata["map_name"]) ? metadata["map_name"] : null
+		if(!reuse_level_name)
+			reuse_level_name = "Veilbreak"
+		name = reuse_level_name
 	else
 		log_world("Veilbreak Debug: creating new Z-level")
 		newly_created_z = TRUE
