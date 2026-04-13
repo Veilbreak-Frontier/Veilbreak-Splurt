@@ -131,13 +131,8 @@
 		if(!eject_to)
 			eject_to = get_turf(src)
 
-<<<<<<< HEAD
-	var/z_to_clear = target.dungeon_z_level
-	var/processed_count = 0
-=======
 	var/z_to_clear = saved_dest.dungeon_z_level
-	var/ejected_count = 0
->>>>>>> e8e479e648d (buncha portal updates)
+	var/processed_count = 0
 
 	for(var/mob/M in GLOB.mob_list)
 		if(M.z != z_to_clear)

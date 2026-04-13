@@ -271,56 +271,17 @@
 				AM.forceMove(ejection_turf)
 			continue
 
-<<<<<<< HEAD
+		if(istype(AM, /obj/machinery/portal))
+			var/obj/machinery/portal/port = AM
+			if(port.is_dungeon_portal && istype(port.target, /datum/portal_destination/veilbreak))
+				var/datum/portal_destination/veilbreak/aux = port.target
+				port.target = null
+				if(aux != src)
+					qdel(aux)
+
 		qdel(AM)
 		processed++
 		if(processed % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
-=======
-			if(istype(AM, /mob/living))
-				var/mob/living/L = AM
-				if(should_eject_mob(L))
-					should_eject = TRUE
-					to_eject = L
-
-			if(istype(AM, /obj/item/organ/brain))
-				var/obj/item/organ/brain/brain_organ = AM
-				if(brain_organ.brainmob && (brain_organ.brainmob.client || brain_organ.brainmob.mind))
-					should_eject = TRUE
-					to_eject = brain_organ
-
-			if(istype(AM, /obj/item/mmi))
-				var/obj/item/mmi/mmi = AM
-				if(mmi.brainmob && (mmi.brainmob.client || mmi.brainmob.mind))
-					should_eject = TRUE
-					to_eject = mmi
-
-			if(should_eject && ejection_turf && to_eject)
-				to_eject.forceMove(ejection_turf)
-				continue
-
-			if(istype(AM, /obj/machinery/portal))
-				var/obj/machinery/portal/port = AM
-				if(port.is_dungeon_portal && istype(port.target, /datum/portal_destination/veilbreak))
-					var/datum/portal_destination/veilbreak/aux = port.target
-					port.target = null
-					if(aux != src)
-						qdel(aux)
-
-			if(istype(AM, /mob/living))
-				var/mob/living/L = AM
-				if(L.ai_controller)
-					var/datum/ai_controller/AC = L.ai_controller
-					L.ai_controller = null
-					qdel(AC)
-
-			qdel(AM)
-			if(AM && !QDELETED(AM))
-				AM.moveToNullspace()
-
-		T.ChangeTurf(/turf/open/space/basic, flags = CHANGETURF_INHERIT_AIR)
-
-		if(T.x == world.maxx && T.y % 10 == 0)
->>>>>>> e8e479e648d (buncha portal updates)
 			CHECK_TICK
 
 	var/list/turfs = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
