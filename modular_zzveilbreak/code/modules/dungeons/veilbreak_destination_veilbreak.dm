@@ -53,10 +53,8 @@
 
 /datum/portal_destination/veilbreak/proc/generation_complete(list/json_data)
 	if(generated || cleanup_in_progress)
-		log_world("Veilbreak Debug: generation_complete skipped - generated=[generated], cleanup=[cleanup_in_progress]")
 		return
 
-	log_world("Veilbreak Debug: generation_complete called")
 	generating = FALSE
 	current_request_id = 0
 	last_generation_data = json_data.Copy()
@@ -66,28 +64,21 @@
 	if(metadata && metadata["key_positions"] && metadata["key_positions"]["gateway"])
 		var/list/gateway = metadata["key_positions"]["gateway"]
 		gateway_location = list("x" = gateway["x"], "y" = gateway["y"])
-		log_world("Veilbreak Debug: Gateway location stored at ([gateway_location["x"]],[gateway_location["y"]])")
 	else
 		gateway_location = null
-		log_world("Veilbreak Debug: No gateway location found in metadata")
-
-	log_world("Veilbreak Debug: dmm_content length = [length(dmm_content)]")
 
 	if(!dmm_content || length(dmm_content) < 100)
-		log_world("Veilbreak Debug: dmm_content too short")
 		generation_failed("Invalid map data")
 		return
 
 	var/newly_created_z = FALSE
-	if(dungeon_z_level && dungeon_z_level <= world.maxz)
-		log_world("Veilbreak Debug: reusing existing Z-level [dungeon_z_level]")
+
+	if(dungeon_z_level && dungeon_z_level <= world.maxz && dungeon_z_level > 0)
 		cleanup_z_level_completely(dungeon_z_level, null)
-		var/reuse_level_name = (metadata && metadata["map_name"]) ? metadata["map_name"] : null
-		if(!reuse_level_name)
-			reuse_level_name = "Veilbreak"
+		newly_created_z = FALSE
+		var/reuse_level_name = (metadata && metadata["map_name"]) ? metadata["map_name"] : "Veilbreak"
 		name = reuse_level_name
 	else
-		log_world("Veilbreak Debug: creating new Z-level")
 		newly_created_z = TRUE
 		var/list/traits = list(
 			ZTRAIT_RESERVED = TRUE,
@@ -97,19 +88,15 @@
 			ZTRAIT_NOXRAY = TRUE,
 			ZTRAIT_GRAVITY = 1
 		)
-		var/level_name = (metadata && metadata["map_name"]) ? metadata["map_name"] : null
-		if(!level_name)
-			level_name = "Veilbreak"
+		var/level_name = (metadata && metadata["map_name"]) ? metadata["map_name"] : "Veilbreak"
 		var/datum/space_level/S = SSmapping.add_new_zlevel(level_name, traits, contain_turfs = FALSE)
 		if(!S)
-			log_world("Veilbreak Debug: failed to create new Z-level")
 			generation_failed("Z-Level allocation failed")
 			return
 		dungeon_z_level = S.z_value
 		GLOB.portal_dungeon_z_level = dungeon_z_level
 		SSmapping.update_plane_tracking(S)
 		name = level_name
-		log_world("Veilbreak Debug: created Z-level [dungeon_z_level] with name [level_name]")
 
 	veilbreak_init_runtime_space_turfs(dungeon_z_level)
 	load_dmm_with_ticks(dmm_content, metadata, newly_created_z)
