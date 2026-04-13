@@ -10669,6 +10669,7 @@
 #include "modular_zzplurt\modules\synthx\code\bodyparts\internal_computer\internal_computer.dm"
 #include "modular_zzveilbreak\code\__DEFINES\auto_update.dm"
 #include "modular_zzveilbreak\code\__DEFINES\veilbreak_antagonists.dm"
+#include "modular_zzveilbreak\code\client\click.dm"
 #include "modular_zzveilbreak\code\datums\quirks\ignite.dm"
 #include "modular_zzveilbreak\code\datums\quirks\static.dm"
 #include "modular_zzveilbreak\code\datums\quirks\negative\hard_of_hearing.dm"

@@ -11,10 +11,11 @@
 
 /obj/machinery/computer/portal_control/proc/try_to_linkup()
 	for(var/obj/machinery/portal/P in orange(3, src))
-		if(!QDELETED(P))
-			linked_portal = P
-			resync_veilbreak_portals_if_active()
-			return TRUE
+		if(QDELETED(P) || P.is_dungeon_portal)
+			continue
+		linked_portal = P
+		resync_veilbreak_portals_if_active()
+		return TRUE
 	return FALSE
 
 /obj/machinery/computer/portal_control/ui_interact(mob/user, datum/tgui/ui)
@@ -33,10 +34,14 @@
 	data["cleanup_in_progress"] = V?.cleanup_in_progress || FALSE
 	data["generation_progress"] = V?.generation_progress || 0
 	data["can_generate"] = (linked_portal && !generation_in_progress && (!V || !V.generated))
-	data["portal_name"] = linked_portal?.name
+	// Pocket title from destination (map_name); avoid dungeon map portal /obj names in the UI.
+	var/display_name = linked_portal?.name
+	if(istype(V, /datum/portal_destination/veilbreak) && V.connected_control_computer == src && (V.generated || V.generating || generation_in_progress))
+		display_name = V.name
+	data["portal_name"] = display_name
 	if(V)
 		data["generation_status"] = V.generating ? "generating" : (V.generated ? "stable" : "idle")
-		data["current_target"] = list("name" = V.generated ? V.name : "0")
+		data["current_target"] = list("name" = (V.generated || V.generating || generation_in_progress) ? V.name : "0")
 	else
 		data["generation_status"] = "idle"
 		data["current_target"] = null
@@ -102,7 +107,7 @@
 /obj/machinery/computer/portal_control/proc/rescan_for_portal()
 	var/obj/machinery/portal/found_portal
 	for(var/obj/machinery/portal/P in range(3, src))
-		if(QDELETED(P) || (P.machine_stat & (BROKEN|NOPOWER)))
+		if(QDELETED(P) || P.is_dungeon_portal || (P.machine_stat & (BROKEN|NOPOWER)))
 			continue
 		found_portal = P
 		break

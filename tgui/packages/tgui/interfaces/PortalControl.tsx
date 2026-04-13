@@ -377,12 +377,13 @@ export const PortalControl = (props, context) => {
                   </LabeledList.Item>
                 )}
                 {/* DIMENSIONAL ANCHOR shows "Quantum Pocket Space" */}
-                {((current_target?.name && current_target.name !== '0') || generation_in_progress) &&
-                    !cleanup_in_progress ? (
-                        <LabeledList.Item label="DIMENSIONAL ANCHOR">
-                        <Box color="blue">Quantum Pocket Space</Box>
-                        </LabeledList.Item>
-                    ) : null}
+                {current_target?.name &&
+                    current_target.name !== '0' &&
+                    !cleanup_in_progress && (
+                      <LabeledList.Item label="DIMENSIONAL ANCHOR">
+                        <Box color="blue">{current_target.name}</Box>
+                      </LabeledList.Item>
+                    )}
                 {cleanup_in_progress ? (
                   <LabeledList.Item label="EMERGENCY STATUS">
                     <Box color="yellow" bold>
