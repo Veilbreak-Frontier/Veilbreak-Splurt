@@ -1,76 +1,187 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ad" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'icons/turf/shuttle.dmi';
+	icon_state = "diagonalWall";
+	dir = 8;
+	pixel_y = 0
+	},
+/obj/structure/lattice{
+	alpha = 0;
+	color = "#FFFFFF"
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/crew)
 "ao" = (
-/mob/living/basic/void_creature/voidling,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/obj/structure/cable,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"ax" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/obj/structure/tank_holder/extinguisher,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"aZ" = (
-/obj/machinery/button/door/directional/south{
-	id = "whiteship_windows";
-	name = "Windows Blast Door Control";
-	pixel_x = -6
-	},
-/obj/machinery/button/door/directional/south{
-	id = "whiteship_bridge";
-	name = "Bridge Blast Door Control";
-	pixel_x = 6
-	},
-/obj/structure/cable,
+/obj/effect/spawner/random/structure/table_fancy,
+/obj/structure/window/reinforced/survival_pod/spawner/directional/north,
+/obj/effect/spawner/random/decoration/showcase,
 /obj/machinery/light/directional/south,
-/turf/open/floor/iron/dark,
-/area/shuttle/abandoned/bridge)
-"bD" = (
-/turf/open/floor/iron/dark/smooth_half,
-/area/shuttle/abandoned/bridge)
-"cm" = (
-/obj/structure/closet/crate/freezer/blood,
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"cn" = (
-/obj/structure/bed/pod{
-	pixel_y = 1
-	},
-/obj/effect/spawner/random/bedsheet/any,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"dv" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/turf/open/floor/iron/dark/smooth_edge{
-	dir = 8
-	},
-/area/shuttle/abandoned/bridge)
-"dx" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/turf/open/floor/iron/dark/side{
-	dir = 4
-	},
-/area/shuttle/abandoned/engine)
-"dE" = (
-/obj/machinery/door/poddoor/shutters{
-	id = "cargosht"
-	},
 /turf/open/floor/iron/dark/smooth_large,
 /area/shuttle/abandoned/crew)
-"ep" = (
-/obj/machinery/power/shuttle_engine/heater{
+"ax" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "7,13";
+	dir = 1
+	},
+/area/shuttle/abandoned/cargo)
+"aZ" = (
+/obj/structure/closet/crate/freezer/blood,
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"bb" = (
+/obj/machinery/sleeper,
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"bd" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "13,5"
+	},
+/area/shuttle/abandoned/engine)
+"bD" = (
+/obj/structure/fluff/metalpole{
+	dir = 8;
+	pixel_y = 0;
+	pixel_x = 32
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "11,8"
+	},
+/area/shuttle/abandoned/crew)
+"bV" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "12,4";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"ci" = (
+/obj/machinery/firealarm/directional/south,
+/obj/machinery/space_heater/wall_mounted/directional/south{
+	pixel_x = -31
+	},
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 4
+	},
+/mob/living/basic/void_creature/voidling,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"cm" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "5,0";
+	pixel_x = 0;
+	pixel_y = -32
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "5,1";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"cn" = (
+/obj/structure/closet/emcloset/anchored,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 4
+	},
+/turf/open/floor/iron,
+/area/shuttle/abandoned/engine)
+"cr" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/dark/corner{
 	dir = 8
 	},
-/turf/closed/wall/mineral/titanium/nodiagonal,
+/obj/structure/cable,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"cB" = (
+/obj/machinery/power/shuttle_engine/heater{
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "9,24";
+	name = "hull";
+	dir = 2
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
+/area/shuttle/abandoned/bridge)
+"da" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13"
+	},
 /area/shuttle/abandoned/crew)
+"dv" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "10,13";
+	dir = 4
+	},
+/area/shuttle/abandoned/cargo)
+"dx" = (
+/obj/machinery/firealarm/directional/north,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"dA" = (
+/obj/effect/turf_decal/siding/thinplating_new/dark{
+	dir = 8
+	},
+/turf/open/floor/carpet/black,
+/area/shuttle/abandoned/bridge)
+"dE" = (
+/obj/effect/turf_decal/bot,
+/obj/structure/closet/crate/preopen,
+/obj/item/clothing/head/helmet/press,
+/obj/item/clothing/suit/armor/vest/press,
+/obj/item/broadcast_camera,
+/obj/item/camera,
+/obj/item/radio/entertainment/microphone/physical,
+/obj/machinery/airalarm/directional/west,
+/obj/effect/mapping_helpers/airalarm/all_access,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"ep" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "4,5";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
 "es" = (
 /obj/structure/rack,
 /obj/item/storage/toolbox/mechanical{
@@ -90,174 +201,1058 @@
 /turf/open/floor/iron,
 /area/shuttle/abandoned/engine)
 "ex" = (
-/turf/closed/wall/mineral/titanium,
-/area/shuttle/abandoned/engine)
-"eD" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/wagon.dmi';
+	icon_state = "0,0";
+	dir = 2;
+	pixel_y = 0
 	},
-/obj/structure/cable,
-/turf/open/floor/iron/dark/side{
-	dir = 8
+/turf/open/space/basic,
+/area/shuttle/abandoned/crew)
+"ez" = (
+/obj/structure/fluff/metalpole/end/right{
+	dir = 4;
+	pixel_y = 24;
+	pixel_x = -20
+	},
+/obj/structure/marker_beacon/cerulean{
+	light_power = 2;
+	pixel_x = -11;
+	pixel_y = 30
+	},
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/bridge)
+"eD" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "8,52"
 	},
 /area/shuttle/abandoned/crew)
 "eH" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
+	dir = 1
+	},
+/area/shuttle/abandoned/medbay)
+"eX" = (
+/obj/machinery/door/airlock/command{
+	name = "Bridge"
+	},
+/obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/door/airlock/medical{
-	name = "Recovery Room"
-	},
-/obj/machinery/door/firedoor,
-/turf/open/floor/iron/white,
-/area/shuttle/abandoned/crew)
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/bridge)
 "fe" = (
 /obj/structure/toilet{
 	dir = 8
 	},
 /turf/open/floor/iron/freezer,
 /area/shuttle/abandoned/crew)
-"fu" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
+"ff" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
+/area/shuttle/abandoned/cargo)
+"fm" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "thruster";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "3,9";
+	dir = 8
 	},
-/obj/structure/cable,
-/obj/machinery/light/floor,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
+/turf/open/space/basic,
+/area/shuttle/abandoned/cargo)
+"fu" = (
+/obj/machinery/computer/operating{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/dark,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
 "fO" = (
-/obj/structure/table,
-/obj/machinery/microwave,
-/obj/machinery/light/directional/south,
-/turf/open/floor/iron,
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "4,7"
+	},
+/area/shuttle/abandoned/engine)
+"fX" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "0,6";
+	dir = 1
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
+/area/shuttle/abandoned/crew)
+"gs" = (
+/obj/structure/fluff/metalpole/anchor{
+	dir = 8;
+	pixel_x = 32;
+	pixel_y = 0
+	},
+/obj/structure/fluff/metalpole{
+	dir = 8;
+	pixel_y = 32;
+	pixel_x = 32
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "11,9"
+	},
 /area/shuttle/abandoned/crew)
 "gY" = (
-/obj/structure/bed/pod{
-	pixel_y = 1
-	},
-/obj/effect/spawner/random/bedsheet/any,
-/obj/machinery/light/directional/south,
-/turf/open/floor/iron,
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
 /area/shuttle/abandoned/crew)
+"gZ" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/wagon.dmi';
+	icon_state = "12,0";
+	dir = 2;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
 "hy" = (
-/obj/structure/chair/comfy/shuttle{
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "10,13";
 	dir = 4
 	},
-/turf/open/floor/iron/dark/smooth_edge,
-/area/shuttle/abandoned/bridge)
+/area/shuttle/abandoned/medbay)
 "hJ" = (
-/obj/effect/turf_decal/bot,
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"il" = (
-/obj/structure/railing{
-	dir = 4
+/obj/machinery/computer/crew{
+	dir = 2;
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/computer.dmi';
+	icon_state = "computer_left";
+	pixel_x = -16
 	},
-/obj/structure/cable,
-/turf/open/floor/iron/dark/side{
-	dir = 4
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "8,23"
 	},
 /area/shuttle/abandoned/bridge)
-"iQ" = (
-/obj/machinery/door/airlock{
+"hR" = (
+/obj/machinery/door/airlock/bathroom{
+	color = "#e9dfec";
 	name = "Restroom"
 	},
-/turf/open/floor/iron/freezer,
+/turf/open/floor/iron/white/smooth_large,
 /area/shuttle/abandoned/crew)
-"iV" = (
-/mob/living/basic/void_creature/voidling,
-/turf/open/floor/iron/dark/corner{
+"ie" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
 	dir = 4
 	},
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"il" = (
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "1,5";
+	pixel_x = 0;
+	pixel_y = -32
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "1,6";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/structure/lattice,
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"iI" = (
+/obj/machinery/firealarm/directional/north,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/crew)
+"iQ" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "9,23"
+	},
 /area/shuttle/abandoned/bridge)
+"iV" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "8,52";
+	dir = 8
+	},
+/area/shuttle/abandoned/medbay)
+"jf" = (
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "16,8";
+	pixel_x = -32;
+	pixel_y = 0;
+	dir = 2
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "15,16";
+	dir = 2;
+	name = "window";
+	desc = null
+	},
+/area/shuttle/abandoned/crew)
+"jv" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "5,2";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
 "jC" = (
 /obj/structure/sink/directional/east,
 /obj/structure/mirror/directional/west,
 /turf/open/floor/iron/freezer,
 /area/shuttle/abandoned/crew)
 "jS" = (
-/obj/machinery/firealarm/directional/west,
-/obj/effect/turf_decal/bot,
-/obj/structure/closet/crate/preopen,
-/obj/effect/spawner/random/maintenance/three,
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"jZ" = (
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"kl" = (
-/obj/machinery/atmospherics/components/unary/vent_pump/on{
-	dir = 8
-	},
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"kv" = (
-/obj/machinery/power/port_gen/pacman{
-	anchored = 1
-	},
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /turf/open/floor/iron,
 /area/shuttle/abandoned/engine)
+"jZ" = (
+/obj/machinery/power/smes/ship,
+/obj/structure/cable,
+/obj/machinery/light/directional/west,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/engine)
+"kb" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "8,52";
+	dir = 1
+	},
+/area/shuttle/abandoned/crew)
+"kl" = (
+/obj/machinery/door/poddoor/shutters{
+	id = "whiteship_windows"
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "15,14";
+	dir = 2;
+	name = "window";
+	desc = "A window into the nothingness."
+	},
+/area/shuttle/abandoned/crew)
+"kv" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "7,13";
+	dir = 8
+	},
+/area/shuttle/abandoned/crew)
 "kz" = (
 /obj/structure/tank_dispenser,
 /turf/open/floor/iron,
 /area/shuttle/abandoned/crew)
-"lf" = (
-/obj/structure/chair/comfy/shuttle{
+"kT" = (
+/obj/machinery/light/directional/east,
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/atmospherics/components/unary/vent_pump/on{
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/mob/living/basic/void_creature/voidling,
+/obj/machinery/power/apc/auto_name/directional/east,
+/obj/structure/cable,
+/turf/open/floor/iron/white/smooth_corner{
+	dir = 1
+	},
+/area/shuttle/abandoned/crew)
+"lf" = (
+/obj/machinery/atmospherics/components/unary/passive_vent/layer2{
+	dir = 1;
+	alpha = 0
+	},
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "11,2";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"lq" = (
+/obj/machinery/shower/directional/south{
+	reagent_capacity = 60000;
+	pixel_x = 0;
+	pixel_y = 16
+	},
+/obj/item/soap,
+/obj/structure/curtain,
+/obj/structure/drain,
+/turf/open/floor/iron/freezer,
+/area/shuttle/abandoned/crew)
+"ls" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/dark{
 	dir = 8
 	},
-/turf/open/floor/iron/dark/smooth_half,
-/area/shuttle/abandoned/bridge)
-"ls" = (
-/obj/machinery/firealarm/directional/west,
-/obj/effect/spawner/random/structure/table_fancy,
-/obj/structure/window/spawner/directional/south,
-/obj/structure/window/spawner/directional/east,
-/obj/effect/spawner/random/decoration/showcase,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
+/obj/structure/cable,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
 "lt" = (
-/obj/structure/tank_holder/extinguisher,
-/turf/open/floor/iron/dark/smooth_corner{
+/obj/structure/table,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
 	dir = 4
 	},
-/area/shuttle/abandoned/bridge)
+/obj/item/kitchen/fork{
+	pixel_x = 10;
+	pixel_y = 8
+	},
+/obj/item/plate/small{
+	pixel_y = 4
+	},
+/obj/item/reagent_containers/cup/glass{
+	pixel_x = -9;
+	pixel_y = 3
+	},
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
 "lJ" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/firealarm/directional/west,
-/mob/living/basic/void_creature/voidling,
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
+/obj/structure/tank_holder/extinguisher,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/engine)
 "lM" = (
+/obj/machinery/door/poddoor/shutters{
+	id = "whiteship_windows"
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "1,12";
+	dir = 1;
+	name = "window";
+	desc = "A window into the nothingness."
+	},
+/area/shuttle/abandoned/crew)
+"lT" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "7,13";
+	dir = 1
+	},
+/area/shuttle/abandoned/medbay)
+"mn" = (
+/obj/machinery/button/door/directional/south{
+	id = "cargosht";
+	name = "Cargo Shutters";
+	pixel_x = 6;
+	pixel_y = 22
+	},
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"mo" = (
+/obj/structure/fluff/fake_vent,
+/obj/machinery/room_controller/directional/north{
+	pixel_y = 29
+	},
+/obj/machinery/space_heater/wall_mounted/directional/south{
+	cell = /obj/item/stock_parts/power_store/cell/high;
+	pixel_x = -26;
+	pixel_y = -30
+	},
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"mO" = (
+/obj/structure/bed/pod{
+	pixel_y = 1;
+	dir = 1
+	},
+/obj/effect/spawner/random/bedsheet/any{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood/end,
+/turf/open/floor/iron/white/smooth_corner{
+	dir = 4
+	},
+/area/shuttle/abandoned/crew)
+"mQ" = (
+/obj/machinery/door/airlock/glass{
+	name = "Canteen"
+	},
+/obj/structure/cable,
+/obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable,
-/mob/living/basic/void_creature/voidling,
-/turf/open/floor/iron/dark/side{
-	dir = 4
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"nb" = (
+/obj/machinery/door/poddoor/shutters{
+	id = "cargosht"
 	},
-/area/shuttle/abandoned/engine)
-"lT" = (
-/obj/machinery/computer/crew{
+/obj/machinery/door/poddoor/shutters{
+	id = "cargosht"
+	},
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"nj" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13"
+	},
+/area/shuttle/abandoned/medbay)
+"nl" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
 	dir = 8
 	},
-/turf/open/floor/iron/dark/side{
-	dir = 9
+/obj/structure/table,
+/obj/effect/spawner/surgery_tray/full,
+/obj/item/clothing/suit/apron/surgical,
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
 	},
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"nz" = (
+/turf/open/floor/iron/freezer,
+/area/shuttle/abandoned/crew)
+"nJ" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "10,24";
+	dir = 2
+	},
+/obj/structure/lattice{
+	alpha = 0;
+	color = "#FFFFFF"
+	},
+/turf/open/space/basic,
 /area/shuttle/abandoned/bridge)
-"mO" = (
+"nP" = (
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/mob/living/basic/void_creature/voidling,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"nU" = (
 /obj/effect/turf_decal/bot,
 /obj/structure/closet/crate,
 /obj/effect/spawner/random/maintenance/three,
 /turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"nX" = (
+/obj/machinery/atmospherics/components/binary/pump/on/general/hidden/layer2{
+	alpha = 0
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "11,6"
+	},
+/area/shuttle/abandoned/engine)
+"oa" = (
+/obj/machinery/door/airlock/medical{
+	name = "Recovery Room"
+	},
+/obj/structure/cable,
+/obj/machinery/door/firedoor,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"oe" = (
+/obj/machinery/door/poddoor/shutters{
+	id = "cargosht"
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/cargo)
+"oD" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "14,6"
+	},
+/area/shuttle/abandoned/engine)
+"oY" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "1,6";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "1,5";
+	pixel_x = 0;
+	pixel_y = -32
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"oZ" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "8,52";
+	dir = 4
+	},
 /area/shuttle/abandoned/crew)
-"mQ" = (
+"pd" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "15,7"
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "16,7";
+	pixel_x = -32;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/crew)
+"pn" = (
+/obj/structure/bed/pod{
+	pixel_y = 1;
+	dir = 1
+	},
+/obj/effect/spawner/random/bedsheet/any{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/turf/open/floor/iron/white/smooth_corner,
+/area/shuttle/abandoned/crew)
+"pp" = (
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"pB" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/mob/living/basic/void_creature/voidling,
+/obj/structure/cable,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"pK" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "4,6";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"pM" = (
+/obj/machinery/power/apc/auto_name/directional/west,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/bridge)
+"pO" = (
+/obj/item/tank/jetpack,
+/obj/item/tank/jetpack,
+/obj/structure/closet/generic/wall/empty{
+	pixel_x = 28;
+	pixel_y = 0
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"pW" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
+	dir = 1
+	},
+/area/shuttle/abandoned/cargo)
+"qr" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
+	dir = 8
+	},
+/area/shuttle/abandoned/bridge)
+"qK" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "11,7"
+	},
+/area/shuttle/abandoned/crew)
+"rl" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/dark/corner,
+/obj/structure/cable,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"rK" = (
+/obj/machinery/door/poddoor/shutters{
+	id = "whiteship_windows"
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "1,12";
+	name = "window";
+	desc = "A window into the nothingness."
+	},
+/area/shuttle/abandoned/medbay)
+"rN" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "15,6"
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "15,5";
+	pixel_x = 0;
+	pixel_y = -32
+	},
+/obj/structure/lattice,
+/turf/open/space/basic,
+/area/shuttle/abandoned/crew)
+"sg" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "10,23";
+	dir = 2
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13"
+	},
+/area/shuttle/abandoned/bridge)
+"sj" = (
+/obj/effect/turf_decal/bot,
+/obj/machinery/light/directional/west,
+/obj/item/voidshard,
+/obj/structure/closet/crate,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"sx" = (
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "0,8";
+	pixel_x = 32;
+	pixel_y = 0
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals{
+	icon_state = "11,0";
+	dir = 1
+	},
+/area/shuttle/abandoned/medbay)
+"sH" = (
+/obj/effect/turf_decal/bot,
+/obj/structure/closet/crate,
+/obj/effect/spawner/random/maintenance/three,
+/obj/machinery/power/apc/auto_name/directional/west,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"sL" = (
+/obj/effect/turf_decal/siding/thinplating_new/dark{
+	dir = 10
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/button/door/directional/south{
+	id = "whiteship_windows";
+	name = "Windows Blast Door Control";
+	pixel_x = -6
+	},
+/obj/structure/cable,
+/turf/open/floor/carpet/black,
+/area/shuttle/abandoned/bridge)
+"sO" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "7,13"
+	},
+/area/shuttle/abandoned/crew)
+"th" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "7,13";
+	dir = 1
+	},
+/area/shuttle/abandoned/crew)
+"tl" = (
+/obj/structure/cable,
+/obj/machinery/firealarm/directional/south,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/engine)
+"tK" = (
+/obj/machinery/firealarm/directional/east,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"uj" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "thruster";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "3,9";
+	dir = 4
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/crew)
+"ur" = (
+/obj/machinery/door/poddoor/shutters{
+	id = "whiteship_windows"
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "15,11";
+	dir = 2;
+	name = "window";
+	desc = "A window into the nothingness."
+	},
+/area/shuttle/abandoned/crew)
+"uz" = (
+/obj/machinery/door/airlock/external/ruin,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper{
+	dir = 4;
+	late = 8
+	},
+/obj/structure/sign/directions/evac/directional/north{
+	dir = 2;
+	pixel_y = 22
+	},
+/obj/docking_port/mobile{
+	callTime = 250;
+	dir = 4;
+	shuttle_id = "whiteship";
+	launch_status = 0;
+	movement_force = list("KNOCKDOWN" = 0, "THROW" = 0);
+	name = "Hospital Ship";
+	port_direction = 8;
+	preferred_direction = 4
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/crew)
+"vm" = (
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/dark{
+	dir = 10
+	},
+/obj/machinery/power/apc/auto_name/directional/west,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"vn" = (
+/obj/machinery/door/airlock/medical{
+	name = "Crew Quarters"
+	},
+/obj/machinery/door/firedoor,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/cable,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/crew)
+"vy" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "6,22";
+	dir = 2
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
+/area/shuttle/abandoned/bridge)
+"vI" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "10,22";
+	dir = 2
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
+/area/shuttle/abandoned/bridge)
+"wt" = (
+/obj/machinery/computer/shuttle/white_ship/bridge{
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/computer.dmi';
+	pixel_x = -16
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "8,23"
+	},
+/area/shuttle/abandoned/bridge)
+"wG" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "3,5"
+	},
+/area/shuttle/abandoned/engine)
+"wT" = (
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"wX" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "8,52"
+	},
+/area/shuttle/abandoned/cargo)
+"xs" = (
+/obj/machinery/atmos_shield_gen/active,
+/obj/machinery/door/poddoor/shutters{
+	id = "cargosht"
+	},
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"xI" = (
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "16,8";
+	pixel_x = -32;
+	pixel_y = 0;
+	dir = 2
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals{
+	icon_state = "1,0";
+	dir = 1
+	},
+/area/shuttle/abandoned/crew)
+"xO" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
+	dir = 4
+	},
+/area/shuttle/abandoned/bridge)
+"xP" = (
+/obj/machinery/firealarm/directional/west,
+/obj/machinery/space_heater/wall_mounted/directional/south,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/dark{
+	dir = 10
+	},
+/obj/structure/cable,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"xU" = (
+/obj/machinery/light/directional/south,
+/obj/machinery/light_switch/directional/south,
+/turf/open/floor/iron/freezer,
+/area/shuttle/abandoned/crew)
+"yf" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "10,13";
+	dir = 4
+	},
+/area/shuttle/abandoned/engine)
+"yB" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals{
+	icon_state = "11,0"
+	},
+/area/shuttle/abandoned/engine)
+"yF" = (
+/obj/structure/table,
+/obj/item/reagent_containers/cup/soda_cans/cola{
+	pixel_x = -6;
+	pixel_y = 4
+	},
+/obj/item/radio/entertainment/speakers/physical{
+	pixel_x = 4;
+	pixel_y = 4
+	},
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"yY" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/mob/living/basic/void_creature/voidling,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/engine)
+"zh" = (
+/obj/structure/fluff/metalpole{
+	dir = 4;
+	pixel_y = 0;
+	pixel_x = -32
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,11"
+	},
+/area/shuttle/abandoned/cargo)
+"zF" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
+	dir = 1
+	},
+/area/shuttle/abandoned/crew)
+"AC" = (
+/obj/machinery/door/airlock/glass{
+	name = "Preparations Room"
+	},
+/obj/machinery/door/firedoor,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/crew)
+"AS" = (
+/obj/structure/closet/firecloset{
+	anchored = 1
+	},
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 8
+	},
+/turf/open/floor/iron,
+/area/shuttle/abandoned/engine)
+"AT" = (
+/obj/machinery/door/poddoor/shutters{
+	id = "whiteship_windows"
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "15,14";
+	dir = 1
+	},
+/area/shuttle/abandoned/medbay)
+"Bv" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/structure/cable,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"Bw" = (
+/obj/effect/spawner/random/structure/table_fancy,
+/obj/effect/spawner/random/decoration/showcase,
+/obj/structure/window/reinforced/survival_pod/spawner/directional/north,
+/obj/machinery/light/directional/south,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/crew)
+"By" = (
+/obj/machinery/door/airlock/external/ruin,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper{
+	dir = 8
+	},
+/obj/structure/sign/directions/evac/directional/north{
+	dir = 2;
+	pixel_y = 22
+	},
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"BO" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "0,5";
+	dir = 1
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
+/area/shuttle/abandoned/crew)
+"BP" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "7,13";
+	dir = 8
+	},
+/area/shuttle/abandoned/cargo)
+"BR" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wood/corner,
+/turf/open/floor/iron/white/smooth_half{
+	dir = 1
+	},
+/area/shuttle/abandoned/crew)
+"BW" = (
 /obj/structure/closet/secure_closet/freezer{
 	locked = 0;
 	name = "fridge"
@@ -279,250 +1274,453 @@
 /obj/item/food/muffin/berry,
 /obj/item/food/tofu,
 /obj/item/food/burrito,
-/turf/open/floor/iron/dark/corner{
-	dir = 1
-	},
-/area/shuttle/abandoned/crew)
-"nj" = (
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/turf/open/floor/iron/dark/side{
-	dir = 4
-	},
-/area/shuttle/abandoned/bridge)
-"nl" = (
-/obj/machinery/firealarm/directional/west,
-/turf/open/floor/iron/dark/corner,
-/area/shuttle/abandoned/bridge)
-"nz" = (
-/turf/open/floor/iron/dark/smooth_edge{
-	dir = 1
-	},
-/area/shuttle/abandoned/bridge)
-"nU" = (
-/obj/structure/cable,
-/obj/machinery/power/shieldwallgen/anchored,
-/turf/open/floor/plating,
-/area/shuttle/abandoned/bridge)
-"nX" = (
-/obj/machinery/door/poddoor/shutters{
-	id = "whiteship_windows"
-	},
-/obj/effect/spawner/structure/window/reinforced/shuttle,
-/turf/open/floor/plating,
-/area/shuttle/abandoned/crew)
-"oa" = (
-/obj/effect/spawner/random/structure/table_fancy,
-/obj/structure/window/spawner/directional/east,
-/obj/structure/window/spawner/directional/north,
-/obj/effect/spawner/random/decoration/showcase,
 /turf/open/floor/iron,
 /area/shuttle/abandoned/crew)
-"oe" = (
-/obj/structure/sign/departments/restroom{
-	pixel_x = 29
-	},
-/obj/structure/bed/pod{
-	pixel_y = 1
-	},
-/obj/effect/spawner/random/bedsheet/any,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"oD" = (
-/turf/open/space/basic,
-/area/template_noop)
-"oZ" = (
+"Cq" = (
 /obj/machinery/power/shuttle_engine/heater{
-	dir = 8
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "7,24";
+	name = "hull";
+	dir = 2
 	},
-/turf/closed/wall/mineral/titanium/nodiagonal,
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
+/area/shuttle/abandoned/bridge)
+"CF" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "14,4";
+	pixel_x = -32;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "14,3";
+	pixel_x = -32;
+	pixel_y = -32
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "13,3";
+	pixel_x = 0;
+	pixel_y = -32
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "12,3";
+	pixel_x = 32;
+	pixel_y = -32
+	},
+/obj/structure/marker_beacon/jade{
+	pixel_x = -9;
+	pixel_y = 10
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "13,4"
+	},
 /area/shuttle/abandoned/engine)
-"pn" = (
-/mob/living/basic/void_creature/voidling,
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"pB" = (
+"CP" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "15,6"
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "15,5";
+	pixel_x = 0;
+	pixel_y = -32
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"CY" = (
 /obj/structure/table,
-/obj/item/tank/jetpack,
-/obj/item/tank/jetpack{
-	pixel_y = 6
+/obj/item/folder/white{
+	pixel_x = -5;
+	pixel_y = 5
+	},
+/obj/item/reagent_containers/cup/bottle/morphine{
+	pixel_x = 8;
+	pixel_y = 4
+	},
+/obj/item/reagent_containers/syringe{
+	pixel_x = 6;
+	pixel_y = -1
+	},
+/obj/machinery/light/directional/west,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"Db" = (
+/obj/structure/fluff/metalpole/anchor{
+	dir = 4;
+	pixel_x = -32;
+	pixel_y = 0
+	},
+/obj/structure/fluff/metalpole{
+	dir = 4;
+	pixel_y = 32;
+	pixel_x = -32
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,12"
+	},
+/area/shuttle/abandoned/cargo)
+"Dp" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "10,13"
+	},
+/area/shuttle/abandoned/medbay)
+"Du" = (
+/obj/machinery/power/terminal{
+	dir = 8
+	},
+/obj/structure/cable,
+/obj/machinery/space_heater,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/engine)
+"DV" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "7,13";
+	dir = 4
+	},
+/area/shuttle/abandoned/crew)
+"DX" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
+	dir = 4
+	},
+/area/shuttle/abandoned/medbay)
+"En" = (
+/obj/structure/marker_beacon/jade{
+	pixel_x = -9;
+	pixel_y = 10
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
+/area/shuttle/abandoned/crew)
+"Ew" = (
+/obj/effect/turf_decal/siding/thinplating_new/dark{
+	dir = 8
+	},
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
+/turf/open/floor/carpet/black,
+/area/shuttle/abandoned/bridge)
+"FC" = (
+/obj/effect/turf_decal/siding/thinplating_new/dark{
+	dir = 6
+	},
+/obj/machinery/space_heater/wall_mounted/directional/south,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/cable,
+/turf/open/floor/carpet/black,
+/area/shuttle/abandoned/bridge)
+"FJ" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "10,13"
+	},
+/area/shuttle/abandoned/crew)
+"FO" = (
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "16,7";
+	pixel_x = -32;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "15,7"
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/crew)
+"FV" = (
+/obj/structure/fluff/metalpole/end/right{
+	dir = 4;
+	pixel_y = 32;
+	pixel_x = -32
+	},
+/obj/structure/fluff/metalpole/anchor{
+	dir = 4;
+	pixel_x = -32;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "6,9";
+	dir = 1;
+	pixel_x = 32;
+	pixel_y = 32
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "floormed"
+	},
+/area/shuttle/abandoned/cargo)
+"Gs" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "1,8";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "0,8";
+	pixel_x = 32;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"GB" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "12,5";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"GD" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/cable,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"GJ" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals{
+	icon_state = "1,0"
+	},
+/area/shuttle/abandoned/crew)
+"GO" = (
+/obj/machinery/power/port_gen/pacman{
+	anchored = 1
+	},
+/obj/structure/cable,
+/obj/item/wrench,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/engine)
+"GW" = (
+/obj/item/radio/intercom/command/directional/west{
+	pixel_x = -32
+	},
+/obj/machinery/recharge_station,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 4
 	},
 /turf/open/floor/iron,
 /area/shuttle/abandoned/crew)
-"pK" = (
-/obj/machinery/modular_computer/preset/civilian{
-	dir = 8
-	},
-/turf/open/floor/iron/dark/side{
-	dir = 8
-	},
-/area/shuttle/abandoned/bridge)
-"pM" = (
-/obj/machinery/airalarm/directional/north,
-/obj/effect/mapping_helpers/airalarm/all_access,
-/obj/structure/cable,
-/obj/machinery/light/directional/north,
-/turf/open/floor/iron/dark/smooth_edge{
-	dir = 1
-	},
-/area/shuttle/abandoned/bridge)
-"rl" = (
-/obj/machinery/atmos_shield_gen/active{
-	dir = 4
-	},
-/obj/machinery/door/poddoor/shutters{
-	id = "cargosht"
+"GY" = (
+/obj/machinery/light/directional/east,
+/obj/machinery/telecomms/message_server/preset{
+	icon_state = "AAS_On_Open"
 	},
 /turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"rK" = (
-/obj/machinery/power/apc/auto_name/directional/north,
-/obj/structure/cable,
-/obj/structure/railing{
-	dir = 4
-	},
-/turf/open/floor/iron/dark/side{
-	dir = 4
-	},
 /area/shuttle/abandoned/bridge)
-"sg" = (
-/obj/machinery/computer/camera_advanced/shuttle_docker/whiteship{
-	dir = 8;
-	x_offset = -7;
-	y_offset = -8
-	},
-/turf/open/floor/iron/dark/side{
-	dir = 10
-	},
-/area/shuttle/abandoned/bridge)
-"sx" = (
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/obj/structure/fake_stairs/directional/north{
-	icon_state = "stairs-old";
-	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
-	color = "#555555";
-	dir = 4;
-	pixel_y = 1
-	},
-/turf/open/floor/iron/dark/smooth_half,
-/area/shuttle/abandoned/bridge)
-"sH" = (
-/obj/machinery/light/floor,
-/turf/open/floor/iron/freezer,
-/area/shuttle/abandoned/crew)
-"th" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/obj/machinery/power/terminal{
-	dir = 4
-	},
-/obj/structure/cable,
-/turf/open/floor/iron/dark/side{
-	dir = 4
+"Hd" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,7"
 	},
 /area/shuttle/abandoned/engine)
-"tK" = (
-/mob/living/basic/void_creature/voidling,
-/obj/structure/cable,
-/turf/open/floor/iron/dark/smooth_corner{
-	dir = 1
+"Hf" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"Hu" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "10,13"
 	},
-/area/shuttle/abandoned/bridge)
-"ur" = (
-/obj/machinery/shower/directional/south,
-/obj/item/soap,
-/obj/structure/curtain,
-/obj/structure/drain,
-/turf/open/floor/iron/freezer,
-/area/shuttle/abandoned/crew)
-"uz" = (
-/obj/machinery/power/shuttle_engine/propulsion/left{
-	dir = 8
-	},
-/turf/closed/wall/mineral/titanium/nodiagonal,
 /area/shuttle/abandoned/engine)
-"vm" = (
+"HS" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "2,6"
+	},
+/area/shuttle/abandoned/engine)
+"Im" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "12,6";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"Iy" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
+	dir = 4
+	},
+/area/shuttle/abandoned/crew)
+"IG" = (
+/obj/structure/chair/comfy/shuttle{
+	dir = 1;
+	name = "co-pilot seat"
+	},
+/obj/effect/turf_decal/siding/thinplating_new/dark{
+	dir = 9
+	},
+/turf/open/floor/carpet/black,
+/area/shuttle/abandoned/bridge)
+"IQ" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "10,13"
+	},
+/area/shuttle/abandoned/cargo)
+"Jb" = (
+/obj/machinery/airalarm/directional/east,
+/obj/effect/mapping_helpers/airalarm/all_access,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/bridge)
+"Je" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "7,13"
+	},
+/area/shuttle/abandoned/medbay)
+"Jy" = (
+/obj/structure/table,
+/obj/machinery/microwave/frontier_printed{
+	pixel_x = 2;
+	pixel_y = 5
+	},
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"JD" = (
+/obj/machinery/light_switch/directional/west,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/structure/cable,
 /turf/open/floor/iron,
 /area/shuttle/abandoned/crew)
-"vI" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
+"Ks" = (
+/obj/structure/fluff/metalpole/end/right{
+	dir = 4;
+	pixel_y = 24;
+	pixel_x = 2
+	},
+/obj/structure/marker_beacon/cerulean{
+	light_power = 2;
+	pixel_x = 11;
+	pixel_y = 30
+	},
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/bridge)
+"Ld" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "1,8";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "1,7";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "0,7";
+	pixel_x = 32;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"LG" = (
+/obj/machinery/door/airlock/medical{
+	name = "Recovery Room"
 	},
 /obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/medical{
-	name = "Crew Quarters"
-	},
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"wt" = (
-/obj/machinery/button/door/directional/south{
-	id = "cargosht";
-	name = "Cargo Shutters";
-	pixel_x = 6
-	},
-/obj/machinery/light/directional/south,
+/obj/structure/cable,
 /turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"wG" = (
+/area/shuttle/abandoned/medbay)
+"LK" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/light/directional/east,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"wT" = (
-/obj/docking_port/mobile{
-	callTime = 250;
-	dir = 2;
-	shuttle_id = "whiteship";
-	launch_status = 0;
-	movement_force = list("KNOCKDOWN" = 0, "THROW" = 0);
-	name = "Hospital Ship";
-	port_direction = 8;
-	preferred_direction = 4
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/cable,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"LP" = (
+/obj/machinery/space_heater/wall_mounted/directional/south,
+/obj/structure/sink/kitchen/directional/west{
+	pixel_x = 16;
+	pixel_y = 3
 	},
-/obj/machinery/door/airlock/external/ruin,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper,
 /turf/open/floor/iron,
 /area/shuttle/abandoned/crew)
-"wX" = (
-/obj/effect/turf_decal/bot,
-/obj/structure/closet/crate,
-/obj/item/voidshard,
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"xI" = (
-/obj/machinery/power/shuttle_engine/propulsion/right{
+"LQ" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "7,13";
 	dir = 8
 	},
-/turf/closed/wall/mineral/titanium,
-/area/shuttle/abandoned/engine)
-"xP" = (
-/obj/structure/chair{
-	dir = 1
-	},
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"xU" = (
-/obj/structure/cable,
-/turf/open/floor/iron/dark/smooth_corner{
-	dir = 1
-	},
-/area/shuttle/abandoned/bridge)
-"yf" = (
-/turf/closed/wall/mineral/titanium/nodiagonal,
-/area/shuttle/abandoned/bridge)
-"yB" = (
+/area/shuttle/abandoned/medbay)
+"Mm" = (
 /obj/item/reagent_containers/cup/bottle/formaldehyde{
 	pixel_x = 9;
 	pixel_y = 11
@@ -542,952 +1740,969 @@
 /obj/item/reagent_containers/cup/bottle/succubus_milk{
 	pixel_x = -8
 	},
+/obj/machinery/atmospherics/components/unary/vent_pump/on,
 /turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"yF" = (
-/turf/closed/wall/mineral/titanium/nodiagonal,
-/area/shuttle/abandoned/crew)
-"yY" = (
-/obj/structure/tank_holder/extinguisher,
+/area/shuttle/abandoned/medbay)
+"Nr" = (
+/obj/machinery/atmospherics/components/tank/air/layer4,
 /turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"AC" = (
-/obj/structure/sign/departments/engineering,
-/turf/closed/wall/mineral/titanium/nodiagonal,
-/area/shuttle/abandoned/crew)
-"AS" = (
-/obj/machinery/firealarm/directional/west,
-/obj/structure/bed/pod{
-	pixel_y = 1
+/area/shuttle/abandoned/engine)
+"Ny" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "battering ram";
+	desc = "A car needs a bumper to protect it from collisions on the road. Now, this is the bumper for shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "5,9";
+	dir = 1;
+	pixel_x = 0
 	},
-/obj/effect/spawner/random/bedsheet/any,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"AT" = (
-/obj/structure/cable,
-/obj/structure/railing{
-	dir = 6
-	},
-/turf/open/floor/iron/dark/side{
-	dir = 6
-	},
-/area/shuttle/abandoned/bridge)
-"Bw" = (
-/obj/structure/closet/crate/bin,
-/obj/machinery/atmospherics/components/unary/vent_pump/on{
+/turf/open/space/basic,
+/area/shuttle/abandoned/cargo)
+"NB" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/light/directional/west,
-/turf/open/floor/iron/dark/side{
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/dark{
+	dir = 9
+	},
+/obj/structure/cable,
+/obj/machinery/airalarm/directional/west,
+/obj/effect/mapping_helpers/airalarm/all_access,
+/turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"NI" = (
+/obj/machinery/suit_storage_unit/standard_unit,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"NJ" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "battering ram";
+	desc = "A car needs a bumper to protect it from collisions on the road. Now, this is the bumper for shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "1,9";
+	dir = 1;
+	pixel_x = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/crew)
+"NQ" = (
+/obj/structure/marker_beacon/burgundy{
+	pixel_x = 10;
+	pixel_y = 10
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals,
+/area/shuttle/abandoned/cargo)
+"NX" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "1,18"
+	},
+/area/shuttle/abandoned/cargo)
+"Ol" = (
+/obj/structure/lattice{
+	alpha = 0;
+	color = "#FFFFFF"
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "6,8";
+	dir = 1;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/cargo)
+"Oy" = (
+/obj/effect/turf_decal/siding/thinplating_new/dark{
+	dir = 4
+	},
+/obj/machinery/atmospherics/components/unary/vent_pump/on,
+/turf/open/floor/carpet/black,
+/area/shuttle/abandoned/bridge)
+"OK" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "6,24";
+	dir = 2
+	},
+/obj/structure/lattice{
+	alpha = 0;
+	color = "#FFFFFF"
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/bridge)
+"OP" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
+	dir = 8
+	},
+/area/shuttle/abandoned/engine)
+"Pa" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "14,5";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"Ps" = (
+/obj/structure/lattice{
+	alpha = 0;
+	color = "#FFFFFF"
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "0,8";
+	dir = 1;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/crew)
+"Pt" = (
+/obj/structure/lattice{
+	alpha = 0;
+	color = "#FFFFFF"
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'icons/turf/shuttle.dmi';
+	icon_state = "diagonalWall";
+	dir = 6;
+	pixel_y = 0
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/cargo)
+"PA" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
 	dir = 8
 	},
 /area/shuttle/abandoned/crew)
-"By" = (
-/obj/structure/closet/emcloset/anchored,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/engine)
-"BR" = (
-/obj/machinery/atmospherics/components/unary/vent_pump/on{
-	dir = 8
+"PT" = (
+/obj/structure/chair/comfy/shuttle{
+	dir = 1;
+	name = "pilot seat"
 	},
-/obj/structure/table,
-/obj/effect/spawner/surgery_tray/full,
-/obj/item/clothing/suit/apron/surgical,
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"BW" = (
-/obj/machinery/sleeper,
-/obj/machinery/light/directional/east,
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"CP" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
+/obj/effect/turf_decal/siding/thinplating_new/dark{
+	dir = 5
 	},
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"DV" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/mob/living/basic/void_creature/voidling,
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"En" = (
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"Ew" = (
-/obj/structure/tank_holder/extinguisher,
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"Gs" = (
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"GD" = (
-/obj/machinery/power/smes/ship,
-/obj/structure/cable,
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/engine)
-"GJ" = (
-/turf/closed/wall/mineral/titanium/nodiagonal,
-/area/shuttle/abandoned/engine)
-"Hd" = (
-/obj/structure/table,
-/obj/item/reagent_containers/cup/soda_cans/cola{
-	pixel_x = -6;
-	pixel_y = 4
-	},
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Hf" = (
-/obj/machinery/light/floor,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"HS" = (
-/obj/structure/lattice/catwalk,
-/turf/open/space/basic,
+/turf/open/floor/carpet/black,
 /area/shuttle/abandoned/bridge)
-"Iy" = (
-/turf/open/floor/iron/dark/smooth_edge,
-/area/shuttle/abandoned/bridge)
-"IG" = (
-/obj/structure/displaycase/trophy,
-/obj/structure/cable,
-/turf/open/floor/iron/dark/smooth_corner,
-/area/shuttle/abandoned/bridge)
-"IQ" = (
-/obj/machinery/light/directional/west,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Je" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Jy" = (
-/obj/structure/lattice/catwalk,
-/turf/open/space/basic,
-/area/shuttle/abandoned/crew)
-"JD" = (
-/obj/machinery/space_heater,
-/turf/open/floor/iron/dark/corner,
-/area/shuttle/abandoned/engine)
-"Ks" = (
+"PX" = (
 /obj/machinery/atmos_shield_gen/active{
-	dir = 8
+	dir = 1
 	},
 /obj/machinery/door/poddoor/shutters{
 	id = "cargosht"
 	},
 /turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"Ld" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"LK" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
-/obj/machinery/firealarm/directional/west,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"LQ" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
+/area/shuttle/abandoned/cargo)
+"Qe" = (
 /obj/structure/cable,
-/obj/machinery/door/firedoor,
+/obj/machinery/airalarm/directional/north,
+/obj/effect/mapping_helpers/airalarm/all_access,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/engine)
+"Qi" = (
 /obj/machinery/door/airlock/glass{
 	name = "Canteen"
 	},
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Mm" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 4
-	},
 /obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/glass{
-	name = "Preparations Room"
-	},
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Nr" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
-/obj/structure/table,
-/obj/item/folder/white{
-	pixel_x = -5;
-	pixel_y = 5
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"Qj" = (
+/obj/machinery/airalarm/directional/north,
+/obj/effect/mapping_helpers/airalarm/all_access,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
 	},
-/obj/item/reagent_containers/cup/bottle/morphine{
-	pixel_x = 8;
-	pixel_y = 4
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/cable,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"QJ" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "8,52";
+	dir = 4
 	},
-/obj/item/reagent_containers/syringe{
-	pixel_x = 6;
-	pixel_y = -1
+/area/shuttle/abandoned/bridge)
+"QO" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
 	},
-/obj/machinery/light/directional/west,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/dark{
+	dir = 5
+	},
+/obj/structure/cable,
 /turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"NB" = (
-/obj/structure/table,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"NI" = (
-/obj/machinery/suit_storage_unit/standard_unit,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"NX" = (
-/obj/structure/chair/comfy/shuttle{
+/area/shuttle/abandoned/medbay)
+"QV" = (
+/obj/effect/turf_decal/siding/wood,
+/obj/machinery/light_switch/directional/south,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
 	dir = 4
 	},
-/turf/open/floor/iron/dark/smooth_edge{
-	dir = 1
+/turf/open/floor/iron/white/smooth_corner,
+/area/shuttle/abandoned/crew)
+"QW" = (
+/mob/living/basic/void_creature/voidling,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/crew)
+"Rg" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "4,4";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "4,3";
+	pixel_x = 0;
+	pixel_y = -32
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"Ri" = (
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "6,23";
+	dir = 2
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13";
+	dir = 8
 	},
 /area/shuttle/abandoned/bridge)
-"Oy" = (
-/obj/machinery/power/shuttle_engine/propulsion/left{
+"Rk" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/obj/machinery/atmospherics/components/unary/vent_pump/on,
+/turf/open/floor/iron/white/smooth_corner{
 	dir = 8
 	},
-/turf/closed/wall/mineral/titanium/nodiagonal,
 /area/shuttle/abandoned/crew)
-"Pa" = (
-/obj/structure/table,
-/obj/item/gun/ballistic/automatic/pistol/m1911,
-/obj/item/ammo_box/magazine/m45,
-/obj/item/ammo_box/magazine/m45,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"PX" = (
-/obj/machinery/computer/shuttle/white_ship/bridge{
-	dir = 8
-	},
-/turf/open/floor/iron/dark/side{
-	dir = 8
+"Rl" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "10,13";
+	dir = 4
 	},
 /area/shuttle/abandoned/bridge)
-"Qe" = (
+"Ru" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"Ry" = (
+/obj/machinery/light_switch/directional/west,
+/obj/structure/chair,
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 4
+	},
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"RK" = (
+/obj/machinery/firealarm/directional/west,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/bridge)
+"Sl" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
+/area/shuttle/abandoned/cargo)
+"Sw" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "5,6"
+	},
+/area/shuttle/abandoned/engine)
+"Sz" = (
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "11,1";
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "11,0";
+	pixel_x = 0;
+	pixel_y = -32
+	},
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
+"SJ" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "5,13"
+	},
+/area/shuttle/abandoned/bridge)
+"SS" = (
 /obj/machinery/door/airlock/medical{
 	name = "Recovery Room"
 	},
 /obj/machinery/door/firedoor,
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"Qj" = (
-/obj/machinery/portable_atmospherics/canister/oxygen,
-/obj/machinery/atmospherics/components/unary/portables_connector/visible,
-/obj/machinery/airalarm/directional/north,
-/obj/effect/mapping_helpers/airalarm/all_access,
-/obj/machinery/firealarm/directional/east,
-/turf/open/floor/iron/dark/side,
-/area/shuttle/abandoned/engine)
-"QO" = (
-/obj/machinery/atmospherics/components/unary/vent_pump/on{
-	dir = 8
-	},
-/mob/living/basic/void_creature/voidling,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"QW" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/structure/cable,
-/obj/machinery/firealarm/directional/east,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Rk" = (
-/obj/structure/closet/crate{
-	name = "food crate"
-	},
-/obj/item/reagent_containers/cup/glass/waterbottle/large{
-	pixel_x = -5;
-	pixel_y = 3
-	},
-/obj/item/reagent_containers/cup/glass/waterbottle/large{
-	pixel_x = 2;
-	pixel_y = 3
-	},
-/obj/item/reagent_containers/cup/glass/waterbottle/large{
-	pixel_x = -2
-	},
-/obj/item/reagent_containers/cup/glass/waterbottle/large{
-	pixel_x = 5
-	},
-/obj/item/reagent_containers/cup/glass/waterbottle/large{
-	pixel_x = 1;
-	pixel_y = -3
-	},
-/obj/item/reagent_containers/cup/glass/waterbottle/large{
-	pixel_x = 8;
-	pixel_y = -3
-	},
-/obj/item/storage/box/donkpockets{
-	pixel_x = -3;
-	pixel_y = 3
-	},
-/obj/item/storage/box/donkpockets,
-/turf/open/floor/iron/dark/corner{
-	dir = 8
-	},
-/area/shuttle/abandoned/crew)
-"Ru" = (
-/obj/structure/closet/firecloset{
-	anchored = 1
-	},
 /turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/engine)
-"Ry" = (
-/obj/structure/reagent_dispensers/fueltank,
-/obj/item/weldingtool/largetank,
-/turf/open/floor/iron/dark/corner{
-	dir = 4
+/area/shuttle/abandoned/cargo)
+"Ur" = (
+/obj/machinery/computer/camera_advanced/shuttle_docker/whiteship{
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/computer.dmi';
+	icon_state = "computer_right";
+	pixel_x = -16
 	},
-/area/shuttle/abandoned/engine)
-"Sl" = (
-/obj/machinery/door/airlock/external/ruin,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper{
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "7,23"
+	},
+/area/shuttle/abandoned/bridge)
+"Us" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals{
+	icon_state = "9,1";
 	dir = 1
 	},
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Sw" = (
-/obj/effect/spawner/structure/window/reinforced/shuttle,
-/obj/machinery/door/poddoor/shutters{
-	id = "whiteship_windows"
-	},
-/turf/open/floor/plating,
-/area/shuttle/abandoned/crew)
-"Ur" = (
-/obj/effect/spawner/structure/window/reinforced/shuttle,
-/obj/machinery/door/poddoor/shutters{
-	id = "whiteship_bridge"
-	},
-/obj/structure/cable,
-/turf/open/floor/plating,
-/area/shuttle/abandoned/bridge)
+/area/shuttle/abandoned/engine)
 "Ut" = (
-/obj/machinery/iv_drip{
-	pixel_x = -15
+/obj/structure/lattice,
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "2,5";
+	pixel_x = 0;
+	pixel_y = 0
 	},
-/obj/structure/table/optable,
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
 "Uu" = (
+/obj/structure/closet/emcloset/wall{
+	pixel_x = 31;
+	pixel_y = 0
+	},
+/obj/machinery/light/directional/east,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/meter,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/cable,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"Ux" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "12,7"
+	},
+/area/shuttle/abandoned/crew)
+"Vl" = (
+/obj/machinery/light/directional/west,
+/obj/machinery/telecomms/relay/preset/auto{
+	id = "whiteship";
+	icon_state = "hub"
+	},
 /obj/structure/cable,
 /turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/engine)
-"Vl" = (
-/obj/structure/displaycase/trophy,
-/obj/structure/cable,
-/turf/open/floor/iron/dark/smooth_corner{
-	dir = 4
-	},
 /area/shuttle/abandoned/bridge)
 "Vw" = (
-/obj/machinery/atmospherics/components/unary/vent_pump/on{
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "10,13";
 	dir = 4
 	},
-/obj/structure/cable,
-/obj/machinery/power/port_gen/pacman{
-	anchored = 1
-	},
-/obj/item/wrench,
-/obj/machinery/light/directional/west,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/engine)
+/area/shuttle/abandoned/crew)
 "Vz" = (
-/obj/structure/cable,
-/turf/open/floor/iron/dark/smooth_corner{
-	dir = 8
+/obj/structure/fluff/metalpole/end/right{
+	dir = 4;
+	pixel_y = 32;
+	pixel_x = 15
 	},
-/area/shuttle/abandoned/bridge)
+/obj/structure/fluff/metalpole/anchor{
+	dir = 8;
+	pixel_x = 32;
+	pixel_y = 0
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/mining_large.dmi';
+	icon_state = "0,9";
+	dir = 1;
+	pixel_x = -32;
+	pixel_y = 32
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/evac{
+	icon_state = "floormed"
+	},
+/area/shuttle/abandoned/crew)
 "Wu" = (
-/turf/closed/wall/mineral/titanium,
-/area/shuttle/abandoned/crew)
-"Xe" = (
-/obj/machinery/airalarm/directional/north,
-/obj/effect/mapping_helpers/airalarm/all_access,
-/obj/structure/chair,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Xz" = (
-/obj/machinery/computer/operating{
-	dir = 1
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "3,3";
+	pixel_x = 0;
+	pixel_y = -32
 	},
-/turf/open/floor/iron/white/smooth_large,
-/area/shuttle/abandoned/crew)
-"XI" = (
-/obj/effect/turf_decal/bot,
-/obj/structure/closet/crate/preopen,
-/obj/item/clothing/head/helmet/press,
-/obj/item/clothing/suit/armor/vest/press,
-/obj/item/broadcast_camera,
-/obj/item/camera,
-/obj/item/radio/entertainment/microphone/physical,
-/turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/crew)
-"XP" = (
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "2,3";
+	pixel_x = 32;
+	pixel_y = -32
+	},
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "2,4";
+	pixel_x = 32;
+	pixel_y = 0
+	},
+/obj/structure/marker_beacon/burgundy{
+	pixel_x = 10;
+	pixel_y = 10
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "3,4"
+	},
+/area/shuttle/abandoned/engine)
+"Wz" = (
+/obj/effect/turf_decal/siding/thinplating_new/dark{
 	dir = 4
 	},
+/turf/open/floor/carpet/black,
+/area/shuttle/abandoned/bridge)
+"Xe" = (
 /obj/machinery/door/airlock/command{
 	name = "Bridge"
 	},
 /obj/machinery/door/firedoor,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Yg" = (
-/obj/machinery/recharge_station,
-/turf/open/floor/iron,
-/area/shuttle/abandoned/crew)
-"Ys" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/door/airlock/engineering{
-	name = "Engineering"
-	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/structure/cable,
-/obj/machinery/door/firedoor,
 /turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/abandoned/engine)
-"YY" = (
-/obj/machinery/atmospherics/components/tank/air{
-	dir = 1
+/area/shuttle/abandoned/bridge)
+"Xz" = (
+/turf/open/space/basic,
+/area/space)
+"XI" = (
+/turf/closed/wall/mineral/titanium/shuttle_wall/arrivals{
+	icon_state = "9,1"
 	},
-/turf/open/floor/iron/dark/side{
-	dir = 1
-	},
 /area/shuttle/abandoned/engine)
-"Zv" = (
-/obj/structure/closet/crate/freezer/surplus_limbs,
+"XP" = (
+/obj/structure/table/optable,
+/obj/machinery/iv_drip{
+	pixel_x = -15
+	},
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
 /turf/open/floor/iron/white/smooth_large,
+/area/shuttle/abandoned/medbay)
+"XU" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"Yg" = (
+/obj/machinery/door/poddoor/shutters{
+	id = "whiteship_windows"
+	},
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "15,11";
+	dir = 1
+	},
+/area/shuttle/abandoned/medbay)
+"Ys" = (
+/obj/structure/closet/crate/bin,
+/obj/machinery/light/directional/east,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"YY" = (
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron,
+/area/shuttle/abandoned/crew)
+"Zv" = (
+/obj/structure/table,
+/obj/item/gun/ballistic/automatic/pistol/deagle,
+/obj/item/ammo_box/magazine/m50,
+/obj/item/ammo_box/magazine/m50,
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/iron/white/smooth_half,
 /area/shuttle/abandoned/crew)
 "ZE" = (
-/turf/open/floor/iron/dark/smooth_corner,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/cable,
+/turf/open/floor/iron/dark/smooth_large,
 /area/shuttle/abandoned/bridge)
 "ZJ" = (
-/turf/open/floor/iron/dark/smooth_edge{
-	dir = 8
+/turf/closed/wall/mineral/titanium/shuttle_wall/window/evac{
+	icon_state = "8,24"
 	},
 /area/shuttle/abandoned/bridge)
 "ZL" = (
-/obj/structure/railing{
-	dir = 5
+/obj/structure/decorative{
+	anchored = 1;
+	density = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "1,7";
+	pixel_x = 0;
+	pixel_y = 0
 	},
-/obj/structure/cable,
-/turf/open/floor/iron/dark/side{
-	dir = 5
+/obj/structure/decorative{
+	anchored = 1;
+	name = "shuttle hull";
+	desc = "A light-weight titanium wall used in shuttles.";
+	icon = 'modular_skyrat/modules/advanced_shuttles/icons/evac_shuttle.dmi';
+	icon_state = "0,7";
+	pixel_x = 32;
+	pixel_y = 0
 	},
-/area/shuttle/abandoned/bridge)
+/turf/open/space/basic,
+/area/shuttle/abandoned/engine)
 
 (1,1,1) = {"
-oD
-oD
-oD
-oD
-oD
-oD
+Xz
+Xz
+Xz
+Xz
+ad
+kv
+Vw
+Vw
+Iy
+kl
+lM
+ur
+Iy
 uz
-uz
+kv
 xI
-uz
-xI
-oD
-oD
-oD
-oD
-oD
-oD
+pd
+rN
+Xz
+Xz
+Xz
+Xz
+Xz
+Xz
 "}
 (2,1,1) = {"
-oD
-oD
-oD
-oD
-oD
+Xz
+Ps
+fX
+BO
+En
+gY
+lq
+jC
+FJ
+pn
+BR
+mO
+FJ
+mo
+NI
+PA
+oZ
+Vw
 ex
-oZ
-oZ
-oZ
-oZ
-oZ
-ex
-oD
-oD
-oD
-oD
-oD
+Xz
+Xz
+Xz
+Xz
+Xz
 "}
 (3,1,1) = {"
-oD
-oD
-oD
-Jy
-ex
-GJ
+NJ
+Vz
+uj
+gs
+bD
+Iy
+fe
+xU
+th
+Zv
+QV
+kv
+zF
 By
 kv
 Vw
-kv
-es
+kb
+BW
 GJ
-ex
-Jy
-oD
-oD
-oD
+jf
+FO
+CP
+Xz
+Xz
 "}
 (4,1,1) = {"
-oD
-oD
-oD
-Jy
-GJ
+Xz
+Xz
+Xz
+Xz
+Xz
+eD
+DV
+nz
+hR
+Rk
+kT
+vn
 JD
-dx
-th
-lM
+ie
+GW
+kz
 th
 dx
 Ry
-GJ
+lt
 Jy
 oD
-oD
-oD
+Pa
+Xz
 "}
 (5,1,1) = {"
-oD
-oD
-oD
-Jy
-GJ
+Xz
+Xz
+Xz
+Xz
+nJ
+sg
+vI
+Vw
+Vw
+Vw
+Vw
+DV
 Qj
 Uu
 GD
 Ru
-GD
-Uu
+Qi
+Ru
 YY
-GJ
-Jy
-oD
-oD
-oD
+XU
+LP
+Us
+bd
+CF
 "}
 (6,1,1) = {"
-oD
-oD
-oD
-Jy
-yF
-yF
-Ys
-yF
+Xz
+Xz
+Xz
+Xz
+cB
+iQ
+ez
+pM
+Vl
+RK
+eX
+pO
+tK
+sO
 AC
-yF
+kv
+Iy
 Ys
+nP
 yF
-yF
-Jy
-oD
-oD
-oD
+Ux
+Im
+GB
+bV
 "}
 (7,1,1) = {"
-oD
-oD
-nX
-Sw
-Sw
-Rk
-eD
-eD
+Xz
+Xz
+Xz
+Xz
+ZJ
+hJ
+IG
+dA
+Ew
+sL
+SJ
+Vw
+Vw
+zF
+iI
 Bw
 eD
-eD
+DV
 mQ
-Sw
-Sw
+da
+qK
 nX
-oD
-oD
+lf
+Sz
 "}
 (8,1,1) = {"
-oD
+Xz
+Xz
+Xz
+Xz
+ZJ
+wt
+PT
+Wz
 Oy
-Sw
-jZ
-jZ
-jZ
-jZ
+FC
+qr
+hy
+hy
+DX
 QW
 ao
-vm
+Hu
 jZ
-jZ
-jZ
+tl
+OP
 Hd
 Sw
-Oy
-oD
+jv
+cm
 "}
 (9,1,1) = {"
-oD
-ep
-yF
+Xz
+Xz
+Xz
+Xz
+Cq
+Ur
+Ks
+Jb
+GY
+ZE
 Xe
 NB
 xP
-yF
-yF
+lT
+LG
 LQ
-yF
-yF
+eH
+Du
 yY
-jZ
+cn
 fO
-yF
+pK
 ep
-oD
+Rg
 "}
 (10,1,1) = {"
-Wu
-yF
-yF
-yF
-yF
-yF
-yF
+Xz
+Xz
+Xz
+Xz
+OK
+Ri
+vy
+QJ
+Rl
+Rl
+xO
+bb
+cr
+CY
 ls
 vm
 oa
-yF
-yF
-yF
-yF
-yF
-yF
+jS
+jS
+jS
+es
+XI
+wG
 Wu
 "}
 (11,1,1) = {"
-yF
-NI
-jZ
+Xz
+Xz
+Xz
+Xz
+Xz
+wX
+dv
+pW
+sj
+nU
 IQ
-Je
+bb
 LK
 Mm
-Je
+LK
 fu
 Je
 Qe
-Ld
+AS
 lJ
 Nr
-Gs
+HS
 Ut
-yF
+Xz
 "}
 (12,1,1) = {"
-yF
-yF
-yF
+Ny
+FV
+fm
+Db
+zh
+pW
+dE
+sH
+pp
+ci
 ax
-Je
+bb
 pB
-yF
-yF
+LK
+rl
 XP
-yF
-yF
+Dp
+GO
 yB
 Gs
 Ld
-Ld
+oY
 Xz
-Sw
+Xz
 "}
 (13,1,1) = {"
+Xz
+Ol
+NX
+NX
+NQ
+ff
+mn
 wT
 Hf
 Sl
-Je
+SS
 QO
-yF
-yf
+Bv
+aZ
 nl
 nj
 iV
 yf
-yF
-Gs
-BR
-Ld
-Zv
-Sw
+gZ
+Xz
+Xz
+Xz
+Xz
+Xz
 "}
 (14,1,1) = {"
-yF
-yF
-yF
-Je
+Xz
+Xz
+Xz
+Xz
+Pt
+BP
+xs
+nb
+oe
+PX
+BP
 Yg
-yf
+rK
 rK
 AT
 sx
 ZL
 il
-yf
-Gs
-Gs
-DV
 Xz
-Sw
-"}
-(15,1,1) = {"
-yF
-NI
-Je
-wG
-kz
-yf
-IG
-ZJ
-dv
-ZJ
-Vl
-yf
-cm
-BW
-Ld
-Ut
-yF
-"}
-(16,1,1) = {"
-yF
-yF
-vI
-yF
-yF
-yf
-pM
-bD
-lf
-bD
-aZ
-yf
-yF
-yF
-eH
-yF
-yF
-"}
-(17,1,1) = {"
-yF
-cn
-Je
-yF
-yf
-ZE
-tK
-lT
-PX
-sg
-Vz
-lt
-yf
-yF
-CP
-jS
-yF
-"}
-(18,1,1) = {"
-Sw
-Pa
-Je
-AS
-yf
-nz
-xU
-Ur
-Ur
-Ur
-Vz
-Iy
-yf
-mO
-CP
-Ew
-Sw
-"}
-(19,1,1) = {"
-yF
-cn
-QO
-yY
-yf
-NX
-Ur
-Ur
-oD
-Ur
-Ur
-hy
-yf
-hJ
-kl
-wX
-yF
-"}
-(20,1,1) = {"
-Wu
-yF
-jZ
-gY
-yf
-pK
-Ur
-oD
-oD
-oD
-Ur
-pK
-yf
-XI
-En
-yF
-Wu
-"}
-(21,1,1) = {"
-oD
-yF
-jZ
-NB
-yf
-yf
-Ur
-oD
-oD
-oD
-Ur
-yf
-yf
-hJ
-wt
-yF
-oD
-"}
-(22,1,1) = {"
-oD
-yF
-jZ
-oe
-yF
-yF
-nU
-HS
-HS
-HS
-nU
-yF
-wX
-En
-En
-rl
-oD
-"}
-(23,1,1) = {"
-oD
-yF
-iQ
-yF
-yF
-yF
-oD
-oD
-oD
-oD
-oD
-yF
-wX
-pn
-En
-dE
-oD
-"}
-(24,1,1) = {"
-oD
-yF
-sH
-jC
-yF
-Wu
-oD
-oD
-oD
-oD
-oD
-Wu
-yF
-En
-En
-Ks
-oD
-"}
-(25,1,1) = {"
-oD
-yF
-ur
-fe
-yF
-oD
-oD
-oD
-oD
-oD
-oD
-oD
-yF
-wX
-hJ
-yF
-oD
-"}
-(26,1,1) = {"
-oD
-Wu
-yF
-yF
-Wu
-oD
-oD
-oD
-oD
-oD
-oD
-oD
-Wu
-yF
-yF
-Wu
-oD
+Xz
+Xz
+Xz
+Xz
+Xz
 "}

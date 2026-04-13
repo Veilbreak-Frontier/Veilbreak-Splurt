@@ -1,10 +1,8 @@
-// tgui/packages/tgui/interfaces/PortalControl.tsx
-
 import {
   Box,
   Button,
-  Icon,
-  LabeledList,
+  Divider,
+  NoticeBox,
   ProgressBar,
   Section,
   Stack,
@@ -25,264 +23,178 @@ interface PortalControlData {
   generation_in_progress: boolean;
   cleanup_in_progress: boolean;
   portal_name?: string;
+  void_boss_kills: number;
+  void_creature_health_scale: number;
+  void_creature_damage_scale: number;
 }
 
-export const PortalControl = (props, context) => {
-  const { act, data } = useBackend<PortalControlData>(context);
+type NoticeKind = 'info' | 'success' | 'danger' | 'warn';
 
+type DerivedState = {
+  title: string;
+  subtitle: string;
+  notice: NoticeKind;
+  showProgress: boolean;
+  progress: number;
+  canOpen: boolean;
+  canClose: boolean;
+};
+
+function deriveState(d: PortalControlData): DerivedState {
   const {
+    cleanup_in_progress,
     portal_present,
     portal_status,
-    portal_active,
-    current_target,
-    generation_status,
-    generation_progress,
-    can_generate,
     generation_in_progress,
-    cleanup_in_progress,
+    portal_active,
+    can_generate,
+    generation_status,
     portal_name,
+    generation_progress,
+  } = d;
+
+  if (cleanup_in_progress) {
+    return {
+      title: 'Closing pocket',
+      subtitle:
+        'The dungeon is being torn down and the portal link is clearing.',
+      notice: 'warn',
+      showProgress: false,
+      progress: 0,
+      canOpen: false,
+      canClose: false,
+    };
+  }
+  if (!portal_present) {
+    return {
+      title: 'No portal in range',
+      subtitle:
+        'Keep a powered station portal within 3 tiles, then press Rescan Matrix.',
+      notice: 'danger',
+      showProgress: false,
+      progress: 0,
+      canOpen: false,
+      canClose: false,
+    };
+  }
+  if (!portal_status) {
+    return {
+      title: 'Portal not usable',
+      subtitle: 'Needs power, must be anchored, and must not be broken.',
+      notice: 'warn',
+      showProgress: false,
+      progress: 0,
+      canOpen: false,
+      canClose: false,
+    };
+  }
+  if (generation_in_progress) {
+    return {
+      title: 'Opening dungeon',
+      subtitle: 'Generating pocket space and loading the map.',
+      notice: 'info',
+      showProgress: true,
+      progress: Math.min(100, Math.max(0, generation_progress)),
+      canOpen: false,
+      canClose: false,
+    };
+  }
+  if (generation_status === 'generating' && !portal_active) {
+    return {
+      title: 'Finishing link',
+      subtitle: 'Waiting for the portal to finish coming online.',
+      notice: 'info',
+      showProgress: false,
+      progress: 0,
+      canOpen: false,
+      canClose: false,
+    };
+  }
+  if (portal_active) {
+    return {
+      title: 'Dungeon open',
+      subtitle: portal_name
+        ? `Active pocket: ${portal_name}`
+        : 'The portal is on and the wormhole is stable.',
+      notice: 'success',
+      showProgress: false,
+      progress: 0,
+      canOpen: false,
+      canClose: true,
+    };
+  }
+  if (can_generate) {
+    return {
+      title: 'Idle',
+      subtitle: 'Portal is ready. Open a dungeon when your crew is prepared.',
+      notice: 'success',
+      showProgress: false,
+      progress: 0,
+      canOpen: true,
+      canClose: false,
+    };
+  }
+  return {
+    title: 'Standby',
+    subtitle:
+      'State is unclear. If the portal moved, use Rescan Matrix to relink.',
+    notice: 'warn',
+    showProgress: false,
+    progress: 0,
+    canOpen: false,
+    canClose: false,
+  };
+}
+
+function StatusNotice(props: {
+  kind: NoticeKind;
+  title: string;
+  subtitle: string;
+}) {
+  const { kind, title, subtitle } = props;
+  const body = (
+    <Box>
+      <Box bold>{title}</Box>
+      <Box color="label" mt={0.5}>
+        {subtitle}
+      </Box>
+    </Box>
+  );
+  if (kind === 'info') {
+    return <NoticeBox info>{body}</NoticeBox>;
+  }
+  if (kind === 'success') {
+    return <NoticeBox success>{body}</NoticeBox>;
+  }
+  if (kind === 'danger') {
+    return <NoticeBox danger>{body}</NoticeBox>;
+  }
+  return <NoticeBox color="yellow">{body}</NoticeBox>;
+}
+
+const fmtScale = (n: number) =>
+  (Math.round(n * 100) / 100).toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+
+export const PortalControl = (props) => {
+  const { act, data } = useBackend<PortalControlData>();
+  const {
+    void_boss_kills = 0,
+    void_creature_health_scale = 1,
+    void_creature_damage_scale = 1,
   } = data;
 
-  // Enhanced state detection to prevent UI flashing
-  const isInTransitionState = () => {
-    // If any of these are true, we're in a transitional state
-    return cleanup_in_progress || generation_in_progress;
-  };
-
-  const isPortalStable = () => {
-    // Portal is considered stable when it's active and not in any transitional state
-    return portal_active && !isInTransitionState();
-  };
-
-  const isReadyForNewGeneration = () => {
-    // Only show generate button when:
-    // - Not in any transitional state
-    // - Portal is not active
-    // - Can generate is true
-    // - Portal is present and powered
-    return (
-      can_generate &&
-      !isInTransitionState() &&
-      !portal_active &&
-      portal_present &&
-      portal_status
-    );
-  };
-
-  // Enhanced status indicators with void-space theme
-  const getPortalStatus = () => {
-    if (cleanup_in_progress) {
-      return {
-        color: 'yellow',
-        icon: 'exclamation-triangle',
-        text: 'CONDUIT COLLAPSING',
-        description: 'Emergency dimensional collapse in progress',
-      };
-    }
-    if (!portal_present) {
-      return {
-        color: 'violet',
-        icon: 'unlink',
-        text: 'VOID CONDUIT OFFLINE',
-        description: 'No dimensional conduit detected',
-      };
-    }
-    if (!portal_status) {
-      return {
-        color: 'yellow',
-        icon: 'bolt',
-        text: 'POWER FLUCTUATION',
-        description: 'Insufficient energy signature',
-      };
-    }
-    if (portal_active) {
-      return {
-        color: 'good',
-        icon: 'portal',
-        text: 'VOID SPACE ACTIVE',
-        description: 'Dimensional bridge stabilized',
-      };
-    }
-    if (generation_in_progress) {
-      return {
-        color: 'blue',
-        icon: 'cog',
-        text: 'REALITY STABILIZATION',
-        description: 'Calibrating dimensional matrix',
-      };
-    }
-    return {
-      color: 'blue',
-      icon: 'check',
-      text: 'VOID CONDUIT READY',
-      description: 'Awaiting dimensional breach',
-    };
-  };
-
-  const status = getPortalStatus();
-
-  // Determine which main content to show
-  const getMainContent = () => {
-    if (cleanup_in_progress) {
-      return (
-        <Box textAlign="center">
-          <Icon name="exclamation-triangle" size={4} color="yellow" />
-          <Box bold fontSize="1.4rem" color="yellow" mt={1}>
-            CONDUIT COLLAPSE INITIATED
-          </Box>
-          <Box color="yellow" bold mt={1} fontSize="1.1rem">
-            <Icon name="radiation" mr={1} />
-            EMERGENCY DIMENSIONAL COLLAPSE IN PROGRESS
-          </Box>
-          <Box textAlign="center" color="label" fontSize="0.9rem" mt={2}>
-            <Icon name="clock" mr={1} />
-            Stabilizing space-time continuum...
-          </Box>
-        </Box>
-      );
-    }
-
-    if (generation_in_progress) {
-      const safeProgress = Math.max(1, generation_progress);
-      return (
-        <Box textAlign="center">
-          <Box mb={2}>
-            <Icon name="cog" spin mr={1} size={1.5} />
-            <strong>STABILIZING VOID SPACE MATRIX</strong>
-          </Box>
-          <ProgressBar
-            value={safeProgress / 100}
-            color="blue"
-            ranges={{
-              good: [0.75, 1],
-              average: [0.25, 0.75],
-              bad: [0, 0.25],
-            }}
-          >
-            Dimensional Coherence: {safeProgress}%
-          </ProgressBar>
-          <Box mt={1} color="label" fontSize="0.9rem">
-            Reality recalibration in progress...
-          </Box>
-        </Box>
-      );
-    }
-
-    // NEW: Check if we're in a post-generation but pre-activation state
-    if (generation_status === 'generating' && !generation_in_progress) {
-      return (
-        <Box textAlign="center">
-          <Icon name="cog" spin size={3} color="blue" />
-          <Box bold fontSize="1.2rem" color="blue" mt={1}>
-            FINALIZING CONNECTION
-          </Box>
-          <Box fontSize="0.9rem" mt={1} color="label">
-            Establishing dimensional bridge...
-          </Box>
-        </Box>
-      );
-    }
-
-    // UPDATED: Use the new ready check instead of can_generate
-    if (isReadyForNewGeneration()) {
-      return (
-        <Box
-          textAlign="center"
-          height="100%"
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Button
-            fontSize="1.4rem"
-            lineHeight="1.2"
-            height="4rem"
-            width="20rem"
-            color="good"
-            onClick={() => act('generate_new')}
-            tooltip="Initiate dimensional breach protocol"
-          >
-            <Box textAlign="center">
-              <Icon name="portal" mr={1} size={1.5} />
-              BREACH VOID SPACE
-              <Box fontSize="0.9rem" opacity={0.8} mt={0.5}>
-                Initialize Dimensional Conduit
-              </Box>
-            </Box>
-          </Button>
-        </Box>
-      );
-    }
-
-    if (portal_active) {
-      return (
-        <Box textAlign="center">
-          <Icon name="portal" size={4} color="good" />
-          <Box bold fontSize="1.4rem" color="good" mt={1}>
-            VOID SPACE CONDUIT ACTIVE
-          </Box>
-          {portal_name && (
-            <Box color="violet" bold mt={1} fontSize="1.1rem">
-              <Icon name="link" mr={1} />
-              Connected to: {portal_name}
-            </Box>
-          )}
-        </Box>
-      );
-    }
-
-    if (!portal_present) {
-      return (
-        <Box textAlign="center" color="average">
-          <Icon name="exclamation-triangle" size={3} />
-          <Box bold fontSize="1.2rem" mt={1}>
-            VOID CONDUIT OFFLINE
-          </Box>
-          <Box fontSize="0.9rem" mt={1}>
-            No dimensional conduit detected in local space-time
-          </Box>
-        </Box>
-      );
-    }
-
-    if (!portal_status) {
-      return (
-        <Box textAlign="center" color="yellow">
-          <Icon name="bolt" size={3} />
-          <Box bold fontSize="1.2rem" mt={1}>
-            ENERGY SIGNATURE UNSTABLE
-          </Box>
-          <Box fontSize="0.9rem" mt={1}>
-            Conduit requires stable power source for operation
-          </Box>
-        </Box>
-      );
-    }
-
-    // Ready state - portal present, powered, but not active
-    // This state should only show when we're truly ready, not during transitions
-    return (
-      <Box textAlign="center" color="blue">
-        <Icon name="check-circle" size={3} />
-        <Box bold fontSize="1.2rem" mt={1}>
-          VOID CONDUIT READY
-        </Box>
-        <Box fontSize="0.9rem" mt={1}>
-          Dimensional conduit prepared for breach sequence
-        </Box>
-      </Box>
-    );
-  };
+  const derived = deriveState(data);
 
   return (
-    <Window width={500} height={460} theme="void">
+    <Window width={440} height={420} theme="void" title="Portal control">
       <Window.Content>
         <Stack vertical fill>
-          {/* Header Status Panel */}
           <Stack.Item>
             <Section
-              title="VOID SPACE CONDUIT CONTROL"
+              title="Status"
               buttons={
                 <Button
                   icon="sync-alt"
@@ -293,106 +205,84 @@ export const PortalControl = (props, context) => {
                 </Button>
               }
             >
-              <LabeledList>
-                <LabeledList.Item label="DIMENSIONAL STATUS">
-                  <Box color={status.color} bold>
-                    <Icon
-                      name={status.icon}
-                      spin={generation_in_progress && !cleanup_in_progress}
-                      mr={1}
-                    />
-                    {status.text}
-                  </Box>
-                  <Box color="label" fontSize="0.8rem" mt={0.5}>
-                    {status.description}
-                  </Box>
-                </LabeledList.Item>
-                {portal_name && portal_active && !cleanup_in_progress && (
-                  <LabeledList.Item label="ACTIVE CONNECTION">
-                    <Box color="violet" bold>
-                      <Icon name="external-link-alt" mr={1} />
-                      {portal_name}
-                    </Box>
-                  </LabeledList.Item>
-                )}
-              </LabeledList>
+              <StatusNotice
+                kind={derived.notice}
+                title={derived.title}
+                subtitle={derived.subtitle}
+              />
+              {derived.showProgress && (
+                <Box mt={1}>
+                  <ProgressBar
+                    value={derived.progress / 100}
+                    minValue={0}
+                    maxValue={1}
+                    color="blue"
+                  >
+                    {derived.progress}%
+                  </ProgressBar>
+                </Box>
+              )}
             </Section>
           </Stack.Item>
 
-          {/* Main Operations Panel - Centered content */}
-          <Stack.Item grow>
-            <Section
-              title="VOID SPACE OPERATIONS"
-              fill
-              buttons={
-                portal_active && !cleanup_in_progress ? (
+          <Stack.Item>
+            <Section title="Dungeon">
+              <Stack vertical>
+                <Stack.Item>
                   <Button
-                    icon="power-off"
+                    fluid
+                    icon="door-open"
+                    color="good"
+                    disabled={!derived.canOpen}
+                    onClick={() => act('generate_new')}
+                  >
+                    Open dungeon
+                  </Button>
+                </Stack.Item>
+                <Stack.Item>
+                  <Button
+                    fluid
+                    icon="door-closed"
                     color="bad"
+                    disabled={!derived.canClose}
                     onClick={() => act('deactivate')}
                   >
-                    COLLAPSE CONDUIT
+                    Close dungeon
                   </Button>
-                ) : null
-              }
-            >
-              {/* Centered container for all content */}
-              <Box
-                height="100%"
-                width="100%"
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-              >
-                {getMainContent()}
-              </Box>
+                </Stack.Item>
+              </Stack>
             </Section>
           </Stack.Item>
 
-          {/* Diagnostics Panel */}
           <Stack.Item>
-            <Section title="CONDUIT DIAGNOSTICS">
-              <LabeledList>
-                <LabeledList.Item label="CONDUIT HARDWARE">
-                  <Box color={portal_present ? 'good' : 'violet'}>
-                    {portal_present
-                      ? 'SPACE-TIME SIGNATURE DETECTED'
-                      : 'NO CONDUIT DETECTED'}
+            <Divider />
+            <Section title="Void retaliation">
+              <Box color="label" mb={1} fontSize="0.9rem">
+                Void bosses you destroy make void creatures tougher in later
+                pockets (health and damage scale up).
+              </Box>
+              <Box>
+                <Box>
+                  <Box inline color="label" width="10rem">
+                    Bosses defeated
                   </Box>
-                </LabeledList.Item>
-                <LabeledList.Item label="ENERGY MATRIX">
-                  <Box color={portal_status ? 'good' : 'yellow'}>
-                    {portal_status ? 'QUANTUM STABILIZED' : 'FLUCTUATING'}
+                  <Box inline bold>
+                    {void_boss_kills}
                   </Box>
-                </LabeledList.Item>
-                {/* Show generation status during transitions */}
-                {(generation_in_progress ||
-                  generation_status === 'generating') && (
-                  <LabeledList.Item label="DIMENSIONAL STABILITY">
-                    <Box color="blue">
-                      <Icon name="cog" spin mr={1} />
-                      REALITY CALIBRATION: {generation_progress}%
-                    </Box>
-                  </LabeledList.Item>
-                )}
-                {/* DIMENSIONAL ANCHOR shows "Quantum Pocket Space" */}
-                {current_target?.name &&
-                    current_target.name !== '0' &&
-                    !cleanup_in_progress && (
-                      <LabeledList.Item label="DIMENSIONAL ANCHOR">
-                        <Box color="blue">{current_target.name}</Box>
-                      </LabeledList.Item>
-                    )}
-                {cleanup_in_progress ? (
-                  <LabeledList.Item label="EMERGENCY STATUS">
-                    <Box color="yellow" bold>
-                      <Icon name="exclamation-triangle" mr={1} />
-                      SPACE-TIME COLLAPSE IN PROGRESS
-                    </Box>
-                  </LabeledList.Item>
-                ) : null}
-              </LabeledList>
+                </Box>
+                <Box mt={0.5}>
+                  <Box inline color="label" width="10rem">
+                    Creature HP
+                  </Box>
+                  <Box inline>×{fmtScale(void_creature_health_scale)}</Box>
+                </Box>
+                <Box mt={0.5}>
+                  <Box inline color="label" width="10rem">
+                    Creature damage
+                  </Box>
+                  <Box inline>×{fmtScale(void_creature_damage_scale)}</Box>
+                </Box>
+              </Box>
             </Section>
           </Stack.Item>
         </Stack>
