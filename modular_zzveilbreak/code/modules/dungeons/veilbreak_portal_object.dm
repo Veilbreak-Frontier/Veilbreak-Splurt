@@ -117,6 +117,8 @@
 	if(!target || !target.dungeon_z_level)
 		return
 
+	var/datum/portal_destination/veilbreak/saved_dest = target
+
 	var/turf/eject_to
 	var/obj/machinery/portal/station_portal = GLOB.station_veilbreak_portal
 
@@ -129,8 +131,13 @@
 		if(!eject_to)
 			eject_to = get_turf(src)
 
+<<<<<<< HEAD
 	var/z_to_clear = target.dungeon_z_level
 	var/processed_count = 0
+=======
+	var/z_to_clear = saved_dest.dungeon_z_level
+	var/ejected_count = 0
+>>>>>>> e8e479e648d (buncha portal updates)
 
 	for(var/mob/M in GLOB.mob_list)
 		if(M.z != z_to_clear)
@@ -156,7 +163,7 @@
 		if(processed_count % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
 			CHECK_TICK
 
-	target.cleanup_z_level_completely(z_to_clear, eject_to)
+	saved_dest.cleanup_z_level_completely(z_to_clear, eject_to, TRUE)
 
 	transport_active = FALSE
 	if(bumper)
@@ -165,6 +172,9 @@
 
 	target = null
 	update_appearance()
+	// Return-pocket datum (no console); console-owned destination is QDEL_IN from cleanup shutdown.
+	if(istype(saved_dest) && !saved_dest.connected_control_computer)
+		qdel(saved_dest)
 
 /obj/machinery/portal/proc/activate_bumpers()
 	if(bumper)

@@ -42,6 +42,21 @@
     AddElement(/datum/element/simple_flying)
     AddElement(/datum/element/ai_retaliate)
     faction |= FACTION_HOSTILE
+    apply_veilbreak_void_creature_stat_scaling()
+
+/// Applies GLOB veilbreak_void_creature_*_scale to this mob (void trash only; megafauna use another type path).
+/mob/living/basic/void_creature/proc/apply_veilbreak_void_creature_stat_scaling()
+    var/h_mult = GLOB.veilbreak_void_creature_health_scale
+    var/d_mult = GLOB.veilbreak_void_creature_damage_scale
+    if(h_mult == 1 && d_mult == 1)
+        return
+    if(h_mult != 1)
+        maxHealth = max(1, ROUND_UP(maxHealth * h_mult))
+        health = maxHealth
+    if(d_mult != 1)
+        melee_damage_lower = max(0, ROUND_UP(melee_damage_lower * d_mult))
+        melee_damage_upper = max(melee_damage_lower, ROUND_UP(melee_damage_upper * d_mult))
+        obj_damage = max(0, ROUND_UP(obj_damage * d_mult))
 
 /mob/living/basic/void_creature/death(gibbed)
     if(!gibbed)

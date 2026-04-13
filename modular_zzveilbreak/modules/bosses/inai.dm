@@ -115,6 +115,7 @@
 			new loot(loc)
 		var/msg = pick(death_messages)
 		visible_message("<span style='color:#8a2be2; font-style:italic; '>[msg]</span>")
+		veilbreak_void_creature_scaling_on_void_boss_death()
 		..()
 
 // Astral Step ability

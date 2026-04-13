@@ -73,6 +73,13 @@
 
 	var/newly_created_z = FALSE
 
+	// Console deactivate deletes the destination datum; the next generate_new starts fresh with
+	// dungeon_z_level 0. Re-bind the reserved pocket Z so we wipe and reload that level instead of add_new_zlevel().
+	if(!dungeon_z_level || dungeon_z_level < 1 || dungeon_z_level > world.maxz)
+		var/glob_z = GLOB.portal_dungeon_z_level
+		if(isnum(glob_z) && glob_z >= 1 && glob_z <= world.maxz)
+			dungeon_z_level = glob_z
+
 	if(dungeon_z_level && dungeon_z_level <= world.maxz && dungeon_z_level > 0)
 		if(spawn_station_portal)
 			spawn_station_portal.transport_active = FALSE
@@ -225,7 +232,31 @@
 		if(T.x % 100 == 0)
 			CHECK_TICK
 
-/datum/portal_destination/veilbreak/proc/cleanup_z_level_completely(z_level, turf/ejection_turf)
+/// After the dungeon Z is wiped, the station gateway must go dark (paired dungeon portals are gone).
+/// If delete_station_destination_datum, the main /datum/portal_destination/veilbreak (console target) is queued for deletion.
+/proc/veilbreak_shutdown_station_portal_after_z_wipe(z_level, delete_station_destination_datum = FALSE)
+	var/obj/machinery/portal/station = GLOB.station_veilbreak_portal
+	if(!station || QDELETED(station))
+		return
+	var/datum/portal_destination/veilbreak/V = station.target
+	if(!istype(V) || V.dungeon_z_level != z_level)
+		return
+	if(V.connected_control_computer)
+		V.connected_control_computer.generation_in_progress = FALSE
+	station.target = null
+	station.transport_active = FALSE
+	if(station.bumper)
+		qdel(station.bumper)
+		station.bumper = null
+	station.update_appearance()
+	V.spawn_station_portal = null
+	V.generated = FALSE
+	V.generating = FALSE
+	V.current_request_id = 0
+	if(delete_station_destination_datum)
+		QDEL_IN(V, 0)
+
+/datum/portal_destination/veilbreak/proc/cleanup_z_level_completely(z_level, turf/ejection_turf, delete_station_destination_datum = FALSE)
 	if(cleanup_in_progress)
 		return
 	cleanup_in_progress = TRUE
@@ -240,9 +271,56 @@
 				AM.forceMove(ejection_turf)
 			continue
 
+<<<<<<< HEAD
 		qdel(AM)
 		processed++
 		if(processed % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+=======
+			if(istype(AM, /mob/living))
+				var/mob/living/L = AM
+				if(should_eject_mob(L))
+					should_eject = TRUE
+					to_eject = L
+
+			if(istype(AM, /obj/item/organ/brain))
+				var/obj/item/organ/brain/brain_organ = AM
+				if(brain_organ.brainmob && (brain_organ.brainmob.client || brain_organ.brainmob.mind))
+					should_eject = TRUE
+					to_eject = brain_organ
+
+			if(istype(AM, /obj/item/mmi))
+				var/obj/item/mmi/mmi = AM
+				if(mmi.brainmob && (mmi.brainmob.client || mmi.brainmob.mind))
+					should_eject = TRUE
+					to_eject = mmi
+
+			if(should_eject && ejection_turf && to_eject)
+				to_eject.forceMove(ejection_turf)
+				continue
+
+			if(istype(AM, /obj/machinery/portal))
+				var/obj/machinery/portal/port = AM
+				if(port.is_dungeon_portal && istype(port.target, /datum/portal_destination/veilbreak))
+					var/datum/portal_destination/veilbreak/aux = port.target
+					port.target = null
+					if(aux != src)
+						qdel(aux)
+
+			if(istype(AM, /mob/living))
+				var/mob/living/L = AM
+				if(L.ai_controller)
+					var/datum/ai_controller/AC = L.ai_controller
+					L.ai_controller = null
+					qdel(AC)
+
+			qdel(AM)
+			if(AM && !QDELETED(AM))
+				AM.moveToNullspace()
+
+		T.ChangeTurf(/turf/open/space/basic, flags = CHANGETURF_INHERIT_AIR)
+
+		if(T.x == world.maxx && T.y % 10 == 0)
+>>>>>>> e8e479e648d (buncha portal updates)
 			CHECK_TICK
 
 	var/list/turfs = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
@@ -254,6 +332,7 @@
 
 	generated = FALSE
 	cleanup_in_progress = FALSE
+	veilbreak_shutdown_station_portal_after_z_wipe(z_level, delete_station_destination_datum)
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)
 	log_world("Veilbreak Generation Failed: [reason]")
@@ -266,7 +345,7 @@
 		fdel(temp_map_file)
 		temp_map_file = null
 	if(dungeon_z_level)
-		cleanup_z_level_completely(dungeon_z_level, null)
+		cleanup_z_level_completely(dungeon_z_level, null, TRUE)
 	if(connected_control_computer)
 		connected_control_computer.on_generation_failed(reason)
 	spawn_station_portal = null
