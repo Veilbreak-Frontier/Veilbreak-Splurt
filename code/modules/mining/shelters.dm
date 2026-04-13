@@ -17,7 +17,7 @@
 /datum/map_template/shelter/New()
 	. = ..()
 	blacklisted_turfs = typecacheof(/turf/closed)
-	banned_areas = typecacheof(list(/area/shuttle, /area/station/holodeck))
+	banned_areas = typecacheof(list(/area/shuttle, /area/station/holodeck, /area/misc/hilbertshotel, /area/dungeon/inside, /area/dungeon/outside, /area/dungeon/outside))
 
 /datum/map_template/shelter/proc/check_deploy(turf/deploy_location, obj/item/survivalcapsule/capsule, ignore_flags = NONE)
 	var/affected = get_affected_turfs(deploy_location, centered=TRUE)
