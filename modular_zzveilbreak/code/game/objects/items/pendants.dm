@@ -127,23 +127,23 @@
 		if(healed_total >= 100)
 			break
 		var/heal_amount = min(20, 100 - healed_total)
-		t.adjust_brute_loss(-heal_amount)
-		t.adjust_fire_loss(-heal_amount)
-		t.adjust_tox_loss(-heal_amount)
-		t.adjust_oxy_loss(-heal_amount)
+		// Brute/burn: carbons heal via damaged bodyparts; simple mobs use overall adjust
+		t.heal_overall_damage(heal_amount, heal_amount)
+		t.heal_damage_type(heal_amount, TOX)
+		t.heal_damage_type(heal_amount, OXY)
 		healed_total += heal_amount
-	to_chat(owner, span_notice("The Life Pendant heals nearby allies!."))
-	addtimer(CALLBACK(pendant, PROC_REF(end_cooldown)), pendant.cooldown_time)
+	to_chat(owner, span_notice("The Life Pendant heals nearby allies!"))
+	addtimer(CALLBACK(pendant, TYPE_PROC_REF(/obj/item/clothing/neck/life_pendant, end_cooldown)), pendant.cooldown_time)
 
 /obj/item/clothing/neck/life_pendant/process(seconds_per_tick)
 	if(!ismob(loc))
 		return
 	var/mob/living/user = loc
 	if(user.health < user.maxHealth)
-		user.adjust_brute_loss(-0.5 * seconds_per_tick)
-		user.adjust_fire_loss(-0.5 * seconds_per_tick)
-		user.adjust_tox_loss(-0.5 * seconds_per_tick)
-		user.adjust_oxy_loss(-0.5 * seconds_per_tick)
+		var/heal_tick = 0.5 * seconds_per_tick
+		user.heal_overall_damage(heal_tick, heal_tick)
+		user.heal_damage_type(heal_tick, TOX)
+		user.heal_damage_type(heal_tick, OXY)
 
 /obj/item/clothing/neck/life_pendant/proc/end_cooldown()
 	on_cooldown = FALSE
