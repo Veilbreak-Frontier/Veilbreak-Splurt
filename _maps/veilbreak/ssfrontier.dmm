@@ -7550,10 +7550,6 @@
 /turf/open/floor/iron/dark,
 /area/station/hallway/primary/central)
 "dVQ" = (
-/obj/machinery/gateway{
-	destination_name = "??????";
-	icon_state = "portal_effect"
-	},
 /obj/effect/turf_decal/delivery,
 /obj/machinery/light/floor,
 /obj/effect/landmark/observer_start,
@@ -7573,6 +7569,14 @@
 	desc = "Abandon all hope those who enter here";
 	icon = 'icons/obj/machines/gateway.dmi';
 	icon_state = "portal_light";
+	name = "Entry Portal";
+	pixel_x = -32;
+	pixel_y = -32
+	},
+/obj/structure/decorative{
+	desc = "Abandon all hope those who enter here";
+	icon = 'icons/obj/machines/gateway.dmi';
+	icon_state = "portal_effect";
 	name = "Entry Portal";
 	pixel_x = -32;
 	pixel_y = -32
