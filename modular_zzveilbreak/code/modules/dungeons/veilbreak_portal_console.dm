@@ -45,6 +45,9 @@
 	else
 		data["generation_status"] = "idle"
 		data["current_target"] = null
+	data["void_boss_kills"] = GLOB.veilbreak_void_creature_boss_kill_count
+	data["void_creature_health_scale"] = GLOB.veilbreak_void_creature_health_scale
+	data["void_creature_damage_scale"] = GLOB.veilbreak_void_creature_damage_scale
 	return data
 
 /obj/machinery/computer/portal_control/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)

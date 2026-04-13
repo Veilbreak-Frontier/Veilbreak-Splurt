@@ -12,7 +12,6 @@
 	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION | CLOTHING_SNOUTED_VARIATION
 
 	var/active = FALSE
-	var/on_cooldown = FALSE
 	var/cooldown_time = 20 SECONDS
 
 /obj/item/clothing/neck/aether_pendant/Initialize()
@@ -21,54 +20,49 @@
 /obj/item/clothing/neck/aether_pendant/equipped(mob/user, slot)
 	. = ..()
 	if(slot == ITEM_SLOT_NECK)
-		RegisterSignal(user, COMSIG_MOB_APPLY_DAMAGE, PROC_REF(on_damage))
-		if(!locate(/datum/action/item_action/aether_activate) in user.actions)
-			var/datum/action/item_action/aether_activate/action = new(src)
+		RegisterSignal(user, COMSIG_MOB_APPLY_DAMAGE_MODIFIERS, PROC_REF(on_apply_damage_modifiers))
+		if(!locate(/datum/action/cooldown/aether_activate) in user.actions)
+			var/datum/action/cooldown/aether_activate/action = new(src)
 			action.Grant(user)
 
 /obj/item/clothing/neck/aether_pendant/dropped(mob/user)
 	. = ..()
-	UnregisterSignal(user, COMSIG_MOB_APPLY_DAMAGE)
-	var/datum/action/item_action/aether_activate/action = locate() in user.actions
+	UnregisterSignal(user, COMSIG_MOB_APPLY_DAMAGE_MODIFIERS)
+	var/datum/action/cooldown/aether_activate/action = locate(/datum/action/cooldown/aether_activate) in user.actions
 	if(action)
 		action.Remove(user)
 
-/datum/action/item_action/aether_activate
+/datum/action/cooldown/aether_activate
 	name = "Activate Aether Shield"
 	desc = "Activate the Aether Pendant's shield for 1.5 seconds. Blocks one instance of damage"
 	button_icon = 'modular_zzveilbreak/icons/item_icons/pendants.dmi'
 	button_icon_state = "aether_pendant"
+	check_flags = AB_CHECK_INCAPACITATED|AB_CHECK_HANDS_BLOCKED|AB_CHECK_CONSCIOUS
 
-/datum/action/item_action/aether_activate/Trigger(trigger_flags)
+/datum/action/cooldown/aether_activate/Activate(atom/activation_target)
 	var/obj/item/clothing/neck/aether_pendant/pendant = target
-	if(!pendant)
-		return
-	if(pendant.on_cooldown)
-		to_chat(owner, span_warning("The pendant is on cooldown!"))
-		return
-	if(pendant.active)
-		to_chat(owner, span_warning("The pendant is already active!"))
-		return
+	if(!istype(pendant) || pendant.active)
+		return FALSE
+	var/mob/user = owner
+	to_chat(user, span_notice("You activate the Aether Pendant, nullifying damage for the next 1.5 seconds."))
 	pendant.active = TRUE
-	pendant.on_cooldown = TRUE
-	to_chat(owner, span_notice("You activate the Aether Pendant, nullifying damage for the next 1.5 seconds."))
-	addtimer(CALLBACK(pendant, "deactivate"), 1.5 SECONDS)
-	addtimer(CALLBACK(pendant, "end_cooldown"), pendant.cooldown_time)
+	addtimer(CALLBACK(pendant, TYPE_PROC_REF(/obj/item/clothing/neck/aether_pendant, deactivate)), 1.5 SECONDS)
+	StartCooldown(pendant.cooldown_time)
+	addtimer(CALLBACK(pendant, TYPE_PROC_REF(/obj/item/clothing/neck/aether_pendant, notify_ready)), pendant.cooldown_time)
+	return TRUE
 
-/obj/item/clothing/neck/aether_pendant/proc/on_damage(datum/source, damage, damagetype, def_zone, blocked, forced)
+/obj/item/clothing/neck/aether_pendant/proc/on_apply_damage_modifiers(mob/living/victim, list/damage_mods, damage, damagetype, def_zone, sharpness, attack_direction, attacking_item)
 	SIGNAL_HANDLER
-	if(active || prob(5))
-		if(active)
-			active = FALSE
-			if(ismob(loc))
-				to_chat(loc, span_notice("The void fully blocks the damage!"))
-		else
-			if(ismob(loc))
-				to_chat(loc, span_notice("The void passively blocks the damage!"))
-		return -damage
+	if(!active && !prob(5))
+		return
+	damage_mods += 0
+	if(active)
+		active = FALSE
+		to_chat(victim, span_notice("The void fully blocks the damage!"))
+	else
+		to_chat(victim, span_notice("The void passively blocks the damage!"))
 
-/obj/item/clothing/neck/aether_pendant/proc/end_cooldown()
-	on_cooldown = FALSE
+/obj/item/clothing/neck/aether_pendant/proc/notify_ready()
 	if(ismob(loc))
 		to_chat(loc, span_notice("The Aether Pendant is ready to use again."))
 
@@ -133,23 +127,23 @@
 		if(healed_total >= 100)
 			break
 		var/heal_amount = min(20, 100 - healed_total)
-		t.adjust_brute_loss(-heal_amount)
-		t.adjust_fire_loss(-heal_amount)
-		t.adjust_tox_loss(-heal_amount)
-		t.adjust_oxy_loss(-heal_amount)
+		// Brute/burn: carbons heal via damaged bodyparts; simple mobs use overall adjust
+		t.heal_overall_damage(heal_amount, heal_amount)
+		t.heal_damage_type(heal_amount, TOX)
+		t.heal_damage_type(heal_amount, OXY)
 		healed_total += heal_amount
-	to_chat(owner, span_notice("The Life Pendant heals nearby allies!."))
-	addtimer(CALLBACK(pendant, PROC_REF(end_cooldown)), pendant.cooldown_time)
+	to_chat(owner, span_notice("The Life Pendant heals nearby allies!"))
+	addtimer(CALLBACK(pendant, TYPE_PROC_REF(/obj/item/clothing/neck/life_pendant, end_cooldown)), pendant.cooldown_time)
 
 /obj/item/clothing/neck/life_pendant/process(seconds_per_tick)
 	if(!ismob(loc))
 		return
 	var/mob/living/user = loc
 	if(user.health < user.maxHealth)
-		user.adjust_brute_loss(-0.5 * seconds_per_tick)
-		user.adjust_fire_loss(-0.5 * seconds_per_tick)
-		user.adjust_tox_loss(-0.5 * seconds_per_tick)
-		user.adjust_oxy_loss(-0.5 * seconds_per_tick)
+		var/heal_tick = 0.5 * seconds_per_tick
+		user.heal_overall_damage(heal_tick, heal_tick)
+		user.heal_damage_type(heal_tick, TOX)
+		user.heal_damage_type(heal_tick, OXY)
 
 /obj/item/clothing/neck/life_pendant/proc/end_cooldown()
 	on_cooldown = FALSE

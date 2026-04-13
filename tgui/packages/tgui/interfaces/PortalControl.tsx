@@ -25,6 +25,9 @@ interface PortalControlData {
   generation_in_progress: boolean;
   cleanup_in_progress: boolean;
   portal_name?: string;
+  void_boss_kills: number;
+  void_creature_health_scale: number;
+  void_creature_damage_scale: number;
 }
 
 export const PortalControl = (props, context) => {
@@ -41,7 +44,16 @@ export const PortalControl = (props, context) => {
     generation_in_progress,
     cleanup_in_progress,
     portal_name,
+    void_boss_kills = 0,
+    void_creature_health_scale = 1,
+    void_creature_damage_scale = 1,
   } = data;
+
+  const fmtScale = (n: number) =>
+    (Math.round(n * 100) / 100).toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
 
   // Enhanced state detection to prevent UI flashing
   const isInTransitionState = () => {
@@ -364,6 +376,17 @@ export const PortalControl = (props, context) => {
                 <LabeledList.Item label="ENERGY MATRIX">
                   <Box color={portal_status ? 'good' : 'yellow'}>
                     {portal_status ? 'QUANTUM STABILIZED' : 'FLUCTUATING'}
+                  </Box>
+                </LabeledList.Item>
+                <LabeledList.Item label="VOID FAUNA STRAIN">
+                  <Box
+                    color={void_boss_kills > 0 ? 'orange' : 'label'}
+                    fontSize="0.9rem"
+                  >
+                    <Icon name="biohazard" mr={1} />
+                    {void_boss_kills === 0
+                      ? `Baseline (×${fmtScale(void_creature_health_scale)} HP, ×${fmtScale(void_creature_damage_scale)} dmg)`
+                      : `${void_boss_kills} void scourge defeat${void_boss_kills === 1 ? '' : 's'} — ×${fmtScale(void_creature_health_scale)} HP, ×${fmtScale(void_creature_damage_scale)} dmg`}
                   </Box>
                 </LabeledList.Item>
                 {/* Show generation status during transitions */}

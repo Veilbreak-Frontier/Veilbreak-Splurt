@@ -42,6 +42,21 @@
     AddElement(/datum/element/simple_flying)
     AddElement(/datum/element/ai_retaliate)
     faction |= FACTION_HOSTILE
+    apply_veilbreak_void_creature_stat_scaling()
+
+/// Applies GLOB veilbreak_void_creature_*_scale to this mob (void trash only; megafauna use another type path).
+/mob/living/basic/void_creature/proc/apply_veilbreak_void_creature_stat_scaling()
+    var/h_mult = GLOB.veilbreak_void_creature_health_scale
+    var/d_mult = GLOB.veilbreak_void_creature_damage_scale
+    if(h_mult == 1 && d_mult == 1)
+        return
+    if(h_mult != 1)
+        maxHealth = max(1, ROUND_UP(maxHealth * h_mult))
+        health = maxHealth
+    if(d_mult != 1)
+        melee_damage_lower = max(0, ROUND_UP(melee_damage_lower * d_mult))
+        melee_damage_upper = max(melee_damage_lower, ROUND_UP(melee_damage_upper * d_mult))
+        obj_damage = max(0, ROUND_UP(obj_damage * d_mult))
 
 /mob/living/basic/void_creature/death(gibbed)
     if(!gibbed)
@@ -83,44 +98,18 @@
 	health = 80
 	speed = 1
 	faction = list(FACTION_VOID)
+	melee_damage_lower = 0
+	melee_damage_upper = 0
 	ai_controller = /datum/ai_controller/basic_controller/void_pathfinder
-	var/timer_id
 
 /mob/living/basic/void_creature/consumed_pathfinder/Initialize(mapload)
 	. = ..()
-	//timer_id = addtimer(CALLBACK(src, .proc/fire_bolt), 3 SECONDS, TIMER_LOOP | TIMER_STOPPABLE)
-
-/mob/living/basic/void_creature/consumed_pathfinder/Destroy()
-	if(timer_id)
-		deltimer(timer_id)
-		timer_id = null
-	return ..()
-
-/mob/living/basic/void_creature/consumed_pathfinder/proc/fire_bolt()
-	if(QDELETED(src) || stat != CONSCIOUS)
-		return
-
-	var/list/targets = list()
-	for(var/mob/living/L in view(7, src))
-		if(L == src || L.stat != CONSCIOUS)
-			continue
-		if(compare_factions(src, L))
-			continue
-		targets += L
-
-	if(!length(targets))
-		return
-
-	var/mob/living/target = pick(targets)
-
-	var/obj/projectile/magic/voidbolt/bolt = new(get_turf(src))
-	bolt.original = target
-	bolt.firer = src
-	bolt.aim_projectile(target, src)
-	bolt.fire()
-
-/mob/living/basic/void_creature/consumed_pathfinder/proc/can_see(atom/A)
-	return (A in view(src))
+	AddComponent(\
+		/datum/component/ranged_attacks,\
+		projectile_type = /obj/projectile/magic/voidbolt,\
+		projectile_sound = 'sound/effects/magic/magic_missile.ogg',\
+		cooldown_time = 2 SECONDS,\
+	)
 
 /mob/living/basic/void_creature/voidbug
     name = "Voidbug"
@@ -169,7 +158,18 @@
     maxHealth = 40
     health = 40
     speed = 0.7
+    melee_damage_lower = 0
+    melee_damage_upper = 0
     ai_controller = /datum/ai_controller/basic_controller/void_healer
+
+/mob/living/basic/void_creature/void_healer/Initialize(mapload)
+    . = ..()
+    AddComponent(\
+        /datum/component/ranged_attacks,\
+        projectile_type = /obj/projectile/magic/voidbolt,\
+        projectile_sound = 'sound/effects/magic/magic_missile.ogg',\
+        cooldown_time = 2.5 SECONDS,\
+    )
 
 /obj/projectile/magic/voidbolt
     name = "void bolt"
@@ -220,18 +220,17 @@
     blackboard = list(
         BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
         BB_VOID_SUMMON_COOLDOWN = 0,
-        BB_RANGED_SKIRMISH_MIN_DISTANCE = 4,
-        BB_RANGED_SKIRMISH_MAX_DISTANCE = 6
+        BB_RANGED_SKIRMISH_MIN_DISTANCE = 3,
+        BB_RANGED_SKIRMISH_MAX_DISTANCE = 8
     )
     ai_movement = /datum/ai_movement/basic_avoidance
     idle_behavior = /datum/idle_behavior/idle_random_walk
     planning_subtrees = list(
         /datum/ai_planning_subtree/target_retaliate,
         /datum/ai_planning_subtree/simple_find_target,
-        /datum/ai_planning_subtree/maintain_distance_from_target,
-        /datum/ai_planning_subtree/flee_target,
+        /datum/ai_planning_subtree/maintain_distance,
         /datum/ai_planning_subtree/void_pathfinder_summon,
-        /datum/ai_planning_subtree/basic_ranged_attack_subtree
+        /datum/ai_planning_subtree/basic_ranged_attack_subtree/void_creature
     )
 
 /datum/ai_controller/basic_controller/void_healer
@@ -239,6 +238,8 @@
         BB_VOID_HEAL_COOLDOWN = 0,
         BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
         BB_AGGRO_RANGE = 10,
+        BB_RANGED_SKIRMISH_MIN_DISTANCE = 3,
+        BB_RANGED_SKIRMISH_MAX_DISTANCE = 8,
     )
     ai_movement = /datum/ai_movement/basic_avoidance
     idle_behavior = /datum/idle_behavior/idle_random_walk
@@ -247,8 +248,17 @@
         /datum/ai_planning_subtree/simple_find_target,
         /datum/ai_planning_subtree/target_retaliate/check_faction,
         /datum/ai_planning_subtree/attack_obstacle_in_path,
-        /datum/ai_planning_subtree/basic_melee_attack_subtree
+        /datum/ai_planning_subtree/maintain_distance,
+        /datum/ai_planning_subtree/basic_ranged_attack_subtree/void_creature
     )
+
+/// Longer line-of-sight window than default basic_ranged_attack (3) so void bolts match skirmish range.
+/datum/ai_behavior/basic_ranged_attack/void_creature
+    required_distance = 9
+    chase_range = 12
+
+/datum/ai_planning_subtree/basic_ranged_attack_subtree/void_creature
+    ranged_attack_behavior = /datum/ai_behavior/basic_ranged_attack/void_creature
 
 // --- SUBTREES ---
 
@@ -327,22 +337,6 @@
         controller.queue_behavior(/datum/ai_behavior/void_heal, BB_HEAL_TARGET)
         return SUBTREE_RETURN_FINISH_PLANNING
 
-/datum/ai_planning_subtree/maintain_distance_from_target/SelectBehaviors(datum/ai_controller/controller, seconds_per_tick)
-    var/mob/living/target = controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET]
-    if(!target || target.stat == DEAD)
-        controller.clear_blackboard_key(BB_BASIC_MOB_FLEE_TARGET)
-        return
-    var/dist = get_dist(controller.pawn, target)
-    var/min_d = controller.blackboard[BB_RANGED_SKIRMISH_MIN_DISTANCE]
-    var/max_d = controller.blackboard[BB_RANGED_SKIRMISH_MAX_DISTANCE]
-    if(dist < min_d)
-        controller.set_blackboard_key(BB_BASIC_MOB_FLEE_TARGET, target)
-        return
-    controller.clear_blackboard_key(BB_BASIC_MOB_FLEE_TARGET)
-    if(dist > max_d)
-        controller.queue_behavior(/datum/ai_behavior/move_towards_target, BB_BASIC_MOB_CURRENT_TARGET)
-        return SUBTREE_RETURN_FINISH_PLANNING
-
 // --- BEHAVIORS ---
 
 /datum/ai_behavior/void_summon
@@ -391,28 +385,6 @@
     controller.set_blackboard_key(BB_VOID_HEAL_COOLDOWN, world.time + action_cooldown)
     controller.clear_blackboard_key(target_key)
     return AI_BEHAVIOR_SUCCEEDED
-
-/datum/ai_behavior/move_towards_target
-    behavior_flags = AI_BEHAVIOR_REQUIRE_MOVEMENT
-
-/datum/ai_behavior/move_towards_target/perform(seconds_per_tick, datum/ai_controller/controller, target_key)
-    var/atom/movable/target = controller.blackboard[target_key]
-    if(!target) return AI_BEHAVIOR_FAILED
-    if(get_dist(controller.pawn, target) <= 1) return AI_BEHAVIOR_SUCCEEDED
-    controller.ai_movement.start_moving_towards(controller, target, 1)
-    return AI_BEHAVIOR_DELAY
-
-/datum/ai_behavior/move_to_and_perform
-    behavior_flags = AI_BEHAVIOR_REQUIRE_MOVEMENT | AI_BEHAVIOR_KEEP_MOVE_TARGET_ON_FINISH
-
-/datum/ai_behavior/move_to_and_perform/perform(seconds_per_tick, datum/ai_controller/controller, target_key, action_behavior_type, prox_distance = 1)
-    var/atom/movable/target = controller.blackboard[target_key]
-    if(!target || QDELETED(target)) return AI_BEHAVIOR_FAILED
-    if(get_dist(controller.pawn, target) > prox_distance)
-        controller.ai_movement.start_moving_towards(controller, target, prox_distance)
-        return AI_BEHAVIOR_DELAY
-    var/datum/ai_behavior/action = GET_AI_BEHAVIOR(action_behavior_type)
-    return action.perform(seconds_per_tick, controller, target_key)
 
 // --- UTILS & VISUALS ---
 
