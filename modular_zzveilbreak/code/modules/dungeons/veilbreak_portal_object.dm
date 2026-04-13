@@ -130,40 +130,40 @@
 			eject_to = get_turf(src)
 
 	var/z_to_clear = target.dungeon_z_level
-	var/ejected_count = 0
+	var/processed_count = 0
 
 	for(var/mob/M in GLOB.mob_list)
 		if(M.z != z_to_clear)
 			continue
-		if(LAZYFIND(M.faction, "FACTION_VOID"))
-			continue
 
-		M.forceMove(eject_to)
-		M.throw_at(get_step(eject_to, SOUTH), 5, 2, M)
-		ejected_count++
-		if(ejected_count % 50 == 0)
+		if(is_player(M))
+			M.forceMove(eject_to)
+			M.throw_at(get_step(eject_to, SOUTH), 5, 2, M)
+
+		processed_count++
+		if(processed_count % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
 			CHECK_TICK
 
-	for(var/obj/item/mmi/mmi in world)
-		if(mmi.z == z_to_clear && mmi.brainmob && (mmi.brainmob.client || mmi.brainmob.mind))
-			mmi.forceMove(eject_to)
-			mmi.throw_at(get_step(eject_to, SOUTH), 5, 2, mmi)
-			ejected_count++
-			if(ejected_count % 50 == 0)
-				CHECK_TICK
+	for(var/obj/item/I in world)
+		if(I.z != z_to_clear)
+			continue
 
-	for(var/obj/item/organ/brain/brain in world)
-		if(brain.z == z_to_clear && brain.brainmob && (brain.brainmob.client || brain.brainmob.mind))
-			brain.forceMove(eject_to)
-			brain.throw_at(get_step(eject_to, SOUTH), 5, 2, brain)
-			ejected_count++
-			if(ejected_count % 50 == 0)
-				CHECK_TICK
+		if(is_player(I))
+			I.forceMove(eject_to)
+			I.throw_at(get_step(eject_to, SOUTH), 5, 2, I)
+
+		processed_count++
+		if(processed_count % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+			CHECK_TICK
 
 	target.cleanup_z_level_completely(z_to_clear, eject_to)
 
-	target = null
 	transport_active = FALSE
+	if(bumper)
+		qdel(bumper)
+		bumper = null
+
+	target = null
 	update_appearance()
 
 /obj/machinery/portal/proc/activate_bumpers()

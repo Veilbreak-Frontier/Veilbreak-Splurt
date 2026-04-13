@@ -74,6 +74,13 @@
 	var/newly_created_z = FALSE
 
 	if(dungeon_z_level && dungeon_z_level <= world.maxz && dungeon_z_level > 0)
+		if(spawn_station_portal)
+			spawn_station_portal.transport_active = FALSE
+			if(spawn_station_portal.bumper)
+				qdel(spawn_station_portal.bumper)
+				spawn_station_portal.bumper = null
+			spawn_station_portal.update_appearance()
+
 		cleanup_z_level_completely(dungeon_z_level, null)
 		newly_created_z = FALSE
 		var/reuse_level_name = (metadata && metadata["map_name"]) ? metadata["map_name"] : "Veilbreak"
@@ -223,52 +230,29 @@
 		return
 	cleanup_in_progress = TRUE
 
-	for(var/turf/T in Z_TURFS(z_level))
-		for(var/atom/movable/AM in T)
-			if(QDELETED(AM))
-				continue
+	var/processed = 0
+	for(var/atom/movable/AM in world)
+		if(AM.z != z_level)
+			continue
 
-			var/should_eject = FALSE
-			var/atom/movable/to_eject = null
+		if(is_player(AM))
+			if(ejection_turf)
+				AM.forceMove(ejection_turf)
+			continue
 
-			if(istype(AM, /mob/living))
-				var/mob/living/L = AM
-				if(should_eject_mob(L))
-					should_eject = TRUE
-					to_eject = L
-
-			if(istype(AM, /obj/item/organ/brain))
-				var/obj/item/organ/brain/brain_organ = AM
-				if(brain_organ.brainmob && (brain_organ.brainmob.client || brain_organ.brainmob.mind))
-					should_eject = TRUE
-					to_eject = brain_organ
-
-			if(istype(AM, /obj/item/mmi))
-				var/obj/item/mmi/mmi = AM
-				if(mmi.brainmob && (mmi.brainmob.client || mmi.brainmob.mind))
-					should_eject = TRUE
-					to_eject = mmi
-
-			if(should_eject && ejection_turf && to_eject)
-				to_eject.forceMove(ejection_turf)
-				continue
-
-			if(istype(AM, /mob/living))
-				var/mob/living/L = AM
-				if(L.ai_controller)
-					var/datum/ai_controller/AC = L.ai_controller
-					L.ai_controller = null
-					qdel(AC)
-
-			qdel(AM)
-			if(AM && !QDELETED(AM))
-				AM.moveToNullspace()
-
-		T.ChangeTurf(/turf/open/space/basic, flags = CHANGETURF_INHERIT_AIR)
-
-		if(T.x == world.maxx && T.y % 10 == 0)
+		qdel(AM)
+		processed++
+		if(processed % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
 			CHECK_TICK
 
+	var/list/turfs = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
+	for(var/turf/T in turfs)
+		T.ChangeTurf(/turf/open/space/basic, null, CHANGETURF_INHERIT_AIR)
+		processed++
+		if(processed % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
+			CHECK_TICK
+
+	generated = FALSE
 	cleanup_in_progress = FALSE
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)
@@ -379,62 +363,40 @@
 	log_world("Veilbreak Debug: get_target_turf returning fallback center at [T ? "[T.x],[T.y],[T.z]" : "null"]")
 	return T
 
-/datum/portal_destination/veilbreak/proc/should_eject_mob(mob/living/L)
-	if(!istype(L))
+/proc/is_player(datum/D)
+	if(!D || istype(D, /datum/weakref))
 		return FALSE
 
-	if(L.client)
-		return TRUE
-
-	if(L.mind && L.mind.active)
-		return TRUE
-
-	if(istype(L, /mob/living/carbon/human))
-		return TRUE
-
-	if(istype(L, /mob/living/silicon/robot))
-		return TRUE
-
-	if(istype(L, /mob/living/brain))
-		return TRUE
-
-	if(L.stat == DEAD && (L.mind || L.client))
-		return TRUE
-
-	return FALSE
-
-
-/datum/portal_destination/veilbreak/proc/is_player_corpse(mob/living/L)
-	if(!istype(L))
+	if(isobserver(D))
 		return FALSE
 
-	if(L.stat != DEAD)
+	var/mob/living/L
+
+	if(isliving(D))
+		L = D
+	else if(istype(D, /obj/item/mmi))
+		var/obj/item/mmi/I = D
+		L = I.brainmob
+	else if(istype(D, /obj/item/organ/brain))
+		var/obj/item/organ/brain/O = D
+		L = O.brainmob
+	else if(istype(D, /obj/item/mob_holder))
+		var/obj/item/mob_holder/H = D
+		L = H.held_mob
+
+	if(!L || !istype(L))
 		return FALSE
 
-	if(istype(L, /mob/living/carbon/human))
-		return TRUE
-
-	if(istype(L, /mob/living/silicon/robot))
-		return TRUE
-
-	if(istype(L, /mob/living/brain))
-		return TRUE
-
-	return FALSE
-
-
-/datum/portal_destination/veilbreak/proc/is_debrained(mob/living/carbon/human/H)
-	if(!istype(H))
+	if(LAZYFIND(L.faction, "FACTION_VOID"))
 		return FALSE
 
-	var/obj/item/organ/brain/brain = H.get_organ_slot(ORGAN_SLOT_BRAIN)
-	if(!brain)
+	if(L.client || (L.mind && L.mind.active))
 		return TRUE
 
-	if(brain.organ_flags & ORGAN_FAILING)
+	if(ishuman(L) || issilicon(L))
 		return TRUE
 
-	if(brain.organ_flags & ORGAN_FROZEN)
+	if(L.stat == DEAD && (L.client || L.mind))
 		return TRUE
 
 	return FALSE
