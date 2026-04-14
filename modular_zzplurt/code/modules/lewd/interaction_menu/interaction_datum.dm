@@ -148,13 +148,18 @@
 	if(unsafe_types & INTERACTION_UNHOLY)
 		if(!(user.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_unholy) != "No" || nonhuman_client_bypass_user) || !(target.client?.prefs?.read_preference(/datum/preference/choiced/erp_status_unholy) != "No" || nonhuman_client_bypass_target))
 			return FALSE
-
+//TODO: NAGA STUFFS
 	if(user_required_parts.len)
 		for(var/slot in user_required_parts)
 			if(!ishuman(user))
 				if(!user.simulated_genitals[slot])
 					return FALSE
 			else
+				if(slot == ORGAN_SLOT_TAIL)
+					if(!human_user.has_tail(LAZYACCESS(user_required_parts, slot) || REQUIRE_GENITAL_ANY))
+						return FALSE
+					continue
+
 				if(!human_user.has_genital(LAZYACCESS(user_required_parts, slot) || REQUIRE_GENITAL_EXPOSED, slot))
 					return FALSE
 
