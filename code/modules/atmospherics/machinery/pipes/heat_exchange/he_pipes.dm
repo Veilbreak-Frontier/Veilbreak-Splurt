@@ -79,13 +79,16 @@
         var/combined_hc = hc + total_mob_hc
 
         if(combined_hc > 0)
-            var/avg_temp = (pipe_air.temperature * hc + (heat_source.bodytemperature * total_mob_hc)) / combined_hc
+            var/target_temp = (pipe_air.temperature * hc + (heat_source.bodytemperature * total_mob_hc)) / combined_hc
 
-            avg_temp = max(avg_temp, 0)
+            var/lerp_factor = 0.5
+            var/new_temp = pipe_air.temperature + (target_temp - pipe_air.temperature) * lerp_factor
+
+            new_temp = max(new_temp, 0)
 
             for(var/mob/living/buckled_mob as anything in buckled_mobs)
-                buckled_mob.bodytemperature = avg_temp
-            pipe_air.temperature = avg_temp
+                buckled_mob.bodytemperature = new_temp
+            pipe_air.temperature = new_temp
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/process(seconds_per_tick)
     if(!parent)
@@ -93,7 +96,8 @@
 
     var/datum/gas_mixture/pipe_air = return_air()
 
-    pipe_air.temperature = max(pipe_air.temperature, 0)
+    if(pipe_air.temperature < 0)
+        pipe_air.temperature = 0
 
     if(pipe_air.temperature && (icon_temperature > 500 || pipe_air.temperature > 500))
         if(abs(pipe_air.temperature - icon_temperature) > 10)
