@@ -215,19 +215,27 @@
 
 /// Returns true if the human has accessible tail for the parameter. Accepts any of the `REQUIRE_GENITAL_` defines.
 /mob/living/carbon/human/proc/has_tail(required_state = REQUIRE_GENITAL_ANY)
-	var/obj/item/organ/genital = get_organ_slot(ORGAN_SLOT_TAIL)
-	if(!genital)
-		return FALSE
+    var/obj/item/organ/tail_organ = get_organ_slot(ORGAN_SLOT_TAIL)
+    var/is_snake_taur = (get_taur_mode() == STYLE_TAUR_SNAKE)
 
-	switch(required_state)
-		if(REQUIRE_GENITAL_ANY)
-			return TRUE
-		if(REQUIRE_GENITAL_EXPOSED)
-			return !get_item_by_slot(ORGAN_SLOT_TAIL)
-		if(REQUIRE_GENITAL_UNEXPOSED)
-			return get_item_by_slot(ORGAN_SLOT_TAIL)
-		else
-			return TRUE
+    if(!tail_organ && !is_snake_taur)
+        return FALSE
+
+    switch(required_state)
+        if(REQUIRE_GENITAL_ANY)
+            return TRUE
+
+        if(REQUIRE_GENITAL_EXPOSED)
+            if(is_snake_taur)
+                return !wear_suit || !(wear_suit.flags_inv & (HIDETAIL | HIDETAUR))
+            return !get_item_by_slot(ORGAN_SLOT_TAIL)
+
+        if(REQUIRE_GENITAL_UNEXPOSED)
+            if(is_snake_taur)
+                return wear_suit && (wear_suit.flags_inv & (HIDETAIL | HIDETAUR))
+            return !!get_item_by_slot(ORGAN_SLOT_TAIL)
+
+    return TRUE
 
 /*
 *	This code needed for changing character's gender by chems
