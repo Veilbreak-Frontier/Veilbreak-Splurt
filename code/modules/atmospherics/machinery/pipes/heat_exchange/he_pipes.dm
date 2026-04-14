@@ -66,8 +66,9 @@
     else
         environment_temperature = local_turf.temperature
 
+    var/combined_conductivity = get_thermal_conductivity_for_turf(local_turf)
     if(abs(environment_temperature - pipe_air.temperature) > minimum_temperature_difference)
-        parent.temperature_interact(local_turf, volume, get_thermal_conductivity_for_turf(local_turf))
+        parent.temperature_interact(local_turf, volume, combined_conductivity)
 
     if(has_buckled_mobs())
         var/hc = pipe_air.heat_capacity()
@@ -79,6 +80,9 @@
 
         if(combined_hc > 0)
             var/avg_temp = (pipe_air.temperature * hc + (heat_source.bodytemperature * total_mob_hc)) / combined_hc
+
+            avg_temp = max(avg_temp, 0)
+
             for(var/mob/living/buckled_mob as anything in buckled_mobs)
                 buckled_mob.bodytemperature = avg_temp
             pipe_air.temperature = avg_temp
@@ -88,6 +92,8 @@
         return
 
     var/datum/gas_mixture/pipe_air = return_air()
+
+    pipe_air.temperature = max(pipe_air.temperature, 0)
 
     if(pipe_air.temperature && (icon_temperature > 500 || pipe_air.temperature > 500))
         if(abs(pipe_air.temperature - icon_temperature) > 10)
