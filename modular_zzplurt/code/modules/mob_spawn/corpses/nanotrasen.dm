@@ -17,7 +17,6 @@
 	id_trim = /datum/id_trim/centcom/corpse/private_security/pvt
 	accessory = /obj/item/clothing/accessory/rank/private
 	implants = list(/obj/item/implant/mindshield)
-	accessory = /obj/item/clothing/accessory/rank/private
 
 /datum/outfit/nanotrasenprivate/post_equip(mob/living/carbon/human/H, visuals_only = FALSE)
 	if(visuals_only)
