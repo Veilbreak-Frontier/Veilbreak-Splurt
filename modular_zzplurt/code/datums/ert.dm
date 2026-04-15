@@ -1,6 +1,6 @@
 // PRIVATE SECURITY ERT - MORE BALLISTIC THAN LASER
 /datum/ert/private_security
-	code = "Cardinal Red"
+	code = "Crimson"
 	roles = list(/datum/antagonist/ert/private_security/operative, /datum/antagonist/ert/private_security/medic, /datum/antagonist/ert/private_security/sergeant)
 	leader_role = /datum/antagonist/ert/private_security/leader
 	teamsize = 7
@@ -287,18 +287,6 @@
 		return
 
 	apply_rank(H, "Captain")
-
-	var/has_taser_bulwark = FALSE
-
-	// Check both hands
-	for(var/obj/item/I in H.get_equipped_items())
-		if(istype(I, /obj/item/gun/ballistic/automatic/bulwark/taser))
-			has_taser_bulwark = TRUE
-			break
-
-	if(has_taser_bulwark)
-		for(var/obj/item/gun/energy/e_gun/advtaser/T in H.contents)
-			qdel(T)
 
 	return ..()
 
