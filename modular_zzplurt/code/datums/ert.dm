@@ -201,12 +201,13 @@
 	uniform = /obj/item/clothing/under/rank/security/splurt/ntps/sergeant
 	head = /obj/item/clothing/head/helmet/swat/nanotrasen/ntps/sergeant
 	l_hand = /obj/item/gun/ballistic/automatic/proto/loyalpin
+	r_pocket = /obj/item/melee/baton/telescopic/silver
 
 	backpack_contents = list(/obj/item/storage/box/survival/security = 1,\
 		/obj/item/storage/box/handcuffs = 1,\
 		/obj/item/gun/energy/e_gun/advtaser = 1,\
 		/obj/item/ammo_box/magazine/smgm9mm = 3,\
-		/obj/item/melee/baton/telescopic/silver = 1,
+		/obj/item/flashlight/seclite = 1,
 		)
 
 /datum/id_trim/centcom/ert/security/privatesecurity
@@ -251,6 +252,8 @@
 	belt = /obj/item/storage/belt/security/webbing/peacekeeper/armadyne/privsec/full
 	ears = /obj/item/radio/headset/headset_cent/alt/privsec/leader
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+	l_hand = /obj/item/gun/ballistic/automatic/bulwark/loyalpin
+	r_pocket = /obj/item/melee/baton/telescopic/gold
 
 	backpack_contents = list(/obj/item/storage/box/survival/security = 1,\
 		/obj/item/storage/box/handcuffs = 1,\
@@ -258,7 +261,7 @@
 		/obj/item/ammo_box/magazine/c68 = 3,\
 		/obj/item/shield/riot/tele = 1,\
 		/obj/item/suppressor = 1,\
-		/obj/item/melee/baton/telescopic/gold = 1,
+		/obj/item/flashlight/seclite = 1,
 		)
 
 /datum/id_trim/centcom/ert/commander/privatesecurity
@@ -273,12 +276,6 @@
 /datum/outfit/centcom/private_security/captain/pre_equip(mob/living/carbon/human/H)
 	. = ..()
 
-	l_hand = pick(list(
-		/obj/item/gun/ballistic/automatic/bulwark/loyalpin,
-		/obj/item/gun/ballistic/automatic/bulwark/loyalpin,
-		/obj/item/gun/ballistic/automatic/bulwark/taser/loyalpin
-	))
-
 	head = pick(list(
 		/obj/item/clothing/head/beret/sec/ntps/captain,
 		/obj/item/clothing/head/hats/hos/cap/captain
@@ -291,18 +288,6 @@
 		return
 
 	apply_rank(H, "Captain")
-
-	var/has_taser_bulwark = FALSE
-
-	// Check both hands
-	for(var/obj/item/I in H.get_equipped_items())
-		if(istype(I, /obj/item/gun/ballistic/automatic/bulwark/taser))
-			has_taser_bulwark = TRUE
-			break
-
-	if(has_taser_bulwark)
-		for(var/obj/item/gun/energy/e_gun/advtaser/T in H.contents)
-			qdel(T)
 
 	return ..()
 
@@ -458,7 +443,4 @@
 	pin = /obj/item/firing_pin/implant/mindshield
 
 /obj/item/gun/ballistic/automatic/bulwark/loyalpin
-	pin = /obj/item/firing_pin/implant/mindshield
-
-/obj/item/gun/ballistic/automatic/bulwark/taser/loyalpin
 	pin = /obj/item/firing_pin/implant/mindshield
