@@ -146,7 +146,6 @@
 	icon_state = "223-casing"
 	caliber = CALIBER_68MM
 	projectile_type = /obj/projectile/bullet/c68
-	advanced_print_req = TRUE
 
 /obj/item/ammo_casing/c68/Initialize(mapload)
 	. = ..()
@@ -154,9 +153,9 @@
 
 /obj/projectile/bullet/c68
 	name = "6.8mm caseless bullet"
-	damage = 27
-	armour_penetration = 20
-	wound_bonus = -15
+	damage = 30
+	armour_penetration = 25
+	wound_bonus = -30
 	embed_type = /datum/embedding/bullet/c68
 
 /datum/embedding/bullet/c68

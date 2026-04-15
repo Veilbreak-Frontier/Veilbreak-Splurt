@@ -3,7 +3,6 @@
 	desc = "Hey! Hi! Contact a coder, you aren't supposed to have this."
 	icon = 'modular_zzplurt/icons/obj/clothing/accessories.dmi'
 	worn_icon = 'modular_zzplurt/icons/mob/clothing/accessories.dmi'
-	icon_state = "chevron"
 	attachment_slot = NONE
 
 /obj/item/clothing/accessory/rank/private

@@ -47,22 +47,6 @@
 
 	apply_corpse_rank_name(H, "Pvt.")
 
-/datum/outfit/nanotrasenprivate/pre_equip(mob/living/carbon/human/H)
-	. = ..()
-
-	uniform = pick(list(
-		/obj/item/clothing/under/rank/security/splurt/ntps,
-		/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck,
-		/obj/item/clothing/under/rank/security/splurt/ntps/fatigues
-	))
-
-	head = pick(list(
-		/obj/item/clothing/head/security_garrison/ntps,
-		/obj/item/clothing/head/soft/sec/ntps,
-		/obj/item/clothing/head/beret/sec/ntps,
-		/obj/item/clothing/head/helmet/swat/nanotrasen/ntps
-	))
-
 /datum/id_trim/centcom/corpse/private_security/pvt
 	assignment = JOB_CENTCOM_PRIVATE_SECURITY_PRIVATE
 	subdepartment_color = COLOR_SECURITY_RED
@@ -136,14 +120,6 @@
 
 	apply_corpse_rank_name(H, "Cpl.")
 
-/datum/outfit/nanotrasencorporal/pre_equip(mob/living/carbon/human/H)
-	. = ..()
-
-	uniform = pick(list(
-		/obj/item/clothing/under/rank/security/splurt/ntps/corporal,
-		/obj/item/clothing/under/rank/security/splurt/ntps/corporal/turtleneck
-	))
-
 /datum/id_trim/centcom/corpse/private_security/cpl
 	assignment = JOB_CENTCOM_PRIVATE_SECURITY_CORPORAL
 	subdepartment_color = COLOR_SECURITY_RED
@@ -179,14 +155,6 @@
 		return
 
 	apply_corpse_rank_name(H, "Sgt.")
-
-/datum/outfit/nanotrasensergeant/pre_equip(mob/living/carbon/human/H)
-	. = ..()
-
-	uniform = pick(list(
-		/obj/item/clothing/under/rank/security/splurt/ntps/sergeant,
-		/obj/item/clothing/under/rank/security/splurt/ntps/sergeant/turtleneck
-	))
 
 /datum/id_trim/centcom/corpse/private_security/sgt
 	assignment = JOB_CENTCOM_PRIVATE_SECURITY_SERGEANT
@@ -258,16 +226,6 @@
 		return
 
 	apply_corpse_rank_name(H, "Cpt.")
-
-/datum/outfit/nanotrasencaptain/pre_equip(mob/living/carbon/human/H)
-	. = ..()
-
-	head = pick(list(
-		/obj/item/clothing/head/beret/sec/ntps/captain,
-		/obj/item/clothing/head/hats/hos/cap/captain
-	))
-
-	return ..()
 
 /datum/id_trim/centcom/corpse/private_security/cpt
 	assignment = JOB_CENTCOM_PRIVATE_SECURITY_CAPTAIN
