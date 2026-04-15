@@ -11264,3 +11264,13 @@
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\theologist\time_of_need.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\theologist\_theologist_datum.dm"
 // END_INCLUDE
+
+#include "../../scripts/cherrypick/modular_zzplurt/code/modules/clothing/accessories/skub_pins.dm"
+#include "../../scripts/cherrypick/modular_zzplurt/code/modules/clothing/gloves/gloves.dm"
+#include "../../scripts/cherrypick/modular_zzplurt/code/datums/quirks/positive_quirks/skub_fan.dm"
+#include "../../scripts/cherrypick/modular_zzplurt/code/modules/clothing/under/jobs/security.dm"
+#include "../../scripts/cherrypick/modular_zzplurt/code/modules/clothing/head/helmets.dm"
+#include "../../scripts/cherrypick/modular_zzplurt/code/game/objects/items/storage/garment.dm"
+#include "../../scripts/cherrypick/modular_zzplurt/code/modules/clothing/head/hats.dm"
+#include "../../scripts/cherrypick/modular_zzplurt/code/modules/clothing/accessories/bodycamera.dm"
+#include "../../scripts/cherrypick/modular_zzplurt/code/modules/clothing/belts/polymorph_belt.dm"
