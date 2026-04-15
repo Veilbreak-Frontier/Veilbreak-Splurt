@@ -1,25 +1,3 @@
-/proc/apply_corpse_rank_name(mob/living/carbon/human/H, rank_abbr)
-	if(!H)
-		return
-
-	var/original_name = H.real_name
-
-	// Prevent double-prefixing
-	if(findtext(original_name, rank_abbr) == 1)
-		return
-
-	var/new_name = "[rank_abbr] [original_name]"
-
-	// Update character name
-	H.fully_replace_character_name(original_name, new_name)
-
-	// Sync ID
-	var/obj/item/card/id/W = H.wear_id
-	if(W)
-		W.registered_name = new_name
-		W.update_label()
-		W.update_icon()
-
 /obj/effect/mob_spawn/corpse/human/privatesecurity
 	name = "Nanotrasen Private Security Private"
 	outfit = /datum/outfit/nanotrasenprivate
@@ -45,7 +23,10 @@
 	if(visuals_only)
 		return
 
-	apply_corpse_rank_name(H, "Pvt.")
+	var/obj/item/card/id/W = H.wear_id
+	W.registered_name = H.real_name
+	W.update_label()
+	W.update_icon()
 
 /datum/outfit/nanotrasenprivate/pre_equip(mob/living/carbon/human/H)
 	. = ..()
@@ -89,13 +70,15 @@
 	id = /obj/item/card/id/advanced
 	id_trim = /datum/id_trim/centcom/corpse/private_security/cpl
 	implants = list(/obj/item/implant/mindshield)
-	accessory = /obj/item/clothing/accessory/rank/corporal
 
 /datum/outfit/nanotrasencorporal/post_equip(mob/living/carbon/human/H, visuals_only = FALSE)
 	if(visuals_only)
 		return
 
-	apply_corpse_rank_name(H, "Cpl.")
+	var/obj/item/card/id/W = H.wear_id
+	W.registered_name = H.real_name
+	W.update_label()
+	W.update_icon()
 
 /datum/outfit/nanotrasencorporal/pre_equip(mob/living/carbon/human/H)
 	. = ..()
@@ -138,7 +121,10 @@
 	if(visuals_only)
 		return
 
-	apply_corpse_rank_name(H, "Sgt.")
+	var/obj/item/card/id/W = H.wear_id
+	W.registered_name = H.real_name
+	W.update_label()
+	W.update_icon()
 
 /datum/outfit/nanotrasensergeant/pre_equip(mob/living/carbon/human/H)
 	. = ..()
@@ -181,17 +167,10 @@
 	if(visuals_only)
 		return
 
-	apply_corpse_rank_name(H, "Cpt.")
-
-/datum/outfit/nanotrasencaptain/pre_equip(mob/living/carbon/human/H)
-	. = ..()
-
-	head = pick(list(
-		/obj/item/clothing/head/beret/sec/ntps/captain,
-		/obj/item/clothing/head/hats/hos/cap/captain
-	))
-
-	return ..()
+	var/obj/item/card/id/W = H.wear_id
+	W.registered_name = H.real_name
+	W.update_label()
+	W.update_icon()
 
 /datum/id_trim/centcom/corpse/private_security/cpt
 	assignment = JOB_CENTCOM_PRIVATE_SECURITY_CAPTAIN
