@@ -206,11 +206,9 @@
 /obj/effect/portal_bumper/Bumped(atom/movable/AM)
 	. = ..()
 	if(parent_portal && parent_portal.transport_active)
-		if(ismob(AM) && !isobserver(AM))
-			parent_portal.transfer(AM)
+		parent_portal.transfer(AM)
 
 /obj/effect/portal_bumper/Crossed(atom/movable/AM)
 	. = ..()
 	if(parent_portal && parent_portal.transport_active)
-		if(ismob(AM) && !isobserver(AM))
-			parent_portal.transfer(AM)
+		parent_portal.transfer(AM)
