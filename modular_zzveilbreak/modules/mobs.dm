@@ -2,6 +2,8 @@
 #define BB_VOID_HEAL_COOLDOWN "void_heal_cooldown"
 #define BB_HEAL_TARGET "heal_target"
 #define BB_VOIDBUG_LAST_PACK_CALL "voidbug_last_pack_call"
+/// Chance (0-100) for trash void mobs to run their weighted loot table on death.
+#define VEILBREAK_VOID_CREATURE_LOOT_CHANCE 10
 
 /mob/living/basic/void_creature
     name = "Void Creature"
@@ -24,9 +26,6 @@
     attack_sound = 'modular_zzveilbreak/sound/weapons/voidling_attack.ogg'
     attack_vis_effect = ATTACK_EFFECT_SLASH
     environment_smash = ENVIRONMENT_SMASH_STRUCTURES
-    unsuitable_atmos_damage = 5
-    unsuitable_cold_damage = 5
-    unsuitable_heat_damage = 10
     status_flags = CANPUSH
     obj_damage = 30
     movement_type = GROUND
@@ -67,6 +66,11 @@
     return TRUE
 
 /mob/living/basic/void_creature/proc/drop_loot()
+    if(!prob(VEILBREAK_VOID_CREATURE_LOOT_CHANCE))
+        return
+    do_void_creature_loot_drop()
+
+/mob/living/basic/void_creature/proc/do_void_creature_loot_drop()
     return
 
 /mob/living/basic/void_creature/voidling
@@ -76,12 +80,21 @@
     icon_state = "voidling"
     icon_living = "voidling"
     icon_dead = "voidling_dead"
-    maxHealth = 30
-    health = 30
+    maxHealth = 60
+    health = 60
     melee_damage_lower = 8
     melee_damage_upper = 12
     speed = 0.8
+    armor = list(
+        BLUNT = 25, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0,
+        BOMB = 0, BIO = 0, FIRE = 0, ACID = 0, MAGIC = 0, RADIATION = 0,
+    )
     ai_controller = /datum/ai_controller/basic_controller/void/voidling
+
+/mob/living/basic/void_creature/voidling/do_void_creature_loot_drop()
+    var/loot_type = pick_loot_from_table(voidling_loot_table)
+    if(loot_type)
+        new loot_type(drop_location())
 
 /mob/living/basic/void_creature/voidling/Move()
     . = ..()
@@ -100,6 +113,10 @@
 	faction = list(FACTION_VOID)
 	melee_damage_lower = 0
 	melee_damage_upper = 0
+	armor = list(
+		BLUNT = -20, PUNCTURE = -20, SLASH = -20, LASER = -10, ENERGY = 0,
+		BOMB = 0, BIO = 50, FIRE = 30, ACID = 0, MAGIC = 30, RADIATION = 80,
+	)
 	ai_controller = /datum/ai_controller/basic_controller/void_pathfinder
 
 /mob/living/basic/void_creature/consumed_pathfinder/Initialize(mapload)
@@ -111,6 +128,11 @@
 		cooldown_time = 2 SECONDS,\
 	)
 
+/mob/living/basic/void_creature/consumed_pathfinder/do_void_creature_loot_drop()
+	var/loot_type = pick_loot_from_table(consumed_pathfinder_drops)
+	if(loot_type)
+		new loot_type(drop_location())
+
 /mob/living/basic/void_creature/voidbug
     name = "Voidbug"
     desc = "A resilient bug-like creature from the void, its chitinous plates deflect attacks with ease."
@@ -118,13 +140,22 @@
     icon_state = "void_bug"
     icon_living = "void_bug"
     icon_dead = "void_bug_dead"
-    maxHealth = 200
-    health = 200
+    maxHealth = 140
+    health = 140
     speed = 1.3
+    armor = list(
+        BLUNT = 30, PUNCTURE = 30, SLASH = 30, LASER = -10, ENERGY = 0,
+        BOMB = 0, BIO = 50, FIRE = -50, ACID = 0, MAGIC = 30, RADIATION = 80,
+    )
     ai_controller = /datum/ai_controller/basic_controller/void/voidbug
     var/block_chance = 40
     var/last_alert_time = 0
-    var/alert_cooldown = 10 SECONDS
+    var/alert_cooldown = 30 SECONDS
+
+/mob/living/basic/void_creature/voidbug/do_void_creature_loot_drop()
+    var/loot_type = pick_loot_from_table(voidbug_loot_table)
+    if(loot_type)
+        new loot_type(drop_location())
 
 /mob/living/basic/void_creature/voidbug/bullet_act(obj/projectile/P, def_zone, piercing_hit)
     if(prob(block_chance) && !piercing_hit)
@@ -160,6 +191,10 @@
     speed = 0.7
     melee_damage_lower = 0
     melee_damage_upper = 0
+    armor = list(
+        BLUNT = -20, PUNCTURE = -20, SLASH = -20, LASER = -10, ENERGY = 0,
+        BOMB = 0, BIO = 50, FIRE = 30, ACID = 0, MAGIC = 30, RADIATION = 80,
+    )
     ai_controller = /datum/ai_controller/basic_controller/void_healer
 
 /mob/living/basic/void_creature/void_healer/Initialize(mapload)
@@ -170,6 +205,11 @@
         projectile_sound = 'sound/effects/magic/magic_missile.ogg',\
         cooldown_time = 2.5 SECONDS,\
     )
+
+/mob/living/basic/void_creature/void_healer/do_void_creature_loot_drop()
+    var/loot_type = pick_loot_from_table(void_healer_table)
+    if(loot_type)
+        new loot_type(drop_location())
 
 /obj/projectile/magic/voidbolt
     name = "void bolt"

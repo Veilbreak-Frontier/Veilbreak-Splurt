@@ -1,14 +1,9 @@
 
 // Weighted loot table (e.g., for random drops with chances)
 var/list/voidling_loot_table = list(
-    /obj/item/stack/sheet/bluespace_crystal = 10,
-    /obj/item/stack/sheet/mineral/diamond = 10,
-    /obj/item/stack/sheet/mineral/gold = 10,
-    /obj/item/stack/sheet/mineral/silver = 10,
-    /obj/item/stack/sheet/plasteel = 30,
-    /obj/item/clothing/neck/aether_pendant = 0.1,  // 0.1% chance
-    /obj/item/clothing/neck/life_pendant = 0.1,
-	/obj/item/voidshard = 1 
+    /obj/item/clothing/neck/aether_pendant = 0.2,  // 0.1% chance
+    /obj/item/clothing/neck/life_pendant = 0.2,
+	/obj/item/voidshard = 1
 )
 
 var/list/inai_drops = list(
@@ -29,16 +24,15 @@ var/list/melos_vecare_drops = list(
 )
 
 var/list/voidbug_loot_table = list(
-	/obj/item/clothing/neck/aether_pendant = 30,
-	/obj/item/food/appleslice = 70
+	/obj/item/clothing/neck/aether_pendant = 3,
+	/obj/item/clothing/neck/life_pendant = 0.1
 )
 
 var/list/consumed_pathfinder_drops = list(
-	/obj/item/voidshard = 1,
-	/obj/item/clothing/neck/aether_pendant = 5,
-	/obj/item/clothing/neck/life_pendant = 5,
-	/obj/item/clothing/gloves/ring/voidring = 29,
-	/obj/item/stack/sheet/bluespace_crystal = 60
+	/obj/item/voidshard = 10,
+	/obj/item/clothing/neck/aether_pendant = 1,
+	/obj/item/clothing/neck/life_pendant = 1,
+	/obj/item/clothing/gloves/ring/voidring = 22
 )
 
 /// One roll when a /obj/structure/closet/crate/veilbreak_lootbox is first opened. Voidshard is the common pull; pendants are deliberately rarer.
