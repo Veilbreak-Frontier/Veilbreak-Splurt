@@ -288,6 +288,18 @@
 
 	apply_rank(H, "Captain")
 
+	var/has_taser_bulwark = FALSE
+
+	// Check both hands
+	for(var/obj/item/I in H.get_equipped_items())
+		if(istype(I, /obj/item/gun/ballistic/automatic/bulwark/taser))
+			has_taser_bulwark = TRUE
+			break
+
+	if(has_taser_bulwark)
+		for(var/obj/item/gun/energy/e_gun/advtaser/T in H.contents)
+			qdel(T)
+
 	return ..()
 
 // MISC ERT CODE
