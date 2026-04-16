@@ -6,14 +6,15 @@
 	var/icon_temperature = T20C //stop small changes in temperature causing icon refresh
 	resistance_flags = LAVA_PROOF | FIRE_PROOF
 
-	hide = FALSE
-
 	has_gas_visuals = FALSE
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/Initialize(mapload)
 	. = ..()
+<<<<<<< HEAD
 	RegisterSignal(src, COMSIG_UNDERTILE_UPDATED, PROC_REF(on_hide))
 
+=======
+>>>>>>> testing
 	add_atom_colour("#404040", FIXED_COLOUR_PRIORITY)
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/is_connectable(obj/machinery/atmospherics/pipe/heat_exchanging/target, given_layer, HE_type_check = TRUE)
