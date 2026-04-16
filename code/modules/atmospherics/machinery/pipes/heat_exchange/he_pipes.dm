@@ -35,11 +35,21 @@
 	return tile_air.total_moles()
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/proc/get_thermal_conductivity_for_turf(turf/local_turf)
-	var/tile_moles = get_tile_moles(local_turf)
-	if(tile_moles <= 0)
-		return thermal_conductivity
+	var/tile_moles = max(get_tile_moles(local_turf), 0)
+	var/safe_moles_cellstandard = max(MOLES_CELLSTANDARD, 1)
+	var/mole_ratio = clamp(tile_moles / safe_moles_cellstandard, 0, 1)
 
-	return thermal_conductivity * ((tile_moles+100) / MOLES_CELLSTANDARD)
+	return round(clamp(1 + (5 * mole_ratio), 1, 6), 0.01)
+
+/obj/machinery/atmospherics/pipe/heat_exchanging/examine(mob/user)
+	. = ..()
+
+	var/current_thermal_conductivity = thermal_conductivity
+	var/turf/local_turf = loc
+	if(istype(local_turf))
+		current_thermal_conductivity = get_thermal_conductivity_for_turf(local_turf)
+
+	. += span_notice("Its current thermal conductivity is <b>[round(current_thermal_conductivity, 0.01)]</b>.")
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/process_atmos()
 	var/environment_temperature = 0
