@@ -31,10 +31,6 @@
     movement_type = GROUND
     basic_mob_flags = DEL_ON_DEATH
     ai_controller = /datum/ai_controller/basic_controller/void
-    armor = list(
-        BLUNT = 0, PUNCTURE = 0, SLASH = 0, LASER = -10, ENERGY = 0,
-        BOMB = 0, BIO = 50, FIRE = -20, ACID = 0, MAGIC = 30, RADIATION = 80,
-    )
 
 /mob/living/basic/void_creature/Initialize(mapload)
     . = ..()
@@ -151,14 +147,11 @@
     var/block_chance = 40
     var/last_alert_time = 0
     var/alert_cooldown = 30 SECONDS
-<<<<<<< HEAD
-=======
 
 /mob/living/basic/void_creature/voidbug/do_void_creature_loot_drop()
     var/loot_type = pick_loot_from_table(voidbug_loot_table)
     if(loot_type)
         new loot_type(drop_location())
->>>>>>> testing
 
 /mob/living/basic/void_creature/voidbug/bullet_act(obj/projectile/P, def_zone, piercing_hit)
     if(prob(block_chance) && !piercing_hit)
