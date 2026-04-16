@@ -139,6 +139,10 @@
 	if(isnull(victim) || victim.has_status_effect(/datum/status_effect/gutted))
 		LoseTarget()
 		return FALSE
+	// Proteans use a custom TRAIT_NODEATH recovery flow and should not be hard-killed here.
+	if(isprotean(victim))
+		LoseTarget()
+		return FALSE
 	celebrate_kill(victim)
 	if(!is_station_level(z) || client) //NPC monsters won't heal while on station
 		heal_overall_damage(victim.maxHealth * 0.5)

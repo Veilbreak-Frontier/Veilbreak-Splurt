@@ -500,6 +500,9 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 /datum/preferences/proc/write_preference_special(datum/preference/preference, preference_value, override_slot)
 	var/save_data = savefile.get_entry("character[override_slot]")
 	var/new_value = preference.deserialize(preference_value, src)
+	// Avoid sharing list references between character slots during duplication.
+	if(islist(new_value))
+		new_value = deep_copy_list(new_value)
 	var/success = preference.write(save_data, new_value)
 	if (success)
 		value_cache[preference.type] = new_value

@@ -304,7 +304,7 @@ While using this makes the system rely on OnFire, it still gives options for tim
 		onEliteLoss()
 		return
 	if(QDELETED(activator) || activator.stat == DEAD || (activator.health <= HEALTH_THRESHOLD_DEAD && HAS_TRAIT(activator, TRAIT_NODEATH)))
-		if(!QDELETED(activator) && HAS_TRAIT(activator, TRAIT_NODEATH)) // dust the unkillable activator
+		if(!QDELETED(activator) && HAS_TRAIT(activator, TRAIT_NODEATH) && !isprotean(activator)) // dust the unkillable activator (except proteans)
 			activator.dust(drop_items = TRUE)
 		onEliteWon()
 
