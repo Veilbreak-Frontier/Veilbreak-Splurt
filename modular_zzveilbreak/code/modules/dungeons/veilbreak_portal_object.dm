@@ -1,6 +1,7 @@
 /obj/machinery/portal
 	name = "Dimensional Portal"
 	desc = "A massive ring of superconducting magnets and exotic matter emitters."
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 	icon = 'icons/obj/machines/gateway.dmi'
 	icon_state = "portal_frame"
 	density = FALSE
@@ -103,6 +104,9 @@
 		if(target)
 			target.post_transfer(AM)
 
+/obj/machinery/portal/singularity_act()
+	return
+
 /obj/machinery/portal/Destroy()
 	if(linked_console)
 		linked_console.linked_portal = null
@@ -202,6 +206,14 @@
 /obj/effect/portal_bumper/Initialize(loc, obj/machinery/portal/P)
 	. = ..()
 	parent_portal = P
+
+/obj/effect/portal_bumper/CanAllowThrough(atom/movable/mover, border_dir)
+	if(isitem(mover))
+		return TRUE
+	return ..()
+
+/obj/effect/portal_bumper/singularity_act()
+	return
 
 /obj/effect/portal_bumper/Bumped(atom/movable/AM)
 	. = ..()
