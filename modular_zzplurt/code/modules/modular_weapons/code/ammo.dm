@@ -157,4 +157,14 @@
 	damage = 27
 	armour_penetration = 20
 	wound_bonus = -15
-	wound_falloff_tile = 0
+	embed_type = /datum/embedding/bullet/c68
+
+/datum/embedding/bullet/c68
+	embed_chance = 20
+	fall_chance = 2
+	jostle_chance = 4
+	ignore_throwspeed_threshold = TRUE
+	pain_stam_pct = 0.5
+	pain_mult = 6
+	jostle_pain_mult = 7
+	rip_time = 2 SECONDS
