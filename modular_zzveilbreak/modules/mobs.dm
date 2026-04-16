@@ -24,9 +24,6 @@
     attack_sound = 'modular_zzveilbreak/sound/weapons/voidling_attack.ogg'
     attack_vis_effect = ATTACK_EFFECT_SLASH
     environment_smash = ENVIRONMENT_SMASH_STRUCTURES
-    unsuitable_atmos_damage = 5
-    unsuitable_cold_damage = 5
-    unsuitable_heat_damage = 10
     status_flags = CANPUSH
     obj_damage = 30
     movement_type = GROUND
@@ -76,11 +73,15 @@
     icon_state = "voidling"
     icon_living = "voidling"
     icon_dead = "voidling_dead"
-    maxHealth = 30
-    health = 30
+    maxHealth = 60
+    health = 60
     melee_damage_lower = 8
     melee_damage_upper = 12
     speed = 0.8
+    armor = list(
+        BLUNT = 25, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0,
+        BOMB = 0, BIO = 0, FIRE = 0, ACID = 0, MAGIC = 0, RADIATION = 0,
+    )
     ai_controller = /datum/ai_controller/basic_controller/void/voidling
 
 /mob/living/basic/void_creature/voidling/Move()
@@ -100,6 +101,10 @@
 	faction = list(FACTION_VOID)
 	melee_damage_lower = 0
 	melee_damage_upper = 0
+	armor = list(
+		BLUNT = -20, PUNCTURE = -20, SLASH = -20, LASER = -10, ENERGY = 0,
+		BOMB = 0, BIO = 50, FIRE = 30, ACID = 0, MAGIC = 30, RADIATION = 80,
+	)
 	ai_controller = /datum/ai_controller/basic_controller/void_pathfinder
 
 /mob/living/basic/void_creature/consumed_pathfinder/Initialize(mapload)
@@ -118,13 +123,17 @@
     icon_state = "void_bug"
     icon_living = "void_bug"
     icon_dead = "void_bug_dead"
-    maxHealth = 200
-    health = 200
+    maxHealth = 140
+    health = 140
     speed = 1.3
+    armor = list(
+        BLUNT = 30, PUNCTURE = 30, SLASH = 30, LASER = -10, ENERGY = 0,
+        BOMB = 0, BIO = 50, FIRE = -50, ACID = 0, MAGIC = 30, RADIATION = 80,
+    )
     ai_controller = /datum/ai_controller/basic_controller/void/voidbug
     var/block_chance = 40
     var/last_alert_time = 0
-    var/alert_cooldown = 10 SECONDS
+    var/alert_cooldown = 30 SECONDS
 
 /mob/living/basic/void_creature/voidbug/bullet_act(obj/projectile/P, def_zone, piercing_hit)
     if(prob(block_chance) && !piercing_hit)
@@ -160,6 +169,10 @@
     speed = 0.7
     melee_damage_lower = 0
     melee_damage_upper = 0
+    armor = list(
+        BLUNT = -20, PUNCTURE = -20, SLASH = -20, LASER = -10, ENERGY = 0,
+        BOMB = 0, BIO = 50, FIRE = 30, ACID = 0, MAGIC = 30, RADIATION = 80,
+    )
     ai_controller = /datum/ai_controller/basic_controller/void_healer
 
 /mob/living/basic/void_creature/void_healer/Initialize(mapload)
