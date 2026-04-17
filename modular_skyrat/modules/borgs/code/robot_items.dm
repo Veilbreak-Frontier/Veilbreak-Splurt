@@ -615,40 +615,40 @@
 		if(!model_selection)
 			return FALSE
 
-		var/model_path
+		var/obj/item/robot_model/model
 		switch(model_selection)
 			if("Standard")
-				model_path = /obj/item/robot_model/standard
+				model = new /obj/item/robot_model/standard
 			if("Medical")
-				model_path = /obj/item/robot_model/medical
+				model = new /obj/item/robot_model/medical
 			if("Cargo")
-				model_path = /obj/item/robot_model/cargo
+				model = new /obj/item/robot_model/cargo
 			if("Engineer")
-				model_path = /obj/item/robot_model/engineering
+				model = new /obj/item/robot_model/engineering
 			if("Security")
-				model_path = /obj/item/robot_model/security
+				model = new /obj/item/robot_model/security
 			if("Service")
-				model_path = /obj/item/robot_model/service
+				model = new /obj/item/robot_model/service
 			if("Janitor")
-				model_path = /obj/item/robot_model/janitor
+				model = new /obj/item/robot_model/janitor
 			if("Miner")
-				model_path = /obj/item/robot_model/miner
+				model = new /obj/item/robot_model/miner
 			if("Peacekeeper")
-				model_path = /obj/item/robot_model/peacekeeper
+				model = new /obj/item/robot_model/peacekeeper
 			if("Clown")
-				model_path = /obj/item/robot_model/clown
+				model = new /obj/item/robot_model/clown
 			if("Syndicate")
-				model_path = /obj/item/robot_model/syndicatejack
+				model = new /obj/item/robot_model/syndicatejack
 			if("Spider Clan")
-				model_path = /obj/item/robot_model/ninja
+				model = new /obj/item/robot_model/ninja
 			if("Research")
-				model_path = /obj/item/robot_model/sci
+				model = new /obj/item/robot_model/sci
 			else
 				return FALSE
-
-		if (!set_disguise_vars(model_path, user))
+		if (!set_disguise_vars(model, user))
+			qdel(model)
 			return FALSE
-
+		qdel(model)
 		animation_playing = TRUE
 		to_chat(user, span_notice("You activate \the [src]."))
 		playsound(src, 'sound/effects/seedling_chargeup.ogg', 100, TRUE, -6)
@@ -672,41 +672,34 @@
 		else
 			to_chat(user, span_warning("The chameleon field fizzles."))
 			do_sparks(3, FALSE, user)
-			for(i=1, i<=min(7, user.filters.len), ++i)
+			for(i=1, i<=min(7, user.filters.len), ++i) // removing filters that are animating does nothing, we gotta stop the animations first
 				f = user.filters[start+i]
 				animate(f)
 		user.filters = null
 		animation_playing = FALSE
 
-
-/obj/item/borg_shapeshifter/proc/set_disguise_vars(obj/item/robot_model/model_path, mob/living/silicon/robot/cyborg)
-	if (!model_path || !cyborg)
+/obj/item/borg_shapeshifter/proc/set_disguise_vars(obj/item/robot_model/disguise_model, mob/living/silicon/robot/cyborg)
+	if (!disguise_model || !cyborg)
 		return FALSE
-
 	var/list/reskin_icons = list()
-	var/list/model_skins = initial(model_path.borg_skins)
-
-	for(var/skin in model_skins)
-		var/list/details = model_skins[skin]
+	for(var/skin in disguise_model.borg_skins)
+		var/list/details = disguise_model.borg_skins[skin]
 		var/image/reskin = image(icon = details[SKIN_ICON] || 'icons/mob/silicon/robots.dmi', icon_state = details[SKIN_ICON_STATE])
-		var/list/features = details[SKIN_FEATURES]
-		if (features && ((TRAIT_R_WIDE in features) || (TRAIT_R_BIG in features)))
-			reskin.pixel_x -= 16
+		if (!isnull(details[SKIN_FEATURES]))
+			if ((TRAIT_R_WIDE in details[SKIN_FEATURES]) || (TRAIT_R_BIG in details[SKIN_FEATURES]))
+				reskin.pixel_x -= 16
 		reskin_icons[skin] = reskin
-
 	var/borg_skin = show_radial_menu(cyborg, cyborg, reskin_icons, custom_check = CALLBACK(src, PROC_REF(check_menu), cyborg), radius = 38, require_near = TRUE)
 	if(!borg_skin)
 		return FALSE
-
-	var/list/chosen_details = model_skins[borg_skin]
-	disguise_model_name = initial(model_path.name)
-	disguise = chosen_details[SKIN_ICON_STATE]
-	disguise_icon_override = chosen_details[SKIN_ICON]
-	disguise_special_light_key = chosen_details[SKIN_LIGHT_KEY]
-	disguise_hat_offset = chosen_details[SKIN_HAT_OFFSET] || 0
-	disguise_model_features = chosen_details[SKIN_FEATURES]
+	disguise_model_name = disguise_model.name
+	var/list/details = disguise_model.borg_skins[borg_skin]
+	disguise = details[SKIN_ICON_STATE]
+	disguise_icon_override = details[SKIN_ICON]
+	disguise_special_light_key = details[SKIN_LIGHT_KEY]
+	disguise_hat_offset = 0 || details[SKIN_HAT_OFFSET]
+	disguise_model_features = details[SKIN_FEATURES]
 	return TRUE
-
 
 /obj/item/borg_shapeshifter/process()
 	if (user && !user.cell?.use(activationUpkeep))

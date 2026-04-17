@@ -12,8 +12,6 @@
 		make_laws()
 
 /mob/living/silicon/proc/log_current_laws()
-	if(!laws)
-		return
 	var/list/the_laws = laws.get_law_list(include_zeroth = TRUE)
 	var/lawtext = the_laws.Join(" ")
 	log_silicon("LAW: [key_name(src)] spawned with [lawtext]")
