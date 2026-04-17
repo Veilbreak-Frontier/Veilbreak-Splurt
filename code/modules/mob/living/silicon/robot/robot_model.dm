@@ -247,12 +247,15 @@
 	cyborg.drop_all_held_items()
 	cyborg.model = new_model
 	cyborg.update_module_innate()
-	// SPLURT EDIT START - CYBORGS - Dogborg specific modules
+
 	if(TRAIT_R_DOGBORG in new_model.model_features)
 		new_model.dogborg_equip()
-	// SPLURT EDIT END
+
 	new_model.rebuild_modules()
-	cyborg.radio.recalculateChannels()
+
+	if(cyborg.radio)
+		cyborg.radio.recalculateChannels()
+
 	cyborg.set_modularInterface_theme()
 	cyborg.diag_hud_set_health()
 	cyborg.diag_hud_set_status()
@@ -260,15 +263,12 @@
 	cyborg.diag_hud_set_aishell()
 	log_silicon("CYBORG: [key_name(cyborg)] has transformed into the [new_model] model.")
 
-	//SKYRAT EDIT ADDITION BEGIN - ALTBORGS - Old check for 'dogborg' var no longer necessary, refactored into model_features instead.
 	new_model.update_tallborg()
-	//SKYRAT EDIT ADDITION END
-	//BUBBER EDIT ADDTION BEGIN
 	new_model.update_quadruped()
 	new_model.update_lightweight()
 	new_model.update_robot_rest()
 	new_model.update_footsteps()
-	//BUBBER EDIT ADDTION END
+
 	if(transform)
 		INVOKE_ASYNC(new_model, PROC_REF(do_transform_animation))
 	qdel(src)
