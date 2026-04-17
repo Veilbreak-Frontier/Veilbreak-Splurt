@@ -1,5 +1,3 @@
-CREATION_TEST_IGNORE_SELF(/obj/item/slimecross/gentle)
-
 /obj/item/slimecross/gentle
 	name = "gentle extract"
 	desc = "It pulses slowly, as if breathing."
@@ -9,26 +7,34 @@ CREATION_TEST_IGNORE_SELF(/obj/item/slimecross/gentle)
 	var/extract_type
 	var/obj/item/slime_extract/extract
 	COOLDOWN_DECLARE(use_cooldown)
-	var/cooldown = 5 //This is in seconds
 
 /obj/item/slimecross/gentle/Initialize(mapload)
-	..()
-	extract = new extract_type(src.loc)
+	. = ..()
+	extract = new extract_type(null)
+	extract.forceMove(src)
+
+/obj/item/slimecross/gentle/Destroy()
+	QDEL_NULL(extract)
+	return ..()
 	visible_message(span_notice("[src] glows and pulsates softly."))
 	extract.name = name
 	extract.desc = desc
 	extract.icon = icon
 	extract.icon_state = icon_state
 	extract.color = color
-	extract.forceMove(src)
 
 /obj/item/slimecross/gentle/attack_self(mob/living/carbon/user)
-	if(preactivate_core(user))
-		COOLDOWN_START(src, use_cooldown, extract.activate(user, user.dna.species, SLIME_ACTIVATE_MINOR))
+	if(!preactivate_core(user))
+		return
+	var/cooldown_time = extract.activate(user, user.dna.species, SLIME_ACTIVATE_MINOR)
+	COOLDOWN_START(src, use_cooldown, cooldown_time || 5 SECONDS)
 
-/obj/item/slimecross/gentle/AltClick(mob/living/carbon/user, obj/item/I)
-	if(preactivate_core(user))
-		COOLDOWN_START(src, use_cooldown, extract.activate(user, user.dna.species, SLIME_ACTIVATE_MAJOR))
+/obj/item/slimecross/gentle/click_alt(mob/living/carbon/user)
+	if(!preactivate_core(user))
+		return NONE
+	var/cooldown_time = extract.activate(user, user.dna.species, SLIME_ACTIVATE_MAJOR)
+	COOLDOWN_START(src, use_cooldown, cooldown_time || 5 SECONDS)
+	return CLICK_ACTION_SUCCESS
 
 /obj/item/slimecross/gentle/proc/preactivate_core(mob/living/carbon/user)
 	if(user.incapacitated || !iscarbon(user))
@@ -36,7 +42,6 @@ CREATION_TEST_IGNORE_SELF(/obj/item/slimecross/gentle)
 	if(!COOLDOWN_FINISHED(src, use_cooldown))
 		to_chat(user, span_notice("[src] isn't ready yet!"))
 		return FALSE
-	COOLDOWN_START(src, use_cooldown, 10 SECONDS) //This will be overwritten depending on exact activation, but prevents bypassing cooldowns on extracts with a do_after.
 	return TRUE
 
 /obj/item/slimecross/gentle/grey

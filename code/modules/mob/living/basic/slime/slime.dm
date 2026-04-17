@@ -95,6 +95,9 @@
 	///How many extracts of the modtype have been applied.
 	var/applied_crossbreed_amount = 0
 
+	///Transformative crossbreed effects (see SLIME_EFFECT_* in slimes.dm)
+	var/transformeffects = SLIME_EFFECT_DEFAULT
+
 	//AI related traits
 
 	/// Instructions you can give to slimes

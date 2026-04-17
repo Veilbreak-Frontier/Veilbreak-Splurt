@@ -6,7 +6,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	max_integrity = 5
 	anchored = TRUE
 	density = TRUE
-	icon = 'icons/obj/slimecrossing.dmi'
+	icon = 'icons/obj/science/slimecrossing.dmi'
 	icon_state = "slime_pylon"
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	///Assoc list of affected mobs, the key is the mob while the value of the map is the amount of ticks spent inside of the zone.
@@ -130,10 +130,10 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	return view(3, src)
 
 /obj/structure/slime_crystal/grey/on_mob_effect(mob/living/affected_mob)
-	if(!istype(affected_mob, /mob/living/simple_animal/slime))
+	if(!istype(affected_mob, /mob/living/basic/slime))
 		return
-	var/mob/living/simple_animal/slime/slime_mob = affected_mob
-	slime_mob.nutrition += 2
+	var/mob/living/basic/slime/slime_mob = affected_mob
+	slime_mob.adjust_nutrition(2)
 
 /obj/structure/slime_crystal/orange
 	colour = SLIME_TYPE_ORANGE
@@ -172,19 +172,19 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 
 	switch(rand_dam_type)
 		if(0)
-			carbon_mob.adjustBruteLoss(-heal_amt)
+			carbon_mob.adjust_brute_loss(-heal_amt)
 		if(1)
-			carbon_mob.adjustFireLoss(-heal_amt)
+			carbon_mob.adjust_fire_loss(-heal_amt)
 		if(2)
-			carbon_mob.adjustOxyLoss(-heal_amt)
+			carbon_mob.adjust_oxy_loss(-heal_amt)
 		if(3)
-			carbon_mob.adjustToxLoss(-heal_amt, forced = TRUE)
+			carbon_mob.adjust_tox_loss(-heal_amt, forced = TRUE)
 		if(4)
-			carbon_mob.adjustCloneLoss(-heal_amt)
+			carbon_mob.adjust_brute_loss(-heal_amt)
 		if(5)
-			carbon_mob.adjustStaminaLoss(-heal_amt)
+			carbon_mob.adjust_stamina_loss(-heal_amt)
 		if(6 to 10)
-			carbon_mob.adjustOrganLoss(pick(ORGAN_SLOT_BRAIN,ORGAN_SLOT_HEART,ORGAN_SLOT_LIVER,ORGAN_SLOT_LUNGS), -heal_amt)
+			carbon_mob.adjust_organ_loss(pick(ORGAN_SLOT_BRAIN,ORGAN_SLOT_HEART,ORGAN_SLOT_LIVER,ORGAN_SLOT_LUNGS), -heal_amt)
 
 /obj/structure/slime_crystal/blue
 	colour = SLIME_TYPE_BLUE
@@ -211,7 +211,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	if(!iscyborg(affected_mob))
 		return
 	var/mob/living/silicon/borgo = affected_mob
-	borgo.adjustBruteLoss(-heal_amt)
+	borgo.adjust_brute_loss(-heal_amt)
 
 /obj/structure/slime_crystal/yellow
 	colour = SLIME_TYPE_YELLOW
@@ -223,9 +223,10 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	. = ..()
 	set_light(3)
 
-/obj/structure/slime_crystal/yellow/attacked_by(obj/item/stock_parts/cell/cell, mob/living/user)
-	if(!istype(cell))
+/obj/structure/slime_crystal/yellow/attacked_by(obj/item/attacking_item, mob/living/user, list/modifiers, list/attack_modifiers)
+	if(!istype(attacking_item, /obj/item/stock_parts/cell))
 		return ..()
+	var/obj/item/stock_parts/cell/cell = attacking_item
 	if(cell.charge == cell.maxcharge) // Punishment for greed
 		to_chat(user, span_danger("You try to charge [cell], but it is already fully energized. You are not sure if this was a good idea..."))
 		cell.explode()
@@ -353,14 +354,12 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	desc = "Translucent and irregular, it can duplicate matter on a whim"
 	anchored = TRUE
 	density = FALSE
-	icon = 'icons/obj/slimecrossing.dmi'
+	icon = 'icons/obj/science/slimecrossing.dmi'
 	icon_state = "cerulean_crystal"
 	max_integrity = 5
 	var/stage = 0
 	var/max_stage = 5
 	var/datum/weakref/pylon
-
-CREATION_TEST_IGNORE_SUBTYPES(/obj/structure/cerulean_slime_crystal)
 
 /obj/structure/cerulean_slime_crystal/Initialize(mapload, obj/structure/slime_crystal/cerulean/master_pylon)
 	. = ..()
@@ -558,8 +557,16 @@ CREATION_TEST_IGNORE_SUBTYPES(/obj/structure/cerulean_slime_crystal)
 	if(!ishuman(user))
 		return
 	var/mob/living/carbon/human/human_mob = user
-	var/mob/living/simple_animal/pet/chosen_pet = pick(/mob/living/basic/pet/dog/corgi,/mob/living/basic/pet/dog/pug,/mob/living/basic/pet/dog/bullterrier,/mob/living/simple_animal/pet/fox,/mob/living/basic/pet/cat/kitten,/mob/living/basic/pet/cat/space,/mob/living/simple_animal/pet/penguin/emperor)
-	chosen_pet = new chosen_pet(get_turf(human_mob))
+	var/chosen_pet_type = pick(
+		/mob/living/basic/pet/dog/corgi,
+		/mob/living/basic/pet/dog/pug,
+		/mob/living/basic/pet/dog/bullterrier,
+		/mob/living/basic/pet/fox/docile,
+		/mob/living/basic/pet/cat/kitten,
+		/mob/living/basic/pet/cat/space,
+		/mob/living/basic/pet/penguin/emperor,
+	)
+	var/mob/living/basic/pet/chosen_pet = new chosen_pet_type(get_turf(human_mob))
 	human_mob.forceMove(chosen_pet)
 	human_mob.mind.transfer_to(chosen_pet)
 	ADD_TRAIT(human_mob, TRAIT_NOBREATH, type)
@@ -584,28 +591,28 @@ CREATION_TEST_IGNORE_SUBTYPES(/obj/structure/cerulean_slime_crystal)
 	colour = SLIME_TYPE_BLACK
 
 /obj/structure/slime_crystal/black/on_mob_effect(mob/living/affected_mob)
-	if(!ishuman(affected_mob) || isoozeling(affected_mob))
+	if(!ishuman(affected_mob) || is_species(affected_mob, /datum/species/jelly/slime))
 		return
 
 	if(affected_mobs[affected_mob] < 60) //Around 2 minutes
 		return
 
 	var/mob/living/carbon/human/human_transformed = affected_mob
-	human_transformed.set_species(pick(typesof(/datum/species/oozeling)))
+	human_transformed.set_species(/datum/species/jelly/slime)
 
 /obj/structure/slime_crystal/lightpink
 	colour = SLIME_TYPE_LIGHT_PINK
 
 /obj/structure/slime_crystal/lightpink/attack_ghost(mob/user)
 	. = ..()
-	var/mob/living/simple_animal/hostile/lightgeist/slime/L = new(get_turf(src))
-	L.ckey = user.ckey
-	affected_mobs[L] = 0
-	ADD_TRAIT(L,TRAIT_MUTE,type)
-	ADD_TRAIT(L,TRAIT_EMOTEMUTE,type)
+	var/mob/living/basic/lightgeist/spirit = new(get_turf(src))
+	spirit.ckey = user.ckey
+	affected_mobs[spirit] = 0
+	ADD_TRAIT(spirit, TRAIT_MUTE, type)
+	ADD_TRAIT(spirit, TRAIT_EMOTEMUTE, type)
 
 /obj/structure/slime_crystal/lightpink/on_mob_leave(mob/living/affected_mob)
-	if(istype(affected_mob,/mob/living/simple_animal/hostile/lightgeist/slime))
+	if(istype(affected_mob, /mob/living/basic/lightgeist))
 		affected_mob.ghostize(TRUE)
 		qdel(affected_mob)
 
@@ -638,18 +645,23 @@ CREATION_TEST_IGNORE_SUBTYPES(/obj/structure/cerulean_slime_crystal)
 	for(var/X in subtypesof(/obj/item/slimecross/crystalline) - /obj/item/slimecross/crystalline/rainbow)
 		inserted_cores[X] = FALSE
 
-/obj/structure/slime_crystal/rainbow/attacked_by(obj/item/I, mob/living/user)
+/obj/structure/slime_crystal/rainbow/attacked_by(obj/item/attacking_item, mob/living/user, list/modifiers, list/attack_modifiers)
+	for(var/X in inserted_cores)
+		if(inserted_cores[X])
+			var/obj/structure/slime_crystal/SC = inserted_cores[X]
+			SC.attacked_by(attacking_item, user, modifiers, attack_modifiers)
+
 	. = ..()
 
-	if(!istype(I,/obj/item/slimecross/crystalline) || istype(I,/obj/item/slimecross/crystalline/rainbow))
+	if(!istype(attacking_item, /obj/item/slimecross/crystalline) || istype(attacking_item, /obj/item/slimecross/crystalline/rainbow))
 		return
 
-	var/obj/item/slimecross/crystalline/slimecross = I
+	var/obj/item/slimecross/crystalline/slimecross = attacking_item
 
 	if(inserted_cores[slimecross.type])
 		return
 
-	inserted_cores[slimecross.type] = new slimecross.crystal_type(get_turf(src),src)
+	inserted_cores[slimecross.type] = new slimecross.crystal_type(get_turf(src), src)
 	qdel(slimecross)
 
 /obj/structure/slime_crystal/rainbow/Destroy()
@@ -663,12 +675,5 @@ CREATION_TEST_IGNORE_SUBTYPES(/obj/structure/cerulean_slime_crystal)
 	for(var/X in inserted_cores)
 		if(inserted_cores[X])
 			var/obj/structure/slime_crystal/SC = inserted_cores[X]
-			SC.attack_hand(user)
-	. = ..()
-
-/obj/structure/slime_crystal/rainbow/attacked_by(obj/item/I, mob/living/user)
-	for(var/X in inserted_cores)
-		if(inserted_cores[X])
-			var/obj/structure/slime_crystal/SC = inserted_cores[X]
-			SC.attacked_by(user)
+			SC.attack_hand(user, modifiers)
 	. = ..()

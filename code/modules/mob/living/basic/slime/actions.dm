@@ -118,8 +118,13 @@
 			continue
 		slime_friends += possible_friend
 
-	for(var/i in 1 to 3)
+	var/babies_to_make = 3
+	if(transformeffects & SLIME_EFFECT_GREY)
+		babies_to_make = 4
+
+	for(var/i in 1 to babies_to_make)
 		var/mob/living/basic/slime/baby = new(drop_loc, get_random_mutation())
+		baby.transformeffects = transformeffects
 		created_slimes += baby
 		for(var/slime_friend in slime_friends)
 			baby.befriend(slime_friend)
