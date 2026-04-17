@@ -80,32 +80,32 @@ put up a rune with bluespace effects, lots of those runes are fluff or act as a 
 
 	qdel(src)
 
-///using the extract on the floor will "draw" the rune.
-/obj/item/slimecross/warping/afterattack(atom/target, mob/user, list/modifiers, list/attack_modifiers)
-	. = ..()
-	if(!user.Adjacent(target))
-		return
+/// Using the extract on a floor tile draws the rune; using it on your matching rune removes it after a delay.
+/obj/item/slimecross/warping/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(!user.Adjacent(interacting_with))
+		return NONE
 
-	if(istype(target, runepath))
-		if(do_after(user, storing_time, target = target))
-			qdel(target)
-		return
+	if(istype(interacting_with, runepath))
+		if(do_after(user, storing_time, target = interacting_with))
+			qdel(interacting_with)
+		return ITEM_INTERACT_BLOCKING
 
-	if(isturf(target) && locate(/obj/effect/warped_rune) in target)
-		to_chat(user, span_warning("There is already a bluespace rune here!"))
-		return
+	if(isturf(interacting_with))
+		if(locate(/obj/effect/warped_rune) in interacting_with)
+			to_chat(user, span_warning("There is already a bluespace rune here!"))
+			return ITEM_INTERACT_BLOCKING
+		if(!isfloorturf(interacting_with))
+			to_chat(user, span_warning("You cannot draw a rune here!"))
+			return ITEM_INTERACT_BLOCKING
+		if(!check_cd(user))
+			return ITEM_INTERACT_BLOCKING
+		if(do_after(user, drawing_time, target = interacting_with))
+			if(!locate(/obj/effect/warped_rune) in interacting_with && check_cd(user))
+				warping_crossbreed_spawn(interacting_with, user)
+				COOLDOWN_START(src, drawing_cooldown, max_cooldown)
+		return ITEM_INTERACT_BLOCKING
 
-	if(!isfloorturf(target))
-		to_chat(user, span_warning("You cannot draw a rune here!"))
-		return
-
-	if(!check_cd(user))
-		return
-
-	if(do_after(user, drawing_time, target = target))
-		if(!locate(/obj/effect/warped_rune) in target && check_cd(user))
-			warping_crossbreed_spawn(target, user)
-			COOLDOWN_START(src, drawing_cooldown, max_cooldown)
+	return NONE
 
 ///spawns the rune
 /obj/item/slimecross/warping/proc/warping_crossbreed_spawn(atom/target, mob/user)

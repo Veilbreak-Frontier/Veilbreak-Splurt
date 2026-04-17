@@ -13,21 +13,21 @@ Transformative extracts:
 	effect = "transformative"
 	var/effect_applied = SLIME_EFFECT_DEFAULT
 
-/obj/item/slimecross/transformative/afterattack(atom/target, mob/user, list/modifiers, list/attack_modifiers)
-	. = ..()
-	if(!user.Adjacent(target) || !isslime(target))
-		return
-	var/mob/living/basic/slime/slime_target = target
+/obj/item/slimecross/transformative/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(!user.Adjacent(interacting_with) || !isslime(interacting_with))
+		return NONE
+	var/mob/living/basic/slime/slime_target = interacting_with
 	if(slime_target.stat == DEAD)
 		to_chat(user, span_warning("The slime is dead!"))
-		return
+		return ITEM_INTERACT_BLOCKING
 	if(slime_target.transformeffects & effect_applied)
 		to_chat(user, span_warning("This slime already has the [colour] transformative effect applied!"))
-		return
-	to_chat(user, span_notice("You apply [src] to [target]."))
+		return ITEM_INTERACT_BLOCKING
+	to_chat(user, span_notice("You apply [src] to [interacting_with]."))
 	do_effect(slime_target, user)
 	slime_target.transformeffects |= effect_applied
 	qdel(src)
+	return ITEM_INTERACT_SUCCESS
 
 /// Undo pieces of previously applied transformative effects before stacking (upstream parity).
 /obj/item/slimecross/transformative/proc/do_effect(mob/living/basic/slime/slime_mob, mob/user)
