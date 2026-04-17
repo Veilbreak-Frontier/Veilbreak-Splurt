@@ -678,6 +678,7 @@
 		user.filters = null
 		animation_playing = FALSE
 
+
 /obj/item/borg_shapeshifter/proc/set_disguise_vars(obj/item/robot_model/model_path, mob/living/silicon/robot/cyborg)
 	if (!model_path || !cyborg)
 		return FALSE
@@ -705,6 +706,7 @@
 	disguise_hat_offset = chosen_details[SKIN_HAT_OFFSET] || 0
 	disguise_model_features = chosen_details[SKIN_FEATURES]
 	return TRUE
+
 
 /obj/item/borg_shapeshifter/process()
 	if (user && !user.cell?.use(activationUpkeep))
