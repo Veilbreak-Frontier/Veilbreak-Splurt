@@ -32,6 +32,8 @@ To add a crossbreed:
 	var/colour = "null"
 	var/effect = "null"
 	var/effect_desc = "null"
+	/// Marked on some crossbreeds for logging / UI; not used on all types.
+	var/dangerous = FALSE
 	force = 0
 	w_class = WEIGHT_CLASS_TINY
 	throwforce = 0

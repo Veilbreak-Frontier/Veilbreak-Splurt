@@ -62,5 +62,30 @@
 #define SLIME_TYPE_SILVER "silver"
 #define SLIME_TYPE_YELLOW "yellow"
 
+/// Bitflags for /mob/living/basic/slime/var/transformeffects (transformative crossbreeds)
+#define SLIME_EFFECT_DEFAULT NONE
+#define SLIME_EFFECT_GREY (1<<0)
+#define SLIME_EFFECT_ORANGE (1<<1)
+#define SLIME_EFFECT_PURPLE (1<<2)
+#define SLIME_EFFECT_BLUE (1<<3)
+#define SLIME_EFFECT_METAL (1<<4)
+#define SLIME_EFFECT_YELLOW (1<<5)
+#define SLIME_EFFECT_DARK_PURPLE (1<<6)
+#define SLIME_EFFECT_DARK_BLUE (1<<7)
+#define SLIME_EFFECT_SILVER (1<<8)
+#define SLIME_EFFECT_BLUESPACE (1<<9)
+#define SLIME_EFFECT_SEPIA (1<<10)
+#define SLIME_EFFECT_CERULEAN (1<<11)
+#define SLIME_EFFECT_PYRITE (1<<12)
+#define SLIME_EFFECT_RED (1<<13)
+#define SLIME_EFFECT_GREEN (1<<14)
+#define SLIME_EFFECT_PINK (1<<15)
+#define SLIME_EFFECT_GOLD (1<<16)
+#define SLIME_EFFECT_OIL (1<<17)
+#define SLIME_EFFECT_BLACK (1<<18)
+#define SLIME_EFFECT_LIGHT_PINK (1<<19)
+#define SLIME_EFFECT_ADAMANTINE (1<<20)
+#define SLIME_EFFECT_RAINBOW (1<<21)
+
 // The alpha value of transperent slime types
 #define SLIME_TRANSPARENCY_ALPHA 180
