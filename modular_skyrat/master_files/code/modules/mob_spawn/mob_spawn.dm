@@ -12,41 +12,44 @@
 	var/restricted_species
 
 /obj/effect/mob_spawn/ghost_role/create(mob/mob_possessor, newname, apply_prefs = FALSE)
-	//if we can load our own appearance and its not restricted, try
+	var/mob/living/L = ..(mob_possessor, newname, apply_prefs)
 
-	var/mob/living/carbon/human/spawned_human = ..(mob_possessor, newname, apply_prefs)
+	if(!istype(L))
+		return L
 
 	if(!apply_prefs)
-		var/datum/language_holder/holder = spawned_human.get_language_holder()
-		holder.get_selected_language() //we need this here so a language starts off selected
+		var/datum/language_holder/holder = L.get_language_holder()
+		holder.get_selected_language()
+		return L
 
-		return spawned_human
+	if(iscarbon(L))
+		var/mob/living/carbon/C = L
+		C.client?.prefs?.safe_transfer_prefs_to(C)
+		if(C.dna)
+			C.dna.update_dna_identity()
+			C.dna.species.give_important_for_life(C)
 
-	spawned_human?.client?.prefs?.safe_transfer_prefs_to(spawned_human)
-	spawned_human.dna.update_dna_identity()
-	if(spawned_human.mind)
-		spawned_human.mind.name = spawned_human.real_name // the mind gets initialized with the random name given as a result of the parent create() so we need to readjust it
-	spawned_human.dna.species.give_important_for_life(spawned_human) // make sure they get plasmaman/vox internals etc before anything else
+		if(quirks_enabled)
+			SSquirks.AssignQuirks(C, C.client)
 
-	if(quirks_enabled)
-		SSquirks.AssignQuirks(spawned_human, spawned_human.client)
+		post_transfer_prefs(C)
 
-	post_transfer_prefs(spawned_human)
-
-	if(loadout_enabled)
-		ASYNC // Expensive and not needing to return
-			spawned_human.equip_outfit_and_loadout(outfit, spawned_human.client.prefs)
+		// ROOT CAUSE FIX: Use equip() which handles the spawner's assigned outfit
+		equip(C)
 	else
-		equip(spawned_human)
+		equip(L)
+
+	if(L.mind)
+		L.mind.name = L.real_name
 
 	var/obj/machinery/computer/cryopod/control_computer = find_control_computer()
-
 	var/alt_name = get_spawner_outfit_name()
-	GLOB.ghost_records.Add(list(list("name" = spawned_human.real_name, "rank" = alt_name ? alt_name : name)))
-	if(control_computer)
-		control_computer.announce("CRYO_JOIN", spawned_human.real_name, name)
+	GLOB.ghost_records.Add(list(list("name" = L.real_name, "rank" = alt_name ? alt_name : name)))
 
-	return spawned_human
+	if(control_computer)
+		control_computer.announce("CRYO_JOIN", L.real_name, name)
+
+	return L
 
 
 // Anything that can potentially be overwritten by transferring prefs must go in this proc
