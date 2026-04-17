@@ -72,7 +72,7 @@ put up a rune with bluespace effects, lots of those runes are fluff or act as a 
 /obj/effect/warped_rune/acid_act()
 	. = ..()
 	visible_message(span_warning("[src] has been dissolved by the acid"))
-	playsound(src, 'sound/items/welder.ogg', 150, TRUE)
+	playsound(src, 'sound/items/tools/welder.ogg', 150, TRUE)
 	qdel(src)
 
 /obj/effect/warped_rune/proc/clean_rune()
@@ -206,13 +206,13 @@ put up a rune with bluespace effects, lots of those runes are fluff or act as a 
 		/obj/item/reagent_containers/hypospray/medipen,
 		/obj/item/stack/medical/bruise_pack,
 		/obj/item/stack/medical/ointment,
-		/obj/item/reagent_containers/pill/oxandrolone,
-		/obj/item/storage/pill_bottle/charcoal,
-		/obj/item/reagent_containers/pill/mutadone,
-		/obj/item/reagent_containers/pill/antirad,
-		/obj/item/reagent_containers/pill/patch/styptic,
-		/obj/item/reagent_containers/pill/patch/synthflesh,
-		/obj/item/reagent_containers/pill/patch/silver_sulf,
+		/obj/item/reagent_containers/applicator/pill/oxandrolone,
+		/obj/item/storage/pill_bottle/multiver,
+		/obj/item/reagent_containers/applicator/pill/mutadone,
+		/obj/item/reagent_containers/applicator/pill/potassiodide,
+		/obj/item/reagent_containers/applicator/patch/libital,
+		/obj/item/reagent_containers/applicator/patch/synthflesh,
+		/obj/item/reagent_containers/applicator/patch/aiuri,
 		/obj/item/healthanalyzer,
 		/obj/item/surgical_drapes,
 		/obj/item/scalpel,
@@ -294,10 +294,10 @@ put up a rune with bluespace effects, lots of those runes are fluff or act as a 
 	remove_on_activation = FALSE
 
 /obj/effect/warped_rune/yellowspace/on_entered(datum/source, atom/movable/AM, oldloc)
-	var/obj/item/stock_parts/cell/C = AM.get_cell()
+	var/obj/item/stock_parts/power_store/cell/C = AM.get_cell()
 	if(!C && isliving(AM))
 		var/mob/living/L = AM
-		for(var/obj/item/I in L.GetAllContents())
+		for(var/obj/item/I in L.get_all_contents())
 			C = I.get_cell()
 			if(C?.charge)
 				break
@@ -319,7 +319,7 @@ put up a rune with bluespace effects, lots of those runes are fluff or act as a 
 	desc = "To gain something you must sacrifice something else in return."
 	var/static/list/materials = list(/obj/item/stack/sheet/iron, /obj/item/stack/sheet/glass, /obj/item/stack/sheet/mineral/silver,
 									/obj/item/stack/sheet/mineral/gold, /obj/item/stack/sheet/mineral/diamond, /obj/item/stack/sheet/mineral/uranium,
-									/obj/item/stack/sheet/mineral/titanium, /obj/item/stack/sheet/mineral/copper,
+									/obj/item/stack/sheet/mineral/titanium, /obj/item/stack/sheet/plasteel,
 									/obj/item/stack/ore/bluespace_crystal/refined)
 
 /obj/effect/warped_rune/darkpurplespace/do_effect(mob/user)
@@ -370,7 +370,6 @@ GLOBAL_DATUM(blue_storage, /obj/item/storage/backpack/holding/bluespace)
 	bio = 100
 	fire = 100
 	acid = 100
-	stamina = 100
 
 /obj/item/slimecross/warping/bluespace
 	colour = SLIME_TYPE_BLUESPACE
@@ -518,14 +517,14 @@ GLOBAL_DATUM(blue_storage, /obj/item/storage/backpack/holding/bluespace)
 /obj/effect/warped_rune/redspace/on_entered(datum/source, atom/movable/AM, oldloc)
 	if(ishuman(AM))
 		var/mob/living/carbon/human/H = AM
-		H.add_blood_DNA(list("Unknown DNA" = random_blood_type()))
+		H.add_blood_DNA(list("Unknown DNA" = random_human_blood_type()))
 		for(var/obj/item/I in H.get_equipped_items(INCLUDE_POCKETS))
 			I.add_blood_DNA(GET_ATOM_BLOOD_DNA(H))
 			I.update_icon()
 		for(var/obj/item/I in H.held_items)
 			I.add_blood_DNA(GET_ATOM_BLOOD_DNA(H))
 			I.update_icon()
-		playsound(src, 'sound/effects/blobattack.ogg', 50, TRUE)
+		playsound(src, 'sound/effects/blob/blobattack.ogg', 50, TRUE)
 		activated_on_step = TRUE
 	. = ..()
 
@@ -559,8 +558,9 @@ GLOBAL_DATUM(blue_storage, /obj/item/storage/backpack/holding/bluespace)
 ///adds the jolly mood effect along with hug sound effect.
 /obj/effect/warped_rune/pinkspace/on_entered(datum/source, atom/movable/AM, oldloc)
 	if(istype(AM, /mob/living/carbon/human))
-		playsound(rune_turf, 'sound/weapons/thudswoosh.ogg', 50, TRUE)
-		SEND_SIGNAL(AM, COMSIG_ADD_MOOD_EVENT,"jolly", /datum/mood_event/jolly)
+		var/mob/living/carbon/human/cheerful_human = AM
+		playsound(rune_turf, 'sound/items/weapons/thudswoosh.ogg', 50, TRUE)
+		cheerful_human.add_mood_event("jolly", /datum/mood_event/jolly)
 		to_chat(AM, span_notice("You feel happier."))
 		activated_on_step = TRUE
 	. = ..()
@@ -578,32 +578,32 @@ GLOBAL_DATUM(blue_storage, /obj/item/storage/backpack/holding/bluespace)
 	var/static/list/common_items = list(
 		/obj/item/toy/plush/carpplushie,
 		/obj/item/toy/plush/bubbleplush,
-		/obj/item/toy/plush/plushvar,
+		/obj/item/toy/plush/ratplush,
 		/obj/item/toy/plush/narplush,
 		/obj/item/toy/plush/lizard_plushie,
 		/obj/item/toy/plush/snakeplushie,
 		/obj/item/toy/plush/nukeplushie,
-		/obj/item/toy/plush/slimeplushie/random,
+		/obj/item/toy/plush/slimeplushie,
 		/obj/item/toy/plush/awakenedplushie,
 		/obj/item/toy/plush/beeplushie,
-		/obj/item/toy/plush/moth/random,
-		/obj/item/toy/plush/gondola,
-		/obj/item/toy/plush/flushed = 2,
-		/obj/item/toy/plush/flushed/rainbow,
+		/obj/item/toy/plush/moth,
+		/obj/item/toy/plush/donkpocket,
+		/obj/item/toy/plush/whiny_plushie = 2,
+		/obj/item/toy/plush/plasmamanplushie,
 		/obj/item/toy/plush/shark,
 		/obj/item/toy/eightball/haunted,
 		/obj/item/toy/foamblade,
 		/obj/item/toy/katana,
 		/obj/item/toy/snappop/phoenix,
-		/obj/item/toy/cards/deck/unum,
+		/obj/item/toy/cards/deck/kotahi,
 		/obj/item/toy/redbutton,
 		/obj/item/toy/toy_xeno,
 		/obj/item/toy/reality_pierce,
 		/obj/item/toy/xmas_cracker,
 		/obj/item/gun/ballistic/automatic/c20r/toy/unrestricted,
 		/obj/item/gun/ballistic/automatic/l6_saw/toy/unrestricted,
-		/obj/item/gun/ballistic/automatic/toy/pistol/unrestricted,
-		/obj/item/gun/ballistic/shotgun/toy/unrestricted,
+		/obj/item/gun/ballistic/automatic/pistol/toy,
+		/obj/item/gun/ballistic/shotgun/toy/riot,
 		/obj/item/gun/ballistic/shotgun/toy/crossbow,
 		/obj/item/clothing/mask/facehugger/toy,
 		/obj/item/dualsaber/toy,
@@ -618,8 +618,8 @@ GLOBAL_DATUM(blue_storage, /obj/item/storage/backpack/holding/bluespace)
 	)
 
 	var/static/list/uncommon_items = list(
-		/obj/item/clothing/head/costume/speedwagon/cursed,
-		/obj/item/clothing/suit/space/hardsuit/ancient,
+		/obj/item/clothing/head/costume/kabuto,
+		/obj/item/mod/control/pre_equipped/prototype,
 		/obj/item/gun/energy/laser/retro/old,
 		/obj/item/storage/toolbox/mechanical/old,
 		/obj/item/storage/toolbox/emergency/old,
@@ -628,12 +628,12 @@ GLOBAL_DATUM(blue_storage, /obj/item/storage/backpack/holding/bluespace)
 		/obj/structure/closet/crate/necropolis/tendril,
 		/obj/item/card/emagfake,
 		/obj/item/flashlight/flashdark,
-		/mob/living/simple_animal/hostile/cat_butcherer
+		/mob/living/basic/cat_butcherer
 	)
 
 	var/static/list/rare_items = list(
 		/obj/effect/spawner/random/contraband/armory,
-		/obj/effect/spawner/random/medical/teratoma/major
+		/obj/effect/spawner/random/medical/medkit_rare
 	)
 
 

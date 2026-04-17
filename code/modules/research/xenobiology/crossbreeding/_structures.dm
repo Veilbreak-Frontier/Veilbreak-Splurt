@@ -224,9 +224,9 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	set_light(3)
 
 /obj/structure/slime_crystal/yellow/attacked_by(obj/item/attacking_item, mob/living/user, list/modifiers, list/attack_modifiers)
-	if(!istype(attacking_item, /obj/item/stock_parts/cell))
+	if(!istype(attacking_item, /obj/item/stock_parts/power_store/cell))
 		return ..()
-	var/obj/item/stock_parts/cell/cell = attacking_item
+	var/obj/item/stock_parts/power_store/cell/cell = attacking_item
 	if(cell.charge == cell.maxcharge) // Punishment for greed
 		to_chat(user, span_danger("You try to charge [cell], but it is already fully energized. You are not sure if this was a good idea..."))
 		cell.explode()
@@ -245,8 +245,11 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	var/turf/open/open_turf = T
 	var/datum/gas_mixture/air = open_turf.return_air()
 
-	if(GET_MOLES(/datum/gas/plasma, air) > 15)
-		REMOVE_MOLES(/datum/gas/plasma, air, 15)
+	air.assert_gas(/datum/gas/plasma)
+	if(air.gases[/datum/gas/plasma][MOLES] > 15)
+		air.remove_specific(/datum/gas/plasma, 15)
+		air.garbage_collect()
+		open_turf.air_update_turf(FALSE, FALSE)
 		new /obj/item/stack/sheet/mineral/plasma(open_turf)
 
 /obj/structure/slime_crystal/darkpurple/Destroy()
@@ -258,12 +261,12 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 
 /obj/structure/slime_crystal/darkblue/process(delta_time)
 	for(var/turf/open/T in RANGE_TURFS(5, src))
-		if(DT_PROB(75, delta_time))
+		if(prob(75))
 			continue
 		T.MakeDry(TURF_WET_LUBE)
 
 	for(var/obj/item/trash/trashie in range(5, src))
-		if(DT_PROB(25, delta_time))
+		if(prob(25))
 			qdel(trashie)
 
 /obj/structure/slime_crystal/silver
@@ -273,7 +276,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	for(var/obj/machinery/hydroponics/hydr in range(5, src))
 		hydr.weedlevel = 0
 		hydr.pestlevel = 0
-		if(DT_PROB(10, delta_time))
+		if(prob(10))
 			hydr.age++
 
 /obj/structure/slime_crystal/bluespace
@@ -348,6 +351,15 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	REMOVE_TRAIT(affected_mob,TRAIT_RESISTHIGHPRESSURE,type)
 	REMOVE_TRAIT(affected_mob,TRAIT_NOSOFTCRIT,type)
 	REMOVE_TRAIT(affected_mob,TRAIT_NOHARDCRIT,type)
+
+/obj/item/cerulean_slime_crystal
+	name = "cerulean slime crystal"
+	desc = "A crystalline fragment shed by a cerulean slimic pylon."
+	icon = 'icons/obj/science/slimecrossing.dmi'
+	icon_state = "cerulean_crystal"
+	w_class = WEIGHT_CLASS_SMALL
+	/// How many uses or pieces this stack of crystals represents when recycled (see cerulean pylon).
+	var/amt = 1
 
 /obj/structure/cerulean_slime_crystal
 	name = "Cerulean slime poly-crystal"
