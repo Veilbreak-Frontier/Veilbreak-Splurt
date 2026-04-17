@@ -11,6 +11,7 @@
 	purchase_price = 200
 	buying_category = NIFSOFT_CATEGORY_UTILITY
 	ui_icon = "video"
+	able_to_keep = TRUE
 	/// What is the scryer currently associated with the NIFSoft?
 	var/obj/item/clothing/neck/link_scryer/loaded/nifsoft/linked_scryer
 

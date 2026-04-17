@@ -55,17 +55,19 @@ GLOBAL_LIST_INIT(stock_part_datums, generate_stock_part_datums())
 /// Returns the energy rating of the stock part given a level.
 /// The higher this is, the more power machines with these parts will consume.
 /datum/stock_part/proc/energy_rating()
-	switch (tier)
-		if (1)
+	switch(tier)
+		if(1)
 			return 1
-		if (2)
+		if(2)
 			return 3
-		if (3)
+		if(3)
 			return 5
-		if (4)
+		if(4)
 			return 10
+		if(5)
+			return 15
 		else
-			CRASH("Invalid level given to energy_rating: [tier]")
+			return 1
 
 /datum/stock_part/scanning_module
 	tier = 1
