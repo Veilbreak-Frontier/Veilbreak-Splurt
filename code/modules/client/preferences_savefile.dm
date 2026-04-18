@@ -337,6 +337,12 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 /datum/preferences/proc/load_character(slot)
 	SHOULD_NOT_SLEEP(TRUE)
+	value_cache = list()
+	all_quirks = list()
+	job_preferences = list()
+	randomise = list()
+	custom_emote_panel = list()
+
 	if(!slot)
 		slot = default_slot
 	slot = sanitize_integer(slot, 1, max_save_slots, initial(default_slot))
@@ -450,21 +456,20 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	return TRUE
 
 /datum/preferences/proc/switch_to_slot(new_slot)
-	// SAFETY: `load_character` performs sanitization on the slot number
-	if (!load_character(new_slot))
-		tainted_character_profiles = TRUE
-		randomise_appearance_prefs()
-		save_character(TRUE) // BUBBER EDIT
+    value_cache = list()
 
-	for (var/datum/preference_middleware/preference_middleware as anything in middleware)
-		preference_middleware.on_new_character(usr)
+    if (!load_character(new_slot))
+        tainted_character_profiles = TRUE
+        randomise_appearance_prefs()
+        save_character(TRUE)
 
-	character_preview_view.update_body()
+    for (var/datum/preference_middleware/preference_middleware as anything in middleware)
+        preference_middleware.on_new_character(usr)
 
-	// SPLURT EDIT START: CUSTOM EMOTE PANEL
-	if(usr.client?.prefs)
-		usr.client.tgui_panel?.emotes_send_list()
-	// SPLURT EDIT END: CUSTOM EMOTE PANEL
+    character_preview_view.update_body()
+
+    if(usr.client?.prefs)
+        usr.client.tgui_panel?.emotes_send_list()
 
 /datum/preferences/proc/remove_current_slot()
 	PRIVATE_PROC(TRUE)
