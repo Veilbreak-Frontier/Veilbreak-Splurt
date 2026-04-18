@@ -337,7 +337,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 /datum/preferences/proc/load_character(slot)
 	SHOULD_NOT_SLEEP(TRUE)
-	// 1. Wipe everything first to prevent bleeding
 	value_cache = list()
 	all_quirks = list()
 	job_preferences = list()
@@ -347,7 +346,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(!slot)
 		slot = default_slot
 	slot = sanitize_integer(slot, 1, max_save_slots, initial(default_slot))
-
 	if(slot != default_slot)
 		default_slot = slot
 		savefile.set_entry("default_slot", slot)
@@ -356,11 +354,11 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	var/list/save_data = savefile.get_entry(tree_key)
 
 	if(!islist(save_data))
-		// Populate the cache with defaults so the loadout screen isn't bugged
+		// Populate the cache with defaults so the UI doesn't show the previous character's loadout
 		for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
 			if (preference.savefile_identifier == PREFERENCE_CHARACTER)
 				read_preference(preference.type)
-		return FALSE // Gracefully exit. The data is already wiped above.
+		return FALSE
 
 	if(save_data["custom_tattoos"])
 		if(!features)
