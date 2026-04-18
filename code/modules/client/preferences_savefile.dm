@@ -337,25 +337,40 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 /datum/preferences/proc/load_character(slot)
 	SHOULD_NOT_SLEEP(TRUE)
+	// 1. Wipe everything first to prevent bleeding
+	value_cache = list()
+	all_quirks = list()
+	job_preferences = list()
+	randomise = list()
+	custom_emote_panel = list()
+
 	if(!slot)
 		slot = default_slot
 	slot = sanitize_integer(slot, 1, max_save_slots, initial(default_slot))
+
 	if(slot != default_slot)
 		default_slot = slot
 		savefile.set_entry("default_slot", slot)
 
 	var/tree_key = "character[slot]"
 	var/list/save_data = savefile.get_entry(tree_key)
+
+	if(!islist(save_data))
+		// Populate the cache with defaults so the loadout screen isn't bugged
+		for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
+			if (preference.savefile_identifier == PREFERENCE_CHARACTER)
+				read_preference(preference.type)
+		return FALSE // Gracefully exit. The data is already wiped above.
+
 	if(save_data["custom_tattoos"])
 		if(!features)
 			features = list()
 		features["custom_tattoos"] = save_data["custom_tattoos"]
+
 	var/data_validity_integer = check_savedata_version(save_data)
-	if(IS_DATA_OBSOLETE(data_validity_integer)) //fatal, can't load any data
+	if(IS_DATA_OBSOLETE(data_validity_integer))
 		return FALSE
 
-	// Read everything into cache
-	// Uses priority order as some values may rely on others for creating default values
 	for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
 		if (preference.savefile_identifier != PREFERENCE_CHARACTER)
 			continue
@@ -363,40 +378,31 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		value_cache -= preference.type
 		read_preference(preference.type)
 
-	//Character
-	randomise = save_data?["randomise"]
+	randomise = save_data["randomise"]
+	job_preferences = save_data["job_preferences"]
+	all_quirks = save_data["all_quirks"]
 
-	//Load prefs
-	job_preferences = save_data?["job_preferences"]
+	load_character_skyrat(save_data)
 
-	//Quirks
-	all_quirks = save_data?["all_quirks"]
-	load_character_skyrat(save_data) // SKYRAT EDIT ADDITION
-
-	//try to fix any outdated data if necessary
-	//preference updating will handle saving the updated data for us.
 	if(SHOULD_UPDATE_DATA(data_validity_integer))
 		update_character(data_validity_integer, save_data)
 
-	//Sanitize
 	randomise = SANITIZE_LIST(randomise)
 	job_preferences = SANITIZE_LIST(job_preferences)
 	all_quirks = SANITIZE_LIST(all_quirks)
 
-	//Validate job prefs
 	for(var/j in job_preferences)
 		if(job_preferences[j] != JP_LOW && job_preferences[j] != JP_MEDIUM && job_preferences[j] != JP_HIGH)
 			job_preferences -= j
 
-	all_quirks = SSquirks.filter_invalid_quirks(SANITIZE_LIST(all_quirks), augments)// SKYRAT EDIT - AUGMENTS+
+	all_quirks = SSquirks.filter_invalid_quirks(all_quirks, augments)
 	validate_quirks()
+	sanitize_powers()
 
-	// SPLURT EDIT START: CUSTOM EMOTE PANEL
-	custom_emote_panel = save_data?["custom_emote_panel"] || list()
+	custom_emote_panel = save_data["custom_emote_panel"] || list()
 	custom_emote_panel = SANITIZE_LIST(custom_emote_panel)
-	// SPLURT EDIT END: CUSTOM EMOTE PANEL
 
-	return needs_update != -3 // BUBBER EDIT
+	return needs_update != -3
 
 /datum/preferences/proc/save_character(update, override_slot) // Skyrat edit - Choose when to update (This is stupid) //Bubber Edit - duplication support
 	SHOULD_NOT_SLEEP(TRUE)
@@ -450,21 +456,20 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	return TRUE
 
 /datum/preferences/proc/switch_to_slot(new_slot)
-	// SAFETY: `load_character` performs sanitization on the slot number
-	if (!load_character(new_slot))
-		tainted_character_profiles = TRUE
-		randomise_appearance_prefs()
-		save_character(TRUE) // BUBBER EDIT
+    value_cache = list()
 
-	for (var/datum/preference_middleware/preference_middleware as anything in middleware)
-		preference_middleware.on_new_character(usr)
+    if (!load_character(new_slot))
+        tainted_character_profiles = TRUE
+        randomise_appearance_prefs()
+        save_character(TRUE)
 
-	character_preview_view.update_body()
+    for (var/datum/preference_middleware/preference_middleware as anything in middleware)
+        preference_middleware.on_new_character(usr)
 
-	// SPLURT EDIT START: CUSTOM EMOTE PANEL
-	if(usr.client?.prefs)
-		usr.client.tgui_panel?.emotes_send_list()
-	// SPLURT EDIT END: CUSTOM EMOTE PANEL
+    character_preview_view.update_body()
+
+    if(usr.client?.prefs)
+        usr.client.tgui_panel?.emotes_send_list()
 
 /datum/preferences/proc/remove_current_slot()
 	PRIVATE_PROC(TRUE)

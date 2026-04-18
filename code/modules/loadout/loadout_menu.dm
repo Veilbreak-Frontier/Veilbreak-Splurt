@@ -15,7 +15,8 @@
 	return ..()
 
 /datum/preference_middleware/loadout/on_new_character(mob/user)
-	preferences.character_preview_view?.update_body()
+    ..()
+    preferences.read_preference(/datum/preference/loadout)
 
 /datum/preference_middleware/loadout/proc/action_select_item(list/params, mob/user)
 	PRIVATE_PROC(TRUE)
