@@ -15,8 +15,8 @@
 	var/busy = FALSE
 	/// Coefficient applied to consumed materials. Lower values result in lower material consumption.
 	var/creation_efficiency = 2
-	///The container to hold materials
-	var/datum/component/material_container/materials
+	/// Material bus (ore silo when linked, or local buffer from matter bins)
+	var/datum/component/remote_materials/materials
 	/// The inserted board
 	var/obj/item/circuitboard/machine/inserted_board
 	/// List of components that need to be packed along with the circuitboard
@@ -34,12 +34,14 @@
 	register_context()
 
 	materials = AddComponent( \
-		/datum/component/material_container, \
-		SSmaterials.materials_by_category[MAT_CATEGORY_SILO], \
-		0, \
-		MATCONTAINER_EXAMINE, \
-		container_signals = list(COMSIG_MATCONTAINER_ITEM_CONSUMED = TYPE_PROC_REF(/obj/machinery/flatpacker, AfterMaterialInsert)) \
+		/datum/component/remote_materials, \
+		mapload, \
+		mat_container_signals = list( \
+			COMSIG_MATCONTAINER_ITEM_CONSUMED = TYPE_PROC_REF(/obj/machinery/flatpacker, AfterMaterialInsert), \
+		), \
 	)
+
+	RegisterSignal(src, COMSIG_SILO_ITEM_CONSUMED, TYPE_PROC_REF(/obj/machinery/flatpacker, silo_material_insert))
 
 	return ..()
 
@@ -78,7 +80,11 @@
 
 	. += span_notice("The status display reads:")
 	. += span_notice("Capable of packing up to <b>Tier [max_part_tier]</b>.")
-	. += span_notice("Storing up to <b>[materials.max_amount]</b> material units.")
+	if(materials.silo)
+		. += span_notice("Materials are drawn from a linked <b>ore silo</b>.")
+	else
+		. += span_notice("Storing up to <b>[materials.mat_container.max_amount]</b> material units.")
+	. += span_notice("It can be linked to an ore silo with a multitool.")
 	. += span_notice("Material consumption at <b>[creation_efficiency * 100]%</b>")
 
 	. += span_notice("Its maintainence panel can be [EXAMINE_HINT("screwed")] [panel_open ? "close" : "open"]")
@@ -151,7 +157,7 @@
 	var/mat_capacity = 0
 	for(var/datum/stock_part/matter_bin/new_matter_bin in component_parts)
 		mat_capacity += new_matter_bin.tier * 25 * SHEET_MATERIAL_AMOUNT
-	materials.max_amount = mat_capacity
+	materials.set_local_size(mat_capacity)
 
 	var/datum/stock_part/servo/servo = locate() in component_parts
 	max_part_tier = servo.tier
@@ -178,6 +184,12 @@
 
 		flick_overlay_view(material_insertion_animation(highest_mat_ref), 1 SECONDS)
 
+/// Materials inserted through a linked silo (context is this machine; silo sends this signal instead of matcontainer on parent)
+/obj/machinery/flatpacker/proc/silo_material_insert(datum/source, datum/component/material_container/container, obj/item/item_inserted, last_inserted_id, list/mats_consumed, amount_inserted)
+	SIGNAL_HANDLER
+
+	AfterMaterialInsert(container, item_inserted, last_inserted_id, mats_consumed, amount_inserted)
+
 /**
  * Attempts to find the total material cost of a typepath (including our creation efficiency), modifying a list
  * The list is modified as an assoc list: Material datum typepath = Cost
@@ -194,10 +206,10 @@
 
 	var/comp_type = part_type
 	if(ispath(part_type, /datum/stock_part))
-		var/datum/stock_part/as_part = part_type
-		comp_type = initial(as_part.physical_object_type)
-		if(as_part.tier > print_tier)
-			print_tier = as_part.tier
+		comp_type = initial(part_type::physical_object_type)
+		var/part_tier = initial(part_type::tier)
+		if(part_tier > print_tier)
+			print_tier = part_tier
 
 	var/list/mat_list
 	var/obj/item/null_comp
@@ -211,8 +223,18 @@
 			null_comp = new comp_type
 			mat_list = null_comp.custom_materials
 
-	for(var/atom/mat as anything in mat_list)
-		CREATE_AND_INCREMENT(costs, mat.type, mat_list[mat] * count)
+	for(var/mat_key as anything in mat_list)
+		var/amount = mat_list[mat_key]
+		if(!isnum(amount))
+			continue
+		var/mat_typepath
+		if(istype(mat_key, /datum/material))
+			mat_typepath = mat_key.type
+		else if(ispath(mat_key, /datum/material))
+			mat_typepath = mat_key
+		else
+			continue
+		CREATE_AND_INCREMENT(costs, mat_typepath, amount * count)
 
 	if(null_comp)
 		qdel(null_comp)
@@ -284,12 +306,13 @@
 	)
 
 /obj/machinery/flatpacker/ui_static_data(mob/user)
-	return materials.ui_static_data()
+	return materials.mat_container.ui_static_data()
 
 /obj/machinery/flatpacker/ui_data(mob/user)
 	. = list()
 
-	.["materials"] = materials.ui_data()
+	.["materials"] = materials.mat_container.ui_data()
+	.["onHold"] = materials.on_hold()
 	.["busy"] = busy
 
 	var/list/design
@@ -306,7 +329,9 @@
 		var/disableReason = ""
 		if(print_tier > max_part_tier)
 			disableReason = "This design is too advanced for this machine. "
-		else if(!materials.has_materials(needed_mats, creation_efficiency))
+		else if(materials.on_hold())
+			disableReason = "Mineral access is on hold. "
+		else if(!materials.mat_container.has_materials(needed_mats, creation_efficiency))
 			disableReason = "Not enough materials. "
 		else
 			for(var/obj/item/component as anything in inserted_board.flatpack_components)
@@ -341,14 +366,16 @@
 				if(inserted_board.req_components[component] != get_flatpack_component_count(component))
 					say("Not enough [get_flatpack_component_name(component)].")
 					return
-			if(!materials.has_materials(needed_mats, creation_efficiency))
+			if(!materials.can_use_resource(user_data = ID_DATA(ui.user)))
+				return
+			if(!materials.mat_container.has_materials(needed_mats, creation_efficiency))
 				say("Not enough materials to begin production.")
 				return
 			playsound(src, 'sound/items/tools/rped.ogg', 50, TRUE)
 
 			busy = TRUE
 			flick_overlay_view(mutable_appearance('icons/obj/machines/lathes.dmi', "flatpacker_bar"), flatpack_time)
-			addtimer(CALLBACK(src, PROC_REF(finish_build), inserted_board), flatpack_time)
+			addtimer(CALLBACK(src, PROC_REF(finish_build), inserted_board, ID_DATA(ui.user)), flatpack_time)
 			return TRUE
 
 		if("ejectBoard")
@@ -373,7 +400,7 @@
 				say("No power to dispense sheets")
 				return
 
-			materials.retrieve_stack(amount, material)
+			materials.eject_sheets(material_ref = material, eject_amount = amount, user_data = ID_DATA(ui.user))
 			return TRUE
 
 /**
@@ -382,12 +409,22 @@
  *
  * * board - the board to put inside the flatpack
  */
-/obj/machinery/flatpacker/proc/finish_build(board)
+/obj/machinery/flatpacker/proc/finish_build(board, alist/user_data)
 	PRIVATE_PROC(TRUE)
+
+	if(QDELETED(board))
+		busy = FALSE
+		SStgui.update_uis(src)
+		return
 
 	busy = FALSE
 
-	materials.use_materials(needed_mats, creation_efficiency)
+	var/obj/item/circuitboard/machine/board_ref = board
+	var/build_name = "machine"
+	if(istype(board_ref))
+		var/atom/build_path = initial(board_ref.build_path)
+		build_name = initial(build_path.name)
+	materials.use_materials(needed_mats, creation_efficiency, 1, "flatpacked", build_name, user_data = user_data)
 	var/obj/item/flatpack/box = new (drop_location(), board)
 	for(var/obj/item/component as anything in flatpacked_components)
 		component.forceMove(box)

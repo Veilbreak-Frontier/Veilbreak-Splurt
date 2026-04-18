@@ -133,6 +133,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 
 /obj/structure/slime_crystal/grey
 	colour = SLIME_TYPE_GREY
+	effect_range = SLIME_CRYSTAL_EFFECT_RANGE_WIDE
 
 /obj/structure/slime_crystal/grey/get_targets()
 	return view(effect_range, src)

@@ -23,6 +23,7 @@ type Data = {
   materials: Material[];
   design?: Design;
   busy: BooleanLike;
+  onHold?: BooleanLike;
 };
 
 type Design = {
@@ -34,7 +35,7 @@ type Design = {
 
 export const Flatpacker = (props: any) => {
   const { act, data } = useBackend<Data>();
-  const { SHEET_MATERIAL_AMOUNT, materials, design, busy } = data;
+  const { SHEET_MATERIAL_AMOUNT, materials, design, busy, onHold } = data;
 
   return (
     <Window width={670} height={400} title="Flatpacker">
@@ -109,6 +110,11 @@ export const Flatpacker = (props: any) => {
             </Section>
           </Stack.Item>
         </Stack>
+        {!!onHold && (
+          <Dimmer style={{ fontSize: '2em', textAlign: 'center' }}>
+            Mineral access is on hold, please contact the quartermaster.
+          </Dimmer>
+        )}
       </Window.Content>
     </Window>
   );
