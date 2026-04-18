@@ -107,6 +107,17 @@ export type Language = {
   can_speak: boolean;
 };
 
+export type PowerEntry = {
+  description: string;
+  name: string;
+  cost: number;
+  state: string;
+  word: string;
+  color: string;
+  powertype: string;
+  rootpower: string | null;
+};
+
 export type Marking = {
   name: string;
   color: string;
@@ -249,6 +260,17 @@ export type PreferencesMenuData = {
   species_restricted_jobs?: string[];
   ckey: string;
   // SKYRAT EDIT END
+  total_power_points?: number;
+  thaumaturge?: PowerEntry[];
+  enigmatist?: PowerEntry[];
+  theologist?: PowerEntry[];
+  psyker?: PowerEntry[];
+  cultivator?: PowerEntry[];
+  aberrant?: PowerEntry[];
+  warfighter?: PowerEntry[];
+  expert?: PowerEntry[];
+  augmented?: PowerEntry[];
+  power_points?: number;
   // SPLURT EDIT START
   donator_tier: number;
   // SPLURT EDIT END

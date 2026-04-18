@@ -397,6 +397,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	all_quirks = SSquirks.filter_invalid_quirks(SANITIZE_LIST(all_quirks), augments)// SKYRAT EDIT - AUGMENTS+
 	validate_quirks()
 
+	sanitize_powers()
+
 	// SPLURT EDIT START: CUSTOM EMOTE PANEL
 	custom_emote_panel = save_data?["custom_emote_panel"] || list()
 	custom_emote_panel = SANITIZE_LIST(custom_emote_panel)
