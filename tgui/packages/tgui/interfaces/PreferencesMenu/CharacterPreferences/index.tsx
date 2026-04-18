@@ -7,6 +7,10 @@ import { SideDropdown } from '../../../bubber_components/SideDropdown'; // BUBBE
 import { PageButton } from '../components/PageButton';
 import { LanguagesPage } from '../LanguagesMenu'; // BUBBER EDIT ADDITION
 import { LimbsPage } from '../LimbsPage'; // BUBBER EDIT ADDITION
+import { MortalPage } from '../Mortal';
+import { PowersPage } from '../PowersMenu';
+import { ResonantPage } from '../Resonant';
+import { SorcerousPage } from '../Sorcerous';
 import type { PreferencesMenuData } from '../types';
 import { AntagsPage } from './AntagsPage';
 import { JobsPage } from './JobsPage';
@@ -26,6 +30,10 @@ enum Page {
   Limbs,
   Languages,
   // BUBBER EDIT ADDITION END
+  Powers,
+  Mortal,
+  Sorcerous,
+  Resonant,
 }
 
 type ProfileProps = {
@@ -110,6 +118,33 @@ export function CharacterPreferenceWindow(props) {
       pageContents = <LanguagesPage />;
       break;
     // BUBBER EDIT ADDITION END
+
+    case Page.Mortal:
+      pageContents = (
+        <MortalPage handleCloseMortal={() => setCurrentPage(Page.Powers)} />
+      );
+      break;
+    case Page.Resonant:
+      pageContents = (
+        <ResonantPage handleCloseResonant={() => setCurrentPage(Page.Powers)} />
+      );
+      break;
+    case Page.Sorcerous:
+      pageContents = (
+        <SorcerousPage
+          handleCloseSorcerous={() => setCurrentPage(Page.Powers)}
+        />
+      );
+      break;
+    case Page.Powers:
+      pageContents = (
+        <PowersPage
+          handleOpenMortal={() => setCurrentPage(Page.Mortal)}
+          handleOpenSorcerous={() => setCurrentPage(Page.Sorcerous)}
+          handleOpenResonant={() => setCurrentPage(Page.Resonant)}
+        />
+      );
+      break;
 
     case Page.Quirks:
       pageContents = <QuirkPersonalityPage />;
@@ -220,6 +255,17 @@ export function CharacterPreferenceWindow(props) {
             </PageButton>
           </Stack.Item>
           {/* BUBBER EDIT ADDITION END */}
+
+          <Stack.Item grow>
+            <PageButton
+              currentPage={currentPage}
+              page={Page.Powers}
+              setPage={setCurrentPage}
+              otherActivePages={[Page.Mortal, Page.Sorcerous, Page.Resonant]}
+            >
+              Powers
+            </PageButton>
+          </Stack.Item>
 
           <Stack.Item grow>
             <PageButton
