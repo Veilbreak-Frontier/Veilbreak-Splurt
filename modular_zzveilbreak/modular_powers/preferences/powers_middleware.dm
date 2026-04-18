@@ -199,12 +199,8 @@
 			powers.Remove(power_name)
 			powers_edited = TRUE
 			continue
-		var/power_path = powers[power_name]
-		if(!ispath(power_path, /datum/power))
-			powers.Remove(power_name)
-			powers_edited = TRUE
-			continue
-		if(!initial(power_path.name))
+		var/datum/power/power_typepath = powers[power_name]
+		if(!ispath(power_typepath, /datum/power) || !(power_typepath in GLOB.power_datum_instances) || !initial(power_typepath.name))
 			powers.Remove(power_name)
 			powers_edited = TRUE
 			continue

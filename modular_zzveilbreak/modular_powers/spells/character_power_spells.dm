@@ -69,7 +69,7 @@
 	carbon_owner.adjust_stamina_loss(-40, updating_stamina = TRUE, forced = TRUE)
 	carbon_owner.adjust_drowsiness(-8 SECONDS)
 	carbon_owner.adjust_disgust(-8)
-	carbon_owner.adjustToxLoss(-2)
+	carbon_owner.adjust_tox_loss(-2, forced = TRUE)
 	to_chat(carbon_owner, span_green("You breathe evenly; your body settles."))
 
 // --- Burden Shared ---
