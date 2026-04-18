@@ -206,10 +206,11 @@
 
 	var/comp_type = part_type
 	if(ispath(part_type, /datum/stock_part))
-		comp_type = initial(part_type::physical_object_type)
-		var/part_tier = initial(part_type::tier)
-		if(part_tier > print_tier)
-			print_tier = part_tier
+		var/datum/stock_part/part_singleton = GLOB.stock_part_datums[part_type]
+		if(part_singleton)
+			comp_type = part_singleton.physical_object_type
+			if(part_singleton.tier > print_tier)
+				print_tier = part_singleton.tier
 
 	var/list/mat_list
 	var/obj/item/null_comp
@@ -229,7 +230,8 @@
 			continue
 		var/mat_typepath
 		if(istype(mat_key, /datum/material))
-			mat_typepath = mat_key.type
+			var/datum/material/mat_instance = mat_key
+			mat_typepath = mat_instance.type
 		else if(ispath(mat_key, /datum/material))
 			mat_typepath = mat_key
 		else
@@ -409,7 +411,7 @@
  *
  * * board - the board to put inside the flatpack
  */
-/obj/machinery/flatpacker/proc/finish_build(board, alist/user_data)
+/obj/machinery/flatpacker/proc/finish_build(obj/item/circuitboard/machine/board, alist/user_data)
 	PRIVATE_PROC(TRUE)
 
 	if(QDELETED(board))
