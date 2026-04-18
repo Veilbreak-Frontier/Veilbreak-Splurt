@@ -1,5 +1,11 @@
 GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 
+/// Default slimic pylon tile reach (`/obj/structure/slime_crystal/var/effect_range`). Subtypes use the derived macros below.
+#define SLIME_CRYSTAL_EFFECT_RANGE 7
+#define SLIME_CRYSTAL_EFFECT_RANGE_COMPACT (SLIME_CRYSTAL_EFFECT_RANGE - 1)
+#define SLIME_CRYSTAL_EFFECT_RANGE_PYRITE (SLIME_CRYSTAL_EFFECT_RANGE + 1)
+#define SLIME_CRYSTAL_EFFECT_RANGE_WIDE (SLIME_CRYSTAL_EFFECT_RANGE + 2)
+
 /obj/structure/slime_crystal
 	name = "slimic pylon"
 	desc = "Glassy, pure, transparent. Powerful artifact that relays the slimecore's influence onto space around it."
@@ -15,6 +21,8 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	var/colour
 	///Does it use process?
 	var/uses_process = TRUE
+	///Distance for mob/turf/process effects (range, view, RANGE_TURFS, set_light). Default from `SLIME_CRYSTAL_EFFECT_RANGE`.
+	var/effect_range = SLIME_CRYSTAL_EFFECT_RANGE
 
 /obj/structure/slime_crystal/New(loc, obj/structure/slime_crystal/master_crystal, ...)
 	. = ..()
@@ -98,10 +106,10 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 		affected_mobs -= M
 
 /obj/structure/slime_crystal/proc/get_targets()
-	return range(3, src)
+	return range(effect_range, src)
 
 /obj/structure/slime_crystal/gold/process()
-	var/list/current_mobs = range(3, src)
+	var/list/current_mobs = range(effect_range, src)
 	for(var/M in affected_mobs - current_mobs)
 		on_mob_leave(M)
 		affected_mobs -= M
@@ -127,19 +135,19 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	colour = SLIME_TYPE_GREY
 
 /obj/structure/slime_crystal/grey/get_targets()
-	return view(3, src)
+	return view(effect_range, src)
 
 /obj/structure/slime_crystal/grey/on_mob_effect(mob/living/affected_mob)
 	if(!istype(affected_mob, /mob/living/basic/slime))
 		return
 	var/mob/living/basic/slime/slime_mob = affected_mob
-	slime_mob.adjust_nutrition(2)
+	slime_mob.adjust_nutrition(5)
 
 /obj/structure/slime_crystal/orange
 	colour = SLIME_TYPE_ORANGE
 
 /obj/structure/slime_crystal/orange/get_targets()
-	return view(3, src)
+	return view(effect_range, src)
 
 /obj/structure/slime_crystal/orange/on_mob_effect(mob/living/affected_mob)
 	if(!istype(affected_mob, /mob/living/carbon))
@@ -160,7 +168,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 /obj/structure/slime_crystal/purple
 	colour = SLIME_TYPE_PURPLE
 
-	var/heal_amt = 2
+	var/heal_amt = 3
 
 /obj/structure/slime_crystal/purple/on_mob_effect(mob/living/affected_mob)
 	if(!istype(affected_mob, /mob/living/carbon))
@@ -188,9 +196,10 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 
 /obj/structure/slime_crystal/blue
 	colour = SLIME_TYPE_BLUE
+	effect_range = SLIME_CRYSTAL_EFFECT_RANGE_COMPACT
 
 /obj/structure/slime_crystal/blue/process()
-	for(var/turf/open/T in view(2, src))
+	for(var/turf/open/T in view(effect_range, src))
 		if(isspaceturf(T))
 			continue
 
@@ -221,7 +230,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 
 /obj/structure/slime_crystal/yellow/Initialize(mapload)
 	. = ..()
-	set_light(3)
+	set_light(effect_range)
 
 /obj/structure/slime_crystal/yellow/attacked_by(obj/item/attacking_item, mob/living/user, list/modifiers, list/attack_modifiers)
 	if(!istype(attacking_item, /obj/item/stock_parts/power_store/cell))
@@ -258,22 +267,24 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 
 /obj/structure/slime_crystal/darkblue
 	colour = SLIME_TYPE_DARK_BLUE
+	effect_range = SLIME_CRYSTAL_EFFECT_RANGE_WIDE
 
 /obj/structure/slime_crystal/darkblue/process(delta_time)
-	for(var/turf/open/T in RANGE_TURFS(5, src))
+	for(var/turf/open/T in RANGE_TURFS(effect_range, src))
 		if(prob(75))
 			continue
 		T.MakeDry(TURF_WET_LUBE)
 
-	for(var/obj/item/trash/trashie in range(5, src))
+	for(var/obj/item/trash/trashie in range(effect_range, src))
 		if(prob(25))
 			qdel(trashie)
 
 /obj/structure/slime_crystal/silver
 	colour = SLIME_TYPE_SILVER
+	effect_range = SLIME_CRYSTAL_EFFECT_RANGE_WIDE
 
 /obj/structure/slime_crystal/silver/process(delta_time)
-	for(var/obj/machinery/hydroponics/hydr in range(5, src))
+	for(var/obj/machinery/hydroponics/hydr in range(effect_range, src))
 		hydr.weedlevel = 0
 		hydr.pestlevel = 0
 		if(prob(10))
@@ -415,6 +426,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 /obj/structure/slime_crystal/cerulean
 	colour = SLIME_TYPE_CERULEAN
 	uses_process = FALSE
+	effect_range = SLIME_CRYSTAL_EFFECT_RANGE_COMPACT
 	var/crystals = 0
 
 /obj/structure/slime_crystal/cerulean/Initialize(mapload)
@@ -425,10 +437,10 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 /obj/structure/slime_crystal/cerulean/proc/spawn_crystal()
 	if(crystals >= 3)
 		return
-	for(var/turf/T as anything in RANGE_TURFS(2, src))
+	for(var/turf/T as anything in RANGE_TURFS(effect_range, src))
 		if(T.is_blocked_turf() || isspaceturf(T)  || T == get_turf(src) || prob(50))
 			continue
-		var/obj/structure/cerulean_slime_crystal/CSC = locate() in range(1, T)
+		var/obj/structure/cerulean_slime_crystal/CSC = locate() in range(max(1, effect_range - 1), T)
 		if(CSC)
 			continue
 		new /obj/structure/cerulean_slime_crystal(T, src)
@@ -438,6 +450,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 /obj/structure/slime_crystal/pyrite
 	colour = SLIME_TYPE_PYRITE
 	uses_process = FALSE
+	effect_range = SLIME_CRYSTAL_EFFECT_RANGE_PYRITE
 
 /obj/structure/slime_crystal/pyrite/Initialize(mapload)
 	. = ..()
@@ -446,7 +459,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 /obj/structure/slime_crystal/pyrite/proc/change_colour()
 	var/list/color_list = list("#FFA500","#B19CD9", "#ADD8E6","#7E7E7E",COLOR_YELLOW,COLOR_DARK_PURPLE,COLOR_BLUE,"#D3D3D3", COLOR_LIME,"#704214","#2956B2","#FAFAD2", COLOR_RED,
 					COLOR_VIBRANT_LIME, "#FF69B4",COLOR_GOLD, "#505050", "#FFB6C1","#008B8B")
-	for(var/turf/T as anything in RANGE_TURFS(4, src))
+	for(var/turf/T as anything in RANGE_TURFS(effect_range, src))
 		T.add_atom_colour(pick(color_list), FIXED_COLOUR_PRIORITY)
 
 	addtimer(CALLBACK(src,PROC_REF(change_colour)),rand(0.75 SECONDS,1.25 SECONDS))
@@ -467,7 +480,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	if(blood_amt == max_blood_amt)
 		return
 
-	var/list/range_objects = range(3, src)
+	var/list/range_objects = range(effect_range, src)
 
 	for(var/obj/effect/decal/cleanable/blood/trail_holder/TH in range_objects)
 		qdel(TH)
@@ -596,7 +609,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	colour = SLIME_TYPE_OIL
 
 /obj/structure/slime_crystal/oil/process()
-	for(var/turf/open/turf_in_range in RANGE_TURFS(3, src))
+	for(var/turf/open/turf_in_range in RANGE_TURFS(effect_range, src))
 		turf_in_range.MakeSlippery(TURF_WET_LUBE, 5 SECONDS)
 
 /obj/structure/slime_crystal/black
