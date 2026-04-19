@@ -24,7 +24,7 @@
 	. = ..()
 	if(!owner || . & EMP_PROTECT_SELF)
 		return
-	owner.adjustBruteLoss(15 / severity)
+	owner.adjust_brute_loss(15 / severity)
 	owner.adjust_stamina_loss(40 / severity)
 	to_chat(owner, span_warning("Your pneumatic reservoir spasms!"))
 

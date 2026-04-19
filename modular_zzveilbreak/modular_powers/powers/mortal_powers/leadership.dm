@@ -69,7 +69,7 @@
 
 /datum/action/cooldown/mob_cooldown/designate_ally
 	name = "Designate Ally"
-	desc = "Click then click a crewmember within 7 tiles to add or remove them from your squad (max [VEILBREAK_LEADERSHIP_MAX_ALLIES]). While an ally or your leader is within [VEILBREAK_LEADERSHIP_RANGE] tiles, you perform timed actions slightly faster."
+	desc = "Designate or remove squadmates to gain action speed bonuses."
 	button_icon = 'icons/mob/actions/actions_items.dmi'
 	button_icon_state = "rcl_gui"
 	cooldown_time = 1 SECONDS
@@ -95,31 +95,41 @@
 
 	var/datum/mind/lead_mind = leader.mind
 	LAZYINITLIST(lead_mind.veilbreak_leadership_allies)
-	for(var/i in 1 to length(lead_mind.veilbreak_leadership_allies))
-		var/datum/weakref/old_wr = lead_mind.veilbreak_leadership_allies[i]
-		if(old_wr?.resolve() != marked)
-			continue
-		lead_mind.veilbreak_leadership_allies -= old_wr
+
+	var/datum/weakref/marked_wr = WEAKREF(marked)
+	var/list/allies = lead_mind.veilbreak_leadership_allies
+
+	var/found_index = allies.Find(marked_wr)
+	if(found_index)
+		allies.Cut(found_index, found_index + 1)
 		REMOVE_TRAIT(marked, TRAIT_LEADERSHIP_ALLY, REF(lead_mind))
 		marked.veilbreak_leadership_leader_ref = null
+
 		to_chat(leader, span_notice("You remove [marked] from your squad."))
 		to_chat(marked, span_notice("[leader] no longer counts you as a squadmate."))
+
 		veilbreak_leadership_refresh_speed(leader)
 		veilbreak_leadership_refresh_speed(marked)
 		StartCooldown()
 		return TRUE
 
-	if(length(lead_mind.veilbreak_leadership_allies) >= VEILBREAK_LEADERSHIP_MAX_ALLIES)
+	if(length(allies) >= VEILBREAK_LEADERSHIP_MAX_ALLIES)
 		to_chat(leader, span_warning("You already have [VEILBREAK_LEADERSHIP_MAX_ALLIES] allies designated."))
 		return TRUE
 
-	lead_mind.veilbreak_leadership_allies += WEAKREF(marked)
+	allies += marked_wr
 	marked.veilbreak_leadership_leader_ref = WEAKREF(lead_mind)
 	ADD_TRAIT(marked, TRAIT_LEADERSHIP_ALLY, REF(lead_mind))
 	veilbreak_leadership_ensure_element(marked)
+
 	to_chat(leader, span_notice("[marked] is now in your squad."))
 	to_chat(marked, span_notice("[leader] counts you as a trusted ally."))
+
 	veilbreak_leadership_refresh_speed(leader)
 	veilbreak_leadership_refresh_speed(marked)
 	StartCooldown()
 	return TRUE
+
+/datum/action/cooldown/mob_cooldown/designate_ally/New()
+	..()
+	desc = "Click then click a crewmember within 7 tiles to add or remove them from your squad (max [VEILBREAK_LEADERSHIP_MAX_ALLIES]). While an ally or your leader is within [VEILBREAK_LEADERSHIP_RANGE] tiles, you perform timed actions slightly faster."

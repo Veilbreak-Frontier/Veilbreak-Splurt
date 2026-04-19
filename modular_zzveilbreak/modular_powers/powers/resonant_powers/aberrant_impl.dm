@@ -39,5 +39,5 @@
 	if(!owner || (organ_flags & ORGAN_FAILING))
 		return
 	var/heal = 0.35 * seconds_per_tick
-	owner.adjustBruteLoss(-heal, updating_health = TRUE, forced = TRUE)
-	owner.adjustFireLoss(-heal * 0.5, updating_health = TRUE, forced = TRUE)
+	owner.adjust_brute_loss(-heal, updating_health = TRUE, forced = TRUE)
+	owner.adjust_fire_loss(-heal * 0.5, updating_health = TRUE, forced = TRUE)
