@@ -10748,6 +10748,7 @@
 #include "modular_zzveilbreak\code\modules\GAGS\greyscale_configs.dm"
 #include "modular_zzveilbreak\code\modules\hallucinations\delirium_pulse.dm"
 #include "modular_zzveilbreak\code\modules\interraction_overrides\veilbreak_overrides.dm"
+#include "modular_zzveilbreak\code\modules\modular_computers\programs\guest_access_pass.dm"
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_Config_API.dm"
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_Logic_Core.dm"
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_Machine_Obj.dm"
