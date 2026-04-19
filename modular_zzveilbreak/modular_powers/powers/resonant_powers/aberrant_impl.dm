@@ -2,7 +2,7 @@
 	if(!ishuman(victim))
 		return FALSE
 	var/mob/living/carbon/human/human_victim = victim
-	if(HAS_TRAIT(human_victim, TRAIT_POWER_CUPROUS_HEART, TRAIT_POWER))
+	if(HAS_TRAIT_FROM(human_victim, TRAIT_POWER_CUPROUS_HEART, TRAIT_POWER))
 		return TRUE
 	return istype(human_victim.get_organ_slot(ORGAN_SLOT_HEART), /obj/item/organ/heart/resonant/copper)
 
