@@ -38,5 +38,13 @@ GLOBAL_LIST_INIT(path_core_powers, list(
 #define TRAIT_POWER_MEDICAL "power_medical"
 #define TRAIT_POWER_ENGINEERING "power_engineering"
 #define TRAIT_POWER_SERVICE "power_service"
+#define TRAIT_POWER_SEASONED_CHEF "power_seasoned_chef"
+#define TRAIT_POWER_GREEN_THUMB "power_green_thumb"
+#define TRAIT_POWER_MASTER_CHEF "power_master_chef"
+
+/// Designated squadmate of a character with Leadership.
+#define TRAIT_LEADERSHIP_ALLY "leadership_ally"
 
 #define MARTIALART_VEILBREAK_GENERIC "veilbreak_generic_martial"
+
+#define VEILBREAK_LEADERSHIP_SOURCE "veilbreak_leadership"

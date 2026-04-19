@@ -1,7 +1,3 @@
-/datum/martial_art/veilbreak_generic
-	name = "Martial Art"
-	id = MARTIALART_VEILBREAK_GENERIC
-
 /datum/power/martialart
 	name = "Martial Art"
 	desc = "While not as advanced as the Resonant arts of Cultivators, with enough training, anyone can pack a punch. \
@@ -42,17 +38,3 @@
 	cost = 3
 	root_power = /datum/power/leadership
 	power_type = TRAIT_PATH_SUBTYPE_WARFIGHTER
-
-/datum/power/leadership/add(mob/living/carbon/human/target)
-	var/datum/action/cooldown/mob_cooldown/designate_ally/designate = new /datum/action/cooldown/mob_cooldown/designate_ally(target.mind || target)
-	designate.Grant(target)
-
-/datum/action/cooldown/mob_cooldown/designate_ally
-	name = "Designate Ally"
-	button_icon = 'icons/mob/actions/actions_items.dmi'
-	button_icon_state = "rcl_gui"
-	desc = "Some time in the future, this might let you designate allies. Maybe"
-	cooldown_time = 10 SECONDS
-
-/datum/action/cooldown/mob_cooldown/designate_ally/Activate(atom/target_atom)
-	return TRUE

@@ -11,13 +11,11 @@
 	desc = "This heart appears to be made out of pure copper. You could scrap this for a fair amount of dosh."
 
 /datum/power/cuprous_heart/add(mob/living/carbon/human/target)
-	var/obj/item/organ/heart/copper_heart = null
 	var/obj/item/organ/heart/old_heart = target.get_organ_slot(ORGAN_SLOT_HEART)
 	if(old_heart && IS_ORGANIC_ORGAN(old_heart))
-		copper_heart = /obj/item/organ/heart/resonant/copper
-	if(!isnull(copper_heart))
-		copper_heart = new copper_heart
-		copper_heart.Insert(target, special = TRUE)
+		qdel(old_heart)
+	var/obj/item/organ/heart/resonant/copper/copper_heart = new
+	copper_heart.Insert(target, special = TRUE)
 
 /datum/power/muscly
 	name = "Condensed Musculature"
@@ -33,4 +31,4 @@
 	root_power = /datum/power/bestial
 	power_type = TRAIT_PATH_SUBTYPE_ABERRANT
 	cost = 5
-	power_traits = list(TRAIT_POWER_BESTIAL)
+	power_traits = list(TRAIT_POWER_BESTIAL, TRAIT_GOOD_HEARING)
