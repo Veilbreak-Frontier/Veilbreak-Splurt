@@ -41,6 +41,10 @@ GLOBAL_LIST_INIT(path_core_powers, list(
 #define TRAIT_POWER_SEASONED_CHEF "power_seasoned_chef"
 #define TRAIT_POWER_GREEN_THUMB "power_green_thumb"
 #define TRAIT_POWER_MASTER_CHEF "power_master_chef"
+#define TRAIT_POWER_CUPROUS_HEART "power_cuprous_heart"
+
+/// Blood from a Cuprous Heart; distinct from Skrell copper (BLOOD_TYPE_COPPER).
+#define BLOOD_TYPE_LIVING_COPPER "LCu"
 
 /// Designated squadmate of a character with Leadership.
 #define TRAIT_LEADERSHIP_ALLY "leadership_ally"

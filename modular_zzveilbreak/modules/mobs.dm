@@ -138,6 +138,8 @@
     icon_dead = "void_bug_dead"
     maxHealth = 140
     health = 140
+    melee_damage_lower = 5
+    melee_damage_upper = 7
     speed = 1.3
     armor = list(
         BLUNT = 30, PUNCTURE = 30, SLASH = 30, LASER = -10, ENERGY = 0,
@@ -169,7 +171,7 @@
     visible_message(span_danger("[src] lets out a resonant, vibrating hum, alerting nearby void creatures!"))
     playsound(src, 'sound/effects/hallucinations/growl1.ogg', 70, TRUE)
     new /obj/effect/temp_visual/void_tear(loc)
-    for(var/mob/living/basic/void_creature/V in view(15, src))
+    for(var/mob/living/basic/void_creature/V in view(7, src))
         if(V == src || V.stat == DEAD || !V.ai_controller)
             continue
         V.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)

@@ -224,3 +224,19 @@
 	. = ..()
 	if(parent_portal && parent_portal.transport_active)
 		parent_portal.transfer(AM)
+
+/// Built from the "Dimensional Anchor" protolathe design. Decorative frame only (not a travel endpoint).
+/obj/structure/gateway_exit
+	name = "dimensional anchor"
+	desc = "A localized stabilization frame for dimensional travel."
+	icon = 'icons/obj/machines/gateway.dmi'
+	icon_state = "portal_frame"
+	density = TRUE
+	anchored = FALSE
+	pixel_x = -32
+	pixel_y = -32
+	bound_height = 64
+	bound_width = 96
+	bound_x = -32
+	bound_y = 0
+	max_integrity = 300

@@ -69,7 +69,7 @@
 
 /datum/action/cooldown/mob_cooldown/designate_ally
 	name = "Designate Ally"
-	desc = "Designate or remove squadmates to gain action speed bonuses."
+	desc = "Click then click a crewmember within 7 tiles to add or remove them from your squad (max 3). While an ally or your leader is within 8 tiles, you perform timed actions slightly faster."
 	button_icon = 'icons/mob/actions/actions_items.dmi'
 	button_icon_state = "rcl_gui"
 	cooldown_time = 1 SECONDS

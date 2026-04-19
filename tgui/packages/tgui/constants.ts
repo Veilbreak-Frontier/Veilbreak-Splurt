@@ -331,6 +331,14 @@ const GASES = [
     label: 'Delirium',
     color: '#7b0f9c',
   },
+  // VEILBREAK: fusion / high-energy atmos
+  {
+    id: 'quark_matter',
+    path: '/datum/gas/quark_matter',
+    name: 'Quark-Gluon Plasma',
+    label: 'QGP',
+    color: '#ff00ff',
+  },
 ] as const;
 
 // Returns gas label based on gasId
