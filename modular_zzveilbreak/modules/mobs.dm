@@ -138,7 +138,7 @@
     icon_dead = "void_bug_dead"
     maxHealth = 140
     health = 140
-	melee_damage_lower = 5
+    melee_damage_lower = 5
     melee_damage_upper = 7
     speed = 1.3
     armor = list(
