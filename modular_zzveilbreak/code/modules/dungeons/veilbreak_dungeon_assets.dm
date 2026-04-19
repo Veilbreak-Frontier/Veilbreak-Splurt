@@ -20,7 +20,7 @@
 	materials = list(/datum/material/glass = 1000)
 	build_path = /obj/item/circuitboard/machine/portal
 	category = list(RND_CATEGORY_MACHINE, RND_SUBCATEGORY_MACHINE_ENGINEERING)
-	departmental_flags = DEPARTMENT_BITFLAG_ENGINEERING
+	departmental_flags = DEPARTMENT_BITFLAG_SCIENCE | DEPARTMENT_BITFLAG_CARGO | DEPARTMENT_BITFLAG_ENGINEERING
 
 /datum/design/board/portal_control
 	name = "Portal Control Console Board"
@@ -30,7 +30,7 @@
 	materials = list(/datum/material/glass = 1000)
 	build_path = /obj/item/circuitboard/computer/portal_control
 	category = list(RND_CATEGORY_COMPUTER, RND_SUBCATEGORY_COMPUTER_ENGINEERING)
-	departmental_flags = DEPARTMENT_BITFLAG_ENGINEERING
+	departmental_flags = DEPARTMENT_BITFLAG_SCIENCE | DEPARTMENT_BITFLAG_CARGO | DEPARTMENT_BITFLAG_ENGINEERING
 
 /datum/design/portal_anchor
 	name = "Dimensional Anchor"
@@ -46,16 +46,3 @@
 	build_path = /obj/structure/gateway_exit
 	category = list(RND_CATEGORY_MACHINE, RND_SUBCATEGORY_MACHINE_ENGINEERING)
 	departmental_flags = DEPARTMENT_BITFLAG_ENGINEERING
-
-/datum/techweb_node/portal_tech
-	id = "portal_tech"
-	display_name = "Dimensional Folding"
-	description = "Advanced bluespace research into the stabilization of long-distance portals."
-	prereq_ids = list(TECHWEB_NODE_BLUESPACE_TRAVEL)
-	design_ids = list(
-		"portal_machine",
-		"portal_control",
-		"portal_anchor"
-	)
-	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = TECHWEB_TIER_4_POINTS)
-	announce_channels = list(RADIO_CHANNEL_SCIENCE)

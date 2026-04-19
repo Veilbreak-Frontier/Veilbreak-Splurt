@@ -11,6 +11,8 @@
 		"void_miner",
 		"entropic_converter",
 		"void_infuser_board",
+		"portal_machine",
+		"portal_control",
 	)
 
 /* Temporarily disabled: Void's Influence node uses WIP machines

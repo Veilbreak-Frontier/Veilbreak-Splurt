@@ -10745,6 +10745,7 @@
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_portal_console.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_portal_object.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_setup_utils.dm"
+#include "modular_zzveilbreak\code\modules\dungeons\veilbreak_dungeon_assets.dm"
 #include "modular_zzveilbreak\code\modules\GAGS\greyscale_configs.dm"
 #include "modular_zzveilbreak\code\modules\hallucinations\delirium_pulse.dm"
 #include "modular_zzveilbreak\code\modules\interraction_overrides\veilbreak_overrides.dm"
