@@ -69,13 +69,12 @@
 		D.Grant(new_spawn)
 
 /datum/outfit/ghostcafe
-	name = "ID, jumpsuit and shoes"
-	uniform = /obj/item/clothing/under/color/random
-	shoes = /obj/item/clothing/shoes/sneakers/black
-	id = /obj/item/card/id/advanced/chameleon/ghost_cafe
-	back = /obj/item/storage/backpack/chameleon
-	backpack_contents = list(/obj/item/storage/box/syndie_kit/chameleon/ghostcafe = 1)
-	skillchips = list(/obj/item/skillchip/job/roboticist, /obj/item/skillchip/job/engineer)
+    name = "ID, jumpsuit and shoes"
+    uniform = /obj/item/clothing/under/color/random
+    shoes = /obj/item/clothing/shoes/sneakers/black
+    id = /obj/item/card/id/advanced/chameleon/ghost_cafe
+    back = /obj/item/storage/backpack/chameleon
+    backpack_contents = list(/obj/item/storage/box/syndie_kit/chameleon/ghostcafe = 1)
 
 /datum/action/toggle_dead_chat_mob
 	button_icon = 'icons/mob/simple/mob.dmi'
@@ -95,3 +94,10 @@
 		to_chat(M,span_notice("You're once again hearing deadchat."))
 
 
+/datum/outfit/ghostcafe/post_equip(mob/living/carbon/human/H, visuals_only = FALSE)
+    ..()
+    if(visuals_only)
+        return
+
+    ADD_TRAIT(H, TRAIT_KNOW_ENGI_WIRES, "ghost_cafe_innate")
+    ADD_TRAIT(H, TRAIT_KNOW_ROBO_WIRES, "ghost_cafe_innate")

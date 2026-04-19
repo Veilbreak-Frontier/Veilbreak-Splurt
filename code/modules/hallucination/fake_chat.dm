@@ -20,7 +20,11 @@
 		var/mob/living/carbon/human_who = who
 		override_typepath = human_who.dna?.species?.species_language_holder
 
-	var/datum/language_holder/what_they_speak = GLOB.prototype_language_holders[override_typepath || who.initial_language_holder]
+	var/lookup_path = override_typepath || who?.initial_language_holder
+	if(!lookup_path)
+		return list()
+
+	var/datum/language_holder/what_they_speak = GLOB.prototype_language_holders[lookup_path]
 	return what_they_speak?.spoken_languages?.Copy() || list()
 
 /datum/hallucination/chat/start()

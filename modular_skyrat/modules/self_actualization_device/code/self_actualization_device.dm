@@ -215,19 +215,27 @@
     var/original_name = patient.dna.real_name
 
     patient.client?.prefs?.safe_transfer_prefs_to_with_damage(patient, visuals_only = TRUE)
-    patient.dna.update_dna_identity()
-
-    var/taur_mode = patient.get_taur_mode()
-    if((taur_mode & STYLE_TAUR_SNAKE) && (patient.shoes))
-        patient.dropItemToGround(patient.shoes, TRUE)
-
-    patient.updateappearance()
 
     var/obj/item/organ/taur_body/T = patient.get_organ_slot(ORGAN_SLOT_EXTERNAL_TAUR)
     if(T)
         T.on_mob_remove(patient)
         T.on_mob_insert(patient)
 
+    patient.dna.update_dna_identity()
+
+    var/taur_mode = patient.get_taur_mode()
+    if(taur_mode & STYLE_TAUR_SNAKE)
+        if(patient.shoes)
+            patient.dropItemToGround(patient.shoes, TRUE)
+
+        var/obj/item/bodypart/leg/L_leg = patient.get_bodypart(BODY_ZONE_L_LEG)
+        var/obj/item/bodypart/leg/R_leg = patient.get_bodypart(BODY_ZONE_R_LEG)
+        if(L_leg)
+            qdel(L_leg)
+        if(R_leg)
+            qdel(R_leg)
+
+    patient.updateappearance()
     patient.wash(CLEAN_SCRUB)
 
     if(patient.dna.real_name != original_name)

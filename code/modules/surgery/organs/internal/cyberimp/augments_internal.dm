@@ -60,17 +60,24 @@
 	. += implant.get_overlay_state()
 
 /datum/bodypart_overlay/augment/get_overlay(layer, obj/item/bodypart/limb)
-	layer = bitflag_to_layer(layer)
-	var/list/imageset = implant.get_overlay(layer, limb)
-	if(blocks_emissive == EMISSIVE_BLOCK_NONE || !limb)
-		return imageset
+    if(!implant || QDELETED(implant) || !limb || QDELETED(limb))
+        return
 
-	var/list/all_images = list()
-	for(var/image/overlay as anything in imageset)
-		all_images += overlay
-		all_images += emissive_blocker(overlay.icon, overlay.icon_state, limb, layer = overlay.layer, alpha = overlay.alpha)
+    layer = bitflag_to_layer(layer)
+    var/list/imageset = implant.get_overlay(layer, limb)
 
-	return all_images
+    if(!imageset)
+        return
+
+    if(blocks_emissive == EMISSIVE_BLOCK_NONE)
+        return imageset
+
+    var/list/all_images = list()
+    for(var/image/overlay as anything in imageset)
+        all_images += overlay
+        all_images += emissive_blocker(overlay.icon, overlay.icon_state, limb, layer = overlay.layer, alpha = overlay.alpha)
+
+    return all_images
 
 /obj/item/organ/cyberimp/feel_for_damage(self_aware)
 	// No feeling in implants (yet?)
