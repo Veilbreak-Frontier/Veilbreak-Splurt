@@ -5,10 +5,13 @@
 	cost = 5
 	root_power = /datum/power/cuprous_heart
 	power_type = TRAIT_PATH_SUBTYPE_ABERRANT
+	power_traits = list(TRAIT_POWER_CUPROUS_HEART)
 
 /obj/item/organ/heart/resonant/copper
 	name = "cuprous heart"
-	desc = "This heart appears to be made out of pure copper. You could scrap this for a fair amount of dosh."
+	desc = "A fist-sized knot of living copper that beats with patient, metallic purpose. Whatever runs through the owner's veins is no longer quite blood."
+	/// Blood type before this organ replaced circulation; restored if the heart is removed.
+	var/datum/blood_type/stored_circulation_type
 
 /datum/power/cuprous_heart/add(mob/living/carbon/human/target)
 	var/obj/item/organ/heart/old_heart = target.get_organ_slot(ORGAN_SLOT_HEART)

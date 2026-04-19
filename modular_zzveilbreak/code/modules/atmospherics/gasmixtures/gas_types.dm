@@ -1,6 +1,3 @@
-/datum/gas/veilbreak
-	//This is a base type for all veilbreak gases
-
 /// Icon used for veilbreak gas overlays (avoids touching parent gas overlay icon)
 #define VEILBREAK_GAS_ICON 'modular_zzveilbreak/icons/effects/gasses.dmi'
 
@@ -8,7 +5,7 @@
 #define VEILBREAK_OVERLAY_GASES list(/datum/gas/delirium)
 
 generate_gas_overlays(old_offset, new_offset, datum/gas/gas_type)
-	if(istype(gas_type, /datum/gas/veilbreak) || istype(gas_type, /datum/gas/delirium))
+	if(gas_type in VEILBREAK_OVERLAY_GASES)
 		var/list/to_return = list()
 		for(var/i in old_offset to new_offset)
 			var/fill = list()

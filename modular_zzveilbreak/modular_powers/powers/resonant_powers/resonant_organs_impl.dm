@@ -39,7 +39,10 @@
 
 /obj/item/organ/resonant/paracausal/proc/on_owner_emp(datum/source, severity)
 	SIGNAL_HANDLER
-	apply_organ_damage(12 / max(severity, 1))
+	var/damage = 12 / max(severity, 1)
+	if(owner && veilbreak_has_cuprous_circulation(owner))
+		damage *= 0.65
+	apply_organ_damage(damage)
 	if(owner)
 		to_chat(owner, span_warning("Your paracausal gland shrieks against the pulse!"))
 

@@ -143,10 +143,12 @@
 	var/amt = min(10, max(1, ROUND_UP(abs(c1 - c2) * 0.5)))
 	if(c1 > c2)
 		caster.heal_overall_damage(amt, 0, updating_health = TRUE, forced = TRUE)
-		victim.take_overall_damage(amt, 0, updating_health = TRUE, forced = TRUE)
+		var/share_hurt = veilbreak_has_cuprous_circulation(victim) ? amt * 0.72 : amt
+		victim.take_overall_damage(share_hurt, 0, updating_health = TRUE, forced = TRUE)
 	else
 		victim.heal_overall_damage(amt, 0, updating_health = TRUE, forced = TRUE)
-		caster.take_overall_damage(amt, 0, updating_health = TRUE, forced = TRUE)
+		var/share_hurt = veilbreak_has_cuprous_circulation(caster) ? amt * 0.72 : amt
+		caster.take_overall_damage(share_hurt, 0, updating_health = TRUE, forced = TRUE)
 	caster.visible_message(
 		span_notice("Injury seems to crawl between [caster] and [victim]."),
 		span_notice("You feel damage shift between you and [victim]."),
@@ -230,7 +232,7 @@
 	if(before > 30 && prob(40))
 		change_theologist_piety(caster, 1)
 		to_chat(caster, span_notice("Their suffering was deep; you feel a scrap of piety."))
-	var/backlash = healed * 0.5
+	var/backlash = healed * 0.5 * (veilbreak_has_cuprous_circulation(victim) ? 0.72 : 1)
 	var/brute_share = round(backlash * (rand(20, 60) / 100), DAMAGE_PRECISION)
 	var/burn_share = round(backlash * (rand(10, 40) / 100), DAMAGE_PRECISION)
 	var/oxy_share = max(0, backlash - brute_share - burn_share)
