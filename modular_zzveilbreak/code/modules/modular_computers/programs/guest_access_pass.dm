@@ -21,6 +21,19 @@ GLOBAL_VAR_INIT(guest_pass_uid_counter, 0)
 		return
 	GLOB.pda_guest_pass_programs -= REF(app)
 
+/// TRUE if this mob is a player with a mind, appears on the general crew manifest, and is on a station Z-level.
+/proc/veilbreak_guest_pass_is_eligible_recipient(mob/living/carbon/human/recipient)
+	if(!ishuman(recipient))
+		return FALSE
+	if(!recipient.mind || !recipient.mind.key)
+		return FALSE
+	if(!find_record(recipient.real_name))
+		return FALSE
+	var/turf/here = get_turf(recipient)
+	if(!here || !is_station_level(here.z))
+		return FALSE
+	return TRUE
+
 /datum/mind
 	/// Active guest passes this mind has issued (`/datum/guest_pass_issued`).
 	var/list/guest_pass_issued = list()
@@ -197,6 +210,9 @@ GLOBAL_VAR_INIT(guest_pass_uid_counter, 0)
 		var/datum/computer_file/program/guest_access_pass/other = GLOB.pda_guest_pass_programs[refkey]
 		if(!istype(other) || other == src || !istype(other.computer))
 			continue
+		var/mob/living/carbon/human/carrier = other.computer.loc
+		if(!veilbreak_guest_pass_is_eligible_recipient(carrier))
+			continue
 		var/obj/item/modular_computer/oc = other.computer
 		targets += list(list(
 			"ref" = refkey,
@@ -297,6 +313,9 @@ GLOBAL_VAR_INIT(guest_pass_uid_counter, 0)
 	var/mob/living/carbon/human/recipient_mob = recipient_app.computer.loc
 	if(!istype(recipient_mob) || recipient_mob.stat >= UNCONSCIOUS)
 		computer.balloon_alert(sponsor, "they need their PDA!")
+		return FALSE
+	if(!veilbreak_guest_pass_is_eligible_recipient(recipient_mob))
+		computer.balloon_alert(sponsor, "recipient unavailable!")
 		return FALSE
 	if(recipient_mob == sponsor)
 		computer.balloon_alert(sponsor, "pick someone else!")
