@@ -142,7 +142,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	if(!istype(affected_mob, /mob/living/basic/slime))
 		return
 	var/mob/living/basic/slime/slime_mob = affected_mob
-	slime_mob.adjust_nutrition(5)
+	slime_mob.adjust_nutrition(rand(1, 3))
 
 /obj/structure/slime_crystal/orange
 	colour = SLIME_TYPE_ORANGE
