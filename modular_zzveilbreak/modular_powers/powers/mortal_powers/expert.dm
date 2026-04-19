@@ -28,6 +28,7 @@
 	cost = 4
 	root_power = /datum/power/service
 	power_type = TRAIT_PATH_SUBTYPE_EXPERT
+	power_traits = list(TRAIT_POWER_SEASONED_CHEF)
 
 /datum/power/green_thumb
 	name = "Green Thumb"
@@ -35,6 +36,7 @@
 	cost = 2
 	root_power = /datum/power/service
 	power_type = TRAIT_PATH_SUBTYPE_EXPERT
+	power_traits = list(TRAIT_POWER_GREEN_THUMB)
 
 /datum/power/master_chef
 	name = "Master Chef"
@@ -44,3 +46,4 @@
 	power_type = TRAIT_PATH_SUBTYPE_EXPERT
 	advanced = TRUE
 	required_powers = list(/datum/power/green_thumb, /datum/power/seasoned_chef)
+	power_traits = list(TRAIT_POWER_MASTER_CHEF)

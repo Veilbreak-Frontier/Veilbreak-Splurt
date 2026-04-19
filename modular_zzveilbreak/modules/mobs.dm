@@ -214,7 +214,7 @@
     damage = 5
     damage_type = BURN
     range = 14
-    speed = 0.3
+    speed = 2.5
     hitsound = 'sound/effects/magic/magic_missile.ogg'
 
 /obj/projectile/magic/voidbolt/on_hit(atom/target, blocked = 0, pierce_hit)
@@ -425,17 +425,36 @@
 // --- UTILS & VISUALS ---
 
 /datum/targeting_strategy/basic/void_aggressive/can_attack(mob/living/owner, atom/target, vision_range)
-    if(!target || isobserver(target)) return FALSE
+    if(!target || isobserver(target))
+        return FALSE
+
     if(ismob(target))
         var/mob/living/L = target
-        if(L.stat == DEAD) return FALSE
+        if(L.stat == DEAD)
+            return FALSE
 
-        // Social Alert Check: If a Voidbug sees a valid enemy, alert nearby allies
+        if(ishuman(L))
+            var/mob/living/carbon/human/H = L
+            if(istype(H.dna?.species, /datum/species/protean))
+                var/datum/species/protean/P = H.dna.species
+
+                if(H.loc == P.species_modsuit)
+                    return FALSE
+
+                var/obj/item/organ/brain/protean/orchestrator = H.get_organ_slot(ORGAN_SLOT_BRAIN)
+                if(!orchestrator || orchestrator.dead)
+                    return FALSE
+
         if(!compare_factions(owner, L))
             if(istype(owner, /mob/living/basic/void_creature/voidbug))
                 var/mob/living/basic/void_creature/voidbug/VB = owner
                 VB.alert_allies(L)
             return TRUE
+
+    if(istype(target, /obj/vehicle/sealed/mecha))
+        if(!compare_factions(owner, target))
+            return TRUE
+
     return FALSE
 
 /proc/compare_factions(mob/living/owner, atom/target)

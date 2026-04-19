@@ -1,5 +1,15 @@
 /mob/living
 	var/list/all_powers = list()
+	/// world.time when TRAIT_USER_SCOPED was first gained; used by Precision Killer.
+	var/veilbreak_sniper_scope_start
+
+/mob/living/carbon/human
+	/// Weakref to /datum/mind of the leader who designated this mob (Leadership power).
+	var/datum/weakref/veilbreak_leadership_leader_ref
+
+/datum/mind
+	/// Weakrefs to /mob/living/carbon/human allies (max 3) for Leadership.
+	var/list/veilbreak_leadership_allies
 
 GLOBAL_DATUM_INIT(power_handler, /datum/power_handler, new)
 

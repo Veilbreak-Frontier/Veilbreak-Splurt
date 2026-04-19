@@ -61,6 +61,18 @@
 	invocation = "Someone starts meditating."
 	invocation_self_message = "You start meditating"
 
+/datum/action/cooldown/spell/meditate/before_cast(atom/cast_on)
+	. = ..()
+	if(. & SPELL_CANCEL_CAST)
+		return
+	if(!ishuman(owner))
+		return
+	var/mob/living/carbon/human/caster = owner
+	if(!veilbreak_resonant_meditation_ok(caster))
+		caster.balloon_alert(caster, "wrong place to meditate!")
+		to_chat(caster, span_warning("Your resonance will not settle here."))
+		return . | SPELL_CANCEL_CAST
+
 /datum/action/cooldown/spell/meditate/cast(atom/cast_on)
 	. = ..()
 	if(!iscarbon(owner))
