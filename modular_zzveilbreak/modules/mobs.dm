@@ -214,7 +214,7 @@
     damage = 5
     damage_type = BURN
     range = 14
-    speed = 0.1
+    speed = 2.5
     hitsound = 'sound/effects/magic/magic_missile.ogg'
 
 /obj/projectile/magic/voidbolt/on_hit(atom/target, blocked = 0, pierce_hit)
