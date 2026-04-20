@@ -10,7 +10,7 @@
 	\n If the creature dies or the effect ends, you are reverted to your normal form (prone on the ground), and all damage taken is transfered to your original form (halved if reverting back manually)."
 	security_threat = POWER_THREAT_MAJOR
 	value = 5
-	species_blacklist = list(/datum/species/android/holosynth) // there are SO MANY BUGS with holosynths I'd rather just NOT.
+	species_blacklist = list(/datum/species/android) // DOPPLER EDIT - Veilbreak uses /datum/species/android in place of holosynth.
 
 	required_powers = list(/datum/power/aberrant_root/beastial, /datum/power/aberrant_root/monstrous)
 	required_allow_any = TRUE
@@ -292,10 +292,10 @@
 
 	// Transfer damage from the shifted body back to the caster.
 	var/damage_mult = manual_revert ? 0.5 : 1
-	var/brute = owner.getBruteLoss() * damage_mult
-	var/burn = owner.getFireLoss() * damage_mult
-	var/tox = owner.getToxLoss() * damage_mult
-	var/oxy = owner.getOxyLoss() * damage_mult
+	var/brute = owner.get_brute_loss() * damage_mult
+	var/burn = owner.get_fire_loss() * damage_mult
+	var/tox = owner.get_tox_loss() * damage_mult
+	var/oxy = owner.get_oxy_loss() * damage_mult
 	if(brute)
 		caster_mob.apply_damage(brute, BRUTE, forced = TRUE)
 	if(burn)

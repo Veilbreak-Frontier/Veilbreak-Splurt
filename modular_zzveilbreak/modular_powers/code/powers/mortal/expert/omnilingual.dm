@@ -26,9 +26,11 @@
 		lang_holder = new species.species_language_holder()
 
 	given_languages_list = list()
-	// Doppler languages specifically filter all languages, so we mimmick those filters.
-	for (var/language_name in GLOB.all_languages_by_priority)
-		var/datum/language/language = GLOB.language_datum_instances[language_name]
+	// DOPPLER EDIT - Veilbreak has no all_languages_by_priority list; iterate GLOB.all_languages instead.
+	for (var/language_type in GLOB.all_languages)
+		var/datum/language/language = GLOB.language_datum_instances[language_type]
+		if(!language)
+			continue
 
 		// If we already have the language, skip
 		if(power_holder.has_language(language.type, ALL))

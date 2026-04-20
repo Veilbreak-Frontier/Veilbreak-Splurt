@@ -85,6 +85,14 @@
 	var/security_note
 	/// Current arrest status
 	var/wanted_status = WANTED_NONE
+	// DOPPLER EDIT START - Powers in records
+	/// Crew-facing power notes
+	var/power_notes
+	/// Power notes that don't impact security's ability to do their job
+	var/power_notes_minor
+	/// Power notes that do impact security's ability to do their job
+	var/power_notes_major
+	// DOPPLER EDIT END
 
 	///Photo used for records, which we store here so we don't have to constantly make more of.
 	var/list/obj/item/photo/record_photos

@@ -27,6 +27,9 @@
 /// Any traits granted by powers.
 #define POWER_TRAIT "power_trait"
 
+/// Trait for mobs that should count as physically small for vent-crawling etc. (Doppler port)
+#define TRAIT_UNDERSIZED "undersized"
+
 /// This power can only be applied to humans.
 #define POWER_HUMAN_ONLY (1<<0)
 /// This power processes on SSpowers (and should implement power process)

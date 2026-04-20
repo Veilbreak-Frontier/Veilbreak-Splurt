@@ -236,10 +236,10 @@
 /// Gets the damage of the affected creature.
 /datum/action/cooldown/power/theologist/theologist_root/shared/proc/get_damage_snapshot(mob/living/carbon/subject)
 	return list(
-		"brute" = subject.getBruteLoss(),
-		"burn"  = subject.getFireLoss(),
-		"tox"   = subject.getToxLoss(),
-		"oxy"   = subject.getOxyLoss(),
+		"brute" = subject.get_brute_loss(),
+		"burn"  = subject.get_fire_loss(),
+		"tox"   = subject.get_tox_loss(),
+		"oxy"   = subject.get_oxy_loss(),
 	)
 
 /// Actually calls the proper health adjustments
@@ -249,24 +249,24 @@
 	// To summarize; heals the target by the amount (which is capped at 5)
 	switch(damage_type)
 		if("brute")
-			amount = clamp((giver.getBruteLoss() - taker.getBruteLoss()) / heal_division_factor, heal_min, heal_max)
-			giver.adjustBruteLoss(-amount)
-			taker.adjustBruteLoss(amount)
+			amount = clamp((giver.get_brute_loss() - taker.get_brute_loss()) / heal_division_factor, heal_min, heal_max)
+			giver.adjust_brute_loss(-amount)
+			taker.adjust_brute_loss(amount)
 
 		if("burn")
-			amount = clamp((giver.getFireLoss() - taker.getFireLoss()) / heal_division_factor, heal_min, heal_max)
-			giver.adjustFireLoss(-amount)
-			taker.adjustFireLoss(amount)
+			amount = clamp((giver.get_fire_loss() - taker.get_fire_loss()) / heal_division_factor, heal_min, heal_max)
+			giver.adjust_fire_loss(-amount)
+			taker.adjust_fire_loss(amount)
 
 		if("tox")
-			amount = clamp((giver.getToxLoss() - taker.getToxLoss()) / heal_division_factor, heal_min, heal_max)
+			amount = clamp((giver.get_tox_loss() - taker.get_tox_loss()) / heal_division_factor, heal_min, heal_max)
 			adjust_tox_noinvert(giver, -amount)
 			adjust_tox_noinvert(taker, amount)
 
 		if("oxy")
-			amount = clamp((giver.getOxyLoss() - taker.getOxyLoss()) / heal_division_factor, heal_min, heal_max)
-			giver.adjustOxyLoss(-amount)
-			taker.adjustOxyLoss(amount)
+			amount = clamp((giver.get_oxy_loss() - taker.get_oxy_loss()) / heal_division_factor, heal_min, heal_max)
+			giver.adjust_oxy_loss(-amount)
+			taker.adjust_oxy_loss(amount)
 
 	// Piety buildup increases/deductions
 	// you can't gain piety from taking burdens from a ckey-less creature (sorry pets), but you can lose piety from dumping onto a ckey-less creature.
@@ -287,14 +287,14 @@
 	This section is really ugly. Due for a do-over.
 	*/
 	if(user_missingHP > target_missingHP)
-		var/bruteloss = clamp((user.getBruteLoss() - target.bruteloss) / heal_division_factor, heal_min, heal_max)
-		var/fireloss = clamp((user.getFireLoss() - target.fireloss) / heal_division_factor, heal_min, heal_max)
-		var/toxloss = clamp((user.getToxLoss() - target.toxloss) / heal_division_factor, heal_min, heal_max)
-		var/oxyloss = clamp((user.getOxyLoss() - target.oxyloss) / heal_division_factor, heal_min, heal_max)
-		user.adjustBruteLoss(-bruteloss)
-		user.adjustFireLoss(-fireloss)
+		var/bruteloss = clamp((user.get_brute_loss() - target.bruteloss) / heal_division_factor, heal_min, heal_max)
+		var/fireloss = clamp((user.get_fire_loss() - target.fireloss) / heal_division_factor, heal_min, heal_max)
+		var/toxloss = clamp((user.get_tox_loss() - target.toxloss) / heal_division_factor, heal_min, heal_max)
+		var/oxyloss = clamp((user.get_oxy_loss() - target.oxyloss) / heal_division_factor, heal_min, heal_max)
+		user.adjust_brute_loss(-bruteloss)
+		user.adjust_fire_loss(-fireloss)
 		adjust_tox_noinvert(user, -toxloss)
-		user.adjustOxyLoss(-oxyloss)
+		user.adjust_oxy_loss(-oxyloss)
 		target.bruteloss -= bruteloss
 		target.fireloss -= fireloss
 		target.toxloss -= toxloss
@@ -304,14 +304,14 @@
 
 	// Yaaay, healing the animals :)
 	if(user_missingHP < target_missingHP)
-		var/bruteloss = clamp((target.bruteloss - user.getBruteLoss()) / heal_division_factor, heal_min, heal_max)
-		var/fireloss = clamp((target.fireloss - user.getFireLoss()) / heal_division_factor, heal_min, heal_max)
-		var/toxloss = clamp((target.toxloss - user.getToxLoss()) / heal_division_factor, heal_min, heal_max)
-		var/oxyloss = clamp((target.oxyloss - user.getOxyLoss()) / heal_division_factor, heal_min, heal_max)
-		user.adjustBruteLoss(bruteloss)
-		user.adjustFireLoss(fireloss)
+		var/bruteloss = clamp((target.bruteloss - user.get_brute_loss()) / heal_division_factor, heal_min, heal_max)
+		var/fireloss = clamp((target.fireloss - user.get_fire_loss()) / heal_division_factor, heal_min, heal_max)
+		var/toxloss = clamp((target.toxloss - user.get_tox_loss()) / heal_division_factor, heal_min, heal_max)
+		var/oxyloss = clamp((target.oxyloss - user.get_oxy_loss()) / heal_division_factor, heal_min, heal_max)
+		user.adjust_brute_loss(bruteloss)
+		user.adjust_fire_loss(fireloss)
 		adjust_tox_noinvert(user, toxloss)
-		user.adjustOxyLoss(oxyloss)
+		user.adjust_oxy_loss(oxyloss)
 		target.bruteloss += bruteloss
 		target.fireloss += fireloss
 		target.toxloss += toxloss

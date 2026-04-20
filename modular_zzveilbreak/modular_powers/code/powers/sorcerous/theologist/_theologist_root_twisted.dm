@@ -115,10 +115,10 @@
 
 	// Gets all damage types on target
 	var/list/damage_choices = list()
-	var/brute_damage = target.getBruteLoss()
-	var/burn_damage = target.getFireLoss()
-	var/tox_damage = target.getToxLoss()
-	var/oxy_damage = target.getOxyLoss()
+	var/brute_damage = target.get_brute_loss()
+	var/burn_damage = target.get_fire_loss()
+	var/tox_damage = target.get_tox_loss()
+	var/oxy_damage = target.get_oxy_loss()
 	// Checks if there's any injuries to heal b4 rolling the damage-type.
 	if(brute_damage > 0) damage_choices += "brute"
 	if(burn_damage > 0) damage_choices += "burn"
@@ -134,11 +134,11 @@
 	switch(damage_choice)
 		if("brute")
 			rand_cap = min(healing_max - healing_done, brute_damage)
-			heal_done = target.adjustBruteLoss(-rand(1, rand_cap))
+			heal_done = target.adjust_brute_loss(-rand(1, rand_cap))
 			healing_done += heal_done
 		if("burn")
 			rand_cap = min(healing_max - healing_done, burn_damage)
-			heal_done = target.adjustFireLoss(-rand(1, rand_cap))
+			heal_done = target.adjust_fire_loss(-rand(1, rand_cap))
 			healing_done += heal_done
 		if("tox")
 			rand_cap = min(healing_max - healing_done, tox_damage)
@@ -146,7 +146,7 @@
 			healing_done += heal_done
 		if("oxy")
 			rand_cap = min(healing_max - healing_done, oxy_damage)
-			heal_done = target.adjustOxyLoss(-rand(1, rand_cap))
+			heal_done = target.adjust_oxy_loss(-rand(1, rand_cap))
 			healing_done += heal_done
 	return heal_done
 
@@ -170,14 +170,14 @@
 		var/damage_choice = pick(damage_choices)
 		switch(damage_choice)
 			if("brute")
-				target.adjustBruteLoss(dam_done)
+				target.adjust_brute_loss(dam_done)
 			if("burn")
-				target.adjustFireLoss(dam_done)
+				target.adjust_fire_loss(dam_done)
 			if("tox")
 				adjust_tox_noinvert(target, dam_done)
 			// The jackpot
 			if("oxy")
-				target.adjustOxyLoss(dam_done)
+				target.adjust_oxy_loss(dam_done)
 		damage_done += dam_done
 		// Keep the net healing at the standard for roots by subtracting damage from total healing done.
 		healing_done = max(0, healing_done - dam_done)

@@ -12,9 +12,7 @@
 	heat_protection = CHEST|GROIN|ARMS|HANDS|LEGS
 	fishing_modifier = -6 // high vishing
 	affinity = 3
-	supported_bodyshapes = list(BODYSHAPE_HUMANOID, BODYSHAPE_DIGITIGRADE)
-	bodyshape_icon_files = list(BODYSHAPE_HUMANOID_T = 'modular_zzveilbreak/modular_powers/icons/items/thaumaturge_robes.dmi',
-		BODYSHAPE_DIGITIGRADE_T = 'modular_zzveilbreak/modular_powers/icons/items/thaumaturge_robes_digi.dmi')
+	// DOPPLER EDIT - supported_bodyshapes/bodyshape_icon_files not supported in Veilbreak.
 
 // Viszard; affinity 3 head, no bonus perks besides not being flammable.
 /obj/item/clothing/head/wizard/viszard
@@ -41,9 +39,7 @@
 	affinity = 3
 	slowdown = 0.2
 	fishing_modifier = -3
-	supported_bodyshapes = list(BODYSHAPE_HUMANOID, BODYSHAPE_DIGITIGRADE)
-	bodyshape_icon_files = list(BODYSHAPE_HUMANOID_T = 'modular_zzveilbreak/modular_powers/icons/items/thaumaturge_robes.dmi',
-		BODYSHAPE_DIGITIGRADE_T = 'modular_zzveilbreak/modular_powers/icons/items/thaumaturge_robes_digi.dmi')
+	// DOPPLER EDIT - supported_bodyshapes/bodyshape_icon_files not supported in Veilbreak.
 
 // Secrobe; affinity 3 head, no bonus perks besides not being flammable.
 /obj/item/clothing/head/wizard/secwiz
