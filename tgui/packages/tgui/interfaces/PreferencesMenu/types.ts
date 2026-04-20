@@ -118,6 +118,33 @@ export type PowerEntry = {
   rootpower: string | null;
 };
 
+// DOPPLER EDIT START - Powers System
+export type Power = {
+  description: string;
+  name: string;
+  icon: string;
+  cost: number;
+  has_power?: boolean;
+  state: string;
+  word: string;
+  color: string;
+  powertype: (string | null)[];
+  rootpower: (string | null)[];
+  required_powers?: string[];
+  required_allow_any?: boolean;
+  required_allow_subtypes?: boolean;
+  customizable?: boolean;
+  customization_options?: string[];
+  augment?: {
+    location?: string | null;
+    is_arm?: boolean;
+    assignment?: string | null;
+    left_blocked?: boolean;
+    right_blocked?: boolean;
+  } | null;
+};
+// DOPPLER EDIT END
+
 export type Marking = {
   name: string;
   color: string;
@@ -261,16 +288,17 @@ export type PreferencesMenuData = {
   ckey: string;
   // SKYRAT EDIT END
   total_power_points?: number;
-  thaumaturge?: PowerEntry[];
-  enigmatist?: PowerEntry[];
-  theologist?: PowerEntry[];
-  psyker?: PowerEntry[];
-  cultivator?: PowerEntry[];
-  aberrant?: PowerEntry[];
-  warfighter?: PowerEntry[];
-  expert?: PowerEntry[];
-  augmented?: PowerEntry[];
+  thaumaturge?: Power[];
+  enigmatist?: Power[];
+  theologist?: Power[];
+  psyker?: Power[];
+  cultivator?: Power[];
+  aberrant?: Power[];
+  warfighter?: Power[];
+  expert?: Power[];
+  augmented?: Power[];
   power_points?: number;
+  augment_location?: string | null; // DOPPLER EDIT ADDITION - Powers System
   // SPLURT EDIT START
   donator_tier: number;
   // SPLURT EDIT END

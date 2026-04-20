@@ -85,6 +85,14 @@
 	var/security_note
 	/// Current arrest status
 	var/wanted_status = WANTED_NONE
+	// DOPPLER EDIT START - Powers in records
+	/// Crew-facing power notes
+	var/power_notes
+	/// Power notes that don't impact security's ability to do their job
+	var/power_notes_minor
+	/// Power notes that do impact security's ability to do their job
+	var/power_notes_major
+	// DOPPLER EDIT END
 
 	///Photo used for records, which we store here so we don't have to constantly make more of.
 	var/list/obj/item/photo/record_photos
@@ -116,6 +124,11 @@
 	past_medical_records = "",
 	past_security_records = "",
 	// SKYRAT EDIT END
+	// DOPPLER EDIT START - Powers in records
+	power_notes = "No powers declared.",
+	power_notes_minor = "",
+	power_notes_major = "",
+	// DOPPLER EDIT END
 )
 	. = ..()
 	src.lock_ref = lock_ref
@@ -131,6 +144,11 @@
 	src.past_medical_records = past_medical_records
 	src.past_security_records = past_security_records
 	// SKYRAT EDIT END
+	// DOPPLER EDIT START - Powers in records
+	src.power_notes = power_notes
+	src.power_notes_minor = power_notes_minor
+	src.power_notes_major = power_notes_major
+	// DOPPLER EDIT END
 
 	GLOB.manifest.general += src
 
@@ -281,6 +299,10 @@
 		final_paper_text += "<br><B>General Records:</B>"
 		final_paper_text += "<br>[past_general_records]<br>"
 	//SKYRAT EDIT ADD END
+	// DOPPLER EDIT START - Powers in records
+	final_paper_text += "<br><B>Powers:</B>"
+	final_paper_text += "<br>[power_notes || "No powers declared."]<br>"
+	// DOPPLER EDIT END
 	final_paper_text += "<center><B>Security Data</B></center><br><br>"
 
 	//SKYRAT EDIT ADDITION START - RP RECORDS

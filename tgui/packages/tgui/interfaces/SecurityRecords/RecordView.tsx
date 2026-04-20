@@ -13,8 +13,8 @@ import {
 
 import { CharacterPreview } from '../common/CharacterPreview';
 import { EditableText } from '../common/EditableText';
-import { CRIMESTATUS2COLOR, CRIMESTATUS2DESC } from './constants';
 import { CrimeWatcher } from './CrimeWatcher';
+import { CRIMESTATUS2COLOR, CRIMESTATUS2DESC } from './constants';
 import { getSecurityRecord } from './helpers';
 import { RecordPrint } from './RecordPrint';
 import type { SecurityRecordsData } from './types';
@@ -71,6 +71,11 @@ const RecordInfo = (props) => {
     wanted_status,
     voice,
     // SKYRAT EDIT START - RP Records
+    // DOPPLER EDIT START - Powers in records
+    power_notes,
+    power_notes_minor,
+    power_notes_major,
+    // DOPPLER EDIT END
     past_general_records,
     past_security_records,
     // SKYRAT EDIT END
@@ -78,6 +83,12 @@ const RecordInfo = (props) => {
 
   const [isValid, setIsValid] = useState(true);
 
+  // DOPPLER ADDITION START - Power sec notes
+  const major_power_notes_array = power_notes_major?.split('<br>') || [];
+  const minor_power_notes_array = power_notes_minor?.split('<br>') || [];
+  const has_power_notes =
+    major_power_notes_array.length > 0 || minor_power_notes_array.length > 0;
+  // DOPPLER ADDITION END
   const hasValidCrimes = !!crimes.find((crime) => !!crime.valid);
 
   return (
@@ -224,6 +235,21 @@ const RecordInfo = (props) => {
               />
             </LabeledList.Item>
             {/* SKYRAT EDIT START - RP Records (Not pretty but it's there) */}
+            {/* DOPPLER EDIT START - Powers in records */}
+            <LabeledList.Item label="Powers">
+              {major_power_notes_array.map((power, index) => (
+                <Box bold key={`major-${index}`}>
+                  &#8226; {power}
+                </Box>
+              ))}
+              {minor_power_notes_array.map((power, index) => (
+                <Box key={`minor-${index}`}>&#8226; {power}</Box>
+              ))}
+              {!has_power_notes && (
+                <Box>&#8226; {power_notes || 'No powers declared.'}</Box>
+              )}
+            </LabeledList.Item>
+            {/* DOPPLER EDIT END */}
             <LabeledList.Item label="General Records">
               <Box maxWidth="100%" preserveWhitespace>
                 {past_general_records || 'N/A'}
