@@ -135,6 +135,11 @@
 			past_general_records = target.past_general_records,
 			past_security_records = target.past_security_records,
 			// SKYRAT EDIT END
+			// DOPPLER EDIT BEGIN - Powers in records
+			power_notes = target.power_notes,
+			power_notes_minor = target.power_notes_minor,
+			power_notes_major = target.power_notes_major,
+			// DOPPLER EDIT END
 		))
 
 	data["records"] = records

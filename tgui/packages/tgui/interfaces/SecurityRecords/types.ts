@@ -29,6 +29,11 @@ export type SecurityRecord = {
   wanted_status: string;
   voice: string;
   // SKYRAT EDIT START - RP Records
+  // DOPPLER EDIT START - Powers in records
+  power_notes: string;
+  power_notes_minor: string;
+  power_notes_major: string;
+  // DOPPLER EDIT END
   past_general_records: string;
   past_security_records: string;
   // SKYRAT EDIT END

@@ -381,6 +381,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	all_quirks = save_data["all_quirks"]
 
 	load_character_skyrat(save_data)
+	load_character_doppler(save_data) // DOPPLER EDIT ADDITION - Powers savefile migration
+	check_doppler_character_savefile(save_data) // DOPPLER EDIT ADDITION - Modular Character Savefile Migration
 
 	if(SHOULD_UPDATE_DATA(data_validity_integer))
 		update_character(data_validity_integer, save_data)
@@ -450,6 +452,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Quirks
 	save_data["all_quirks"] = all_quirks
 	save_character_skyrat(save_data, update) // SKYRAT EDIT ADDITION
+	save_character_doppler(save_data) // DOPPLER EDIT ADDITION - Powers savefile migration
 	save_custom_tattoo_data(save_data)
 	return TRUE
 
