@@ -347,7 +347,7 @@ put up a rune with bluespace effects, lots of those runes are fluff or act as a 
 /obj/effect/warped_rune/silverspace/on_entered(datum/source, atom/movable/AM, oldloc)
 	if(iscarbon(AM))
 		var/mob/living/carbon/C = AM
-		C.adjust_nutrition(150)
+		C.adjust_nutrition(10)
 		activated_on_step = TRUE
 	. = ..()
 
