@@ -333,7 +333,7 @@
 	for(var/mob/living/basic/void_creature/void_mob in view(7, living_pawn))
 		if(void_mob == living_pawn || void_mob.stat == DEAD || !void_mob.ai_controller)
 			continue
-		if(!living_pawn.can_see(void_mob))
+		if(!can_see(living_pawn, void_mob))
 			continue
 		if(void_mob.faction.Find(FACTION_VOID) && !void_mob.ai_controller.blackboard_key_exists(BB_BASIC_MOB_CURRENT_TARGET))
 			void_mob.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
@@ -434,7 +434,7 @@
 	if(!target || isobserver(target))
 		return FALSE
 
-	if(!owner.can_see(target))
+	if(!can_see(owner, target))
 		return FALSE
 
 	if(ismob(target))
