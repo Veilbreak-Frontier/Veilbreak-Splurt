@@ -325,24 +325,41 @@
 	return ..()
 
 /datum/ai_behavior/voidbug_call_pack/perform(seconds_per_tick, datum/ai_controller/controller, target_key)
-	var/mob/living/living_pawn = controller.pawn
-	var/atom/target = controller.blackboard[target_key]
-	if(!target)
-		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
-	var/pack_called = FALSE
-	for(var/mob/living/basic/void_creature/void_mob in view(7, living_pawn))
-		if(void_mob == living_pawn || void_mob.stat == DEAD || !void_mob.ai_controller)
-			continue
-		if(!can_see(living_pawn, void_mob))
-			continue
-		if(void_mob.faction.Find(FACTION_VOID) && !void_mob.ai_controller.blackboard_key_exists(BB_BASIC_MOB_CURRENT_TARGET))
-			void_mob.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
-			pack_called = TRUE
-	if(pack_called)
-		living_pawn.visible_message(span_warning("[living_pawn] lets out a chittering call, rallying nearby void creatures!"))
-		playsound(living_pawn, 'sound/effects/hallucinations/growl1.ogg', 50, TRUE)
-	controller.blackboard[BB_VOIDBUG_LAST_PACK_CALL] = world.time
-	return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED
+    var/mob/living/living_pawn = controller.pawn
+    var/atom/target = controller.blackboard[target_key]
+    if(!target)
+        return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
+
+    var/turf/source_turf = get_turf(living_pawn)
+    var/pack_called = FALSE
+
+    for(var/mob/living/basic/void_creature/void_mob in view(7, living_pawn))
+        if(void_mob == living_pawn || void_mob.stat == DEAD || !void_mob.ai_controller)
+            continue
+
+        var/turf/ally_turf = get_turf(void_mob)
+        var/blocked = FALSE
+
+        for(var/turf/check_turf in get_line(source_turf, ally_turf))
+            if(check_turf == source_turf || check_turf == ally_turf)
+                continue
+            if(check_turf.opacity)
+                blocked = TRUE
+                break
+
+        if(blocked)
+            continue
+
+        if(void_mob.faction.Find(FACTION_VOID) && !void_mob.ai_controller.blackboard_key_exists(BB_BASIC_MOB_CURRENT_TARGET))
+            void_mob.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
+            pack_called = TRUE
+
+    if(pack_called)
+        living_pawn.visible_message(span_warning("[living_pawn] lets out a chittering call, rallying nearby void creatures!"))
+        playsound(living_pawn, 'sound/effects/hallucinations/growl1.ogg', 50, TRUE)
+
+    controller.blackboard[BB_VOIDBUG_LAST_PACK_CALL] = world.time
+    return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED
 
 /datum/ai_planning_subtree/void_pathfinder_summon/SelectBehaviors(datum/ai_controller/controller, seconds_per_tick)
 	if(world.time <= controller.blackboard[BB_VOID_SUMMON_COOLDOWN])
@@ -431,40 +448,49 @@
 // --- UTILS & VISUALS ---
 
 /datum/targeting_strategy/basic/void_aggressive/can_attack(mob/living/owner, atom/target, vision_range)
-	if(!target || isobserver(target))
-		return FALSE
+    if(!target || isobserver(target))
+        return FALSE
 
-	if(!can_see(owner, target))
-		return FALSE
+    var/turf/source_turf = get_turf(owner)
+    var/turf/target_turf = get_turf(target)
 
-	if(ismob(target))
-		var/mob/living/L = target
-		if(L.stat == DEAD)
-			return FALSE
+    if(!source_turf || !target_turf || get_dist(source_turf, target_turf) > vision_range)
+        return FALSE
 
-		if(ishuman(L))
-			var/mob/living/carbon/human/H = L
-			if(istype(H.dna?.species, /datum/species/protean))
-				var/datum/species/protean/P = H.dna.species
+    for(var/turf/check_turf in get_line(source_turf, target_turf))
+        if(check_turf == source_turf || check_turf == target_turf)
+            continue
+        if(check_turf.opacity)
+            return FALSE
 
-				if(H.loc == P.species_modsuit)
-					return FALSE
+    if(ismob(target))
+        var/mob/living/L = target
+        if(L.stat == DEAD)
+            return FALSE
 
-				var/obj/item/organ/brain/protean/orchestrator = H.get_organ_slot(ORGAN_SLOT_BRAIN)
-				if(!orchestrator || orchestrator.dead)
-					return FALSE
+        if(ishuman(L))
+            var/mob/living/carbon/human/H = L
+            if(istype(H.dna?.species, /datum/species/protean))
+                var/datum/species/protean/P = H.dna.species
 
-		if(!compare_factions(owner, L))
-			if(istype(owner, /mob/living/basic/void_creature/voidbug))
-				var/mob/living/basic/void_creature/voidbug/VB = owner
-				VB.alert_allies(L)
-			return TRUE
+                if(H.loc == P.species_modsuit)
+                    return FALSE
 
-	if(istype(target, /obj/vehicle/sealed/mecha))
-		if(!compare_factions(owner, target))
-			return TRUE
+                var/obj/item/organ/brain/protean/orchestrator = H.get_organ_slot(ORGAN_SLOT_BRAIN)
+                if(!orchestrator || orchestrator.dead)
+                    return FALSE
 
-	return FALSE
+        if(!compare_factions(owner, L))
+            if(istype(owner, /mob/living/basic/void_creature/voidbug))
+                var/mob/living/basic/void_creature/voidbug/VB = owner
+                VB.alert_allies(L)
+            return TRUE
+
+    if(istype(target, /obj/vehicle/sealed/mecha))
+        if(!compare_factions(owner, target))
+            return TRUE
+
+    return FALSE
 
 /proc/compare_factions(mob/living/owner, atom/target)
 	if(!owner.faction) return FALSE
