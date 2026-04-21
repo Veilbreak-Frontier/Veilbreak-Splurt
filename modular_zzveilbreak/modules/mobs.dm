@@ -174,6 +174,8 @@
     for(var/mob/living/basic/void_creature/V in view(7, src))
         if(V == src || V.stat == DEAD || !V.ai_controller)
             continue
+        if(!can_see(V))
+            continue
         V.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
         new /obj/effect/temp_visual/void_alert(V.loc)
 
@@ -323,22 +325,24 @@
 	return ..()
 
 /datum/ai_behavior/voidbug_call_pack/perform(seconds_per_tick, datum/ai_controller/controller, target_key)
-	var/mob/living/living_pawn = controller.pawn
-	var/atom/target = controller.blackboard[target_key]
-	if(!target)
-		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
-	var/pack_called = FALSE
-	for(var/mob/living/basic/void_creature/void_mob in view(7, living_pawn))
-		if(void_mob == living_pawn || void_mob.stat == DEAD || !void_mob.ai_controller)
-			continue
-		if(void_mob.faction.Find(FACTION_VOID) && !void_mob.ai_controller.blackboard_key_exists(BB_BASIC_MOB_CURRENT_TARGET))
-			void_mob.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
-			pack_called = TRUE
-	if(pack_called)
-		living_pawn.visible_message(span_warning("[living_pawn] lets out a chittering call, rallying nearby void creatures!"))
-		playsound(living_pawn, 'sound/effects/hallucinations/growl1.ogg', 50, TRUE)
-	controller.blackboard[BB_VOIDBUG_LAST_PACK_CALL] = world.time
-	return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED
+    var/mob/living/living_pawn = controller.pawn
+    var/atom/target = controller.blackboard[target_key]
+    if(!target)
+        return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
+    var/pack_called = FALSE
+    for(var/mob/living/basic/void_creature/void_mob in view(7, living_pawn))
+        if(void_mob == living_pawn || void_mob.stat == DEAD || !void_mob.ai_controller)
+            continue
+        if(!living_pawn.can_see(void_mob))
+            continue
+        if(void_mob.faction.Find(FACTION_VOID) && !void_mob.ai_controller.blackboard_key_exists(BB_BASIC_MOB_CURRENT_TARGET))
+            void_mob.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
+            pack_called = TRUE
+    if(pack_called)
+        living_pawn.visible_message(span_warning("[living_pawn] lets out a chittering call, rallying nearby void creatures!"))
+        playsound(living_pawn, 'sound/effects/hallucinations/growl1.ogg', 50, TRUE)
+    controller.blackboard[BB_VOIDBUG_LAST_PACK_CALL] = world.time
+    return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED
 
 /datum/ai_planning_subtree/void_pathfinder_summon/SelectBehaviors(datum/ai_controller/controller, seconds_per_tick)
     if(world.time <= controller.blackboard[BB_VOID_SUMMON_COOLDOWN])
@@ -428,6 +432,9 @@
 
 /datum/targeting_strategy/basic/void_aggressive/can_attack(mob/living/owner, atom/target, vision_range)
     if(!target || isobserver(target))
+        return FALSE
+
+	if(!owner.can_see(target))
         return FALSE
 
     if(ismob(target))
