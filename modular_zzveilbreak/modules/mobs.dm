@@ -332,23 +332,16 @@
 
 	var/turf/source_turf = get_turf(living_pawn)
 	var/pack_called = FALSE
-	var/pawn_angle = dir2angle(living_pawn.dir)
 
 	for(var/mob/living/basic/void_creature/void_mob in view(7, living_pawn))
 		if(void_mob == living_pawn || void_mob.stat == DEAD || !void_mob.ai_controller)
 			continue
 
-		var/deg_to_ally = get_angle(living_pawn, void_mob)
-		var/diff = deg_to_ally - pawn_angle
-		while(diff <= -180) diff += 360
-		while(diff > 180) diff -= 360
-
-		if(abs(diff) > 45)
+		var/turf/ally_turf = get_turf(void_mob)
+		if(!ally_turf)
 			continue
 
-		var/turf/ally_turf = get_turf(void_mob)
 		var/blocked = FALSE
-
 		for(var/turf/check_turf in get_line(source_turf, ally_turf))
 			if(check_turf == source_turf || check_turf == ally_turf)
 				continue
@@ -476,17 +469,6 @@
 		return FALSE
 
 	if(get_dist(source_turf, target_turf) > 7)
-		return FALSE
-
-	var/deg_to_target = get_angle(owner, target)
-	var/dir_angle = dir2angle(owner.dir)
-
-	var/diff = deg_to_target - dir_angle
-	while(diff <= -180) diff += 360
-	while(diff > 180) diff -= 360
-	diff = abs(diff)
-
-	if(diff > 45)
 		return FALSE
 
 	for(var/turf/check_turf in get_line(source_turf, target_turf))
