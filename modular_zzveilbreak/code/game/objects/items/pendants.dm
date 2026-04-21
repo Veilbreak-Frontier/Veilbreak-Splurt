@@ -87,7 +87,6 @@
 	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION | CLOTHING_SNOUTED_VARIATION
 	// NO custom scaling, NO custom build_worn_icon override
 
-	var/on_cooldown = FALSE
 	var/cooldown_time = 35 SECONDS
 
 /obj/item/clothing/neck/life_pendant/Initialize()
@@ -97,31 +96,28 @@
 	. = ..()
 	if(slot == ITEM_SLOT_NECK)
 		START_PROCESSING(SSobj, src)
-		if(!locate(/datum/action/item_action/life_heal) in user.actions)
-			var/datum/action/item_action/life_heal/action = new(src)
+		if(!locate(/datum/action/cooldown/life_heal) in user.actions)
+			var/datum/action/cooldown/life_heal/action = new(src)
 			action.Grant(user)
 
 /obj/item/clothing/neck/life_pendant/dropped(mob/user)
 	. = ..()
 	STOP_PROCESSING(SSobj, src)
-	var/datum/action/item_action/life_heal/action = locate() in user.actions
+	var/datum/action/cooldown/life_heal/action = locate() in user.actions
 	if(action)
 		action.Remove(user)
 
-/datum/action/item_action/life_heal
+/datum/action/cooldown/life_heal
 	name = "Life Heal"
 	desc = "Heal nearby allies with the Life Pendant."
 	button_icon = 'modular_zzveilbreak/icons/item_icons/pendants.dmi'
 	button_icon_state = "life_pendant"
+	check_flags = AB_CHECK_INCAPACITATED|AB_CHECK_HANDS_BLOCKED|AB_CHECK_CONSCIOUS
 
-/datum/action/item_action/life_heal/Trigger(trigger_flags)
+/datum/action/cooldown/life_heal/Activate(atom/activation_target)
 	var/obj/item/clothing/neck/life_pendant/pendant = target
-	if(!pendant)
-		return
-	if(pendant.on_cooldown)
-		to_chat(owner, span_warning("The pendant is on cooldown!"))
-		return
-	pendant.on_cooldown = TRUE
+	if(!istype(pendant))
+		return FALSE
 	var/healed_total = 0
 	for(var/mob/living/t in range(3, owner))
 		if(healed_total >= 100)
@@ -133,7 +129,9 @@
 		t.heal_damage_type(heal_amount, OXY)
 		healed_total += heal_amount
 	to_chat(owner, span_notice("The Life Pendant heals nearby allies!"))
-	addtimer(CALLBACK(pendant, TYPE_PROC_REF(/obj/item/clothing/neck/life_pendant, end_cooldown)), pendant.cooldown_time)
+	StartCooldown(pendant.cooldown_time)
+	addtimer(CALLBACK(pendant, TYPE_PROC_REF(/obj/item/clothing/neck/life_pendant, notify_ready)), pendant.cooldown_time)
+	return TRUE
 
 /obj/item/clothing/neck/life_pendant/process(seconds_per_tick)
 	if(!ismob(loc))
@@ -145,7 +143,6 @@
 		user.heal_damage_type(heal_tick, TOX)
 		user.heal_damage_type(heal_tick, OXY)
 
-/obj/item/clothing/neck/life_pendant/proc/end_cooldown()
-	on_cooldown = FALSE
+/obj/item/clothing/neck/life_pendant/proc/notify_ready()
 	if(ismob(loc))
 		to_chat(loc, span_notice("The Life Pendant is ready to use again."))

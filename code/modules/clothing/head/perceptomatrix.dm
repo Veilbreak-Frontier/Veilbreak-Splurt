@@ -49,6 +49,7 @@
 		/* psychic protection */
 		TRAIT_NO_MINDSWAP,
 		TRAIT_UNCONVERTABLE,
+		TRAIT_ANTIRESONANCE_SCRYING,
 	)
 
 // weaker overall but better against energy
