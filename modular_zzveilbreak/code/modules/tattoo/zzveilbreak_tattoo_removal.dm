@@ -41,26 +41,34 @@
 	return ..()
 
 /datum/surgery/custom_tattoo_removal/can_start(mob/user, mob/living/patient)
-	if(!..())
-		return FALSE
-
 	if(!ishuman(patient))
 		return FALSE
 
 	var/mob/living/carbon/human/H = patient
 
-	if(H.dna && H.dna.species.id == SPECIES_PROTEAN)
-		return FALSE
+	var/is_protean_target = (H.dna?.species?.id == SPECIES_PROTEAN)
 
-	if(issynthetic(H))
-		if(src.type != /datum/surgery/custom_tattoo_removal/mechanic)
+	if(is_protean_target)
+		if(src.type != /datum/surgery/custom_tattoo_removal/protean)
 			return FALSE
 	else
-		if(src.type == /datum/surgery/custom_tattoo_removal/mechanic)
-			return FALSE
+		// Logic for non-proteans
+		if(issynthetic(H))
+			if(src.type != /datum/surgery/custom_tattoo_removal/mechanic)
+				return FALSE
+		else
+			if(src.type == /datum/surgery/custom_tattoo_removal/mechanic || src.type == /datum/surgery/custom_tattoo_removal/protean)
+				return FALSE
 
+	// FIX: Only search for tattoos on the SPECIFIC zone we are clicking
 	var/list/tattoos = get_accessible_custom_tattoos(H)
-	if(!length(tattoos))
+	var/found_tattoo_in_zone = FALSE
+	for(var/datum/custom_tattoo/T in tattoos)
+		if(T.body_part == location)
+			found_tattoo_in_zone = TRUE
+			break
+
+	if(!found_tattoo_in_zone)
 		return FALSE
 
 	accessible_tattoos = tattoos
@@ -73,14 +81,9 @@
 	for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
 		if(!istype(T) || QDELETED(T))
 			continue
-
-		var/target_zone = T.body_part
-		if(target_zone != location)
+		if(!is_custom_tattoo_bodypart_existing(H, T.body_part))
 			continue
-
-		if(!is_custom_tattoo_bodypart_existing(H, target_zone))
-			continue
-		if(!get_custom_tattoo_location_accessible(H, target_zone))
+		if(!get_custom_tattoo_location_accessible(H, T.body_part))
 			continue
 		tattoos += T
 	return tattoos
@@ -373,3 +376,9 @@
 
 	accessible_tattoos = tattoos
 	return TRUE
+
+
+/datum/surgery/custom_tattoo_removal/protean/New()
+	..()
+	if(!(src.type in GLOB.surgeries_list))
+		GLOB.surgeries_list += src.type
