@@ -333,7 +333,7 @@
 	var/turf/source_turf = get_turf(living_pawn)
 	var/pack_called = FALSE
 
-	for(var/mob/living/basic/void_creature/void_mob in view(7, living_pawn))
+	for(var/mob/living/basic/void_creature/void_mob in view(9, living_pawn))
 		if(void_mob == living_pawn || void_mob.stat == DEAD || !void_mob.ai_controller)
 			continue
 
@@ -350,8 +350,10 @@
 				blocked = TRUE
 				break
 
-			for(var/atom/movable/AM in check_turf)
-				if(AM.density && AM != living_pawn && AM != void_mob)
+			for(var/atom/A in check_turf)
+				if(ismob(A))
+					continue
+				if(A.density)
 					blocked = TRUE
 					break
 
@@ -468,7 +470,7 @@
 	if(!source_turf || !target_turf)
 		return FALSE
 
-	if(get_dist(source_turf, target_turf) > 7)
+	if(get_dist(source_turf, target_turf) > 9)
 		return FALSE
 
 	for(var/turf/check_turf in get_line(source_turf, target_turf))
@@ -478,8 +480,10 @@
 		if(check_turf.opacity)
 			return FALSE
 
-		for(var/atom/movable/AM in check_turf)
-			if(AM.density && AM != owner && AM != target)
+		for(var/atom/A in check_turf)
+			if(ismob(A))
+				continue
+			if(A.density)
 				return FALSE
 
 	if(ismob(target))
@@ -504,7 +508,7 @@
 				VB.alert_allies(L)
 			return TRUE
 
-	if(istype(target, /obj/vehicle/sealed/mecha))
+	if(istype(target, /obj/vehicle/sealed/mecha) || istype(target, /mob/living/silicon))
 		if(!compare_factions(owner, target))
 			return TRUE
 
