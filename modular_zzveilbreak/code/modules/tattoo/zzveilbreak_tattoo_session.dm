@@ -8,7 +8,7 @@
 	if(!prefs.features)
 		prefs.features = list()
 
-	if(length(prefs.features["custom_tattoos"]) || length(prefs.features["custom_tattoos_loaded"]))
+	if(length(prefs.features["custom_tattoos"]))
 		prefs.apply_custom_tattoos_to_mob(H)
 
 	. = ..()
