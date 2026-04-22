@@ -1,301 +1,220 @@
 {
-	"Spawn Bitrunning Glitch": {
-		"min_players": 1,
-		"weight": 100
-	},
-	"Aurora Caelus": {
-		"min_players": 0,
-		"weight": 1,
-		"earliest_start": 3000
-	},
-	"Spontaneous Brain Trauma": {
-		"min_players": 13,
-		"weight": 25
-	},
-	"Brand Intelligence": {
-		"min_players": 15,
-		"weight": 5
-	},
-	"Bureaucratic Error": {
-		"min_players": 0,
-		"weight": 5
-	},
-	"Camera Failure": {
-		"min_players": 0,
-		"weight": 100
-	},
-	"Carp Migration": {
-		"min_players": 12,
-		"weight": 15,
-		"earliest_start": 6000
-	},
-	"Disease Outbreak: Classic": {
-		"min_players": 10,
-		"weight": 5
-	},
-	"Disease Outbreak: Advanced": {
-		"min_players": 35,
-		"weight": 15,
-		"earliest_start": 9000
-	},
-	"Space Dust: Minor": {
-		"min_players": 0,
-		"weight": 200,
-		"earliest_start": 0
-	},
-	"Electrical Storm": {
-		"min_players": 5,
-		"weight": 20,
-		"earliest_start": 6000
-	},
-	"Fake Virus": {
-		"min_players": 0,
-		"weight": 20
-	},
-	"False Alarm": {
-		"min_players": 0,
-		"weight": 20
-	},
-	"Gravity Generator Blackout": {
-		"min_players": 0,
-		"weight": 30
-	},
-	"Grey Tide": {
-		"min_players": 5,
-		"weight": 10
-	},
-	"Grid Check": {
-		"min_players": 0,
-		"weight": 10
-	},
-	"Random Heart Attack": {
-		"min_players": 40,
-		"weight": 20
-	},
-	"Ion Storm": {
-		"min_players": 2,
-		"weight": 15
-	},
-	"Market Crash": {
-		"min_players": 0,
-		"weight": 10
-	},
-	"Mass Hallucination": {
-		"min_players": 1,
-		"weight": 10
-	},
-	"Mice Migration": {
-		"min_players": 0,
-		"weight": 10
-	},
-	"Portal Storm: Syndicate Shocktroops": {
-		"min_players": 15,
-		"weight": 2,
-		"earliest_start": 18000
-	},
-	"Portal Storm: Constructs": {
-		"min_players": 0,
-		"weight": 0
-	},
-	"Processor Overload": {
-		"min_players": 20,
-		"weight": 15
-	},
-	"Radiation Leak": {
-		"min_players": 0,
-		"weight": 15
-	},
-	"Radiation Storm": {
-		"min_players": 0,
-		"weight": 10
-	},
-	"Sandstorm: Directional": {
-		"min_players": 35,
-		"weight": 10,
-		"earliest_start": 21000
-	},
-	"Sandstorm: Classic": {
-		"min_players": 0,
-		"weight": 0,
-		"earliest_start": 0
-	},
-	"Scrubber Overflow: Normal": {
-		"min_players": 10,
-		"weight": 10
-	},
-	"Scrubber Overflow: Threatening": {
-		"min_players": 25,
-		"weight": 4,
-		"earliest_start": 21000
-	},
-	"Scrubber Overflow: Catastrophic": {
-		"min_players": 35,
-		"weight": 2,
-		"earliest_start": 27000
-	},
-	"Scrubber Overflow: Every Vent": {
-		"min_players": 10,
-		"weight": 0
-	},
-	"Shuttle Catastrophe": {
-		"min_players": 0,
-		"weight": 10
-	},
-	"Shuttle Insurance": {
-		"min_players": 0,
-		"weight": 10
-	},
-	"Stray Cargo Pod": {
-		"min_players": 0,
-		"weight": 20,
-		"earliest_start": 6000
-	},
-	"Stray Syndicate Cargo Pod": {
-		"min_players": 0,
-		"weight": 6,
-		"earliest_start": 18000
-	},
-	"Supermatter Surge": {
-		"min_players": 0,
-		"weight": 15
-	},
-	"Supermatter Surge: Poly's Revenge": {
-		"min_players": 0,
-		"weight": 0
-	},
-	"Tram Malfunction": {
-		"min_players": 0,
-		"weight": 30,
-		"earliest_start": 9000
-	},
-	"Ventilation Clog: Minor": {
-		"min_players": 0,
-		"weight": 25,
-		"earliest_start": 3000
-	},
-	"Ventilation Clog: Major": {
-		"min_players": 0,
-		"weight": 12,
-		"earliest_start": 6000
-	},
-	"Ventilation Clog: Critical": {
-		"min_players": 15,
-		"weight": 8,
-		"earliest_start": 15000
-	},
-	"Ventilation Clog: Strange": {
-		"min_players": 0,
-		"weight": 5,
-		"earliest_start": 3000
-	},
-	"Wisdom Cow": {
-		"min_players": 0,
-		"weight": 20
-	},
-	"Wormholes": {
-		"min_players": 2,
-		"weight": 2
-	},
-	"Anomaly: Energetic Flux": {
-		"min_players": 1,
-		"weight": 15
-	},
-	"Anomaly: Bioscrambler": {
-		"min_players": 10,
-		"weight": 20
-	},
-	"Anomaly: Bluespace": {
-		"min_players": 1,
-		"weight": 15
-	},
-	"Anomaly: Dimensional": {
-		"min_players": 10,
-		"weight": 20
-	},
-	"Anomaly: Ectoplasmic Outburst": {
-		"min_players": 30,
-		"weight": 4
-	},
-	"Anomaly: Hyper-Energetic Flux": {
-		"min_players": 10,
-		"weight": 20
-	},
-	"Anomaly: Gravitational": {
-		"min_players": 1,
-		"weight": 25
-	},
-	"Anomaly: Gravitational (High Intensity)": {
-		"min_players": 1,
-		"weight": 15
-	},
-	"Anomaly: Hallucination": {
-		"min_players": 10,
-		"weight": 20
-	},
-	"Anomaly: Pyroclastic": {
-		"min_players": 1,
-		"weight": 20
-	},
-	"Anomaly: Vortex": {
-		"min_players": 20,
-		"weight": 10
-	},
-	"Lone Operative": {
-		"min_players": 0,
-		"weight": 0
-	},
-	"Random Human-level Intelligence": {
-		"min_players": 0,
-		"weight": 10
-	},
-	"Station-wide Human-level Intelligence": {
-		"min_players": 0,
-		"weight": 0
-	},
-	"Immovable Rod": {
-		"min_players": 15,
-		"weight": 10
-	},
-	"Dark Matt-eor": {
-		"min_players": 0,
-		"weight": 0
-	},
-	"Meteor Wave: Normal": {
-		"min_players": 15,
-		"weight": 4,
-		"earliest_start": 15000
-	},
-	"Meteor Wave: Threatening": {
-		"min_players": 20,
-		"weight": 5,
-		"earliest_start": 21000
-	},
-	"Meteor Wave: Catastrophic": {
-		"min_players": 25,
-		"weight": 7,
-		"earliest_start": 27000
-	},
-	"Meteor Wave: Meaty": {
-		"min_players": 15,
-		"weight": 2,
-		"earliest_start": 15000
-	},
-	"Major Space Dust": {
-		"min_players": 15,
-		"weight": 14,
-		"earliest_start": 9000
-	},
-	"Stray Meteor": {
-		"min_players": 15,
-		"weight": 15
-	},
-	"Shuttle Loan": {
-		"min_players": 0,
-		"weight": 10,
-		"earliest_start": 4200
-	},
-	"Space Vines": {
-		"min_players": 10,
-		"weight": 15
-	}
+  "/datum/round_event_control/space_dust": {
+    "weight": 120,
+    "min_players": 0,
+    "earliest_start": 5
+  },
+  "/datum/round_event_control/aurora_caelus": {
+    "weight": 25,
+    "min_players": 0,
+    "earliest_start": 10
+  },
+  "/datum/round_event_control/camera_failure": {
+    "weight": 35,
+    "min_players": 0,
+    "earliest_start": 8
+  },
+  "/datum/round_event_control/grid_check": {
+    "weight": 20,
+    "min_players": 0,
+    "earliest_start": 12
+  },
+  "/datum/round_event_control/fake_virus": {
+    "weight": 15,
+    "min_players": 0,
+    "earliest_start": 15
+  },
+  "/datum/round_event_control/falsealarm": {
+    "weight": 18,
+    "min_players": 0,
+    "earliest_start": 10
+  },
+  "/datum/round_event_control/market_crash": {
+    "weight": 15,
+    "min_players": 0,
+    "earliest_start": 20
+  },
+  "/datum/round_event_control/mice_migration": {
+    "weight": 16,
+    "min_players": 0,
+    "earliest_start": 10
+  },
+  "/datum/round_event_control/wisdomcow": {
+    "weight": 16,
+    "min_players": 0,
+    "earliest_start": 15
+  },
+  "/datum/round_event_control/shuttle_loan": {
+    "weight": 8,
+    "min_players": 0,
+    "earliest_start": 30
+  },
+  "/datum/round_event_control/shuttle_insurance": {
+    "weight": 8,
+    "min_players": 0,
+    "earliest_start": 25
+  },
+  "/datum/round_event_control/tram_malfunction": {
+    "weight": 10,
+    "min_players": 0,
+    "earliest_start": 25
+  },
+  "/datum/round_event_control/mass_hallucination": {
+    "weight": 8,
+    "min_players": 8,
+    "earliest_start": 25
+  },
+  "/datum/round_event_control/electrical_storm": {
+    "weight": 8,
+    "min_players": 8,
+    "earliest_start": 30
+  },
+  "/datum/round_event_control/brand_intelligence": {
+    "weight": 0
+  },
+  "/datum/round_event_control/ion_storm": {
+    "weight": 6,
+    "min_players": 10,
+    "earliest_start": 35
+  },
+  "/datum/round_event_control/radiation_leak": {
+    "weight": 0
+  },
+  "/datum/round_event_control/anomaly/anomaly_flux": {
+    "weight": 5,
+    "min_players": 12,
+    "earliest_start": 40
+  },
+  "/datum/round_event_control/anomaly": {
+    "weight": 3,
+    "min_players": 12,
+    "earliest_start": 45
+  },
+  "/datum/round_event_control/anomaly/anomaly_bluespace": {
+    "weight": 4,
+    "min_players": 14,
+    "earliest_start": 45
+  },
+  "/datum/round_event_control/anomaly/anomaly_bioscrambler": {
+    "weight": 3,
+    "min_players": 16,
+    "earliest_start": 50
+  },
+  "/datum/round_event_control/anomaly/anomaly_grav": {
+    "weight": 3,
+    "min_players": 16,
+    "earliest_start": 50
+  },
+  "/datum/round_event_control/anomaly/anomaly_grav/high": {
+    "weight": 1,
+    "min_players": 24,
+    "earliest_start": 65
+  },
+  "/datum/round_event_control/anomaly/anomaly_dimensional": {
+    "weight": 2,
+    "min_players": 20,
+    "earliest_start": 55
+  },
+  "/datum/round_event_control/anomaly/anomaly_ectoplasm": {
+    "weight": 2,
+    "min_players": 22,
+    "earliest_start": 55
+  },
+  "/datum/round_event_control/anomaly/anomaly_hallucination": {
+    "weight": 2,
+    "min_players": 18,
+    "earliest_start": 55
+  },
+  "/datum/round_event_control/anomaly/anomaly_pyro": {
+    "weight": 2,
+    "min_players": 20,
+    "earliest_start": 60
+  },
+  "/datum/round_event_control/anomaly/anomaly_vortex": {
+    "weight": 0
+  },
+  "/datum/round_event_control/brain_trauma": {
+    "weight": 0
+  },
+  "/datum/round_event_control/heart_attack": {
+    "weight": 0
+  },
+  "/datum/round_event_control/disease_outbreak": {
+    "weight": 0
+  },
+  "/datum/round_event_control/disease_outbreak/advanced": {
+    "weight": 0
+  },
+  "/datum/round_event_control/carp_migration": {
+    "weight": 0
+  },
+  "/datum/round_event_control/grey_tide": {
+    "weight": 0
+  },
+  "/datum/round_event_control/gravity_generator_blackout": {
+    "weight": 0
+  },
+  "/datum/round_event_control/scrubber_overflow": {
+    "weight": 0
+  },
+  "/datum/round_event_control/scrubber_overflow/threatening": {
+    "weight": 0
+  },
+  "/datum/round_event_control/scrubber_overflow/catastrophic": {
+    "weight": 0
+  },
+  "/datum/round_event_control/scrubber_overflow/every_vent": {
+    "weight": 0
+  },
+  "/datum/round_event_control/processor_overload": {
+    "weight": 0
+  },
+  "/datum/round_event_control/supermatter_surge": {
+    "weight": 0
+  },
+  "/datum/round_event_control/supermatter_surge/poly": {
+    "weight": 0
+  },
+  "/datum/round_event_control/stray_meteor": {
+    "weight": 0
+  },
+  "/datum/round_event_control/vent_clog": {
+    "weight": 0
+  },
+  "/datum/round_event_control/vent_clog/major": {
+    "weight": 0
+  },
+  "/datum/round_event_control/vent_clog/critical": {
+    "weight": 0
+  },
+  "/datum/round_event_control/vent_clog/strange": {
+    "weight": 0
+  },
+  "/datum/round_event_control/spacevine": {
+    "weight": 0
+  },
+  "/datum/round_event_control/communications_blackout": {
+    "weight": 0
+  },
+  "/datum/round_event_control/shuttle_catastrophe": {
+    "weight": 0
+  },
+  "/datum/round_event_control/radiation_storm": {
+    "weight": 0
+  },
+  "/datum/round_event_control/portal_storm_syndicate": {
+    "weight": 0
+  },
+  "/datum/round_event_control/portal_storm_narsie": {
+    "weight": 0
+  },
+  "/datum/round_event_control/operative": {
+    "weight": 0
+  },
+  "/datum/round_event_control/mold": {
+    "weight": 0
+  },
+  "/datum/round_event_control/obsessed": {
+    "weight": 0
+  }
 }

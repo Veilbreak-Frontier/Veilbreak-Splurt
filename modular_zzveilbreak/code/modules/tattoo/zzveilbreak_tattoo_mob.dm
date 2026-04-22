@@ -19,7 +19,6 @@
 	if(!istype(new_tattoo) || QDELETED(new_tattoo))
 		return FALSE
 
-	// Convert string zone to define if needed
 	var/actual_zone = istext(new_tattoo.body_part) ? string_to_zone(new_tattoo.body_part) : new_tattoo.body_part
 
 	if(!is_custom_tattoo_bodypart_valid(actual_zone))
@@ -28,26 +27,22 @@
 	if(!custom_body_tattoos)
 		custom_body_tattoos = list()
 
-	// Check if layer is already taken for this body part
 	var/list/current_tattoos = get_custom_tattoos(actual_zone)
 	for(var/datum/custom_tattoo/existing_tattoo in current_tattoos)
 		if(existing_tattoo.layer == new_tattoo.layer)
-			return FALSE // Layer already taken
+			return FALSE
 
 	if(length(current_tattoos) >= CUSTOM_MAX_TATTOOS_PER_PART)
 		return FALSE
 
-	// Ensure the tattoo has the correct zone
 	new_tattoo.body_part = actual_zone
 
 	LAZYADD(custom_body_tattoos, new_tattoo)
 	sortTim(custom_body_tattoos, GLOBAL_PROC_REF(cmp_custom_tattoo_layer_asc))
 
-	// Save to preferences
 	if(client?.prefs)
 		client.prefs.save_custom_tattoo_data()
 
-	// Ensure we listen for limb removal so tattoos attached to removed limbs are cleaned up
 	if(!tattoos_signal_registered)
 		RegisterSignal(src, COMSIG_CARBON_REMOVE_LIMB, PROC_REF(_tattoo_on_limb_removed))
 		tattoos_signal_registered = TRUE
@@ -63,7 +58,6 @@
 	custom_body_tattoos -= tattoo
 	qdel(tattoo)
 
-	// Save to preferences
 	if(client?.prefs)
 		client.prefs.save_custom_tattoo_data()
 

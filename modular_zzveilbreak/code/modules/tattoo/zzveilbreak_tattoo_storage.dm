@@ -23,12 +23,6 @@
 			)
 			tattoo_serialization += list(T_dict)
 
-	if(!length(tattoo_serialization))
-		if(features && islist(features["custom_tattoos"]) && length(features["custom_tattoos"]))
-			if(save_data)
-				save_data["custom_tattoos"] = features["custom_tattoos"]
-		return
-
 	if(save_data)
 		save_data["custom_tattoos"] = tattoo_serialization
 
@@ -41,6 +35,8 @@
 /datum/preferences/proc/load_custom_tattoo_data()
 	if(!features)
 		features = list()
+
+	features["custom_tattoos_loaded"] = list()
 
 	var/list/tattoo_serialization = features["custom_tattoos"]
 	if(!islist(tattoo_serialization))
@@ -75,8 +71,7 @@
 
 	H.custom_body_tattoos.Cut()
 
-	if(!islist(features["custom_tattoos_loaded"]) || !length(features["custom_tattoos_loaded"]))
-		load_custom_tattoo_data()
+	load_custom_tattoo_data()
 
 	var/list/stored = features["custom_tattoos_loaded"]
 	if(!islist(stored))
