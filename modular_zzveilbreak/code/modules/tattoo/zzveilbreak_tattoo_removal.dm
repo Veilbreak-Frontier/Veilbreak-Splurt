@@ -73,9 +73,14 @@
 	for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
 		if(!istype(T) || QDELETED(T))
 			continue
-		if(!is_custom_tattoo_bodypart_existing(H, T.body_part))
+
+		var/target_zone = T.body_part
+		if(target_zone != location)
 			continue
-		if(!get_custom_tattoo_location_accessible(H, T.body_part))
+
+		if(!is_custom_tattoo_bodypart_existing(H, target_zone))
+			continue
+		if(!get_custom_tattoo_location_accessible(H, target_zone))
 			continue
 		tattoos += T
 	return tattoos
@@ -286,12 +291,25 @@
 	var/datum/custom_tattoo/operated_tattoo
 
 /datum/surgery_step/protean_tattoo_flush/preop(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	var/list/tattoos = target.get_custom_tattoos(target_zone)
+	var/datum/surgery/custom_tattoo_removal/protean/S = surgery
+	var/list/tattoos = S.accessible_tattoos
+
 	if(!length(tattoos))
 		to_chat(user, span_warning("There are no nanite patterns to flush on [target]'s [target_zone]!"))
 		return FALSE
 
-	var/datum/custom_tattoo/chosen = input(user, "Select the pattern to flush:", "Nanite Pigment Flush") as null|anything in tattoos
+	var/datum/custom_tattoo/chosen
+	if(length(tattoos) == 1)
+		chosen = tattoos[1]
+	else
+		var/list/tattoo_choices = list()
+		for(var/datum/custom_tattoo/T in tattoos)
+			tattoo_choices["[T.design] by [T.artist]"] = T
+
+		chosen = input(user, "Select the pattern to flush:", "Nanite Pigment Flush") as null|anything in tattoo_choices
+		if(chosen)
+			chosen = tattoo_choices[chosen]
+
 	if(!chosen || !user.can_perform_action(target, NEED_HANDS))
 		return FALSE
 
@@ -303,6 +321,7 @@
 		span_notice("[user] begins recalibrating [target]'s [target_zone] with [tool]."),
 		span_notice("[user] begins recalibrating [target]'s [target_zone].")
 	)
+	return TRUE
 
 /datum/surgery_step/protean_tattoo_flush/success(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = TRUE)
 	if(operated_tattoo)
@@ -347,4 +366,10 @@
 /datum/surgery/custom_tattoo_removal/protean/can_start(mob/user, mob/living/carbon/human/target)
 	if(!target.dna || target.dna.species.id != SPECIES_PROTEAN)
 		return FALSE
-	return ..()
+
+	var/list/tattoos = get_accessible_custom_tattoos(target)
+	if(!length(tattoos))
+		return FALSE
+
+	accessible_tattoos = tattoos
+	return TRUE
