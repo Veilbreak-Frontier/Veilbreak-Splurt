@@ -25,10 +25,12 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/defibrillator_mount, 28)
 	. = ..()
 	if(mapload)
 		find_and_mount_on_atom()
+	update_appearance()
 
-/obj/machinery/defibrillator_mount/loaded/Initialize(mapload) //loaded subtype for mapping use
+/obj/machinery/defibrillator_mount/loaded/Initialize(mapload)
 	. = ..()
-	defib = new/obj/item/defibrillator/loaded(src)
+	defib = new /obj/item/defibrillator/loaded(src)
+	update_appearance()
 
 /obj/machinery/defibrillator_mount/Destroy()
 	QDEL_NULL(defib)
