@@ -45,30 +45,26 @@
 		return FALSE
 
 	var/mob/living/carbon/human/H = patient
+	var/is_protean = (H.dna?.species?.id == SPECIES_PROTEAN)
 
-	var/is_protean_target = (H.dna?.species?.id == SPECIES_PROTEAN)
-
-	if(is_protean_target)
+	if(is_protean)
 		if(src.type != /datum/surgery/custom_tattoo_removal/protean)
 			return FALSE
+	else if(issynthetic(H))
+		if(src.type != /datum/surgery/custom_tattoo_removal/mechanic)
+			return FALSE
 	else
-		// Logic for non-proteans
-		if(issynthetic(H))
-			if(src.type != /datum/surgery/custom_tattoo_removal/mechanic)
-				return FALSE
-		else
-			if(src.type == /datum/surgery/custom_tattoo_removal/mechanic || src.type == /datum/surgery/custom_tattoo_removal/protean)
-				return FALSE
+		if(src.type != /datum/surgery/custom_tattoo_removal)
+			return FALSE
 
-	// FIX: Only search for tattoos on the SPECIFIC zone we are clicking
 	var/list/tattoos = get_accessible_custom_tattoos(H)
-	var/found_tattoo_in_zone = FALSE
+	var/found_in_zone = FALSE
 	for(var/datum/custom_tattoo/T in tattoos)
 		if(T.body_part == location)
-			found_tattoo_in_zone = TRUE
+			found_in_zone = TRUE
 			break
 
-	if(!found_tattoo_in_zone)
+	if(!found_in_zone)
 		return FALSE
 
 	accessible_tattoos = tattoos
@@ -287,34 +283,29 @@
 	name = "flush nanite pigments"
 	implements = list(
 		/obj/item/multitool = 100,
-		/obj/item/weldingtool = 70,
-		/obj/item/stack/cable_coil = 40
+		/obj/item/weldingtool = 70
 	)
 	time = 80
 	var/datum/custom_tattoo/operated_tattoo
 
 /datum/surgery_step/protean_tattoo_flush/preop(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	var/datum/surgery/custom_tattoo_removal/protean/S = surgery
-	var/list/tattoos = S.accessible_tattoos
-
+	var/datum/surgery/custom_tattoo_removal/S = surgery
+	var/list/tattoos = list()
+	for(var/datum/custom_tattoo/T in S.accessible_tattoos)
+		if(T.body_part == target_zone)
+			tattoos += T
 	if(!length(tattoos))
-		to_chat(user, span_warning("There are no nanite patterns to flush on [target]'s [target_zone]!"))
 		return FALSE
 
-	var/datum/custom_tattoo/chosen
-	if(length(tattoos) == 1)
-		chosen = tattoos[1]
-	else
-		var/list/tattoo_choices = list()
+	var/datum/custom_tattoo/chosen = tattoos[1]
+	if(length(tattoos) > 1)
+		var/list/choices = list()
 		for(var/datum/custom_tattoo/T in tattoos)
-			tattoo_choices["[T.design] by [T.artist]"] = T
-
-		chosen = input(user, "Select the pattern to flush:", "Nanite Pigment Flush") as null|anything in tattoo_choices
-		if(chosen)
-			chosen = tattoo_choices[chosen]
-
-	if(!chosen || !user.can_perform_action(target, NEED_HANDS))
-		return FALSE
+			choices["[T.design] ([T.artist])"] = T
+		var/sel = input(user, "Select pattern to flush", "Nanite Flush") as null|anything in choices
+		if(!sel)
+			return FALSE
+		chosen = choices[sel]
 
 	operated_tattoo = chosen
 	display_results(
