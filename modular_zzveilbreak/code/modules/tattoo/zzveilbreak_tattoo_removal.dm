@@ -36,7 +36,7 @@
 	requires_bodypart_type = BODYTYPE_ROBOTIC | BODYTYPE_NANO
 
 /datum/surgery/custom_tattoo_removal/mechanic/can_start(mob/user, mob/living/carbon/target)
-	if(!issynthetic(target))
+	if(!issynthetic(target) || (target.dna && target.dna.species.id == SPECIES_PROTEAN))
 		return FALSE
 	return ..()
 
@@ -48,6 +48,9 @@
 		return FALSE
 
 	var/mob/living/carbon/human/H = patient
+
+	if(H.dna && H.dna.species.id == SPECIES_PROTEAN)
+		return FALSE
 
 	if(issynthetic(H))
 		if(src.type != /datum/surgery/custom_tattoo_removal/mechanic)
@@ -271,3 +274,77 @@
 		BP.receive_damage(burn = failure_damage)
 		BP.check_wounding(50, WOUND_BURN, target_zone)
 	return FALSE
+
+/datum/surgery_step/protean_tattoo_flush
+	name = "flush nanite pigments"
+	implements = list(
+		/obj/item/multitool = 100,
+		/obj/item/weldingtool = 70,
+		/obj/item/stack/cable_coil = 40
+	)
+	time = 80
+	var/datum/custom_tattoo/operated_tattoo
+
+/datum/surgery_step/protean_tattoo_flush/preop(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery)
+	var/list/tattoos = target.get_custom_tattoos(target_zone)
+	if(!length(tattoos))
+		to_chat(user, span_warning("There are no nanite patterns to flush on [target]'s [target_zone]!"))
+		return FALSE
+
+	var/datum/custom_tattoo/chosen = input(user, "Select the pattern to flush:", "Nanite Pigment Flush") as null|anything in tattoos
+	if(!chosen || !user.can_perform_action(target, NEED_HANDS))
+		return FALSE
+
+	operated_tattoo = chosen
+	display_results(
+		user,
+		target,
+		span_notice("You begin recalibrating the nanites in [target]'s [target_zone] to flush the [operated_tattoo.design] pattern..."),
+		span_notice("[user] begins recalibrating [target]'s [target_zone] with [tool]."),
+		span_notice("[user] begins recalibrating [target]'s [target_zone].")
+	)
+
+/datum/surgery_step/protean_tattoo_flush/success(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = TRUE)
+	if(operated_tattoo)
+		display_results(
+			user,
+			target,
+			span_notice("You successfully flush the nanite pigments, erasing the [operated_tattoo.design] pattern."),
+			span_notice("[user] successfully flushes the nanite pigments on [target]'s [target_zone]."),
+			span_notice("[user] finishes the recalibration.")
+		)
+		target.custom_body_tattoos -= operated_tattoo
+		qdel(operated_tattoo)
+
+		var/obj/item/bodypart/BP = target.get_bodypart(target_zone)
+		if(BP)
+			BP.receive_damage(fire = 10)
+	return ..()
+
+/datum/surgery_step/protean_tattoo_flush/failure(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery, fail_prob = 0)
+	display_results(
+		user,
+		target,
+		span_warning("You miswire the recalibration! A surge of energy arcs through [target]'s plating!"),
+		span_warning("[user] accidentally causes an electrical surge in [target]'s [target_zone]!"),
+		span_warning("[user] screws up the recalibration!")
+	)
+	target.apply_damage(20, FIRE, target_zone)
+	return ..()
+
+/datum/surgery/custom_tattoo_removal/protean
+	name = "Protean Tattoo Erasure"
+	steps = list(
+		/datum/surgery_step/mechanic_open,
+		/datum/surgery_step/mechanic_unwrench,
+		/datum/surgery_step/protean_tattoo_flush,
+		/datum/surgery_step/mechanic_wrench,
+		/datum/surgery_step/mechanic_close
+	)
+	target_mobtypes = list(/mob/living/carbon/human)
+	possible_locs = list(BODY_ZONE_CHEST, BODY_ZONE_HEAD, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_GROIN)
+
+/datum/surgery/custom_tattoo_removal/protean/can_start(mob/user, mob/living/carbon/human/target)
+	if(!target.dna || target.dna.species.id != SPECIES_PROTEAN)
+		return FALSE
+	return ..()
