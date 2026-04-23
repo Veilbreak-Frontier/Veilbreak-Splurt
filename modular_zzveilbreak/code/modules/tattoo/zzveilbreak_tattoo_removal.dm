@@ -44,6 +44,8 @@
 	if(!ishuman(patient))
 		return FALSE
 	var/mob/living/carbon/human/H = patient
+
+	// 1. Species Path Routing
 	if(isprotean(H))
 		if(src.type != /datum/surgery/custom_tattoo_removal/protean)
 			return FALSE
@@ -53,15 +55,20 @@
 	else
 		if(src.type != /datum/surgery/custom_tattoo_removal)
 			return FALSE
+
+	var/target_zone = user.zone_selected
 	var/list/tattoos = get_accessible_custom_tattoos(H)
 	var/found_in_zone = FALSE
+
 	for(var/datum/custom_tattoo/T in tattoos)
-		if(T.body_part == location)
+		if(T.body_part == target_zone)
 			found_in_zone = TRUE
 			break
+
 	if(!found_in_zone)
 		return FALSE
-	accessible_tattoos = tattoos
+
+	src.accessible_tattoos = tattoos
 	return TRUE
 
 /datum/surgery/custom_tattoo_removal/proc/get_accessible_custom_tattoos(mob/living/carbon/human/H)
@@ -345,17 +352,9 @@
 	possible_locs = list(BODY_ZONE_CHEST, BODY_ZONE_HEAD, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_GROIN)
 
 /datum/surgery/custom_tattoo_removal/protean/can_start(mob/user, mob/living/carbon/human/target)
-	if(!target.dna || target.dna.species.id != SPECIES_PROTEAN)
-		return FALSE
-
-	var/list/tattoos = get_accessible_custom_tattoos(target)
-	if(!length(tattoos))
-		return FALSE
-
-	accessible_tattoos = tattoos
-	return TRUE
+	return ..()
 
 /datum/surgery/custom_tattoo_removal/protean/New()
 	..()
-	if(!(src.type in GLOB.surgeries_list))
+	if(GLOB && !(src.type in GLOB.surgeries_list))
 		GLOB.surgeries_list += src.type
