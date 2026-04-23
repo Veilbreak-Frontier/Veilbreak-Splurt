@@ -36,25 +36,37 @@
 	requires_bodypart_type = BODYTYPE_ROBOTIC | BODYTYPE_NANO
 
 /datum/surgery/custom_tattoo_removal/mechanic/can_start(mob/user, mob/living/patient)
-	if(!issynthetic(patient) || isprotean(patient))
+	if(!ishuman(patient))
 		return FALSE
-	return ..()
-
-/datum/surgery/custom_tattoo_removal/can_start(mob/user, mob/living/patient)
 	var/mob/living/carbon/human/H = patient
-	var/target_zone = user.zone_selected
 
+	if(!issynthetic(H) || isprotean(H))
+		return FALSE
+
+	var/target_zone = user.zone_selected
 	var/list/tattoos = get_accessible_custom_tattoos(H)
-	var/found_in_zone = FALSE
 	for(var/datum/custom_tattoo/T in tattoos)
 		if(T.body_part == target_zone)
-			found_in_zone = TRUE
-			break
-	if(!found_in_zone)
+			accessible_tattoos = tattoos
+			return TRUE
+	return FALSE
+
+/datum/surgery/custom_tattoo_removal/can_start(mob/user, mob/living/patient)
+	if(!ishuman(patient))
+		return FALSE
+	var/mob/living/carbon/human/H = patient
+
+	if(isprotean(H) || issynthetic(H))
 		return FALSE
 
-	accessible_tattoos = tattoos
-	return TRUE
+	var/target_zone = user.zone_selected
+	var/list/tattoos = get_accessible_custom_tattoos(H)
+
+	for(var/datum/custom_tattoo/T in tattoos)
+		if(T.body_part == target_zone)
+			accessible_tattoos = tattoos
+			return TRUE
+	return FALSE
 
 
 /datum/surgery/custom_tattoo_removal/proc/get_accessible_custom_tattoos(mob/living/carbon/human/H)
@@ -338,9 +350,20 @@
 	possible_locs = list(BODY_ZONE_CHEST, BODY_ZONE_HEAD, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_GROIN)
 
 /datum/surgery/custom_tattoo_removal/protean/can_start(mob/user, mob/living/patient)
-	if(!isprotean(patient))
+	if(!ishuman(patient))
 		return FALSE
-	return ..()
+	var/mob/living/carbon/human/H = patient
+
+	if(!isprotean(H))
+		return FALSE
+
+	var/target_zone = user.zone_selected
+	var/list/tattoos = get_accessible_custom_tattoos(H)
+	for(var/datum/custom_tattoo/T in tattoos)
+		if(T.body_part == target_zone)
+			accessible_tattoos = tattoos
+			return TRUE
+	return FALSE
 
 /datum/surgery/custom_tattoo_removal/protean/New()
 	..()
