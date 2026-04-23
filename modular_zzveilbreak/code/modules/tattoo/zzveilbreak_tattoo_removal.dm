@@ -1,73 +1,47 @@
 /datum/surgery/custom_tattoo_removal
 	name = "Custom Tattoo Removal"
 	steps = list(/datum/surgery_step/cauterize_custom_tattoo)
-	possible_locs = list()
+	possible_locs = list(
+		BODY_ZONE_HEAD,
+		BODY_ZONE_CHEST,
+		BODY_ZONE_L_ARM,
+		BODY_ZONE_R_ARM,
+		BODY_ZONE_L_LEG,
+		BODY_ZONE_R_LEG,
+		BODY_ZONE_PRECISE_GROIN
+	)
 	surgery_flags = SURGERY_SELF_OPERABLE
 	target_mobtypes = list(/mob/living/carbon/human)
-	var/list/self_surgery_possible_locs = list()
 	var/list/accessible_tattoos
-
-/datum/surgery/custom_tattoo_removal/New(atom/surgery_target, surgery_location, surgery_bodypart)
-	. = ..()
-	if(!length(possible_locs))
-		src.possible_locs = list(
-			BODY_ZONE_HEAD,
-			BODY_ZONE_CHEST,
-			BODY_ZONE_L_ARM,
-			BODY_ZONE_R_ARM,
-			BODY_ZONE_L_LEG,
-			BODY_ZONE_R_LEG,
-			BODY_ZONE_PRECISE_GROIN,
-		)
-	if(!length(self_surgery_possible_locs))
-		self_surgery_possible_locs = possible_locs.Copy()
-
-/datum/surgery/custom_tattoo_removal/mechanic
-	name = "Custom Tattoo Erasure (Mechanical)"
-	steps = list(
-		/datum/surgery_step/mechanic_open,
-		/datum/surgery_step/mechanic_unwrench,
-		/datum/surgery_step/prepare_electronics,
-		/datum/surgery_step/cauterize_custom_tattoo,
-		/datum/surgery_step/mechanic_wrench,
-		/datum/surgery_step/mechanic_close
-	)
-	target_mobtypes = list(/mob/living/carbon/human)
-	requires_bodypart_type = BODYTYPE_ROBOTIC | BODYTYPE_NANO
-
-/datum/surgery/custom_tattoo_removal/mechanic/can_start(mob/user, mob/living/patient)
-	if(!ishuman(patient))
-		return FALSE
-	var/mob/living/carbon/human/H = patient
-
-	if(!issynthetic(H) || isprotean(H))
-		return FALSE
-
-	var/target_zone = user.zone_selected
-	var/list/tattoos = get_accessible_custom_tattoos(H)
-	for(var/datum/custom_tattoo/T in tattoos)
-		if(T.body_part == target_zone)
-			accessible_tattoos = tattoos
-			return TRUE
-	return FALSE
 
 /datum/surgery/custom_tattoo_removal/can_start(mob/user, mob/living/patient)
 	if(!ishuman(patient))
 		return FALSE
 	var/mob/living/carbon/human/H = patient
 
-	if(isprotean(H) || issynthetic(H))
-		return FALSE
+	if(isprotean(H))
+		if(src.type != /datum/surgery/custom_tattoo_removal/protean)
+			return FALSE
+	else if(issynthetic(H))
+		if(src.type != /datum/surgery/custom_tattoo_removal/mechanic)
+			return FALSE
+	else
+		if(src.type != /datum/surgery/custom_tattoo_removal)
+			return FALSE
 
 	var/target_zone = user.zone_selected
 	var/list/tattoos = get_accessible_custom_tattoos(H)
-
+	var/found_in_zone = FALSE
 	for(var/datum/custom_tattoo/T in tattoos)
 		if(T.body_part == target_zone)
-			accessible_tattoos = tattoos
-			return TRUE
-	return FALSE
+			found_in_zone = TRUE
+			break
 
+	if(!found_in_zone)
+		return FALSE
+
+	accessible_tattoos = tattoos
+	return TRUE
 
 /datum/surgery/custom_tattoo_removal/proc/get_accessible_custom_tattoos(mob/living/carbon/human/H)
 	if(!istype(H))
@@ -82,6 +56,28 @@
 			continue
 		tattoos += T
 	return tattoos
+
+/datum/surgery/custom_tattoo_removal/mechanic
+	name = "Custom Tattoo Erasure (Mechanical)"
+	steps = list(
+		/datum/surgery_step/mechanic_open,
+		/datum/surgery_step/mechanic_unwrench,
+		/datum/surgery_step/prepare_electronics,
+		/datum/surgery_step/cauterize_custom_tattoo,
+		/datum/surgery_step/mechanic_wrench,
+		/datum/surgery_step/mechanic_close
+	)
+	requires_bodypart_type = BODYTYPE_ROBOTIC | BODYTYPE_NANO
+
+/datum/surgery/custom_tattoo_removal/protean
+	name = "Protean Tattoo Erasure"
+	steps = list(
+		/datum/surgery_step/mechanic_open,
+		/datum/surgery_step/mechanic_unwrench,
+		/datum/surgery_step/protean_tattoo_flush,
+		/datum/surgery_step/mechanic_wrench,
+		/datum/surgery_step/mechanic_close
+	)
 
 /datum/surgery_step/cauterize_custom_tattoo
 	name = "cauterize custom tattoo"
@@ -120,16 +116,12 @@
 		to_chat(user, span_warning("This can only be performed on humans!"))
 		return FALSE
 
-	if(!H.client?.prefs?.read_preference(/datum/preference/toggle/erp/allow_bodywriting))
+	if(!H.client?.prefs?.read_preference(CUSTOM_TATTOO_PREFERENCE_PATH))
 		to_chat(user, span_warning("[H] does not allow body modifications!"))
 		return FALSE
 
-	var/list/tattoos
-	if(istype(surgery, /datum/surgery/custom_tattoo_removal))
-		var/datum/surgery/custom_tattoo_removal/removal = surgery
-		tattoos = removal.get_accessible_custom_tattoos(H)
-	else
-		tattoos = H.custom_body_tattoos
+	var/datum/surgery/custom_tattoo_removal/S = surgery
+	var/list/tattoos = S.get_accessible_custom_tattoos(H)
 
 	if(!length(tattoos))
 		to_chat(user, span_warning("There are no accessible tattoos here!"))
@@ -152,10 +144,6 @@
 		return FALSE
 
 	operated_tattoo = to_remove
-	if(istype(surgery, /datum/surgery/custom_tattoo_removal))
-		var/datum/surgery/custom_tattoo_removal/removal = surgery
-		removal.accessible_tattoos = null
-
 	surgery.location = to_remove.body_part
 
 	var/atom/movable/screen/zone_sel/zone_selector = user.hud_used?.zone_select
@@ -336,36 +324,3 @@
 		span_notice("[user] stops the recalibration.")
 	)
 	return FALSE
-
-/datum/surgery/custom_tattoo_removal/protean
-	name = "Protean Tattoo Erasure"
-	steps = list(
-		/datum/surgery_step/mechanic_open,
-		/datum/surgery_step/mechanic_unwrench,
-		/datum/surgery_step/protean_tattoo_flush,
-		/datum/surgery_step/mechanic_wrench,
-		/datum/surgery_step/mechanic_close
-	)
-	target_mobtypes = list(/mob/living/carbon/human)
-	possible_locs = list(BODY_ZONE_CHEST, BODY_ZONE_HEAD, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_GROIN)
-
-/datum/surgery/custom_tattoo_removal/protean/can_start(mob/user, mob/living/patient)
-	if(!ishuman(patient))
-		return FALSE
-	var/mob/living/carbon/human/H = patient
-
-	if(!isprotean(H))
-		return FALSE
-
-	var/target_zone = user.zone_selected
-	var/list/tattoos = get_accessible_custom_tattoos(H)
-	for(var/datum/custom_tattoo/T in tattoos)
-		if(T.body_part == target_zone)
-			accessible_tattoos = tattoos
-			return TRUE
-	return FALSE
-
-/datum/surgery/custom_tattoo_removal/protean/New()
-	..()
-	if(GLOB && !(src.type in GLOB.surgeries_list))
-		GLOB.surgeries_list += src.type
