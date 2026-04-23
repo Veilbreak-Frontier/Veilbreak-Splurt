@@ -43,11 +43,8 @@
 /datum/surgery/custom_tattoo_removal/can_start(mob/user, mob/living/patient)
 	if(!ishuman(patient))
 		return FALSE
-
 	var/mob/living/carbon/human/H = patient
-	var/is_protean = (H.dna?.species?.id == SPECIES_PROTEAN)
-
-	if(is_protean)
+	if(isprotean(H))
 		if(src.type != /datum/surgery/custom_tattoo_removal/protean)
 			return FALSE
 	else if(issynthetic(H))
@@ -56,17 +53,14 @@
 	else
 		if(src.type != /datum/surgery/custom_tattoo_removal)
 			return FALSE
-
 	var/list/tattoos = get_accessible_custom_tattoos(H)
 	var/found_in_zone = FALSE
 	for(var/datum/custom_tattoo/T in tattoos)
 		if(T.body_part == location)
 			found_in_zone = TRUE
 			break
-
 	if(!found_in_zone)
 		return FALSE
-
 	accessible_tattoos = tattoos
 	return TRUE
 
@@ -285,7 +279,7 @@
 		/obj/item/multitool = 100,
 		/obj/item/weldingtool = 70
 	)
-	time = 80
+	time = 40
 	var/datum/custom_tattoo/operated_tattoo
 
 /datum/surgery_step/protean_tattoo_flush/preop(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -296,7 +290,6 @@
 			tattoos += T
 	if(!length(tattoos))
 		return FALSE
-
 	var/datum/custom_tattoo/chosen = tattoos[1]
 	if(length(tattoos) > 1)
 		var/list/choices = list()
@@ -306,7 +299,6 @@
 		if(!sel)
 			return FALSE
 		chosen = choices[sel]
-
 	operated_tattoo = chosen
 	display_results(
 		user,
@@ -317,7 +309,7 @@
 	)
 	return TRUE
 
-/datum/surgery_step/protean_tattoo_flush/success(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = TRUE)
+/datum/surgery_step/protean_tattoo_flush/success(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	if(operated_tattoo)
 		display_results(
 			user,
@@ -328,22 +320,17 @@
 		)
 		target.custom_body_tattoos -= operated_tattoo
 		qdel(operated_tattoo)
-
-		var/obj/item/bodypart/BP = target.get_bodypart(target_zone)
-		if(BP)
-			BP.receive_damage(fire = 10)
 	return ..()
 
-/datum/surgery_step/protean_tattoo_flush/failure(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery, fail_prob = 0)
+/datum/surgery_step/protean_tattoo_flush/failure(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	display_results(
 		user,
 		target,
-		span_warning("You miswire the recalibration! A surge of energy arcs through [target]'s plating!"),
-		span_warning("[user] accidentally causes an electrical surge in [target]'s [target_zone]!"),
-		span_warning("[user] screws up the recalibration!")
+		span_warning("You fail to recalibrate the nanites, causing the pigment to smear!"),
+		span_warning("[user] fails to recalibrate the nanites on [target]'s [target_zone]."),
+		span_notice("[user] stops the recalibration.")
 	)
-	target.apply_damage(20, FIRE, target_zone)
-	return ..()
+	return FALSE
 
 /datum/surgery/custom_tattoo_removal/protean
 	name = "Protean Tattoo Erasure"
@@ -367,7 +354,6 @@
 
 	accessible_tattoos = tattoos
 	return TRUE
-
 
 /datum/surgery/custom_tattoo_removal/protean/New()
 	..()
