@@ -10821,6 +10821,7 @@
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\thaumaturge\phantasmal_tool.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\thaumaturge\prestidigitation.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\thaumaturge\sanguine_absorption.dm"
+#include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\thaumaturge\summon_light.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\thaumaturge\_thaumaturge_action.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\thaumaturge\_thaumaturge_power.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\thaumaturge\_thaumaturge_preperation.dm"
