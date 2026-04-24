@@ -278,8 +278,9 @@
 /datum/surgery_step/protean_tattoo_flush/preop(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	var/datum/surgery/custom_tattoo_removal/S = surgery
 	var/list/tattoos = list()
+	var/target_zone_string = zone_to_string(target_zone)
 	for(var/datum/custom_tattoo/T in S.accessible_tattoos)
-		if(T.body_part == target_zone)
+		if(zone_to_string(T.body_part) == target_zone_string)
 			tattoos += T
 	if(!length(tattoos))
 		return FALSE
