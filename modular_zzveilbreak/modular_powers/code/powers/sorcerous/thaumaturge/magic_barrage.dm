@@ -194,10 +194,21 @@
 	name = "magic missile"
 	icon_state = "arcane_barrage"
 	damage = 9
+	/// Extra damage dealt to living mobs in FACTION_VOID.
+	var/bonus_vs_void = 35
 	damage_type = BURN
 	armour_penetration = 25 // Great for civilian use, less-so on armored opponents.
 	armor_flag = LASER
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE // unfortunately for you this is a magical LASER
+
+/obj/projectile/resonant/magic_barrage/prehit_pierce(atom/target)
+	. = ..()
+	if(. == PROJECTILE_DELETE_WITHOUT_HITTING || !bonus_vs_void || !isliving(target))
+		return
+
+	var/mob/living/living_target = target
+	if(FACTION_VOID in living_target.faction)
+		damage += bonus_vs_void
 
 /* Code for orbitals below */
 /obj/effect/magic_missile_orbiter
