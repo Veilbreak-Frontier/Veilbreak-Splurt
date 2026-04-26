@@ -1,8 +1,8 @@
 /obj/machinery/void_infuser
 	name = "void infuser"
 	desc = "A strange, pulsing machine that infuses items with void shards."
-	icon = 'icons/obj/machines/research.dmi'
-	icon_state = "protolathe"
+	icon = 'modular_zzveilbreak/icons/obj/machines/void_infuser.dmi'
+	icon_state = "v_infuser"
 	density = TRUE
 	anchored = TRUE
 	use_power = IDLE_POWER_USE
@@ -12,6 +12,13 @@
 	var/is_infusing = FALSE
 	var/infusion_start_time = 0
 	var/infusion_duration = 5 SECONDS
+
+/obj/machinery/void_infuser/update_icon_state()
+	. = ..()
+	if(machine_stat & (NOPOWER|BROKEN))
+		icon_state = "v_infuser_t"
+		return
+	icon_state = is_infusing ? "v_infuser_process" : "v_infuser"
 
 /obj/machinery/void_infuser/RefreshParts()
 	. = ..()
@@ -115,6 +122,7 @@
 
 			is_infusing = TRUE
 			infusion_start_time = world.time
+			update_appearance()
 			to_chat(user, "<span class='notice'>\The [src] starts humming as it prepares the infusion...</span>")
 
 			// Force UI update so it shows as infusing
@@ -137,6 +145,7 @@
 	if(!(shard in contents) || !(target_item in contents) || (machine_stat & (NOPOWER|BROKEN)))
 		is_infusing = FALSE
 		infusion_start_time = 0
+		update_appearance()
 		SStgui.update_uis(src)
 		return
 
@@ -165,6 +174,7 @@
 
 	is_infusing = FALSE
 	infusion_start_time = 0
+	update_appearance()
 	SStgui.update_uis(src)
 
 /obj/item/circuitboard/machine/void_infuser
