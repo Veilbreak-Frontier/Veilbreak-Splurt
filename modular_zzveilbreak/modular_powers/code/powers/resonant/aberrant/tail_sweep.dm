@@ -33,16 +33,17 @@
 	var/on_hit_vfx = /obj/effect/temp_visual/dir_setting/tailsweep
 
 /datum/action/cooldown/power/aberrant/tailsweep/can_use(mob/living/user, atom/target)
-	if(iscarbon(user)) // we don't check for tails on non-carbons; I figured it should only exist on others for admeme reasons.
-		var/mob/living/carbon/carbon_user = user
-		var/obj/item/organ/tail/tail = carbon_user.get_organ_slot(ORGAN_SLOT_EXTERNAL_TAIL)
-		if(!tail)
-			owner.balloon_alert(user, "no tail")
-			return FALSE
-	if(user.nutrition <= NUTRITION_LEVEL_STARVING) // can't use while starving
-		owner.balloon_alert(user, "too hungry!")
-		return FALSE
-	. = ..()
+    if(ishuman(user))
+        var/mob/living/carbon/human/H = user
+        if(!H.pc_has_tail())
+            owner.balloon_alert(user, "no tail")
+            return FALSE
+
+    if(user.nutrition <= NUTRITION_LEVEL_STARVING)
+        owner.balloon_alert(user, "too hungry!")
+        return FALSE
+
+    return ..()
 
 /datum/action/cooldown/power/aberrant/tailsweep/use_action(mob/living/user, atom/target)
 	playsound(get_turf(user), 'sound/effects/magic/tail_swing.ogg', 80, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)

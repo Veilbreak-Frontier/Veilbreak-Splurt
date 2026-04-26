@@ -237,6 +237,18 @@
 
 	return TRUE
 
+/mob/living/carbon/human/proc/pc_has_tail()
+    if(get_organ_slot(ORGAN_SLOT_TAIL))
+        return TRUE
+
+    if(get_organ_slot(ORGAN_SLOT_EXTERNAL_TAIL))
+        return TRUE
+
+    if(get_taur_mode() == STYLE_TAUR_SNAKE)
+        return TRUE
+
+    return FALSE
+
 /*
 *	This code needed for changing character's gender by chems
 */
