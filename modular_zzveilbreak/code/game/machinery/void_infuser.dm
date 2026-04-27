@@ -30,6 +30,10 @@
 	active_power_usage = max(1000, 600000 - (50000 * cap_rating))
 
 /obj/machinery/void_infuser/attackby(obj/item/W, mob/living/user, params)
+	// Let tool interactions (screwdriver, crowbar, etc.) pass through to normal machinery handling.
+	if(length(W.get_all_tool_behaviours()))
+		return ..()
+
 	if(istype(W, /obj/item/voidshard) || W.w_class <= WEIGHT_CLASS_BULKY)
 		var/loaded_count = 0
 		for(var/obj/item/I in contents)

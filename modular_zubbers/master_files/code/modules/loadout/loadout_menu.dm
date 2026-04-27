@@ -65,6 +65,9 @@
 	if(!istext(new_loadout_name) || loadout_name == "Default")
 		return TRUE
 
+	if(length(new_loadout_name) > LOADOUT_MAX_NAME_LENGTH || length(new_loadout_name) < 1)
+		return TRUE
+
 	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
 
 	if(new_loadout_name in loadout_entries)
@@ -78,11 +81,25 @@
 
 /datum/preference_middleware/loadout/proc/get_current_loadout()
 	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
-	return loadout_entries[preferences.read_preference(/datum/preference/loadout_index)]
+	var/loadout_index = preferences.read_preference(/datum/preference/loadout_index)
+
+	if(!istext(loadout_index) || !islist(loadout_entries[loadout_index]))
+		loadout_index = "Default"
+		if(!islist(loadout_entries[loadout_index]))
+			loadout_entries[loadout_index] = list()
+			preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
+		preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout_index], loadout_index)
+
+	return loadout_entries[loadout_index]
 
 /datum/preference_middleware/loadout/proc/save_current_loadout(list/loadout)
 	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
-	loadout_entries[preferences.read_preference(/datum/preference/loadout_index)] = loadout
+	var/loadout_index = preferences.read_preference(/datum/preference/loadout_index)
+	if(!istext(loadout_index))
+		loadout_index = "Default"
+	if(!islist(loadout_entries[loadout_index]))
+		loadout_entries[loadout_index] = list()
+	loadout_entries[loadout_index] = loadout
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
 
 /datum/preference_middleware/loadout/proc/action_clear_all(list/params, mob/user)
