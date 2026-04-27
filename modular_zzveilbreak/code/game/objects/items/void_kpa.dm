@@ -7,8 +7,8 @@
 	icon_state = "abdication100"
 	base_icon_state = "abdication"
 	inhand_icon_state = "abdication100"
-	lefthand_file = 'modular_zzveilbreak/icons/item_icons/void_gun_void_KPA.dmi'
-	righthand_file = 'modular_zzveilbreak/icons/item_icons/void_gun_void_KPA.dmi'
+	lefthand_file = 'modular_zzveilbreak/icons/item_icons/lefthand.dmi'
+	righthand_file = 'modular_zzveilbreak/icons/item_icons/righthand.dmi'
 	automatic_charge_overlays = FALSE
 	ammo_type = list(/obj/item/ammo_casing/energy/void_piercer)
 	fire_sound = 'sound/items/weapons/laser.ogg'

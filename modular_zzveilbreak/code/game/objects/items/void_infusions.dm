@@ -87,8 +87,8 @@
 	icon_state = "vkineticgun"
 	base_icon_state = "vkineticgun"
 	inhand_icon_state = "vkineticgun"
-	lefthand_file = 'modular_zzveilbreak/icons/item_icons/void_gun_void_KPA.dmi'
-	righthand_file = 'modular_zzveilbreak/icons/item_icons/void_gun_void_KPA.dmi'
+	lefthand_file = 'modular_zzveilbreak/icons/item_icons/lefthand.dmi'
+	righthand_file = 'modular_zzveilbreak/icons/item_icons/righthand.dmi'
 	/// Bonus projectile damage from void infusion (all targets).
 	var/void_infusion_damage_bonus = 0
 	/// Extra damage vs mobs in FACTION_VOID; applied when the bolt pre-hits a living target.
