@@ -79,10 +79,16 @@
 	target.light_power = 0.5
 	target.light_color = infusion_color
 	target.void_infusion_damage_bonus = 10
-	target.void_infusion_antivoid_bonus = 20
+	target.void_infusion_antivoid_bonus = 30
 	return TRUE
 
 /obj/item/gun/energy/recharge/kinetic_accelerator
+	icon = 'modular_zzveilbreak/icons/item_icons/void_gun_void_KPA.dmi'
+	icon_state = "vkineticgun"
+	base_icon_state = "vkineticgun"
+	inhand_icon_state = "vkineticgun"
+	lefthand_file = 'modular_zzveilbreak/icons/item_icons/void_gun_void_KPA.dmi'
+	righthand_file = 'modular_zzveilbreak/icons/item_icons/void_gun_void_KPA.dmi'
 	/// Bonus projectile damage from void infusion (all targets).
 	var/void_infusion_damage_bonus = 0
 	/// Extra damage vs mobs in FACTION_VOID; applied when the bolt pre-hits a living target.
@@ -172,3 +178,4 @@
 		var/dist = get_dist(victim, epicenter)
 		var/damage = dist ? 8 : 15
 		victim.apply_damage(damage, BURN, spread_damage = TRUE, wound_bonus = CANT_WOUND)
+
