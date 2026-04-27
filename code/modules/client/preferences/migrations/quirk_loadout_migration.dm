@@ -14,14 +14,36 @@
 /datum/preferences/proc/add_loadout_item(typepath, list/data = list())
 	PRIVATE_PROC(TRUE)
 
-	var/list/loadout_list = read_preference(/datum/preference/loadout) || list()
-	loadout_list[typepath] = data
-	write_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_list)
+	var/list/loadout_entries = read_preference(/datum/preference/loadout) || list()
+	var/loadout_index = read_preference(/datum/preference/loadout_index)
+	if(!istext(loadout_index))
+		loadout_index = "Default"
+
+	var/list/target_loadout = loadout_entries[loadout_index]
+	if(!islist(target_loadout))
+		target_loadout = loadout_entries["Default"]
+		if(!islist(target_loadout))
+			target_loadout = list()
+		loadout_index = "Default"
+
+	target_loadout[typepath] = islist(data) ? data : list()
+	loadout_entries[loadout_index] = target_loadout
+	write_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
 
 /// Helper for removing a loadout item
 /datum/preferences/proc/remove_loadout_item(typepath)
 	PRIVATE_PROC(TRUE)
 
-	var/list/loadout_list = read_preference(/datum/preference/loadout)
-	if(loadout_list?.Remove(typepath))
-		write_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_list)
+	var/list/loadout_entries = read_preference(/datum/preference/loadout)
+	var/loadout_index = read_preference(/datum/preference/loadout_index)
+	if(!istext(loadout_index))
+		loadout_index = "Default"
+
+	var/list/target_loadout = loadout_entries?[loadout_index]
+	if(!islist(target_loadout))
+		target_loadout = loadout_entries?["Default"]
+		loadout_index = "Default"
+
+	if(target_loadout?.Remove(typepath))
+		loadout_entries[loadout_index] = target_loadout
+		write_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
