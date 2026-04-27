@@ -228,9 +228,9 @@
 
 		var/heat = CALCULATE_CONDUCTION_ENERGY(thermal_conductivity * delta_temperature, turf_heat_capacity, partial_heat_capacity)
 
-		air.temperature -= heat / total_heat_capacity
+		air.temperature = max(air.temperature - heat / total_heat_capacity, TCMB)
 		if(!target.liquids.immutable)
-			target.liquids.temp += heat / turf_heat_capacity
+			target.liquids.temp = max(target.liquids.temp + heat / turf_heat_capacity, TCMB)
 	else //SKYRAT EDIT END
 		if(turf_heat_capacity <= 0 || partial_heat_capacity <= 0)
 			return TRUE
@@ -238,7 +238,7 @@
 		var/delta_temperature = turf_temperature - air.temperature
 
 		var/heat = thermal_conductivity * CALCULATE_CONDUCTION_ENERGY(delta_temperature, partial_heat_capacity, turf_heat_capacity)
-		air.temperature += heat / total_heat_capacity
+		air.temperature = max(air.temperature + heat / total_heat_capacity, TCMB)
 		target.TakeTemperature(-1 * heat / turf_heat_capacity)
 
 		if(target.blocks_air)
