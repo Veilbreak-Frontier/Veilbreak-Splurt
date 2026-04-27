@@ -118,25 +118,31 @@ PROCESSING_SUBSYSTEM_DEF(powers)
 		powers[initial(power_type.name)] = power_type
 
 /// Assigns all powers in the player's preferences onto the mob.
-/datum/controller/subsystem/processing/powers/proc/assign_powers(mob/living/user, client/applied_client)
+/datum/controller/subsystem/processing/powers/proc/assign_powers(mob/living/user, client/applied_client, datum/preferences/applied_preferences)
+	applied_preferences ||= applied_client?.prefs
+	if(!user || !applied_preferences)
+		return
+
+	var/log_ckey = applied_client?.ckey || applied_preferences.parent?.ckey || "unknown"
 	var/bad_power = FALSE
 	var/list/powers_by_priority = list()
-	for(var/power_name in applied_client.prefs.all_powers)
-		var/datum/power/power_type = powers[power_name]
+	var/list/available_powers = get_powers()
+	for(var/power_name in applied_preferences.all_powers)
+		var/datum/power/power_type = available_powers[power_name]
 		if(!ispath(power_type))
-			stack_trace("Invalid power \"[power_name]\" in client [applied_client.ckey] preferences")
-			applied_client.prefs.all_powers -= power_name
+			stack_trace("Invalid power \"[power_name]\" in client [log_ckey] preferences")
+			applied_preferences.all_powers -= power_name
 			bad_power = TRUE
 			continue
 		if(!power_type.priority)
-			stack_trace("Power with invalid priority \"[power_name]\" in client [applied_client.ckey] preferences")
-			applied_client.prefs.all_powers -= power_name
+			stack_trace("Power with invalid priority \"[power_name]\" in client [log_ckey] preferences")
+			applied_preferences.all_powers -= power_name
 			bad_power = TRUE
 			continue
 		LAZYADDASSOCLIST(powers_by_priority, power_type.priority, power_type)
 
 	if(bad_power)
-		applied_client.prefs.save_character()
+		applied_preferences.save_character()
 
 	for(var/power_priority in power_priorities)
 		var/list/priority_powers = powers_by_priority[power_priority]
