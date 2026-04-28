@@ -1,5 +1,6 @@
 /obj/effect/appearance_clone
 	var/atom/source_atom
+	var/list/stored_color_matrix
 
 /obj/effect/appearance_clone/New(loc, atom/our_atom)
 	if(!istype(our_atom))
@@ -7,6 +8,12 @@
 	source_atom = our_atom
 	appearance = our_atom.appearance
 	dir = our_atom.dir
+
+	if(islist(our_atom.color))
+		stored_color_matrix = our_atom.color
+	else if(our_atom.color)
+		color = our_atom.color
+
 	if(ismovable(our_atom))
 		var/atom/movable/our_movable = our_atom
 		step_x = our_movable.step_x
@@ -101,21 +108,25 @@
 	var/ycomp = FLOOR(psize_y / 2, 1) - 15
 
 	for(var/atom/A in sorted)
-		var/atom/true_source = A
+		var/icon/img
+		var/list/matrix_to_apply
+
 		if(istype(A, /obj/effect/appearance_clone))
 			var/obj/effect/appearance_clone/AC = A
-			if(AC.source_atom)
-				true_source = AC.source_atom
+			img = icon(AC.icon, AC.icon_state, AC.dir)
+			if(AC.stored_color_matrix)
+				matrix_to_apply = AC.stored_color_matrix
+			else if(AC.color)
+				img.Blend(AC.color, ICON_MULTIPLY)
+		else
+			img = getFlatIcon(A, no_anim = TRUE)
 
-		var/icon/img = getFlatIcon(true_source, no_anim = TRUE)
 		if(!img)
 			CHECK_TICK
 			continue
 
-		if(islist(true_source.color))
-			img.MapColors(arglist(true_source.color))
-		else if(true_source.color)
-			img.Blend(true_source.color, ICON_MULTIPLY)
+		if(matrix_to_apply)
+			img.MapColors(arglist(matrix_to_apply))
 
 		var/xo = (A.x - center.x) * ICON_SIZE_X + A.pixel_x + xcomp
 		var/yo = (A.y - center.y) * ICON_SIZE_Y + A.pixel_y + ycomp
