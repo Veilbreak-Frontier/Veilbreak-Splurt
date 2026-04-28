@@ -30,9 +30,8 @@
 
 	if(quirks_enabled)
 		SSquirks.AssignQuirks(spawned_human, spawned_human.client)
-		// Latejoin assigns quirks first, then powers. safe_transfer_prefs_to already ran assign_powers; quirks can swap limbs/organs afterward, so augments would be missing while power datums remain. Reset and re-apply.
-		spawned_human.cleanse_power_datums()
-		SSpowers.assign_powers(spawned_human, spawned_human.client)
+		// Latejoin assigns quirks before powers; we already ran assign_powers in safe_transfer_prefs_to. Re-assigning all powers would duplicate non-organ effects (e.g. Rich credits). Only re-stamp augments.
+		SSpowers.reapply_augmented_powers(spawned_human, spawned_human.client)
 
 	post_transfer_prefs(spawned_human)
 
