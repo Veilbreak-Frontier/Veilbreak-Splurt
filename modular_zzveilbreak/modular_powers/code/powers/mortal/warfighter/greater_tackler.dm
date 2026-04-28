@@ -19,15 +19,23 @@
 
 /datum/power/warfighter/tackler/greater_tackler/post_add()
 	. = ..()
+	var/datum/power/warfighter/tackler/base_tackler = power_holder.get_power(/datum/power/warfighter/tackler)
 	var/datum/component/tackler/component = power_holder.GetComponent(/datum/component/tackler)
-	if(component)
-		component.skill_mod += skill_mod_bonus
-		component.range += tackle_range_bonus
-		component.base_knockdown += knockdown_bonus
+	var/list/params = component?.tackle_source_params?[base_tackler]
+	if(!params)
+		return
+	params["skill_mod"] += skill_mod_bonus
+	params["range"] += tackle_range_bonus
+	params["base_knockdown"] += knockdown_bonus
+	component.refresh_tackle_stats()
 
 /datum/power/warfighter/tackler/greater_tackler/remove()
+	var/datum/power/warfighter/tackler/base_tackler = power_holder.get_power(/datum/power/warfighter/tackler)
 	var/datum/component/tackler/component = power_holder.GetComponent(/datum/component/tackler)
-	if(component)
-		component.skill_mod -= skill_mod_bonus
-		component.range -= tackle_range_bonus
-		component.base_knockdown -= knockdown_bonus
+	var/list/params = component?.tackle_source_params?[base_tackler]
+	if(!params)
+		return
+	params["skill_mod"] -= skill_mod_bonus
+	params["range"] -= tackle_range_bonus
+	params["base_knockdown"] -= knockdown_bonus
+	component.refresh_tackle_stats()
