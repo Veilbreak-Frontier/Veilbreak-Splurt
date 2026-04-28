@@ -3,25 +3,28 @@
 	if(parent?.mob && ishuman(parent.mob))
 		H = parent.mob
 
+	if(!H || QDELETED(H))
+		if(save_data && islist(features?["custom_tattoos"]))
+			save_data["custom_tattoos"] = features["custom_tattoos"]
+		return
+
 	var/list/tattoo_serialization = list()
+	for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
+		if(!istype(T) || QDELETED(T))
+			continue
 
-	if(H && !QDELETED(H))
-		for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
-			if(!istype(T) || QDELETED(T))
-				continue
-
-			var/list/T_dict = list(
-				"artist" = T.artist,
-				"design" = T.design,
-				"body_part" = T.body_part,
-				"color" = T.color,
-				"date_applied" = T.date_applied,
-				"layer" = T.layer,
-				"is_signature" = T.is_signature,
-				"font" = T.font,
-				"flair" = T.flair
-			)
-			tattoo_serialization += list(T_dict)
+		var/list/T_dict = list(
+			"artist" = T.artist,
+			"design" = T.design,
+			"body_part" = T.body_part,
+			"color" = T.color,
+			"date_applied" = T.date_applied,
+			"layer" = T.layer,
+			"is_signature" = T.is_signature,
+			"font" = T.font,
+			"flair" = T.flair
+		)
+		tattoo_serialization += list(T_dict)
 
 	if(save_data)
 		save_data["custom_tattoos"] = tattoo_serialization
@@ -79,9 +82,19 @@
 
 	for(var/datum/custom_tattoo/T as anything in stored)
 		if(istype(T) && !QDELETED(T))
-			if(!is_custom_tattoo_bodypart_existing(H, T.body_part))
-				continue
-
-			var/datum/custom_tattoo/copy = new(T.artist, T.design, T.body_part, T.color, T.layer, T.is_signature, T.font, T.flair)
+			var/datum/custom_tattoo/copy = new(
+				T.artist,
+				T.design,
+				T.body_part,
+				T.color,
+				T.layer,
+				T.is_signature,
+				T.font,
+				T.flair
+			)
 			copy.date_applied = T.date_applied
 			H.add_custom_tattoo(copy)
+
+	if(!H.tattoos_signal_registered)
+		RegisterSignal(H, COMSIG_CARBON_REMOVE_LIMB, TYPE_PROC_REF(/mob/living/carbon/human, _tattoo_on_limb_removed))
+		H.tattoos_signal_registered = TRUE
