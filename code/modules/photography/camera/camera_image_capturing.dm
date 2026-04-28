@@ -1,8 +1,10 @@
 /obj/effect/appearance_clone
+	var/atom/source_atom
 
 /obj/effect/appearance_clone/New(loc, atom/our_atom)
 	if(!istype(our_atom))
 		return ..()
+	source_atom = our_atom
 	if(!isopenspaceturf(our_atom))
 		appearance = our_atom.appearance
 	dir = our_atom.dir
@@ -100,7 +102,13 @@
 	var/ycomp = FLOOR(psize_y / 2, 1) - 15
 
 	for(var/atom/A in sorted)
-		var/icon/img = getFlatIcon(A, no_anim = TRUE)
+		var/atom/render_source = A
+		if(istype(A, /obj/effect/appearance_clone))
+			var/obj/effect/appearance_clone/C = A
+			if(C.source_atom)
+				render_source = C.source_atom
+
+		var/icon/img = getFlatIcon(render_source, no_anim = TRUE)
 		if(!img)
 			CHECK_TICK
 			continue
@@ -108,16 +116,13 @@
 		var/xo = (A.x - center.x) * ICON_SIZE_X + A.pixel_x + xcomp
 		var/yo = (A.y - center.y) * ICON_SIZE_Y + A.pixel_y + ycomp
 
-		var/target_blend = A.blend_mode
-		var/matrix/target_transform = A.transform
-
 		if(ismovable(A))
 			var/atom/movable/AM = A
 			xo += AM.step_x
 			yo += AM.step_y
 
-		if(target_transform && skip_normal)
-			var/datum/decompose_matrix/decompose = target_transform.decompose()
+		if(A.transform && skip_normal)
+			var/datum/decompose_matrix/decompose = A.transform.decompose()
 			if(decompose.scale_x != 1 || decompose.scale_y != 1)
 				var/base_w = img.Width()
 				var/base_h = img.Height()
@@ -132,7 +137,7 @@
 			yo += decompose.shift_y
 
 		var/imode = ICON_OVERLAY
-		switch(target_blend)
+		switch(A.blend_mode)
 			if(BLEND_MULTIPLY)
 				imode = ICON_MULTIPLY
 			if(BLEND_ADD)
