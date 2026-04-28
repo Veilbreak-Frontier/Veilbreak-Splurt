@@ -143,12 +143,11 @@
 	SIGNAL_HANDLER
 	if(ishuman(movable))
 		var/mob/living/carbon/human/H = movable
-		H.AddComponent(/datum/component/tackler, stamina_cost=25, base_knockdown = 1 SECONDS, range = 4, speed = 1, skill_mod = 0, min_distance = 0)
+		H.AddComponentFrom(REF(src), /datum/component/tackler, stamina_cost=25, base_knockdown = 1 SECONDS, range = 4, speed = 1, skill_mod = 0, min_distance = 0)
 
 /obj/structure/wrestling_corner/proc/on_exit(datum/source, atom/movable/leaving, direction)
 	SIGNAL_HANDLER
 
 	if(ishuman(leaving))
 		var/mob/living/carbon/human/H = leaving
-		var/datum/component/tackler/wrestling_tackler = H.GetComponent(/datum/component/tackler)
-		wrestling_tackler.Destroy()
+		H.RemoveComponentSource(REF(src), /datum/component/tackler)

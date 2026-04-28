@@ -354,16 +354,18 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	var/list/save_data = savefile.get_entry(tree_key)
 
 	if(!islist(save_data))
-		// Populate the cache with defaults so the UI doesn't show the previous character's loadout
 		for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
 			if (preference.savefile_identifier == PREFERENCE_CHARACTER)
 				read_preference(preference.type)
 		return FALSE
 
-	if(save_data["custom_tattoos"])
-		if(!features)
-			features = list()
+	if(!features)
+		features = list()
+
+	if(islist(save_data["custom_tattoos"]))
 		features["custom_tattoos"] = save_data["custom_tattoos"]
+	else
+		features["custom_tattoos"] = list()
 
 	var/data_validity_integer = check_savedata_version(save_data)
 	if(IS_DATA_OBSOLETE(data_validity_integer))
@@ -381,8 +383,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	all_quirks = save_data["all_quirks"]
 
 	load_character_skyrat(save_data)
-	load_character_doppler(save_data) // DOPPLER EDIT ADDITION - Powers savefile migration
-	check_doppler_character_savefile(save_data) // DOPPLER EDIT ADDITION - Modular Character Savefile Migration
+	load_character_doppler(save_data)
+	check_doppler_character_savefile(save_data)
 
 	if(SHOULD_UPDATE_DATA(data_validity_integer))
 		update_character(data_validity_integer, save_data)

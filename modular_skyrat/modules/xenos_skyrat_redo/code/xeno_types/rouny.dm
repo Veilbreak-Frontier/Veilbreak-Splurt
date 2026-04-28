@@ -29,7 +29,7 @@
 
 /mob/living/carbon/alien/adult/skyrat/runner/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/tackler, stamina_cost = 0, base_knockdown = 2, range = 10, speed = 2, skill_mod = 7, min_distance = 0)
+	AddComponentFrom(REF(src), /datum/component/tackler, stamina_cost = 0, base_knockdown = 2, range = 10, speed = 2, skill_mod = 7, min_distance = 0)
 	evade_ability = new(src)
 	evade_ability.Grant(src)
 

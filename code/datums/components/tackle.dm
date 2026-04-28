@@ -12,7 +12,7 @@
  * There are 2 separate """skill rolls""" involved here, which are handled and explained in [rollTackle()][/datum/component/tackler/proc/rollTackle] (for roll 1, carbons), and [splat()][/datum/component/tackler/proc/splat] (for roll 2, walls and solid objects)
 */
 /datum/component/tackler
-	dupe_mode = COMPONENT_DUPE_UNIQUE
+	dupe_mode = COMPONENT_DUPE_SOURCES
 
 	///If we're currently tackling or are on cooldown. Actually, shit, if I use this to handle cooldowns, then getting thrown by something while on cooldown will count as a tackle..... whatever, i'll fix that next commit
 	var/tackling = TRUE
@@ -30,6 +30,8 @@
 	var/min_distance
 	///A wearkef to the throwdatum we're currently dealing with, if we need it
 	var/datum/weakref/tackle_ref
+	/// Assoc list (source -> list) of tackle stats for each registered source; see refresh_tackle_stats().
+	var/list/tackle_source_params
 
 /datum/component/tackler/Initialize(stamina_cost = 25, base_knockdown = 1 SECONDS, range = 4, speed = 1, skill_mod = 0, min_distance = min_distance, silent_gain = FALSE)
 	if(!iscarbon(parent))
@@ -51,7 +53,56 @@
 /datum/component/tackler/Destroy()
 	var/mob/P = parent
 	to_chat(P, span_notice("You can no longer tackle."))
+	tackle_source_params = null
 	return ..()
+
+/datum/component/tackler/on_source_add(source, stamina_cost = 25, base_knockdown = 1 SECONDS, range = 4, speed = 1, skill_mod = 0, min_distance = 0, silent_gain = FALSE)
+	LAZYSET(tackle_source_params, source, list(
+		"stamina_cost" = stamina_cost,
+		"base_knockdown" = base_knockdown,
+		"range" = range,
+		"speed" = speed,
+		"skill_mod" = skill_mod,
+		"min_distance" = min_distance,
+	))
+	. = ..()
+	refresh_tackle_stats()
+
+/datum/component/tackler/on_source_remove(source)
+	LAZYREMOVE(tackle_source_params, source)
+	. = ..()
+	if(!QDELETED(src))
+		refresh_tackle_stats()
+
+/// Gloves take priority over the warfighter tackler power; everything else uses first registered source order.
+/datum/component/tackler/proc/pick_active_tackle_params()
+	if(!LAZYLEN(sources))
+		return null
+	for(var/tackle_source in sources)
+		if(resolve_tackle_gloves(tackle_source))
+			return tackle_source_params[tackle_source]
+	for(var/tackle_source in sources)
+		if(istype(tackle_source, /datum/power/warfighter/tackler) && !istype(tackle_source, /datum/power/warfighter/tackler/greater_tackler))
+			return tackle_source_params[tackle_source]
+	return tackle_source_params[sources[1]]
+
+/datum/component/tackler/proc/resolve_tackle_gloves(source)
+	if(istype(source, /obj/item/clothing/gloves/tackler))
+		return source
+	if(istext(source))
+		return locate(source)
+	return null
+
+/datum/component/tackler/proc/refresh_tackle_stats()
+	var/list/params = pick_active_tackle_params()
+	if(!params)
+		return
+	stamina_cost = params["stamina_cost"]
+	base_knockdown = params["base_knockdown"]
+	range = params["range"]
+	speed = params["speed"]
+	skill_mod = params["skill_mod"]
+	min_distance = params["min_distance"]
 
 /datum/component/tackler/RegisterWithParent()
 	RegisterSignal(parent, COMSIG_MOB_CLICKON, PROC_REF(checkTackle))
