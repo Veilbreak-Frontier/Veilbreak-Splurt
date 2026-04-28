@@ -108,18 +108,13 @@
 		var/xo = (A.x - center.x) * ICON_SIZE_X + A.pixel_x + xcomp
 		var/yo = (A.y - center.y) * ICON_SIZE_Y + A.pixel_y + ycomp
 
-		var/target_step_x = 0
-		var/target_step_y = 0
 		var/target_blend = A.blend_mode
 		var/matrix/target_transform = A.transform
 
 		if(ismovable(A))
 			var/atom/movable/AM = A
-			target_step_x = AM.step_x
-			target_step_y = AM.step_y
-
-		xo += target_step_x
-		yo += target_step_y
+			xo += AM.step_x
+			yo += AM.step_y
 
 		if(target_transform && skip_normal)
 			var/datum/decompose_matrix/decompose = target_transform.decompose()
@@ -136,16 +131,16 @@
 			xo += decompose.shift_x
 			yo += decompose.shift_y
 
-		var/icon_blend_mode = ICON_OVERLAY
+		var/imode = ICON_OVERLAY
 		switch(target_blend)
 			if(BLEND_MULTIPLY)
-				icon_blend_mode = ICON_MULTIPLY
+				imode = ICON_MULTIPLY
 			if(BLEND_ADD)
-				icon_blend_mode = ICON_ADD
+				imode = ICON_ADD
 			if(BLEND_SUBTRACT)
-				icon_blend_mode = ICON_SUBTRACT
+				imode = ICON_SUBTRACT
 
-		res.Blend(img, icon_blend_mode, xo, yo)
+		res.Blend(img, imode, xo, yo)
 		CHECK_TICK
 
 	if(wipe_atoms)
