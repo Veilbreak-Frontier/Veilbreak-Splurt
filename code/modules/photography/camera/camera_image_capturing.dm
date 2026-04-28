@@ -1,6 +1,6 @@
 /obj/effect/appearance_clone
 
-/obj/effect/appearance_clone/New(loc, atom/our_atom) //Intentionally not Initialize(), to make sure the clone assumes the intended appearance in time for the camera getFlatIcon.
+/obj/effect/appearance_clone/New(loc, atom/our_atom)
 	if(!istype(our_atom))
 		return ..()
 	if(!isopenspaceturf(our_atom))
@@ -33,7 +33,7 @@
 			var/offset_x = T.x - center.x
 			var/offset_y = T.y - center.y
 			var/turf/newT = locate(cloned_center_x + offset_x, cloned_center_y + offset_y, bottom_left.z)
-			if(!(newT in clone_area.reserved_turfs)) //sanity check so we don't overwrite other areas somehow
+			if(!(newT in clone_area.reserved_turfs))
 				continue
 			atoms += new /obj/effect/appearance_clone(newT, T)
 			if(T.loc.icon_state)
@@ -87,10 +87,8 @@
 				break
 			var/c_position = PHYSICAL_POSITION(c)
 			var/c2_position = PHYSICAL_POSITION(c2)
-			// If you are above me, I layer above you
 			if(c2_position - 32 >= c_position)
 				break
-			// If I am above you you will always layer above me
 			if(c2_position <= c_position - 32)
 				continue
 			if(c2.layer < c.layer)
@@ -101,50 +99,54 @@
 	var/xcomp = FLOOR(psize_x / 2, 1) - 15
 	var/ycomp = FLOOR(psize_y / 2, 1) - 15
 
-	if(!skip_normal) //these are not clones
-		for(var/atom/A in sorted)
-			var/xo = (A.x - center.x) * ICON_SIZE_X + A.pixel_x + xcomp
-			var/yo = (A.y - center.y) * ICON_SIZE_Y + A.pixel_y + ycomp
-			if(ismovable(A))
-				var/atom/movable/AM = A
-				xo += AM.step_x
-				yo += AM.step_y
-			var/icon/img = getFlatIcon(A, no_anim = TRUE)
-			res.Blend(img, blendMode2iconMode(A.blend_mode), xo, yo)
+	for(var/atom/A in sorted)
+		var/icon/img = getFlatIcon(A, no_anim = TRUE)
+		if(!img)
 			CHECK_TICK
-	else
-		for(var/X in sorted) //these are clones
-			var/obj/effect/appearance_clone/clone = X
-			var/icon/img = getFlatIcon(clone, no_anim = TRUE)
-			if(!img)
-				CHECK_TICK
-				continue
-			// Center of the image in X
-			var/xo = (clone.x - center.x) * ICON_SIZE_X + clone.pixel_x + xcomp + clone.step_x
-			// Center of the image in Y
-			var/yo = (clone.y - center.y) * ICON_SIZE_Y + clone.pixel_y + ycomp + clone.step_y
+			continue
 
-			if(clone.transform) // getFlatIcon doesn't give a snot about transforms.
-				var/datum/decompose_matrix/decompose = clone.transform.decompose()
-				// Scale in X, Y
-				if(decompose.scale_x != 1 || decompose.scale_y != 1)
-					var/base_w = img.Width()
-					var/base_h = img.Height()
-					// scale_x can be negative
-					img.Scale(base_w * abs(decompose.scale_x), base_h * decompose.scale_y)
-					if(decompose.scale_x < 0)
-						img.Flip(EAST)
-					xo -= base_w * (decompose.scale_x - SIGN(decompose.scale_x)) / 2 * SIGN(decompose.scale_x)
-					yo -= base_h * (decompose.scale_y - 1) / 2
-				// Rotation
-				if(decompose.rotation != 0)
-					img.Turn(decompose.rotation)
-				// Shift
-				xo += decompose.shift_x
-				yo += decompose.shift_y
+		var/xo = (A.x - center.x) * ICON_SIZE_X + A.pixel_x + xcomp
+		var/yo = (A.y - center.y) * ICON_SIZE_Y + A.pixel_y + ycomp
 
-			res.Blend(img, blendMode2iconMode(clone.blend_mode), xo, yo)
-			CHECK_TICK
+		var/target_step_x = 0
+		var/target_step_y = 0
+		var/target_blend = A.blend_mode
+		var/matrix/target_transform = A.transform
+
+		if(ismovable(A))
+			var/atom/movable/AM = A
+			target_step_x = AM.step_x
+			target_step_y = AM.step_y
+
+		xo += target_step_x
+		yo += target_step_y
+
+		if(target_transform && skip_normal)
+			var/datum/decompose_matrix/decompose = target_transform.decompose()
+			if(decompose.scale_x != 1 || decompose.scale_y != 1)
+				var/base_w = img.Width()
+				var/base_h = img.Height()
+				img.Scale(base_w * abs(decompose.scale_x), base_h * decompose.scale_y)
+				if(decompose.scale_x < 0)
+					img.Flip(EAST)
+				xo -= base_w * (decompose.scale_x - SIGN(decompose.scale_x)) / 2 * SIGN(decompose.scale_x)
+				yo -= base_h * (decompose.scale_y - 1) / 2
+			if(decompose.rotation != 0)
+				img.Turn(decompose.rotation)
+			xo += decompose.shift_x
+			yo += decompose.shift_y
+
+		var/icon_blend_mode = ICON_OVERLAY
+		switch(target_blend)
+			if(BLEND_MULTIPLY)
+				icon_blend_mode = ICON_MULTIPLY
+			if(BLEND_ADD)
+				icon_blend_mode = ICON_ADD
+			if(BLEND_SUBTRACT)
+				icon_blend_mode = ICON_SUBTRACT
+
+		res.Blend(img, icon_blend_mode, xo, yo)
+		CHECK_TICK
 
 	if(wipe_atoms)
 		QDEL_LIST(atoms)
