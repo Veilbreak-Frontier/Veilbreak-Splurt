@@ -5,8 +5,7 @@
 	if(!istype(our_atom))
 		return ..()
 	source_atom = our_atom
-	if(!isopenspaceturf(our_atom))
-		appearance = our_atom.appearance
+	appearance = our_atom.appearance
 	dir = our_atom.dir
 	if(ismovable(our_atom))
 		var/atom/movable/our_movable = our_atom
@@ -102,16 +101,21 @@
 	var/ycomp = FLOOR(psize_y / 2, 1) - 15
 
 	for(var/atom/A in sorted)
-		var/atom/render_source = A
+		var/atom/true_source = A
 		if(istype(A, /obj/effect/appearance_clone))
-			var/obj/effect/appearance_clone/C = A
-			if(C.source_atom)
-				render_source = C.source_atom
+			var/obj/effect/appearance_clone/AC = A
+			if(AC.source_atom)
+				true_source = AC.source_atom
 
-		var/icon/img = getFlatIcon(render_source, no_anim = TRUE)
+		var/icon/img = getFlatIcon(true_source, no_anim = TRUE)
 		if(!img)
 			CHECK_TICK
 			continue
+
+		if(islist(true_source.color))
+			img.MapColors(arglist(true_source.color))
+		else if(true_source.color)
+			img.Blend(true_source.color, ICON_MULTIPLY)
 
 		var/xo = (A.x - center.x) * ICON_SIZE_X + A.pixel_x + xcomp
 		var/yo = (A.y - center.y) * ICON_SIZE_Y + A.pixel_y + ycomp
