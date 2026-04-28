@@ -153,6 +153,15 @@ PROCESSING_SUBSYSTEM_DEF(powers)
 				continue
 			SSblackbox.record_feedback("tally", "powers_taken", 1, "[power_type.name]")
 
+/// After quirks or other body changes, re-implant augmented organs only. Avoids re-running assign_powers (which would double-apply credits, items, etc.).
+/datum/controller/subsystem/processing/powers/proc/reapply_augmented_powers(mob/living/carbon/human/wearer, client/wearer_client)
+	if(!wearer)
+		return
+	wearer_client ||= wearer.client
+	for(var/datum/power/augmented/aug_power as anything in wearer.powers.Copy())
+		aug_power.remove()
+		aug_power.add_unique(wearer_client)
+
 /// Takes a list of power names,
 /// and returns a new list of powers that would be valid.
 /// If no changes need to be made, will return the same list.

@@ -15,8 +15,8 @@
 
 /datum/power/expert/filthy_rich/add_unique(client/client_source)
 	var/mob/living/carbon/human/human_holder = power_holder
-	if(!human_holder.account_id)
+	var/datum/bank_account/account = get_bank_account_for_rich_power(human_holder)
+	if(!account)
 		return
-	var/datum/bank_account/account = SSeconomy.bank_accounts_by_id["[human_holder.account_id]"]
 	account.account_balance += riches
 
