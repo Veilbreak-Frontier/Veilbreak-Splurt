@@ -106,6 +106,15 @@
 	if(!current_color && A.appearance && islist(A.appearance.color))
 		current_color = A.appearance.color
 
+	if(istype(A, /obj/structure/serpentine_tail))
+		var/obj/structure/serpentine_tail/ST = A
+		if(ST.owner?.dna?.mutant_bodyparts)
+			var/list/taur_data = ST.owner.dna.mutant_bodyparts["taur"] || ST.owner.dna.mutant_bodyparts["taur_snake"]
+			if(taur_data && taur_data["color"])
+				var/list/L = taur_data["color"]
+				if(length(L) >= 1)
+					current_color = L[1]
+
 	if(iscarbon(A))
 		var/mob/living/carbon/C = A
 		if(C.dna?.mutant_bodyparts)
