@@ -57,7 +57,7 @@
 			img = icon(A.icon, A.icon_state)
 			img.Blend(backdrop, ICON_OVERLAY)
 		else
-			img = build_forced_color_icon(A)
+			img = build_recursive_flattened_icon(A)
 
 		if(!img)
 			continue
@@ -100,31 +100,34 @@
 
 	return res
 
-/proc/build_forced_color_icon(atom/A)
+/proc/build_recursive_flattened_icon(atom/A, list/forced_color)
 	var/icon/base = icon(A.icon, A.icon_state, A.dir)
-	var/list/color_matrix
+	var/list/current_color = islist(A.color) ? A.color : forced_color
 
-	if(islist(A.color))
-		color_matrix = A.color
-	else if(A.appearance && islist(A.appearance.color))
-		color_matrix = A.appearance.color
+	if(!current_color && A.appearance && islist(A.appearance.color))
+		current_color = A.appearance.color
 
-	if(color_matrix)
-		base.MapColors(arglist(color_matrix))
+	if(current_color)
+		base.MapColors(arglist(current_color))
 	else if(A.color && A.color != "#ffffff")
 		base.Blend(A.color, ICON_MULTIPLY)
 
-	if(A.overlays.len)
+	if(length(A.overlays))
 		for(var/overlay in A.overlays)
 			var/image/I = overlay
 			if(!istype(I))
 				continue
 			var/icon/ov = icon(I.icon || A.icon, I.icon_state, I.dir || A.dir)
-			if(color_matrix)
-				ov.MapColors(arglist(color_matrix))
-			else if(A.color && A.color != "#ffffff")
-				ov.Blend(A.color, ICON_MULTIPLY)
+			if(current_color)
+				ov.MapColors(arglist(current_color))
 			base.Blend(ov, ICON_OVERLAY)
+
+	if(A.vars.Find("vis_contents"))
+		var/list/vc = A.vars["vis_contents"]
+		if(length(vc))
+			for(var/atom/V in vc)
+				var/icon/vic = build_recursive_flattened_icon(V, current_color)
+				base.Blend(vic, ICON_OVERLAY, V.pixel_x, V.pixel_y)
 
 	if(A.alpha < 255)
 		base.MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,A.alpha/255, 0,0,0,0)
