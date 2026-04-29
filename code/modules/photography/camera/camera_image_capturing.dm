@@ -1,9 +1,9 @@
-#define PHYSICAL_POSITION(atom) ((atom.y * ICON_SIZE_Y) + (atom.pixel_y))
+#define PHYSICAL_POSITION(atom) ((atom.y * 32) + (atom.pixel_y))
 
 /obj/item/camera/proc/camera_get_icon(list/turfs, turf/center, psize_x = 96, psize_y = 96, datum/turf_reservation/clone_area, size_x, size_y, total_x, total_y)
 	var/list/render_queue = list()
-	var/xcomp = FLOOR(psize_x / 2, 1) - 15
-	var/ycomp = FLOOR(psize_y / 2, 1) - 15
+	var/xcomp = (psize_x / 2) - 16
+	var/ycomp = (psize_y / 2) - 16
 
 	var/mutable_appearance/backdrop = mutable_appearance('icons/hud/screen_gen.dmi', "flash")
 	backdrop.blend_mode = BLEND_OVERLAY
@@ -30,11 +30,11 @@
 				continue
 			if(c2.plane < c.plane)
 				break
-			var/c_position = PHYSICAL_POSITION(c)
-			var/c2_position = PHYSICAL_POSITION(c2)
-			if(c2_position - 32 >= c_position)
+			var/c_pos = PHYSICAL_POSITION(c)
+			var/c2_pos = PHYSICAL_POSITION(c2)
+			if(c2_pos - 32 >= c_pos)
 				break
-			if(c2_position <= c_position - 32)
+			if(c2_pos <= c_pos - 32)
 				continue
 			if(c2.layer < c.layer)
 				break
@@ -57,13 +57,13 @@
 			img = icon(A.icon, A.icon_state)
 			img.Blend(backdrop, ICON_OVERLAY)
 		else
-			img = icon(A.appearance)
+			img = build_forced_color_icon(A)
 
 		if(!img)
 			continue
 
-		var/xo = (A.x - center.x) * ICON_SIZE_X + A.pixel_x + xcomp
-		var/yo = (A.y - center.y) * ICON_SIZE_Y + A.pixel_y + ycomp
+		var/xo = (A.x - center.x) * 32 + A.pixel_x + xcomp
+		var/yo = (A.y - center.y) * 32 + A.pixel_y + ycomp
 
 		if(ismovable(A))
 			var/atom/movable/AM = A
@@ -99,5 +99,36 @@
 		CHECK_TICK
 
 	return res
+
+/proc/build_forced_color_icon(atom/A)
+	var/icon/base = icon(A.icon, A.icon_state, A.dir)
+	var/list/color_matrix
+
+	if(islist(A.color))
+		color_matrix = A.color
+	else if(A.appearance && islist(A.appearance.color))
+		color_matrix = A.appearance.color
+
+	if(color_matrix)
+		base.MapColors(arglist(color_matrix))
+	else if(A.color && A.color != "#ffffff")
+		base.Blend(A.color, ICON_MULTIPLY)
+
+	if(A.overlays.len)
+		for(var/overlay in A.overlays)
+			var/image/I = overlay
+			if(!istype(I))
+				continue
+			var/icon/ov = icon(I.icon || A.icon, I.icon_state, I.dir || A.dir)
+			if(color_matrix)
+				ov.MapColors(arglist(color_matrix))
+			else if(A.color && A.color != "#ffffff")
+				ov.Blend(A.color, ICON_MULTIPLY)
+			base.Blend(ov, ICON_OVERLAY)
+
+	if(A.alpha < 255)
+		base.MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,A.alpha/255, 0,0,0,0)
+
+	return base
 
 #undef PHYSICAL_POSITION
