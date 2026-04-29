@@ -10731,6 +10731,7 @@
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_Machine_Obj.dm"
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_UI_Handler.dm"
 #include "modular_zzveilbreak\code\modules\modular_computers\programs\guest_access_pass.dm"
+#include "modular_zzveilbreak\code\modules\modular_nif\vore_nifsofts.dm"
 #include "modular_zzveilbreak\code\modules\nanites\program_designs.dm"
 #include "modular_zzveilbreak\code\modules\nanites\programs.dm"
 #include "modular_zzveilbreak\code\modules\research\experiments.dm"
