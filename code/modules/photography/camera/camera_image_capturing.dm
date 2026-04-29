@@ -59,19 +59,18 @@
 			img = icon(A.icon, A.icon_state)
 			img.Blend(backdrop, ICON_OVERLAY)
 		else
-			img = icon(A.icon, A.icon_state, A.dir)
+			img = icon(A.appearance)
+
+			if(islist(A.color))
+				img.MapColors(arglist(A.color))
+			else if(A.color && A.color != "#ffffff")
+				img.Blend(A.color, ICON_MULTIPLY)
+
+			if(A.alpha < 255)
+				img.MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,A.alpha/255, 0,0,0,0)
 
 		if(!img)
 			continue
-
-		var/list/C = A.color
-		if(islist(C))
-			img.MapColors(arglist(C))
-		else if(C)
-			img.Blend(C, ICON_MULTIPLY)
-
-		if(A.alpha < 255)
-			img.MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,A.alpha/255, 0,0,0,0)
 
 		var/xo = (A.x - center.x) * ICON_SIZE_X + A.pixel_x + xcomp
 		var/yo = (A.y - center.y) * ICON_SIZE_Y + A.pixel_y + ycomp
