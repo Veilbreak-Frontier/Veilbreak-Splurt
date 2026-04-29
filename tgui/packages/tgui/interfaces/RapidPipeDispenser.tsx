@@ -82,6 +82,7 @@ type Data = {
   init_directions: DirectionsAllowed;
   mode: number;
   multi_layer: BooleanLike;
+  pipe_underfloor: BooleanLike;
   pipe_layers: number;
   selected_category: string;
   selected_color: string;
@@ -189,7 +190,7 @@ function layerToBitmask(layer: number) {
 
 function LayerSelect(props) {
   const { act, data } = useBackend<Data>();
-  const { pipe_layers, multi_layer, max_pipe_layers = 1 } = data;
+  const { pipe_layers, multi_layer, pipe_underfloor, max_pipe_layers = 1 } = data;
 
   return (
     <LabeledList.Item label="Layer">
@@ -217,6 +218,16 @@ function LayerSelect(props) {
         }}
       >
         Multi
+      </Button.Checkbox>
+      <Button.Checkbox
+        key="underfloor"
+        checked={pipe_underfloor}
+        tooltip="Try to place wrench-built atmos fittings under the tile"
+        onClick={() => {
+          act('toggle_pipe_underfloor');
+        }}
+      >
+        Underfloor
       </Button.Checkbox>
     </LabeledList.Item>
   );

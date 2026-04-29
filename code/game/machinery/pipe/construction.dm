@@ -29,6 +29,8 @@ Buildable meters
 	var/pipe_color
 	///Initial direction of the created pipe (either made from the RPD or after unwrenching the pipe)
 	var/p_init_dir = SOUTH
+	///Should this fitting place its machine under the floor immediately when wrenched
+	var/place_underfloor = FALSE
 
 /obj/item/pipe/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
 	. = ..()
@@ -267,6 +269,8 @@ Buildable meters
 	var/obj/machinery/atmospherics/built_machine = new pipe_type(loc, null, fixed_dir(), p_init_dir)
 	build_pipe(built_machine)
 	built_machine.on_construction(user, pipe_color, piping_layer)
+	if(place_underfloor && initial(built_machine.hide))
+		SEND_SIGNAL(built_machine, COMSIG_OBJ_HIDE, UNDERFLOOR_HIDDEN)
 	transfer_fingerprints_to(built_machine)
 
 	wrench.play_tool_sound(src)
