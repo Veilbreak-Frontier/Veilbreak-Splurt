@@ -46,7 +46,6 @@
 
 	for(var/atom/A in sorted)
 		var/icon/img
-
 		var/is_lighting = FALSE
 		if(isturf(A))
 			var/turf/T = A
@@ -107,20 +106,39 @@
 	if(!current_color && A.appearance && islist(A.appearance.color))
 		current_color = A.appearance.color
 
+	if(iscarbon(A))
+		var/mob/living/carbon/C = A
+		if(C.dna?.mutant_bodyparts)
+			var/list/taur_data = C.dna.mutant_bodyparts["taur"] || C.dna.mutant_bodyparts["taur_snake"]
+			if(taur_data && taur_data["color"])
+				var/list/L = taur_data["color"]
+				if(length(L) >= 1)
+					current_color = L[1]
+
 	if(current_color)
-		base.MapColors(arglist(current_color))
+		if(islist(current_color))
+			base.MapColors(arglist(current_color))
+		else
+			base.Blend(current_color, ICON_MULTIPLY)
 	else if(A.color && A.color != "#ffffff")
 		base.Blend(A.color, ICON_MULTIPLY)
 
 	if(length(A.overlays))
 		for(var/overlay in A.overlays)
-			var/image/I = overlay
-			if(!istype(I))
-				continue
-			var/icon/ov = icon(I.icon || A.icon, I.icon_state, I.dir || A.dir)
-			if(current_color)
-				ov.MapColors(arglist(current_color))
-			base.Blend(ov, ICON_OVERLAY)
+			var/icon/ov
+			if(istype(overlay, /image))
+				var/image/I = overlay
+				ov = icon(I.icon || A.icon, I.icon_state, I.dir || A.dir)
+			else if(isappearance(overlay))
+				ov = icon(overlay)
+
+			if(ov)
+				if(current_color)
+					if(islist(current_color))
+						ov.MapColors(arglist(current_color))
+					else
+						ov.Blend(current_color, ICON_MULTIPLY)
+				base.Blend(ov, ICON_OVERLAY)
 
 	if(A.vars.Find("vis_contents"))
 		var/list/vc = A.vars["vis_contents"]
