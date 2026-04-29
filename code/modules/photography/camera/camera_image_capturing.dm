@@ -99,38 +99,40 @@
 
 	return res
 
-/proc/build_recursive_flattened_icon(atom/A, list/forced_color)
+/proc/build_recursive_flattened_icon(atom/A, list/passed_color)
 	var/icon/base = icon(A.icon, A.icon_state, A.dir)
-	var/list/current_color = islist(A.color) ? A.color : forced_color
-
-	if(!current_color && A.appearance && islist(A.appearance.color))
-		current_color = A.appearance.color
+	var/list/working_color = passed_color
 
 	if(istype(A, /obj/structure/serpentine_tail))
 		var/obj/structure/serpentine_tail/ST = A
 		if(ST.owner?.dna?.mutant_bodyparts)
 			var/list/taur_data = ST.owner.dna.mutant_bodyparts["taur"] || ST.owner.dna.mutant_bodyparts["taur_snake"]
 			if(taur_data && taur_data["color"])
-				var/list/L = taur_data["color"]
-				if(length(L) >= 1)
-					current_color = L[1]
+				working_color = taur_data["color"]
 
 	if(iscarbon(A))
 		var/mob/living/carbon/C = A
 		if(C.dna?.mutant_bodyparts)
 			var/list/taur_data = C.dna.mutant_bodyparts["taur"] || C.dna.mutant_bodyparts["taur_snake"]
 			if(taur_data && taur_data["color"])
-				var/list/L = taur_data["color"]
-				if(length(L) >= 1)
-					current_color = L[1]
+				working_color = taur_data["color"]
 
-	if(current_color)
-		if(islist(current_color))
-			base.MapColors(arglist(current_color))
+	if(!working_color && A.atom_colours)
+		for(var/i in A.atom_colours.len to 1 step -1)
+			var/list/color_data = A.atom_colours[i]
+			if(color_data && color_data[1])
+				working_color = islist(color_data[1]) ? color_data[1] : list(color_data[1])
+				break
+
+	if(!working_color && A.color && A.color != "#ffffff")
+		working_color = islist(A.color) ? A.color : list(A.color)
+
+	if(working_color)
+		if(length(working_color) >= 20)
+			base.MapColors(arglist(working_color))
 		else
-			base.Blend(current_color, ICON_MULTIPLY)
-	else if(A.color && A.color != "#ffffff")
-		base.Blend(A.color, ICON_MULTIPLY)
+			for(var/c_val in working_color)
+				base.Blend(c_val, ICON_MULTIPLY)
 
 	if(length(A.overlays))
 		for(var/overlay in A.overlays)
@@ -138,22 +140,25 @@
 			if(istype(overlay, /image))
 				var/image/I = overlay
 				ov = icon(I.icon || A.icon, I.icon_state, I.dir || A.dir)
+				if(I.color && I.color != "#ffffff")
+					ov.Blend(I.color, ICON_MULTIPLY)
 			else if(isappearance(overlay))
 				ov = icon(overlay)
 
 			if(ov)
-				if(current_color)
-					if(islist(current_color))
-						ov.MapColors(arglist(current_color))
+				if(working_color)
+					if(length(working_color) >= 20)
+						ov.MapColors(arglist(working_color))
 					else
-						ov.Blend(current_color, ICON_MULTIPLY)
+						for(var/cv in working_color)
+							ov.Blend(cv, ICON_MULTIPLY)
 				base.Blend(ov, ICON_OVERLAY)
 
 	if(A.vars.Find("vis_contents"))
 		var/list/vc = A.vars["vis_contents"]
 		if(length(vc))
 			for(var/atom/V in vc)
-				var/icon/vic = build_recursive_flattened_icon(V, current_color)
+				var/icon/vic = build_recursive_flattened_icon(V, working_color)
 				base.Blend(vic, ICON_OVERLAY, V.pixel_x, V.pixel_y)
 
 	if(A.alpha < 255)
