@@ -61,6 +61,8 @@
 	var/pipe_layers = PIPE_LAYER(3)
 	///Are we laying multiple layers per click
 	var/multi_layer = FALSE
+	///Should atmos pipes be placed under the tile immediately when possible
+	var/pipe_underfloor = FALSE
 	///Stores the current device to spawn
 	var/datum/pipe_info/recipe
 	///Stores the first atmos device
@@ -163,6 +165,7 @@
 	var/list/data = list(
 		"category" = category,
 		"multi_layer" = multi_layer,
+		"pipe_underfloor" = pipe_underfloor,
 		"pipe_layers" = pipe_layers,
 		"categories" = list(),
 		"selected_recipe" = recipe.name,
@@ -253,6 +256,9 @@
 			if(multi_layer)
 				pipe_layers = PIPE_LAYER(max(get_active_pipe_layers()))
 			multi_layer = !multi_layer
+
+		if("toggle_pipe_underfloor")
+			pipe_underfloor = !pipe_underfloor
 
 		if("pipe_type")
 			var/static/list/recipes
@@ -568,6 +574,7 @@
 			pipe_type.update()
 			pipe_type.add_fingerprint(user)
 			pipe_type.set_piping_layer(layer_to_build)
+			pipe_type.place_underfloor = pipe_underfloor
 			if(ispath(queued_pipe_type, /obj/machinery/atmospherics) && !ispath(queued_pipe_type, /obj/machinery/atmospherics/pipe/color_adapter))
 				pipe_type.add_atom_colour(GLOB.pipe_paint_colors[paint_color], FIXED_COLOUR_PRIORITY)
 			if(mode & WRENCH_MODE)
