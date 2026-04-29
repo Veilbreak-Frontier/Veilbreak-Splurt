@@ -1,113 +1,69 @@
-#define PHYSICAL_POSITION(atom) ((atom.y * ICON_SIZE_Y) + (atom.pixel_y))
+/obj/effect/render_proxy
+	vis_flags = VIS_INHERIT_ID | VIS_INHERIT_PLANE | VIS_INHERIT_LAYER
 
 /obj/item/camera/proc/camera_get_icon(list/turfs, turf/center, psize_x = 96, psize_y = 96, datum/turf_reservation/clone_area, size_x, size_y, total_x, total_y)
-	var/list/render_queue = list()
-	var/xcomp = FLOOR(psize_x / 2, 1) - 15
-	var/ycomp = FLOOR(psize_y / 2, 1) - 15
+	if(!istype(clone_area))
+		return icon('icons/blanks/96x96.dmi', "nothing")
 
+	var/turf/bottom_left = clone_area.bottom_left_turfs[1]
+	var/cloned_center_x = round(bottom_left.x + ((total_x - 1) / 2))
+	var/cloned_center_y = round(bottom_left.y + ((total_y - 1) / 2))
+	var/turf/cloned_center = locate(cloned_center_x, cloned_center_y, bottom_left.z)
+
+	var/list/proxies = list()
 	var/mutable_appearance/backdrop = mutable_appearance('icons/hud/screen_gen.dmi', "flash")
 	backdrop.blend_mode = BLEND_OVERLAY
 	backdrop.color = "#292319"
 
 	for(var/t in turfs)
 		var/turf/T = t
-		render_queue += T
+		var/offset_x = T.x - center.x
+		var/offset_y = T.y - center.y
+		var/turf/newT = locate(cloned_center_x + offset_x, cloned_center_y + offset_y, bottom_left.z)
+
+		if(!(newT in clone_area.reserved_turfs))
+			continue
+
+		var/obj/effect/render_proxy/T_P = new(newT)
+		T_P.appearance = T.appearance
+		T_P.render_source = "\ref[T]"
+		proxies += T_P
 
 		if(T.lighting_object)
-			render_queue += T.lighting_object
+			var/obj/effect/render_proxy/L_P = new(newT)
+			L_P.appearance = T.lighting_object.current_underlay
+			L_P.underlays += backdrop
+			L_P.blend_mode = BLEND_MULTIPLY
+			proxies += L_P
 
 		for(var/atom/movable/AM in T)
 			if(AM.invisibility)
 				if(!(see_ghosts && (isobserver(AM) || HAS_TRAIT(AM, TRAIT_INVISIBLE_TO_CAMERA))))
 					continue
-			render_queue += AM
 
-	var/list/sorted = list()
-	var/j
-	for(var/i in 1 to render_queue.len)
-		var/atom/c = render_queue[i]
-		for(j = sorted.len, j > 0, --j)
-			var/atom/c2 = sorted[j]
-			if(c2.plane > c.plane)
-				continue
-			if(c2.plane < c.plane)
-				break
-			var/c_position = PHYSICAL_POSITION(c)
-			var/c2_position = PHYSICAL_POSITION(c2)
-			if(c2_position - 32 >= c_position)
-				break
-			if(c2_position <= c_position - 32)
-				continue
-			if(c2.layer < c.layer)
-				break
-		sorted.Insert(j+1, c)
-		CHECK_TICK
+			var/obj/effect/render_proxy/AM_P = new(newT)
+			AM_P.appearance = AM.appearance
+			AM_P.render_source = "\ref[AM]"
+			AM_P.dir = AM.dir
+			AM_P.pixel_x = AM.pixel_x
+			AM_P.pixel_y = AM.pixel_y
+			AM_P.transform = AM.transform
+			proxies += AM_P
 
-	var/icon/res = icon('icons/blanks/96x96.dmi', "nothing")
-	res.Scale(psize_x, psize_y)
+	var/obj/effect/render_proxy/compositor = new(cloned_center)
+	compositor.icon = 'icons/blanks/96x96.dmi'
+	compositor.icon_state = "nothing"
 
-	for(var/atom/A in sorted)
-		var/icon/img
+	var/matrix/M = matrix()
+	M.Scale(psize_x / 32, psize_y / 32)
+	compositor.transform = M
 
-		var/is_lighting = FALSE
-		if(isturf(A))
-			var/turf/T = A
-			if(T.lighting_object == A)
-				is_lighting = TRUE
+	for(var/obj/effect/render_proxy/P in proxies)
+		compositor.vis_contents += P
 
-		if(is_lighting)
-			img = icon(A.icon, A.icon_state)
-			img.Blend(backdrop, ICON_OVERLAY)
-		else
-			img = icon(A.appearance)
+	var/icon/final_render = icon(compositor)
 
-			if(islist(A.color))
-				img.MapColors(arglist(A.color))
-			else if(A.color && A.color != "#ffffff")
-				img.Blend(A.color, ICON_MULTIPLY)
+	QDEL_LIST(proxies)
+	qdel(compositor)
 
-			if(A.alpha < 255)
-				img.MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,A.alpha/255, 0,0,0,0)
-
-		if(!img)
-			continue
-
-		var/xo = (A.x - center.x) * ICON_SIZE_X + A.pixel_x + xcomp
-		var/yo = (A.y - center.y) * ICON_SIZE_Y + A.pixel_y + ycomp
-
-		if(ismovable(A))
-			var/atom/movable/AM = A
-			xo += AM.step_x
-			yo += AM.step_y
-
-		if(A.transform)
-			var/matrix/M = A.transform
-			var/datum/decompose_matrix/decompose = M.decompose()
-			if(decompose.scale_x != 1 || decompose.scale_y != 1)
-				var/bw = img.Width()
-				var/bh = img.Height()
-				img.Scale(bw * abs(decompose.scale_x), bh * decompose.scale_y)
-				if(decompose.scale_x < 0)
-					img.Flip(EAST)
-				xo -= (img.Width() - bw) / 2
-				yo -= (img.Height() - bh) / 2
-			if(decompose.rotation != 0)
-				img.Turn(decompose.rotation)
-			xo += decompose.shift_x
-			yo += decompose.shift_y
-
-		var/imode = ICON_OVERLAY
-		switch(A.blend_mode)
-			if(BLEND_MULTIPLY)
-				imode = ICON_MULTIPLY
-			if(BLEND_ADD)
-				imode = ICON_ADD
-			if(BLEND_SUBTRACT)
-				imode = ICON_SUBTRACT
-
-		res.Blend(img, imode, xo, yo)
-		CHECK_TICK
-
-	return res
-
-#undef PHYSICAL_POSITION
+	return final_render
