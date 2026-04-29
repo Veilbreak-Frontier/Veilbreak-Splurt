@@ -22,7 +22,7 @@ export function LootPanel(props) {
   useEffect(() => {
     const interval = setInterval(() => {
       act('refresh');
-    }, 1000);
+    }, 7000);
     return () => clearInterval(interval);
   }, [act]);
 
