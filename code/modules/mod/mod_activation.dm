@@ -85,19 +85,21 @@
 
 	if(wearer.equip_to_slot_if_possible(part, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
 		ADD_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
-
 		sync_taur_logic()
-
 		SEND_SIGNAL(src, COMSIG_MOD_PART_DEPLOYED, user, part_datum)
 		if(user)
+			wearer.visible_message(span_notice("[wearer]'s [part.name] deploy[part.p_s()] with a mechanical hiss."), span_notice("[part] deploy[part.p_s()] with a mechanical hiss."), span_hear("You hear a mechanical hiss."))
 			playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
-
 		if(active && !part_datum.sealed)
 			if(instant)
 				seal_part(part, is_sealed = TRUE)
-			else
-				delayed_seal_part(part)
+				return TRUE
+			else if(delayed_seal_part(part))
+				return TRUE
 		return TRUE
+	else
+		if(part_datum.overslotting)
+			on_overslot_exit(part, part_datum.overslotting)
 	return FALSE
 
 /// Retract a part of the suit from the user.
@@ -110,15 +112,15 @@
 		var/obj/item/overslot = part_datum.overslotting
 		if(overslot)
 			on_overslot_exit(part, overslot)
-
 		REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
 		wearer.temporarilyRemoveItemFromInventory(part, TRUE)
 
+	sync_taur_logic()
 	part.forceMove(src)
 
-	sync_taur_logic()
-
 	if(user)
+		var/msg = "[part.name] retracts with a mechanical hiss."
+		wearer.visible_message(span_notice("[wearer]'s [msg]"), span_notice("Your [msg]"))
 		playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 	return TRUE
 
