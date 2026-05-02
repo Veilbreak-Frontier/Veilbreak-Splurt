@@ -32,15 +32,12 @@
 // If we're overslotting an item, add its visual as an underlay
 /datum/mod_part/proc/get_separate_worn_overlays(obj/item/source, list/overlays, mutable_appearance/standing, mutable_appearance/draw_target, isinhands, icon_file)
 	SIGNAL_HANDLER
-
-	if (!overslotting || sealed)
+	if(!overslotting || sealed || !part_item)
 		return
-
-	var/checked_slot = source.slot_flags
-	if (ismob(source.loc))
-		var/mob/as_mob = source.loc
-		checked_slot = as_mob.get_slot_by_item(source)
-	var/mutable_appearance/worn_overlay = overslotting.build_worn_icon(default_layer = -draw_target.layer + 0.1, default_icon_file = get_default_icon_by_slot(checked_slot))
-	for (var/mutable_appearance/overlay in worn_overlay.overlays)
-		overlay.layer = draw_target.layer + 0.1
-	overlays += worn_overlay
+	if(ismob(source.loc))
+		var/mob/living/L = source.loc
+		if(L.get_item_by_slot(source.slot_flags) != source)
+			return
+	var/mutable_appearance/over_overlay = mutable_appearance(icon_file, source.icon_state)
+	over_overlay.alpha = 150
+	overlays += over_overlay
