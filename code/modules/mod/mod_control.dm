@@ -771,8 +771,6 @@
 
 /obj/item/mod/control/proc/sync_taur_logic()
 	if(!wearer || !wearer.dna || !wearer.dna.species)
-		if(wearer)
-			to_chat(wearer, "DEBUG sync_taur_logic: no species")
 		return
 
 	var/should_shield = FALSE
@@ -781,17 +779,12 @@
 			var/datum/mod_part/P = mod_parts[slot_key]
 			if(P.part_item && P.part_item.loc == wearer && (P.part_item.slot_flags & ITEM_SLOT_FEET))
 				should_shield = TRUE
-				to_chat(wearer, "DEBUG sync_taur_logic: found active feet part [P.part_item] on wearer")
 				break
 
-	to_chat(wearer, "DEBUG sync_taur_logic: active=[active] should_shield=[should_shield] current exceptions=[wearer.dna.species.modsuit_slot_exceptions]")
 	if(should_shield)
 		wearer.dna.species.modsuit_slot_exceptions |= ITEM_SLOT_FEET
-		to_chat(wearer, "DEBUG sync_taur_logic: added ITEM_SLOT_FEET to exceptions")
 	else
 		wearer.dna.species.modsuit_slot_exceptions &= ~ITEM_SLOT_FEET
-		to_chat(wearer, "DEBUG sync_taur_logic: removed ITEM_SLOT_FEET from exceptions")
 
 	wearer.update_body_parts()
 	wearer.update_appearance(UPDATE_OVERLAYS)
-	to_chat(wearer, "DEBUG sync_taur_logic: called update_body_parts and update_appearance")
