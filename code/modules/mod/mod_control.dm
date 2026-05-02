@@ -728,7 +728,9 @@
 		return
 	UnregisterSignal(part, COMSIG_ATOM_EXITED)
 	part_datum.overslotting = null
+	part.update_appearance(UPDATE_OVERLAYS)
 	if(wearer)
+		wearer.update_appearance(UPDATE_OVERLAYS)
 		wearer.update_body()
 
 /obj/item/mod/control/proc/on_potion(atom/movable/source, obj/item/slimepotion/speed/speed_potion, mob/living/user)

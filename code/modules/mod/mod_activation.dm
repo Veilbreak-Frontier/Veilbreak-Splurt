@@ -314,6 +314,7 @@
 	update_charge_alert()
 	update_appearance(UPDATE_ICON_STATE)
 	if(wearer)
+		wearer.update_appearance(UPDATE_OVERLAYS)
 		wearer.update_body()
 
 /// Quickly deploys all the suit parts and if successful, seals them and turns on the suit. Intended mostly for outfits.
