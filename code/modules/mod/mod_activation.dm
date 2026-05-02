@@ -78,7 +78,7 @@
 
 	if(part_datum.can_overslot)
 		var/obj/item/overslot = wearer.get_item_by_slot(part.slot_flags)
-		if(overslot && istype(overslot))
+		if(istype(overslot))
 			part_datum.overslotting = overslot
 			wearer.transferItemToLoc(overslot, part, force = TRUE)
 			RegisterSignal(part, COMSIG_ATOM_EXITED, PROC_REF(on_overslot_exit))
@@ -86,8 +86,9 @@
 	if(wearer.equip_to_slot_if_possible(part, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
 		ADD_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
 
-		SEND_SIGNAL(src, COMSIG_MOD_PART_DEPLOYED, user, part_datum)
+		sync_taur_logic()
 
+		SEND_SIGNAL(src, COMSIG_MOD_PART_DEPLOYED, user, part_datum)
 		if(user)
 			playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 
@@ -96,12 +97,7 @@
 				seal_part(part, is_sealed = TRUE)
 			else
 				delayed_seal_part(part)
-
-		sync_taur_logic()
 		return TRUE
-	else
-		if(part_datum.overslotting)
-			on_overslot_exit(part, part_datum.overslotting)
 	return FALSE
 
 /// Retract a part of the suit from the user.
@@ -118,9 +114,9 @@
 		REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
 		wearer.temporarilyRemoveItemFromInventory(part, TRUE)
 
-	sync_taur_logic()
-
 	part.forceMove(src)
+
+	sync_taur_logic()
 
 	if(user)
 		playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)

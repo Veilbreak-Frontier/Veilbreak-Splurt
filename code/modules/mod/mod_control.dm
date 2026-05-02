@@ -773,14 +773,15 @@
 	if(!wearer || !wearer.dna || !wearer.dna.species)
 		return
 
-	var/leg_deployed = FALSE
-	for(var/slot_key in mod_parts)
-		var/datum/mod_part/P = mod_parts[slot_key]
-		if(P.part_item && P.part_item.loc == wearer && (P.part_item.slot_flags & ITEM_SLOT_FEET))
-			leg_deployed = TRUE
-			break
+	var/should_shield = FALSE
+	if(active)
+		for(var/slot_key in mod_parts)
+			var/datum/mod_part/P = mod_parts[slot_key]
+			if(P.part_item && P.part_item.loc == wearer && (P.part_item.slot_flags & ITEM_SLOT_FEET))
+				should_shield = TRUE
+				break
 
-	if(leg_deployed)
+	if(should_shield)
 		wearer.dna.species.modsuit_slot_exceptions |= ITEM_SLOT_FEET
 	else
 		wearer.dna.species.modsuit_slot_exceptions &= ~ITEM_SLOT_FEET
