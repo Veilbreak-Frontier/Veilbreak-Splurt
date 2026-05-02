@@ -5,18 +5,23 @@
 		return ..()
 	if(!isopenspaceturf(our_atom))
 		appearance = our_atom.appearance
-		if(istype(our_atom.color, /list))
-			var/list/clr = our_atom.color
-			if(clr.len >= 16)
-				color = "matrix(" + jointext(clr, ",") + ")"
-			else
-				color = our_atom.color
+		if(appearance)
+			if(istype(appearance.color, /list))
+				var/list/clr = appearance.color
+				if(clr.len >= 16)
+					appearance.color = "matrix(" + jointext(clr, ",") + ")"
+				else
+					appearance.color = our_atom.color
+			appearance.alpha = our_atom.alpha
+			appearance.transform = our_atom.transform
+			appearance.blend_mode = our_atom.blend_mode
+			appearance.appearance_flags = our_atom.appearance_flags
 		else
 			color = our_atom.color
-		alpha = our_atom.alpha
-		transform = our_atom.transform
-		blend_mode = our_atom.blend_mode
-		appearance_flags = our_atom.appearance_flags
+			alpha = our_atom.alpha
+			transform = our_atom.transform
+			blend_mode = our_atom.blend_mode
+			appearance_flags = our_atom.appearance_flags
 	dir = our_atom.dir
 	if(ismovable(our_atom))
 		var/atom/movable/our_movable = our_atom
