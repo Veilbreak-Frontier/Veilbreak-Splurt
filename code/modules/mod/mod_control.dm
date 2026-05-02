@@ -767,3 +767,23 @@
 	if (length(overrides))
 		return overrides[1]
 	return mutable_appearance(worn_icon, "[skin]-helmet-visor", layer = standing.layer + 0.1)
+
+
+/obj/item/mod/control/proc/sync_taur_logic()
+	if(!wearer || !wearer.dna || !wearer.dna.species)
+		return
+
+	var/leg_deployed = FALSE
+	for(var/slot_key in mod_parts)
+		var/datum/mod_part/P = mod_parts[slot_key]
+		if(P.part_item && P.part_item.loc != src && (P.part_item.slot_flags & ITEM_SLOT_FEET))
+			leg_deployed = TRUE
+			break
+
+	if(leg_deployed)
+		wearer.dna.species.modsuit_slot_exceptions |= ITEM_SLOT_FEET
+	else
+		wearer.dna.species.modsuit_slot_exceptions &= ~ITEM_SLOT_FEET
+
+	wearer.update_body_parts()
+	wearer.update_appearance(UPDATE_OVERLAYS)
