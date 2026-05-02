@@ -119,46 +119,34 @@
 /// Retract a part of the suit from the user.
 /obj/item/mod/control/proc/retract(mob/user, obj/item/part, instant = FALSE)
 	var/datum/mod_part/part_datum = get_part_datum(part)
-	if(part.loc == src)
-		if(!user)
-			return FALSE
-		balloon_alert(user, "already retracted!")
-		playsound(src, 'sound/machines/scanner/scanbuzz.ogg', 25, TRUE, SILENCED_SOUND_EXTRARANGE)
+	if(!part_datum || part.loc == src)
 		return FALSE
-	if(SEND_SIGNAL(src, COMSIG_MOD_PART_RETRACTING, user, part_datum) & MOD_CANCEL_RETRACTION)
-		return FALSE
-	var/unsealing = FALSE
-	if(active && part_datum.sealed)
-		unsealing = TRUE
-		if(instant)
-			seal_part(part, is_sealed = FALSE)
-		else if(!delayed_seal_part(part))
-			balloon_alert(user, "can't unseal!")
-			playsound(src, 'sound/machines/scanner/scanbuzz.ogg', 25, TRUE, SILENCED_SOUND_EXTRARANGE)
-			return FALSE
-	REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
-	var/obj/item/overslot = part_datum.overslotting
-	if(!overslot && (part.slot_flags & ITEM_SLOT_FEET) && wearer)
-		overslot = wearer.get_organ_slot(ORGAN_SLOT_EXTERNAL_TAUR)
-	wearer.transferItemToLoc(part, src, force = TRUE)
-	if(overslot)
-		if(!QDELING(wearer) && isitem(overslot) && wearer.equip_to_slot_if_possible(overslot, overslot.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
-			// successfully re-equipped
-		else if(!QDELING(wearer) && isitem(overslot))
-			wearer.dropItemToGround(overslot, force = TRUE, silent = TRUE)
-		on_overslot_exit(part, overslot)
-	wearer.update_clothing(slot_flags|part.slot_flags)
+
 	if(wearer)
+		if(part.slot_flags & ITEM_SLOT_FEET)
+			wearer.dna.species.modsuit_slot_exceptions &= ~ITEM_SLOT_FEET
+
+		var/obj/item/overslot = part_datum.overslotting
+		if(overslot)
+			part_datum.overslotting = null
+			UnregisterSignal(part, COMSIG_ATOM_EXITED)
+			wearer.equip_to_slot_if_possible(overslot, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE)
+
+		REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
+		wearer.temporarilyRemoveItemFromInventory(part, TRUE)
+
+	part.forceMove(src)
+
+	if(wearer)
+		wearer.update_clothing(part.slot_flags)
 		wearer.update_body_parts()
-		wearer.update_appearance(UPDATE_OVERLAYS)
-		wearer.update_body()
-	if(!user)
-		return TRUE
-	wearer.visible_message(span_notice("[wearer]'s [part.name] retract[part.p_s()] back into [src] with a mechanical hiss."),
-		span_notice("[part] retract[part.p_s()] back into [src] with a mechanical hiss."),
-		span_hear("You hear a mechanical hiss."))
-	if (!unsealing)
+
+	if(user)
+		wearer.visible_message(span_notice("[wearer]'s [part.name] retracts with a mechanical hiss."),
+			span_notice("[part] retracts with a mechanical hiss."),
+			span_hear("You hear a mechanical hiss."))
 		playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+
 	return TRUE
 
 /// Starts the activation sequence, where parts of the suit activate one by one until the whole suit is on.
