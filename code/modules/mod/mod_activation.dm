@@ -73,7 +73,11 @@
 /// Deploys a part of the suit onto the user.
 /obj/item/mod/control/proc/deploy(mob/user, obj/item/part, instant = FALSE)
 	var/datum/mod_part/part_datum = get_part_datum(part)
+	if(wearer)
+		to_chat(wearer, "DEBUG deploy: [part] sealed=[part_datum?.sealed]")
 	if(!wearer || part.loc != src)
+		if(wearer)
+			to_chat(wearer, "DEBUG deploy abort: no wearer or part not in control")
 		return FALSE
 
 	if(part_datum.can_overslot)
@@ -91,11 +95,17 @@
 			wearer.visible_message(span_notice("[wearer]'s [part.name] deploy[part.p_s()] with a mechanical hiss."), span_notice("[part] deploy[part.p_s()] with a mechanical hiss."), span_hear("You hear a mechanical hiss."))
 			playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		if(active && !part_datum.sealed)
+			to_chat(wearer, "DEBUG deploy: active suit and part not sealed, will seal now (instant=[instant])")
 			if(instant)
 				seal_part(part, is_sealed = TRUE)
+				to_chat(wearer, "DEBUG deploy: instant seal done, part.icon_state=[part.icon_state]")
 				return TRUE
 			else if(delayed_seal_part(part))
+				to_chat(wearer, "DEBUG deploy: delayed seal started")
 				return TRUE
+		to_chat(wearer, "DEBUG deploy: finished, sealed status remains [part_datum.sealed]")
+		wearer.update_body_parts()
+		wearer.update_appearance(UPDATE_OVERLAYS)
 		return TRUE
 	else
 		if(part_datum.overslotting)
@@ -105,7 +115,11 @@
 /// Retract a part of the suit from the user.
 /obj/item/mod/control/proc/retract(mob/user, obj/item/part, instant = FALSE)
 	var/datum/mod_part/part_datum = get_part_datum(part)
+	if(wearer)
+		to_chat(wearer, "DEBUG retract: [part] sealed=[part_datum?.sealed]")
 	if(!part_datum || part.loc == src)
+		if(wearer)
+			to_chat(wearer, "DEBUG retract abort: no part datum or part already in src")
 		return FALSE
 
 	if(wearer)
@@ -113,11 +127,20 @@
 		if(overslot)
 			on_overslot_exit(part, overslot)
 		REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
-		seal_part(part, is_sealed = FALSE)
+		if(part_datum.sealed)
+			to_chat(wearer, "DEBUG retract: part was sealed, calling seal_part(FALSE)")
+			seal_part(part, is_sealed = FALSE)
 		wearer.temporarilyRemoveItemFromInventory(part, TRUE)
+		to_chat(wearer, "DEBUG retract: removed from inventory, updating taur visuals")
+		wearer.update_body_parts()
+		wearer.update_appearance(UPDATE_OVERLAYS)
+		wearer.update_equipment_speed_mods()
+		to_chat(wearer, "DEBUG retract: after removal, part_datum.sealed=[part_datum.sealed], part.icon_state=[part.icon_state]")
 
 	sync_taur_logic()
 	part.forceMove(src)
+	if(wearer)
+		to_chat(wearer, "DEBUG retract: moved to control unit")
 
 	if(user)
 		var/msg = "[part.name] retracts with a mechanical hiss."
@@ -223,6 +246,8 @@
 ///Seals or unseals the given part.
 /obj/item/mod/control/proc/seal_part(obj/item/clothing/part, is_sealed)
 	var/datum/mod_part/part_datum = get_part_datum(part)
+	if(wearer)
+		to_chat(wearer, "DEBUG seal_part: [part] is_sealed=[is_sealed] current=[part_datum.sealed]")
 	part_datum.sealed = is_sealed
 	if(part_datum.sealed)
 		part.icon_state = "[skin]-[part.base_icon_state]-sealed"
@@ -232,6 +257,8 @@
 		part.heat_protection = initial(part.heat_protection)
 		part.cold_protection = initial(part.cold_protection)
 		part.alternate_worn_layer = part_datum.sealed_layer
+		if(wearer)
+			to_chat(wearer, "DEBUG seal_part: sealed icon_state=[part.icon_state]")
 	else
 		part.icon_state = "[skin]-[part.base_icon_state]"
 		part.flags_cover &= ~part.visor_flags_cover
@@ -240,9 +267,13 @@
 		part.heat_protection = NONE
 		part.cold_protection = NONE
 		part.alternate_worn_layer = part_datum.unsealed_layer
+		if(wearer)
+			to_chat(wearer, "DEBUG seal_part: unsealed icon_state=[part.icon_state]")
 	update_speed()
-	wearer.update_clothing(part.slot_flags | slot_flags)
-	wearer.refresh_obscured()
+	if(wearer)
+		wearer.update_clothing(part.slot_flags | slot_flags)
+		wearer.refresh_obscured()
+		wearer.update_body_parts()
 	if((part.clothing_flags & (MASKINTERNALS|HEADINTERNALS)) && wearer.invalid_internals())
 		wearer.cutoff_internals()
 	SEND_SIGNAL(src, COMSIG_MOD_PART_SEALED, part_datum)
@@ -267,6 +298,8 @@
 /// Finishes the suit's activation
 /obj/item/mod/control/proc/control_activation(is_on)
 	var/datum/mod_part/part_datum = get_part_datum(src)
+	if(wearer)
+		to_chat(wearer, "DEBUG control_activation: is_on=[is_on] active before=[active]")
 	part_datum.sealed = is_on
 	active = is_on
 
@@ -279,6 +312,10 @@
 	sync_taur_logic()
 	update_charge_alert()
 	update_appearance(UPDATE_ICON_STATE)
+	if(wearer)
+		wearer.regenerate_icons()
+		wearer.update_body_parts()
+		to_chat(wearer, "DEBUG control_activation: forced regenerate_icons and update_body_parts")
 
 /// Quickly deploys all the suit parts and if successful, seals them and turns on the suit. Intended mostly for outfits.
 /obj/item/mod/control/proc/quick_activation()
