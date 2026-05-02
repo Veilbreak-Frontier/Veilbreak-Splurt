@@ -307,12 +307,14 @@
 				continue
 			module.on_part_deactivation()
 			module.part_activated = FALSE
+		for(var/slot_key in mod_parts)
+			var/datum/mod_part/P = mod_parts[slot_key]
+			if(P.overslotting)
+				on_overslot_exit(P.part_item, P.overslotting)
 	update_charge_alert()
 	update_appearance(UPDATE_ICON_STATE)
-	var/updated_slots = slot_flags
-	for (var/slot_key in mod_parts)
-		updated_slots |= text2num(slot_key)
-	wearer.update_clothing(updated_slots)
+	if(wearer)
+		wearer.update_body()
 
 /// Quickly deploys all the suit parts and if successful, seals them and turns on the suit. Intended mostly for outfits.
 /obj/item/mod/control/proc/quick_activation()

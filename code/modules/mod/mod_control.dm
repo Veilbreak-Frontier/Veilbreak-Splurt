@@ -723,12 +723,13 @@
 
 /obj/item/mod/control/proc/on_overslot_exit(obj/item/part, atom/movable/overslot, direction)
 	SIGNAL_HANDLER
-
 	var/datum/mod_part/part_datum = get_part_datum(part)
-	if(overslot != part_datum.overslotting)
+	if(!part_datum || overslot != part_datum.overslotting)
 		return
 	UnregisterSignal(part, COMSIG_ATOM_EXITED)
 	part_datum.overslotting = null
+	if(wearer)
+		wearer.update_body()
 
 /obj/item/mod/control/proc/on_potion(atom/movable/source, obj/item/slimepotion/speed/speed_potion, mob/living/user)
 	SIGNAL_HANDLER
