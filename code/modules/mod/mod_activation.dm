@@ -110,6 +110,12 @@
 	if(!part_datum || part.loc == src)
 		return FALSE
 
+	if(!instant && wearer)
+		if(!do_after(wearer, activation_step_time, wearer, MOD_ACTIVATION_STEP_FLAGS, extra_checks = CALLBACK(src, PROC_REF(get_wearer)), hidden = TRUE))
+			return FALSE
+		to_chat(wearer, span_notice("[part] unseals with a mechanical hiss."))
+		playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+
 	if(wearer)
 		var/obj/item/overslot = part_datum.overslotting
 		if(overslot)
@@ -122,8 +128,8 @@
 		wearer.update_appearance(UPDATE_OVERLAYS)
 		wearer.update_equipment_speed_mods()
 
-	sync_taur_logic()
 	part.forceMove(src)
+	sync_taur_logic()
 
 	if(user)
 		var/msg = "[part.name] retracts with a mechanical hiss."

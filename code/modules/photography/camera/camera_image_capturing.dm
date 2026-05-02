@@ -56,7 +56,7 @@
 			img = icon(A.icon, A.icon_state)
 			img.Blend(backdrop, ICON_OVERLAY)
 		else
-			img = build_recursive_flattened_icon(A)
+			img = build_recursive_flattened_icon(A, null, list())
 
 		if(!img)
 			continue
@@ -99,7 +99,16 @@
 
 	return res
 
-/proc/build_recursive_flattened_icon(atom/A, list/passed_color)
+/proc/build_recursive_flattened_icon(atom/A, list/passed_color, list/visited)
+	if(!visited)
+		visited = list()
+	if(A in visited)
+		return null
+	visited += A
+
+	if(!A.icon)
+		return null
+
 	var/icon/base = icon(A.icon, A.icon_state, A.dir)
 	var/list/working_color = passed_color
 
@@ -158,8 +167,9 @@
 		var/list/vc = A.vars["vis_contents"]
 		if(length(vc))
 			for(var/atom/V in vc)
-				var/icon/vic = build_recursive_flattened_icon(V, working_color)
-				base.Blend(vic, ICON_OVERLAY, V.pixel_x, V.pixel_y)
+				var/icon/vic = build_recursive_flattened_icon(V, working_color, visited)
+				if(vic)
+					base.Blend(vic, ICON_OVERLAY, V.pixel_x, V.pixel_y)
 
 	if(A.alpha < 255)
 		base.MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,A.alpha/255, 0,0,0,0)
