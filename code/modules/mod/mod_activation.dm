@@ -138,9 +138,13 @@
 			return FALSE
 	REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
 	var/obj/item/overslot = part_datum.overslotting
+	if(!overslot && (part.slot_flags & ITEM_SLOT_FEET) && wearer)
+		overslot = wearer.get_organ_slot(ORGAN_SLOT_EXTERNAL_TAUR)
 	wearer.transferItemToLoc(part, src, force = TRUE)
 	if(overslot)
-		if(!QDELING(wearer) && !wearer.equip_to_slot_if_possible(overslot, overslot.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
+		if(!QDELING(wearer) && isitem(overslot) && wearer.equip_to_slot_if_possible(overslot, overslot.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
+			// successfully re-equipped
+		else if(!QDELING(wearer) && isitem(overslot))
 			wearer.dropItemToGround(overslot, force = TRUE, silent = TRUE)
 		on_overslot_exit(part, overslot)
 	wearer.update_clothing(slot_flags|part.slot_flags)

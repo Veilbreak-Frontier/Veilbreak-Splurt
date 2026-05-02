@@ -724,9 +724,11 @@
 /obj/item/mod/control/proc/on_overslot_exit(obj/item/part, atom/movable/overslot, direction)
 	SIGNAL_HANDLER
 	var/datum/mod_part/part_datum = get_part_datum(part)
-	if(!part_datum || overslot != part_datum.overslotting)
+	if(!part_datum)
 		return
 	UnregisterSignal(part, list(COMSIG_ATOM_EXITED, COMSIG_ITEM_GET_WORN_OVERLAYS))
+	if(overslot)
+		UnregisterSignal(overslot, list(COMSIG_ITEM_GET_WORN_OVERLAYS))
 	part_datum.overslotting = null
 	if(wearer)
 		wearer.update_body_parts()
