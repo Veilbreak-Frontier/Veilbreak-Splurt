@@ -729,6 +729,9 @@
 	UnregisterSignal(part, COMSIG_ATOM_EXITED)
 	part_datum.overslotting = null
 	if(wearer)
+		var/obj/item/organ/taur_body/T = wearer.get_organ_slot(ORGAN_SLOT_EXTERNAL_TAUR)
+		if(T)
+			wearer.update_body_parts()
 		wearer.update_appearance(UPDATE_OVERLAYS)
 		wearer.update_body()
 
