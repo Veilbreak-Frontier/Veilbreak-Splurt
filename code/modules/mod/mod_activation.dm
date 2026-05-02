@@ -137,9 +137,9 @@
 			playsound(src, 'sound/machines/scanner/scanbuzz.ogg', 25, TRUE, SILENCED_SOUND_EXTRARANGE)
 			return FALSE
 	REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
+	var/obj/item/overslot = part_datum.overslotting
 	wearer.transferItemToLoc(part, src, force = TRUE)
-	if(part_datum.overslotting)
-		var/obj/item/overslot = part_datum.overslotting
+	if(overslot)
 		if(!QDELING(wearer) && !wearer.equip_to_slot_if_possible(overslot, overslot.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
 			wearer.dropItemToGround(overslot, force = TRUE, silent = TRUE)
 		on_overslot_exit(part, overslot)
@@ -147,6 +147,7 @@
 	if(wearer)
 		wearer.update_body_parts()
 		wearer.update_appearance(UPDATE_OVERLAYS)
+		wearer.update_body()
 	if(!user)
 		return TRUE
 	wearer.visible_message(span_notice("[wearer]'s [part.name] retract[part.p_s()] back into [src] with a mechanical hiss."),

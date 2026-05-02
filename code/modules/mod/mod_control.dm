@@ -726,7 +726,7 @@
 	var/datum/mod_part/part_datum = get_part_datum(part)
 	if(!part_datum || overslot != part_datum.overslotting)
 		return
-	UnregisterSignal(part, COMSIG_ATOM_EXITED)
+	UnregisterSignal(part, list(COMSIG_ATOM_EXITED, COMSIG_ITEM_GET_WORN_OVERLAYS))
 	part_datum.overslotting = null
 	if(wearer)
 		wearer.update_body_parts()
