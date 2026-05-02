@@ -142,6 +142,7 @@
 		var/obj/item/overslot = part_datum.overslotting
 		if(!QDELING(wearer) && !wearer.equip_to_slot_if_possible(overslot, overslot.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
 			wearer.dropItemToGround(overslot, force = TRUE, silent = TRUE)
+		on_overslot_exit(part, overslot)
 	wearer.update_clothing(slot_flags|part.slot_flags)
 	if(!user)
 		return TRUE
@@ -311,6 +312,12 @@
 			var/datum/mod_part/P = mod_parts[slot_key]
 			if(P.overslotting)
 				on_overslot_exit(P.part_item, P.overslotting)
+	update_charge_alert()
+	update_appearance(UPDATE_ICON_STATE)
+	if(wearer)
+		wearer.update_appearance(UPDATE_OVERLAYS)
+		wearer.update_body()
+
 	update_charge_alert()
 	update_appearance(UPDATE_ICON_STATE)
 	if(wearer)
