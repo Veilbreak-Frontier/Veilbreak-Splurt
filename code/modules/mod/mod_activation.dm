@@ -128,9 +128,7 @@
 
 		var/obj/item/overslot = part_datum.overslotting
 		if(overslot)
-			part_datum.overslotting = null
-			UnregisterSignal(part, COMSIG_ATOM_EXITED)
-			wearer.equip_to_slot_if_possible(overslot, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE)
+			on_overslot_exit(part, overslot)
 
 		REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
 		wearer.temporarilyRemoveItemFromInventory(part, TRUE)
@@ -139,12 +137,13 @@
 
 	if(wearer)
 		wearer.update_clothing(part.slot_flags)
+		wearer.update_inv_wear_suit()
 		wearer.update_body_parts()
+		wearer.update_appearance(UPDATE_OVERLAYS)
 
 	if(user)
-		wearer.visible_message(span_notice("[wearer]'s [part.name] retracts with a mechanical hiss."),
-			span_notice("[part] retracts with a mechanical hiss."),
-			span_hear("You hear a mechanical hiss."))
+		var/msg = "[part.name] retracts with a mechanical hiss."
+		wearer.visible_message(span_notice("[wearer]'s [msg]"), span_notice("Your [msg]"))
 		playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 
 	return TRUE
