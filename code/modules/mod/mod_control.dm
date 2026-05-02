@@ -776,7 +776,7 @@
 	var/leg_deployed = FALSE
 	for(var/slot_key in mod_parts)
 		var/datum/mod_part/P = mod_parts[slot_key]
-		if(P.part_item && P.part_item.loc != src && (P.part_item.slot_flags & ITEM_SLOT_FEET))
+		if(P.part_item && P.part_item.loc == wearer && (P.part_item.slot_flags & ITEM_SLOT_FEET))
 			leg_deployed = TRUE
 			break
 

@@ -85,7 +85,7 @@
 
 	if(wearer.equip_to_slot_if_possible(part, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
 		ADD_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
-		sync_taur_logic()
+
 		SEND_SIGNAL(src, COMSIG_MOD_PART_DEPLOYED, user, part_datum)
 
 		if(user)
@@ -96,6 +96,8 @@
 				seal_part(part, is_sealed = TRUE)
 			else
 				delayed_seal_part(part)
+
+		sync_taur_logic()
 		return TRUE
 	else
 		if(part_datum.overslotting)
@@ -116,8 +118,9 @@
 		REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
 		wearer.temporarilyRemoveItemFromInventory(part, TRUE)
 
-	part.forceMove(src)
 	sync_taur_logic()
+
+	part.forceMove(src)
 
 	if(user)
 		playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
