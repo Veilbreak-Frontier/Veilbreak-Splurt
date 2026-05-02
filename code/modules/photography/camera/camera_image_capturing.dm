@@ -5,14 +5,14 @@
 		return ..()
 	if(!isopenspaceturf(our_atom))
 		appearance = our_atom.appearance
-		if(istype(our_atom.color, /list))
+		if(appearance && istype(our_atom.color, /list))
 			var/list/clr = our_atom.color
 			if(clr.len >= 16)
-				color = "matrix(" + jointext(clr, ",") + ")"
+				appearance.color = "matrix(" + jointext(clr, ",") + ")"
 			else
-				color = our_atom.color
-		else
-			color = our_atom.color
+				appearance.color = our_atom.color
+		else if(appearance)
+			appearance.color = our_atom.color
 		alpha = our_atom.alpha
 		transform = our_atom.transform
 		blend_mode = our_atom.blend_mode
