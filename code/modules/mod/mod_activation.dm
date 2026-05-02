@@ -113,6 +113,7 @@
 		if(overslot)
 			on_overslot_exit(part, overslot)
 		REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
+		seal_part(part, is_sealed = FALSE)
 		wearer.temporarilyRemoveItemFromInventory(part, TRUE)
 
 	sync_taur_logic()
