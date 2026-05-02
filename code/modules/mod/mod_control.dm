@@ -728,7 +728,6 @@
 		return
 	UnregisterSignal(part, COMSIG_ATOM_EXITED)
 	part_datum.overslotting = null
-	part.update_appearance(UPDATE_OVERLAYS)
 	if(wearer)
 		wearer.update_appearance(UPDATE_OVERLAYS)
 		wearer.update_body()
