@@ -114,7 +114,8 @@
 				break
 
 	if(working_color)
-		if(length(working_color) >= 20)
+		var/color_length = length(working_color)
+		if(color_length == 16 || color_length == 20)
 			base.MapColors(arglist(working_color))
 		else
 			for(var/c_val in working_color)
@@ -133,7 +134,8 @@
 
 			if(ov)
 				if(working_color)
-					if(length(working_color) >= 20)
+					var/cl = length(working_color)
+					if(cl == 16 || cl == 20)
 						ov.MapColors(arglist(working_color))
 					else
 						for(var/cv in working_color)
