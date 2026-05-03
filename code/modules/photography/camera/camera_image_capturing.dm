@@ -103,19 +103,8 @@
 	var/icon/base = icon(A.icon, A.icon_state, A.dir)
 	var/list/working_color = passed_color
 
-	if(istype(A, /obj/structure/serpentine_tail))
-		var/obj/structure/serpentine_tail/ST = A
-		if(ST.owner?.dna?.mutant_bodyparts)
-			var/list/taur_data = ST.owner.dna.mutant_bodyparts["taur"] || ST.owner.dna.mutant_bodyparts["taur_snake"]
-			if(taur_data && taur_data["color"])
-				working_color = taur_data["color"]
-
-	if(iscarbon(A))
-		var/mob/living/carbon/C = A
-		if(C.dna?.mutant_bodyparts)
-			var/list/taur_data = C.dna.mutant_bodyparts["taur"] || C.dna.mutant_bodyparts["taur_snake"]
-			if(taur_data && taur_data["color"])
-				working_color = taur_data["color"]
+	if(!working_color && A.color && A.color != "#ffffff")
+		working_color = islist(A.color) ? A.color : list(A.color)
 
 	if(!working_color && A.atom_colours)
 		for(var/i in A.atom_colours.len to 1 step -1)
@@ -123,9 +112,6 @@
 			if(color_data && color_data[1])
 				working_color = islist(color_data[1]) ? color_data[1] : list(color_data[1])
 				break
-
-	if(!working_color && A.color && A.color != "#ffffff")
-		working_color = islist(A.color) ? A.color : list(A.color)
 
 	if(working_color)
 		if(length(working_color) >= 20)
