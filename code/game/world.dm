@@ -346,37 +346,38 @@ GLOBAL_VAR(restart_counter)
 	else
 		to_chat(world, span_boldannounce("Rebooting world..."))
 
-		if(SSchat)
-			SSchat.Shutdown()
+	spawn(0)
+		if(!reason && !fast_track)
+			if(SSchat)
+				SSchat.Shutdown()
 
-		Master.Shutdown()
+			Master.Shutdown()
 
-	#ifdef UNIT_TESTS
-	FinishTestRun()
-	return
-	#else
-	if(check_hard_reboot())
-		log_world("World hard rebooted at [time_stamp()]")
+		#ifdef UNIT_TESTS
+		FinishTestRun()
+		#else
+		if(check_hard_reboot())
+			log_world("World hard rebooted at [time_stamp()]")
+			shutdown_logging()
+			QDEL_NULL(Tracy)
+			QDEL_NULL(Debugger)
+			TgsEndProcess()
+			sleep(10)
+			shutdown(0)
+			return
+
+		log_world("World rebooted at [time_stamp()]")
+
 		shutdown_logging()
 		QDEL_NULL(Tracy)
 		QDEL_NULL(Debugger)
-		TgsEndProcess()
-		sleep(10)
+
+		TgsReboot()
+
+		sleep(100)
+
 		shutdown(0)
-		return
-
-	log_world("World rebooted at [time_stamp()]")
-
-	shutdown_logging()
-	QDEL_NULL(Tracy)
-	QDEL_NULL(Debugger)
-
-	TgsReboot()
-
-	sleep(100)
-
-	shutdown(0)
-	#endif
+		#endif
 
 /world/Del()
 	QDEL_NULL(Tracy)
