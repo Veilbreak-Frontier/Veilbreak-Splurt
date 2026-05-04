@@ -178,7 +178,8 @@
 
 	if(!world.OpenPort(port))
 		TGS_ERROR_LOG("Unable to set port to [port]!")
-	sleep(2)
+	sleep(10)
+	shutdown(0)
 
 /datum/tgs_api/v5/InstanceName()
 	RequireInitialBridgeResponse()
