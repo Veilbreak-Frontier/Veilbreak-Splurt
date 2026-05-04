@@ -373,7 +373,7 @@ GLOBAL_VAR(restart_counter)
 
 	TgsReboot()
 
-	sleep(50)
+	sleep(100)
 
 	shutdown(0)
 	#endif
