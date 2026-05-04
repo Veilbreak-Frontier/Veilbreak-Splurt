@@ -338,14 +338,16 @@ GLOBAL_VAR(restart_counter)
 				return FALSE
 
 /world/Reboot(reason = 0, fast_track = FALSE)
-	if (reason || fast_track) //special reboot, do none of the normal stuff
+	if (reason || fast_track)
 		if (usr)
 			log_admin("[key_name(usr)] Has requested an immediate world restart via client side debugging tools")
 			message_admins("[key_name_admin(usr)] Has requested an immediate world restart via client side debugging tools")
 		to_chat(world, span_boldannounce("Rebooting World immediately due to host request."))
 	else
 		to_chat(world, span_boldannounce("Rebooting world..."))
-		Master.Shutdown() //run SS shutdowns
+
+		TgsReboot()
+		Master.Shutdown()
 
 	#ifdef UNIT_TESTS
 	FinishTestRun()
@@ -353,21 +355,23 @@ GLOBAL_VAR(restart_counter)
 	#else
 	if(check_hard_reboot())
 		log_world("World hard rebooted at [time_stamp()]")
-		shutdown_logging() // See comment below.
+		shutdown_logging()
 		QDEL_NULL(Tracy)
 		QDEL_NULL(Debugger)
 		TgsEndProcess()
-		return ..()
+		sleep(10)
+		shutdown(0)
+		return
 
 	log_world("World rebooted at [time_stamp()]")
 
-	shutdown_logging() // Past this point, no logging procs can be used, at risk of data loss.
+	shutdown_logging()
 	QDEL_NULL(Tracy)
 	QDEL_NULL(Debugger)
 
-	TgsReboot() // TGS can decide to kill us right here, so it's important to do it last
+	sleep(20)
+
 	shutdown(0)
-	..()
 	#endif
 
 /world/Del()

@@ -166,7 +166,10 @@
 	if(!result)
 		TGS_ERROR_LOG("OnReboot: Bridge returned null – TGS will see a crash!")
 		return
-
+	if(result)
+		world.log << "TGS Reboot Bridge: Success"
+	else
+		world.log << "TGS Reboot Bridge: FAILED"
 	//okay so the standard TGS proceedure is: right before rebooting change the port to whatever was sent to us in the above json's data parameter
 	var/port = result[DMAPI5_BRIDGE_RESPONSE_NEW_PORT]
 	if(!isnum(port))
