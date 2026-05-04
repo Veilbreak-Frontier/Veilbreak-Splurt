@@ -168,7 +168,6 @@
 		return
 
 	//okay so the standard TGS proceedure is: right before rebooting change the port to whatever was sent to us in the above json's data parameter
-	sleep(world.tick_lag)
 	var/port = result[DMAPI5_BRIDGE_RESPONSE_NEW_PORT]
 	if(!isnum(port))
 		return //this is valid, server may just want use to reboot
@@ -179,6 +178,7 @@
 
 	if(!world.OpenPort(port))
 		TGS_ERROR_LOG("Unable to set port to [port]!")
+	sleep(2)
 
 /datum/tgs_api/v5/InstanceName()
 	RequireInitialBridgeResponse()
@@ -190,6 +190,7 @@
 
 /datum/tgs_api/v5/EndProcess()
 	Bridge(DMAPI5_BRIDGE_COMMAND_KILL)
+	sleep(2)
 
 /datum/tgs_api/v5/Revision()
 	RequireInitialBridgeResponse()

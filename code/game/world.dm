@@ -366,7 +366,7 @@ GLOBAL_VAR(restart_counter)
 	QDEL_NULL(Debugger)
 
 	TgsReboot() // TGS can decide to kill us right here, so it's important to do it last
-
+	shutdown(0)
 	..()
 	#endif
 
