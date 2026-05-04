@@ -338,41 +338,41 @@ GLOBAL_VAR(restart_counter)
 				return FALSE
 
 /world/Reboot(reason = 0, fast_track = FALSE)
-	if (reason || fast_track)
-		if (usr)
-			log_admin("[key_name(usr)] Has requested an immediate world restart via client side debugging tools")
-			message_admins("[key_name_admin(usr)] Has requested an immediate world restart via client side debugging tools")
-		to_chat(world, span_boldannounce("Rebooting World immediately due to host request."))
-	else
-		to_chat(world, span_boldannounce("Rebooting world..."))
+    if (reason || fast_track)
+        if (usr)
+            log_admin("[key_name(usr)] Has requested an immediate world restart via client side debugging tools")
+            message_admins("[key_name_admin(usr)] Has requested an immediate world restart via client side debugging tools")
+        to_chat(world, span_boldannounce("Rebooting World immediately due to host request."))
+    else
+        to_chat(world, span_boldannounce("Rebooting world..."))
+        Master.Shutdown()
 
-		TgsReboot()
-		Master.Shutdown()
+    #ifdef UNIT_TESTS
+    FinishTestRun()
+    return
+    #else
+    if(check_hard_reboot())
+        log_world("World hard rebooted at [time_stamp()]")
+        shutdown_logging()
+        QDEL_NULL(Tracy)
+        QDEL_NULL(Debugger)
+        TgsEndProcess()
+        sleep(10)
+        shutdown(0)
+        return
 
-	#ifdef UNIT_TESTS
-	FinishTestRun()
-	return
-	#else
-	if(check_hard_reboot())
-		log_world("World hard rebooted at [time_stamp()]")
-		shutdown_logging()
-		QDEL_NULL(Tracy)
-		QDEL_NULL(Debugger)
-		TgsEndProcess()
-		sleep(10)
-		shutdown(0)
-		return
+    log_world("World rebooted at [time_stamp()]")
 
-	log_world("World rebooted at [time_stamp()]")
+    shutdown_logging()
+    QDEL_NULL(Tracy)
+    QDEL_NULL(Debugger)
 
-	shutdown_logging()
-	QDEL_NULL(Tracy)
-	QDEL_NULL(Debugger)
+    TgsReboot()
 
-	sleep(20)
+    sleep(10)
 
-	shutdown(0)
-	#endif
+    shutdown(0)
+    #endif
 
 /world/Del()
 	QDEL_NULL(Tracy)
