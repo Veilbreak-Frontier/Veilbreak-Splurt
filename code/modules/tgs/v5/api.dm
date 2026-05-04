@@ -160,17 +160,12 @@
 	return ProcessTopicJson(json, TRUE)
 
 /datum/tgs_api/v5/OnReboot()
-	TGS_WARNING_LOG("OnReboot called. server_port=[server_port] detached=[detached]")
 	var/list/result = Bridge(DMAPI5_BRIDGE_COMMAND_REBOOT)
-	TGS_WARNING_LOG("OnReboot Bridge result: [result ? "GOT RESPONSE" : "NULL/FAILED"]")
 	if(!result)
-		TGS_ERROR_LOG("OnReboot: Bridge returned null – TGS will see a crash!")
 		return
-	if(result)
-		world.log << "TGS Reboot Bridge: Success"
-	else
-		world.log << "TGS Reboot Bridge: FAILED"
+
 	//okay so the standard TGS proceedure is: right before rebooting change the port to whatever was sent to us in the above json's data parameter
+
 	var/port = result[DMAPI5_BRIDGE_RESPONSE_NEW_PORT]
 	if(!isnum(port))
 		return //this is valid, server may just want use to reboot
@@ -181,8 +176,6 @@
 
 	if(!world.OpenPort(port))
 		TGS_ERROR_LOG("Unable to set port to [port]!")
-	sleep(50)
-	shutdown(0)
 
 /datum/tgs_api/v5/InstanceName()
 	RequireInitialBridgeResponse()
@@ -194,7 +187,6 @@
 
 /datum/tgs_api/v5/EndProcess()
 	Bridge(DMAPI5_BRIDGE_COMMAND_KILL)
-	sleep(2)
 
 /datum/tgs_api/v5/Revision()
 	RequireInitialBridgeResponse()
