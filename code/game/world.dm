@@ -345,6 +345,11 @@ GLOBAL_VAR(restart_counter)
 		to_chat(world, span_boldannounce("Rebooting World immediately due to host request."))
 	else
 		to_chat(world, span_boldannounce("Rebooting world..."))
+
+	TgsReboot()
+	if(!reason && !fast_track)
+		if(SSchat)
+			SSchat.Shutdown()
 		Master.Shutdown() //run SS shutdowns
 
 	#ifdef UNIT_TESTS
@@ -364,8 +369,6 @@ GLOBAL_VAR(restart_counter)
 	shutdown_logging() // Past this point, no logging procs can be used, at risk of data loss.
 	QDEL_NULL(Tracy)
 	QDEL_NULL(Debugger)
-
-	TgsReboot() // TGS can decide to kill us right here, so it's important to do it last
 
 	..()
 	#endif
