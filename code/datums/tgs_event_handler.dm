@@ -22,11 +22,9 @@
 			message_admins("TGS: Deployment complete!")
 			to_chat(world, span_boldannounce("Server updated, changes will be applied on the next round..."))
 		if(TGS_EVENT_WATCHDOG_DETACH)
-			TgsTargetedChatBroadcast("The round has ended. Restarting...")
 			message_admins("TGS restarting...")
 			reattach_timer = addtimer(CALLBACK(src, PROC_REF(LateOnReattach)), 1 MINUTES, TIMER_STOPPABLE)
 		if(TGS_EVENT_WATCHDOG_REATTACH)
-			TgsTargetedChatBroadcast("The server is back online. New round starting!")
 			var/datum/tgs_version/old_version = world.TgsVersion()
 			var/datum/tgs_version/new_version = args[2]
 			if(!old_version.Equals(new_version))
