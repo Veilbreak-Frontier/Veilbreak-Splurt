@@ -729,6 +729,8 @@
 	UnregisterSignal(part, list(COMSIG_ATOM_EXITED, COMSIG_ITEM_GET_WORN_OVERLAYS))
 	if(overslot)
 		UnregisterSignal(overslot, list(COMSIG_ITEM_GET_WORN_OVERLAYS))
+		if(wearer && overslot.loc == part)
+			wearer.equip_to_slot_if_possible(overslot, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE)
 	part_datum.overslotting = null
 	if(wearer)
 		wearer.update_body_parts()
