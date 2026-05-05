@@ -353,7 +353,7 @@ GLOBAL_VAR(restart_counter)
 	#else
 	if(check_hard_reboot())
 		log_world("World hard rebooted at [time_stamp()]")
-		shutdown_logging() // See comment below.
+		shutdown_logging()
 		QDEL_NULL(Tracy)
 		QDEL_NULL(Debugger)
 		TgsEndProcess()
@@ -361,13 +361,15 @@ GLOBAL_VAR(restart_counter)
 
 	log_world("World rebooted at [time_stamp()]")
 
-	shutdown_logging() // Past this point, no logging procs can be used, at risk of data loss.
+	shutdown_logging()
 	QDEL_NULL(Tracy)
 	QDEL_NULL(Debugger)
 
-	TgsReboot() // TGS can decide to kill us right here, so it's important to do it last
+	TgsReboot() // Notify TGS that a normal reboot is occurring
 
-	..()
+	// Force the process to exit with code 0 to prevent watchdog false alarms
+	TgsEndProcess()
+	shutdown()
 	#endif
 
 /world/Del()
