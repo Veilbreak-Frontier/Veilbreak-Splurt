@@ -721,21 +721,24 @@
 		return
 	atom_destruction(damage_flag)
 
-/obj/item/mod/control/proc/on_overslot_exit(obj/item/part, atom/movable/overslot, direction)
+/obj/item/mod/control/proc/on_overslot_exit(obj/item/part, atom/movable/overslot)
 	SIGNAL_HANDLER
 	var/datum/mod_part/part_datum = get_part_datum(part)
-	if(!part_datum)
+	if(!part_datum || !overslot)
 		return
+
 	UnregisterSignal(part, list(COMSIG_ATOM_EXITED, COMSIG_ITEM_GET_WORN_OVERLAYS))
-	if(overslot)
-		UnregisterSignal(overslot, list(COMSIG_ITEM_GET_WORN_OVERLAYS))
-		if(wearer && overslot.loc == part)
+	UnregisterSignal(overslot, list(COMSIG_ITEM_POST_UNEQUIP, COMSIG_ITEM_GET_WORN_OVERLAYS))
+
+	if(wearer && overslot.loc == part)
+		if(!wearer.get_item_by_slot(part.slot_flags))
 			wearer.equip_to_slot_if_possible(overslot, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE)
+		else
+			overslot.forceMove(wearer.drop_location())
+
 	part_datum.overslotting = null
 	if(wearer)
-		wearer.update_body_parts()
 		wearer.update_appearance(UPDATE_OVERLAYS)
-		wearer.update_body()
 
 /obj/item/mod/control/proc/on_potion(atom/movable/source, obj/item/slimepotion/speed/speed_potion, mob/living/user)
 	SIGNAL_HANDLER
