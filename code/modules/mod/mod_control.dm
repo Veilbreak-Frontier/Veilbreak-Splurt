@@ -731,8 +731,13 @@
 	UnregisterSignal(overslot, list(COMSIG_ITEM_POST_UNEQUIP, COMSIG_ITEM_GET_WORN_OVERLAYS))
 
 	if(wearer && overslot.loc == part)
-		if(!wearer.get_item_by_slot(part.slot_flags))
-			wearer.equip_to_slot_if_possible(overslot, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE)
+		var/current_item = wearer.get_item_by_slot(part.slot_flags)
+		if(!current_item || current_item == part)
+			if(current_item == part)
+				wearer.transferItemToLoc(part, src, force = TRUE)
+
+			if(!wearer.equip_to_slot_if_possible(overslot, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
+				overslot.forceMove(wearer.drop_location())
 		else
 			overslot.forceMove(wearer.drop_location())
 
