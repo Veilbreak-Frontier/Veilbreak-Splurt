@@ -25,9 +25,15 @@
 	return controller.blackboard_key_exists(target_key)
 
 /datum/ai_behavior/basic_melee_attack/opportunistic/perform(seconds_per_tick, datum/ai_controller/controller, target_key, targeting_strategy_key, hiding_location_key)
-	var/atom/movable/atom_pawn = controller.pawn
-	var/atom/atom_target = controller.blackboard[target_key]
-	if(!atom_target.IsReachableBy(atom_pawn))
-		return AI_BEHAVIOR_INSTANT | AI_BEHAVIOR_SUCCEEDED
-	. = ..()
-	return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED
+    var/atom/movable/atom_pawn = controller.pawn
+    var/atom/atom_target = controller.blackboard[target_key]
+
+    if(!atom_target || QDELETED(atom_target))
+        controller.clear_blackboard_key(target_key)
+        return AI_BEHAVIOR_INSTANT | AI_BEHAVIOR_SUCCEEDED
+
+    if(!atom_target.IsReachableBy(atom_pawn))
+        return AI_BEHAVIOR_INSTANT | AI_BEHAVIOR_SUCCEEDED
+
+    . = ..()
+    return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED
