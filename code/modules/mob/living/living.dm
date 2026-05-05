@@ -1112,11 +1112,14 @@
 /mob/living/Move(atom/newloc, direct, glide_size_override)
 	if(lying_angle != 0)
 		lying_angle_on_movement(direct)
-	if (buckled && buckled.loc != newloc) //not updating position
-		if (!buckled.anchored)
-			buckled.moving_from_pull = moving_from_pull
-			. = buckled.Move(newloc, direct, glide_size)
-			buckled.moving_from_pull = null
+
+	var/atom/movable/buckled_obj = buckled
+	if (buckled_obj && buckled_obj.loc != newloc)
+		if (!buckled_obj.anchored)
+			buckled_obj.moving_from_pull = moving_from_pull
+			. = buckled_obj.Move(newloc, direct, glide_size)
+			if(buckled_obj)
+				buckled_obj.moving_from_pull = null
 		return
 
 	var/old_direction = dir

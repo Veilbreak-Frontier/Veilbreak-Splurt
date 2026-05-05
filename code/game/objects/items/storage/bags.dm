@@ -115,14 +115,14 @@
 	return ..()
 
 /obj/item/storage/bag/ore/equipped(mob/user)
-	. = ..()
-	if (listening_to)
-		return
-	RegisterSignal(user, COMSIG_MOVABLE_MOVED, PROC_REF(on_user_moved))
-	if (isturf(user.loc))
-		RegisterSignal(user.loc, COMSIG_ATOM_ENTERED, PROC_REF(on_obj_entered))
-		RegisterSignal(user.loc, COMSIG_ATOM_AFTER_SUCCESSFUL_INITIALIZED_ON, PROC_REF(on_atom_initialized_on))
-	listening_to = user
+    . = ..()
+    if (listening_to)
+        return
+    RegisterSignal(user, COMSIG_MOVABLE_MOVED, PROC_REF(on_user_moved), override = TRUE)
+    if (isturf(user.loc))
+        RegisterSignal(user.loc, COMSIG_ATOM_ENTERED, PROC_REF(on_obj_entered), override = TRUE)
+        RegisterSignal(user.loc, COMSIG_ATOM_AFTER_SUCCESSFUL_INITIALIZED_ON, PROC_REF(on_atom_initialized_on), override = TRUE)
+    listening_to = user
 
 /obj/item/storage/bag/ore/dropped()
 	. = ..()

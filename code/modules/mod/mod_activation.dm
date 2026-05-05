@@ -76,32 +76,41 @@
 	if(!wearer || part.loc != src)
 		return FALSE
 
-	if(part_datum.can_overslot)
-		var/obj/item/overslot = wearer.get_item_by_slot(part.slot_flags)
-		if(istype(overslot))
-			part_datum.overslotting = overslot
-			wearer.transferItemToLoc(overslot, part, force = TRUE)
-			RegisterSignal(part, COMSIG_ATOM_EXITED, PROC_REF(on_overslot_exit))
+	var/obj/item/old_equipment = wearer.get_item_by_slot(part.slot_flags)
+	var/cleared_slot = FALSE
+
+	if(part_datum.can_overslot && istype(old_equipment) && old_equipment != part)
+		part_datum.overslotting = old_equipment
+		wearer.transferItemToLoc(old_equipment, part, force = TRUE)
+		cleared_slot = TRUE
 
 	if(wearer.equip_to_slot_if_possible(part, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
+		if(cleared_slot)
+			RegisterSignal(part, COMSIG_ATOM_EXITED, PROC_REF(on_overslot_exit))
+			RegisterSignal(old_equipment, COMSIG_ITEM_POST_UNEQUIP, PROC_REF(on_overslot_exit))
+
 		ADD_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
 		sync_taur_logic()
 		SEND_SIGNAL(src, COMSIG_MOD_PART_DEPLOYED, user, part_datum)
+
 		if(user)
-			wearer.visible_message(span_notice("[wearer]'s [part.name] deploy[part.p_s()] with a mechanical hiss."), span_notice("[part] deploy[part.p_s()] with a mechanical hiss."), span_hear("You hear a mechanical hiss."))
+			wearer.visible_message(span_notice("[wearer]'s [part.name] deploys with a mechanical hiss."), span_notice("[part] deploys with a mechanical hiss."), span_hear("You hear a mechanical hiss."))
 			playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+
 		if(active && !part_datum.sealed)
 			if(instant)
 				seal_part(part, is_sealed = TRUE)
-				return TRUE
-			else if(delayed_seal_part(part))
-				return TRUE
+			else
+				delayed_seal_part(part)
+
 		wearer.update_body_parts()
 		wearer.update_appearance(UPDATE_OVERLAYS)
 		return TRUE
-	else
-		if(part_datum.overslotting)
-			on_overslot_exit(part, part_datum.overslotting)
+
+	if(cleared_slot)
+		wearer.equip_to_slot_if_possible(old_equipment, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE)
+		part_datum.overslotting = null
+
 	return FALSE
 
 /// Retract a part of the suit from the user.
