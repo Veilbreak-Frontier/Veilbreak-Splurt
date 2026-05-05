@@ -126,6 +126,7 @@ GLOBAL_VAR(restart_counter)
  * All atoms in both compiled and uncompiled maps are initialized()
  */
 /world/New()
+	InitTgs()
 	log_world("World loaded at [time_stamp()]!")
 	log_world("BOOT_MARKER: world.New() called at [time_stamp()]")
 
@@ -135,7 +136,6 @@ GLOBAL_VAR(restart_counter)
 	GLOB.timezoneOffset = world.timezone * 36000
 
 	// First possible sleep()
-	InitTgs()
 
 	config.Load(params[OVERRIDE_CONFIG_DIRECTORY_PARAMETER])
 
