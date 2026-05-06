@@ -197,12 +197,6 @@
 	mob_spawner = /obj/effect/mob_spawn/corpse/human/nanotrasendeathsquad
 	r_hand = /obj/item/gun/energy/pulse
 
-/mob/living/basic/trooper/nanotrasen/ranged/elite/Initialize(mapload)
-	. = ..()
-	ADD_TRAIT(src, TRAIT_SPACEWALK, INNATE_TRAIT)
-	set_light_color(COLOR_RED)
-	set_light(4)
-
 /// I'm leaving this one because I really can't be bothered to edit skyrat maps.
 /mob/living/basic/trooper/nanotrasen/peaceful
 	desc = "A member of Nanotrasen's private security, an underpaid security force."
@@ -212,12 +206,6 @@
 	. = ..()
 	var/datum/callback/retaliate_callback = CALLBACK(src, PROC_REF(ai_retaliate_behaviour))
 	AddComponent(/datum/component/ai_retaliate_advanced, retaliate_callback)
-
-/mob/living/basic/trooper/nanotrasen/proc/ai_retaliate_behaviour(mob/living/attacker)
-	if (!istype(attacker))
-		return
-	for (var/mob/living/basic/trooper/nanotrasen/potential_trooper in oview(src, 7))
-		potential_trooper.ai_controller.insert_blackboard_key_lazylist(BB_BASIC_MOB_RETALIATE_LIST, attacker)
 
 /* // Removing these for now.
 /mob/living/basic/trooper/nanotrasen/ranged/smg/peaceful
