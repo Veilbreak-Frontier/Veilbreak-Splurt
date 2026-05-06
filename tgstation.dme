@@ -11285,3 +11285,4 @@
 #include "modular_zzplurt/code/modules/clothing/headset.dm"
 #include "modular_zzplurt/code/datums/ert.dm"
 #include "modular_zzplurt/code/modules/mob_spawn/corpses/nanotrasen.dm"
+#include "modular_zzplurt/code/modules/clothing/under/uniform.dm"
