@@ -181,7 +181,6 @@
 	mod_link.end_call()
 	var/original_active_status = active
 	to_chat(wearer, span_notice("MODsuit [active ? "shutting down" : "starting up"]."))
-	//deploy the control unit
 	if(original_active_status)
 		if(delayed_activation())
 			playsound(src, 'sound/machines/synth/synth_no.ogg', 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE, frequency = 6000)
@@ -192,10 +191,10 @@
 
 	var/list/sealed_parts = list()
 
-	for(var/obj/item/part as anything in get_parts()) //seals/unseals all deployed parts
+	for(var/obj/item/part as anything in get_parts())
 		if(part.loc == src)
 			continue
-		if(!delayed_seal_part(part)) //shit something broke, revert it all
+		if(!delayed_seal_part(part))
 			activating = FALSE
 			for(var/obj/item/sealed_part as anything in sealed_parts)
 				seal_part(sealed_part, is_sealed = !get_part_datum(sealed_part).sealed)
@@ -297,6 +296,12 @@
 			var/datum/mod_part/P = mod_parts[slot_key]
 			if(P.overslotting)
 				on_overslot_exit(P.part_item, P.overslotting)
+	else
+		for(var/obj/item/mod/module/module as anything in modules)
+			if(module.part_activated || !module.has_required_parts(mod_parts, need_active = TRUE))
+				continue
+			module.on_part_activation()
+			module.part_activated = TRUE
 
 	sync_taur_logic()
 	update_charge_alert()
