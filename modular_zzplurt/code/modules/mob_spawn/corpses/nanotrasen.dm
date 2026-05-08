@@ -1,3 +1,25 @@
+/proc/apply_corpse_rank_name(mob/living/carbon/human/H, rank_abbr)
+	if(!H)
+		return
+
+	var/original_name = H.real_name
+
+	// Prevent double-prefixing
+	if(findtext(original_name, rank_abbr) == 1)
+		return
+
+	var/new_name = "[rank_abbr] [original_name]"
+
+	// Update character name
+	H.fully_replace_character_name(original_name, new_name)
+
+	// Sync ID
+	var/obj/item/card/id/W = H.wear_id
+	if(W)
+		W.registered_name = new_name
+		W.update_label()
+		W.update_icon()
+
 /obj/effect/mob_spawn/corpse/human/privatesecurity
 	name = "Nanotrasen Private Security Private"
 	outfit = /datum/outfit/nanotrasenprivate
@@ -11,11 +33,11 @@
 	shoes = /obj/item/clothing/shoes/combat
 	gloves = /obj/item/clothing/gloves/tackler/combat/black
 	mask = /obj/item/clothing/mask/gas/sechailer/swat
-	head = /obj/item/clothing/head/helmet/swat/nanotrasen/ntps
-	back = /obj/item/storage/backpack/satchel/sec/redsec
+	head = /obj/item/clothing/head/soft/sec/ntps
+	back = /obj/item/storage/backpack/satchel/sec
+	ears = /obj/item/radio/headset/headset_cent/empty/privsec
 	id = /obj/item/card/id/advanced
 	id_trim = /datum/id_trim/centcom/corpse/private_security/pvt
-	accessory = /obj/item/clothing/accessory/rank/private
 	implants = list(/obj/item/implant/mindshield)
 	accessory = /obj/item/clothing/accessory/rank/private
 
@@ -23,26 +45,7 @@
 	if(visuals_only)
 		return
 
-	var/obj/item/card/id/W = H.wear_id
-	W.registered_name = H.real_name
-	W.update_label()
-	W.update_icon()
-
-/datum/outfit/nanotrasenprivate/pre_equip(mob/living/carbon/human/H)
-	. = ..()
-
-	uniform = pick(list(
-		/obj/item/clothing/under/rank/security/splurt/ntps,
-		/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck,
-		/obj/item/clothing/under/rank/security/splurt/ntps/fatigues
-	))
-
-	head = pick(list(
-		/obj/item/clothing/head/security_garrison/ntps,
-		/obj/item/clothing/head/soft/sec/ntps,
-		/obj/item/clothing/head/beret/sec/ntps,
-		/obj/item/clothing/head/helmet/swat/nanotrasen/ntps
-	))
+	apply_corpse_rank_name(H, "Pvt.")
 
 /datum/id_trim/centcom/corpse/private_security/pvt
 	assignment = JOB_CENTCOM_PRIVATE_SECURITY_PRIVATE
@@ -50,6 +53,43 @@
 	access = list(ACCESS_CENT_GENERAL, ACCESS_CENT_LIVING, ACCESS_WEAPONS)
 	big_pointer = FALSE
 	honorifics = list("Pvt.")
+	honorific_positions = HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_NONE
+	pointer_color = COLOR_CENTCOM_BLUE
+
+/obj/effect/mob_spawn/corpse/human/privatesecurity/specialist
+	name = "Nanotrasen Private Security Specialist"
+	outfit = /datum/outfit/nanotrasenspecialist
+
+/datum/outfit/nanotrasenspecialist
+	name = "NT Private Security Specialist Corpse"
+
+	uniform = /obj/item/clothing/under/rank/security/splurt/ntps
+	suit = /obj/item/clothing/suit/armor/vest
+	belt = /obj/item/storage/belt/security/redsec
+	shoes = /obj/item/clothing/shoes/combat
+	gloves = /obj/item/clothing/gloves/tackler/combat/black
+	mask = /obj/item/clothing/mask/gas/sechailer/swat
+	head = /obj/item/clothing/head/beret/sec/medical
+	belt = /obj/item/storage/belt/medical/privsec
+	back = /obj/item/storage/backpack/satchel/sec
+	ears = /obj/item/radio/headset/headset_cent/empty/privsec
+	id = /obj/item/card/id/advanced
+	id_trim = /datum/id_trim/centcom/corpse/private_security/spc
+	implants = list(/obj/item/implant/mindshield)
+	accessory = /obj/item/clothing/accessory/rank/specialist
+
+/datum/outfit/nanotrasenspecialist/post_equip(mob/living/carbon/human/H, visuals_only = FALSE)
+	if(visuals_only)
+		return
+
+	apply_corpse_rank_name(H, "Spc.")
+
+/datum/id_trim/centcom/corpse/private_security/spc
+	assignment = JOB_CENTCOM_PRIVATE_SECURITY_SPECIALIST
+	subdepartment_color = COLOR_MEDICAL_BLUE
+	access = list(ACCESS_CENT_GENERAL, ACCESS_CENT_MEDICAL, ACCESS_CENT_LIVING, ACCESS_WEAPONS)
+	big_pointer = FALSE
+	honorifics = list("Spc.")
 	honorific_positions = HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_NONE
 	pointer_color = COLOR_CENTCOM_BLUE
 
@@ -62,31 +102,23 @@
 
 	uniform = /obj/item/clothing/under/rank/security/splurt/ntps/corporal
 	suit = /obj/item/clothing/suit/armor/vest
+	belt = /obj/item/storage/belt/security/redsec
 	shoes = /obj/item/clothing/shoes/combat
 	gloves = /obj/item/clothing/gloves/tackler/combat/black
 	mask = /obj/item/clothing/mask/gas/sechailer/swat
 	head = /obj/item/clothing/head/helmet/swat/nanotrasen/ntps
-	back = /obj/item/storage/backpack/satchel/sec/redsec
+	back = /obj/item/storage/backpack/satchel/sec
+	ears = /obj/item/radio/headset/headset_cent/empty/privsec
 	id = /obj/item/card/id/advanced
 	id_trim = /datum/id_trim/centcom/corpse/private_security/cpl
 	implants = list(/obj/item/implant/mindshield)
+	accessory = /obj/item/clothing/accessory/rank/corporal
 
 /datum/outfit/nanotrasencorporal/post_equip(mob/living/carbon/human/H, visuals_only = FALSE)
 	if(visuals_only)
 		return
 
-	var/obj/item/card/id/W = H.wear_id
-	W.registered_name = H.real_name
-	W.update_label()
-	W.update_icon()
-
-/datum/outfit/nanotrasencorporal/pre_equip(mob/living/carbon/human/H)
-	. = ..()
-
-	uniform = pick(list(
-		/obj/item/clothing/under/rank/security/splurt/ntps/corporal,
-		/obj/item/clothing/under/rank/security/splurt/ntps/corporal/turtleneck
-	))
+	apply_corpse_rank_name(H, "Cpl.")
 
 /datum/id_trim/centcom/corpse/private_security/cpl
 	assignment = JOB_CENTCOM_PRIVATE_SECURITY_CORPORAL
@@ -111,7 +143,8 @@
 	gloves = /obj/item/clothing/gloves/tackler/combat/black
 	mask = /obj/item/clothing/mask/gas/sechailer/swat
 	head = /obj/item/clothing/head/helmet/swat/nanotrasen/ntps/sergeant
-	back = /obj/item/storage/backpack/satchel/sec/redsec
+	back = /obj/item/storage/backpack/satchel
+	ears = /obj/item/radio/headset/headset_cent/empty/privsec
 	id = /obj/item/card/id/advanced/silver
 	id_trim = /datum/id_trim/centcom/corpse/private_security/sgt
 	implants = list(/obj/item/implant/mindshield)
@@ -121,18 +154,7 @@
 	if(visuals_only)
 		return
 
-	var/obj/item/card/id/W = H.wear_id
-	W.registered_name = H.real_name
-	W.update_label()
-	W.update_icon()
-
-/datum/outfit/nanotrasensergeant/pre_equip(mob/living/carbon/human/H)
-	. = ..()
-
-	uniform = pick(list(
-		/obj/item/clothing/under/rank/security/splurt/ntps/sergeant,
-		/obj/item/clothing/under/rank/security/splurt/ntps/sergeant/turtleneck
-	))
+	apply_corpse_rank_name(H, "Sgt.")
 
 /datum/id_trim/centcom/corpse/private_security/sgt
 	assignment = JOB_CENTCOM_PRIVATE_SECURITY_SERGEANT
@@ -140,6 +162,41 @@
 	access = list(ACCESS_CENT_GENERAL, ACCESS_CENT_SPECOPS, ACCESS_CENT_MEDICAL, ACCESS_CENT_STORAGE, ACCESS_SECURITY, ACCESS_MECH_SECURITY, ACCESS_WEAPONS)
 	big_pointer = TRUE
 	honorifics = list("Sgt.")
+	honorific_positions = HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_NONE
+	pointer_color = COLOR_CENTCOM_BLUE
+
+/obj/effect/mob_spawn/corpse/human/privatesecurity/assault
+	name = "Nanotrasen Private Security Assault Officer"
+	outfit = /datum/outfit/nanotrasenassault
+
+/datum/outfit/nanotrasenassault
+	name = "NT Private Security Assault Officer Corpse"
+
+	uniform = /obj/item/clothing/under/rank/security/splurt/ntps/fatigues
+	suit = /obj/item/clothing/suit/armor/bulletproof
+	belt = /obj/item/storage/belt/security/webbing/privsec
+	shoes = /obj/item/clothing/shoes/combat
+	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+	mask = /obj/item/clothing/mask/gas/sechailer/swat
+	head = /obj/item/clothing/head/helmet/swat/nanotrasen/ntps
+	back = /obj/item/storage/backpack/satchel
+	ears = /obj/item/radio/headset/headset_cent/empty/privsec
+	id = /obj/item/card/id/advanced/black
+	id_trim = /datum/id_trim/centcom/corpse/private_security/assault
+	implants = list(/obj/item/implant/mindshield)
+
+/datum/outfit/nanotrasenassault/post_equip(mob/living/carbon/human/H, visuals_only = FALSE)
+	if(visuals_only)
+		return
+
+	apply_corpse_rank_name(H, "Off.")
+
+/datum/id_trim/centcom/corpse/private_security/assault
+	assignment = JOB_CENTCOM_PRIVATE_SECURITY_SERGEANT
+	subdepartment_color = COLOR_SYNDIE_RED
+	access = list(ACCESS_CENT_GENERAL, ACCESS_CENT_SPECOPS, ACCESS_CENT_MEDICAL, ACCESS_CENT_STORAGE, ACCESS_SECURITY, ACCESS_MECH_SECURITY, ACCESS_WEAPONS)
+	big_pointer = TRUE
+	honorifics = list("Off.")
 	honorific_positions = HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_NONE
 	pointer_color = COLOR_CENTCOM_BLUE
 
@@ -152,12 +209,13 @@
 
 	uniform = /obj/item/clothing/under/rank/security/splurt/ntps/captain
 	suit = /obj/item/clothing/suit/armor/vest
-	belt = /obj/item/storage/belt/security/webbing/peacekeeper/armadyne
+	belt = /obj/item/storage/belt/security/webbing/privsec
 	shoes = /obj/item/clothing/shoes/combat
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
 	mask = /obj/item/clothing/mask/gas/sechailer/swat
 	head = /obj/item/clothing/head/beret/sec/ntps/captain
-	back = /obj/item/storage/backpack/satchel/sec/redsec
+	back = /obj/item/storage/backpack/satchel/sec
+	ears = /obj/item/radio/headset/headset_cent/empty/privsec
 	id = /obj/item/card/id/advanced/platinum
 	id_trim = /datum/id_trim/centcom/corpse/private_security/cpt
 	implants = list(/obj/item/implant/mindshield)
@@ -167,10 +225,7 @@
 	if(visuals_only)
 		return
 
-	var/obj/item/card/id/W = H.wear_id
-	W.registered_name = H.real_name
-	W.update_label()
-	W.update_icon()
+	apply_corpse_rank_name(H, "Cpt.")
 
 /datum/id_trim/centcom/corpse/private_security/cpt
 	assignment = JOB_CENTCOM_PRIVATE_SECURITY_CAPTAIN
@@ -180,6 +235,10 @@
 	honorifics = list("Cpt.")
 	honorific_positions = HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_NONE
 	pointer_color = COLOR_CENTCOM_BLUE
+
+/obj/effect/mob_spawn/corpse/human/commander // just to stop the complaining.
+	name = JOB_CENTCOM_PRIVATE_SECURITY_CAPTAIN
+	outfit = /datum/outfit/nanotrasencaptain
 
 /obj/effect/mob_spawn/corpse/human/bridgeofficer/bigderelict
 	name = JOB_TRADEPOST_COORDINATOR
@@ -266,21 +325,39 @@
 	name = JOB_CENTCOM_PRIVATE_SECURITY_CORPORAL
 	outfit = /datum/outfit/nanotrasencorporal
 
-/obj/effect/mob_spawn/corpse/human/nanotrasenelitecommander
-	name = "\improper Nanotrasen Elite Commander Corpse"
-	outfit = /datum/outfit/nanotrasenelitecommandercorpse
+/obj/effect/mob_spawn/corpse/human/nanotrasenertsecurity
+	name = "\improper Nanotrasen ERT Commander Corpse"
+	outfit = /datum/outfit/nanotrasenertsecuritycorpse
 	hairstyle = "Bald"
 	facial_hairstyle = "Shaved"
 
-/datum/outfit/nanotrasenelitecommandercorpse
-	name = "\improper NT Elite Commander Corpse"
-	uniform = /obj/item/clothing/under/rank/centcom/military
+/datum/outfit/nanotrasenertsecuritycorpse
+	name = "\improper NT ERT Security Officer Corpse"
+	uniform = /obj/item/clothing/under/rank/centcom/officer
+	belt = /obj/item/storage/belt/security/redsec
+	shoes = /obj/item/clothing/shoes/combat
+	gloves = /obj/item/clothing/gloves/combat
+	mask = /obj/item/clothing/mask/gas/sechailer/swat
+	back = /obj/item/mod/control/pre_equipped/responsory/security
+	id = /obj/item/card/id/advanced/centcom
+	id_trim = /datum/id_trim/centcom/ert/security
+
+/obj/effect/mob_spawn/corpse/human/nanotrasenertcommander
+	name = "\improper Nanotrasen ERT Commander Corpse"
+	outfit = /datum/outfit/nanotrasenertcommandercorpse
+	hairstyle = "Bald"
+	facial_hairstyle = "Shaved"
+
+/datum/outfit/nanotrasenertcommandercorpse
+	name = "\improper NT ERT Commander Corpse"
+	uniform = /obj/item/clothing/under/rank/centcom/commander
+	belt = /obj/item/storage/belt/security/redsec
 	shoes = /obj/item/clothing/shoes/combat
 	gloves = /obj/item/clothing/gloves/combat
 	mask = /obj/item/clothing/mask/gas/sechailer/swat
 	back = /obj/item/mod/control/pre_equipped/responsory/commander
 	id = /obj/item/card/id/advanced/centcom
-	id_trim = /datum/id_trim/centcom/ert/security
+	id_trim = /datum/id_trim/centcom/ert/commander
 
 /obj/effect/mob_spawn/corpse/human/nanotrasendeathsquad
 	name = "\improper Nanotrasen Deathsquad Corpse"
@@ -308,9 +385,10 @@
 /datum/outfit/nanotrasenassetprotectioncorpse
 	name = "\improper NT Asset Protection Corpse"
 	uniform = /obj/item/clothing/under/rank/centcom/commander
+	belt = /obj/item/storage/belt/security/redsec
 	shoes = /obj/item/clothing/shoes/combat/swat
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
 	mask = /obj/item/clothing/mask/gas/sechailer/swat
 	back = /obj/item/mod/control/pre_equipped/asset_protection
-	id = /obj/item/card/id/advanced/centcom/ert
-	id_trim = /datum/id_trim/centcom
+	id = /obj/item/card/id/advanced/centcom
+	id_trim = /datum/id_trim/centcom/ert

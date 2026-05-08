@@ -1,11 +1,9 @@
 // PRIVATE SECURITY ERT - MORE BALLISTIC THAN LASER
 /datum/ert/private_security
-	code = "Security Red"
+	code = "Crimson"
 	roles = list(/datum/antagonist/ert/private_security/operative, /datum/antagonist/ert/private_security/medic, /datum/antagonist/ert/private_security/sergeant)
 	leader_role = /datum/antagonist/ert/private_security/leader
 	teamsize = 7
-	opendoors = FALSE
-	notify_players = FALSE
 	rename_team = "Squad of Private Security"
 	mission = "Assist the station."
 	polldesc = "a Nanotrasen Private Security Team"
@@ -120,8 +118,7 @@
 	else
 		uniform = pick(list(
 			/obj/item/clothing/under/rank/security/splurt/ntps,
-			/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck,
-			/obj/item/clothing/under/rank/security/splurt/ntps/fatigues
+			/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck
 		))
 
 	head = pick(list(
@@ -151,7 +148,7 @@
 	id_trim = /datum/id_trim/centcom/ert/medical/privatesecurity
 	belt = /obj/item/storage/belt/medical/privsec/full
 	ears = /obj/item/radio/headset/headset_cent/alt/privsec/medic
-	head = /obj/item/clothing/head/helmet/swat/nanotrasen/ntps
+	head = /obj/item/clothing/head/beret/sec/medical
 	glasses = /obj/item/clothing/glasses/hud/medsechud/sunglasses
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
 	l_pocket = /obj/item/storage/pouch/medical/loaded
@@ -187,8 +184,7 @@
 
 	uniform = pick(list(
 		/obj/item/clothing/under/rank/security/splurt/ntps,
-		/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck,
-		/obj/item/clothing/under/rank/security/splurt/ntps/fatigues
+		/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck
 	))
 
 	return ..()
@@ -201,13 +197,12 @@
 	uniform = /obj/item/clothing/under/rank/security/splurt/ntps/sergeant
 	head = /obj/item/clothing/head/helmet/swat/nanotrasen/ntps/sergeant
 	l_hand = /obj/item/gun/ballistic/automatic/proto/loyalpin
-	r_pocket = /obj/item/melee/baton/telescopic/silver
 
 	backpack_contents = list(/obj/item/storage/box/survival/security = 1,\
 		/obj/item/storage/box/handcuffs = 1,\
 		/obj/item/gun/energy/e_gun/advtaser = 1,\
 		/obj/item/ammo_box/magazine/smgm9mm = 3,\
-		/obj/item/flashlight/seclite = 1,
+		/obj/item/melee/baton/telescopic/silver = 1,
 		)
 
 /datum/id_trim/centcom/ert/security/privatesecurity
@@ -249,19 +244,16 @@
 	id = /obj/item/card/id/advanced/platinum
 	id_trim = /datum/id_trim/centcom/ert/commander/privatesecurity
 	uniform = /obj/item/clothing/under/rank/security/splurt/ntps/captain
-	belt = /obj/item/storage/belt/security/webbing/peacekeeper/armadyne/privsec/full
+	belt = /obj/item/storage/belt/security/webbing/privsec/full
 	ears = /obj/item/radio/headset/headset_cent/alt/privsec/leader
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
-	l_hand = /obj/item/gun/ballistic/automatic/bulwark/loyalpin
-	r_pocket = /obj/item/melee/baton/telescopic/gold
 
 	backpack_contents = list(/obj/item/storage/box/survival/security = 1,\
 		/obj/item/storage/box/handcuffs = 1,\
 		/obj/item/gun/energy/e_gun/advtaser = 1,\
 		/obj/item/ammo_box/magazine/c68 = 3,\
 		/obj/item/shield/riot/tele = 1,\
-		/obj/item/suppressor = 1,\
-		/obj/item/flashlight/seclite = 1,
+		/obj/item/melee/baton/telescopic/gold = 1,
 		)
 
 /datum/id_trim/centcom/ert/commander/privatesecurity
@@ -275,6 +267,13 @@
 
 /datum/outfit/centcom/private_security/captain/pre_equip(mob/living/carbon/human/H)
 	. = ..()
+
+	l_hand = pick(list(
+		/obj/item/gun/ballistic/automatic/bulwark/loyalpin,
+		/obj/item/gun/ballistic/automatic/bulwark/loyalpin,
+		/obj/item/gun/ballistic/automatic/bulwark/suppressed/loyalpin,
+		/obj/item/gun/ballistic/automatic/bulwark/taser/loyalpin
+	))
 
 	head = pick(list(
 		/obj/item/clothing/head/beret/sec/ntps/captain,
@@ -358,9 +357,13 @@
 	new /obj/item/melee/baton/security/loaded(src)
 	update_appearance()
 
-/obj/item/storage/belt/security/webbing/peacekeeper/armadyne/privsec
+/obj/item/storage/belt/security/webbing/privsec
 	name = "private security webbing"
 	desc = "A tactical chest rig issued to fit security equipment, the added holster seems to help fit sidearms too."
+	icon = 'modular_skyrat/master_files/icons/obj/clothing/belts.dmi'
+	worn_icon = 'modular_skyrat/master_files/icons/mob/clothing/belt.dmi'
+	icon_state = "armadyne_webbing"
+	worn_icon_state = "armadyne_webbing"
 	storage_type = /datum/storage/security_belt/webbing/holster
 
 /datum/storage/security_belt/webbing/holster/New(atom/parent, max_slots, max_specific_storage, max_total_storage, rustle_sound, remove_rustle_sound)
@@ -388,7 +391,7 @@
 		/obj/item/gun/energy/disabler,
 	))
 
-/obj/item/storage/belt/security/webbing/peacekeeper/armadyne/privsec/full/PopulateContents()
+/obj/item/storage/belt/security/webbing/privsec/full/PopulateContents()
 	new /obj/item/reagent_containers/spray/pepper(src)
 	new /obj/item/restraints/handcuffs(src)
 	new /obj/item/grenade/flashbang(src)
@@ -443,4 +446,15 @@
 	pin = /obj/item/firing_pin/implant/mindshield
 
 /obj/item/gun/ballistic/automatic/bulwark/loyalpin
+	pin = /obj/item/firing_pin/implant/mindshield
+
+/obj/item/gun/ballistic/automatic/bulwark/suppressed/Initialize(mapload)
+	. = ..()
+	var/obj/item/suppressor/S = new(src)
+	install_suppressor(S)
+
+/obj/item/gun/ballistic/automatic/bulwark/suppressed/loyalpin
+	pin = /obj/item/firing_pin/implant/mindshield
+
+/obj/item/gun/ballistic/automatic/bulwark/taser/loyalpin
 	pin = /obj/item/firing_pin/implant/mindshield

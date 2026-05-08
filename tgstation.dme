@@ -11282,3 +11282,6 @@
 #include "modular_zzplurt/code/modules/clothing/accessories/camera.dm"
 #include "modular_zubbers/maps/offstation/dauntless/implant_syndie.dm"
 #include "modular_zzplurt/code/datums/quirks/neutral_quirks/storage_concealment.dm"
+#include "modular_zzplurt/code/modules/clothing/headset.dm"
+#include "modular_zzplurt/code/datums/ert.dm"
+#include "modular_zzplurt/code/modules/mob_spawn/corpses/nanotrasen.dm"
