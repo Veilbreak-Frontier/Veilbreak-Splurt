@@ -265,3 +265,71 @@
 /obj/effect/mob_spawn/corpse/human/nanotrasenassaultsoldier
 	name = JOB_CENTCOM_PRIVATE_SECURITY_CORPORAL
 	outfit = /datum/outfit/nanotrasencorporal
+
+/obj/effect/mob_spawn/corpse/human/nanotrasenertsecurity
+	name = "\improper Nanotrasen ERT Commander Corpse"
+	outfit = /datum/outfit/nanotrasenertsecuritycorpse
+	hairstyle = "Bald"
+	facial_hairstyle = "Shaved"
+
+/datum/outfit/nanotrasenertsecuritycorpse
+	name = "\improper NT ERT Security Officer Corpse"
+	uniform = /obj/item/clothing/under/rank/centcom/officer
+	belt = /obj/item/storage/belt/security/redsec
+	shoes = /obj/item/clothing/shoes/combat
+	gloves = /obj/item/clothing/gloves/combat
+	mask = /obj/item/clothing/mask/gas/sechailer/swat
+	back = /obj/item/mod/control/pre_equipped/responsory/security
+	id = /obj/item/card/id/advanced/centcom
+	id_trim = /datum/id_trim/centcom/ert/security
+
+/obj/effect/mob_spawn/corpse/human/nanotrasenertcommander
+	name = "\improper Nanotrasen ERT Commander Corpse"
+	outfit = /datum/outfit/nanotrasenertcommandercorpse
+	hairstyle = "Bald"
+	facial_hairstyle = "Shaved"
+
+/datum/outfit/nanotrasenertcommandercorpse
+	name = "\improper NT ERT Commander Corpse"
+	uniform = /obj/item/clothing/under/rank/centcom/commander
+	belt = /obj/item/storage/belt/security/redsec
+	shoes = /obj/item/clothing/shoes/combat
+	gloves = /obj/item/clothing/gloves/combat
+	mask = /obj/item/clothing/mask/gas/sechailer/swat
+	back = /obj/item/mod/control/pre_equipped/responsory/commander
+	id = /obj/item/card/id/advanced/centcom
+	id_trim = /datum/id_trim/centcom/ert/commander
+
+/obj/effect/mob_spawn/corpse/human/nanotrasendeathsquad
+	name = "\improper Nanotrasen Deathsquad Corpse"
+	outfit = /datum/outfit/nanotrasendeathsquadcorpse
+	hairstyle = "Bald"
+	facial_hairstyle = "Shaved"
+
+/datum/outfit/nanotrasendeathsquadcorpse
+	name = "\improper NT Deathsquad Corpse"
+	uniform = /obj/item/clothing/under/rank/centcom/commander
+	belt = /obj/item/storage/belt/security/redsec
+	shoes = /obj/item/clothing/shoes/combat/swat
+	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+	mask = /obj/item/clothing/mask/gas/sechailer/swat
+	back = /obj/item/mod/control/pre_equipped/apocryphal
+	id = /obj/item/card/id/advanced/black/deathsquad
+	id_trim = /datum/id_trim/centcom/deathsquad
+
+/obj/effect/mob_spawn/corpse/human/nanotrasenassetprotection
+	name = "\improper Nanotrasen Asset Protection Corpse"
+	outfit = /datum/outfit/nanotrasenassetprotectioncorpse
+	hairstyle = "Bald"
+	facial_hairstyle = "Shaved"
+
+/datum/outfit/nanotrasenassetprotectioncorpse
+	name = "\improper NT Asset Protection Corpse"
+	uniform = /obj/item/clothing/under/rank/centcom/commander
+	belt = /obj/item/storage/belt/security/redsec
+	shoes = /obj/item/clothing/shoes/combat/swat
+	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+	mask = /obj/item/clothing/mask/gas/sechailer/swat
+	back = /obj/item/mod/control/pre_equipped/asset_protection
+	id = /obj/item/card/id/advanced/centcom
+	id_trim = /datum/id_trim/centcom/ert
