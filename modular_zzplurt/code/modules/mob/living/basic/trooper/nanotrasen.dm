@@ -149,10 +149,27 @@
 	projectilesound = 'modular_zubbers/sound/weapons/laser.ogg'
 	ranged_cooldown = 1 SECONDS
 	corpse = /obj/effect/gibspawner/human
-	mob_spawner = /obj/effect/mob_spawn/corpse/human/nanotrasenelitesoldier
+	mob_spawner = /obj/effect/mob_spawn/corpse/human/nanotrasenertsecurity
 	r_hand = /obj/item/gun/energy/modular_laser_rifle/carbine
 
-/mob/living/basic/trooper/nanotrasen/ranged/elite
+/mob/living/basic/trooper/nanotrasen/energy/assault/lead
+	name = "\improper Nanotrasen ERT Commander"
+	desc = "A commanding officer of Nanotrasen's Emergency Response Team. Contact Central Command if you see them, prepare to die if you're spotted off-station. They are armed with a Hyeseong modular laser rifle."
+	maxHealth = 225
+	health = 225
+	ai_controller = /datum/ai_controller/basic_controller/trooper/ranged/burst
+	burst_shots = 2
+	projectiletype = /obj/projectile/beam/cybersun_laser
+	projectilesound = 'modular_zubbers/sound/weapons/laser.ogg'
+	mob_spawner = /obj/effect/mob_spawn/corpse/human/nanotrasenertcommander
+	r_hand = /obj/item/gun/energy/modular_laser_rifle
+
+/mob/living/basic/trooper/nanotrasen/energy/assault/Initialize(mapload)
+	. = ..()
+	ADD_TRAIT(src, TRAIT_SPACEWALK, INNATE_TRAIT)
+	set_light(4)
+
+/mob/living/basic/trooper/nanotrasen/energy/elite
 	name = "Deathsquad Trooper"
 	desc = "A member of Nanotrasen's Deathsquad, THE elite strike team. Central Command won't help you, prepare to die if you're spotted. They are armed with a Pulse Rifle."
 	maxHealth = 250
