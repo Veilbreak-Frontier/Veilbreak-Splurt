@@ -596,3 +596,7 @@
 		return FALSE
 	var/turf/our_turf = get_turf(src)
 	return HAS_TRAIT(our_turf, TRAIT_RUSTY)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/proc/can_hear()
+	return !HAS_TRAIT(src, TRAIT_DEAF)

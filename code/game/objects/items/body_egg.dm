@@ -55,3 +55,17 @@
 
 /obj/item/organ/body_egg/proc/RemoveInfectionImages()
 	return
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/body_egg/on_death(seconds_per_tick, times_fired)
+	. = ..()
+	if(!owner)
+		return
+	egg_process(seconds_per_tick, times_fired)
+
+/obj/item/organ/body_egg/on_life(seconds_per_tick, times_fired)
+	. = ..()
+	egg_process(seconds_per_tick, times_fired)
+
+/obj/item/organ/body_egg/proc/egg_process(seconds_per_tick, times_fired)
+	return

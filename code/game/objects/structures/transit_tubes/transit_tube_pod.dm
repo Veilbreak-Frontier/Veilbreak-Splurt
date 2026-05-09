@@ -218,3 +218,16 @@
 
 #undef MOVE_ANIMATION_STAGE_ONE
 #undef MOVE_ANIMATION_STAGE_TWO
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/structure/transit_tube_pod/proc/engine_finish(datum/move_loop/source)
+    SIGNAL_HANDLER
+    if(QDELING(src))
+        return
+
+    set_density(TRUE)
+    moving = FALSE
+
+    var/obj/structure/transit_tube/TT = locate(/obj/structure/transit_tube) in loc
+    if(!TT || (!(dir in TT.tube_dirs) && !(REVERSE_DIR(dir) in TT.tube_dirs)))
+        outside_tube()

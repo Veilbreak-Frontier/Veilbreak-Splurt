@@ -561,3 +561,12 @@
 
 #undef SOURCE_PORTAL
 #undef DESTINATION_PORTAL
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/syndicate_teleporter/process(seconds_per_tick, times_fired)
+	if(SPT_PROB(10, seconds_per_tick) && charges < max_charges)
+		charges++
+		if(ishuman(loc))
+			var/mob/living/carbon/human/holder = loc
+			balloon_alert(holder, "teleporter beeps")
+		playsound(src, 'sound/machines/beep/twobeep.ogg', 10, TRUE, extrarange = SILENCED_SOUND_EXTRARANGE, falloff_distance = 0)

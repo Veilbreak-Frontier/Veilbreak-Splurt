@@ -223,3 +223,39 @@
 
 #undef MIN_VOLUME
 #undef MAX_FLOOR_PRODUCTS
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/plumbing/pill_press/Initialize(mapload, bolt, layer)
+	. = ..()
+
+	if(!packaging_types)
+		var/datum/asset/spritesheet_batched/assets = get_asset_datum(/datum/asset/spritesheet_batched/chemmaster)
+
+		var/list/types = list(
+			CAT_PILLS = GLOB.reagent_containers[CAT_PILLS],
+			CAT_PATCHES = GLOB.reagent_containers[CAT_PATCHES],
+			CAT_HYPOS = GLOB.reagent_containers[CAT_HYPOS], // SKYRAT EDIT ADDITION - Hypovials
+			CAT_PEN_INJECTORS = GLOB.reagent_containers[CAT_PEN_INJECTORS], // BUBBER EDIT pen_medipens
+			CAT_MEDBOTTLES = GLOB.reagent_containers[CAT_MEDBOTTLES], // BUBBER EDIT - CAT_MEDBOTTLES
+		)
+
+		packaging_types = list()
+		for(var/category in types)
+			var/list/packages = types[category]
+
+			var/list/category_item = list("cat_name" = category)
+			for(var/obj/item/reagent_containers/container as anything in packages)
+				var/list/package_item = list(
+					"class_name" = assets.icon_class_name(sanitize_css_class_name("[container]")),
+					"ref" = REF(container)
+				)
+				category_item["products"] += list(package_item)
+
+			packaging_types += list(category_item)
+
+	packaging_type = GLOB.reagent_containers[CAT_PILLS][1]
+	packaging_category = CAT_PILLS
+	max_volume = initial(packaging_type.volume)
+	current_volume = clamp(current_volume, MIN_VOLUME, max_volume)
+
+	AddComponent(/datum/component/plumbing/simple_demand, bolt, layer)

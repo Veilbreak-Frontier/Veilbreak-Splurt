@@ -92,3 +92,10 @@
 	owner.update_appearance(UPDATE_ICON)
 
 #undef DEFAULT_ACTIVATED_ENDLAG
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/action/cooldown/mob_cooldown/wing_buffet/proc/on_life(mob/living/liver, seconds_per_tick, times_fired)
+	SIGNAL_HANDLER
+	if (liver.stat == DEAD)
+		return // not so life now buddy
+	additional_endlag = max(0, additional_endlag - (endlag_decay_per_second * seconds_per_tick))

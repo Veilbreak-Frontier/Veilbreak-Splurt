@@ -679,3 +679,10 @@
 		/obj/item/clothing/mask/gas/clown_hat = 1,
 	)
 	category = CAT_CLOTHING
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/crafting_recipe/chaplain_hood/New()
+	. = ..()
+	//the resulting hoodie can be used to craft other hoodies.
+	//recipe blacklists should be refactored to only affect components and not tools.
+	blacklist -= result

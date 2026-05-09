@@ -658,3 +658,13 @@
 		robust_searching = TRUE // enables friends list check
 		return
 	robust_searching = initial(robust_searching)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/simple_animal/hostile/Initialize(mapload)
+	. = ..()
+	wanted_objects = typecacheof(wanted_objects)
+
+/mob/living/simple_animal/hostile/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	. = ..()
+	if(!.) //dead
+		GLOB.move_manager.stop_looping(src)

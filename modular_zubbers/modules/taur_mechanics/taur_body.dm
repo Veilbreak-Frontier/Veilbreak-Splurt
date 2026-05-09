@@ -168,29 +168,30 @@
 	add_verb(receiver, /obj/item/organ/taur_body/proc/toggle_cropping)
 
 /obj/item/organ/taur_body/on_mob_remove(mob/living/carbon/organ_owner, special, movement_flags)
-	var/obj/item/bodypart/leg/left/left_leg = organ_owner.get_bodypart(BODY_ZONE_L_LEG)
-	var/obj/item/bodypart/leg/right/right_leg = organ_owner.get_bodypart(BODY_ZONE_R_LEG)
+    var/obj/item/bodypart/leg/left/left_leg = organ_owner.get_bodypart(BODY_ZONE_L_LEG)
+    var/obj/item/bodypart/leg/right/right_leg = organ_owner.get_bodypart(BODY_ZONE_R_LEG)
 
-	if(left_leg)
-		left_leg.drop_limb()
-		qdel(left_leg)
+    if(left_leg)
+        left_leg.drop_limb()
+        qdel(left_leg)
 
-	if(right_leg)
-		right_leg.drop_limb()
-		qdel(right_leg)
+    if(right_leg)
+        right_leg.drop_limb()
+        qdel(right_leg)
 
-	if(old_left_leg)
-		var/obj/item/bodypart/leg/left/new_left_leg = new old_left_leg()
-		new_left_leg.replace_limb(organ_owner, TRUE)
+    if(!QDELETED(organ_owner))
+        if(old_left_leg)
+            var/obj/item/bodypart/leg/left/new_left_leg = new old_left_leg()
+            new_left_leg.replace_limb(organ_owner, TRUE)
 
-	if(old_right_leg)
-		var/obj/item/bodypart/leg/right/new_right_leg = new old_right_leg()
-		new_right_leg.replace_limb(organ_owner, TRUE)
+        if(old_right_leg)
+            var/obj/item/bodypart/leg/right/new_right_leg = new old_right_leg()
+            new_right_leg.replace_limb(organ_owner, TRUE)
 
-	// We don't call `synchronize_bodytypes()` here, because it's already going to get called in the parent because `external_bodyshapes` has a value.
-	remove_verb(organ_owner, /obj/item/organ/taur_body/proc/toggle_laying)
-	remove_verb(organ_owner, /obj/item/organ/taur_body/proc/toggle_cropping)
-	return ..()
+        remove_verb(organ_owner, /obj/item/organ/taur_body/proc/toggle_laying)
+        remove_verb(organ_owner, /obj/item/organ/taur_body/proc/toggle_cropping)
+
+    return ..()
 
 /obj/item/organ/taur_body/proc/get_riding_offset(oversized = FALSE)
 	var/size_scaling = (owner.dna.features["body_size"] / BODY_SIZE_NORMAL) - 1

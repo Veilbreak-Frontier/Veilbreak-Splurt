@@ -147,6 +147,9 @@
 	var/girth = 9
 	var/sheath = SHEATH_NONE
 	bodypart_overlay = /datum/bodypart_overlay/mutant/genital/penis
+	var/knotted = FALSE
+	var/override_string_knot = "knot"
+	var/override_string_tie = "tie"
 
 /datum/bodypart_overlay/mutant/genital/penis
 	feature_key = ORGAN_SLOT_PENIS
@@ -192,36 +195,17 @@
 /obj/item/organ/genital/penis/update_genital_icon_state()
 	var/size_affix
 	var/measured_size = FLOOR(genital_size,1)
-	if(findtext(genital_name, "(Alt)"))
-		if(measured_size < 1)
-			measured_size = 1
-		switch(measured_size)
-			if(1 to 10)
-				size_affix = "1"
-			if(11 to 20)
-				size_affix = "2"
-			if(21 to 30)
-				size_affix = "3"
-			if(31 to 40)
-				size_affix = "4"
-			if(41 to 50)
-				size_affix = "5"
-			if(51 to 61)
-				size_affix = "6"
-			else
-				size_affix = "7"
-	else
-		if(measured_size < 1)
-			measured_size = 1
-		switch(measured_size)
-			if(1 to 8)
-				size_affix = "1"
-			if(9 to 15)
-				size_affix = "2"
-			if(16 to 24)
-				size_affix = "3"
-			else
-				size_affix = "4"
+	if(measured_size < 1)
+		measured_size = 1
+	switch(measured_size)
+		if(1 to 8)
+			size_affix = "1"
+		if(9 to 15)
+			size_affix = "2"
+		if(16 to 24)
+			size_affix = "3"
+		else
+			size_affix = "4"
 	var/passed_string = "penis_[genital_type]_[size_affix]"
 	if(uses_skintones)
 		passed_string += "_s"
@@ -239,36 +223,35 @@
 	var/is_erect = 0
 	if(aroused == AROUSAL_FULL)
 		is_erect = 1
-	if(findtext(genital_name, "(Alt)"))
-		if(measured_size < 1)
-			measured_size = 1
-		switch(measured_size)
-			if(1 to 10)
-				size_affix = "1"
-			if(11 to 20)
-				size_affix = "2"
-			if(21 to 30)
-				size_affix = "3"
-			if(31 to 40)
-				size_affix = "4"
-			if(41 to 50)
-				size_affix = "5"
-			if(51 to 61)
-				size_affix = "6"
-			else
-				size_affix = "7"
-	else
-		if(measured_size < 1)
-			measured_size = 1
-		switch(measured_size)
-			if(1 to 8)
-				size_affix = "1"
-			if(9 to 15)
-				size_affix = "2"
-			if(16 to 24)
-				size_affix = "3"
-			else
-				size_affix = "4"
+	if(measured_size < 1)
+		measured_size = 1
+	switch(measured_size)
+	//SPLURT EDIT START
+	/*
+		if(1 to 8)
+			size_affix = "1"
+		if(9 to 15)
+			size_affix = "2"
+		if(16 to 24)
+			size_affix = "3"
+		else
+			size_affix = "4"
+	*/
+		if(1 to 6)
+			size_affix = "1"
+		if(7 to 11)
+			size_affix = "2"
+		if(12 to 36)
+			size_affix = "3"
+		if(37 to 48)
+			size_affix = "4"
+		if(49 to 56)
+			size_affix = "5"
+		if(57 to 64)
+			size_affix = "6"
+		else
+			size_affix = "7"
+	//SPLURT EDIT END
 	var/passed_string = "[genital_type]_[size_affix]_[is_erect]"
 	if(uses_skintones)
 		passed_string += "_s"
@@ -287,6 +270,9 @@
 		sheath = DNA.features["penis_sheath"]
 	if(DNA.features["penis_uses_skintones"])
 		uses_skintones = accessory.has_skintone_shading
+	knotted = snake.knotted
+	override_string_knot = snake.override_string_knot
+	override_string_tie = snake.override_string_tie
 
 /datum/bodypart_overlay/mutant/genital/penis/get_global_feature_list()
 	return SSaccessories.sprite_accessories[ORGAN_SLOT_PENIS]
@@ -311,11 +297,7 @@
 	layers = EXTERNAL_ADJACENT | EXTERNAL_BEHIND
 
 /obj/item/organ/genital/testicles/update_genital_icon_state()
-	var/measured_size = FLOOR(genital_size,1)
-	var/max_size = TESTICLES_MAX_SIZE
-	if(genital_name != "Pair (Alt)" && genital_name != "Sheathed Pair")
-		max_size -= 2
-	measured_size = clamp(measured_size, 1, max_size)
+	var/measured_size = clamp(genital_size, 1, TESTICLES_MAX_SIZE)
 	var/passed_string = "testicles_[genital_type]_[measured_size]"
 	if(uses_skintones)
 		passed_string += "_s"
@@ -339,10 +321,7 @@
 
 /obj/item/organ/genital/testicles/get_sprite_size_string()
 	var/measured_size = FLOOR(genital_size,1)
-	var/max_size = TESTICLES_MAX_SIZE
-	if(genital_name != "Pair (Alt)" && genital_name != "Sheathed Pair")
-		max_size -= 2
-	measured_size = clamp(measured_size, 0, max_size)
+	measured_size = clamp(measured_size, 0, TESTICLES_MAX_SIZE)
 	var/passed_string = "[genital_type]_[measured_size]"
 	if(uses_skintones)
 		passed_string += "_s"
@@ -500,7 +479,7 @@
 	returned_string += size_description
 	if(aroused == AROUSAL_FULL)
 		if(lactates)
-			returned_string += " The nipples seem hard, perky and are leaking milk."
+			returned_string += " The nipples seem hard, perky and are leaking [find_reagent_object_from_type(internal_fluid_datum)]." //SPLURT EDIT - Adds fluid name to examine text
 		else
 			returned_string += " Their nipples look hard and perky."
 	return returned_string
@@ -518,16 +497,19 @@
 	icon_state = passed_string
 
 /obj/item/organ/genital/breasts/get_sprite_size_string()
+	//SPLURT EDIT START
+	/*
 	var/max_size = 5
 	if(genital_type == "pair")
-		max_size = findtext(genital_name, "(Alt)") ? 19 : 16
-	if(genital_type == "quad")
-		max_size = findtext(genital_name, "(Alt)") ? 19 : 5
+		max_size = 16
 	var/current_size = FLOOR(genital_size, 1)
 	if(current_size < 0)
 		current_size = 0
 	else if (current_size > max_size)
 		current_size = max_size
+	*/
+	var/current_size = clamp(floor(genital_size), 0, 19)
+	//SPLURT EDIT END
 	var/passed_string = "[genital_type]_[current_size]"
 	if(uses_skintones)
 		passed_string += "_s"

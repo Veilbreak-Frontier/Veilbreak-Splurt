@@ -37,3 +37,15 @@
 /obj/machinery/computer/operating/oldstation
 	name = "ancient operating computer"
 	advanced_surgeries = list(/datum/surgery_operation/basic/dissection)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/rnd/server/oldstation/attackby(obj/item/attacking_item, mob/user, list/modifiers, list/attack_modifiers)
+	if(istype(attacking_item, /obj/item/research_notes) && stored_research)
+		var/obj/item/research_notes/research_notes = attacking_item
+		stored_research.add_point_list(list(TECHWEB_POINT_TYPE_GENERIC = research_notes.value))
+		playsound(src, 'sound/machines/copier.ogg', 50, TRUE)
+		qdel(research_notes)
+		return
+	return ..()
+
+///Ancient computer that starts with dissection to tell players they have it.

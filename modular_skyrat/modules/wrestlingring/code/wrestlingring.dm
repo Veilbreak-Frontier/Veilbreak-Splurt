@@ -3,7 +3,6 @@
 	desc = "Ropes that are meant to go around a wrestling ring."
 	icon = 'modular_skyrat/modules/wrestlingring/icons/wrestling.dmi'
 	icon_state = "ropes"
-	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 1.5)
 	climbable = FALSE
 
 /obj/structure/railing/wrestling/CanPass(atom/movable/mover, border_dir)
@@ -66,7 +65,6 @@
 	armor_type = /datum/armor/structure_wrestling_corner
 	max_integrity = 75
 	var/ini_dir
-	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 3)
 
 /datum/armor/structure_wrestling_corner
 	melee = 50
@@ -81,7 +79,7 @@
 	ini_dir = dir
 
 	AddElement(/datum/element/climbable, climb_time = 20, climb_stun = 0)
-	AddElement(/datum/element/simple_rotation, ROTATION_NEEDS_ROOM)
+	AddComponent(/datum/component/simple_rotation, ROTATION_NEEDS_ROOM)
 
 	var/static/list/loc_connections = list(
 		COMSIG_ATOM_ENTERED = PROC_REF(on_enter),
@@ -145,12 +143,11 @@
 	SIGNAL_HANDLER
 	if(ishuman(movable))
 		var/mob/living/carbon/human/H = movable
-		H.AddComponent(/datum/component/tackler, stamina_cost=25, base_knockdown = 1 SECONDS, range = 4, speed = 1, skill_mod = 0, min_distance = 0)
+		H.AddComponentFrom(REF(src), /datum/component/tackler, stamina_cost=25, base_knockdown = 1 SECONDS, range = 4, speed = 1, skill_mod = 0, min_distance = 0)
 
 /obj/structure/wrestling_corner/proc/on_exit(datum/source, atom/movable/leaving, direction)
 	SIGNAL_HANDLER
 
 	if(ishuman(leaving))
 		var/mob/living/carbon/human/H = leaving
-		var/datum/component/tackler/wrestling_tackler = H.GetComponent(/datum/component/tackler)
-		wrestling_tackler.Destroy()
+		H.RemoveComponentSource(REF(src), /datum/component/tackler)

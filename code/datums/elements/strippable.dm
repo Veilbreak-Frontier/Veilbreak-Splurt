@@ -540,3 +540,9 @@
 		strippable_items[strippable_item.key] = strippable_item
 
 	return strippable_items
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/strip_menu/New(atom/movable/owner, datum/element/strippable/strippable)
+	. = ..()
+	src.owner = owner
+	src.strippable = strippable

@@ -14,6 +14,7 @@
 		JOB_CAPTAIN,
 		JOB_CORRECTIONS_OFFICER,
 		JOB_NT_REP,
+		JOB_NT_TRN,
 		JOB_BLUESHIELD,
 		JOB_ORDERLY,
 		JOB_BOUNCER,
@@ -63,5 +64,5 @@
 	id_trim = /datum/id_trim/chameleon/operative
 
 /datum/outfit/syndicateinfiltrator/post_equip(mob/living/carbon/human/H)
-	H.add_faction(ROLE_SYNDICATE)
+	H.faction |= ROLE_SYNDICATE
 	H.update_icons()

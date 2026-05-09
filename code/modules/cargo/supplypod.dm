@@ -804,3 +804,273 @@
 
 /obj/item/disk/cargo/bluespace_pod/setup_reskins()
 	return
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/structure/closet/supplypod/podspawn/deathmatch/preOpen()
+	for(var/mob/living/critter in contents)
+		critter.faction = list(FACTION_HOSTILE) //No infighting, but also KILL!!
+	return ..()
+
+/obj/structure/closet/supplypod/proc/setStyle(datum/pod_style/chosen_style) //Used to give the sprite an icon state, name, and description.
+	style = chosen_style
+	icon_state = chosen_style::icon_state
+	decal = chosen_style::decal_icon
+	rubble_type = chosen_style::rubble_type
+	if (!adminNamed && !specialised) //We dont want to name it ourselves if it has been specifically named by an admin using the centcom_podlauncher datum
+		name = chosen_style::name
+		desc = chosen_style::desc
+	if (chosen_style::has_door)
+		door = "[icon_state]_door"
+	else
+		door = FALSE
+	update_appearance()
+
+/obj/structure/closet/supplypod/proc/preOpen() //Called before the open_pod() proc. Handles anything that occurs right as the pod lands.
+	var/turf/turf_underneath = get_turf(src)
+	var/list/boom = explosionSize
+	resistance_flags = initial(resistance_flags)
+	set_density(TRUE) //Density is originally false so the pod doesn't block anything while it's still falling through the air
+	AddComponent(/datum/component/pellet_cloud, projectile_type=shrapnel_type, magnitude=shrapnel_magnitude)
+	if(effectShrapnel)
+		SEND_SIGNAL(src, COMSIG_SUPPLYPOD_LANDED)
+	for (var/mob/living/target_living in turf_underneath)
+		if (iscarbon(target_living)) //If effectLimb is true (which means we pop limbs off when we hit people):
+			if (effectLimb)
+				var/mob/living/carbon/carbon_target_mob = target_living
+				for (var/bp in carbon_target_mob.bodyparts) //Look at the bodyparts in our poor mob beneath our pod as it lands
+					var/obj/item/bodypart/bodypart = bp
+					if(bodypart.body_part != HEAD && bodypart.body_part != CHEST)//we dont want to kill him, just teach em a lesson!
+						if (!(bodypart.bodypart_flags & BODYPART_UNREMOVABLE))
+							bodypart.dismember() //Using the power of flextape i've sawed this man's limb in half!
+							break
+			if (effectOrgans) //effectOrgans means remove every organ in our mob
+				var/mob/living/carbon/carbon_target_mob = target_living
+				for(var/obj/item/organ/organ_to_yeet as anything in carbon_target_mob.organs)
+					var/destination = get_edge_target_turf(turf_underneath, pick(GLOB.alldirs)) //Pick a random direction to toss them in
+					// SKYRAT EDIT START - Non-spillable organs
+					if(!organ_to_yeet.drop_when_organ_spilling)
+						qdel(organ_to_yeet)
+						continue
+					// SKYRAT EDIT END
+					organ_to_yeet.Remove(carbon_target_mob) //Note that this isn't the same proc as for lists
+					organ_to_yeet.forceMove(turf_underneath) //Move the organ outta the body
+					organ_to_yeet.throw_at(destination, 2, 3) //Thow the organ at a random tile 3 spots away
+					sleep(0.1 SECONDS)
+				for (var/bp in carbon_target_mob.bodyparts) //Look at the bodyparts in our poor mob beneath our pod as it lands
+					var/obj/item/bodypart/bodypart = bp
+					var/destination = get_edge_target_turf(turf_underneath, pick(GLOB.alldirs))
+					if (!(bodypart.bodypart_flags & BODYPART_UNREMOVABLE))
+						bodypart.dismember() //Using the power of flextape i've sawed this man's bodypart in half!
+						bodypart.throw_at(destination, 2, 3)
+						sleep(0.1 SECONDS)
+
+		if (effectGib) //effectGib is on, that means whatever's underneath us better be fucking oof'd on
+			target_living.adjust_brute_loss(5000) //THATS A LOT OF DAMAGE (called just in case gib() doesnt work on em)
+			if (!QDELETED(target_living))
+				target_living.gib(DROP_ALL_REMAINS) //After adjusting the fuck outta that brute loss we finish the job with some satisfying gibs
+		else
+			target_living.adjust_brute_loss(damage)
+
+	if (boom?.len == 4)
+		boom.len += 1
+	if (!isnull(boom) && (boom[1] + boom[2] + boom[3] + boom[4] + boom[5])) // spawn explosion only if there is actual explosion range
+		explosion(turf_underneath, boom[1], boom[2], boom[3], flame_range = boom[4], flash_range = boom[5], silent = effectQuiet, ignorecap = istype(src, /obj/structure/closet/supplypod/centcompod), explosion_cause = src)
+	else if (!effectQuiet && !(pod_flags & FIRST_SOUNDS)) //If our explosion list IS all zeroes, we still make a nice explosion sound (unless the effectQuiet var is true)
+		playsound(src, SFX_EXPLOSION, landingSound ? soundVolume * 0.25 : soundVolume, TRUE)
+	if (landingSound)
+		playsound(turf_underneath, landingSound, soundVolume, FALSE, FALSE)
+	if (effectMissile) //If we are acting like a missile, then right after we land and finish fucking shit up w explosions, we should delete
+		opened = TRUE //We set opened to TRUE to avoid spending time trying to open (due to being deleted) during the Destroy() proc
+		qdel(src)
+		return
+	if (ispath(style, /datum/pod_style/gondola)) //Checks if we are supposed to be a gondola pod. If so, create a gondolapod mob, and move this pod to nullspace. I'd like to give a shout out, to my man oranges
+		var/mob/living/basic/pet/gondola/gondolapod/benis = new(turf_underneath, src)
+		benis.contents |= contents //Move the contents of this supplypod into the gondolapod mob.
+		for (var/mob/living/mob_in_pod in benis.contents)
+			mob_in_pod.reset_perspective(null)
+		moveToNullspace()
+		addtimer(CALLBACK(src, PROC_REF(open_pod), benis), delays[POD_OPENING]) //After the opening delay passes, we use the open proc from this supplyprod while referencing the contents of the "holder", in this case the gondolapod mob
+	else if (ispath(style, /datum/pod_style/seethrough))
+		open_pod(src)
+	else
+		addtimer(CALLBACK(src, PROC_REF(open_pod), src), delays[POD_OPENING]) //After the opening delay passes, we use the open proc from this supplypod, while referencing this supplypod's contents
+
+/obj/structure/closet/supplypod/proc/startExitSequence(atom/movable/holder)
+	if (leavingSound)
+		playsound(get_turf(holder), leavingSound, soundVolume, FALSE, FALSE)
+	if (reversing) //If we're reversing, we call the close proc. This sends the pod back up to centcom
+		close(holder)
+	else if (bluespace) //If we're a bluespace pod, then delete ourselves (along with our holder, if a separate holder exists)
+		deleteRubble()
+		if (!effectQuiet && create_sparks && !ispath(style, /datum/pod_style/invisible) && !ispath(style, /datum/pod_style/seethrough))
+			do_sparks(5, TRUE, holder) //Create some sparks right before closing
+		qdel(src) //Delete ourselves and the holder
+		if (holder != src)
+			qdel(holder)
+
+/obj/structure/closet/supplypod/proc/preReturn(atom/movable/holder)
+	deleteRubble()
+	animate(holder, alpha = 0, time = 8, easing = QUAD_EASING|EASE_IN, flags = ANIMATION_PARALLEL)
+	animate(holder, pixel_z = 400, time = 10, easing = QUAD_EASING|EASE_IN, flags = ANIMATION_PARALLEL) //Animate our rising pod
+	addtimer(CALLBACK(src, PROC_REF(handleReturnAfterDeparting), holder), 15) //Finish up the pod's duties after a certain amount of time
+
+/obj/structure/closet/supplypod/extractionpod/preReturn(atom/movable/holder)
+	// Double ensure we're loaded, this SHOULD be here by now but you never know
+	SSmapping.lazy_load_template(LAZY_TEMPLATE_KEY_NINJA_HOLDING_FACILITY)
+	var/turf/picked_turf = pick(GLOB.holdingfacility)
+	reverse_dropoff_coords = list(picked_turf.x, picked_turf.y, picked_turf.z)
+	return ..()
+
+/obj/structure/closet/supplypod/setOpened() //Proc exists here, as well as in any atom that can assume the role of a "holder" of a supplypod. Check the open_pod() proc for more details
+	opened = TRUE
+	set_density(FALSE)
+	update_appearance()
+	after_open(null, FALSE)
+
+/obj/structure/closet/supplypod/extractionpod/setOpened()
+	opened = TRUE
+	set_density(TRUE)
+	update_appearance()
+	after_open(null, FALSE)
+
+/obj/structure/closet/supplypod/setClosed() //Ditto
+	opened = FALSE
+	set_density(TRUE)
+	update_appearance()
+	after_close(null, FALSE)
+
+/obj/structure/closet/supplypod/proc/tryMakeRubble(turf/T) //Ditto
+	if (rubble_type == RUBBLE_NONE)
+		return
+	if (rubble)
+		return
+	if (effectMissile)
+		return
+	if (isspaceturf(T) || isclosedturf(T))
+		return
+	rubble = new /obj/effect/supplypod_rubble(T)
+	rubble.setStyle(rubble_type, src)
+	update_appearance()
+
+/obj/structure/closet/supplypod/proc/deleteRubble()
+	rubble?.fadeAway()
+	rubble = null
+	update_appearance()
+
+/obj/structure/closet/supplypod/proc/addGlow()
+	if (style::shape != POD_SHAPE_NORMAL)
+		return
+	glow_effect = new(src)
+	glow_effect.icon_state = "pod_glow_" + style::glow_color
+	vis_contents += glow_effect
+	glow_effect.layer = GASFIRE_LAYER
+	SET_PLANE_EXPLICIT(glow_effect, ABOVE_GAME_PLANE, src)
+	RegisterSignal(glow_effect, COMSIG_QDELETING, PROC_REF(remove_glow))
+
+/obj/structure/closet/supplypod/proc/endGlow()
+	if(!glow_effect)
+		return
+	glow_effect.layer = LOW_ITEM_LAYER
+	glow_effect.fadeAway(delays[POD_OPENING])
+	//Trust the signals
+
+/obj/structure/closet/supplypod/Destroy()
+	deleteRubble()
+	//Trust the signals even harder
+	qdel(glow_effect)
+	open_pod(src, broken = TRUE) //Lets dump our contents by opening up
+	return ..()
+
+//------------------------------------TEMPORARY_VISUAL-------------------------------------//
+
+/obj/effect/engineglow/proc/fadeAway(leaveTime)
+	var/duration = min(leaveTime, 25)
+	animate(src, alpha=0, time = duration)
+	QDEL_IN(src, duration + 5)
+
+/obj/effect/supplypod_smoke/proc/drawSelf(amount)
+	alpha = max(0, 255-(amount*20))
+
+/obj/effect/supplypod_rubble/proc/getForeground(obj/structure/closet/supplypod/pod)
+	var/mutable_appearance/rubble_overlay = mutable_appearance('icons/obj/supplypods.dmi', foreground)
+	rubble_overlay.appearance_flags = KEEP_APART|RESET_TRANSFORM
+	rubble_overlay.transform = matrix().Translate(SUPPLYPOD_X_OFFSET - pod.pixel_x, verticle_offset)
+	return rubble_overlay
+
+/obj/effect/supplypod_rubble/proc/fadeAway()
+	animate(src, alpha=0, time = 30)
+	QDEL_IN(src, 35)
+
+/obj/effect/supplypod_rubble/proc/setStyle(type, obj/structure/closet/supplypod/pod)
+	if (type == RUBBLE_WIDE)
+		icon_state += "_wide"
+		foreground += "_wide"
+	if (type == RUBBLE_THIN)
+		icon_state += "_thin"
+		foreground += "_thin"
+	if (ispath(pod.style, /datum/pod_style/box))
+		verticle_offset = -2
+	else
+		verticle_offset = initial(verticle_offset)
+
+	pixel_y = verticle_offset
+
+/obj/effect/pod_landingzone/proc/playFallingSound()
+	playsound(src, pod.fallingSound, pod.soundVolume, TRUE, 6)
+
+/obj/effect/pod_landingzone/proc/beginLaunch(effectCircle) //Begin the animation for the pod falling. The effectCircle param determines whether the pod gets to come in from any descent angle
+	pod.addGlow()
+	pod.update_appearance()
+	pod.forceMove(drop_location())
+	for (var/mob/living/M in pod) //Remember earlier (initialization) when we moved mobs into the pod_landingzone so they wouldnt get lost in nullspace? Time to get them out
+		M.reset_perspective(null)
+	var/angle = effectCircle ? rand(0,360) : rand(70,110) //The angle that we can come in from
+	pod.pixel_x = cos(angle)*32*length(smoke_effects) //Use some ADVANCED MATHEMATICS to set the animated pod's position to somewhere on the edge of a circle with the center being the pod_landingzone
+	pod.pixel_z = sin(angle)*32*length(smoke_effects)
+	var/rotation = get_pixel_angle(pod.pixel_z, pod.pixel_x) //CUSTOM HOMEBREWED proc that is just arctan with extra steps
+	setupSmoke(rotation)
+	pod.transform = matrix().Turn(rotation)
+	pod.layer = FLY_LAYER
+	SET_PLANE_EXPLICIT(pod, ABOVE_GAME_PLANE, src)
+	if (!ispath(pod.style, /datum/pod_style/invisible))
+		animate(pod, pixel_z = -1 * abs(sin(rotation))*4, pixel_x = SUPPLYPOD_X_OFFSET + (sin(rotation) * 20), time = pod.delays[POD_FALLING], easing = LINEAR_EASING) //Make the pod fall! At an angle!
+	addtimer(CALLBACK(src, PROC_REF(endLaunch)), pod.delays[POD_FALLING], TIMER_CLIENT_TIME) //Go onto the last step after a very short falling animation
+
+/obj/effect/pod_landingzone/proc/setupSmoke(rotation)
+	if (ispath(pod.style, /datum/pod_style/invisible) || ispath(pod.style, /datum/pod_style/seethrough))
+		return
+	var/turf/our_turf = get_turf(drop_location())
+	for ( var/i in 1 to length(smoke_effects))
+		var/obj/effect/supplypod_smoke/smoke_part = new (drop_location())
+		if (i == 1)
+			smoke_part.layer = FLY_LAYER
+			SET_PLANE(smoke_part, ABOVE_GAME_PLANE, our_turf)
+			smoke_part.icon_state = "smoke_start"
+		smoke_part.transform = matrix().Turn(rotation)
+		smoke_effects[i] = smoke_part
+		smoke_part.pixel_x = sin(rotation)*32 * i
+		smoke_part.pixel_y = abs(cos(rotation))*32 * i
+		smoke_part.add_filter("smoke_blur", 1, gauss_blur_filter(size = 4))
+		var/time = (pod.delays[POD_FALLING] / length(smoke_effects))*(length(smoke_effects)-i)
+		addtimer(CALLBACK(smoke_part, TYPE_PROC_REF(/obj/effect/supplypod_smoke/, drawSelf), i), time, TIMER_CLIENT_TIME) //Go onto the last step after a very short falling animation
+		QDEL_IN(smoke_part, pod.delays[POD_FALLING] + 35)
+
+/obj/effect/pod_landingzone/proc/drawSmoke()
+	if (ispath(pod.style, /datum/pod_style/invisible) || ispath(pod.style, /datum/pod_style/seethrough))
+		return
+	for (var/obj/effect/supplypod_smoke/smoke_part in smoke_effects)
+		animate(smoke_part, alpha = 0, time = 20, flags = ANIMATION_PARALLEL)
+		animate(smoke_part.get_filter("smoke_blur"), size = 6, time = 15, easing = CUBIC_EASING|EASE_OUT, flags = ANIMATION_PARALLEL)
+
+/obj/effect/pod_landingzone/proc/endLaunch()
+	var/turf/our_turf = get_turf(drop_location())
+	pod.tryMakeRubble(drop_location())
+	pod.layer = initial(pod.layer)
+	SET_PLANE(pod, initial(pod.plane), our_turf)
+	pod.endGlow()
+	QDEL_NULL(helper)
+	pod.preOpen() //Begin supplypod open procedures. Here effects like explosions, damage, and other dangerous (and potentially admin-caused, if the centcom_podlauncher datum was used) memes will take place
+	drawSmoke()
+	qdel(src) //The pod_landingzone's purpose is complete. It can rest easy now
+
+//------------------------------------UPGRADES-------------------------------------//

@@ -312,3 +312,27 @@
 			names += initial(event.name)
 	if(LAZYLEN(names))
 		log_game("[capitalize(name)] has selected the following shuttle events: [english_list(names)].")
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/docking_port/mobile/emergency/cancel(area/signalOrigin)
+	if(mode != SHUTTLE_CALL)
+		return
+	if(SSshuttle.emergency_no_recall)
+		return
+
+	invertTimer()
+	mode = SHUTTLE_RECALL
+
+	if(prob(70))
+		SSshuttle.emergency_last_call_loc = signalOrigin
+	else
+		SSshuttle.emergency_last_call_loc = null
+	priority_announce(
+		text = "The emergency shuttle has been recalled.[SSshuttle.emergency_last_call_loc ? " Recall signal traced. Results can be viewed on any communications console." : "" ]",
+		title = "Emergency Shuttle Recalled",
+		sound = ANNOUNCER_SHUTTLERECALLED,
+		sender_override = "Emergency Shuttle Uplink Alert",
+		color_override = "orange",
+		)
+
+	SSticker.emergency_reason = null

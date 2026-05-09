@@ -171,3 +171,13 @@
 	human_user?.do_jitter_animation(50)
 	// Hand fires at them from the location
 	fire_curse_hand(user, get_turf(challenge.location))
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/fish_source/dimensional_rift/proc/check_item_location(atom/location, obj/item/bodypart/random_arm, obj/item/used_rod)
+	for(var/obj/item/thingy in get_turf(location))
+		// If it's not in the list and it's not what we know as the used rod, skip.
+		// This lets fishing gloves be dragged in as well. I mean honestly if you try fishing in here with those you should just Fucking Die but that's for later.
+		if(!is_type_in_list(thingy, list(/obj/item/bodypart, /obj/item/fishing_rod)) && (thingy != used_rod))
+			continue
+		thingy.forceMove(location)
+		location.visible_message(span_danger("Tendrils lash out from [location] and greedily drag [thingy] inwards. You're probably never seeing [thingy] again."))

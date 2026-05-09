@@ -331,3 +331,9 @@
 /// Returns true if you are out and about
 /mob/living/basic/guardian/proc/is_deployed()
 	return isnull(summoner) || loc != summoner
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/guardian/dust(just_ash, drop_items, force)
+	death(TRUE)
+
+/// Link up with a summoner mob.

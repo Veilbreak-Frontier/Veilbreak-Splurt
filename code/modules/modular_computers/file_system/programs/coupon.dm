@@ -118,3 +118,10 @@
 
 #undef COUPON_PAPER_USE
 #undef COUPON_TONER_USE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/computer_file/program/coupon/on_install()
+	. = ..()
+	///set the discount_coupons list, which means SSmodular_computers will now begin to periodically produce new coupon codes.
+	LAZYINITLIST(SSmodular_computers.discount_coupons)
+	ADD_TRAIT(computer, TRAIT_MODPC_HALVED_DOWNLOAD_SPEED, REF(src)) //All that glitters is not gold

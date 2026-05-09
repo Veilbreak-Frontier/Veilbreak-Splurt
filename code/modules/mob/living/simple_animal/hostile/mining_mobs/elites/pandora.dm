@@ -195,3 +195,15 @@
 #undef MAGIC_BOX
 #undef PANDORA_TELEPORT
 #undef AOE_SQUARES
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/simple_animal/hostile/asteroid/elite/pandora/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	. = ..()
+	if(health >= maxHealth * 0.5)
+		cooldown_time = 2 SECONDS
+		return
+	if(health < maxHealth * 0.5 && health > maxHealth * 0.25)
+		cooldown_time = 1.5 SECONDS
+		return
+	else
+		cooldown_time = 1 SECONDS

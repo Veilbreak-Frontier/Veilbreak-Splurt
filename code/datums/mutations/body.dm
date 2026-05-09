@@ -734,3 +734,84 @@
 		owner.adjust_brute_loss(0.5 * seconds_per_tick * GET_MUTATION_SYNCHRONIZER(src), forced = TRUE)
 	// Offsets suffocation but not entirely
 	owner.adjust_oxy_loss(-0.5 * seconds_per_tick, forced = TRUE)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/mutation/epilepsy/on_life(seconds_per_tick, times_fired)
+	if(SPT_PROB(0.5 * GET_MUTATION_SYNCHRONIZER(src), seconds_per_tick))
+		trigger_seizure()
+
+/datum/mutation/cough/on_life(seconds_per_tick, times_fired)
+	if(SPT_PROB(2.5 * GET_MUTATION_SYNCHRONIZER(src), seconds_per_tick) && owner.stat == CONSCIOUS)
+		owner.drop_all_held_items()
+		owner.emote("cough")
+		if(GET_MUTATION_POWER(src) > 1)
+			var/cough_range = GET_MUTATION_POWER(src) * 4
+			var/turf/target = get_ranged_target_turf(owner, REVERSE_DIR(owner.dir), cough_range)
+			owner.throw_at(target, cough_range, GET_MUTATION_POWER(src))
+
+/datum/mutation/paranoia/on_life(seconds_per_tick, times_fired)
+	if(SPT_PROB(2.5, seconds_per_tick) && owner.stat == CONSCIOUS)
+		owner.emote("scream")
+		if(prob(25))
+			owner.adjust_hallucinations(40 SECONDS)
+
+//Dwarfism shrinks your body and lets you pass tables.
+
+/datum/mutation/tourettes/on_life(seconds_per_tick, times_fired)
+	if(SPT_PROB(5 * GET_MUTATION_SYNCHRONIZER(src), seconds_per_tick) && owner.stat == CONSCIOUS && !owner.IsStun())
+		switch(rand(1, 3))
+			if(1)
+				owner.emote("twitch")
+			if(2 to 3)
+				owner.say("[prob(50) ? ";" : ""][pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER", "TITS")]", forced=name)
+		var/w_offset =  rand(-2, 2)
+		var/z_offset = rand(-1, 1)
+		animate(owner, pixel_w = w_offset, pixel_z = z_offset, time = 0.1 SECONDS, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
+		animate(owner, pixel_w = -w_offset, pixel_z = -z_offset, time = 0.1 SECONDS, flags = ANIMATION_RELATIVE)
+
+
+//Deafness makes you deaf.
+
+/datum/mutation/fire/on_life(seconds_per_tick, times_fired)
+	if(SPT_PROB((0.05+(100-dna.stability)/19.5) * GET_MUTATION_SYNCHRONIZER(src), seconds_per_tick))
+		owner.adjust_fire_stacks(2 * GET_MUTATION_POWER(src))
+		owner.ignite_mob()
+
+/datum/mutation/badblink/on_life(seconds_per_tick, times_fired)
+	if(SPT_PROB(warpchance, seconds_per_tick))
+		var/warpmessage = pick(
+		span_warning("With a sickening 720-degree twist of [owner.p_their()] back, [owner] vanishes into thin air."),
+		span_warning("[owner] does some sort of strange backflip into another dimension. It looks pretty painful."),
+		span_warning("[owner] does a jump to the left, a step to the right, and warps out of reality."),
+		span_warning("[owner]'s torso starts folding inside out until it vanishes from reality, taking [owner] with it."),
+		span_warning("One moment, you see [owner]. The next, [owner] is gone."))
+		owner.visible_message(warpmessage, span_userdanger("You feel a wave of nausea as you fall through reality!"))
+		var/warpdistance = rand(10, 15) * GET_MUTATION_POWER(src)
+		do_teleport(owner, get_turf(owner), warpdistance, channel = TELEPORT_CHANNEL_FREE)
+		owner.adjust_disgust(GET_MUTATION_SYNCHRONIZER(src) * (warpchance * warpdistance))
+		warpchance = 0
+		owner.visible_message(span_danger("[owner] appears out of nowhere!"))
+	else
+		warpchance += 0.0625 * seconds_per_tick / GET_MUTATION_ENERGY(src)
+
+/datum/mutation/acidflesh/on_life(seconds_per_tick, times_fired)
+	if(SPT_PROB(13, seconds_per_tick))
+		if(COOLDOWN_FINISHED(src, msgcooldown))
+			to_chat(owner, span_danger("Your acid flesh bubbles..."))
+			COOLDOWN_START(src, msgcooldown, 20 SECONDS)
+		if(prob(15))
+			owner.acid_act(rand(30, 50), 10)
+			owner.visible_message(span_warning("[owner]'s skin bubbles and pops."), span_userdanger("Your bubbling flesh pops! It burns!"))
+			playsound(owner,'sound/items/weapons/sear.ogg', 50, TRUE)
+
+/datum/mutation/inexorable/on_life(seconds_per_tick, times_fired)
+	if(owner.health > owner.crit_threshold || owner.stat != CONSCIOUS || HAS_TRAIT(owner, TRAIT_STASIS))
+		return
+	// Gives you 30 seconds of being in soft crit... give or take
+	if(HAS_TRAIT(owner, TRAIT_TOXIMMUNE) || HAS_TRAIT(owner, TRAIT_TOXINLOVER))
+		owner.adjust_brute_loss(1 * seconds_per_tick * GET_MUTATION_SYNCHRONIZER(src), forced = TRUE)
+	else
+		owner.adjust_tox_loss(0.5 * seconds_per_tick * GET_MUTATION_SYNCHRONIZER(src), forced = TRUE)
+		owner.adjust_brute_loss(0.5 * seconds_per_tick * GET_MUTATION_SYNCHRONIZER(src), forced = TRUE)
+	// Offsets suffocation but not entirely
+	owner.adjust_oxy_loss(-0.5 * seconds_per_tick, forced = TRUE)

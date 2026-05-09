@@ -239,3 +239,10 @@
 		return TRUE
 	playsound(computer, 'sound/machines/terminal/terminal_error.ogg', 25)
 	return FALSE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/computer_file/program/scipaper_program/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
+	. = ..()
+	paper_to_be = new
+	if(!CONFIG_GET(flag/no_default_techweb_link) && !linked_techweb)
+		CONNECT_TO_RND_SERVER_ROUNDSTART(linked_techweb, computer)

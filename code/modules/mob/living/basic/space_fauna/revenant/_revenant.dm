@@ -472,3 +472,25 @@
 	return TRUE
 
 #undef REVENANT_STUNNED_TRAIT
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/revenant/proc/on_life(seconds_per_tick = SSMOBS_DT, times_fired)
+	SIGNAL_HANDLER
+
+	if(dormant)
+		return COMPONENT_LIVING_CANCEL_LIFE_PROCESSING
+
+	if(HAS_TRAIT(src, TRAIT_REVENANT_REVEALED) && essence <= 0)
+		death()
+		return COMPONENT_LIVING_CANCEL_LIFE_PROCESSING
+
+	if(essence_regenerating && !HAS_TRAIT(src, TRAIT_REVENANT_INHIBITED) && essence < max_essence) //While inhibited, essence will not regenerate
+		var/change_in_time = DELTA_WORLD_TIME(SSmobs)
+		essence = min(essence + (essence_regen_amount * change_in_time), max_essence)
+		update_mob_action_buttons() //because we update something required by our spells in life, we need to update our buttons
+
+	update_appearance(UPDATE_ICON)
+	update_health_hud()
+
+/mob/living/basic/revenant/dust(just_ash, drop_items, force)
+	death()

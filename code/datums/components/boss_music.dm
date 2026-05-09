@@ -83,3 +83,27 @@
 	if(old_target)
 		UnregisterSignal(old_target, COMSIG_LIVING_DEATH)
 		old_target.stop_sound_channel(CHANNEL_BOSS_MUSIC)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/component/boss_music/Initialize(boss_track)
+	. = ..()
+	if(!ishostile(parent))
+		return COMPONENT_INCOMPATIBLE
+	src.boss_track = boss_track
+	track_duration = SSsounds.get_sound_length(boss_track)
+
+/datum/component/boss_music/proc/on_target_found(atom/source, mob/new_target)
+	SIGNAL_HANDLER
+	if(QDELETED(source) || !istype(new_target))
+		return
+
+	var/datum/weakref/new_ref = WEAKREF(new_target)
+	if(new_ref in players_listening_refs)
+		return
+
+	players_listening_refs += new_ref
+	RegisterSignal(new_target, COMSIG_LIVING_DEATH, PROC_REF(on_mob_death))
+	music_callbacks += addtimer(CALLBACK(src, PROC_REF(clear_target), new_ref), track_duration, TIMER_STOPPABLE)
+	new_target.playsound_local(new_target, boss_track, 200, FALSE, channel = CHANNEL_BOSS_MUSIC, pressure_affected = FALSE, use_reverb = FALSE)
+
+///Called when a mob listening to boss music dies- ends their music early.

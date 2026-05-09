@@ -615,3 +615,68 @@
 	burn_modifier = LIMB_ALIEN_BURN_DAMAGE_MULTIPLIER
 	should_draw_greyscale = FALSE
 	biological_state = BIO_STANDARD_ALIEN
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/bodypart/arm/left/set_disabled(new_disabled)
+	. = ..()
+	if(isnull(.) || !owner)
+		return
+
+	if(!.)
+		if(bodypart_disabled)
+			owner.set_usable_hands(owner.usable_hands - 1)
+			if(owner.stat < UNCONSCIOUS)
+				to_chat(owner, span_userdanger("You lose control of your [plaintext_zone]!"))
+			if(held_index)
+				owner.dropItemToGround(owner.get_item_for_held_index(held_index))
+	else if(!bodypart_disabled)
+		owner.set_usable_hands(owner.usable_hands + 1)
+
+	if(owner.hud_used)
+		var/atom/movable/screen/inventory/hand/hand_screen_object = owner.hud_used.hand_slots["[held_index]"]
+		hand_screen_object?.update_appearance()
+
+/obj/item/bodypart/arm/right/set_disabled(new_disabled)
+	. = ..()
+	if(isnull(.) || !owner)
+		return
+
+	if(!.)
+		if(bodypart_disabled)
+			owner.set_usable_hands(owner.usable_hands - 1)
+			if(owner.stat < UNCONSCIOUS)
+				to_chat(owner, span_userdanger("You lose control of your [plaintext_zone]!"))
+			if(held_index)
+				owner.dropItemToGround(owner.get_item_for_held_index(held_index))
+	else if(!bodypart_disabled)
+		owner.set_usable_hands(owner.usable_hands + 1)
+
+	if(owner.hud_used)
+		var/atom/movable/screen/inventory/hand/hand_screen_object = owner.hud_used.hand_slots["[held_index]"]
+		hand_screen_object?.update_appearance()
+
+/obj/item/bodypart/leg/left/set_disabled(new_disabled)
+	. = ..()
+	if(isnull(.) || !owner)
+		return
+
+	if(!.)
+		if(bodypart_disabled)
+			owner.set_usable_legs(owner.usable_legs - 1)
+			if(owner.stat < UNCONSCIOUS)
+				to_chat(owner, span_userdanger("You lose control of your [plaintext_zone]!"))
+	else if(!bodypart_disabled)
+		owner.set_usable_legs(owner.usable_legs + 1)
+
+/obj/item/bodypart/leg/right/set_disabled(new_disabled)
+	. = ..()
+	if(isnull(.) || !owner)
+		return
+
+	if(!.)
+		if(bodypart_disabled)
+			owner.set_usable_legs(owner.usable_legs - 1)
+			if(owner.stat < UNCONSCIOUS)
+				to_chat(owner, span_userdanger("You lose control of your [plaintext_zone]!"))
+	else if(!bodypart_disabled)
+		owner.set_usable_legs(owner.usable_legs + 1)

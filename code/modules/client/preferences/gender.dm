@@ -27,3 +27,9 @@
 	var/current_physique = preferences.read_preference(/datum/preference/choiced/body_type)
 	if(current_physique != MALE && current_physique != FEMALE)
 		preferences.update_preference(GLOB.preference_entries[/datum/preference/choiced/body_type], FEMALE)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/preference/choiced/gender/create_informed_default_value(datum/preferences/preferences)
+	// The only reason I'm limiting this to male or female
+	// is that hairstyle randomization handles enbies poorly
+	return pick(MALE, FEMALE)

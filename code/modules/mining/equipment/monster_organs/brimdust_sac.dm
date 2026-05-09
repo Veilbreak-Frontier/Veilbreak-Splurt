@@ -231,3 +231,15 @@
 #undef BRIMDUST_STACKS_ON_LIFE
 #undef BRIMDUST_STACKS_ON_USE
 #undef BRIMDUST_ALPHA_PER_STACK
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/monster_core/brimdust_sac/on_life(seconds_per_tick, times_fired)
+	. = ..()
+	if(!COOLDOWN_FINISHED(src, brimdust_auto_apply_cooldown))
+		return
+	if(!lavaland_equipment_pressure_check(get_turf(owner)))
+		return
+	COOLDOWN_START(src, brimdust_auto_apply_cooldown, BRIMDUST_LIFE_APPLY_COOLDOWN)
+	owner.apply_status_effect(user_status, BRIMDUST_STACKS_ON_LIFE)
+
+/// Make a cloud which applies brimdust to everyone nearby

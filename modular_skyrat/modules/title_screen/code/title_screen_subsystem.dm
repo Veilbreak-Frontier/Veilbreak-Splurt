@@ -28,11 +28,11 @@ SUBSYSTEM_DEF(title)
 
 /datum/controller/subsystem/title/Initialize()
 	var/dat
-	if(!fexists("[global.config.directory]/bubbers/bubbers_title.txt"))
-		to_chat(world, span_boldwarning("CRITICAL ERROR: Unable to read bubbers_title.txt, reverting to backup title html, please check your server config and ensure this file exists."))
+	if(!fexists("[global.config.directory]/splurt/veilbreak_title.txt")) // SPLURT EDIT - original title_html.txt
+		to_chat(world, span_boldwarning("CRITICAL ERROR: Unable to read splurt_title.txt, reverting to backup title html, please check your server config and ensure this file exists.")) // BUBBER EDIT - original title_html.txt
 		dat = DEFAULT_TITLE_HTML
 	else
-		dat = file2text("[global.config.directory]/bubbers/bubbers_title.txt")
+		dat = file2text("[global.config.directory]/splurt/veilbreak_title.txt") // SPLURT EDIT - original title_html.txt
 
 	title_html = dat
 
@@ -48,6 +48,7 @@ SUBSYSTEM_DEF(title)
 
 		if(LAZYLEN(formatted_list) > 1 && LOWER_TEXT(formatted_list[1]) == "startup_splash")
 			var/file_path = "[global.config.directory]/title_screens/images/[screen]"
+			splashscreen_name = screen // SPLURT EDIT ADDITION - Roundend Embeds
 			ASSERT(fexists(file_path))
 			startup_splash = new(fcopy_rsc(file_path))
 
@@ -72,6 +73,7 @@ SUBSYSTEM_DEF(title)
 			ASSERT(fexists(file_path))
 			var/icon/title2use = new(fcopy_rsc(file_path))
 			title_screens += title2use
+			title_screen_names[title2use] = i // SPLURT EDIT ADDITION - Roundend Embeds
 
 	return SS_INIT_SUCCESS
 

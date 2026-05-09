@@ -46,3 +46,12 @@
 	else
 		end_processing()
 	return ITEM_INTERACT_SUCCESS
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/iv_drip/plumbing/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/automated_iv, bolt, layer)
+	AddComponent(/datum/component/simple_rotation)
+
+/obj/machinery/iv_drip/attack_hand_secondary(mob/user, list/modifiers)
+	return FALSE

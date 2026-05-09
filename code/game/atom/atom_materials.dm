@@ -495,3 +495,18 @@
 	return final_sheet_multiplier
 
 #undef COMPARISION_ACCEPTABLE_MATERIAL_DEVIATION
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/atom/proc/get_materials_english_list()
+	if(!custom_materials)
+		return "null"
+	var/text = "\[list("
+	var/index = 1
+	var/mats_len = length(custom_materials)
+	for(var/datum/material/mat as anything in custom_materials)
+		text += "[mat.type] = [custom_materials[mat]]"
+		if(index < mats_len)
+			text += ", "
+		index++
+	text += ")\]"
+	return text

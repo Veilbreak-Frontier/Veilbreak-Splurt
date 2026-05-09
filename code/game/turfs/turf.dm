@@ -873,3 +873,18 @@ GLOBAL_LIST_EMPTY(station_turfs)
 		return ..()
 	var/obj/machinery/fishing_portal_generator/portal = tool.buffer
 	return portal.link_fishing_spot(GLOB.preset_fish_sources[fish_source], src, user)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/turf/rust_heretic_act(rust_strength = 1)
+	if((turf_flags & NO_RUST) || (rust_strength < rust_resistance))
+		return
+	rust_turf()
+
+/// Override this to change behaviour when being rusted by a heretic
+
+/turf/proc/rust_turf()
+	if(HAS_TRAIT(src, TRAIT_RUSTY))
+		return
+
+	AddElement(/datum/element/rust/heretic)
+	new /obj/effect/glowing_rune(src)

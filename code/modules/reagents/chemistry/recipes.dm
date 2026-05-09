@@ -582,3 +582,47 @@
 		equilibrium.data[id] = 0
 		return TRUE
 	return FALSE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/chemical_reaction/proc/default_explode(datum/reagents/holder, created_volume, modifier = 0, strengthdiv = 10, clear_mob_reagents)
+	var/power = modifier + round(created_volume/strengthdiv, 1)
+	if(power > 0)
+		var/turf/T = get_turf(holder.my_atom)
+		var/inside_msg
+		if(ismob(holder.my_atom))
+			var/mob/M = holder.my_atom
+			inside_msg = " inside [ADMIN_LOOKUPFLW(M)]"
+		var/lastkey = holder.my_atom.fingerprintslast //This can runtime (null.fingerprintslast) - due to plumbing?
+		var/touch_msg = "N/A"
+		if(lastkey)
+			var/mob/toucher = get_mob_by_key(lastkey)
+			touch_msg = "[ADMIN_LOOKUPFLW(toucher)]"
+		if(!istype(holder.my_atom, /obj/machinery/plumbing)) //excludes standard plumbing equipment from spamming admins with this shit
+			message_admins("Reagent explosion reaction occurred at [ADMIN_VERBOSEJMP(T)][inside_msg]. Last Fingerprint: [touch_msg].")
+		log_game("Reagent explosion reaction occurred at [AREACOORD(T)]. Last Fingerprint: [lastkey ? lastkey : "N/A"]." )
+		var/datum/effect_system/reagents_explosion/e = new()
+		e.set_up(power , T, 0, 0)
+		e.start(holder.my_atom)
+	if (ismob(holder.my_atom))
+		if(!clear_mob_reagents)
+			return
+		// Only clear reagents if they use a special explosive reaction to do it; it shouldn't apply
+		// to any explosion inside a person
+		holder.clear_reagents()
+		if(iscarbon(holder.my_atom))
+			var/mob/living/carbon/victim = holder.my_atom
+			var/vomit_flags = MOB_VOMIT_MESSAGE | MOB_VOMIT_FORCE
+			// The vomiting here is for effect, not meant to help with purging
+			victim.vomit(vomit_flags, distance = 5)
+		// Not quite the same if the reaction is in their stomach; they'll throw up
+		// from any explosion, but it'll only make them puke up everything in their
+		// stomach
+	else if (istype(holder.my_atom, /obj/item/organ/stomach))
+		var/obj/item/organ/stomach/indigestion = holder.my_atom
+		if(power < 1)
+			return
+		indigestion.owner?.vomit(MOB_VOMIT_MESSAGE | MOB_VOMIT_FORCE, lost_nutrition = 150, distance = 5, purge_ratio = 1)
+		holder.clear_reagents()
+		return
+	else
+		holder.clear_reagents()

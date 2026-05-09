@@ -73,3 +73,13 @@
 	theme_name = PDA_THEME_ABDUCTOR_NAME
 	theme_id = PDA_THEME_ID_ABDUCTOR
 	icon = "alien"
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/computer_file/program/maintenance/theme/on_install()
+	SHOULD_CALL_PARENT(FALSE)
+	//add the theme to the computer and increase its size to match
+	var/datum/computer_file/program/themeify/theme_app = locate() in computer.stored_files
+	if(theme_app)
+		theme_app.imported_themes += theme_name
+		theme_app.size += size
+		qdel(src)

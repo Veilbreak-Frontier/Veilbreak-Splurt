@@ -425,3 +425,17 @@
 
 	update_body_parts()
 	return TRUE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/bodypart/proc/replace_limb(mob/living/carbon/limb_owner, special)
+	if(!istype(limb_owner))
+		return
+	var/obj/item/bodypart/old_limb = limb_owner.get_bodypart(body_zone)
+	if(old_limb)
+		old_limb.drop_limb(TRUE)
+
+	. = try_attach_limb(limb_owner, special)
+	if(!.) //If it failed to replace, re-attach their old limb as if nothing happened.
+		old_limb.try_attach_limb(limb_owner, TRUE)
+
+///Checks if a limb qualifies as a BODYPART_IMPLANTED

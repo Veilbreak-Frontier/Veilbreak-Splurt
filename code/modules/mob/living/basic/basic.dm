@@ -352,3 +352,8 @@
 	else
 		return FALSE
 
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	. = ..()
+	if(staminaloss > 0)
+		adjust_stamina_loss(-stamina_recovery * seconds_per_tick, forced = TRUE)

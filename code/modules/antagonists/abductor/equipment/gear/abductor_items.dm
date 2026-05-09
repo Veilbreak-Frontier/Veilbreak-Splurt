@@ -747,3 +747,26 @@ Return to step 11 of normal process."}
 		active_toolset = TOOLSET_MEDICAL
 		if(user)
 			balloon_alert(user, "medical toolset selected")
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/melee/baton/abductor/can_baton(mob/living/target, mob/living/user)
+	if(!AbductorCheck(user))
+		return FALSE
+	return ..()
+
+/obj/item/melee/baton/abductor/baton_effect(mob/living/target, mob/living/user, modifiers, stun_override)
+	switch (mode)
+		if(BATON_STUN)
+			target.visible_message(span_danger("[user] stuns [target] with [src]!"),
+				span_userdanger("[user] stuns you with [src]!"), visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE)
+			target.set_jitter_if_lower(40 SECONDS)
+			target.set_confusion_if_lower(10 SECONDS)
+			target.set_stutter_if_lower(16 SECONDS)
+			SEND_SIGNAL(target, COMSIG_LIVING_MINOR_SHOCK)
+			target.Paralyze(knockdown_time * (HAS_TRAIT(target, TRAIT_BATON_RESISTANCE) ? 0.1 : 1))
+		if(BATON_SLEEP)
+			SleepAttack(target,user)
+		if(BATON_CUFF)
+			CuffAttack(target,user)
+		if(BATON_PROBE)
+			ProbeAttack(target,user)

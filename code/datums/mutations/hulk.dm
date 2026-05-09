@@ -290,3 +290,13 @@
 	AddComponent(/datum/component/speechmod, replacements = strings("ork_replacement.json", "ork"), end_string = "!!", uppercase = TRUE)
 
 #undef HULK_TAILTHROW_STEPS
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/mutation/hulk/on_life(seconds_per_tick, times_fired)
+	if(owner.health < owner.crit_threshold)
+		on_losing(owner)
+		to_chat(owner, span_danger("You suddenly feel very weak."))
+		qdel(src)
+
+/datum/mutation/hulk/superhuman/on_life(seconds_per_tick, times_fired)
+	return

@@ -107,3 +107,11 @@
 	reagents.expose(get_turf(src), TOUCH) //splash on the floor
 	reagents.clear_reagents()
 	return TRUE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/plumbing/Initialize(mapload, bolt = TRUE)
+	. = ..()
+	set_anchored(bolt)
+	create_reagents(buffer, reagent_flags)
+	AddComponent(/datum/component/simple_rotation)
+	register_context()

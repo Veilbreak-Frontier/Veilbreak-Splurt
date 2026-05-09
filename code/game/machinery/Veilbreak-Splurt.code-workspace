@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../DopplerShift"
+		}
+	],
+	"settings": {
+		"workbench.editorAssociations": {
+			"*.dmi": "dmiEditor.dmiEditor"
+		}
+	}
+}

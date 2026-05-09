@@ -240,3 +240,24 @@
 		return
 	REMOVE_TRAIT(target, TRAIT_NO_TELEPORT, REF(src))
 	target.RemoveElement(cosmic_effect_trail, /obj/effect/forcefield/cosmic_field/star_touch)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/status_effect/cosmic_beam/proc/yoink_victim(mob/living/carbon/caster)
+	current_target.apply_effect(8 SECONDS, effecttype = EFFECT_UNCONSCIOUS)
+	REMOVE_TRAIT(current_target, TRAIT_NO_TELEPORT, REF(src))
+	do_teleport(current_target, caster, channel = TELEPORT_CHANNEL_MAGIC, forced = TRUE)
+	current_target.apply_status_effect(/datum/status_effect/star_mark)
+
+/datum/status_effect/cosmic_beam/tick(seconds_between_ticks)
+	if(!current_target)
+		lose_target()
+		return
+
+	if(world.time <= last_check+check_delay)
+		return
+
+	last_check = world.time
+
+	if(!get_dist(owner, current_target) > 8)
+		QDEL_NULL(current_beam)//this will give the target lost message
+		return

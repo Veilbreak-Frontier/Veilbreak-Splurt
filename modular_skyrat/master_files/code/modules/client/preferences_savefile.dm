@@ -31,17 +31,6 @@
 
 	return MODULAR_SAVEFILE_UP_TO_DATE
 
-/// Check that the alt job titles in the save data exist on the server side
-/datum/preferences/proc/validate_alt_jobs(list/job_titles)
-	. = list()
-	for(var/job in job_titles)
-		var/datum/job/job_datum = SSjob.get_job(job)
-		if(!istype(job_datum))
-			continue
-		var/alt_title = job_titles[job]
-		if(!alt_title || !(alt_title in job_datum.alt_titles))
-			continue
-		.[job] = alt_title
 
 /// Loads the modular customizations of a character from the savefile
 /datum/preferences/proc/load_character_skyrat(list/save_data)
@@ -55,13 +44,37 @@
 		if(!GLOB.robotic_styles_list[augment_limb_styles[key]])
 			augment_limb_styles -= key
 
-	features = SANITIZE_LIST(save_data["features"])
+	var/list/raw_features = save_data["features"]
+	features = SANITIZE_LIST(raw_features)
+
+	if(!features)
+		features = list()
+
+	features["custom_tattoos_loaded"] = null
+
+	if(islist(raw_features))
+		var/list/source = raw_features["custom_tattoos"] || raw_features["tattoos_data"]
+		if(length(source))
+			features["custom_tattoos"] = source
+
 	mutant_bodyparts = SANITIZE_LIST(save_data["mutant_bodyparts"])
 	body_markings = update_markings(SANITIZE_LIST(save_data["body_markings"]))
-	mismatched_customization = save_data["mismatched_customization"]
-	allow_advanced_colors = save_data["allow_advanced_colors"]
 
-	alt_job_titles = validate_alt_jobs(SANITIZE_LIST(save_data["alt_job_titles"]))
+	var/mismatched_value = save_data["mismatched_customization"]
+	if(!isnull(mismatched_value))
+		mismatched_customization = !!mismatched_value
+
+	var/advanced_colors_value = save_data["allow_advanced_colors"]
+	if(!isnull(advanced_colors_value))
+		allow_advanced_colors = !!advanced_colors_value
+
+	alt_job_titles = SANITIZE_LIST(save_data["alt_job_titles"])
+	var/list/alt_job_titles_sanitized = list()
+	for(var/job_title in alt_job_titles)
+		var/alt_title = alt_job_titles[job_title]
+		if(istext(job_title) && istext(alt_title))
+			alt_job_titles_sanitized[job_title] = alt_title
+	alt_job_titles = alt_job_titles_sanitized
 
 	general_record = sanitize_text(general_record)
 	security_record = sanitize_text(security_record)
@@ -69,31 +82,43 @@
 	background_info = sanitize_text(background_info)
 	exploitable_info = sanitize_text(exploitable_info)
 
-	var/list/save_languages = SANITIZE_LIST(save_data["languages"])
-	for(var/language in save_languages)
-		var/value = save_languages[language]
-		save_languages -= language
-
+	var/list/raw_languages = SANITIZE_LIST(save_data["languages"])
+	var/list/parsed_languages = list()
+	for(var/language in raw_languages)
+		var/value = raw_languages[language]
 		if(istext(language))
 			language = _text2path(language)
-		save_languages[language] = value
-	languages = save_languages
+		if(!ispath(language))
+			continue
+		parsed_languages[language] = value
+	languages = parsed_languages
 
-	tgui_prefs_migration = save_data["tgui_prefs_migration"]
-	if(!tgui_prefs_migration && save_data["modular_version"] && save_data["modular_version"] < MODULAR_SAVEFILE_VERSION_MAX) // BUBBER EDIT - if we're missing version from migration, then the char is new. Won't be able to migrate either.
-		to_chat(parent, custom_boxed_message("red_box", span_bolddanger("PREFERENCE MIGRATION BEGINNING.\
-		\nDO NOT INTERACT WITH YOUR PREFERENCES UNTIL THIS PROCESS HAS BEEN COMPLETED.\
-		\nDO NOT DISCONNECT UNTIL THIS PROCESS HAS BEEN COMPLETED.\
-		")))
+	// DOPPLER EDIT - Old powers save block removed; handled by save_character_doppler/load_character_doppler.
+
+	var/tgui_migration_value = save_data["tgui_prefs_migration"]
+	if(isnull(tgui_migration_value))
+		tgui_prefs_migration = TRUE
+	else
+		tgui_prefs_migration = !!tgui_migration_value
+
+	var/modular_version = save_data["modular_version"]
+	if(!tgui_prefs_migration && isnum(modular_version) && modular_version < MODULAR_SAVEFILE_VERSION_MAX)
 		migrate_skyrat(save_data)
 		addtimer(CALLBACK(src, PROC_REF(check_migration)), 10 SECONDS)
 
 	food_preferences = SANITIZE_LIST(save_data["food_preferences"])
+	var/list/food_preferences_sanitized = list()
+	for(var/food_type in food_preferences)
+		var/food_preference_value = food_preferences[food_type]
+		if(isnull(food_type) || isnull(food_preference_value))
+			continue
+		food_preferences_sanitized[food_type] = food_preference_value
+	food_preferences = food_preferences_sanitized
+
 	var/skyrat_update = savefile_needs_update_skyrat(save_data)
 	if(skyrat_update >= 0)
-		update_character_skyrat(skyrat_update, save_data) // needs_update == savefile_version if we need an update (positive integer)
+		update_character_skyrat(skyrat_update, save_data)
 		save_character(TRUE)
-
 
 /// Brings a savefile up to date with modular preferences. Called if savefile_needs_update_skyrat() returned a value higher than 0
 /datum/preferences/proc/update_character_skyrat(current_version, list/save_data)
@@ -263,7 +288,19 @@
 			languages[language] = language_number_updates[save_languages[language] + 1]// fuck you indexing from 1
 
 	if(current_version < VERSION_LOADOUT_PRESETS)
-		write_preference(GLOB.preference_entries[/datum/preference/loadout], list("Default" = save_data["loadout_list"])) // So easy. I wish the synth refactor was this easy.
+		var/list/legacy_loadout = SANITIZE_LIST(save_data["loadout_list"])
+		var/list/existing_loadout_lists = read_preference(/datum/preference/loadout)
+
+		if(!islist(existing_loadout_lists))
+			existing_loadout_lists = list()
+
+		// Preserve existing migrated presets and only backfill "Default" from legacy storage if needed.
+		if(!length(existing_loadout_lists["Default"]) && length(legacy_loadout))
+			existing_loadout_lists["Default"] = legacy_loadout
+		else if(!("Default" in existing_loadout_lists))
+			existing_loadout_lists["Default"] = list()
+
+		write_preference(GLOB.preference_entries[/datum/preference/loadout], existing_loadout_lists)
 
 	if(current_version < VERSION_INTERNAL_EXTERNAL_ORGANS)
 		var/list/save_augments = SANITIZE_LIST(save_data["augments"])
@@ -295,6 +332,7 @@
 	save_data["allow_advanced_colors"] = allow_advanced_colors
 	save_data["alt_job_titles"] = alt_job_titles
 	save_data["languages"] = languages
+	// DOPPLER EDIT - Old powers save removed; handled by save_character_doppler.
 	save_data["food_preferences"] = food_preferences
 	//if(updated) // BUBBER EDIT - This is bullshit, results in newly created characters getting invalid data. Load character should forcefully migrate it, so we can safely assume its up to date
 	//	save_data["modular_version"] = MODULAR_SAVEFILE_VERSION_MAX

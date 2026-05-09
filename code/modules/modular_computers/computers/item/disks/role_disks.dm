@@ -125,3 +125,9 @@
 
 	)
 
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/computer_disk/command/Initialize(mapload)
+	. = ..()
+	for(var/programs in command_programs)
+		var/datum/computer_file/program/program_type = new programs
+		add_file(program_type)

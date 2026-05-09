@@ -798,3 +798,67 @@
 	return GLOB.all_wound_pregen_data[type]
 
 #undef WOUND_CRITICAL_BLUNT_DISMEMBER_BONUS
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/wound/proc/set_limb(obj/item/bodypart/new_value, replaced = FALSE)
+	if(limb == new_value)
+		return FALSE //Limb can either be a reference to something or `null`. Returning the number variable makes it clear no change was made.
+	. = limb
+	if(limb) // if we're nulling limb, we're basically detaching from it, so we should remove ourselves in that case
+		UnregisterSignal(limb, COMSIG_QDELETING)
+		UnregisterSignal(limb, list(COMSIG_BODYPART_GAUZED, COMSIG_BODYPART_UNGAUZED))
+		LAZYREMOVE(limb.wounds, src)
+		limb.update_wounds(replaced)
+		if (disabling)
+			limb.remove_traits(list(TRAIT_PARALYSIS, TRAIT_DISABLED_BY_WOUND), REF(src))
+
+	limb = new_value
+
+	// POST-CHANGE
+
+	if (limb)
+		RegisterSignal(limb, COMSIG_QDELETING, PROC_REF(source_died))
+		RegisterSignals(limb, list(COMSIG_BODYPART_GAUZED, COMSIG_BODYPART_UNGAUZED), PROC_REF(gauze_state_changed))
+		if (disabling)
+			limb.add_traits(list(TRAIT_PARALYSIS, TRAIT_DISABLED_BY_WOUND), REF(src))
+
+		if (victim)
+			start_limping_if_we_should() // the status effect already handles removing itself
+			add_or_remove_actionspeed_mod()
+
+		update_inefficiencies(replaced)
+
+/datum/wound/proc/remove_wound(ignore_limb, replaced = FALSE)
+	//TODO: have better way to tell if we're getting removed without replacement (full heal) scar stuff
+	var/old_victim = victim
+	var/old_limb = limb
+
+	set_disabling(FALSE)
+	if(limb && can_scar && !already_scarred && !replaced)
+		already_scarred = TRUE
+		var/datum/scar/new_scar = new
+		new_scar.generate(limb, src)
+
+	remove_actionspeed_modifier()
+
+	null_victim() // we use the proc here because some behaviors may depend on changing victim to some new value
+
+	if(limb && !ignore_limb)
+		set_limb(null, replaced) // since we're removing limb's ref to us, we should do the same
+		// if you want to keep the ref, do it externally, there's no reason for us to remember it
+
+	if (ismob(old_victim))
+		var/mob/mob_victim = old_victim
+		SEND_SIGNAL(mob_victim, COMSIG_CARBON_POST_LOSE_WOUND, src, old_limb, ignore_limb, replaced)
+		if(!replaced && !limb)
+			mob_victim.update_health_hud()
+
+/datum/wound/proc/handle_process(seconds_per_tick, times_fired)
+	return
+
+/// For use in do_after callback checks
+
+/datum/wound/proc/on_stasis(seconds_per_tick, times_fired)
+	return
+
+/// Sets our blood flow

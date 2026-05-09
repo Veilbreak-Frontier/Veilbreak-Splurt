@@ -74,3 +74,9 @@
 	SIGNAL_HANDLER
 
 	UnregisterSignal(owner, COMSIG_MOB_SAY)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/brain_trauma/proc/on_life(seconds_per_tick, times_fired)
+	return
+
+//Called on death

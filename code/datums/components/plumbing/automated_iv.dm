@@ -32,3 +32,12 @@
 	. = ..()
 	var/obj/machinery/iv_drip/plumbing/drip = parent
 	reagents = drip.reagents
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/component/plumbing/automated_iv/Initialize(start=TRUE, _ducting_layer, _turn_connects=TRUE, datum/reagents/custom_receiver)
+	. = ..()
+	if(!istype(parent, /obj/machinery/iv_drip/plumbing))
+		return COMPONENT_INCOMPATIBLE
+	var/obj/machinery/iv_drip/plumbing/drip = parent
+	holder = new(drip.reagents.maximum_volume, drip.reagents.flags)
+	holder.my_atom = drip

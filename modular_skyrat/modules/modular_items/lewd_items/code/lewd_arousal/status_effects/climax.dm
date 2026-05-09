@@ -11,17 +11,28 @@
 	alert_type = null
 
 /datum/status_effect/climax/tick(seconds_between_ticks)
-	if(!owner.client?.prefs?.read_preference(/datum/preference/toggle/erp))
+	if(!(owner.client?.prefs?.read_preference(/datum/preference/toggle/erp) || !ishuman(owner) && !owner.client && !SSinteractions.is_blacklisted(owner))) // SPLURT EDIT - INTERACTIONS - All mobs should be interactable
 		return
 
 	var/mob/living/carbon/human/affected_mob = owner
 
-	owner.reagents.add_reagent(/datum/reagent/drug/aphrodisiac/dopamine, 0.5)
-	owner.adjust_stamina_loss(STAMINA_REMOVAL_AMOUNT_EXTERNAL)
+	owner?.reagents?.add_reagent(/datum/reagent/drug/aphrodisiac/dopamine, 0.5) // SPLURT EDIT - fix a runtime on basic mobs
+	//owner?.adjust_stamina_loss(STAMINA_REMOVAL_AMOUNT_EXTERNAL) // SPLURT EDIT - Removed stamina loss on climax by external stimulation.
 	var/datum/component/to_del = affected_mob.GetComponent(/datum/component/change_arousal_on_life)
 	qdel(to_del)
 	affected_mob.adjust_arousal(AROUSAL_REMOVAL_AMOUNT)
-	affected_mob.adjust_pleasure(AROUSAL_REMOVAL_AMOUNT)
+	if(iscarbon(owner)) // SPLURT EDIT - Fix a runtime on basic mobs
+		affected_mob.adjust_pleasure(AROUSAL_REMOVAL_AMOUNT * (affected_mob.dna.features["lust_tolerance"] || 1)) // SPLURT EDIT - Lust tolerance
+	else
+		affected_mob.adjust_pleasure(AROUSAL_REMOVAL_AMOUNT)
+	// SPLURT EDIT: Send signal for completing climax
+	// EDIT: OK my good sir. This is not "perform climax"
+	// This is processed every tick. Give it a better name bro PLEASE!
+	// DIFFERENT FROM MOB ON CLIMAX BECAUSE ON CLIMAX IS CALLED ONCE THE MOB
+	// CLIMAXES NOT DURING EVERY TICK OF THE STATUS EFFECT LIKE HERE
+	// 						- Your friendly neighborhood programmer
+	SEND_SIGNAL(affected_mob, COMSIG_HUMAN_PERFORM_CLIMAX)
+	// SPLURT EDIT END
 
 // Likely ready to be deprecated code that could be removed, due to nymphomaniac not existing anymore.
 /datum/status_effect/masturbation_climax
@@ -32,13 +43,13 @@
 
 // This one should not leave decals on the floor. Used in case if character cumming in beaker.
 /datum/status_effect/masturbation_climax/tick(seconds_between_ticks)
-	if(!owner.client?.prefs?.read_preference(/datum/preference/toggle/erp))
+	if(!(owner.client?.prefs?.read_preference(/datum/preference/toggle/erp) || !ishuman(owner) && !owner.client && !SSinteractions.is_blacklisted(owner))) // SPLURT EDIT - INTERACTIONS - All mobs should be interactable
 		return
 
 	var/mob/living/carbon/human/affected_mob = owner
 
 	owner.reagents.add_reagent(/datum/reagent/drug/aphrodisiac/dopamine, 0.3)
-	owner.adjust_stamina_loss(STAMINA_REMOVAL_AMOUNT_SELF)
+	// owner?.adjust_stamina_loss(STAMINA_REMOVAL_AMOUNT_SELF) // SPLURT EDIT - Removed stamina loss on climax by self stimulation.
 	var/datum/component/to_del = affected_mob.GetComponent(/datum/component/change_arousal_on_life)
 	qdel(to_del) //apparently deprecated effect, still adding this line just to be safe
 	affected_mob.adjust_arousal(AROUSAL_REMOVAL_AMOUNT)

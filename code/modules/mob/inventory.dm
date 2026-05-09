@@ -733,3 +733,18 @@
 		if(stored_cell && stored_cell.charge <= (stored_cell.maxcharge * max_percent))
 			cell_items[stored] = stored_cell
 	return cell_items
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/proc/get_equipped_items(include_flags = NONE)
+	var/list/items = list()
+	for(var/obj/item/item_contents in contents)
+		if(item_contents.item_flags & IN_INVENTORY)
+			if(!(include_flags & INCLUDE_PROSTHETICS) && HAS_TRAIT_FROM(item_contents, TRAIT_NODROP, HAND_REPLACEMENT_TRAIT)) //prostetic limbs are not equipped items, they are part of the body.
+				continue
+			if(!(include_flags & INCLUDE_ABSTRACT) && (item_contents.item_flags & ABSTRACT)) //not really flavoured as items
+				continue
+			items += item_contents
+	if (!(include_flags & INCLUDE_HELD))
+		items -= held_items
+
+	return items

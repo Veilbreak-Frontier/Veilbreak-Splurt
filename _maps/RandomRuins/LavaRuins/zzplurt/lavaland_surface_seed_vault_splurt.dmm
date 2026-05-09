@@ -1,0 +1,3585 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ab" = (
+/obj/structure/flora/bush/fullgrass/style_random,
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/obj/structure/flora/biolumi/flower/weaklight,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"ai" = (
+/obj/machinery/chem_master,
+/obj/structure/spacevine,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 8;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 1;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"an" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"au" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 8;
+	use_holiday_colors = 0
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"ax" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 8
+	},
+/obj/machinery/vending/dorms{
+	shut_up = 1;
+	pixel_x = 2
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 6
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/obj/machinery/light/dim/directional/east{
+	pixel_y = 15
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"aE" = (
+/obj/machinery/atmospherics/pipe/smart/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"bb" = (
+/obj/machinery/plumbing/reaction_chamber/chem,
+/obj/machinery/door/window/left/directional,
+/obj/machinery/door/window/left/directional/north,
+/obj/structure/window/spawner/directional/east,
+/obj/structure/window/spawner/directional/west,
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"bi" = (
+/obj/structure/reagent_crafting_bench,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/item/forging/billow,
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"br" = (
+/obj/structure/window/spawner/directional/west,
+/obj/structure/window/spawner/directional/south,
+/obj/structure/chair/pew/left{
+	dir = 1
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 8;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 2;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 10
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"cb" = (
+/obj/structure/sign/poster/contraband/kudzu/directional/north,
+/obj/machinery/duct,
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"co" = (
+/obj/effect/turf_decal/shuttle/exploration/typhon,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"cq" = (
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 4;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"cr" = (
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 2;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/machinery/hydroponics/constructable{
+	dir = 1
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"cs" = (
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"cF" = (
+/obj/machinery/portable_atmospherics/canister/air,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"cG" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 6
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 6
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"cQ" = (
+/obj/structure/flora/bush/flowers_pp/style_random,
+/obj/structure/water_source{
+	dir = 4;
+	pixel_x = -14;
+	name = "Sink"
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"cV" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 8
+	},
+/obj/structure/flora/bush/fullgrass/style_random,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 10
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 10
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"dc" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"dn" = (
+/obj/structure/flora/bush/fullgrass/style_random,
+/obj/structure/flora/bush/flowers_br/style_random,
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"dp" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/railing,
+/turf/open/floor/wood/stairs/left,
+/area/ruin/powered/seedvault)
+"dv" = (
+/obj/structure/spacevine,
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"dw" = (
+/obj/structure/chair/pew,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 1;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"dL" = (
+/obj/machinery/atmospherics/components/tank/air{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 9
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 9
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"dT" = (
+/obj/machinery/atmospherics/pipe/smart/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/door/airlock/vault,
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/effect/mapping_helpers/airlock/access/all/away/general,
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"dU" = (
+/obj/structure/disposalpipe/segment{
+	dir = 10
+	},
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"ef" = (
+/obj/structure/window/spawner/directional/west,
+/obj/structure/chair/pew/left,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 8;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 1;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"eg" = (
+/obj/machinery/computer/terminal{
+	dir = 8;
+	name = "Old Terminal";
+	desc = "A dusty, nonfunctioning terminal left by your creators. The screen is on but nothing you press does anything."
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"ej" = (
+/obj/structure/flora/bush/lavendergrass,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"eq" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/obj/structure/sign/departments/chemistry/alt/directional/west,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"eC" = (
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/warning,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"eH" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"eI" = (
+/obj/machinery/door/airlock/vault,
+/obj/effect/mapping_helpers/airlock/access/all/away/general,
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"eX" = (
+/obj/effect/turf_decal/siding/wood/end{
+	dir = 4
+	},
+/obj/structure/flora/bush/fullgrass,
+/obj/structure/flora/biolumi/mine,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"eZ" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/obj/machinery/duct,
+/obj/effect/turf_decal/siding/wideplating_new/dark/corner{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 1
+	},
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"fe" = (
+/obj/machinery/door/airlock/vault,
+/obj/effect/mapping_helpers/airlock/access/all/away/general,
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/duct,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"fC" = (
+/obj/machinery/biogenerator,
+/obj/machinery/door/window/left/directional,
+/obj/machinery/door/window/left/directional/north,
+/turf/open/floor/mineral/plastitanium,
+/area/ruin/powered/seedvault)
+"fE" = (
+/obj/structure/flora/bush/fullgrass/style_3,
+/obj/structure/flora/bush/flowers_br,
+/obj/structure/spacevine,
+/obj/structure/flora/biolumi/lamp/weaklight,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"fG" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/structure/flora/bush/lavendergrass/style_2,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"fW" = (
+/obj/item/seeds/seedling,
+/obj/machinery/hydroponics/constructable,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"gv" = (
+/obj/structure/flora/bush/sparsegrass/style_random,
+/obj/structure/flora/bush/flowers_yw/style_random,
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"gx" = (
+/obj/structure/spacevine,
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"gI" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/flora/bush/sparsegrass/style_random,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"hc" = (
+/obj/effect/turf_decal/siding/wood/end{
+	dir = 8
+	},
+/obj/structure/flora/bush/grassy,
+/obj/structure/flora/biolumi/lamp,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"hR" = (
+/obj/machinery/vending/hydronutrients{
+	all_products_free = 1
+	},
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 8
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"ia" = (
+/obj/structure/flora/tree/jungle/small/style_6,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"im" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 4
+	},
+/obj/machinery/mining_weather_monitor/directional/west,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 8
+	},
+/obj/effect/turf_decal/shuttle/exploration/hazardstripe{
+	dir = 1
+	},
+/obj/machinery/light/directional/west{
+	pixel_y = -16
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"in" = (
+/obj/structure/medieval/bed_2x2{
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"iA" = (
+/obj/effect/baseturf_helper/lava_land/surface,
+/turf/closed/mineral/volcanic/lava_land_surface,
+/area/lavaland/surface/outdoors)
+"iJ" = (
+/obj/structure/flora/bush/sparsegrass/style_random,
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/obj/structure/flora/biolumi/lamp/weaklight,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"iK" = (
+/obj/effect/decal/cleanable/wrapping,
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"iQ" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 8
+	},
+/obj/effect/turf_decal/shuttle/exploration/hazardstripe,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"iV" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 4
+	},
+/obj/effect/turf_decal/shuttle/exploration/hazardstripe,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"jw" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 1
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"jJ" = (
+/obj/structure/flora/bush/fullgrass/style_random,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"jO" = (
+/obj/machinery/atmospherics/pipe/smart/simple/supply/hidden,
+/obj/machinery/door/poddoor{
+	id = "bunkerinterior"
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/warning,
+/obj/machinery/atmos_shield_gen/active{
+	dir = 8
+	},
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"jW" = (
+/obj/machinery/door/poddoor{
+	id = "bunkerinterior"
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/warning,
+/obj/machinery/atmos_shield_gen/active{
+	dir = 4
+	},
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"kk" = (
+/obj/machinery/duct,
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"kB" = (
+/obj/effect/turf_decal/weather/dirt{
+	dir = 4
+	},
+/obj/effect/turf_decal/weather/dirt,
+/turf/open/water/hot_spring,
+/area/ruin/powered/seedvault)
+"kF" = (
+/obj/structure/table/reinforced,
+/obj/machinery/plantgenes{
+	pixel_y = 8
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"kR" = (
+/obj/structure/flora/bush/sparsegrass/style_random,
+/obj/structure/water_source{
+	dir = 8;
+	pixel_x = 14
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"kX" = (
+/obj/machinery/atmospherics/pipe/smart/simple/scrubbers/visible,
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"la" = (
+/obj/structure/reagent_anvil,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 5
+	},
+/obj/item/forging/hammer,
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 8
+	},
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"lg" = (
+/obj/effect/turf_decal/shuttle/exploration/echidna,
+/turf/open/misc/asteroid/basalt/lava_land_surface,
+/area/lavaland/surface/outdoors)
+"lh" = (
+/obj/machinery/atmospherics/pipe/smart/simple/supply/hidden,
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"lF" = (
+/obj/effect/turf_decal/weather/dirt{
+	dir = 8
+	},
+/obj/effect/turf_decal/weather/dirt,
+/turf/open/water/hot_spring,
+/area/ruin/powered/seedvault)
+"lM" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"lN" = (
+/obj/structure/flora/tree/jungle/small/style_4,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 4
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"lO" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/obj/machinery/duct,
+/obj/effect/turf_decal/siding/wideplating_new/dark/corner,
+/obj/effect/turf_decal/siding/wood/corner,
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"lP" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"lX" = (
+/obj/structure/flora/bush/sparsegrass/style_random,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/flora/biolumi/flower/weaklight,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"mv" = (
+/obj/structure/flora/bush/sunny/style_3,
+/obj/structure/spacevine,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"mA" = (
+/obj/structure/flora/bush/sunny,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"mJ" = (
+/obj/machinery/door/airlock/vault,
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 10
+	},
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "seedvault-airlock"
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"mY" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"nd" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/spacevine,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"ni" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 1
+	},
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/obj/machinery/light/dim/directional/east,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"nq" = (
+/obj/structure/disposalpipe/segment{
+	dir = 5
+	},
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"ns" = (
+/obj/structure/spacevine,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 1;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"nv" = (
+/obj/effect/turf_decal/siding/wood/corner,
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 8
+	},
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"nM" = (
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 9
+	},
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	name = "Server Vent"
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 9
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"nS" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 8
+	},
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"nT" = (
+/obj/structure/flora/bush/grassy/style_3,
+/obj/structure/flora/bush/lavendergrass,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"oa" = (
+/obj/structure/flora/bush/ferny/style_3,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 4
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"ou" = (
+/obj/effect/turf_decal/shuttle/exploration/typhon,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 4
+	},
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"oI" = (
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 6
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 6
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"oZ" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/structure/flora/bush/flowers_pp,
+/obj/structure/flora/bush/fullgrass/style_3,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"pi" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"pr" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/effect/spawner/random/food_or_drink/seed_vault,
+/obj/machinery/light/directional/north,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"pv" = (
+/obj/structure/flora/bush/generic/style_random,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"py" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/structure/flora/bush/sparsegrass,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"pR" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/flora/bush/grassy/style_3,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"pY" = (
+/obj/structure/water_source/puddle{
+	icon = 'modular_skyrat/modules/reagent_forging/icons/obj/forge_structures.dmi';
+	base_icon_state = "water_basin";
+	icon_state = "water_basin";
+	name = "filled water basin"
+	},
+/obj/item/reagent_containers/cup/bucket/wooden,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"qe" = (
+/obj/machinery/door/airlock/vault,
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"qn" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/spacevine,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"qw" = (
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/effect/mapping_helpers/airlock/access/all/away/general,
+/obj/machinery/atmospherics/pipe/smart/simple/supply/hidden,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 5
+	},
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "seedvault-airlock"
+	},
+/obj/machinery/door/airlock/vault,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"qA" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/sand/volcanic,
+/obj/machinery/door/poddoor{
+	id = "bunkerexterior"
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/warning{
+	dir = 1
+	},
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"qD" = (
+/obj/structure/table/reinforced,
+/obj/machinery/reagentgrinder{
+	pixel_y = 5;
+	pixel_x = -3
+	},
+/obj/item/construction/plumbing,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 8;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 10
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"qG" = (
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"qN" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"qX" = (
+/turf/open/misc/asteroid/basalt/lava_land_surface,
+/area/lavaland/surface/outdoors)
+"qY" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"ra" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/door/poddoor/shutters/preopen{
+	id = "bunkershutter"
+	},
+/obj/structure/window/green_glass_pane,
+/turf/open/floor/plating,
+/area/ruin/powered/seedvault)
+"rb" = (
+/obj/structure/flora/bush/sparsegrass/style_random,
+/obj/structure/flora/bush/flowers_yw/style_2,
+/obj/structure/closet/secure_closet/wall{
+	pixel_y = -31
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 10
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"rf" = (
+/obj/effect/turf_decal/weather/dirt,
+/turf/open/water/hot_spring,
+/area/ruin/powered/seedvault)
+"rh" = (
+/obj/structure/spacevine,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood,
+/obj/machinery/light/dim/directional/north,
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"rm" = (
+/obj/effect/mob_spawn/ghost_role/human/seed_vault,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/plating/kudzu,
+/area/ruin/powered/seedvault)
+"rn" = (
+/obj/structure/flora/bush/fullgrass/style_random,
+/obj/effect/turf_decal/siding/wood,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"rs" = (
+/obj/effect/turf_decal/weather/dirt{
+	dir = 8
+	},
+/turf/open/water/hot_spring,
+/area/ruin/powered/seedvault)
+"rI" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"rL" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	name = "Server Vent"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/reagent_water_basin,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"rS" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 8
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 1;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"si" = (
+/obj/structure/flora/bush/flowers_pp/style_2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"sx" = (
+/obj/structure/flora/bush/fullgrass/style_3,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"sF" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"sT" = (
+/obj/structure/flora/bush/fullgrass/style_random,
+/obj/structure/flora/bush/flowers_yw/style_random,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"sU" = (
+/obj/structure/flora/bush/flowers_yw/style_random,
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"tA" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 10
+	},
+/obj/structure/flora/bush/fullgrass/style_2,
+/obj/structure/flora/biolumi/flower/weaklight,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"tU" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"ua" = (
+/obj/structure/flora/bush/flowers_pp/style_random,
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/obj/structure/flora/biolumi/mine/weaklight,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"ud" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 8
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"ur" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/obj/structure/flora/bush/fullgrass/style_3,
+/obj/structure/flora/biolumi/flower/weaklight,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"uu" = (
+/obj/machinery/atmospherics/components/unary/passive_vent{
+	dir = 1
+	},
+/turf/open/misc/asteroid/basalt/lava_land_surface,
+/area/ruin/powered/seedvault)
+"uB" = (
+/obj/structure/flora/bush/sparsegrass/style_random,
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"uD" = (
+/obj/machinery/seed_extractor,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 4
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 1;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"uE" = (
+/obj/structure/fans/tiny,
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/door/airlock/vault,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"uX" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 5
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"ve" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"vI" = (
+/obj/structure/flora/bush/grassy/style_random,
+/obj/structure/flora/bush/flowers_yw/style_2,
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"vQ" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"vR" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/spacevine,
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 5
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 5
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"vU" = (
+/obj/machinery/vending/wardrobe/hydro_wardrobe/ghost_cafe,
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 8
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"wg" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"wu" = (
+/obj/structure/flora/bush/grassy/style_random,
+/obj/structure/flora/bush/sparsegrass/style_random,
+/obj/structure/flora/bush/flowers_yw/style_random,
+/obj/effect/turf_decal/siding/wood,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"wH" = (
+/obj/structure/flora/bush/lavendergrass/style_4,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"wN" = (
+/obj/structure/flora/bush/flowers_pp/style_2,
+/obj/structure/spacevine,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"wS" = (
+/obj/structure/flora/bush/fullgrass/style_random,
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"wT" = (
+/obj/structure/flora/bush/flowers_pp/style_random,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"xo" = (
+/obj/structure/beebox,
+/obj/effect/turf_decal/siding/wood/end,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"xq" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 10
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"xB" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"xE" = (
+/obj/structure/flora/bush/flowers_pp/style_random,
+/obj/structure/flora/bush/grassy/style_random,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"xP" = (
+/obj/structure/disposalpipe/segment{
+	dir = 1
+	},
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"xR" = (
+/obj/structure/flora/bush/grassy/style_random,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"ym" = (
+/turf/open/water/hot_spring,
+/area/ruin/powered/seedvault)
+"yy" = (
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 10
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 10
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"yz" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/item/gun/energy/floragun,
+/obj/item/gun/energy/floragun,
+/obj/item/gun/energy/floragun,
+/obj/item/gun/energy/floragun,
+/obj/item/geneshears,
+/obj/item/geneshears,
+/obj/item/geneshears,
+/obj/item/geneshears,
+/obj/item/clothing/neck/stethoscope,
+/obj/machinery/light/dim/directional/west,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"yN" = (
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"zb" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"zr" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/spacevine,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"zw" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/duct,
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"zI" = (
+/obj/effect/turf_decal/weather/dirt{
+	dir = 1
+	},
+/turf/open/water/hot_spring,
+/area/ruin/powered/seedvault)
+"zJ" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"zK" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"zT" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	name = "Server Vent"
+	},
+/obj/structure/flora/bush/lavendergrass,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"AB" = (
+/obj/structure/spacevine,
+/obj/structure/flora/bush/lavendergrass/style_2,
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"AD" = (
+/obj/structure/flora/tree/jungle/small/style_5,
+/obj/effect/turf_decal/siding/wood{
+	dir = 10
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 4
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"AP" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Bd" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"Bm" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/flora/bush/grassy/style_3,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"By" = (
+/obj/structure/flora/bush/flowers_br/style_3,
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 4
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"BB" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
+/obj/structure/spacevine,
+/obj/structure/flora/bush/sparsegrass/style_random,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"BC" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"BR" = (
+/obj/structure/spacevine,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 8;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/obj/machinery/hydroponics/constructable{
+	dir = 4
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"BV" = (
+/obj/structure/table/wood,
+/obj/item/lighter,
+/obj/item/lighter,
+/obj/item/lighter,
+/obj/item/lighter,
+/obj/item/lighter,
+/obj/item/bong/lungbuster{
+	pixel_y = 8;
+	pixel_x = -9
+	},
+/obj/item/bong/lungbuster{
+	pixel_y = 8;
+	pixel_x = 9
+	},
+/obj/item/bong{
+	pixel_x = -3;
+	pixel_y = 2
+	},
+/obj/item/bong{
+	pixel_x = 2;
+	pixel_y = 8
+	},
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"Cp" = (
+/obj/structure/spacevine{
+	base_icon_state = "holo_firelock"
+	},
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"Cy" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"CJ" = (
+/obj/structure/flora/bush/sparsegrass/style_random,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"CP" = (
+/obj/structure/flora/bush/fullgrass/style_random,
+/obj/structure/flora/biolumi/mine/weaklight,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"CS" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/flora/bush/flowers_br/style_3,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Da" = (
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/machinery/hydroponics/constructable{
+	dir = 8
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"Dv" = (
+/obj/structure/flora/bush/grassy/style_random,
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Dx" = (
+/obj/structure/chair/pew/right,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 4;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 1;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"DM" = (
+/obj/structure/flora/bush/lavendergrass/style_3,
+/obj/structure/flora/biolumi/flower/weaklight,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"DZ" = (
+/obj/machinery/vending/clothing{
+	all_products_free = 1
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 5
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"Eb" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"Eg" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 6
+	},
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 1
+	},
+/obj/structure/rack/shelf{
+	icon_state = "empty_shelf_1";
+	icon = 'modular_skyrat/modules/mapping/icons/unique/furniture.dmi';
+	desc = "A sturdy wooden shelf to store a variety of items on."
+	},
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"EU" = (
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"Fm" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/spacevine,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"FP" = (
+/obj/effect/turf_decal/weather/dirt{
+	dir = 8
+	},
+/obj/effect/turf_decal/weather/dirt{
+	dir = 1
+	},
+/turf/open/water/hot_spring,
+/area/ruin/powered/seedvault)
+"FS" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"GB" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 6
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"GY" = (
+/obj/structure/sauna_oven,
+/obj/item/stack/sheet/mineral/wood/fifty,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"Hh" = (
+/obj/structure/chair/pew/right{
+	dir = 1
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 4;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 2;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"Hx" = (
+/obj/structure/spacevine,
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"HB" = (
+/obj/structure/disposalpipe/segment{
+	dir = 1
+	},
+/obj/structure/spacevine,
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"HQ" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/effect/turf_decal/trimline/green/filled/line,
+/obj/item/seeds/surik,
+/obj/item/seeds/surik,
+/obj/item/seeds/vaporsac,
+/obj/item/seeds/vaporsac,
+/obj/item/seeds/amauri,
+/obj/item/seeds/amauri,
+/obj/item/seeds/gelthi,
+/obj/item/seeds/gelthi,
+/obj/item/seeds/jurlmah,
+/obj/item/seeds/jurlmah,
+/obj/item/seeds/nofruit,
+/obj/item/seeds/nofruit,
+/obj/item/seeds/shand,
+/obj/item/seeds/shand,
+/obj/item/seeds/telriis,
+/obj/item/seeds/telriis,
+/obj/item/seeds/thaadra,
+/obj/item/seeds/thaadra,
+/obj/item/seeds/vale,
+/obj/item/seeds/vale,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"HR" = (
+/turf/closed/mineral/volcanic/lava_land_surface,
+/area/lavaland/surface/outdoors)
+"Ic" = (
+/obj/structure/flora/bush/fullgrass/style_random,
+/obj/structure/flora/bush/flowers_yw/style_random,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Ip" = (
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 2;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/machinery/hydroponics/constructable{
+	dir = 1
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"IL" = (
+/obj/structure/flora/bush/ferny/style_3,
+/obj/structure/closet/secure_closet/wall{
+	pixel_y = -31
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/obj/structure/flora/biolumi/lamp,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"IY" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 4
+	},
+/obj/structure/table/wood,
+/obj/item/card/id/away/deep_storage{
+	name = "Seed Vault Access ID"
+	},
+/obj/item/card/id/away/deep_storage{
+	name = "Seed Vault Access ID"
+	},
+/obj/item/card/id/away/deep_storage{
+	name = "Seed Vault Access ID"
+	},
+/obj/item/card/id/away/deep_storage{
+	name = "Seed Vault Access ID"
+	},
+/obj/item/card/id/away/deep_storage{
+	name = "Seed Vault Access ID"
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 9
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"Jq" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/flora/biolumi/lamp,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Jr" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/airalarm/directional/north,
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 1
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/obj/effect/mapping_helpers/airalarm/all_access,
+/obj/effect/mapping_helpers/airalarm/unlocked,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"JE" = (
+/obj/machinery/disposal/bin,
+/obj/structure/disposalpipe/trunk{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 6
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"JI" = (
+/obj/effect/turf_decal/weather/dirt{
+	dir = 4
+	},
+/turf/open/water/hot_spring,
+/area/ruin/powered/seedvault)
+"JP" = (
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 8;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/obj/machinery/hydroponics/constructable{
+	dir = 4
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 4
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"Ks" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/fake_stairs/wood/directional/west,
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"Kt" = (
+/obj/structure/table/wood,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/item/reagent_containers/cup/beaker/bluespace,
+/obj/item/reagent_containers/cup/beaker/bluespace,
+/obj/item/reagent_containers/cup/beaker/bluespace,
+/obj/item/reagent_containers/cup/beaker/bluespace,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 10
+	},
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 4
+	},
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"KD" = (
+/obj/structure/spacevine,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/machinery/hydroponics/constructable{
+	dir = 8
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"KQ" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 10
+	},
+/obj/machinery/duct,
+/obj/effect/turf_decal/siding/wideplating_new/dark/corner{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 8
+	},
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"KX" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/item/melee/flyswatter,
+/obj/item/honey_frame,
+/obj/item/honey_frame,
+/obj/item/honey_frame,
+/obj/item/queen_bee/bought,
+/obj/item/bee_smoker,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"Lk" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/spacevine,
+/obj/structure/fake_stairs/wood/directional/west,
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"LI" = (
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/warning{
+	dir = 1
+	},
+/obj/structure/reagent_dispensers/watertank/high,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"LM" = (
+/obj/effect/turf_decal/weather/dirt,
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"LS" = (
+/obj/structure/flora/bush/flowers_pp/style_2,
+/obj/structure/flora/biolumi/flower/weaklight,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"LV" = (
+/obj/machinery/atmospherics/pipe/smart/simple/supply/hidden,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 8
+	},
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"MZ" = (
+/obj/machinery/door/poddoor/shutters/preopen{
+	id = "bunkershutter"
+	},
+/obj/structure/window/green_glass_pane,
+/turf/open/floor/plating,
+/area/ruin/powered/seedvault)
+"Nh" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/item/vending_refill/hydroseeds,
+/obj/item/vending_refill/hydroseeds,
+/obj/item/vending_refill/hydroseeds,
+/obj/item/vending_refill/hydronutrients,
+/obj/item/vending_refill/hydronutrients,
+/obj/item/vending_refill/hydronutrients,
+/obj/item/soap/homemade,
+/obj/item/soap/homemade,
+/obj/item/soap/homemade,
+/obj/effect/decal/cleanable/cobweb,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"Nr" = (
+/obj/structure/table/wood,
+/obj/item/tank/internals/emergency_oxygen/double,
+/obj/item/tank/internals/emergency_oxygen/double,
+/obj/item/tank/internals/emergency_oxygen/double,
+/obj/item/tank/internals/emergency_oxygen/double,
+/obj/machinery/light/directional/east,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"NH" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Oa" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"Oh" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/thinplating/dark,
+/obj/effect/turf_decal/trimline/dark_green/filled/line,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"Op" = (
+/obj/machinery/smartfridge,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"OA" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/item/flatpacked_machine,
+/obj/item/stack/sheet/iron/fifty,
+/obj/item/stack/sheet/iron/fifty,
+/obj/item/stack/sheet/glass/fifty,
+/obj/item/stack/sheet/glass/fifty,
+/obj/item/stack/sheet/mineral/silver{
+	amount = 25
+	},
+/obj/item/stack/sheet/mineral/titanium{
+	amount = 25
+	},
+/obj/item/stack/sheet/mineral/uranium/half{
+	amount = 20
+	},
+/obj/item/stack/sheet/mineral/plasma/thirty,
+/obj/item/stack/sheet/mineral/gold{
+	amount = 15
+	},
+/obj/item/stack/sheet/mineral/diamond{
+	amount = 25
+	},
+/obj/machinery/light/dim/directional/east,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"OF" = (
+/obj/structure/flora/bush/grassy/style_random,
+/obj/structure/flora/bush/sparsegrass/style_random,
+/obj/structure/flora/bush/flowers_pp/style_3,
+/obj/effect/turf_decal/siding/wood/corner,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"OG" = (
+/obj/machinery/vending/hydroseeds{
+	all_products_free = 1
+	},
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 8
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"ON" = (
+/obj/effect/turf_decal/weather/dirt{
+	dir = 4
+	},
+/obj/effect/turf_decal/weather/dirt{
+	dir = 1
+	},
+/turf/open/water/hot_spring,
+/area/ruin/powered/seedvault)
+"OZ" = (
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"Pd" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/flora/bush/fullgrass/style_3,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Pg" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/item/storage/bag/plants,
+/obj/item/storage/bag/plants,
+/obj/item/storage/bag/plants,
+/obj/item/storage/bag/plants,
+/obj/item/shovel/spade,
+/obj/item/shovel/spade,
+/obj/item/shovel/spade,
+/obj/item/shovel/spade,
+/obj/item/hatchet,
+/obj/item/hatchet,
+/obj/item/hatchet,
+/obj/item/hatchet,
+/obj/item/cultivator,
+/obj/item/cultivator,
+/obj/item/cultivator,
+/obj/item/cultivator,
+/turf/open/floor/catwalk_floor/iron_dark,
+/area/ruin/powered/seedvault)
+"Pq" = (
+/obj/machinery/door/airlock/multi_tile/public/glass,
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/effect/mapping_helpers/airlock/access/all/away/general,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"PB" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"PF" = (
+/obj/machinery/door/airlock/vault,
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 6
+	},
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "seedvault-airlock"
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"PJ" = (
+/obj/structure/flora/tree/jungle/small/style_6,
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"PR" = (
+/obj/structure/flora/bush/flowers_br/style_random,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"PY" = (
+/obj/structure/chair/pew{
+	dir = 1
+	},
+/obj/structure/window/spawner/directional/south,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 2;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"Qe" = (
+/obj/machinery/duct,
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"Qg" = (
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/warning{
+	dir = 1
+	},
+/obj/structure/spacevine,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"Qr" = (
+/obj/machinery/autolathe,
+/obj/item/storage/toolbox/syndicate,
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"QS" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"Rj" = (
+/obj/structure/window/green_glass_pane,
+/turf/open/floor/mineral/plastitanium,
+/area/ruin/powered/seedvault)
+"Rl" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
+/obj/structure/flora/bush/sparsegrass/style_2,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 9
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 9
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Rt" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"RG" = (
+/obj/machinery/atmospherics/pipe/smart/simple/supply/hidden{
+	dir = 9
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 4
+	},
+/obj/effect/turf_decal/shuttle/exploration/hazardstripe{
+	dir = 1
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"RK" = (
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 1
+	},
+/obj/structure/safe/abovetilefloor{
+	name = "old floor safe";
+	desc = "A large, floor embedded safe. Looks old and worn."
+	},
+/obj/item/seeds/kudzu,
+/obj/item/lighter/royal,
+/obj/item/food/grown/poppy/geranium,
+/obj/item/clothing/suit/cloak/shawl,
+/obj/item/clothing/suit/cloak/shawl,
+/obj/item/clothing/suit/cloak/shawl,
+/obj/item/clothing/suit/cloak/shawl,
+/obj/item/clothing/neck/cowboylea,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"RP" = (
+/obj/structure/disposalpipe/trunk{
+	dir = 8
+	},
+/obj/structure/disposaloutlet,
+/turf/open/misc/asteroid/basalt/lava_land_surface,
+/area/ruin/powered/seedvault)
+"RX" = (
+/obj/structure/flora/bush/generic/style_random,
+/obj/structure/flora/bush/flowers_pp/style_random,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Sa" = (
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"Sd" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"Sj" = (
+/obj/machinery/light/dim/directional/west,
+/obj/effect/turf_decal/shuttle/exploration/typhon,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"Sk" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/flora/bush/fullgrass/style_3,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"So" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/structure/flora/bush/lavendergrass,
+/obj/structure/flora/biolumi/mine/weaklight,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"SS" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/duct,
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"Tb" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/structure/table/wood,
+/obj/structure/towel_bin,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Tq" = (
+/obj/machinery/light/dim/directional/east,
+/obj/effect/turf_decal/shuttle/exploration/typhon,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"Tt" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/button/door/directional/west{
+	id = "bunkerinterior";
+	name = "interior blast door access";
+	req_access = list("away_general")
+	},
+/obj/machinery/button/door/directional/west{
+	id = "bunkershutter";
+	name = "hallway shutter toggle";
+	pixel_y = 8;
+	req_access = list("away_general")
+	},
+/obj/machinery/button/door/directional/west{
+	id = "bunkerexterior";
+	name = "exterior blast door access";
+	pixel_y = -8;
+	req_access = list("away_general")
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"TD" = (
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"TO" = (
+/obj/machinery/atmospherics/components/binary/volume_pump/on,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"TU" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/obj/structure/flora/bush/flowers_yw,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"TV" = (
+/obj/structure/flora/bush/flowers_br/style_random,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Uo" = (
+/obj/structure/flora/bush/flowers_yw/style_2,
+/obj/structure/flora/bush/fullgrass/style_2,
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Up" = (
+/obj/structure/spacevine,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"UD" = (
+/obj/machinery/atmospherics/pipe/layer_manifold/scrubbers,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"UE" = (
+/obj/machinery/door/airlock/multi_tile/public/glass,
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine"
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"UI" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"Vl" = (
+/obj/structure/flora/bush/grassy/style_random,
+/obj/machinery/duct,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Vn" = (
+/obj/effect/mapping_helpers/airlock/cutaiwire,
+/obj/effect/mapping_helpers/airlock/access/all/away/general,
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 9
+	},
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "seedvault-airlock"
+	},
+/obj/machinery/door/airlock/vault,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"Vp" = (
+/obj/machinery/chem_dispenser/mutagensaltpeter,
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 8;
+	use_holiday_colors = 0
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 4
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+"VR" = (
+/obj/structure/disposalpipe/segment{
+	dir = 8
+	},
+/obj/structure/spacevine,
+/turf/closed/wall/r_wall,
+/area/ruin/powered/seedvault)
+"VS" = (
+/obj/effect/turf_decal/shuttle/exploration/typhon,
+/turf/open/floor/wood/large,
+/area/ruin/powered/seedvault)
+"Wk" = (
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 4
+	},
+/turf/open/floor/catwalk_floor/wood_smooth,
+/area/ruin/powered/seedvault)
+"WL" = (
+/obj/structure/flora/bush/lavendergrass/style_3,
+/obj/structure/flora/biolumi/flower/weaklight,
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"WM" = (
+/obj/machinery/atmospherics/components/tank/air{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 10
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 10
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 4
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 1
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"Xg" = (
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/thinplating/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/trimline/dark_green/filled/warning,
+/obj/structure/reagent_dispensers/watertank/high,
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"Xn" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 10
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 10
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"XT" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/structure/flora/bush/fullgrass/style_3,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"XY" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/flora/bush/flowers_pp/style_2,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Ya" = (
+/obj/effect/turf_decal/trimline/dark_green/filled/line{
+	dir = 5
+	},
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 5
+	},
+/turf/open/floor/iron/dark,
+/area/ruin/powered/seedvault)
+"Yf" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/wood,
+/area/ruin/powered/seedvault)
+"Yh" = (
+/obj/structure/flora/bush/grassy/style_4,
+/obj/structure/flora/bush/flowers_yw,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"YI" = (
+/obj/structure/reagent_forge,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 9
+	},
+/obj/item/forging/tongs,
+/obj/effect/turf_decal/siding/wood/corner,
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"Zc" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 5
+	},
+/obj/machinery/duct,
+/obj/effect/turf_decal/siding/wideplating_new/dark/corner{
+	dir = 4;
+	color = "#515152"
+	},
+/obj/effect/turf_decal/siding/wood/corner{
+	dir = 4
+	},
+/turf/open/floor/stone,
+/area/ruin/powered/seedvault)
+"Zm" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/siding/wood,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"Zq" = (
+/obj/structure/flora/bush/fullgrass/style_random,
+/obj/structure/flora/bush/flowers_br/style_random,
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"ZI" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/flora/bush/flowers_pp/style_3,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 1
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"ZU" = (
+/obj/structure/flora/bush/flowers_br/style_random,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/seedvault)
+"ZW" = (
+/obj/effect/turf_decal/tile/neutral/half{
+	alpha = 255;
+	color = "#5d341f";
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/machinery/hydroponics/constructable{
+	dir = 8
+	},
+/obj/structure/fluff{
+	icon = 'modular_zubbers/icons/maps/biodome/holo_leaves.dmi';
+	icon_state = "holo_leaves";
+	desc = "A hanging vine.";
+	name = "hanging vine";
+	dir = 8
+	},
+/turf/open/floor/wood/tile,
+/area/ruin/powered/seedvault)
+
+(1,1,1) = {"
+iA
+HR
+HR
+HR
+HR
+HR
+qX
+HR
+HR
+qX
+HR
+HR
+HR
+HR
+HR
+HR
+qX
+qX
+qX
+HR
+HR
+HR
+HR
+HR
+HR
+qX
+"}
+(2,1,1) = {"
+HR
+HR
+HR
+HR
+HR
+qX
+qX
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+qX
+qX
+HR
+HR
+"}
+(3,1,1) = {"
+qX
+HR
+HR
+HR
+Sa
+Sa
+Sa
+Sa
+Sa
+Sa
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+"}
+(4,1,1) = {"
+HR
+HR
+HR
+Sa
+dv
+By
+AB
+Uo
+AD
+dv
+Sa
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+qX
+"}
+(5,1,1) = {"
+HR
+HR
+HR
+Sa
+vI
+DM
+cs
+in
+Hx
+rb
+Sa
+HR
+Sa
+Sa
+Sa
+Sa
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+qX
+"}
+(6,1,1) = {"
+HR
+HR
+HR
+Sa
+PJ
+oa
+cs
+cs
+OF
+IL
+Sa
+HR
+Sa
+dL
+WM
+Sa
+Sa
+Sa
+Sa
+Sa
+Sa
+qX
+HR
+qX
+qX
+qX
+"}
+(7,1,1) = {"
+HR
+HR
+HR
+Sa
+dv
+si
+ej
+ZU
+wH
+Sa
+Sa
+Sa
+Sa
+jw
+Oh
+jW
+Vn
+im
+iQ
+mJ
+qA
+qX
+qX
+qX
+HR
+qX
+"}
+(8,1,1) = {"
+qX
+HR
+HR
+Sa
+Sa
+dv
+Sa
+dv
+qe
+Sa
+LI
+Xg
+Sa
+Jr
+Oh
+jO
+qw
+RG
+iV
+PF
+qA
+qX
+qX
+HR
+HR
+HR
+"}
+(9,1,1) = {"
+lg
+HR
+HR
+Sa
+rm
+Up
+Sa
+IY
+Xn
+Sa
+Qg
+eC
+dv
+vR
+cG
+Sa
+Sa
+MZ
+ra
+Sa
+Sa
+Sa
+qX
+qX
+qX
+HR
+"}
+(10,1,1) = {"
+HR
+HR
+HR
+Sa
+rm
+zT
+UE
+sF
+dc
+Pq
+Rl
+mY
+zr
+Bm
+cV
+Sa
+Tt
+Rt
+Rt
+UD
+TO
+kX
+uu
+qX
+qX
+qX
+"}
+(11,1,1) = {"
+HR
+HR
+HR
+Sa
+rm
+BB
+ve
+wg
+Yf
+Oa
+NH
+Ic
+lX
+XY
+Zm
+dT
+aE
+LV
+lh
+ni
+cF
+Sa
+HR
+qX
+HR
+HR
+"}
+(12,1,1) = {"
+HR
+HR
+HR
+Sa
+rm
+LS
+dv
+DZ
+ax
+Sa
+gI
+pv
+PR
+jJ
+qn
+Sa
+Nr
+eg
+Cp
+Sa
+Sa
+Sa
+Sa
+Sa
+HR
+HR
+"}
+(13,1,1) = {"
+HR
+HR
+Sa
+Sa
+Sa
+Sa
+Sa
+dv
+Sa
+dv
+ZI
+CJ
+xR
+mv
+zb
+Sa
+Sa
+dv
+Sa
+BR
+BR
+JP
+JP
+dv
+Sa
+HR
+"}
+(14,1,1) = {"
+HR
+Sa
+dv
+Pg
+yz
+dv
+ou
+Sj
+VS
+Sa
+Jq
+wT
+ia
+xE
+nd
+Sa
+ai
+Vp
+qD
+ua
+wS
+gv
+tA
+cr
+Sa
+HR
+"}
+(15,1,1) = {"
+HR
+Sa
+Nh
+nM
+yy
+Sa
+kk
+eZ
+KQ
+eq
+Pd
+mA
+Zq
+Up
+XT
+Rj
+ns
+qG
+eH
+Dv
+kR
+xR
+rn
+Ip
+Sa
+HR
+"}
+(16,1,1) = {"
+HR
+Sa
+pr
+RK
+tU
+eI
+TD
+TD
+Qe
+bb
+pR
+sT
+Vl
+RX
+AP
+fe
+zw
+SS
+SS
+sU
+Op
+fW
+nv
+xo
+Sa
+HR
+"}
+(17,1,1) = {"
+HR
+Sa
+HQ
+Ya
+oI
+Sa
+cb
+Zc
+lO
+Cy
+NH
+TV
+CP
+vQ
+CS
+fC
+rS
+qG
+UI
+uB
+cQ
+PR
+wu
+cr
+Sa
+HR
+"}
+(18,1,1) = {"
+HR
+Sa
+Sa
+KX
+OA
+dv
+VS
+Tq
+co
+Sa
+uX
+lM
+Fm
+Sk
+GB
+Sa
+uD
+kF
+JE
+ab
+PB
+dn
+iJ
+cr
+Sa
+HR
+"}
+(19,1,1) = {"
+HR
+HR
+Sa
+Sa
+dv
+Sa
+Sa
+dv
+dv
+Sa
+Lk
+Ks
+Sa
+uE
+Sa
+dv
+Sa
+dv
+VR
+ZW
+Da
+ZW
+KD
+dv
+Sa
+HR
+"}
+(20,1,1) = {"
+qX
+HR
+HR
+Sa
+YI
+rL
+Kt
+Wk
+EU
+EU
+xB
+pi
+Sa
+dp
+GY
+pY
+Tb
+fE
+dU
+HB
+xP
+nq
+Sa
+Sa
+HR
+HR
+"}
+(21,1,1) = {"
+qX
+qX
+HR
+Sa
+rh
+TD
+qN
+EU
+an
+Bd
+xq
+pi
+dv
+dp
+yN
+qY
+py
+nT
+Yh
+lN
+Sa
+RP
+qX
+qX
+qX
+HR
+"}
+(22,1,1) = {"
+qX
+HR
+HR
+LM
+la
+bi
+Eg
+EU
+zJ
+hc
+OZ
+BC
+Sa
+Sd
+lP
+FS
+fG
+sx
+wN
+WL
+Sa
+qX
+qX
+HR
+qX
+HR
+"}
+(23,1,1) = {"
+HR
+HR
+HR
+Sa
+Sa
+Sa
+Sa
+BV
+zJ
+eX
+OZ
+BC
+dv
+ud
+yN
+Eb
+TU
+FP
+rs
+lF
+Sa
+HR
+HR
+HR
+qX
+qX
+"}
+(24,1,1) = {"
+HR
+HR
+HR
+HR
+HR
+HR
+Sa
+Qr
+zK
+QS
+rI
+pi
+Sa
+ef
+au
+br
+So
+zI
+ym
+rf
+Sa
+HR
+HR
+qX
+qX
+HR
+"}
+(25,1,1) = {"
+HR
+HR
+HR
+HR
+qX
+HR
+Sa
+EU
+EU
+iK
+nS
+gx
+Sa
+dw
+ur
+PY
+oZ
+ON
+JI
+kB
+Sa
+HR
+HR
+qX
+qX
+HR
+"}
+(26,1,1) = {"
+HR
+HR
+HR
+qX
+qX
+HR
+Sa
+Sa
+dv
+vU
+OG
+hR
+Sa
+Dx
+cq
+Hh
+dv
+Sa
+Sa
+Sa
+Sa
+HR
+HR
+HR
+HR
+HR
+"}
+(27,1,1) = {"
+qX
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+Sa
+Sa
+Sa
+Sa
+Sa
+Sa
+Sa
+Sa
+Sa
+HR
+HR
+HR
+HR
+HR
+qX
+HR
+HR
+HR
+"}
+(28,1,1) = {"
+qX
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+qX
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+qX
+HR
+HR
+HR
+"}
+(29,1,1) = {"
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+qX
+qX
+qX
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+qX
+qX
+qX
+qX
+HR
+HR
+"}

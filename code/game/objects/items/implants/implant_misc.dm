@@ -145,3 +145,16 @@
 	special_desc_requirement = EXAMINE_CHECK_SYNDICATE // Skyrat edit
 	special_desc = "A Syndicate implanter used for a internal radio implant" // Skyrat edit
 
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/implant/weapons_auth/get_data()
+	return "<b>Implant Specifications:</b><BR> \
+		<b>Name:</b> Firearms Authentication Implant<BR> \
+		<b>Life:</b> 4 hours after death of host<BR> \
+		<b>Implant Details:</b> <BR> \
+		<b>Function:</b> Allows operation of implant-locked weaponry, preventing equipment from falling into enemy hands."
+
+/obj/item/implant/radio/get_data()
+	return "<b>Implant Specifications:</b><BR> \
+		<b>Name:</b> Internal Radio Implant<BR> \
+		<b>Life:</b> 24 hours<BR> \
+		<b>Implant Details:</b> Allows user to use an internal radio, useful if user expects equipment loss, or cannot equip conventional radios."

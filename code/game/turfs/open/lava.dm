@@ -489,3 +489,16 @@
 	initial_gas_mix = OPENTURF_DEFAULT_ATMOS
 	slowdown = 0
 	fish_source_type = null
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/turf/open/lava/plasma/examine(mob/user)
+	. = ..()
+	. += span_info("Some <b>liquid plasma<b> could probably be scooped up with a <b>container</b>.")
+
+/turf/open/lava/plasma/attackby(obj/item/I, mob/user, list/modifiers)
+	if(!I.is_open_container())
+		return ..()
+	if(!I.reagents.add_reagent(/datum/reagent/toxin/plasma, rand(5, 10)))
+		to_chat(user, span_warning("[I] is full."))
+		return
+	user.visible_message(span_notice("[user] scoops some plasma from the [src] with [I]."), span_notice("You scoop out some plasma from the [src] using [I]."))

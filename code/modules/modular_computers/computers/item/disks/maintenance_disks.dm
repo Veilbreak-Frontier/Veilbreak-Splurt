@@ -28,3 +28,8 @@
 
 /obj/item/disk/computer/maintenance/cool_sword
 	starting_programs = list(/datum/computer_file/program/maintenance/cool_sword)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/computer_disk/maintenance/theme/Initialize(mapload)
+	starting_programs = list(pick(subtypesof(/datum/computer_file/program/maintenance/theme)))
+	return ..()

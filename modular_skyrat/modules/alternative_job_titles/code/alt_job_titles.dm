@@ -28,7 +28,6 @@
 		"Colonist",
 		"Contractor",
 		"Civilian",
-		"Duchess",
 		"Duke",
 		"Diplomat",
 		"Entertainer",
@@ -272,6 +271,7 @@
 		"Android",
 		"Robot",
 		"Synthetic",
+		"Servitor",
 	)
 
 /datum/job/detective
@@ -316,6 +316,7 @@
 		"Crew Supervisor",
 		"Employment Officer",
 		"Executive Officer",
+		"Head of Fursonnel",
 	)
 
 /datum/job/head_of_security
@@ -368,12 +369,12 @@
 		"Nanotrasen Advisor",
 		"Nanotrasen Diplomat",
 		"Nanotrasen Representative",
-		"Nanotrasen Liaison",
+		"Nanotrasen Liason",// SPLURT REMOVAL OF CENTCOM RENAMES
 		"Command Consultant",
 		"Command Advisor",
 		"Corporate Diplomat",
 		"Corporate Representative",
-		"Corporate Liaison",
+		"Corporate Liason",
 		"Corporate Interest Officer",
 	)
 
@@ -407,8 +408,6 @@
 		"Psychiatrist",
 		"Therapist",
 		"Shrink",
-		"Anger Management",
-		"Emotional Support Animal",
 	)
 
 /datum/job/quartermaster

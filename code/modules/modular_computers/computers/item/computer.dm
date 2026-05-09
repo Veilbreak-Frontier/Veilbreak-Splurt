@@ -1102,3 +1102,20 @@
 /obj/item/modular_computer/debug/Initialize(mapload)
 	starting_programs += subtypesof(/datum/computer_file/program)
 	return ..()
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/modular_computer/mouse_drop_dragged(atom/over_object, mob/user)
+	if(!istype(over_object, /atom/movable/screen))
+		return attack_self(user)
+
+/obj/item/modular_computer/proc/computer_disk_act(mob/user, obj/item/computer_disk/disk)
+	if(!user.transferItemToLoc(disk, src))
+		return ITEM_INTERACT_BLOCKING
+	if(inserted_disk)
+		user.put_in_hands(inserted_disk)
+		balloon_alert(user, "disks swapped")
+	else
+		balloon_alert(user, "disk inserted")
+	inserted_disk = disk
+	playsound(src, 'sound/machines/card_slide.ogg', 50)
+	return ITEM_INTERACT_SUCCESS

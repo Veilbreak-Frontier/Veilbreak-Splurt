@@ -871,3 +871,31 @@
 #undef ANNOYED
 #undef DELIGHT
 #undef CHIME
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/simple_animal/bot/mulebot/attackby(obj/item/I, mob/living/user, list/modifiers, list/attack_modifiers)
+	if(istype(I, /obj/item/stock_parts/power_store/cell) && bot_cover_flags & BOT_COVER_MAINTS_OPEN)
+		if(cell)
+			to_chat(user, span_warning("[src] already has a power cell!"))
+			return TRUE
+		if(!user.transferItemToLoc(I, src))
+			return TRUE
+		cell = I
+		diag_hud_set_mulebotcell()
+		user.visible_message(
+			span_notice("[user] inserts \a [cell] into [src]."),
+			span_notice("You insert [cell] into [src]."),
+		)
+		return TRUE
+	else if(is_wire_tool(I) && bot_cover_flags & BOT_COVER_MAINTS_OPEN)
+		return attack_hand(user)
+	else if(load && ismob(load))  // chance to knock off rider
+		if(prob(1 + I.force * 2))
+			unload(0)
+			user.visible_message(span_danger("[user] knocks [load] off [src] with \the [I]!"),
+									span_danger("You knock [load] off [src] with \the [I]!"))
+		else
+			to_chat(user, span_warning("You hit [src] with \the [I] but to no effect!"))
+			return ..()
+	else
+		return ..()

@@ -160,3 +160,9 @@
 	if(!istype(holder, /obj/machinery/plumbing) && !(fluid_area.area_flags & QUIET_LOGS)) //excludes standard plumbing equipment as well as deathmatch from spamming admins with this shit
 		message_admins("\A [flood] flood started at [ADMIN_VERBOSEJMP(location)] [source_msg][blame_msg].")
 	log_game("\A [flood] flood started at [AREACOORD(location)] [source_msg][blame_msg].")
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/effect_system/fluid_spread/set_up(range = 1, amount = DIAMOND_AREA(range), atom/holder, atom/location, ...)
+	src.holder = holder
+	src.location = location
+	src.amount = amount

@@ -119,10 +119,20 @@
 	sound = 'modular_zubbers/code/modules/emotes/sound/voice/tailthump.ogg' // See https://github.com/shiptest-ss13/Shiptest/pull/2159
 
 /datum/emote/living/tail_thump/can_run_emote(mob/user, status_check, intentional, params)
-	var/obj/item/organ/tail/tail = user.get_organ_slot(ORGAN_SLOT_EXTERNAL_TAIL)
-	if(isnull(tail))
-		return FALSE
-	return ..()
+    if(iscyborg(user))
+        return ..()
+
+    var/obj/item/organ/tail/tail = user.get_organ_slot(ORGAN_SLOT_EXTERNAL_TAIL)
+    if(!isnull(tail))
+        return ..()
+
+    if(ishuman(user))
+        var/mob/living/carbon/human/H = user
+        var/taur_mode = H.get_taur_mode()
+        if(taur_mode == STYLE_TAUR_SNAKE)
+            return ..()
+
+    return FALSE
 
 
 /datum/emote/living/squeal
@@ -252,21 +262,3 @@
 
 /datum/emote/living/snort/get_sound(mob/living/user)
 	return 'sound/mobs/non-humanoids/pony/snort.ogg'
-
-/datum/emote/living/bray
-	key = "bray"
-	key_third_person = "brays"
-	message = "brays loudly."
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/living/bray/get_sound(mob/living/user)
-	return 'modular_zubbers/sound/emotes/bray.ogg'
-
-/datum/emote/living/bellow
-	key = "bellow"
-	key_third_person = "bellows"
-	message = "lets out a deep bellow."
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/living/bellow/get_sound(mob/living/user)
-	return 'modular_zubbers/sound/emotes/bellow.ogg'

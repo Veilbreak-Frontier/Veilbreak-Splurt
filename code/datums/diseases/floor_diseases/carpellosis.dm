@@ -94,3 +94,33 @@
 		affected_mob.visible_message("gnashes at [target.name].", visible_message_flags = EMOTE_MESSAGE)
 
 #undef GNASHING_RANGE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/disease/carpellosis/stage_act(seconds_per_tick, times_fired)
+	. = ..()
+	if(!.)
+		return
+
+
+	switch(stage)
+		if(2)
+			if(SPT_PROB(1, seconds_per_tick) && affected_mob.stat == CONSCIOUS && affected_mob.get_organ_slot(ORGAN_SLOT_EXTERNAL_TAIL))
+				to_chat(affected_mob, span_warning("You want to wag your tail..."))
+				affected_mob.emote("wag")
+		if(3)
+			if(SPT_PROB(1, seconds_per_tick) && affected_mob.stat == CONSCIOUS)
+				to_chat(affected_mob, span_warning("You suddenly feel like swimming in space..."))
+			else if(SPT_PROB(1, seconds_per_tick) && affected_mob.stat == CONSCIOUS)
+				affected_mob.visible_message("gnashes.", visible_message_flags = EMOTE_MESSAGE)
+		if(4)
+			if(SPT_PROB(1, seconds_per_tick) && affected_mob.stat == CONSCIOUS)
+				gnash_someone()
+			else if(SPT_PROB(1, seconds_per_tick) && affected_mob.stat == CONSCIOUS)
+				affected_mob.visible_message("gnashes.", visible_message_flags = EMOTE_MESSAGE)
+		if(5)
+			max_stage_reached = TRUE
+			grant_ability()
+			if(SPT_PROB(2, seconds_per_tick) && affected_mob.stat == CONSCIOUS)
+				gnash_someone()
+			else if(SPT_PROB(2, seconds_per_tick) && affected_mob.stat == CONSCIOUS)
+				affected_mob.visible_message("gnashes.", visible_message_flags = EMOTE_MESSAGE)

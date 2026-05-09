@@ -176,3 +176,13 @@
 #undef CARP_SCLERA_COLOR
 #undef CARP_PUPIL_COLOR
 #undef CARP_COLORS
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/tongue/carp/on_life(seconds_per_tick, times_fired)
+	. = ..()
+	if(owner.stat != CONSCIOUS || !prob(0.1))
+		return
+	owner.emote("cough")
+	var/turf/tooth_fairy = get_turf(owner)
+	if(tooth_fairy)
+		new /obj/item/knife/carp(tooth_fairy)

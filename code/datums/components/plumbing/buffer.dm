@@ -14,3 +14,10 @@
 	return (buffer.mode == READY) ? ..() : FALSE
 
 #undef READY
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/component/plumbing/buffer/Initialize(start = TRUE, _turn_connects = TRUE, _ducting_layer, datum/reagents/custom_receiver)
+	if(!istype(parent, /obj/machinery/plumbing/buffer))
+		return COMPONENT_INCOMPATIBLE
+
+	return ..()

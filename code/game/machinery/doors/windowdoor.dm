@@ -569,3 +569,9 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/door/window/brigdoor/security/holding
 	update_appearance()
 
 	return TRUE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/door/window/try_to_activate_door(mob/user, access_bypass = FALSE)
+	. = ..()
+	if(.)
+		autoclose = FALSE

@@ -429,3 +429,112 @@
 	antag = /datum/antagonist/cult
 
 #endif
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/gun/magic/wand/proc/zap_self(mob/living/user)
+	user.visible_message(span_danger("[user] zaps [user.p_them()]self with [src]."))
+	playsound(user, fire_sound, 50, TRUE)
+	user.log_message("zapped [user.p_them()]self with a <b>[src]</b>", LOG_ATTACK)
+
+
+/////////////////////////////////////
+//WAND OF DEATH
+/////////////////////////////////////
+
+/obj/item/gun/magic/wand/death/zap_self(mob/living/user)
+	..()
+	charges--
+	if(user.can_block_magic())
+		user.visible_message(span_warning("[src] has no effect on [user]!"))
+		return
+	if(isliving(user))
+		var/mob/living/L = user
+		if(L.mob_biotypes & MOB_UNDEAD) //negative energy heals the undead
+			user.revive(ADMIN_HEAL_ALL, force_grab_ghost = TRUE) // This heals suicides
+			to_chat(user, span_notice("You feel great!"))
+			return
+	to_chat(user, span_warning("You irradiate yourself with pure negative energy! \
+	[pick("Do not pass go. Do not collect 200 zorkmids.","You feel more confident in your spell casting skills.","You die...","Do you want your possessions identified?")]"))
+	user.death(FALSE)
+
+/obj/item/gun/magic/wand/resurrection/zap_self(mob/living/user)
+	..()
+	charges--
+	if(user.can_block_magic())
+		user.visible_message(span_warning("[src] has no effect on [user]!"))
+		return
+	if(isliving(user))
+		var/mob/living/L = user
+		if(L.mob_biotypes & MOB_UNDEAD) //positive energy harms the undead
+			to_chat(user, span_warning("You irradiate yourself with pure positive energy! \
+			[pick("Do not pass go. Do not collect 200 zorkmids.","You feel more confident in your spell casting skills.","You die...","Do you want your possessions identified?")]"))
+			user.investigate_log("has been killed by a bolt of resurrection.", INVESTIGATE_DEATHS)
+			user.death(FALSE)
+			return
+	user.revive(ADMIN_HEAL_ALL, force_grab_ghost = TRUE) // This heals suicides
+	to_chat(user, span_notice("You feel great!"))
+
+/obj/item/gun/magic/wand/polymorph/zap_self(mob/living/user)
+	. = ..() //because the user mob ceases to exists by the time wabbajack fully resolves
+
+	user.wabbajack()
+	charges--
+
+/////////////////////////////////////
+//WAND OF TELEPORTATION
+/////////////////////////////////////
+
+/obj/item/gun/magic/wand/teleport/zap_self(mob/living/user)
+	if(do_teleport(user, user, 10, channel = TELEPORT_CHANNEL_MAGIC))
+		var/datum/effect_system/fluid_spread/smoke/smoke = new
+		smoke.set_up(3, holder = src, location = user.loc)
+		smoke.start()
+		charges--
+	..()
+
+/obj/item/gun/magic/wand/safety/zap_self(mob/living/user)
+	var/turf/origin = get_turf(user)
+	var/turf/destination = find_safe_turf(extended_safety_checks = TRUE)
+
+	if(do_teleport(user, destination, channel=TELEPORT_CHANNEL_MAGIC))
+		for(var/t in list(origin, destination))
+			var/datum/effect_system/fluid_spread/smoke/smoke = new
+			smoke.set_up(0, holder = src, location = t)
+			smoke.start()
+	..()
+
+/obj/item/gun/magic/wand/door/zap_self(mob/living/user)
+	to_chat(user, span_notice("You feel vaguely more open with your feelings."))
+	charges--
+	..()
+
+/////////////////////////////////////
+//WAND OF FIREBALL
+/////////////////////////////////////
+
+/obj/item/gun/magic/wand/fireball/zap_self(mob/living/user)
+	..()
+	explosion(user, devastation_range = -1, light_impact_range = 2, flame_range = 2, flash_range = 3, adminlog = FALSE, explosion_cause = src)
+	charges--
+
+/////////////////////////////////////
+//WAND OF NOTHING
+/////////////////////////////////////
+
+/obj/item/gun/magic/wand/shrink/zap_self(mob/living/user)
+	to_chat(user, span_notice("The world grows large..."))
+	charges--
+	user.AddComponent(/datum/component/shrink, -1) // small forever
+	return ..()
+
+// Wand of debugging
+
+#ifdef TESTING
+
+/obj/item/gun/magic/wand/antag/zap_self(mob/living/user)
+	. = ..()
+	var/obj/item/ammo_casing/magic/antag/casing = new ammo_type()
+	var/obj/projectile/magic/magic_proj = casing.projectile_type
+	magic_proj = new magic_proj(src)
+	magic_proj.on_hit(user)
+	QDEL_NULL(casing)

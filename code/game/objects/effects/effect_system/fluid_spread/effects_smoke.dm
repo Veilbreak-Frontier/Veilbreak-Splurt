@@ -496,3 +496,95 @@
 
 /datum/effect_system/fluid_spread/smoke/chem/medium
 	effect_type = /obj/effect/particle_effect/fluid/smoke/chem/medium
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/proc/do_smoke(range = 0, amount = DIAMOND_AREA(range), atom/holder = null, location = null, smoke_type = /obj/effect/particle_effect/fluid/smoke, log = FALSE)
+	var/datum/effect_system/fluid_spread/smoke/smoke = new
+	smoke.effect_type = smoke_type
+	smoke.set_up(amount = amount, holder = holder, location = location)
+	smoke.start(log = log)
+
+/////////////////////////////////////////////
+// Quick smoke
+/////////////////////////////////////////////
+
+/// Smoke that dissipates as quickly as possible.
+
+/datum/effect_system/fluid_spread/smoke/freezing/proc/Chilled(turf/open/chilly)
+	if(!istype(chilly))
+		return
+
+	if(chilly.air)
+		var/datum/gas_mixture/air = chilly.air
+		if(!distcheck || get_dist(location, chilly) < blast) // Otherwise we'll get silliness like people using Nanofrost to kill people through walls with cold air
+			air.temperature = temperature
+
+		var/list/gases = air.gases
+		if(gases[/datum/gas/plasma])
+			air.assert_gas(/datum/gas/nitrogen)
+			gases[/datum/gas/nitrogen][MOLES] += gases[/datum/gas/plasma][MOLES]
+			gases[/datum/gas/plasma][MOLES] = 0
+			air.garbage_collect()
+
+		for(var/obj/effect/hotspot/fire in chilly)
+			qdel(fire)
+		chilly.air_update_turf(FALSE, FALSE)
+
+	if(weldvents)
+		for(var/obj/machinery/atmospherics/components/unary/comp in chilly)
+			if(!isnull(comp.welded) && !comp.welded) //must be an unwelded vent pump or vent scrubber.
+				comp.welded = TRUE
+				comp.update_appearance()
+				comp.visible_message(span_danger("[comp] is frozen shut!"))
+
+	// Extinguishes everything in the turf
+	for(var/mob/living/potential_tinder in chilly)
+		potential_tinder.extinguish_mob()
+	for(var/obj/item/potential_tinder in chilly)
+		potential_tinder.extinguish()
+
+/datum/effect_system/fluid_spread/smoke/freezing/set_up(range = 5, amount = DIAMOND_AREA(range), atom/holder, atom/location, blast_radius = 0)
+	. = ..()
+	blast = blast_radius
+
+/proc/do_chem_smoke(range = 0, amount = DIAMOND_AREA(range), atom/holder = null, location = null, reagent_type = /datum/reagent/water, reagent_volume = 10, log = FALSE, datum/effect_system/fluid_spread/smoke/chem/smoke_type = /datum/effect_system/fluid_spread/smoke/chem)
+	var/datum/reagents/smoke_reagents = new/datum/reagents(reagent_volume)
+	smoke_reagents.add_reagent(reagent_type, reagent_volume)
+
+	var/datum/effect_system/fluid_spread/smoke/chem/smoke = new smoke_type
+	smoke.attach(location)
+	smoke.set_up(amount = amount, holder = holder, location = location, carry = smoke_reagents, silent = TRUE)
+	smoke.start(log = log)
+
+/// A factory which produces clouds of chemical bearing smoke.
+
+/datum/effect_system/fluid_spread/smoke/chem/New()
+	..()
+	chemholder = new(1000, NO_REACT)
+
+/datum/effect_system/fluid_spread/smoke/chem/set_up(range = 1, amount = DIAMOND_AREA(range), atom/holder, atom/location = null, datum/reagents/carry = null, silent = FALSE)
+	. = ..()
+	carry?.trans_to(chemholder, carry.total_volume, copy_only = TRUE)
+
+	if(silent)
+		return
+
+	var/list/contained_reagents = list()
+	for(var/datum/reagent/reagent as anything in chemholder.reagent_list)
+		contained_reagents += "[reagent.volume]u [reagent]"
+
+	var/where = "[AREACOORD(location)]"
+	var/contained = length(contained_reagents) ? "\[[contained_reagents.Join(", ")]\] @ [chemholder.chem_temp]K" : null
+	var/area/fluid_area = get_area(location)
+	if(carry.my_atom?.fingerprintslast) //Some reagents don't have a my_atom in some cases
+		var/mob/M = get_mob_by_key(carry.my_atom.fingerprintslast)
+		var/more = ""
+		if(M)
+			more = "[ADMIN_LOOKUPFLW(M)] "
+		if(!istype(carry.my_atom, /obj/machinery/plumbing) && !(fluid_area.area_flags & QUIET_LOGS)) // I like to be able to see my logs thank you
+			message_admins("Smoke: ([ADMIN_VERBOSEJMP(location)])[contained]. Key: [more ? more : carry.my_atom.fingerprintslast].")
+		log_game("A chemical smoke reaction has taken place in ([where])[contained]. Last touched by [carry.my_atom.fingerprintslast].")
+	else
+		if(!istype(carry.my_atom, /obj/machinery/plumbing) && !(fluid_area.area_flags & QUIET_LOGS)) // Deathmatch has way too much smoke to log
+			message_admins("Smoke: ([ADMIN_VERBOSEJMP(location)])[contained]. No associated key.")
+		log_game("A chemical smoke reaction has taken place in ([where])[contained]. No associated key.")

@@ -118,3 +118,9 @@
 	cooldown_time = 180 SECONDS
 
 #undef HEALTH_DANGER_ZONE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/monster_core/rush_gland/on_life(seconds_per_tick, times_fired)
+	. = ..()
+	if (owner.health <= HEALTH_DANGER_ZONE)
+		trigger_organ_action()

@@ -252,3 +252,17 @@
 		INVOKE_ASYNC(computer, TYPE_PROC_REF(/obj/item/modular_computer, update_tablet_open_uis), user)
 	computer.update_appearance(UPDATE_ICON)
 	return TRUE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/computer_file/program/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
+	. = ..()
+	if(isnull(circuit_comp_type) || isnull(computer.shell))
+		return
+	if(!(locate(circuit_comp_type) in computer.shell.unremovable_circuit_components))
+		var/obj/item/circuit_component/mod_program/comp = new circuit_comp_type()
+		computer.shell.add_unremovable_circuit_component(comp)
+		if(computer.shell.attached_circuit)
+			comp.forceMove(computer.shell.attached_circuit)
+			computer.shell.attached_circuit.add_component(comp)
+
+///Here we deal with killing the associated components instead.

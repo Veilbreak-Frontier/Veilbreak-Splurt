@@ -62,3 +62,23 @@
 /datum/disease/pierrot_throat/remove_disease()
 	UnregisterSignal(affected_mob, COMSIG_MOB_SAY)
 	return ..()
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/disease/pierrot_throat/stage_act(seconds_per_tick, times_fired)
+	. = ..()
+	if(!.)
+		return
+
+	switch(stage)
+		if(1)
+			if(SPT_PROB(5, seconds_per_tick))
+				to_chat(affected_mob, span_danger("You feel a little silly."))
+		if(2)
+			if(SPT_PROB(5, seconds_per_tick))
+				to_chat(affected_mob, span_danger("You start seeing rainbows."))
+		if(3)
+			if(SPT_PROB(5, seconds_per_tick))
+				to_chat(affected_mob, span_danger("Your thoughts are interrupted by a loud <b>HONK!</b>"))
+		if(4)
+			if(SPT_PROB(2.5, seconds_per_tick))
+				affected_mob.say( pick( list("HONK!", "Honk!", "Honk.", "Honk?", "Honk!!", "Honk?!", "Honk...") ) , forced = "pierrot's throat")

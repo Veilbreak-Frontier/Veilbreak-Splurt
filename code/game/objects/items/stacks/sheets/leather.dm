@@ -463,3 +463,12 @@ GLOBAL_LIST_INIT(bear_pelt_recipes, list ( \
 		new /obj/item/stack/sheet/leather(drop_location(), amount)
 		wetness = initial(wetness)
 		use(1)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/stack/sheet/animalhide/human/get_main_recipes()
+	. = ..()
+	. += GLOB.human_recipes
+
+/obj/item/stack/sheet/animalhide/monkey/get_main_recipes()
+	. = ..()
+	. += GLOB.monkey_recipes

@@ -356,3 +356,22 @@
 	added_throw_range = 8
 	strength_bonus = 8
 	core_applied = TRUE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/cyberimp/chest/nutriment/on_life(seconds_per_tick, times_fired)
+	if(synthesizing)
+		return
+
+	if(owner.nutrition <= hunger_threshold)
+		synthesizing = TRUE
+		to_chat(owner, span_notice("You feel less hungry..."))
+		owner.adjust_nutrition(25 * seconds_per_tick)
+		addtimer(CALLBACK(src, PROC_REF(synth_cool)), 5 SECONDS)
+
+/obj/item/organ/cyberimp/chest/reviver/on_death(seconds_per_tick, times_fired)
+	if(isnull(owner)) // owner can be null, on_death() gets called by /obj/item/organ/process() for decay
+		return
+	try_heal() // Allows implant to work even on dead people
+
+/obj/item/organ/cyberimp/chest/reviver/on_life(seconds_per_tick, times_fired)
+	try_heal()

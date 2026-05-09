@@ -250,3 +250,7 @@
 		valid_chrom_list += "Power"
 	if(energy_coeff != MUTATION_COEFFICIENT_UNMODIFIABLE)
 		valid_chrom_list += "Energetic"
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/mutation/proc/on_life(seconds_per_tick, times_fired)
+	return

@@ -116,3 +116,8 @@
 
 	if(panel_open)
 		lose_senders()
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/plumbing/sender/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/simple_demand, bolt, layer)

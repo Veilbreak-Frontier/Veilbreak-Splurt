@@ -226,3 +226,12 @@
 			return TRUE
 
 #undef REAGENTS_BASE_VOLUME
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/effect_system/fluid_spread/smoke/chem/smoke_machine/set_up(range = 1, amount = DIAMOND_AREA(range), atom/holder, atom/location, datum/reagents/carry, efficiency = 10, silent = FALSE)
+	src.holder = holder
+	src.location = get_turf(location)
+	src.amount = amount
+	if(carry)
+		carry.trans_to(chemholder, 20, copy_only = TRUE)
+		carry.remove_all(amount / efficiency)

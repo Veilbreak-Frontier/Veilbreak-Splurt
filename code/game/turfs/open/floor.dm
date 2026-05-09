@@ -382,3 +382,10 @@
 	if(.)
 		var/obj/item/stack/tile = .
 		tile.set_custom_materials(custom_materials)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/turf/open/floor/rust_turf()
+	if(HAS_TRAIT(src, TRAIT_RUSTY))
+		return
+	ChangeTurf(/turf/open/floor/plating)
+	return ..()

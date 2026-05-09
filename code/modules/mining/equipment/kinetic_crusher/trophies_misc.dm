@@ -152,3 +152,69 @@
 
 /obj/item/crusher_trophy/retool_kit/ashenskull/effect_desc()
 	return "the crusher to appear corrupted by infernal powers"
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/crusher_trophy/retool_kit/Destroy(force)
+	if (istype(active_skin))
+		QDEL_NULL(active_skin)
+	return ..()
+
+/datum/crusher_skin/New(obj/item/kinetic_crusher/new_crusher)
+	. = ..()
+	crusher = new_crusher
+
+/datum/crusher_skin/Destroy(force)
+	crusher = null
+	return ..()
+
+/datum/crusher_skin/harpoon/New(obj/item/kinetic_crusher/new_crusher)
+	. = ..()
+	RegisterSignal(crusher, COMSIG_ITEM_ATTACK_ANIMATION, PROC_REF(on_attack_animation))
+
+/datum/crusher_skin/harpoon/Destroy(force)
+	UnregisterSignal(crusher, COMSIG_ITEM_ATTACK_ANIMATION)
+	return ..()
+
+/datum/crusher_skin/harpoon/proc/on_attack_animation(obj/item/source, atom/movable/attacker, atom/attacked_atom, animation_type, list/image_override, list/animation_override)
+	SIGNAL_HANDLER
+
+	// If nothing is forcing an animation type, attack with a piercing animation because we're a harpoon
+	if (!animation_type)
+		animation_override += ATTACK_ANIMATION_PIERCE
+
+/datum/crusher_skin/dagger/New(obj/item/kinetic_crusher/new_crusher)
+	. = ..()
+	RegisterSignal(crusher, COMSIG_ITEM_ATTACK_ANIMATION, PROC_REF(on_attack_animation))
+	RegisterSignal(crusher, COMSIG_CRUSHER_FIRED_BLAST, PROC_REF(on_fired_blast))
+
+/datum/crusher_skin/dagger/Destroy(force)
+	UnregisterSignal(crusher, list(COMSIG_ITEM_ATTACK_ANIMATION, COMSIG_CRUSHER_FIRED_BLAST))
+	return ..()
+
+/datum/crusher_skin/dagger/proc/on_attack_animation(obj/item/kinetic_crusher/source, atom/movable/attacker, atom/attacked_atom, animation_type, list/image_override, list/animation_override, list/angle_override)
+	SIGNAL_HANDLER
+
+	// If we've been forcefully assigned an animation type already, we shouldn't do the custom attack animation logic
+	if (animation_type)
+		return
+
+	if (isliving(attacked_atom))
+		var/mob/living/target = attacked_atom
+		if (blaster_strike)
+			image_override += image(icon = 'icons/obj/mining.dmi', icon_state = "crusher_dagger_blaster")
+			angle_override += 0
+			animation_override += ATTACK_ANIMATION_PIERCE
+			blaster_strike = FALSE
+			return
+
+		if (target.has_status_effect(/datum/status_effect/crusher_mark))
+			animation_override += ATTACK_ANIMATION_PIERCE
+
+	image_override += image(icon = 'icons/obj/mining.dmi', icon_state = "crusher_dagger_melee")
+
+/datum/crusher_skin/dagger/proc/on_fired_blast(obj/item/kinetic_crusher/source, atom/target, mob/living/user, obj/projectile/destabilizer/destabilizer)
+	SIGNAL_HANDLER
+
+	if (isliving(target) && get_dist(target, user) <= 1)
+		blaster_strike = TRUE
+		user.do_item_attack_animation(target, used_item = source)

@@ -574,3 +574,24 @@
 
 /mob/living/simple_animal/compare_sentience_type(compare_type)
 	return sentience_type == compare_type
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/simple_animal/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	. = ..()
+	if(staminaloss > 0)
+		adjust_stamina_loss(-stamina_recovery * seconds_per_tick, FALSE, TRUE)
+
+/mob/living/simple_animal/handle_environment(datum/gas_mixture/environment, seconds_per_tick, times_fired)
+	var/atom/A = loc
+	if(isturf(A))
+		var/areatemp = get_temperature(environment)
+		var/temp_delta = areatemp - bodytemperature
+		if(abs(temp_delta) > 5)
+			if(temp_delta < 0)
+				if(!on_fire)
+					adjust_bodytemperature(clamp(temp_delta * seconds_per_tick / temperature_normalization_speed, temp_delta, 0))
+			else
+				adjust_bodytemperature(clamp(temp_delta * seconds_per_tick / temperature_normalization_speed, 0, temp_delta))
+
+/mob/living/simple_animal/get_idcard(hand_first)
+	return (..() || access_card)

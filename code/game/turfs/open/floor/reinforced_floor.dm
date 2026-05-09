@@ -234,3 +234,12 @@
 	thermal_conductivity = 0
 	floor_tile = /obj/item/stack/sheet/mineral/plastitanium
 	floor_tile_amount = 1 // Made with 1 sheet, deconstructs into 1 sheet
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/turf/open/floor/engine/attack_hand(mob/user, list/modifiers)
+	. = ..()
+	if(.)
+		return
+	user.Move_Pulled(src)
+
+//air filled floors; used in atmos pressure chambers

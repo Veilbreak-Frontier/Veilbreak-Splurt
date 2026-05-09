@@ -1,0 +1,102 @@
+/obj/item/clothing/suit/jacket/duster
+	name = "Oilskin duster"
+	desc = "A Long Duster coat with the iconic shoulder cape, Commonly used for rainy days and dusty dry days by cowboys."
+	icon = 'modular_zzplurt/icons/obj/clothing/suits.dmi'
+	worn_icon = 'modular_zzplurt/icons/mob/clothing/suit.dmi'
+	icon_state = "duster"
+	body_parts_covered = CHEST|GROIN|ARMS|LEGS
+	cold_protection = CHEST|GROIN|ARMS|LEGS
+
+/obj/item/clothing/suit/toggle/rp_jacket
+	name = "Yellow Jacket"
+	desc = "A yellow jacket with a fluffy collar."
+	icon = 'modular_zzplurt/icons/obj/clothing/suits.dmi'
+	worn_icon = 'modular_zzplurt/icons/mob/clothing/suit.dmi'
+	icon_state = "jacket_yellow"
+	body_parts_covered = CHEST|ARMS
+	cold_protection = CHEST|ARMS
+	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON
+	min_cold_protection_temperature = FIRE_SUIT_MIN_TEMP_PROTECT
+
+/obj/item/clothing/suit/toggle/rp_jacket/orange
+	name = "Orange Jacket"
+	desc = "A orange jacket with a fluffy collar."
+	icon_state = "jacket_orange"
+
+/obj/item/clothing/suit/toggle/rp_jacket/red
+	name = "Red Jacket"
+	desc = "A red jacket with a fluffy collar."
+	icon_state = "jacket_red"
+
+/obj/item/clothing/suit/toggle/rp_jacket/purple
+	name = "Purple Jacket"
+	desc = "A purple jacket with a fluffy collar."
+	icon_state = "jacket_purple"
+
+/obj/item/clothing/suit/toggle/rp_jacket/white
+	name = "White Jacket"
+	desc = "A white jacket with a fluffy collar."
+	icon_state = "jacket_white"
+
+/obj/item/clothing/suit/toggle/tunnelfox
+	name = "tunnel fox jacket"
+	desc = "Tunnel Foxes Rule!"
+	icon_state = "tunnelfox"
+	icon = 'modular_zzplurt/icons/obj/clothing/suits.dmi'
+	worn_icon = 'modular_zzplurt/icons/mob/clothing/suit.dmi'
+	body_parts_covered = CHEST|LEGS|ARMS
+	min_cold_protection_temperature = FIRE_SUIT_MIN_TEMP_PROTECT
+	toggle_noun = "buttons"
+	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON
+
+/obj/item/clothing/suit/jacket/tailcoat/nanotrasen
+	name = "Nanotrasen tailcoat"
+	desc = "An official coat usually worn by bunny themed executives. The inside is lined with comfortable yet tasteful bunny fluff."
+	icon_state = "tailcoat_nanotrasen"
+	icon = 'modular_zzplurt/icons/obj/clothing/suits.dmi'
+	worn_icon = 'modular_zzplurt/icons/mob/clothing/suit.dmi'
+	post_init_icon_state = null
+	armor_type = /datum/armor/armor_centcom_formal_nt_consultant
+	greyscale_config = null
+	greyscale_config_worn = null
+	greyscale_colors = null
+
+/obj/item/clothing/suit/jacket/tailcoat/engineer/Initialize(mapload)
+	. = ..()
+	allowed += list(
+		/obj/item/analyzer,
+		/obj/item/construction/rcd,
+		/obj/item/pipe_dispenser,
+		/obj/item/construction/rld,
+		/obj/item/construction/rtd,
+		/obj/item/gun/ballistic/rifle/rebarxbow,
+		/obj/item/storage/bag/rebar_quiver,
+		/obj/item/storage/bag/construction,
+	)
+
+/obj/item/clothing/suit/utility/fire/atmos_tech_tailcoat/Initialize(mapload)
+	. = ..()
+	allowed += list(
+		/obj/item/analyzer,
+		/obj/item/construction/rcd,
+		/obj/item/pipe_dispenser,
+		/obj/item/construction/rld,
+		/obj/item/construction/rtd,
+		/obj/item/gun/ballistic/rifle/rebarxbow,
+		/obj/item/storage/bag/rebar_quiver,
+		/obj/item/storage/bag/construction,
+	)
+
+/obj/item/clothing/suit/utility/fire/ce_tailcoat/Initialize(mapload)
+	. = ..()
+	allowed += list(
+		/obj/item/analyzer,
+		/obj/item/construction/rcd,
+		/obj/item/pipe_dispenser,
+		/obj/item/construction/rld,
+		/obj/item/construction/rtd,
+		/obj/item/gun/ballistic/rifle/rebarxbow,
+		/obj/item/storage/bag/rebar_quiver,
+		/obj/item/storage/bag/construction,
+		/obj/item/melee/baton/telescopic,
+	)

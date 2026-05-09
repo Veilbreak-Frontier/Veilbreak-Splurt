@@ -146,3 +146,58 @@
 /datum/addiction/proc/withdrawal_stage_3_process(mob/living/carbon/affected_carbon, seconds_per_tick)
 	if(SPT_PROB(15, seconds_per_tick))
 		to_chat(affected_carbon, span_danger("[withdrawal_stage_messages[3]]"))
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/addiction/proc/process_addiction(mob/living/carbon/affected_carbon, seconds_per_tick, times_fired)
+	var/current_addiction_cycle = LAZYACCESS(affected_carbon.mind.active_addictions, type) //If this is null, we're not addicted
+	var/on_drug_of_this_addiction = FALSE
+	for(var/datum/reagent/possible_drug as anything in affected_carbon.reagents.reagent_list) //Go through the drugs in our system
+		for(var/addiction in possible_drug.addiction_types) //And check all of their addiction types
+			if(addiction == type && possible_drug.volume >= addiction_relief_treshold) //If one of them matches, and we have enough of it in our system, we're not losing addiction
+				if(current_addiction_cycle)
+					end_withdrawal(affected_carbon) //stop the pain
+				on_drug_of_this_addiction = TRUE
+				break
+
+	var/withdrawal_stage
+
+	switch(current_addiction_cycle)
+		if(WITHDRAWAL_STAGE1_START_CYCLE to WITHDRAWAL_STAGE1_END_CYCLE)
+			withdrawal_stage = 1
+		if(WITHDRAWAL_STAGE2_START_CYCLE to WITHDRAWAL_STAGE2_END_CYCLE)
+			withdrawal_stage = 2
+		if(WITHDRAWAL_STAGE3_START_CYCLE to INFINITY)
+			withdrawal_stage = 3
+		else
+			withdrawal_stage = 0
+
+	if(!on_drug_of_this_addiction && !HAS_TRAIT(affected_carbon, TRAIT_HOPELESSLY_ADDICTED))
+		if(affected_carbon.mind.remove_addiction_points(type, addiction_loss_per_stage[withdrawal_stage + 1] * seconds_per_tick)) //If true was returned, we lost the addiction!
+			return
+
+	if(!on_drug_of_this_addiction && HAS_TRAIT(affected_carbon, TRAIT_ADDICTIONRESILIENT) && affected_carbon.mind.remove_addiction_points(type, addiction_loss_per_stage[withdrawal_stage + 2] * seconds_per_tick))
+		return
+
+	if(!current_addiction_cycle) //Dont do the effects if were not on drugs
+		return FALSE
+
+	switch(current_addiction_cycle)
+		if(WITHDRAWAL_STAGE1_START_CYCLE)
+			withdrawal_enters_stage_1(affected_carbon)
+		if(WITHDRAWAL_STAGE2_START_CYCLE)
+			withdrawal_enters_stage_2(affected_carbon)
+		if(WITHDRAWAL_STAGE3_START_CYCLE)
+			withdrawal_enters_stage_3(affected_carbon)
+
+	///One cycle is 2 seconds
+	switch(withdrawal_stage)
+		if(1)
+			withdrawal_stage_1_process(affected_carbon, seconds_per_tick)
+		if(2)
+			withdrawal_stage_2_process(affected_carbon, seconds_per_tick)
+		if(3)
+			withdrawal_stage_3_process(affected_carbon, seconds_per_tick)
+
+	LAZYADDASSOC(affected_carbon.mind.active_addictions, type, 1 * seconds_per_tick) //Next cycle!
+
+/// Called when addiction enters stage 1

@@ -189,3 +189,9 @@
 	. = ..()
 
 	dispensable_reagents = beer_reagents
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/plumbing/synthesizer/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/simple_supply, bolt, layer)
+	dispensable_reagents = default_reagents

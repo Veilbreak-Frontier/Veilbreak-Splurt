@@ -546,3 +546,13 @@
 #undef IMAGINARY_FRIEND_RANGE
 #undef IMAGINARY_FRIEND_SPEECH_RANGE
 #undef IMAGINARY_FRIEND_EXTENDED_SPEECH_RANGE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/brain_trauma/special/imaginary_friend/on_life(seconds_per_tick, times_fired)
+	if(get_dist(owner, friend) > 9)
+		friend.recall()
+	if(!friend)
+		qdel(src)
+		return
+	if(!friend.client && friend_initialized)
+		addtimer(CALLBACK(src, PROC_REF(reroll_friend)), 1 MINUTES)

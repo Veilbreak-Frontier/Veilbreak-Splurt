@@ -98,3 +98,12 @@
 /// Don't call parent if you override this, that's for error checking
 /datum/personality/proc/on_tick(mob/living/subject, seconds_per_tick)
 	return PROCESS_KILL
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/personality/proc/on_mob_deleting(mob/living/source)
+    SIGNAL_HANDLER
+    remove_from_mob(source)
+
+
+/// Called every SSpersonality tick if `processes` is TRUE.
+/// Don't call parent if you override this, that's for error checking

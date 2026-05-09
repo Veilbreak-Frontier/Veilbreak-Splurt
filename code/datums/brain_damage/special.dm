@@ -726,3 +726,142 @@
 	while(!ismob(axe_loc) && !isarea(axe_loc) && !isnull(axe_loc))
 		axe_loc = axe_loc.loc
 	return axe_loc
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/brain_trauma/special/godwoken/on_life(seconds_per_tick, times_fired)
+	..()
+	if(SPT_PROB(2, seconds_per_tick))
+		if(prob(33) && (owner.IsStun() || owner.IsParalyzed() || owner.IsUnconscious()))
+			speak("unstun", TRUE)
+		else if(prob(60) && owner.health <= owner.crit_threshold)
+			speak("heal", TRUE)
+		else if(prob(30) && owner.combat_mode)
+			speak("aggressive")
+		else
+			speak("neutral", prob(25))
+
+/datum/brain_trauma/special/bluespace_prophet/on_life(seconds_per_tick, times_fired)
+	if(!COOLDOWN_FINISHED(src, portal_cooldown))
+		return
+
+	COOLDOWN_START(src, portal_cooldown, 10 SECONDS)
+	var/list/turf/possible_turfs = list()
+	for(var/turf/T as anything in RANGE_TURFS(8, owner))
+		if(T.density)
+			continue
+
+		var/clear = TRUE
+		for(var/obj/O in T)
+			if(O.density)
+				clear = FALSE
+				break
+		if(clear)
+			possible_turfs += T
+
+	if(!LAZYLEN(possible_turfs))
+		return
+
+	var/turf/first_turf = pick(possible_turfs)
+	if(!first_turf)
+		return
+
+	possible_turfs -= (possible_turfs & range(first_turf, 3))
+
+	var/turf/second_turf = pick(possible_turfs)
+	if(!second_turf)
+		return
+
+	var/obj/effect/client_image_holder/bluespace_stream/first = new(first_turf, owner)
+	var/obj/effect/client_image_holder/bluespace_stream/second = new(second_turf, owner)
+
+	first.linked_to = second
+	second.linked_to = first
+
+/datum/brain_trauma/special/quantum_alignment/on_life(seconds_per_tick, times_fired)
+	if(linked)
+		if(QDELETED(linked_target))
+			linked_target = null
+			linked = FALSE
+			return
+		if(!returning && COOLDOWN_FINISHED(src, snapback_cooldown))
+			start_snapback()
+		return
+	if(SPT_PROB(2, seconds_per_tick))
+		try_entangle()
+
+/datum/brain_trauma/special/existential_crisis/on_life(seconds_per_tick, times_fired)
+	..()
+	if(!veil && COOLDOWN_FINISHED(src, crisis_cooldown) && SPT_PROB(1.5, seconds_per_tick))
+		if(isturf(owner.loc))
+			fade_out()
+
+/datum/brain_trauma/special/ptsd/on_life(seconds_per_tick, times_fired)
+	if(owner.stat != CONSCIOUS)
+		return
+
+	if(!COOLDOWN_FINISHED(src, ptsd_hallucinations))
+		return
+
+	owner.cause_hallucination(pick(ptsd_hallucinations_list), "Caused by The Combat PTSD brain trauma")
+	COOLDOWN_START(src, ptsd_hallucinations, rand(10 SECONDS, 10 MINUTES))
+
+/datum/brain_trauma/special/primal_instincts/on_life(seconds_per_tick, times_fired)
+	if(isnull(owner.ai_controller))
+		qdel(src)
+		return
+
+	if(!SPT_PROB(3, seconds_per_tick))
+		return
+
+	owner.grant_language(/datum/language/monkey, UNDERSTOOD_LANGUAGE, TRAUMA_TRAIT)
+	owner.ai_controller.set_blackboard_key(BB_MONKEY_AGGRESSIVE, prob(75))
+	if(owner.ai_controller.ai_status == AI_STATUS_OFF)
+		owner.ai_controller.set_ai_status(AI_STATUS_ON)
+		owner.log_message("became controlled by monkey instincts ([owner.ai_controller.blackboard[BB_MONKEY_AGGRESSIVE] ? "aggressive" : "docile"])", LOG_ATTACK, color = "orange")
+		to_chat(owner, span_warning("You feel the urge to act on your primal instincts..."))
+	// extend original timer if we roll the effect while it's already ongoing
+	addtimer(CALLBACK(src, PROC_REF(primal_instincts_off)), rand(20 SECONDS, 40 SECONDS), TIMER_UNIQUE|TIMER_NO_HASH_WAIT|TIMER_OVERRIDE|TIMER_DELETE_ME)
+
+/datum/brain_trauma/special/axedoration/on_life(seconds_per_tick, times_fired)
+	if(owner.stat != CONSCIOUS)
+		return
+
+	if(!GLOB.bridge_axe)
+		if(SPT_PROB(0.5, seconds_per_tick))
+			to_chat(owner, span_warning("I've failed my duty..."))
+			owner.set_jitter_if_lower(5 SECONDS)
+			owner.set_stutter_if_lower(5 SECONDS)
+			if(SPT_PROB(20, seconds_per_tick))
+				owner.vomit(VOMIT_CATEGORY_DEFAULT)
+		return
+
+	var/atom/axe_location = get_axe_location()
+	if(!SPT_PROB(1.5, seconds_per_tick))
+		return
+	if(isliving(axe_location))
+		var/mob/living/axe_holder = axe_location
+		if(axe_holder == owner)
+			talk_tuah(pick(talk_lines))
+			return
+		var/datum/job/holder_job = axe_holder.mind?.assigned_role
+		if(holder_job && (/datum/job_department/command in holder_job.departments_list))
+			to_chat(owner, span_notice("I hope the axe is in good hands..."))
+			owner.add_mood_event("fireaxe", /datum/mood_event/axe_neutral)
+			return
+		to_chat(owner, span_warning("You start having a bad feeling..."))
+		owner.add_mood_event("fireaxe", /datum/mood_event/axe_missing)
+		return
+
+	if(!isarea(axe_location))
+		owner.add_mood_event("fireaxe", /datum/mood_event/axe_gone)
+		return
+
+	if(istype(axe_location, /area/station/command))
+		to_chat(owner, span_notice("You feel a sense of relief..."))
+		if(istype(GLOB.bridge_axe.loc, /obj/structure/fireaxecabinet))
+			return
+		owner.add_mood_event("fireaxe", /datum/mood_event/axe_neutral)
+		return
+
+	to_chat(owner, span_warning("You start having a bad feeling..."))
+	owner.add_mood_event("fireaxe", /datum/mood_event/axe_missing)

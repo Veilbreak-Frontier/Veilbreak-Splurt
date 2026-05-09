@@ -7,7 +7,7 @@ GLOBAL_LIST_INIT(purchasable_nifsofts, list(
 	/datum/nifsoft/soulcatcher,
 	/datum/nifsoft/scryer,
 	/datum/nifsoft/summoner/book,
-	/datum/nifsoft/action_granter/hypnosis,
+	/datum/nifsoft/action_granter/hypnosis
 ))
 
 /datum/computer_file/program/nifsoft_downloader
@@ -109,6 +109,12 @@ GLOBAL_LIST_INIT(purchasable_nifsofts, list(
 			var/amount_to_charge = (params["product_cost"])
 			var/rewards_purchase = (params["rewards_purchase"])
 			var/obj/item/organ/cyberimp/brain/nif/buyer_nif = target_nif.resolve()
+
+			//SPLURT ADDITION START - TELLS THE USER THEY NEED A NIF TO BUY NIFSOFTs (FIXES NULL RUNTIME)
+			if(!buyer_nif)
+				paying_account.bank_card_talk("You are unable to buy this. A NIF implant is required to purchase NIFSofts.")
+				return FALSE
+			//SPLURT ADDITION END
 
 			if(rewards_purchase)
 				if(buyer_nif.rewards_points < amount_to_charge)

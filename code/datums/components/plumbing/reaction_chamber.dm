@@ -100,3 +100,17 @@
 	demand_color = COLOR_VIBRANT_LIME
 	ducting_layer = FOURTH_DUCT_LAYER
 	request = /datum/reagent/reaction_agent/basic_buffer
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/component/plumbing/reaction_chamber/Initialize(start=TRUE, _ducting_layer, _turn_connects=TRUE, datum/reagents/custom_receiver)
+	. = ..()
+	if(!istype(parent, /obj/machinery/plumbing/reaction_chamber))
+		return COMPONENT_INCOMPATIBLE
+
+/datum/component/plumbing/acidic_input/send_request(dir)
+	process_request(reagent = /datum/reagent/reaction_agent/acidic_buffer, dir = dir)
+
+///Special connect that we currently use for reaction chambers. Being used so we can keep certain inputs separate, like into a special internal base container
+
+/datum/component/plumbing/alkaline_input/send_request(dir)
+	process_request(reagent = /datum/reagent/reaction_agent/basic_buffer, dir = dir)

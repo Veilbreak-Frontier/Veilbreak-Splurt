@@ -1257,3 +1257,18 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/splash)
 
 #undef FORMAT_XENOBIO_HUD_MAPTEXT
 #undef POTION_DROP_SPEED
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/atom/movable/screen/blood_level/proc/on_mob_life(mob/living/source, seconds_per_tick, times_fired)
+	SIGNAL_HANDLER
+
+	if(!isliving(source))
+		return
+	maptext = FORMAT_BLOOD_LEVEL_HUD_MAPTEXT(source.get_blood_volume())
+
+#undef FORMAT_BLOOD_LEVEL_HUD_MAPTEXT
+
+#define FORMAT_XENOBIO_HUD_MAPTEXT(text_to_use) MAPTEXT_SPESSFONT("<span style='color: [COLOR_WHITE]; text-align: center; line-height: 1.9; '>[text_to_use]</span>")
+#define POTION_DROP_SPEED 5 DECISECONDS
+
+/// Used to show how many monkeys & slimes are in the console

@@ -80,3 +80,18 @@
 	ready_to_breed = !ready_to_breed
 	source.ai_controller?.set_blackboard_key(BB_BREED_READY, ready_to_breed)
 
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/component/breed/Initialize(list/can_breed_with = list(), breed_timer = 40 SECONDS, list/baby_paths = list(), post_birth)
+	if(!isliving(parent) || ishuman(parent))
+		return COMPONENT_INCOMPATIBLE
+
+	if(!length(baby_paths))
+		stack_trace("Attempted to add a breeding component to [parent.type] with empty baby_paths.")
+		return COMPONENT_INCOMPATIBLE
+
+	src.can_breed_with = can_breed_with
+	src.breed_timer = breed_timer
+	src.baby_paths = baby_paths
+	src.post_birth = post_birth
+
+	ADD_TRAIT(parent, TRAIT_SUBTREE_REQUIRED_OPERATIONAL_DATUM, type)

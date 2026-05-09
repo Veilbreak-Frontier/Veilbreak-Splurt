@@ -581,3 +581,15 @@ GLOBAL_LIST_EMPTY(raptor_population)
 /mob/living/basic/raptor/baby/blue
 	icon_state = "baby_blue"
 	raptor_color = /datum/raptor_color/blue
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/raptor/Life(seconds_per_tick, times_fired)
+	. = ..()
+	if (growth_stage != RAPTOR_BABY || HAS_TRAIT(src, TRAIT_STASIS) || stat == DEAD)
+		return
+	if (!SPT_PROB(growth_probability * (1 + happiness_percentage * RAPTOR_GROWTH_HAPPINESS_MULTIPLIER), seconds_per_tick))
+		return
+	growth_progress += rand(RAPTOR_BABY_GROWTH_LOWER, RAPTOR_BABY_GROWTH_UPPER)
+	if (growth_progress >= RAPTOR_GROWTH_REQUIRED)
+		change_growth_stage(RAPTOR_YOUNG)
+		growth_progress = 0

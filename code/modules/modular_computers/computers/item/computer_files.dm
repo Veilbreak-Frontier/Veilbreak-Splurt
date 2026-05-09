@@ -107,3 +107,46 @@
 			if(file.uid == uid)
 				return file
 	return null
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/modular_computer/proc/store_file(datum/computer_file/file_storing)
+	if(!file_storing || !istype(file_storing))
+		return FALSE
+	if(!can_store_file(file_storing))
+		return FALSE
+
+	// This file is already stored. Don't store it again.
+	if(file_storing in stored_files)
+		return FALSE
+
+	file_storing.computer = src
+	used_capacity += file_storing.size
+	SEND_SIGNAL(file_storing, COMSIG_COMPUTER_FILE_STORE, src)
+	SEND_SIGNAL(src, COMSIG_MODULAR_COMPUTER_FILE_STORE, file_storing)
+	return TRUE
+
+/obj/item/modular_computer/proc/find_file_by_name(filename, obj/item/computer_disk/target_disk)
+	if(!istext(filename))
+		return null
+	if(isnull(target_disk))
+		for(var/datum/computer_file/file as anything in stored_files)
+			if(file.filename == filename)
+				return file
+	else
+		for(var/datum/computer_file/file as anything in target_disk.stored_files)
+			if(file.filename == filename)
+				return file
+	return null
+
+/obj/item/modular_computer/proc/find_file_by_uid(uid, obj/item/computer_disk/target_disk)
+	if(!isnum(uid))
+		return null
+	if(isnull(target_disk))
+		for(var/datum/computer_file/file as anything in stored_files)
+			if(file.uid == uid)
+				return file
+	else
+		for(var/datum/computer_file/file as anything in target_disk.stored_files)
+			if(file.uid == uid)
+				return file
+	return null

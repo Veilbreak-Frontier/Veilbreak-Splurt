@@ -876,3 +876,352 @@
 		return heart.Stop()
 
 	return heart.Restart()
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/carbon/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	if(HAS_TRAIT(src, TRAIT_NO_TRANSFORM))
+		return
+
+	if(damageoverlaytemp)
+		damageoverlaytemp = 0
+		update_damage_hud()
+
+	for(var/datum/wound/wound as anything in all_wounds)
+		if(!wound.processes) // meh
+			continue
+		wound.handle_process(seconds_per_tick, times_fired)
+
+	if(HAS_TRAIT(src, TRAIT_STASIS))
+		. = ..()
+		reagents?.handle_stasis_chems(src, seconds_per_tick, times_fired)
+	else
+		//Reagent processing needs to come before breathing, to prevent edge cases.
+		handle_dead_metabolization(seconds_per_tick, times_fired) //Dead metabolization first since it can modify life metabolization.
+		handle_organs(seconds_per_tick, times_fired)
+
+		. = ..()
+		if(QDELETED(src))
+			return
+
+		if(.) //not dead
+			handle_blood(seconds_per_tick, times_fired)
+
+		if(stat != DEAD)
+			handle_brain_damage(seconds_per_tick, times_fired)
+
+	if(stat != DEAD)
+		handle_bodyparts(seconds_per_tick, times_fired)
+
+	if(. && mind) //. == not dead
+		for(var/key in mind.addiction_points)
+			var/datum/addiction/addiction = SSaddiction.all_addictions[key]
+			addiction.process_addiction(src, seconds_per_tick, times_fired)
+	if(stat != DEAD)
+		return TRUE
+
+///////////////
+// BREATHING //
+///////////////
+
+// Start of a breath chain, calls [carbon/proc/breathe()]
+
+/mob/living/carbon/handle_breathing(seconds_per_tick, times_fired)
+	var/next_breath = 4
+	var/obj/item/organ/lungs/L = get_organ_slot(ORGAN_SLOT_LUNGS)
+	var/obj/item/organ/heart/H = get_organ_slot(ORGAN_SLOT_HEART)
+	if(L)
+		if(L.damage > L.high_threshold)
+			next_breath--
+	if(H)
+		if(H.damage > H.high_threshold)
+			next_breath--
+
+	if((times_fired % next_breath) == 0 || failed_last_breath)
+		breathe(seconds_per_tick, times_fired) //Breathe per 4 ticks if healthy, down to 2 if our lungs or heart are damaged, unless suffocating
+		if(failed_last_breath)
+			add_mood_event("suffocation", /datum/mood_event/suffocation)
+		else
+			clear_mood_event("suffocation")
+	else
+		if(isobj(loc))
+			var/obj/location_as_object = loc
+			location_as_object.handle_internal_lifeform(src,0)
+
+// Second link in a breath chain, calls [carbon/proc/check_breath()]
+
+/mob/living/carbon/proc/breathe(seconds_per_tick, times_fired)
+	var/obj/item/organ/lungs = get_organ_slot(ORGAN_SLOT_LUNGS)
+	var/is_on_internals = FALSE
+
+	if(SEND_SIGNAL(src, COMSIG_CARBON_ATTEMPT_BREATHE, seconds_per_tick, times_fired) & COMSIG_CARBON_BLOCK_BREATH)
+		return
+
+	SEND_SIGNAL(src, COMSIG_CARBON_PRE_BREATHE, seconds_per_tick, times_fired)
+
+	var/datum/gas_mixture/environment
+	if(loc)
+		environment = loc.return_air()
+
+	var/datum/gas_mixture/breath
+
+	if(!get_organ_slot(ORGAN_SLOT_BREATHING_TUBE))
+		if(health <= HEALTH_THRESHOLD_FULLCRIT || (pulledby?.grab_state >= GRAB_KILL) || (lungs?.organ_flags & ORGAN_FAILING))
+			losebreath++  //You can't breath at all when in critical or when being choked, so you're going to miss a breath
+
+		else if(health <= crit_threshold)
+			losebreath += 0.25 //You're having trouble breathing in soft crit, so you'll miss a breath one in four times
+
+	//Suffocate
+	if(losebreath >= 1) //You've missed a breath, take oxy damage
+		losebreath--
+		if(prob(10))
+			emote("gasp")
+		if(isobj(loc))
+			var/obj/loc_as_obj = loc
+			loc_as_obj.handle_internal_lifeform(src,0)
+	else
+		//Breathe from internal
+		breath = get_breath_from_internal(BREATH_VOLUME)
+
+		if(isnull(breath)) //in case of 0 pressure internals
+
+			if(isobj(loc)) //Breathe from loc as object
+				var/obj/loc_as_obj = loc
+				breath = loc_as_obj.handle_internal_lifeform(src, BREATH_VOLUME)
+
+			else if(isturf(loc)) //Breathe from loc as turf
+				//SKYRAT EDIT ADDITION
+				//Underwater breathing
+				var/turf/our_turf = loc
+				if(our_turf.liquids && !HAS_TRAIT(src, TRAIT_NOBREATH) && ((body_position == LYING_DOWN && our_turf.liquids.liquid_state >= LIQUID_STATE_WAIST) || (body_position == STANDING_UP && our_turf.liquids.liquid_state >= LIQUID_STATE_FULLTILE)))
+					//Officially trying to breathe underwater
+					if(HAS_TRAIT(src, TRAIT_WATER_BREATHING))
+						failed_last_breath = FALSE
+						clear_alert("not_enough_oxy")
+						return FALSE
+					breath = null // uh oh where'd the air go
+					check_breath(breath)
+					if(oxyloss <= OXYGEN_DAMAGE_CHOKING_THRESHOLD && stat == CONSCIOUS)
+						to_chat(src, "<span class='userdanger'>You hold in your breath!</span>")
+					else
+						//Try and drink water
+						var/datum/reagents/tempr = our_turf.liquids.take_reagents_flat(CHOKE_REAGENTS_INGEST_ON_BREATH_AMOUNT)
+						tempr.trans_to(src, tempr.total_volume, methods = INGEST)
+						qdel(tempr)
+						visible_message("<span class='warning'>[src] chokes on [our_turf.liquids.reagents_to_text()]!</span>", \
+									"<span class='userdanger'>You're choking on [our_turf.liquids.reagents_to_text()]!</span>")
+					return FALSE
+				//SKYRAT EDIT END
+				var/breath_moles = 0
+				if(environment)
+					breath_moles = environment.total_moles()*BREATH_PERCENTAGE
+
+				breath = loc.remove_air(breath_moles)
+		else //Breathe from loc as obj again
+			is_on_internals = TRUE
+
+			if(isobj(loc))
+				var/obj/loc_as_obj = loc
+				loc_as_obj.handle_internal_lifeform(src,0)
+
+	if(check_breath(breath) && is_on_internals)
+		try_breathing_sound(breath)
+
+	if(breath)
+		loc.assume_air(breath)
+
+//Tries to play the carbon a breathing sound when using internals, also invokes check_breath
+
+/mob/living/carbon/proc/try_breathing_sound(breath)
+	var/should_be_on =  canon_client?.prefs?.read_preference(/datum/preference/toggle/sound_breathing)
+	if(should_be_on && !breathing_loop.timer_id && canon_client?.mob.can_hear())
+		breathing_loop.start()
+	else if((!should_be_on && breathing_loop.timer_id) || !canon_client?.mob.can_hear())
+		breathing_loop.stop()
+
+/mob/living/carbon/proc/handle_blood(seconds_per_tick, times_fired)
+	return
+
+/mob/living/carbon/reagent_tick(datum/reagent/chem, seconds_per_tick, times_fired)
+	. = ..()
+	if(. & COMSIG_MOB_STOP_REAGENT_TICK)
+		return
+
+	var/datum/blood_type/blood_type = get_bloodtype()
+	if(!blood_type)
+		return
+
+	if(chem.type == blood_type?.restoration_chem && get_blood_volume() < BLOOD_VOLUME_NORMAL)
+		// Don't clamp this to BLOOD_VOLUME_NORMAL. Reagents have quantization, making an clamped threshold janky.
+		adjust_blood_volume(BLOOD_REGEN_FACTOR * seconds_per_tick)
+		reagents.remove_reagent(chem.type, chem.metabolization_rate * seconds_per_tick)
+		return COMSIG_MOB_STOP_REAGENT_TICK
+
+/mob/living/carbon/proc/handle_bodyparts(seconds_per_tick, times_fired)
+	for(var/obj/item/bodypart/limb as anything in bodyparts)
+		. |= limb.on_life(seconds_per_tick, times_fired)
+
+/mob/living/carbon/proc/handle_organs(seconds_per_tick, times_fired)
+	if(stat == DEAD)
+		if(reagents && (reagents.has_reagent(/datum/reagent/toxin/formaldehyde, 1) || reagents.has_reagent(/datum/reagent/cryostylane))) // No organ decay if the body contains formaldehyde.
+			return
+		var/rot_count = 0 //BUBBERSTATION CHANGE: MIASMA ORGAN ROT
+		for(var/obj/item/organ/organ in organs)
+			// On-death is where organ decay is handled
+			if(organ?.owner) // organ + owner can be null due to reagent metabolization causing organ shuffling
+				rot_count += organ.on_death(seconds_per_tick, times_fired) //BUBBERSTATION ADDITION: MIASMA_COUNT. NOTE THIS ISN'T CALLED ON ROBOTIC ORGANS.
+			// We need to re-check the stat every organ, as one of our others may have revived us
+			if(stat != DEAD)
+				break
+		//BUBBERSTATION CHANGE START: MIASMA ORGAN ROT
+		if(rot_count > 0) //This is going to be weird if there are mechanics that cause an organ to heal if you're dead, but at least this saves performance.
+			var/turf/organ_turf = get_turf(src) //We don't check the loc because of lockers. Stasis bodybags would prevent this from running anyways.
+			if(isopenturf(organ_turf) && !isspaceturf(organ_turf)) //Only spawn miasma on floor turfs and not in space turfs.
+				var/turf/open/open_turf = organ_turf
+				if(!open_turf.planetary_atmos) //Don't spawn miasma when there is open air to the sky.
+					var/miasma_to_spawn = (rot_count/(6*100))*30 //There are about 6 rottable organs in each mob, all with 100 health. If a person is 100% rotted, they should spawn 30 moles of miasma. (A 1x1 tile has 104 moles of oxygen+nitrogen).
+					open_turf.atmos_spawn_air("[GAS_MIASMA]=[miasma_to_spawn];[TURF_TEMPERATURE(src.bodytemperature)]")
+		//BUBBERSTATION CHANGE END: MIASMA
+		return
+
+	// NOTE: organs_slot is sorted by GLOB.organ_process_order on insertion
+	for(var/slot in organs_slot)
+		// We don't use get_organ_slot here because we know we have the organ we want, since we're iterating the list containing em already
+		// This code is hot enough that it's just not worth the time
+		var/obj/item/organ/organ = organs_slot[slot]
+		if(organ?.owner) // This exist mostly because reagent metabolization can cause organ reshuffling
+			organ.on_life(seconds_per_tick, times_fired)
+
+/mob/living/carbon/handle_diseases(seconds_per_tick, times_fired)
+	for(var/datum/disease/disease as anything in diseases)
+		if(QDELETED(disease)) //Got cured/deleted while the loop was still going.
+			continue
+		if(stat != DEAD || disease.process_dead)
+			disease.stage_act(seconds_per_tick, times_fired)
+
+/mob/living/carbon/handle_mutations(time_since_irradiated, seconds_per_tick, times_fired)
+	if(!dna?.temporary_mutations.len)
+		return
+
+	for(var/mut in dna.temporary_mutations)
+		if(dna.temporary_mutations[mut] < world.time)
+			if(mut == UI_CHANGED)
+				if(dna.previous["UI"])
+					dna.unique_identity = merge_text(dna.unique_identity,dna.previous["UI"])
+					updateappearance(mutations_overlay_update=1)
+					dna.previous.Remove("UI")
+				dna.temporary_mutations.Remove(mut)
+				continue
+			if(mut == UF_CHANGED)
+				if(dna.previous["UF"])
+					dna.unique_features = merge_text(dna.unique_features,dna.previous["UF"])
+					updateappearance(mutcolor_update=1, mutations_overlay_update=1)
+					dna.previous.Remove("UF")
+				dna.temporary_mutations.Remove(mut)
+				continue
+			if(mut == UE_CHANGED)
+				if(dna.previous["name"])
+					real_name = dna.previous["name"]
+					name = real_name
+					dna.previous.Remove("name")
+				if(dna.previous["UE"])
+					dna.unique_enzymes = dna.previous["UE"]
+					dna.previous.Remove("UE")
+				if(dna.previous["blood_type"])
+					set_blood_type(dna.previous["blood_type"])
+					dna.previous.Remove("blood_type")
+				dna.temporary_mutations.Remove(mut)
+				continue
+
+/mob/living/carbon/proc/handle_dead_metabolization(seconds_per_tick, times_fired)
+	if(stat != DEAD)
+		return
+	reagents?.metabolize(src, seconds_per_tick, times_fired, can_overdose = TRUE, liverless = TRUE, dead = TRUE) // Your liver doesn't work while you're dead.
+
+/// Base carbon environment handler, adds natural stabilization
+
+/mob/living/carbon/handle_environment(datum/gas_mixture/environment, seconds_per_tick, times_fired)
+	var/areatemp = get_temperature(environment)
+
+	if(stat != DEAD) // If you are dead your body does not stabilize naturally
+		natural_bodytemperature_stabilization(environment, seconds_per_tick, times_fired)
+
+	else if(!on_fire && areatemp < bodytemperature) // lowers your dead body temperature to room temperature over time
+		adjust_bodytemperature((areatemp - bodytemperature), use_insulation=FALSE, use_steps=TRUE)
+
+	if(!on_fire || areatemp > bodytemperature) // If we are not on fire or the area is hotter
+		adjust_bodytemperature((areatemp - bodytemperature), use_insulation=TRUE, use_steps=TRUE)
+
+/mob/living/carbon/proc/natural_bodytemperature_stabilization(datum/gas_mixture/environment, seconds_per_tick, times_fired)
+	var/areatemp = get_temperature(environment)
+	var/body_temperature_difference = get_body_temp_normal() - bodytemperature
+	var/natural_change = 0
+
+	// We are very cold, increase body temperature
+	if(bodytemperature <= BODYTEMP_COLD_DAMAGE_LIMIT)
+		natural_change = max((body_temperature_difference * metabolism_efficiency / BODYTEMP_AUTORECOVERY_DIVISOR), \
+			BODYTEMP_AUTORECOVERY_MINIMUM)
+
+	// we are cold, reduce the minimum increment and do not jump over the difference
+	else if(bodytemperature > BODYTEMP_COLD_DAMAGE_LIMIT && bodytemperature < get_body_temp_normal())
+		natural_change = max(body_temperature_difference * metabolism_efficiency / BODYTEMP_AUTORECOVERY_DIVISOR, \
+			min(body_temperature_difference, BODYTEMP_AUTORECOVERY_MINIMUM / 4))
+
+	// We are hot, reduce the minimum increment and do not jump below the difference
+	else if(bodytemperature > get_body_temp_normal() && bodytemperature <= BODYTEMP_HEAT_DAMAGE_LIMIT)
+		natural_change = min(body_temperature_difference * metabolism_efficiency / BODYTEMP_AUTORECOVERY_DIVISOR, \
+			max(body_temperature_difference, -(BODYTEMP_AUTORECOVERY_MINIMUM / 4)))
+
+	// We are very hot, reduce the body temperature
+	else if(bodytemperature >= BODYTEMP_HEAT_DAMAGE_LIMIT)
+		natural_change = min((body_temperature_difference / BODYTEMP_AUTORECOVERY_DIVISOR), -BODYTEMP_AUTORECOVERY_MINIMUM)
+
+	var/thermal_protection = 1 - get_insulation_protection(areatemp) // invert the protection
+	if(areatemp > bodytemperature) // It is hot here
+		if(bodytemperature < get_body_temp_normal())
+			// Our bodytemp is below normal we are cold, insulation helps us retain body heat
+			// and will reduce the heat we lose to the environment
+			natural_change = (thermal_protection + 1) * natural_change
+		else
+			// Our bodytemp is above normal and sweating, insulation hinders out ability to reduce heat
+			// but will reduce the amount of heat we get from the environment
+			natural_change = (1 / (thermal_protection + 1)) * natural_change
+	else // It is cold here
+		if(!on_fire) // If on fire ignore ignore local temperature in cold areas
+			if(bodytemperature < get_body_temp_normal())
+				// Our bodytemp is below normal, insulation helps us retain body heat
+				// and will reduce the heat we lose to the environment
+				natural_change = (thermal_protection + 1) * natural_change
+			else
+				// Our bodytemp is above normal and sweating, insulation hinders out ability to reduce heat
+				// but will reduce the amount of heat we get from the environment
+				natural_change = (1 / (thermal_protection + 1)) * natural_change
+
+	// Apply the natural stabilization changes
+	adjust_bodytemperature(natural_change * seconds_per_tick)
+
+/mob/living/carbon/proc/handle_liver(seconds_per_tick, times_fired)
+	if(isnull(has_dna()))
+		return
+
+	var/obj/item/organ/liver/liver = get_organ_slot(ORGAN_SLOT_LIVER)
+	if(liver)
+		return
+
+	reagents.end_metabolization(src, keep_liverless = TRUE) //Stops trait-based effects on reagents, to prevent permanent buffs
+	reagents.metabolize(src, seconds_per_tick, times_fired, can_overdose = TRUE, liverless = TRUE)
+
+	if(HAS_TRAIT(src, TRAIT_STABLELIVER) || HAS_TRAIT(src, TRAIT_LIVERLESS_METABOLISM))
+		return
+
+	adjust_tox_loss(0.6 * seconds_per_tick, forced = TRUE)
+	adjust_organ_loss(pick(ORGAN_SLOT_HEART, ORGAN_SLOT_LUNGS, ORGAN_SLOT_STOMACH, ORGAN_SLOT_EYES, ORGAN_SLOT_EARS), 0.5* seconds_per_tick)
+
+/mob/living/carbon/proc/handle_brain_damage(seconds_per_tick, times_fired)
+	for(var/T in get_traumas())
+		var/datum/brain_trauma/BT = T
+		BT.on_life(seconds_per_tick, times_fired)
+
+/////////////////////////////////////
+//MONKEYS WITH TOO MUCH CHOLOESTROL//
+/////////////////////////////////////

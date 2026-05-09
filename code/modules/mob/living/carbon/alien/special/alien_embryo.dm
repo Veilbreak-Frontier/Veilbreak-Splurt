@@ -170,3 +170,38 @@ Des: Removes all images from the mob infected by this embryo
 			if(client_image.loc == owner && findtext(client_image.icon_state, searchfor, 1, length(searchfor) + 1))
 				to_remove += client_image
 		alien.client?.images -= to_remove
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/body_egg/alien_embryo/on_life(seconds_per_tick, times_fired)
+	. = ..()
+	if(QDELETED(src) || QDELETED(owner))
+		return
+
+	switch(stage)
+		if(3, 4)
+			if(SPT_PROB(1, seconds_per_tick))
+				owner.emote("sneeze")
+			if(SPT_PROB(1, seconds_per_tick))
+				owner.emote("cough")
+			if(SPT_PROB(1, seconds_per_tick))
+				to_chat(owner, span_danger("Your throat feels sore."))
+			if(SPT_PROB(1, seconds_per_tick))
+				to_chat(owner, span_danger("Mucous runs down the back of your throat."))
+		if(5)
+			if(SPT_PROB(1, seconds_per_tick))
+				owner.emote("sneeze")
+			if(SPT_PROB(1, seconds_per_tick))
+				owner.emote("cough")
+			if(SPT_PROB(2, seconds_per_tick))
+				to_chat(owner, span_danger("Your muscles ache."))
+				if(prob(20))
+					owner.take_bodypart_damage(1)
+			if(SPT_PROB(2, seconds_per_tick))
+				to_chat(owner, span_danger("Your stomach hurts."))
+				if(prob(20))
+					owner.adjust_tox_loss(1)
+		if(6)
+			to_chat(owner, span_danger("You feel something tearing its way out of your chest..."))
+			owner.adjust_tox_loss(5 * seconds_per_tick) // Why is this [TOX]?
+
+/// Controls Xenomorph Embryo growth. If embryo is fully grown (or overgrown), stop the proc. If not, increase the stage by one and if it's not fully grown (stage 6), add a timer to do this proc again after however long the growth time variable is.

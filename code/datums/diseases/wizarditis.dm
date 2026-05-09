@@ -185,3 +185,59 @@
 
 	var/datum/action/cooldown/spell/pointed/swap/cough_swap = new(src)
 	random_targeted_spells += cough_swap
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/disease/wizarditis/stage_act(seconds_per_tick, times_fired)
+	. = ..()
+	if(!.)
+		return
+
+	if(affected_mob.can_block_magic(charge_cost = 0))
+		update_stage(1)
+		return
+
+	if(stage >= 3 && SPT_PROB(0.15 * stage, seconds_per_tick))
+		var/datum/action/cooldown/spell/picked = pick(random_spells)
+		if(!picked.try_invoke(affected_mob, feedback = FALSE))
+			to_chat(affected_mob, span_danger("You feel something building up inside... but the feeling passes."))
+			return
+
+		picked.spell_feedback(affected_mob)
+		return
+
+	if(stage <= 3 && SPT_PROB(0.33 * stage, seconds_per_tick))
+		affected_mob.manual_emote("sniffles.")
+
+	switch(stage)
+		if(2)
+			if(SPT_PROB(1, seconds_per_tick))
+				to_chat(affected_mob, span_danger("You feel [pick("that you don't have enough mana", "that the winds of magic are gone", "an urge to summon familiar")]."))
+
+		if(3)
+			if(SPT_PROB(1, seconds_per_tick))
+				to_chat(affected_mob, span_danger("You feel [pick("the magic bubbling in your veins", "that this location gives you a +1 to INT", "an urge to summon familiar")]."))
+				spawn_wizard_clothes(10)
+
+		if(4)
+			if(SPT_PROB(1, seconds_per_tick))
+				to_chat(affected_mob, span_danger("You feel [pick("the tidal wave of raw power building inside", "that this location gives you a +2 to INT and +1 to WIS", "an urge to teleport")]."))
+				spawn_wizard_clothes(50)
+
+			if(SPT_PROB(0.2, seconds_per_tick))
+				if(prob(15))
+					var/list/targets = list()
+					var/datum/action/cooldown/spell/target_picked = pick(random_targeted_spells)
+					for(var/mob/living/potential_target in view(affected_mob))
+						if(potential_target == affected_mob)
+							continue
+						targets += potential_target
+
+					if(length(targets))
+						target_picked.Activate(pick(targets))
+						affected_mob.emote("cough")
+						return
+
+				var/datum/action/cooldown/spell/picked = pick(random_spells)
+				picked.Activate(affected_mob)
+				affected_mob.emote("sneeze")
+				return

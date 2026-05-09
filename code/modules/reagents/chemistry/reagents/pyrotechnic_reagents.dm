@@ -503,3 +503,72 @@
 	. = ..()
 	if(methods & (TOUCH|VAPOR))
 		exposed_mob.extinguish_mob() //All stacks are removed
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/reagent/thermite/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	if(affected_mob.adjust_fire_loss(1 * REM * seconds_per_tick, updating_health = FALSE))
+		return UPDATE_MOB_HEALTH
+
+/datum/reagent/nitroglycerin/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	if(affected_mob.adjust_organ_loss(ORGAN_SLOT_HEART, -1 * REM * seconds_per_tick * normalise_creation_purity(), required_organ_flag = affected_organ_flags))
+		return UPDATE_MOB_HEALTH
+
+/datum/reagent/clf3/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	affected_mob.adjust_fire_stacks(2 * REM * seconds_per_tick)
+	if(affected_mob.adjust_fire_loss(0.3 * max(affected_mob.fire_stacks, 1) * REM * seconds_per_tick, updating_health = FALSE))
+		return UPDATE_MOB_HEALTH
+
+/datum/reagent/phlogiston/on_mob_life(mob/living/carbon/metabolizer, seconds_per_tick, times_fired)
+	. = ..()
+	metabolizer.adjust_fire_stacks(1 * REM * seconds_per_tick)
+	if(metabolizer.adjust_fire_loss(0.3 * max(metabolizer.fire_stacks, 0.15) * REM * seconds_per_tick, updating_health = FALSE))
+		return UPDATE_MOB_HEALTH
+
+/datum/reagent/napalm/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	affected_mob.adjust_fire_stacks(1 * REM * seconds_per_tick)
+
+/datum/reagent/cryostylane/on_mob_dead(mob/living/carbon/affected_mob, seconds_per_tick)
+	. = ..()
+	metabolization_rate = 0.05 * REM //slower consumption when dead
+
+/datum/reagent/cryostylane/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	metabolization_rate = 0.25 * REM//faster consumption when alive
+	if(affected_mob.reagents.has_reagent(/datum/reagent/oxygen))
+		affected_mob.reagents.remove_reagent(/datum/reagent/oxygen, 0.5 * REM * seconds_per_tick)
+		affected_mob.adjust_bodytemperature(-15 * REM * seconds_per_tick)
+		if(ishuman(affected_mob))
+			var/mob/living/carbon/human/humi = affected_mob
+			humi.adjust_coretemperature(-15 * REM * seconds_per_tick)
+
+/datum/reagent/pyrosium/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	if(holder.has_reagent(/datum/reagent/oxygen))
+		holder.remove_reagent(/datum/reagent/oxygen, 0.5 * REM * seconds_per_tick)
+		affected_mob.adjust_bodytemperature(15 * REM * seconds_per_tick)
+		if(ishuman(affected_mob))
+			var/mob/living/carbon/human/affected_human = affected_mob
+			affected_human.adjust_coretemperature(15 * REM * seconds_per_tick)
+
+/datum/reagent/teslium/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	shock_timer++
+	if(shock_timer >= rand(5, 30)) //Random shocks are wildly unpredictable
+		shock_timer = 0
+		affected_mob.electrocute_act(rand(5, 20), "Teslium in their body", 1, SHOCK_NOGLOVES) //SHOCK_NOGLOVES because it's caused from INSIDE of you
+		playsound(affected_mob, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+
+/datum/reagent/teslium/energized_jelly/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	if(!isjellyperson(affected_mob)) //everyone but jellypeople get shocked as normal.
+		return ..()
+	affected_mob.AdjustAllImmobility(-40  *REM * seconds_per_tick)
+	if(affected_mob.adjust_stamina_loss(-10 * REM * seconds_per_tick, updating_stamina = FALSE))
+		. = UPDATE_MOB_HEALTH
+	if(is_species(affected_mob, /datum/species/jelly/luminescent))
+		var/mob/living/carbon/human/affected_human = affected_mob
+		var/datum/species/jelly/luminescent/slime_species = affected_human.dna.species
+		slime_species.extract_cooldown = max(slime_species.extract_cooldown - (2 SECONDS * REM * seconds_per_tick), 0)

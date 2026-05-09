@@ -207,3 +207,25 @@ Des: Removes all infected images from the alien.
 
 /mob/living/carbon/alien/get_footprint_sprite()
 	return FOOTPRINT_SPRITE_CLAWS
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/carbon/alien/handle_environment(datum/gas_mixture/environment, seconds_per_tick, times_fired)
+	// Run base mob body temperature proc before taking damage
+	// this balances body temp to the environment and natural stabilization
+	. = ..()
+	if(bodytemperature <= BODYTEMP_HEAT_DAMAGE_LIMIT)
+		clear_alert(ALERT_XENO_FIRE)
+		return
+
+	//Body temperature is too hot.
+	throw_alert(ALERT_XENO_FIRE, /atom/movable/screen/alert/alien_fire)
+	switch(bodytemperature)
+		if(360 to 400)
+			apply_damage(HEAT_DAMAGE_LEVEL_1 * seconds_per_tick, BURN)
+		if(400 to 460)
+			apply_damage(HEAT_DAMAGE_LEVEL_2 * seconds_per_tick, BURN)
+		if(460 to INFINITY)
+			if(on_fire)
+				apply_damage(HEAT_DAMAGE_LEVEL_3 * seconds_per_tick, BURN)
+			else
+				apply_damage(HEAT_DAMAGE_LEVEL_2 * seconds_per_tick, BURN)

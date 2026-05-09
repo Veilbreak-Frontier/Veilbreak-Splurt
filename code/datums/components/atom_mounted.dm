@@ -181,3 +181,24 @@
 	PRIVATE_PROC(TRUE)
 
 	find_and_mount_on_atom()
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/component/atom_mounted/Initialize(target_structure, on_drop_callback)
+	. = ..()
+	if(!isobj(parent))
+		return COMPONENT_INCOMPATIBLE
+	hanging_support_atom = target_structure
+
+/obj/proc/get_moutable_objects()
+	PROTECTED_PROC(TRUE)
+	SHOULD_BE_PURE(TRUE)
+	RETURN_TYPE(/list/obj)
+
+	var/static/list/obj/attachables = list(
+		/obj/structure/table,
+		/obj/structure/window,
+		/obj/structure/fence,
+		/obj/structure/falsewall,
+	)
+
+	return attachables

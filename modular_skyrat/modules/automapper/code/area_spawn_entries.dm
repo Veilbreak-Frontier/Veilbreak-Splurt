@@ -20,10 +20,12 @@
 	target_areas = list(/area/station/security/medical, /area/station/security/lockers)
 	desired_atom = /obj/structure/closet/secure_closet/security_medic
 
+/* Replacing for actual Blueshield offices.
 /datum/area_spawn/blueshield_locker
 	target_areas = list(/area/station/command/heads_quarters/captain, /area/station/command/bridge, /area/station/command/corporate_dock, /area/station/command/meeting_room, /area/station/command/gateway)
 	desired_atom = /obj/structure/closet/secure_closet/blueshield
 	mode = AREA_SPAWN_MODE_HUG_WALL
+*/
 
 /datum/area_spawn/command_drobe
 	target_areas = list(/area/station/command/meeting_room, /area/station/command/meeting_room/council, /area/station/command/bridge)
@@ -52,7 +54,7 @@
 
 /datum/area_spawn/bar_jukebox
 	target_areas = list(/area/station/commons/lounge, /area/station/service/bar/atrium, /area/station/service/bar)
-	desired_atom = /obj/machinery/jukebox/no_access
+	desired_atom = /obj/machinery/jukebox/online
 	mode = AREA_SPAWN_MODE_OPEN
 
 // Wall mounts. Use sparingly as walls are prime real estate

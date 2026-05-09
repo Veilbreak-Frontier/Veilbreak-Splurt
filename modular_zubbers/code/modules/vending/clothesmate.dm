@@ -189,7 +189,6 @@
 				/obj/item/clothing/under/dress/skyrat/short_dress = 5,
 				/obj/item/clothing/under/dress/skyrat/strapless = 5,
 				/obj/item/clothing/under/dress/bubber/midnight_gown = 5,
-				/obj/item/clothing/under/dress/bubber/giant_scarf = 5,
 			),
 		),
 
@@ -254,3 +253,18 @@
 		/obj/item/clothing/suit/toggle/digicoat/glitched = 2,
 		/obj/item/clothing/neck/scarf/shadekin = 2, //Made of a sentient so probably illegal
 	)
+
+/obj/machinery/vending/clothing/Initialize(mapload)
+	var/list/underwears = list()
+	for(var/obj/item/clothing/underwear/briefs/briefs in typesof(/obj/item/clothing/underwear/briefs))
+		underwears[briefs] = 5
+
+	product_categories += list(
+		list(
+			"name" = "Underwear",
+			"icon" = "socks",
+			"products" = underwears
+		),
+	)
+
+	return ..()

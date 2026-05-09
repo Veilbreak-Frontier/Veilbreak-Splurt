@@ -12,7 +12,6 @@
 
 	anchored = TRUE
 	density = TRUE
-	custom_materials = list(/datum/material/wood = SHEET_MATERIAL_AMOUNT * 5)
 
 	/// What the currently picked recipe is
 	var/datum/crafting_bench_recipe/selected_recipe
@@ -31,7 +30,7 @@
 		/datum/crafting_bench_recipe/horse_shoes,
 		/datum/crafting_bench_recipe/ring,
 		/datum/crafting_bench_recipe/collar,
-		/datum/crafting_bench_recipe/handcuffs,
+		// /datum/crafting_bench_recipe/handcuffs, // SPLURT REMOVAL - Maybe cuffs that keep you permanently asleep aren't fun.
 		/datum/crafting_bench_recipe/borer_cage,
 		/datum/crafting_bench_recipe/pavise,
 		/datum/crafting_bench_recipe/buckler,

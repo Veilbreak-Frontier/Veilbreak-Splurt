@@ -786,3 +786,39 @@
 	make_silly()
 
 #undef FREQ_LISTENING
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/radio/borg/screwdriver_act(mob/living/user, obj/item/tool)
+	if(!keyslot)
+		loc.balloon_alert(user, "no encryption keys!")
+		return
+
+	for(var/ch_name in channels)
+		SSradio.remove_object(src, GLOB.default_radio_channels[ch_name])
+		secure_radio_connections[ch_name] = null
+
+	if (!user.put_in_hands(keyslot))
+		keyslot.forceMove(drop_location())
+
+	keyslot = null
+	recalculateChannels()
+	loc.balloon_alert(user, "encryption key removed")
+	return ..()
+
+/obj/item/radio/borg/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if (!istype(tool, /obj/item/encryptionkey))
+		return NONE
+
+	if(keyslot)
+		loc.balloon_alert(user, "cannot hold another key!")
+		return ITEM_INTERACT_BLOCKING
+
+	if(!user.transferItemToLoc(tool, src))
+		loc.balloon_alert(user, "cannot install!")
+		return ITEM_INTERACT_BLOCKING
+
+	keyslot = tool
+	recalculateChannels()
+	playsound(src, 'sound/machines/click.ogg', 50, TRUE)
+	loc.balloon_alert(user, "encryption key installed")
+	return ITEM_INTERACT_SUCCESS

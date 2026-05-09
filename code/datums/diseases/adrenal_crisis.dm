@@ -36,3 +36,26 @@
 
 			if(SPT_PROB(2.5, seconds_per_tick))
 				to_chat(affected_mob, span_warning(pick("You feel pain shoot down your legs!", "You feel like you are going to pass out at any moment.", "You feel really dizzy.")))
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/disease/adrenal_crisis/stage_act(seconds_per_tick, times_fired)
+	. = ..()
+	if(!.)
+		return
+
+	switch(stage)
+		if(1)
+			if(SPT_PROB(2.5, seconds_per_tick))
+				to_chat(affected_mob, span_warning(pick("You feel lightheaded.", "You feel lethargic.")))
+		if(2)
+			if(SPT_PROB(5, seconds_per_tick))
+				affected_mob.Unconscious(40)
+
+			if(SPT_PROB(10, seconds_per_tick))
+				affected_mob.adjust_slurring(14 SECONDS)
+
+			if(SPT_PROB(7, seconds_per_tick))
+				affected_mob.set_dizzy_if_lower(20 SECONDS)
+
+			if(SPT_PROB(2.5, seconds_per_tick))
+				to_chat(affected_mob, span_warning(pick("You feel pain shoot down your legs!", "You feel like you are going to pass out at any moment.", "You feel really dizzy.")))

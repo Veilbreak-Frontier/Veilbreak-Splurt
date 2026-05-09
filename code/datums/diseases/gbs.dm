@@ -33,3 +33,25 @@
 				affected_mob.investigate_log("has been gibbed by GBS.", INVESTIGATE_DEATHS)
 				affected_mob.gib(DROP_ALL_REMAINS)
 				return FALSE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/disease/gbs/stage_act(seconds_per_tick, times_fired)
+	. = ..()
+	if(!.)
+		return
+
+	switch(stage)
+		if(2)
+			if(SPT_PROB(2.5, seconds_per_tick))
+				affected_mob.emote("cough")
+		if(3)
+			if(SPT_PROB(2.5, seconds_per_tick))
+				affected_mob.emote("gasp")
+			if(SPT_PROB(5, seconds_per_tick))
+				to_chat(affected_mob, span_danger("Your body hurts all over!"))
+		if(4)
+			to_chat(affected_mob, span_userdanger("Your body feels as if it's trying to rip itself apart!"))
+			if(SPT_PROB(30, seconds_per_tick))
+				affected_mob.investigate_log("has been gibbed by GBS.", INVESTIGATE_DEATHS)
+				affected_mob.gib(DROP_ALL_REMAINS)
+				return FALSE

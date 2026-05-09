@@ -104,3 +104,8 @@
 		return CLICK_ACTION_BLOCKING
 	unlink_console()
 	return CLICK_ACTION_SUCCESS
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/supplypod_beacon/proc/endLaunch()
+	launched = FALSE
+	update_status()

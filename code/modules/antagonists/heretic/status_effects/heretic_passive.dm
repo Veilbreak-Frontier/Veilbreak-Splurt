@@ -585,3 +585,51 @@
 #undef HERETIC_LEVEL_START
 #undef HERETIC_LEVEL_UPGRADE
 #undef HERETIC_LEVEL_FINAL
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/status_effect/heretic_passive/rust/proc/on_life(mob/living/source, seconds_per_tick, times_fired)
+	SIGNAL_HANDLER
+
+	var/turf/our_turf = get_turf(source)
+	if(!HAS_TRAIT(our_turf, TRAIT_RUSTY))
+		return
+
+	// Heals all damage + Stamina
+	var/need_mob_update = FALSE
+	var/delta_time = DELTA_WORLD_TIME(SSmobs) * 0.5 // SSmobs.wait is 2 secs, so this should be halved.
+	var/main_healing = 1 + 1 * passive_level * delta_time
+	var/stam_healing = 5 + 5 * passive_level * delta_time
+	need_mob_update += source.heal_overall_damage(-main_healing, -main_healing, updating_health = FALSE)
+	need_mob_update += source.adjust_stamina_loss(-stam_healing, updating_stamina = FALSE)
+	need_mob_update += source.adjust_tox_loss(-main_healing, updating_health = FALSE, forced = TRUE) // Slimes are people too
+	need_mob_update += source.adjust_oxy_loss(-main_healing, updating_health = FALSE)
+	if(need_mob_update)
+		source.updatehealth()
+		new /obj/effect/temp_visual/heal(get_turf(owner), COLOR_BROWN)
+	// Reduces duration of stuns/etc
+	var/stun_reduction = 0.5 * passive_level * delta_time
+	source.AdjustAllImmobility(-stun_reduction)
+	// Heals blood loss
+	source.adjust_blood_volume(2.5 * delta_time, maximum = BLOOD_VOLUME_NORMAL)
+	for(var/datum/reagent/reagent as anything in source.reagents.reagent_list)
+		source.reagents.remove_reagent(reagent.type, 2 * reagent.purge_multiplier * REM * seconds_per_tick)
+
+	if(!iscarbon(source))
+		return
+	var/mob/living/carbon/carbon_owner = source
+	if(passive_level < HERETIC_LEVEL_UPGRADE)
+		return
+	for(var/obj/item/bodypart/wounded_limb as anything in carbon_owner.bodyparts)
+		for(var/datum/wound/to_cure as anything in wounded_limb.wounds)
+			to_cure.remove_wound()
+	for(var/obj/item/organ/internal as anything in carbon_owner.organs)
+		internal.apply_organ_damage(round(-2 * seconds_per_tick))
+	if(passive_level < HERETIC_LEVEL_FINAL)
+		return
+	if(length(carbon_owner.get_missing_limbs()))
+		carbon_owner.regenerate_limbs()
+
+//---- Void Passive
+// Level 1 Cold and Low pressure resist
+// Level 2 No breathe
+// Level 3 No slip on water/ice

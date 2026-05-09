@@ -115,8 +115,9 @@ GLOBAL_LIST_EMPTY(startup_messages)
 			<a class="menu_button" href='byond://?src=[text_ref(src)];character_setup=1'>SETUP CHARACTER (<span id="character_slot">[uppertext(client.prefs.read_preference(/datum/preference/name/real_name))]</span>)</a>
 			<a class="menu_button" href='byond://?src=[text_ref(src)];game_options=1'>GAME OPTIONS</a>
 			<a id="be_antag" class="menu_button" href='byond://?src=[text_ref(src)];toggle_antag=1'>[client.prefs.read_preference(/datum/preference/toggle/be_antag) ? "<span class='checked'>☑</span> BE ANTAGONIST" : "<span class='unchecked'>☒</span> BE ANTAGONIST"]</a>
-			<hr>
-			<a class="menu_button" href='byond://?src=[text_ref(src)];server_swap=1'>SWAP SERVERS</a>
+			<!-- SPLURT STATION EDIT: Server swap button removed - not needed for single server setup -->
+			<!-- <hr> -->
+			<!--  <a class="menu_button" href='byond://?src=[text_ref(src)];server_swap=1'>SWAP SERVERS</a> -->
 		"}
 
 		if(length(GLOB.lobby_station_traits))
@@ -128,15 +129,19 @@ GLOBAL_LIST_EMPTY(startup_messages)
 		dat += "</div>"
 		dat += {"
 		<script language="JavaScript">
-			const PLAYER_READY_TO_PLAY = "[PLAYER_READY_TO_PLAY]"
-			const PLAYER_NOT_READY = "[PLAYER_NOT_READY]"
+			var ready_int = 0;
 			var ready_mark = document.getElementById("ready");
+			var ready_marks = \[ "<span class='unchecked'>☒</span> READY", "<span class='checked'>☑</span> READY" \];
 			function toggle_ready(setReady) {
-				if(setReady === PLAYER_READY_TO_PLAY) {
-					ready_mark.innerHTML = "<span class='checked'>☑</span> READY"
+				if(setReady) {
+					ready_int = setReady;
+					ready_mark.innerHTML = ready_marks\[ready_int\];
 				}
 				else {
-					ready_mark.innerHTML = "<span class='unchecked'>☒</span> READY"
+					ready_int++;
+					if (ready_int === ready_marks.length)
+						ready_int = 0;
+					ready_mark.innerHTML = ready_marks\[ready_int\];
 				}
 			}
 			var antag_int = 0;

@@ -1,0 +1,148 @@
+/obj/item/clothing/neck/aether_pendant
+	name = "Aether Pendant"
+	desc = "A mysterious pendant. Protects the user from harm."
+	icon = 'modular_zzveilbreak/icons/item_icons/pendants.dmi'
+	worn_icon = 'modular_zzveilbreak/icons/item_icons/pendants.dmi'
+	post_init_icon_state = "aether_pendant"
+	worn_icon_state = "aether_worn"
+	icon_state = "aether_pendant"
+	w_class = WEIGHT_CLASS_SMALL
+	slot_flags = ITEM_SLOT_NECK
+
+	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION | CLOTHING_SNOUTED_VARIATION
+
+	var/active = FALSE
+	var/cooldown_time = 20 SECONDS
+
+/obj/item/clothing/neck/aether_pendant/Initialize()
+	. = ..()
+
+/obj/item/clothing/neck/aether_pendant/equipped(mob/user, slot)
+	. = ..()
+	if(slot == ITEM_SLOT_NECK)
+		RegisterSignal(user, COMSIG_MOB_APPLY_DAMAGE_MODIFIERS, PROC_REF(on_apply_damage_modifiers))
+		if(!locate(/datum/action/cooldown/aether_activate) in user.actions)
+			var/datum/action/cooldown/aether_activate/action = new(src)
+			action.Grant(user)
+
+/obj/item/clothing/neck/aether_pendant/dropped(mob/user)
+	. = ..()
+	UnregisterSignal(user, COMSIG_MOB_APPLY_DAMAGE_MODIFIERS)
+	var/datum/action/cooldown/aether_activate/action = locate(/datum/action/cooldown/aether_activate) in user.actions
+	if(action)
+		action.Remove(user)
+
+/datum/action/cooldown/aether_activate
+	name = "Activate Aether Shield"
+	desc = "Activate the Aether Pendant's shield for 1.5 seconds. Blocks one instance of damage"
+	button_icon = 'modular_zzveilbreak/icons/item_icons/pendants.dmi'
+	button_icon_state = "aether_pendant"
+	check_flags = AB_CHECK_INCAPACITATED|AB_CHECK_HANDS_BLOCKED|AB_CHECK_CONSCIOUS
+
+/datum/action/cooldown/aether_activate/Activate(atom/activation_target)
+	var/obj/item/clothing/neck/aether_pendant/pendant = target
+	if(!istype(pendant) || pendant.active)
+		return FALSE
+	var/mob/user = owner
+	to_chat(user, span_notice("You activate the Aether Pendant, nullifying damage for the next 1.5 seconds."))
+	pendant.active = TRUE
+	addtimer(CALLBACK(pendant, TYPE_PROC_REF(/obj/item/clothing/neck/aether_pendant, deactivate)), 1.5 SECONDS)
+	StartCooldown(pendant.cooldown_time)
+	addtimer(CALLBACK(pendant, TYPE_PROC_REF(/obj/item/clothing/neck/aether_pendant, notify_ready)), pendant.cooldown_time)
+	return TRUE
+
+/obj/item/clothing/neck/aether_pendant/proc/on_apply_damage_modifiers(mob/living/victim, list/damage_mods, damage, damagetype, def_zone, sharpness, attack_direction, attacking_item)
+	SIGNAL_HANDLER
+	if(!active && !prob(5))
+		return
+	damage_mods += 0
+	if(active)
+		active = FALSE
+		to_chat(victim, span_notice("The void fully blocks the damage!"))
+	else
+		to_chat(victim, span_notice("The void passively blocks the damage!"))
+
+/obj/item/clothing/neck/aether_pendant/proc/notify_ready()
+	if(ismob(loc))
+		to_chat(loc, span_notice("The Aether Pendant is ready to use again."))
+
+/obj/item/clothing/neck/aether_pendant/proc/deactivate()
+	if(active)
+		active = FALSE
+		if(ismob(loc))
+			to_chat(loc, span_warning("The Aether Pendant's activation fades."))
+
+/obj/item/clothing/neck/life_pendant
+	name = "Life Pendant"
+	desc = "A vibrant pendant that pulses with life energy. Heals the user."
+	icon = 'modular_zzveilbreak/icons/item_icons/pendants.dmi'
+	worn_icon = 'modular_zzveilbreak/icons/item_icons/pendants.dmi'
+	post_init_icon_state = "life_pendant"
+	icon_state = "life_pendant"
+	worn_icon_state = "life_worn"
+	w_class = WEIGHT_CLASS_SMALL
+	slot_flags = ITEM_SLOT_NECK
+
+	// Skyrat scaling integration - same as ashwalker necklace
+	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION | CLOTHING_SNOUTED_VARIATION
+	// NO custom scaling, NO custom build_worn_icon override
+
+	var/cooldown_time = 35 SECONDS
+
+/obj/item/clothing/neck/life_pendant/Initialize()
+	. = ..()
+
+/obj/item/clothing/neck/life_pendant/equipped(mob/user, slot)
+	. = ..()
+	if(slot == ITEM_SLOT_NECK)
+		START_PROCESSING(SSobj, src)
+		if(!locate(/datum/action/cooldown/life_heal) in user.actions)
+			var/datum/action/cooldown/life_heal/action = new(src)
+			action.Grant(user)
+
+/obj/item/clothing/neck/life_pendant/dropped(mob/user)
+	. = ..()
+	STOP_PROCESSING(SSobj, src)
+	var/datum/action/cooldown/life_heal/action = locate() in user.actions
+	if(action)
+		action.Remove(user)
+
+/datum/action/cooldown/life_heal
+	name = "Life Heal"
+	desc = "Heal nearby allies with the Life Pendant."
+	button_icon = 'modular_zzveilbreak/icons/item_icons/pendants.dmi'
+	button_icon_state = "life_pendant"
+	check_flags = AB_CHECK_INCAPACITATED|AB_CHECK_HANDS_BLOCKED|AB_CHECK_CONSCIOUS
+
+/datum/action/cooldown/life_heal/Activate(atom/activation_target)
+	var/obj/item/clothing/neck/life_pendant/pendant = target
+	if(!istype(pendant))
+		return FALSE
+	var/healed_total = 0
+	for(var/mob/living/t in range(3, owner))
+		if(healed_total >= 100)
+			break
+		var/heal_amount = min(20, 100 - healed_total)
+		// Brute/burn: carbons heal via damaged bodyparts; simple mobs use overall adjust
+		t.heal_overall_damage(heal_amount, heal_amount)
+		t.heal_damage_type(heal_amount, TOX)
+		t.heal_damage_type(heal_amount, OXY)
+		healed_total += heal_amount
+	to_chat(owner, span_notice("The Life Pendant heals nearby allies!"))
+	StartCooldown(pendant.cooldown_time)
+	addtimer(CALLBACK(pendant, TYPE_PROC_REF(/obj/item/clothing/neck/life_pendant, notify_ready)), pendant.cooldown_time)
+	return TRUE
+
+/obj/item/clothing/neck/life_pendant/process(seconds_per_tick)
+	if(!ismob(loc))
+		return
+	var/mob/living/user = loc
+	if(user.health < user.maxHealth)
+		var/heal_tick = 0.5 * seconds_per_tick
+		user.heal_overall_damage(heal_tick, heal_tick)
+		user.heal_damage_type(heal_tick, TOX)
+		user.heal_damage_type(heal_tick, OXY)
+
+/obj/item/clothing/neck/life_pendant/proc/notify_ready()
+	if(ismob(loc))
+		to_chat(loc, span_notice("The Life Pendant is ready to use again."))

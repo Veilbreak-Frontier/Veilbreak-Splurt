@@ -84,3 +84,12 @@
 	/// SKYRAT EDIT BEGIN
 	REMOVE_TRAIT(owner, TRAIT_CHAMELEON_SKIN, GENETIC_MUTATION)
 	/// SKYRAT EDIT END
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/mutation/chameleon/on_life(seconds_per_tick, times_fired)
+	/// SKYRAT EDIT BEGIN
+	if(HAS_TRAIT(owner, TRAIT_CHAMELEON_SKIN))
+		owner.alpha = max(owner.alpha - (12.5 * (GET_MUTATION_POWER(src)) * seconds_per_tick), 0)
+	/// SKYRAT EDIT END
+
+//Upgraded mutation of the base variant, used for changelings. No instability and better power_coeff

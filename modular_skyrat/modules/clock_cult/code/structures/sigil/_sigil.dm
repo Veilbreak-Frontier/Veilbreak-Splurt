@@ -135,8 +135,9 @@
 	return TRUE
 
 
-/// Dispel the sigil and delete itself
-/obj/structure/destructible/clockwork/sigil/proc/dispel()
+/// Dispel the sigil and delete itself (override of /atom/proc/dispel from Doppler powers port)
+/obj/structure/destructible/clockwork/sigil/dispel(atom/dispeller, dispel_flags = 0)
+	. = ..()
 	animate(src, transform = matrix() * 1.5, alpha = 0, time = 0.3 SECONDS)
 	QDEL_IN(src, 0.3 SECONDS)
 

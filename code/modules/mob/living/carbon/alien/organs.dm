@@ -330,3 +330,23 @@
 		acid.move_at(my_target, particle_delay, spit_range)
 
 	return ejected
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/alien/plasmavessel/on_life(seconds_per_tick, times_fired)
+	var/delta_time = DELTA_WORLD_TIME(SSmobs)
+	//Instantly healing to max health in a single tick would be silly. If it takes 8 seconds to fire, then something's fucked.
+	var/delta_time_capped = min(delta_time, 8)
+	//If there are alien weeds on the ground then heal if needed or give some plasma
+	if(locate(/obj/structure/alien/weeds) in owner.loc)
+		if(owner.health >= owner.maxHealth)
+			owner.adjustPlasma(plasma_rate * delta_time)
+		else
+			var/heal_amt = heal_rate
+			if(!isalien(owner))
+				heal_amt *= 0.2
+			owner.adjustPlasma(0.5 * plasma_rate * delta_time_capped)
+			owner.adjust_brute_loss(-heal_amt * delta_time_capped)
+			owner.adjust_fire_loss(-heal_amt * delta_time_capped)
+			owner.adjust_oxy_loss(-heal_amt * delta_time_capped)
+	else
+		owner.adjustPlasma(0.1 * plasma_rate * delta_time)

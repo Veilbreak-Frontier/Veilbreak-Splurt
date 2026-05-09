@@ -409,3 +409,9 @@
 	setDir(angle2dir(rotation+dir2angle(dir))) // No parentcall, rest of the rotate code breaks the pixel offset.
 
 #undef LUXURY_MESSAGE_COOLDOWN
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/effect/decal/hammerandsickle/shuttleRotate(rotation)
+	setDir(angle2dir(rotation+dir2angle(dir))) // No parentcall, rest of the rotate code breaks the pixel offset.
+
+#undef LUXURY_MESSAGE_COOLDOWN

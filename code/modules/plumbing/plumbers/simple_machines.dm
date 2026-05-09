@@ -55,3 +55,31 @@
 	AddComponent(/datum/component/plumbing/manifold, THIRD_DUCT_LAYER)
 	AddComponent(/datum/component/plumbing/manifold, FOURTH_DUCT_LAYER)
 	AddComponent(/datum/component/plumbing/manifold, FIFTH_DUCT_LAYER)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/plumbing/input/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/simple_supply, bolt, layer)
+
+///We can fill beakers in here and everything. we dont inheret from input because it has nothing that we need
+
+/obj/machinery/plumbing/output/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/simple_demand, bolt, layer)
+
+///For pouring reagents from ducts directly into cups
+
+/obj/machinery/plumbing/tank/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/tank, bolt, layer)
+
+///Layer manifold machine that connects a bunch of layers
+
+/obj/machinery/plumbing/layer_manifold/Initialize(mapload, bolt, layer)
+	. = ..()
+
+	AddComponent(/datum/component/plumbing/manifold, bolt, FIRST_DUCT_LAYER)
+	AddComponent(/datum/component/plumbing/manifold, bolt, SECOND_DUCT_LAYER)
+	AddComponent(/datum/component/plumbing/manifold, bolt, THIRD_DUCT_LAYER)
+	AddComponent(/datum/component/plumbing/manifold, bolt, FOURTH_DUCT_LAYER)
+	AddComponent(/datum/component/plumbing/manifold, bolt, FIFTH_DUCT_LAYER)

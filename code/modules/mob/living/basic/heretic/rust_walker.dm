@@ -90,3 +90,16 @@
 	if (HAS_TRAIT(our_turf, TRAIT_RUSTY))
 		return
 	return ..()
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/heretic_summon/rust_walker/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	. = ..()
+	if(!.) //dead or deleted
+		return
+	var/turf/our_turf = get_turf(src)
+	if(HAS_TRAIT(our_turf, TRAIT_RUSTY))
+		adjust_brute_loss(-3 * seconds_per_tick)
+
+	return ..()
+
+/// Converts unconverted terrain, sprays pocket sand around

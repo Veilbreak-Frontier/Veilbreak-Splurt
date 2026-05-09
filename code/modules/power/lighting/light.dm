@@ -812,3 +812,12 @@
 	plane = GAME_PLANE
 
 #undef NIGHTSHIFT_COLOR_MODIFIER // BUBBER EDIT ADDITION - LIGHTING
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/light/floor/get_moutable_objects()
+	var/static/list/attachables = list(
+		/obj/structure/thermoplastic,
+		/obj/structure/lattice/catwalk,
+	)
+
+	return attachables

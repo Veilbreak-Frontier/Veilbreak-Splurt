@@ -37,3 +37,12 @@
 	name = "implant case - 'Kaza Ruk'"
 	desc = "A glass case containing an implant that can teach the user the Tiziran martial arts of Kaza Ruk."
 	imp_type = /obj/item/implant/kaza_ruk
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/implant/kaza_ruk/get_data()
+	var/dat = {"<b>Implant Specifications:</b><BR>
+				<b>Name:</b> Kaza Ruk Implant<BR>
+				<b>Life:</b> 4 hours after death of host<BR>
+				<b>Implant Details:</b> <BR>
+				<b>Function:</b> Teaches even the clumsiest host the arts of Kaza Ruk."}
+	return dat

@@ -202,6 +202,8 @@
 		else
 			. += image('modular_skyrat/modules/barricades/icons/barricade.dmi', icon_state = "[barricade_type]_closed_wire")
 
+// SPLURT EDIT START: REMOVE CRASHING VERBS
+/*
 /obj/structure/deployable_barricade/verb/rotate()
 	set name = "Rotate barricade counterclockwise <"
 	set category = "Object"
@@ -223,7 +225,8 @@
 		return FALSE
 
 	setDir(turn(dir, 270))
-
+*/
+// SPLURT EDIT END: REMOVE CRASHING VERBS
 
 /obj/structure/deployable_barricade/attack_hand_secondary(mob/user, list/modifiers)
 	. = ..()
@@ -247,7 +250,6 @@
 	barricade_type = "snow"
 	max_integrity = 75
 	stack_type = /obj/item/stack/sheet/mineral/snow
-	custom_materials = list(/datum/material/snow = SHEET_MATERIAL_AMOUNT * 2)
 	stack_amount = 2
 	destroyed_stack_amount = 0
 	can_wire = FALSE
@@ -263,7 +265,6 @@
 	max_integrity = 150
 	armor_type = /datum/armor/deployable_barricade_guardrail
 	stack_type = /obj/item/stack/rods
-	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT)
 	destroyed_stack_amount = 2
 	barricade_type = "railing"
 	pass_flags_self = PASSSTRUCTURE
@@ -295,7 +296,6 @@
 	max_integrity = 100
 	layer = OBJ_LAYER
 	stack_type = /obj/item/stack/sheet/mineral/wood
-	custom_materials = list(/datum/material/wood = SHEET_MATERIAL_AMOUNT * 5)
 	stack_amount = 2
 	destroyed_stack_amount = 1
 	can_change_dmg_state = FALSE
@@ -346,7 +346,6 @@
 	max_integrity = 200
 	armor_type = /datum/armor/deployable_barricade_metal
 	stack_type = /obj/item/stack/sheet/iron
-	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 2)
 	stack_amount = 2
 	destroyed_stack_amount = 1
 	barricade_type = "metal"
@@ -670,7 +669,6 @@
 	icon_state = "plasteel_closed_0"
 	max_integrity = 500
 	stack_type = /obj/item/stack/sheet/plasteel
-	custom_materials = list(/datum/material/alloy/plasteel = SHEET_MATERIAL_AMOUNT * 2)
 	barricade_type = "plasteel"
 	density = FALSE
 	closed = TRUE

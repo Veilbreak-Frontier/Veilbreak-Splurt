@@ -37,3 +37,7 @@
 	return gender == MALE || gender == FEMALE
 
 #undef USE_GENDER
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/preference/choiced/body_type/create_default_value()
+	return USE_GENDER

@@ -110,3 +110,8 @@
 #undef HEATING
 #undef NEUTRAL
 #undef HEATER_COEFFICIENT
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/plumbing/acclimator/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/acclimator, bolt, layer)

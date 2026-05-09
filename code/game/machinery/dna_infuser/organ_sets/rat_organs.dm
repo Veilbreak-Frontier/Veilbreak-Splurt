@@ -154,3 +154,15 @@
 #undef RAT_SCLERA_COLOR
 #undef RAT_PUPIL_COLOR
 #undef RAT_COLORS
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/tongue/rat/on_life(seconds_per_tick, times_fired)
+	. = ..()
+	if(prob(5))
+		owner.emote("squeaks")
+		playsound(owner, 'sound/mobs/non-humanoids/mouse/mousesqueek.ogg', 100)
+
+#undef RAT_ORGAN_COLOR
+#undef RAT_SCLERA_COLOR
+#undef RAT_PUPIL_COLOR
+#undef RAT_COLORS

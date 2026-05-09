@@ -416,3 +416,36 @@
 	wound_path_to_generate = /datum/wound/pierce/bleed/critical
 
 	threshold_minimum = 100
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/wound/pierce/bleed/handle_process(seconds_per_tick, times_fired)
+	if (!victim || HAS_TRAIT(victim, TRAIT_STASIS))
+		return
+
+
+	if(limb.can_bleed())
+		if(victim.bodytemperature < (BODYTEMP_NORMAL - 10))
+			adjust_blood_flow(-0.1 * seconds_per_tick)
+			if(QDELETED(src))
+				return
+			if(SPT_PROB(2.5, seconds_per_tick))
+				to_chat(victim, span_notice("You feel the [LOWER_TEXT(undiagnosed_name || name)] in your [limb.plaintext_zone] firming up from the cold!"))
+
+		if(HAS_TRAIT(victim, TRAIT_BLOOD_FOUNTAIN))
+			adjust_blood_flow(0.25 * seconds_per_tick) // old heparin used to just add +2 bleed stacks per tick, this adds 0.5 bleed flow to all open cuts which is probably even stronger as long as you can cut them first
+
+	//gauze always reduces blood flow, even for non bleeders
+	if(limb.current_gauze)
+		if(clot_rate > 0)
+			adjust_blood_flow(-clot_rate * seconds_per_tick)
+		var/gauze_power = limb.current_gauze.absorption_rate
+		limb.seep_gauze(gauze_power * seconds_per_tick)
+		adjust_blood_flow(-gauze_power * gauzed_clot_rate * seconds_per_tick)
+	//otherwise, only clot if it's a bleeder
+	else if(limb.can_bleed())
+		adjust_blood_flow(-clot_rate * seconds_per_tick)
+
+/datum/wound/pierce/bleed/severe/eye/remove_wound(ignore_limb, replaced)
+	if (!isnull(limb))
+		UnregisterSignal(limb, COMSIG_BODYPART_UPDATE_WOUND_OVERLAY)
+	return ..()

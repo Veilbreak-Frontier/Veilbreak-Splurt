@@ -24,3 +24,8 @@
 /mob/living/basic/heretic_summon/ash_spirit/Life(seconds_per_tick)
 	. = ..()
 	adjust_brute_loss(-3) // 3 health passively healing
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/heretic_summon/ash_spirit/Life(seconds_per_tick, times_fired)
+	. = ..()
+	adjust_brute_loss(-3) // 3 health passively healing

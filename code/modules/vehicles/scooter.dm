@@ -351,3 +351,10 @@
 	instability = 8
 	wheel_name = "skis"
 	component_type = /datum/component/riding/vehicle/scooter/skateboard/wheelys/skishoes
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/vehicle/ridden/scooter/skateboard/Initialize(mapload)
+	. = ..()
+	sparks = new
+	sparks.set_up(1, 0, src)
+	sparks.attach(src)

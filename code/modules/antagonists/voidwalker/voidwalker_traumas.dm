@@ -133,3 +133,12 @@
 	. = ..()
 
 	qdel(owner.GetComponent(/datum/component/glass_passer))
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/brain_trauma/voided/on_life(seconds_per_tick, times_fired)
+	. = ..()
+
+	if(prob(vomit_frequency))
+		owner.vomit(MOB_VOMIT_KNOCKDOWN, vomit_type = /obj/effect/decal/cleanable/vomit/nebula, distance = 0)
+
+/// Apply the space texture

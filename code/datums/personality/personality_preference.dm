@@ -44,3 +44,7 @@
 	for(var/datum/personality/personality_type as anything in SSpersonalities.select_random_personalities())
 		LAZYADD(random_personalities, initial(personality_type.savefile_key))
 	return random_personalities
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/preference/personality/is_valid(value)
+	return islist(value) || isnull(value)

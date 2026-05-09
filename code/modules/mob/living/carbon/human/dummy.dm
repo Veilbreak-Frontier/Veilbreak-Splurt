@@ -224,3 +224,7 @@ GLOBAL_LIST_EMPTY(dummy_mob_list)
 	if(istype(dummy))
 		GLOB.dummy_mob_list -= dummy
 		qdel(dummy)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/carbon/human/dummy/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	return

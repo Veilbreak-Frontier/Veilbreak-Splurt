@@ -524,3 +524,7 @@
 
 /mob/living/silicon/get_access()
 	return REGION_ACCESS_ALL_STATION
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/silicon/handle_high_gravity(gravity, seconds_per_tick, times_fired)
+	return

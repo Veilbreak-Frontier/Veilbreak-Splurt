@@ -1,0 +1,89 @@
+/**
+ * This is a special reagent used by 'alternative food' quirks
+ * It functionally matches Nutriment, but can be processed with liverless metabolism
+ * It should not be used for any other purpose outside quirks
+ */
+/datum/reagent/consumable/notriment
+	name = "Strange Nutriment"
+	description = "An exotic form of nutriment produced by unusual digestive systems."
+	nutriment_factor = /datum/reagent/consumable/nutriment::nutriment_factor
+	color = /datum/reagent/consumable/nutriment::color
+	// Allow processing without a liver
+	self_consuming = TRUE
+
+// Reagent process: Hell Water
+/datum/reagent/hellwater/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	// Check for Cursed Blood
+	if(HAS_TRAIT(affected_mob, TRAIT_CURSED_BLOOD))
+		// Send signal for processing reagent
+		SEND_SIGNAL(affected_mob, COMSIG_REAGENT_PROCESS_HELLWATER, src, seconds_per_tick, times_fired)
+
+		// Block other effects
+		return
+
+	// Run normally
+	. = ..()
+
+// Reagent metabolize: Holy Water
+/datum/reagent/water/holywater/on_mob_metabolize(mob/living/affected_mob)
+	. = ..()
+	SEND_SIGNAL(affected_mob, COMSIG_REAGENT_METABOLIZE_HOLYWATER)
+	affected_mob.AddComponent(/datum/component/anti_magic, antimagic_flags = MAGIC_RESISTANCE_HOLY, block_magic = CALLBACK(src, PROC_REF(drain_antimagic)))
+
+// Reagent end metabolize: Holy Water
+/datum/reagent/water/holywater/on_mob_end_metabolize(mob/living/affected_mob)
+	. = ..()
+	SEND_SIGNAL(affected_mob, COMSIG_REAGENT_METABOLIZE_END_HOLYWATER)
+	qdel(affected_mob.GetComponent(/datum/component/anti_magic))
+
+/datum/reagent/water/holywater/proc/drain_antimagic(mob/living/user)
+	SIGNAL_HANDLER
+
+	user.reagents.remove_reagent(/datum/reagent/water/holywater, user.reagents.get_reagent_amount(/datum/reagent/water/holywater) / 3) // remove a third of the mob's holy water
+
+
+// Reagent process: Holy Water
+/datum/reagent/water/holywater/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+
+	SEND_SIGNAL(affected_mob, COMSIG_REAGENT_PROCESS_HOLYWATER, src, seconds_per_tick, times_fired)
+
+// Reagent expose: Holy Water
+/datum/reagent/water/holywater/expose_mob(mob/living/exposed_mob, methods=TOUCH, reac_volume, show_message=TRUE, touch_protection=0)
+	. = ..()
+
+	SEND_SIGNAL(exposed_mob, COMSIG_REAGENT_EXPOSE_HOLYWATER, src, methods, reac_volume, show_message, touch_protection)
+
+// Reagent Add: Blood
+/datum/reagent/blood/on_mob_add(mob/living/affected_mob, amount)
+	. = ..()
+
+	SEND_SIGNAL(affected_mob, COMSIG_REAGENT_ADD_BLOOD, src, amount, data)
+
+// Reagent process: Salt Water
+/datum/reagent/water/salt/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+
+	SEND_SIGNAL(affected_mob, COMSIG_REAGENT_PROCESS_SALT, src, seconds_per_tick, times_fired)
+
+// Reagent expose: Salt Water
+/datum/reagent/water/salt/expose_mob(mob/living/exposed_mob, methods=TOUCH, reac_volume, show_message=TRUE, touch_protection=0)
+	. = ..()
+
+	SEND_SIGNAL(exposed_mob, COMSIG_REAGENT_EXPOSE_SALT, src, methods, reac_volume, show_message, touch_protection)
+
+// Sterilizine makes you sterile!
+/datum/reagent/space_cleaner/sterilizine/on_mob_metabolize(mob/living/affected_mob)
+	. = ..()
+	ADD_TRAIT(affected_mob, TRAIT_INFERTILE, "[src.type]")
+
+/datum/reagent/space_cleaner/sterilizine/on_mob_end_metabolize(mob/living/affected_mob)
+	. = ..()
+	REMOVE_TRAIT(affected_mob, TRAIT_INFERTILE, "[src.type]")
+
+
+/datum/reagent/ammonia/urine
+	name = "Urine"
+	description = "Exactly what you think. Should be useful."
+	color = "#c0d121"
+	taste_description = "piss"

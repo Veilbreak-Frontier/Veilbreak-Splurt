@@ -106,3 +106,18 @@
 		damage = melee_damage_upper,
 		replicate = multiply_chance / 2,
 	)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/illusion/proc/full_setup(mob/living/original, mob/living/target_mob = null, list/faction = null, life = 5 SECONDS, hp = 100, damage = 0, replicate = 0)
+	mock_as(original, life, hp, damage, replicate)
+	set_faction(faction)
+	set_target(target_mob)
+
+/// Gives the illusion a target to focus on in whatever behavior it wants to engage as.
+
+/mob/living/basic/illusion/proc/set_faction(list/new_faction)
+	if(!new_faction) // can be list with no length or null
+		return
+	faction = new_faction.Copy()
+
+/// Does the actual work of setting up the illusion's appearance and some other functionality.

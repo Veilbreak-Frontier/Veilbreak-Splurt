@@ -176,3 +176,128 @@
 
 /datum/component/personal_crafting/unit_test
 	ignored_flags = CRAFT_MUST_BE_LEARNED|CRAFT_ONE_PER_TURF|CRAFT_CHECK_DIRECTION|CRAFT_CHECK_DENSITY|CRAFT_ON_SOLID_GROUND|CRAFT_IGNORE_DO_AFTER
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/unit_test/crafting/proc/process_recipe(
+	atom/crafter,
+	datum/component/personal_crafting/unit_test/craft_comp,
+	datum/crafting_recipe/recipe,
+	obj/item/reagent_containers/bottomless_cup,
+	list/tools
+)
+	var/turf/turf = crafter.loc
+	//Components that have to be deleted later so they don't mess up with other recipes
+	var/list/spawned_components = list()
+	//Warn if uncreatables were found in the recipe if it fails
+	//If it doesn't fail, then it was already handled, maybe through `unit_test_spawn_extras`
+	var/list/uncreatables_found
+
+	for(var/spawn_path in recipe.unit_test_spawn_extras)
+		var/amount = recipe.unit_test_spawn_extras[spawn_path]
+		if(ispath(spawn_path, /obj/item/stack))
+			spawned_components += new spawn_path(turf, /*new_amount =*/ amount, /*merge =*/ FALSE)
+			continue
+		for(var/index in 1 to amount)
+			spawned_components += new spawn_path(turf)
+
+	for(var/req_path in recipe.reqs) //spawn items and reagents
+		var/amount = recipe.reqs[req_path]
+
+		if(ispath(req_path, /datum/reagent)) //it's a reagent
+			if(!bottomless_cup.reagents.has_reagent(req_path, amount))
+				bottomless_cup.reagents.add_reagent(req_path, amount + 1, no_react = TRUE)
+			continue
+
+		if(req_path in uncreatables)
+			LAZYADD(uncreatables_found, req_path)
+			continue
+
+		if(ispath(req_path, /obj/item/stack)) //it's a stack
+			spawned_components += new req_path(turf, /*new_amount =*/ amount, /*merge =*/ FALSE)
+			continue
+
+		//it's any other item
+		for(var/iteration in 1 to amount)
+			spawned_components += new req_path(turf)
+
+	for(var/req_path in recipe.chem_catalysts) // spawn catalysts
+		var/amount = recipe.chem_catalysts[req_path]
+		if(!bottomless_cup.reagents.has_reagent(req_path, amount))
+			bottomless_cup.reagents.add_reagent(req_path, amount + 1, no_react = TRUE)
+
+	var/list/bulky_objects = list()
+	bulky_objects += recipe.structures + recipe.machinery //either structures and machinery could be null
+	list_clear_nulls(bulky_objects) //so we clear the list
+	for(var/req_path in bulky_objects) //spawn required machinery or structures
+		if(req_path in uncreatables)
+			LAZYADD(uncreatables_found, req_path)
+			continue
+		spawned_components += new req_path(turf)
+
+	var/list/needed_tools = list()
+	needed_tools += recipe.tool_behaviors + recipe.tool_paths //either tool_behaviors and tool_paths could be null
+	list_clear_nulls(needed_tools) //so we clear the list
+	///tool instances which have been moved to the crafter loc, which are moved back to nullspace once the recipe is done
+	var/list/summoned_tools = list()
+	for(var/tooltype in needed_tools)
+		var/obj/item/tool = tools[tooltype]
+		if(!QDELETED(tool))
+			tool.forceMove(turf)
+		else
+			var/is_behaviour = istext(tooltype)
+			var/path_to_use = is_behaviour ? /obj/item : tooltype
+			tool = allocate(path_to_use, turf) //we shouldn't delete the tools and allocate and keep them between recipes
+			if(is_behaviour)
+				tool.tool_behaviour = tooltype
+			else if(tooltype in uncreatables)
+				LAZYADD(uncreatables_found, tooltype)
+				continue
+			tools[tooltype] = tool
+		summoned_tools |= tool
+
+	var/atom/result = craft_comp.construct_item(crafter, recipe)
+
+	for(var/atom/movable/tool as anything in summoned_tools)
+		tool.moveToNullspace()
+
+	if(istext(result) || isnull(result)) //construct_item() returned a text string telling us why it failed.
+		TEST_FAIL("[recipe.type] couldn't be crafted during unit test[result || ", result is null for some reason!"]")
+		if(uncreatables_found)
+			TEST_FAIL("The following objects that shouldn't initialize during unit tests were found in [recipe]: [english_list(uncreatables_found)]")
+		delete_components(spawned_components)
+		return
+	//enforcing materials parity between crafted and spawned for turfs would be more trouble than worth right now
+	if(isturf(result))
+		delete_components(spawned_components)
+		return
+
+	spawned_components += result
+
+	if(!(recipe.crafting_flags & CRAFT_ENFORCE_MATERIALS_PARITY))
+		delete_components(spawned_components)
+		return
+
+	var/atom/copycat = new result.type(turf)
+	spawned_components += copycat
+
+	// SSmaterials caches the combinations so we don't have to run more complex checks
+	if(result.custom_materials == copycat.custom_materials)
+		delete_components(spawned_components)
+		return
+	if(!result.compare_materials(copycat))
+		var/warning = "custom_materials of [result.type] when crafted compared to just spawned don't match"
+		var/what_it_should_be = result.get_materials_english_list()
+		//compose a text string containing the syntax and paths to use for editing the custom_materials var
+		if(result.custom_materials)
+			what_it_should_be += " (you can round values a bit)"
+		TEST_FAIL("[warning]. custom_materials should be [what_it_should_be]. \
+			Otherwise set the requirements_mats_blacklist variable for [recipe] \
+			or remove the CRAFT_ENFORCE_MATERIALS_PARITY crafting flag from it")
+
+
+	delete_components(spawned_components)
+
+/datum/unit_test/crafting/proc/delete_components(list/comps)
+	for(var/atom/movable/used as anything in comps)
+		if(!QDELETED(used))
+			qdel(used)

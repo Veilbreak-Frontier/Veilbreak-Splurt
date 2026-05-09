@@ -817,3 +817,131 @@
 	add_hiddenprint_list(GET_ATOM_HIDDENPRINTS(from))
 	fingerprintslast = from.fingerprintslast
 	//TODO bloody overlay
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/stack/Initialize(mapload, new_amount = amount, merge = TRUE, list/mat_override=null, mat_amt=1)
+	amount = new_amount
+	if(amount <= 0)
+		stack_trace("invalid amount [amount]!")
+		return INITIALIZE_HINT_QDEL
+	while(amount > max_amount)
+		amount -= max_amount
+		new type(loc, max_amount, FALSE, mat_override, mat_amt)
+	if(!merge_type)
+		merge_type = type
+
+	. = ..()
+
+	if(merge)
+		. = INITIALIZE_HINT_LATELOAD
+
+	var/materials_mult = amount
+	if(LAZYLEN(mat_override))
+		materials_mult *= mat_amt
+		mats_per_unit = mat_override
+	if(LAZYLEN(mats_per_unit))
+		initialize_materials(mats_per_unit, materials_mult)
+
+	recipes = get_main_recipes().Copy()
+	if(material_type)
+		var/datum/material/what_are_we_made_of = GET_MATERIAL_REF(material_type) //First/main material
+		for(var/category in what_are_we_made_of.categories)
+			switch(category)
+				if(MAT_CATEGORY_BASE_RECIPES)
+					recipes |= SSmaterials.base_stack_recipes.Copy()
+				if(MAT_CATEGORY_RIGID)
+					recipes |= SSmaterials.rigid_stack_recipes.Copy()
+
+	update_weight()
+	update_appearance()
+
+	if(is_path_in_list(merge_type, GLOB.golem_stack_food_directory))
+		AddComponent(/datum/component/golem_food, golem_food_key = merge_type)
+
+/obj/item/stack/apply_material_effects(list/materials)
+	. = ..()
+	if(amount)
+		mats_per_unit = SSmaterials.FindOrCreateMaterialCombo(materials, 1/amount)
+
+/obj/item/stack/proc/make_item(mob/builder, datum/stack_recipe/recipe, multiplier)
+	if(get_amount() < 1 && !is_cyborg) //sanity check as this shouldn't happen
+		qdel(src)
+		return
+	if(!is_valid_recipe(recipe, recipes)) //href exploit protection
+		return
+	if(!multiplier || multiplier < 1 || !IS_FINITE(multiplier)) //href exploit protection
+		stack_trace("Invalid multiplier value in stack creation [multiplier], [usr] is likely attempting an exploit")
+		return
+	if(!building_checks(builder, recipe, multiplier))
+		return
+	if(recipe.time)
+		var/adjusted_time = 0
+		builder.balloon_alert(builder, "building...")
+		builder.visible_message(
+			span_notice("[builder] starts building \a [recipe.title]."),
+			span_notice("You start building \a [recipe.title]..."),
+		)
+		if(HAS_TRAIT(builder, recipe.trait_booster))
+			adjusted_time = (recipe.time * recipe.trait_modifier)
+		else
+			adjusted_time = recipe.time
+		var/skill_modifier = builder.mind.get_skill_modifier(/datum/skill/construction, SKILL_SPEED_MODIFIER) //SKYRAT EDIT: Construction Skill
+		if(!do_after(builder, adjusted_time * skill_modifier, target = builder))
+			builder.balloon_alert(builder, "interrupted!")
+			return
+		if(!building_checks(builder, recipe, multiplier))
+			return
+
+	var/atom/created
+	if(recipe.max_res_amount > 1) // Is it a stack?
+		created = new recipe.result_type(builder.drop_location(), recipe.res_amount * multiplier)
+		builder.balloon_alert(builder, "built items")
+
+	else if(ispath(recipe.result_type, /turf))
+		var/turf/covered_turf = builder.drop_location()
+		if(!isturf(covered_turf))
+			return
+		created = covered_turf.place_on_top(recipe.result_type, flags = CHANGETURF_INHERIT_AIR)
+		builder.balloon_alert(builder, "placed [ispath(recipe.result_type, /turf/open) ? "floor" : "wall"]")
+		if((recipe.crafting_flags & CRAFT_APPLIES_MATS) && LAZYLEN(mats_per_unit))
+			created.set_custom_materials(mats_per_unit, recipe.req_amount / recipe.res_amount)
+
+	else
+		created = new recipe.result_type(builder.drop_location())
+		builder.balloon_alert(builder, "built item")
+
+	// split the material and use it for the craft
+	var/obj/item/stack/used_stack = split_stack(recipe.req_amount * multiplier)
+	if(ismovable(created))
+		created.setDir(builder.dir)
+	created.on_craft_completion(list(used_stack), null, builder)
+	qdel(used_stack) //you've outlived your purpose
+
+	builder.mind.adjust_experience(/datum/skill/construction, 5) //SKYRAT EDIT: Construction Skill
+
+	builder.investigate_log("crafted [recipe.title]", INVESTIGATE_CRAFTING)
+
+	// Apply mat datums
+	if((recipe.crafting_flags & CRAFT_APPLIES_MATS) && LAZYLEN(mats_per_unit))
+		if(isstack(created))
+			var/obj/item/stack/crafted_stack = created
+			crafted_stack.set_custom_materials(mats_per_unit, (recipe.req_amount / recipe.res_amount) * crafted_stack.amount)
+		else
+			created.set_custom_materials(mats_per_unit, recipe.req_amount / recipe.res_amount)
+
+	// We could be qdeleted - like if it's a stack and has already been merged
+	if(QDELETED(created))
+		return TRUE
+
+	// Add fingerprints first, otherwise created might already be deleted because of stack merging
+	created.add_fingerprint(builder)
+	if(isitem(created))
+		builder.put_in_hands(created)
+
+	//BubbleWrap - so newly formed boxes are empty
+	if(istype(created, /obj/item/storage))
+		for (var/obj/item/thing in created)
+			qdel(thing)
+	//BubbleWrap END
+
+	return TRUE

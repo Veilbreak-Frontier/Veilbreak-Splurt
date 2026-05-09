@@ -162,3 +162,43 @@
 	update_sight()
 	to_chat(src, span_alert("You've lost power!"))
 	addtimer(CALLBACK(src, PROC_REF(start_RestorePowerRoutine)), 2 SECONDS)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/silicon/ai/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	if (stat == DEAD)
+		return
+	//Being dead doesn't mean your temperature never changes
+
+	if(malfhack?.aidisabled)
+		deltimer(malfhacking)
+		// This proc handles cleanup of screen notifications and
+		// messenging the client
+		malfhacked(malfhack)
+
+	if(isturf(loc) && (QDELETED(eyeobj) || !eyeobj.loc))
+		view_core()
+
+	// Handle power damage (oxy)
+	if (battery <= 0 && lacks_power())
+		to_chat(src, span_warning("Your backup battery's output drops below usable levels. It takes only a moment longer for your systems to fail, corrupted and unusable."))
+		adjust_oxy_loss(200)
+
+	if(aiRestorePowerRoutine)
+		// Lost power
+		battery--
+	else
+		// Gain Power
+		if (battery < 200)
+			battery++
+
+	if(!lacks_power())
+		var/area/home = get_area(src)
+		if(home.powered(AREA_USAGE_EQUIP))
+			home.apc?.terminal?.use_energy(500 WATTS * seconds_per_tick, channel = AREA_USAGE_EQUIP)
+
+		if(aiRestorePowerRoutine >= POWER_RESTORATION_SEARCH_APC)
+			ai_restore_power()
+			return
+
+	else if(!aiRestorePowerRoutine)
+		ai_lose_power()

@@ -79,3 +79,17 @@
 	if(HAS_TRAIT(owner, TRAIT_DEAF) || owner == hearing_args[HEARING_SPEAKER])
 		return
 	hearing_args[HEARING_RAW_MESSAGE] = target_phrase.Replace(hearing_args[HEARING_RAW_MESSAGE], span_hypnophrase("$1"))
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/brain_trauma/hypnosis/on_life(seconds_per_tick, times_fired)
+	..()
+	if(SPT_PROB(1, seconds_per_tick))
+		if(prob(50))
+			to_chat(owner, span_hypnophrase("<i>...[LOWER_TEXT(hypnotic_phrase)]...</i>"))
+		else
+			owner.cause_hallucination( \
+				/datum/hallucination/chat, \
+				"hypnosis", \
+				force_radio = TRUE, \
+				specific_message = span_hypnophrase("[hypnotic_phrase]"), \
+			)

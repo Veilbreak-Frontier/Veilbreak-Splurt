@@ -1233,3 +1233,41 @@
 /// Called if this machine is supposed to be a sabotage machine objective.
 /obj/machinery/proc/add_as_sabotage_target()
 	return
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/proc/check_nap_violations()
+	PROTECTED_PROC(TRUE)
+	SHOULD_NOT_OVERRIDE(TRUE)
+
+	if(!SSeconomy.full_ancap)
+		return TRUE
+	if(!occupant || state_open)
+		return TRUE
+	var/mob/living/occupant_mob = occupant
+	var/obj/item/card/id/occupant_id = occupant_mob.get_idcard(TRUE)
+	if(!occupant_id)
+		say("Customer NAP Violation: No ID card found.")
+		nap_violation(occupant_mob)
+		return FALSE
+	var/datum/bank_account/insurance = occupant_id.registered_account
+	if(!insurance)
+		say("Customer NAP Violation: No bank account found.")
+		nap_violation(occupant_mob)
+		return FALSE
+	if(!insurance.adjust_money(-fair_market_price))
+		say("Customer NAP Violation: Unable to pay.")
+		nap_violation(occupant_mob)
+		return FALSE
+	var/datum/bank_account/department_account = SSeconomy.get_dep_account(payment_department)
+	if(department_account)
+		department_account.adjust_money(fair_market_price)
+	return TRUE
+
+/obj/machinery/proc/nap_violation(mob/violator)
+	PROTECTED_PROC(TRUE)
+
+	return
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+//Return a non FALSE value to interrupt attack_hand propagation to subtypes.

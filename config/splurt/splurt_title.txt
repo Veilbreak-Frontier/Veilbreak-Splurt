@@ -1,0 +1,406 @@
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<style type='text/css'>
+			@font-face {
+				font-family: "Fixedsys";
+				src: url("FixedsysExcelsior3.01Regular.ttf");
+				font-display: swap;
+			}
+			body,
+			html {
+				margin: 0;
+				overflow: hidden;
+				font-family: "Fixedsys", sans-serif;
+				text-align: center;
+				background-color: #000000;
+				padding-top: 5vmin;
+				-ms-user-select: none;
+				cursor: default;
+			}
+
+			img {
+				border-style: none;
+			}
+
+			.bg {
+				position: absolute;
+				width: auto;
+				height: 100vmin;
+				min-width: 100vmin;
+				min-height: 100vmin;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 0;
+			}
+
+			/* Top-centered logo container */
+			.container_logo {
+				position: absolute;
+				top: 3vmin; /* padding from the top */
+				left: 50%;
+				transform: translateX(-50%);
+				z-index: 2; /* above background and menus */
+				pointer-events: none; /* don't block interactions below */
+				transition: opacity 0.3s ease;
+			}
+
+			/* Responsive logo image sizing */
+			.logo_image {
+				display: block;
+				max-width: 80vmin; /* scale with viewport, stay within scene */
+				max-height: 24vmin; /* avoid covering central splash */
+				width: auto;
+				height: auto;
+				margin: 0 auto;
+			}
+
+			.container_terminal {
+				position: absolute;
+				top: calc(90% - 3vmin);
+				left: calc(50% - 450px);
+				height: 3vmin;
+				width: 900px;
+				overflow: hidden;
+				box-sizing: border-box;
+				z-index: 1;
+			}
+
+			.terminal_text {
+				font-family: "Fixedsys", sans-serif;
+				font-weight: 500;
+				display: inline-block;
+				text-decoration: none;
+				width: 100%;
+				text-align: left;
+				color: #ff4ff0;
+				text-shadow: 1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black;
+				margin-right: 0;
+				margin-top: 0;
+				font-size: 2.2vmin;
+				letter-spacing: 1px;
+			}
+
+			.container_progress {
+				position: absolute;
+				box-sizing: border-box;
+				top: 90%;
+				left: calc(50% - 450px);
+				height: 72px;
+				width: 900px;
+				border: 4px solid #ff4ff0;
+				padding: 4px;
+				background-color: #000000;
+			}
+
+			.progress_bar {
+				width: 0%;
+				height: 100%;
+				background-image: url('https://i.ibb.co/k2zd4kRd/com-speed.gif');
+				background-position: center right;
+				background-color: #000000;
+			}
+
+			@keyframes fade_out {
+				to {
+					opacity: 0;
+				}
+			}
+
+			.fade_out {
+				animation: fade_out 2s both;
+			}
+
+			.container_nav {
+				position: absolute;
+				box-sizing: border-box;
+				width: 90vmin;
+				min-height: 10vmin;
+				top: calc(50% + 22.5vmin);
+				left: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 1;
+				border: 2px solid #ffffff;
+				border-radius: 4px;
+				box-shadow: 2px 2px #333, inset 1px 1px #333;
+				background: linear-gradient(to bottom,
+					rgba(255, 79, 240, 0.95),
+					rgba(255, 140, 250, 0.95)
+				);
+				opacity: 0.95;
+				padding: 1em;
+				transition: opacity 0.3s ease;
+			}
+
+
+			.container_nav.inactive,
+			.container_logo.inactive {
+				opacity: 0.2;
+			}
+
+			.container_nav.hidden,
+			.container_logo.hidden {
+				opacity: 0;
+			}
+
+			.container_nav hr {
+				height: 2px;
+				background-color: #ffffff;
+				border: none;
+				box-shadow: 2px 2px black;
+			}
+
+			.menu_button {
+				display: block;
+				box-sizing: border-box;
+				font-family: "Fixedsys", sans-serif;
+				font-weight: lighter;
+				text-decoration: none;
+				font-size: 4vmin;
+				text-shadow: 2px 2px black;
+				line-height: 4vmin;
+				width: 100%;
+				text-align: left;
+				color: #ffffff;
+				height: 4vmin;
+				padding-left: 5vmin;
+				letter-spacing: 1px;
+				cursor: pointer;
+				white-space: nowrap;
+				overflow: hidden;
+				transition: transform 0.3s ease;
+			}
+
+			.menu_button:hover {
+				transform: translateX(10px);
+				color: #ffffff;
+			}
+
+			.menu_button:active {
+				transform: translate(2px, 2px);
+			}
+
+			.menu_button:hover::before {
+				content: "🍆";
+				font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+				text-align: center;
+				width: 5vmin;
+				display: inline-block;
+				margin-right: 0.5vmin;
+				font-size: 3vmin;
+				line-height: 4vmin;
+			}
+
+			@keyframes pulse_button {
+				0% {transform: translateX(0px);}
+				100% {transform: translateX(2px);}
+			}
+
+			.menu_button:active::before {
+				content: "🍆";
+				font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+				text-align: center;
+				width: 5vmin;
+				font-size: 3vmin;
+				line-height: 4vmin;
+				animation: pulse_button 0.25s infinite alternate;
+			}
+
+			.menu_newpoll {
+				animation: pollsbox 2s step-start infinite;
+				padding-left: 0.5vmin;
+			}
+
+			.menu_newpoll::before {
+				content: "→";
+				text-align: center;
+				width: 5vmin;
+				display: inline-block;
+				margin-right: 0.5vmin;
+			}
+
+			.menu_newpoll::after {
+				content: "←";
+				text-align: center;
+				width: 5vmin;
+				display: inline-block;
+				margin-left: 0.5vmin;
+			}
+
+			.container_notice {
+				position: absolute;
+				box-sizing: border-box;
+				width: auto;
+				padding-top: 1vmin;
+				top: calc(50% - 10vmin);
+				left: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 1;
+			}
+
+			.menu_notice {
+				display: inline-block;
+				font-family: "Fixedsys", sans-serif;
+				font-weight: lighter;
+				text-decoration: none;
+				width: 100%;
+				text-align: left;
+				color: white;
+				text-shadow: 1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black;
+				margin-right: 0;
+				margin-top: 0;
+				font-size: 3vmin;
+				line-height: 2vmin;
+				letter-spacing: 1px;
+			}
+
+			.unchecked {
+				color: #F44;
+			}
+
+			.checked {
+				color: #4F4;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			let lastActivity = Date.now();
+			let fadeTimer;
+			let hideTimer;
+			let isMenuHovered = false;
+			let isMenuHidden = false;
+
+			// Configuration variables - can be adjusted
+			const FADE_DELAY = 100;    // Time before starting to fade (ms)
+			const HIDE_DELAY = 1500;   // Time before completely hiding (ms)
+
+			// Handle menu visibility transitions
+			function updateMenuVisibility() {
+				clearTimeout(fadeTimer);
+				clearTimeout(hideTimer);
+
+				if (!isMenuHovered) {
+					// Start fading immediately with minimal delay
+					fadeTimer = setTimeout(function() {
+						const navContainer = document.querySelector('.container_nav');
+						const logoContainer = document.querySelector('.container_logo');
+						if (navContainer) {
+							navContainer.classList.add('inactive');
+							if (logoContainer) {
+								logoContainer.classList.add('inactive');
+							}
+
+							// Then hide after a short delay
+							hideTimer = setTimeout(function() {
+								if (!isMenuHovered) {
+									const navContainer = document.querySelector('.container_nav');
+									const logoContainer = document.querySelector('.container_logo');
+									if (navContainer) {
+										navContainer.classList.add('hidden');
+										if (logoContainer) {
+											logoContainer.classList.add('hidden');
+										}
+										isMenuHidden = true;
+									}
+								}
+							}, HIDE_DELAY);
+						}
+					}, FADE_DELAY);
+				}
+			}
+
+			// Handle mouse entering menu
+			function handleMenuMouseEnter() {
+				isMenuHovered = true;
+				const navContainer = document.querySelector('.container_nav');
+				const logoContainer = document.querySelector('.container_logo');
+				if (navContainer) {
+					navContainer.classList.remove('inactive', 'hidden');
+					isMenuHidden = false;
+				}
+				if (logoContainer) {
+					logoContainer.classList.remove('inactive', 'hidden');
+				}
+				clearTimeout(fadeTimer);
+				clearTimeout(hideTimer);
+			}
+
+			// Handle mouse leaving menu
+			function handleMenuMouseLeave() {
+				isMenuHovered = false;
+				updateMenuVisibility();
+			}
+
+			window.addEventListener('load', function() {
+				const navContainer = document.querySelector('.container_nav');
+				const logoContainer = document.querySelector('.container_logo');
+				if (navContainer) {
+					// Setup menu hover events
+					navContainer.addEventListener('mouseenter', handleMenuMouseEnter);
+					navContainer.addEventListener('mouseleave', handleMenuMouseLeave);
+
+					// Reset state for both containers
+					isMenuHidden = false;
+					isMenuHovered = false;
+					navContainer.classList.remove('inactive', 'hidden');
+					if (logoContainer) {
+						logoContainer.classList.remove('inactive', 'hidden');
+					}
+
+					setTimeout(function() {
+						if (!isMenuHovered) {
+							updateMenuVisibility();
+						}
+					}, 2500); // 2.5 second delay before starting fade
+				}
+			});
+
+			function initializeMenu() {
+				const navContainer = document.querySelector('.container_nav');
+				let logoContainer = document.querySelector('.container_logo');
+
+				// Create logo container if it doesn't exist and we have a nav container
+				if (navContainer && !logoContainer) {
+					logoContainer = document.createElement('div');
+					logoContainer.className = 'container_logo';
+					const logoImg = document.createElement('img');
+					logoImg.className = 'logo_image';
+					logoImg.src = 'https://i.ibb.co/FLcjXLfL/splurtlogo.png';
+					logoImg.alt = 'SPLURT Title Logo';
+					logoContainer.appendChild(logoImg);
+					document.body.appendChild(logoContainer);
+				}
+
+				if (navContainer && !navContainer.dataset.initialized) {
+					navContainer.dataset.initialized = 'true';
+
+					// Setup menu hover events
+					navContainer.addEventListener('mouseenter', handleMenuMouseEnter);
+					navContainer.addEventListener('mouseleave', handleMenuMouseLeave);
+
+					// Reset state for both containers
+					isMenuHidden = false;
+					isMenuHovered = false;
+					navContainer.classList.remove('inactive', 'hidden');
+					if (logoContainer && !logoContainer.dataset.initialized) {
+						logoContainer.dataset.initialized = 'true';
+						logoContainer.classList.remove('inactive', 'hidden');
+					}
+
+					setTimeout(function() {
+						if (!isMenuHovered) {
+							updateMenuVisibility();
+						}
+					}, 2500);
+				}
+			}
+
+			window.addEventListener('DOMContentLoaded', initializeMenu);
+
+			setTimeout(initializeMenu, 250);
+		</script>
+	</body>
+</html>

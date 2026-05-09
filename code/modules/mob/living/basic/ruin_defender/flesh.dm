@@ -211,3 +211,53 @@
 #undef LIVING_FLESH_COMBAT_TOUCH_CHANCE
 #undef LIVING_FLESH_WARN_CHANCE
 #undef LIVING_FLESH_INTERFERENCE_CHANCE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/living_limb_flesh/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	. = ..()
+	if(stat == DEAD)
+		return
+	if(isnull(current_bodypart) || isnull(current_bodypart.owner))
+		return
+	var/mob/living/carbon/human/victim = current_bodypart.owner
+	if(SPT_PROB(LIVING_FLESH_WARN_CHANCE, SSMOBS_DT))
+		to_chat(victim, span_warning("The skin on your [current_bodypart.plaintext_zone] crawls."))
+
+	victim.adjust_nutrition(-1.5)
+
+	if(!SPT_PROB(LIVING_FLESH_INTERFERENCE_CHANCE, SSMOBS_DT))
+		return
+
+	if(istype(current_bodypart, /obj/item/bodypart/leg))
+		if(HAS_TRAIT(victim, TRAIT_IMMOBILIZED))
+			return
+		step(victim, pick(GLOB.cardinals))
+		to_chat(victim, span_warning("Your [current_bodypart.plaintext_zone] moves on its own!"))
+		return
+
+	var/list/candidates = list()
+	for(var/atom/movable/movable in orange(victim, 1))
+		if(movable == victim)
+			continue
+		if(!movable.IsReachableBy(victim) || movable.invisibility > victim.see_invisible)
+			continue
+		candidates += movable
+	if(!length(candidates))
+		return
+	var/atom/movable/candidate = pick(candidates)
+	if(isnull(candidate))
+		return
+
+	if (!prob(victim.combat_mode ? LIVING_FLESH_COMBAT_TOUCH_CHANCE : LIVING_FLESH_TOUCH_CHANCE) && candidate.can_be_pulled(user = victim, force = victim.pull_force))
+		victim.visible_message(span_warning("[victim]'s [current_bodypart.plaintext_zone] suddenly fastens around [candidate]!"))
+		INVOKE_ASYNC(victim, TYPE_PROC_REF(/atom/movable, start_pulling), candidate, supress_message = TRUE)
+		return
+
+	victim.visible_message(span_warning("[victim]'s [current_bodypart.plaintext_zone] suddenly spasms towards [candidate]!"))
+	var/active_hand = victim.active_hand_index
+	var/new_index = (current_bodypart.body_zone == BODY_ZONE_L_ARM) ? LEFT_HANDS : RIGHT_HANDS
+	if (active_hand != new_index)
+		victim.swap_hand(new_index, TRUE)
+	victim.resolve_unarmed_attack(candidate)
+	if (active_hand != victim.active_hand_index) // Different check in case we failed to swap hands previously due to holding a bulky item
+		victim.swap_hand(active_hand, TRUE)

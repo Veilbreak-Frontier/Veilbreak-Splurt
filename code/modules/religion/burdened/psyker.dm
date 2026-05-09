@@ -407,3 +407,25 @@
 /datum/action/cooldown/spell/forcewall/psychic_wall/spawn_wall(turf/cast_turf)
 	. = ..()
 	play_fov_effect(cast_turf, 5, "forcefield", time = 10 SECONDS)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/brain/psyker/on_life(seconds_per_tick, times_fired)
+	. = ..()
+	var/obj/item/bodypart/head/psyker/psyker_head = owner.get_bodypart(zone)
+	if(istype(psyker_head))
+		return
+	if(!SPT_PROB(2, seconds_per_tick))
+		return
+	to_chat(owner, span_userdanger("Your head hurts... It can't fit your brain!"))
+	owner.adjust_disgust(33 * seconds_per_tick)
+	apply_organ_damage(5 * seconds_per_tick, 199)
+
+/obj/item/gun/ballistic/revolver/chaplain/proc/on_cult_rune_removed(obj/effect/target, mob/living/user)
+	SIGNAL_HANDLER
+	if(!istype(target, /obj/effect/rune))
+		return
+
+	var/obj/effect/rune/target_rune = target
+	if(target_rune.log_when_erased)
+		user.log_message("erased [target_rune.cultist_name] rune using [src]", LOG_GAME)
+	SSshuttle.shuttle_purchase_requirements_met[SHUTTLE_UNLOCK_NARNAR] = TRUE

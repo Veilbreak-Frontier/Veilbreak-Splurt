@@ -555,3 +555,43 @@
 #undef ADV_SPREAD_FORCED_LOW
 #undef ADV_SPREAD_FORCED_MID
 #undef ADV_SPREAD_FORCED_HIGH
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/disease/advance/event/generate_cure()// BUBBER EDIT CHANGE - DISEASE OUTBREAK UPDATES
+	if(!length(properties))
+		stack_trace("Advanced virus properties were empty or null!")
+		return
+
+	// BUBBER EDIT CHANGE START - DISEASE OUTBREAK UPDATES
+	/*
+	var/res = rand(4, 7)
+	cures = list(pick(advance_cures[res]))
+	oldres = res
+	// Get the cure name from the cure_id
+	var/datum/reagent/cure = GLOB.chemical_reagents_list[cures[1]]
+	cure_text = cure.name
+	*/
+	var/list/cures_list = advance_cures.Copy()
+	if(properties["stage_rate"] >= 7)
+		cures = list(pick_n_take(cures_list[rand(4, 7)]), pick_n_take(cures_list[3])) // require some help outside medbay (list 3)
+		var/datum/reagent/cure_1 = GLOB.chemical_reagents_list[cures[1]]
+		var/datum/reagent/cure_2 = GLOB.chemical_reagents_list[cures[2]]
+		cure_text = "[cure_1.name] and [cure_2.name]"
+	else
+		cures = list(pick_n_take(cures_list[rand(4, 7)]))
+		var/datum/reagent/cure_1 = GLOB.chemical_reagents_list[cures[1]]
+		cure_text = cure_1.name
+	// BUBBER EDIT CHANGE END - DISEASE OUTBREAK UPDATES
+
+#undef ADV_MIN_SYMPTOMS
+#undef ADV_MAX_SYMPTOMS
+#undef ADV_ANNOUNCE_DELAY
+#undef ADV_DISEASE_MEDIUM
+#undef ADV_DISEASE_HARMFUL
+#undef ADV_DISEASE_DANGEROUS
+#undef ADV_RNG_LOW
+#undef ADV_RNG_MID
+#undef ADV_SPREAD_THRESHOLD
+#undef ADV_SPREAD_FORCED_LOW
+#undef ADV_SPREAD_FORCED_MID
+#undef ADV_SPREAD_FORCED_HIGH

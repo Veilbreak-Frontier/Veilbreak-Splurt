@@ -241,3 +241,24 @@
 	desc = "This rough saddle will give you a serviceable seat upon a goliath! Provided you can get one to stand still."
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "goliath_saddle"
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/mining/goliath/apply_damage(damage, damagetype, def_zone, blocked, forced, spread_damage, wound_bonus, exposed_wound_bonus, sharpness, attack_direction, attacking_item)
+	. = ..()
+	if (. <= 0)
+		return
+	if (tentacles.cooldown_time > 1 SECONDS)
+		tentacles.cooldown_time -= 1 SECONDS
+
+/mob/living/basic/mining/goliath/ancient/immortal/Life(seconds_per_tick, times_fired)
+	. = ..()
+	if (!. || !isturf(loc))
+		return
+	if (!LAZYLEN(tentacle_target_turfs) || COOLDOWN_FINISHED(src, retarget_turfs_cooldown))
+		cache_nearby_turfs()
+	for (var/turf/target_turf in tentacle_target_turfs)
+		if (target_turf.is_blocked_turf(exclude_mobs = TRUE))
+			tentacle_target_turfs -= target_turf
+			continue
+		if (prob(10))
+			new /obj/effect/goliath_tentacle(target_turf)

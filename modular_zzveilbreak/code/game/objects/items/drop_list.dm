@@ -1,0 +1,55 @@
+
+// Weighted loot table (e.g., for random drops with chances)
+var/list/voidling_loot_table = list(
+    /obj/item/clothing/neck/aether_pendant = 0.2,  // 0.1% chance
+    /obj/item/clothing/neck/life_pendant = 0.2,
+	/obj/item/voidshard = 1
+)
+
+var/list/inai_drops = list(
+	/obj/item/clothing/neck/aether_pendant = 50,
+	/obj/item/clothing/neck/life_pendant = 50,
+	/obj/item/clothing/gloves/ring/voidring = 50
+)
+
+var/list/void_healer_table = list(
+	/obj/item/clothing/neck/life_pendant = 30,
+	/obj/item/food/donkpocket = 70
+)
+
+var/list/melos_vecare_drops = list(
+	/obj/item/clothing/neck/aether_pendant = 50,
+	/obj/item/clothing/neck/life_pendant = 50,
+	/obj/item/clothing/gloves/ring/voidring = 50
+)
+
+var/list/voidbug_loot_table = list(
+	/obj/item/clothing/neck/aether_pendant = 3,
+	/obj/item/clothing/neck/life_pendant = 0.1
+)
+
+var/list/consumed_pathfinder_drops = list(
+	/obj/item/voidshard = 10,
+	/obj/item/clothing/neck/aether_pendant = 1,
+	/obj/item/clothing/neck/life_pendant = 1,
+	/obj/item/clothing/gloves/ring/voidring = 22
+)
+
+/// One roll when a /obj/structure/closet/crate/veilbreak_lootbox is first opened. Voidshard is the common pull; pendants are deliberately rarer.
+var/list/veilbreak_lootbox_table = list(
+	/obj/item/voidshard = 58,
+	/obj/item/clothing/neck/aether_pendant = 21,
+	/obj/item/clothing/neck/life_pendant = 21,
+)
+
+// Function to pick loot from a table (call this in mob death proc if needed)
+/proc/pick_loot_from_table(list/loot_table)
+    var/total_weight = 0
+    for(var/item in loot_table)
+        total_weight += loot_table[item]
+    var/rand_val = rand(1, total_weight)
+    for(var/item in loot_table)
+        rand_val -= loot_table[item]
+        if(rand_val <= 0)
+            return item
+    return null  // Fallback

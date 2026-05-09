@@ -49,3 +49,10 @@
 	qdel(src)
 
 #undef EGG_INCUBATION_TIME
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/body_egg/changeling_egg/egg_process(seconds_per_tick, times_fired)
+	if(owner && hatch_time <= world.time)
+		pop()
+
+/// Once the egg is fully grown, we gib the host and spawn a monkey (with the changeling's player controlling it). Very descriptive proc name.

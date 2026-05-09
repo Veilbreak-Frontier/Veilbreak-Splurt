@@ -69,3 +69,14 @@
 	var/list/data = list()
 	data["dmi"] = list("icon" = sword_icon, "icon_state" = "")
 	return data
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/computer_file/program/maintenance/cool_sword/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
+	. = ..()
+	RegisterSignal(computer_installing, COMSIG_ITEM_EQUIPPED, PROC_REF(host_equipped))
+	RegisterSignal(computer_installing, COMSIG_ITEM_DROPPED, PROC_REF(host_dropped))
+
+	if(ismob(computer_installing.loc))
+		var/mob/living/computer_guy = computer_installing.loc
+		var/current_slot = computer_guy.get_slot_by_item(computer_installing)
+		host_equipped(computer_installing, computer_guy, current_slot)

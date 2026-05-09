@@ -99,3 +99,35 @@
 		our_action.Grant(avatar)
 
 	return return_flags
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/bitrunning_disk/gimmick/Destroy()
+	QDEL_NULL(granted_loadout)
+	return ..()
+
+/obj/item/bitrunning_disk/gimmick/load_onto_avatar(mob/living/carbon/human/neo, mob/living/carbon/human/avatar, domain_flags)
+	if(isnull(granted_loadout))
+		return BITRUNNER_GEAR_LOAD_FAILED
+	return granted_loadout.grant_loadout(neo, avatar, domain_flags)
+
+/obj/item/bitrunning_disk/gimmick/attack_self(mob/user, modifiers)
+	. = ..()
+
+	if(granted_loadout)
+		return
+
+	var/names = list()
+	for(var/datum/bitrunning_gimmick/loadout as anything in selectable_loadouts)
+		names += initial(loadout.name)
+
+	var/choice = tgui_input_list(user, message = "Select a gimmick loadout",  title = "Bitrunning Program", items = names)
+	if(isnull(choice) || !user.is_holding(src))
+		return
+
+	for(var/datum/bitrunning_gimmick/loadout as anything in selectable_loadouts)
+		if(initial(loadout.name) == choice)
+			granted_loadout = new loadout()
+
+	balloon_alert(user, "selected")
+	playsound(user, 'sound/items/click.ogg', 50, TRUE)
+	choice_made = choice

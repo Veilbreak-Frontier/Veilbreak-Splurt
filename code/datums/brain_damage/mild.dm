@@ -340,3 +340,93 @@
 
 	REMOVE_TRAIT(my_thing, TRAIT_NODROP, TRAUMA_TRAIT)
 	UnregisterSignal(my_thing, list(COMSIG_ITEM_DROPPED, COMSIG_MOVABLE_MOVED))
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/brain_trauma/mild/hallucinations/on_life(seconds_per_tick, times_fired)
+	if(owner.stat >= UNCONSCIOUS)
+		return
+	if(HAS_TRAIT(owner, TRAIT_RDS_SUPPRESSED))
+		owner.remove_language(/datum/language/aphasia, source = LANGUAGE_APHASIA)
+		owner.adjust_hallucinations(-10 SECONDS * seconds_per_tick)
+		return
+
+	owner.grant_language(/datum/language/aphasia, source = LANGUAGE_APHASIA)
+	owner.adjust_hallucinations_up_to(((uncapped ? 12 SECONDS : 5 SECONDS) * seconds_per_tick), (uncapped ? 240 SECONDS : 60 SECONDS))
+
+/datum/brain_trauma/mild/stuttering/on_life(seconds_per_tick, times_fired)
+	owner.adjust_stutter_up_to(5 SECONDS * seconds_per_tick, 50 SECONDS)
+
+/datum/brain_trauma/mild/dumbness/on_life(seconds_per_tick, times_fired)
+	owner.adjust_derpspeech_up_to(5 SECONDS * seconds_per_tick, 50 SECONDS)
+	if(SPT_PROB(1.5, seconds_per_tick))
+		owner.emote("drool")
+	else if(owner.stat == CONSCIOUS && SPT_PROB(1.5, seconds_per_tick))
+		owner.say(pick_list_replacements(BRAIN_DAMAGE_FILE, "brain_damage"), forced = "brain damage", filterproof = TRUE)
+
+/datum/brain_trauma/mild/concussion/on_life(seconds_per_tick, times_fired)
+	if(SPT_PROB(2.5, seconds_per_tick))
+		switch(rand(1,11))
+			if(1)
+				owner.vomit(VOMIT_CATEGORY_DEFAULT)
+			if(2,3)
+				owner.adjust_dizzy(20 SECONDS)
+			if(4,5)
+				owner.adjust_confusion(10 SECONDS)
+				owner.set_eye_blur_if_lower(20 SECONDS)
+			if(6 to 9)
+				owner.adjust_slurring(1 MINUTES)
+			if(10)
+				to_chat(owner, span_notice("You forget for a moment what you were doing."))
+				owner.Stun(20)
+			if(11)
+				to_chat(owner, span_warning("You faint."))
+				owner.Unconscious(80)
+
+	..()
+
+/datum/brain_trauma/mild/healthy/on_life(seconds_per_tick, times_fired)
+	owner.adjust_stamina_loss(-6 * seconds_per_tick) //no pain, no fatigue
+
+/datum/brain_trauma/mild/muscle_weakness/on_life(seconds_per_tick, times_fired)
+	var/fall_chance = 1
+	if(owner.move_intent == MOVE_INTENT_RUN)
+		fall_chance += 2
+	if(SPT_PROB(0.5 * fall_chance, seconds_per_tick) && owner.body_position == STANDING_UP)
+		to_chat(owner, span_warning("Your leg gives out!"))
+		owner.Paralyze(35)
+
+	else if(owner.get_active_held_item())
+		var/drop_chance = 1
+		var/obj/item/I = owner.get_active_held_item()
+		drop_chance += I.w_class
+		if(SPT_PROB(0.5 * drop_chance, seconds_per_tick) && owner.dropItemToGround(I))
+			to_chat(owner, span_warning("You drop [I]!"))
+
+	else if(SPT_PROB(1.5, seconds_per_tick))
+		to_chat(owner, span_warning("You feel a sudden weakness in your muscles!"))
+		owner.adjust_stamina_loss(50)
+	..()
+
+/datum/brain_trauma/mild/nervous_cough/on_life(seconds_per_tick, times_fired)
+	if(SPT_PROB(6, seconds_per_tick) && !HAS_TRAIT(owner, TRAIT_SOOTHED_THROAT))
+		if(prob(5))
+			to_chat(owner, span_warning("[pick("You have a coughing fit!", "You can't stop coughing!")]"))
+			owner.Immobilize(20)
+			owner.emote("cough")
+			addtimer(CALLBACK(owner, TYPE_PROC_REF(/mob/, emote), "cough"), 0.6 SECONDS)
+			addtimer(CALLBACK(owner, TYPE_PROC_REF(/mob/, emote), "cough"), 1.2 SECONDS)
+		owner.emote("cough")
+	..()
+
+/datum/brain_trauma/mild/possessive/on_life(seconds_per_tick, times_fired)
+	if(!SPT_PROB(5, seconds_per_tick))
+		return
+
+	var/obj/item/my_thing = pick(owner.held_items) // can pick null, that's fine
+	if(isnull(my_thing) || HAS_TRAIT(my_thing, TRAIT_NODROP) || (my_thing.item_flags & (HAND_ITEM|ABSTRACT)))
+		return
+
+	ADD_TRAIT(my_thing, TRAIT_NODROP, TRAUMA_TRAIT)
+	RegisterSignals(my_thing, list(COMSIG_ITEM_DROPPED, COMSIG_MOVABLE_MOVED), PROC_REF(clear_trait))
+	to_chat(owner, span_warning("You feel a need to keep [my_thing] close..."))
+	addtimer(CALLBACK(src, PROC_REF(relax), my_thing), rand(30 SECONDS, 3 MINUTES), TIMER_DELETE_ME)

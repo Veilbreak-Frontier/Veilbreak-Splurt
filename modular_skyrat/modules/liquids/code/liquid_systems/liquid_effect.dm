@@ -455,29 +455,31 @@
 		AM.fire_act((T20C+50) + (50*fire_state), 125)
 
 /obj/effect/abstract/liquid_turf/proc/mob_fall(datum/source, mob/M)
-	SIGNAL_HANDLER
-	var/turf/T = source
-	if(liquid_state >= LIQUID_STATE_ANKLES && T.has_gravity(T))
-		playsound(T, 'modular_zubbers/sound/effects/splash.ogg', 50, 0)
-		if(iscarbon(M))
-			var/mob/living/carbon/falling_carbon = M
+    SIGNAL_HANDLER
+    var/turf/T = source
 
-			// No point in giving reagents to the deceased. It can cause some runtimes.
-			if(falling_carbon.stat >= DEAD)
-				return
+    if(HAS_TRAIT(M, TRAIT_WATER_BREATHING) && reagents.has_reagent(/datum/reagent/water))
+        return
 
-			if(falling_carbon.wear_mask && falling_carbon.wear_mask.flags_cover & MASKCOVERSMOUTH)
-				to_chat(falling_carbon, span_userdanger("You fall in the [reagents_to_text()]!"))
-			else
-				var/datum/reagents/tempr = take_reagents_flat(CHOKE_REAGENTS_INGEST_ON_FALL_AMOUNT)
-				tempr.trans_to(falling_carbon, tempr.total_volume, methods = INGEST)
-				qdel(tempr)
-				falling_carbon.adjust_oxy_loss(5)
-				//C.emote("cough")
-				INVOKE_ASYNC(falling_carbon, TYPE_PROC_REF(/mob, emote), "cough")
-				to_chat(falling_carbon, span_userdanger("You fall in and swallow some [reagents_to_text()]!"))
-		else
-			to_chat(M, span_userdanger("You fall in the [reagents_to_text()]!"))
+    if(liquid_state >= LIQUID_STATE_ANKLES && T.has_gravity(T))
+        playsound(T, 'modular_zubbers/sound/effects/splash.ogg', 50, 0)
+        if(iscarbon(M))
+            var/mob/living/carbon/falling_carbon = M
+
+            if(falling_carbon.stat >= DEAD)
+                return
+
+            if(falling_carbon.wear_mask && falling_carbon.wear_mask.flags_cover & MASKCOVERSMOUTH)
+                to_chat(falling_carbon, span_userdanger("You fall in the [reagents_to_text()]!"))
+            else
+                var/datum/reagents/tempr = take_reagents_flat(CHOKE_REAGENTS_INGEST_ON_FALL_AMOUNT)
+                tempr.trans_to(falling_carbon, tempr.total_volume, methods = INGEST)
+                qdel(tempr)
+                falling_carbon.adjust_oxy_loss(5)
+                INVOKE_ASYNC(falling_carbon, TYPE_PROC_REF(/mob, emote), "cough")
+                to_chat(falling_carbon, span_userdanger("You fall in and swallow some [reagents_to_text()]!"))
+        else
+            to_chat(M, span_userdanger("You fall in the [reagents_to_text()]!"))
 
 /obj/effect/abstract/liquid_turf/Initialize(mapload)
 	. = ..()

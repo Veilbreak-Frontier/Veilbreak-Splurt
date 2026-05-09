@@ -1237,3 +1237,52 @@ GLOBAL_VAR_INIT(narsie_summon_count, 0)
 			if(I.icon_state != "bloodsparkles")
 				I.override = TRUE
 		sleep(19 SECONDS)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/effect/rune/convert/proc/try_spawn_sword()
+	for(var/obj/item/potential_rod in loc)
+		if(!HAS_TRAIT(potential_rod, TRAIT_NULLROD_ITEM))
+			continue
+
+		if(potential_rod.anchored || (potential_rod.resistance_flags & INDESTRUCTIBLE))
+			continue
+
+		var/num_slain = 0
+		if (istype(potential_rod, /obj/item/nullrod))
+			var/obj/item/nullrod/actual_rod = potential_rod
+			num_slain = LAZYLEN(actual_rod.cultists_slain)
+
+		var/displayed_message = "[potential_rod] glows an unholy red and begins to transform..."
+		if(num_slain && GET_ATOM_BLOOD_DNA_LENGTH(potential_rod))
+			displayed_message += " The blood of [num_slain] fallen cultist[num_slain == 1 ? "":"s"] is absorbed into [potential_rod]!"
+
+		potential_rod.visible_message(span_cult_italic(displayed_message))
+		switch(num_slain)
+			if(0)
+				animate_spawn_sword(potential_rod, /obj/item/melee/cultblade/dagger)
+			if(1)
+				animate_spawn_sword(potential_rod, /obj/item/melee/cultblade)
+			else
+				animate_spawn_sword(potential_rod, /obj/item/melee/cultblade/halberd)
+		return TRUE
+
+	return FALSE
+
+/// Does an animation of a null rod transforming into a cult sword
+
+/obj/effect/rune/convert/proc/animate_spawn_sword(obj/item/former_rod, new_blade_typepath)
+	playsound(src, 'sound/effects/magic.ogg', 33, vary = TRUE, extrarange = SILENCED_SOUND_EXTRARANGE, frequency = 0.66)
+	former_rod.anchored = TRUE
+	former_rod.Shake()
+	animate(former_rod, alpha = 0, transform = matrix(former_rod.transform).Scale(0.01), time = 2 SECONDS, easing = BOUNCE_EASING, flags = ANIMATION_PARALLEL)
+	QDEL_IN(former_rod, 2 SECONDS)
+
+	var/obj/item/new_blade = new new_blade_typepath(loc)
+	var/matrix/blade_matrix_on_spawn = matrix(new_blade.transform)
+	new_blade.name = "converted [new_blade.name]"
+	new_blade.anchored = TRUE
+	new_blade.alpha = 0
+	new_blade.transform = matrix(new_blade.transform).Scale(0.01)
+	new_blade.Shake()
+	animate(new_blade, alpha = 255, transform = blade_matrix_on_spawn, time = 2 SECONDS, easing = BOUNCE_EASING, flags = ANIMATION_PARALLEL)
+	addtimer(VARSET_CALLBACK(new_blade, anchored, FALSE), 2 SECONDS)

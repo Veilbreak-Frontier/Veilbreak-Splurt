@@ -753,3 +753,10 @@ GLOBAL_LIST_EMPTY(conveyors_by_id)
 #undef CONVEYOR_BACKWARDS
 #undef CONVEYOR_OFF
 #undef CONVEYOR_FORWARD
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/conveyor/attack_hand(mob/user, list/modifiers)
+	. = ..()
+	if(.)
+		return
+	user.Move_Pulled(src)

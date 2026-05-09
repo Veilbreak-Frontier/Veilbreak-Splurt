@@ -381,3 +381,18 @@
 /turf/closed/wall/mineral/plastitanium/copyTurf(turf/copy_to_turf, copy_air = FALSE, flags = null)
 	. = ..()
 	copy_to_turf.transform = transform
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/turf/closed/wall/mineral/titanium/rust_turf()
+	if(HAS_TRAIT(src, TRAIT_RUSTY))
+		ChangeTurf(/turf/closed/wall/rust)
+		return
+	return ..()
+
+/////////////////////Plastitanium walls/////////////////////
+
+/turf/closed/wall/mineral/plastitanium/rust_turf()
+	if(HAS_TRAIT(src, TRAIT_RUSTY))
+		ChangeTurf(/turf/closed/wall/rust)
+		return
+	return ..()

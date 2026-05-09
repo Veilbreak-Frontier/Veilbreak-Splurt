@@ -94,7 +94,6 @@
 		return
 	deflate(FALSE)
 
-
 /obj/structure/inflatable/door
 	name = "inflatable door"
 	can_atmos_pass = ATMOS_PASS_DENSITY

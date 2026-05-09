@@ -103,3 +103,82 @@
 		affected_mob.adjust_brute_loss(10)
 		being_stealthy = FALSE
 // BUBBER EDIT END
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/disease/chronic_illness/stage_act(seconds_per_tick, times_fired)
+	. = ..()
+	if(!.)
+		return
+
+	switch(stage)
+		if(1)
+			carrier = FALSE // Go fuck yourself
+			being_stealthy = TRUE // BUBBER EDIT ADD
+		if(2)
+			if(SPT_PROB(0.5, seconds_per_tick))
+				to_chat(affected_mob, span_warning("You feel dizzy."))
+				affected_mob.adjust_confusion(6 SECONDS)
+				being_stealthy = FALSE // BUBBER EDIT ADD
+			if(SPT_PROB(0.5, seconds_per_tick))
+				to_chat(affected_mob, span_notice("You look at your hand. Your vision blurs."))
+				affected_mob.set_eye_blur_if_lower(10 SECONDS)
+				being_stealthy = FALSE // BUBBER EDIT ADD
+		if(3)
+			var/need_mob_update = FALSE
+			if(SPT_PROB(0.5, seconds_per_tick))
+				to_chat(affected_mob, span_danger("You feel a very sharp pain in your chest!"))
+				being_stealthy = FALSE // BUBBER EDIT ADD
+				if(prob(45))
+					affected_mob.vomit(VOMIT_CATEGORY_BLOOD, lost_nutrition = 20)
+			if(SPT_PROB(0.5, seconds_per_tick))
+				to_chat(affected_mob, span_userdanger("[pick("You feel your heart slowing...", "You relax and slow your heartbeat.")]"))
+				need_mob_update += affected_mob.adjust_stamina_loss(70, updating_stamina = FALSE)
+				being_stealthy = FALSE // BUBBER EDIT ADD
+			if(SPT_PROB(1, seconds_per_tick))
+				to_chat(affected_mob, span_danger("You feel a buzzing in your brain."))
+				SEND_SOUND(affected_mob, sound('sound/items/weapons/flash_ring.ogg'))
+				being_stealthy = FALSE // BUBBER EDIT ADD
+			if(SPT_PROB(0.5, seconds_per_tick))
+				need_mob_update += affected_mob.adjust_brute_loss(1, updating_health = FALSE)
+			if(need_mob_update)
+				affected_mob.updatehealth()
+		if(4)
+			var/need_mob_update = FALSE
+			if(prob(30))
+				affected_mob.playsound_local(affected_mob, 'sound/effects/singlebeat.ogg', 100, FALSE, use_reverb = FALSE)
+			if(SPT_PROB(1, seconds_per_tick))
+				to_chat(affected_mob, span_danger("You feel a gruesome pain in your chest!"))
+				if(prob(75))
+					affected_mob.vomit(VOMIT_CATEGORY_BLOOD, lost_nutrition = 45)
+			if(SPT_PROB(1, seconds_per_tick))
+				need_mob_update += affected_mob.adjust_stamina_loss(100, updating_stamina = FALSE)
+				affected_mob.visible_message(span_warning("[affected_mob] collapses!"))
+				if(prob(30))
+					to_chat(affected_mob, span_danger("Your vision blurs as you faint!"))
+					affected_mob.AdjustSleeping(1 SECONDS)
+			if(SPT_PROB(0.5, seconds_per_tick))
+				to_chat(affected_mob, span_danger("[pick("You feel as though your atoms are accelerating in place.", "You feel like you're being torn apart!")]"))
+				affected_mob.emote("scream")
+				need_mob_update += affected_mob.adjust_brute_loss(10, updating_health = FALSE)
+			if(need_mob_update)
+				affected_mob.updatehealth()
+		if(5)
+			switch(rand(1,2))
+				if(1)
+					to_chat(affected_mob, span_notice("You feel your atoms begin to realign. You're safe. For now."))
+					update_stage(1)
+				if(2)
+					to_chat(affected_mob, span_boldwarning("There is no place for you in this timeline."))
+					affected_mob.adjust_stamina_loss(100, forced = TRUE)
+					playsound(affected_mob.loc, 'sound/effects/magic/repulse.ogg', 100, FALSE)
+					affected_mob.emote("scream")
+					for(var/mob/living/viewers in viewers(3, affected_mob.loc))
+						viewers.flash_act()
+					new /obj/effect/decal/cleanable/plasma(affected_mob.loc)
+					new /obj/effect/decal/cleanable/ash(affected_mob.loc)
+					affected_mob.visible_message(span_warning("[affected_mob] is erased from the timeline!"), span_userdanger("You are ripped from the timeline!"))
+					affected_mob.investigate_log("has been dusted / deleted by [name].", INVESTIGATE_DEATHS)
+					affected_mob.ghostize(can_reenter_corpse = FALSE)
+					qdel(affected_mob)
+
+//BUBBER EDIT BEGIN - Costly warning if it sneaks through to stage four.

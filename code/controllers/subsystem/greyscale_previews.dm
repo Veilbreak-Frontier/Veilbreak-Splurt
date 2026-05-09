@@ -196,3 +196,51 @@ SUBSYSTEM_DEF(greyscale_previews)
 #ifdef CHECK_SPRITESHEET_ICON_VALIDITY
 	#undef CHECK_SPRITESHEET_ICON_VALIDITY
 #endif
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/controller/subsystem/greyscale_previews/proc/ExportMapPreviewsForType(filename, atom/atom_typepath, list/type_blacklist)
+	var/list/handled_types = list()
+	var/list/icons = list()
+	for(var/atom/atom_type as anything in typesof(atom_typepath))
+		if(type_blacklist && type_blacklist[atom_type])
+			continue
+		handled_types[atom_type] = TRUE
+		var/greyscale_config = atom_type::greyscale_config
+		var/greyscale_colors = atom_type::greyscale_colors
+		if(!greyscale_config || !greyscale_colors || atom_type::flags_1 & NO_NEW_GAGS_PREVIEW_1)
+			continue
+	#ifdef CHECK_SPRITESHEET_ICON_VALIDITY
+		var/icon/map_icon = icon(SSgreyscale.GetColoredIconByType(greyscale_config, greyscale_colors))
+		if((map_icon.Height() > 32) || (map_icon.Width() > 32)) // No large icons, use icon_preview and icon_preview_state instead.
+			stack_trace("GAGS configuration is trying to generate a map preview graphic for '[atom_type]', which has a large icon. This is not suppoorted; implement icon_preview instead.")
+			continue
+		if(!(atom_type::post_init_icon_state in map_icon.IconStates()))
+			stack_trace("GAGS configuration missing icon state needed to generate map preview graphic for '[atom_type]'. Make sure the right greyscale_config is set up.")
+			continue
+		map_icon = icon(map_icon, atom_type::post_init_icon_state)
+		icons["[atom_type]"] = map_icon
+	#else // will be updated to use iconforge's new .dmi spritesheet generation instead
+		var/icon/map_icon = icon(SSgreyscale.GetColoredIconByType(greyscale_config, greyscale_colors))
+		map_icon = icon(map_icon, atom_type::post_init_icon_state)
+		icons["[atom_type]"] = map_icon
+	#endif
+
+	var/icon/holder = icon('icons/testing/greyscale_error.dmi')
+	for(var/state in icons)
+		holder.Insert(icons[state], state)
+
+	var/filepath = "icons/map_icons/[filename].dmi"
+#ifdef UNIT_TESTS
+	var/old_md5 = rustg_hash_file(RUSTG_HASH_MD5, filepath)
+#endif
+	fcopy(holder, filepath)
+#ifdef UNIT_TESTS
+	var/new_md5 = rustg_hash_file(RUSTG_HASH_MD5, filepath)
+	if(old_md5 != new_md5)
+		stack_trace("Generated map icons were different than what is currently saved. If you see this in a CI run it means you need to run the game once through initialization and commit the resulting files in 'icons/map_icons/'")
+#endif
+	return handled_types
+
+#ifdef CHECK_SPRITESHEET_ICON_VALIDITY
+	#undef CHECK_SPRITESHEET_ICON_VALIDITY
+#endif

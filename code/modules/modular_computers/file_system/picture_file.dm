@@ -35,3 +35,10 @@
 	temp.stored_picture = stored_picture
 	temp.picture_name = picture_name
 	return temp
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/computer_file/picture/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
+	. = ..()
+	assign_path()
+
+/// Assigns an asset path to the stored image, for use in the UI.

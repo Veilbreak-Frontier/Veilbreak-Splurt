@@ -328,3 +328,23 @@
 
 #undef AUTOFIRE_MOUSEUP
 #undef AUTOFIRE_MOUSEDOWN
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/component/automatic_fire/proc/stop_autofiring(datum/source, atom/object, turf/location, control, params)
+	SIGNAL_HANDLER
+	if(autofire_stat != AUTOFIRE_STAT_FIRING)
+		return
+	STOP_PROCESSING(SSprojectiles, src)
+	autofire_stat = AUTOFIRE_STAT_ALERT
+	if(clicker)
+		clicker.mouse_override_icon = null
+		clicker.mouse_pointer_icon = clicker.mouse_override_icon
+		UnregisterSignal(clicker, COMSIG_CLIENT_MOUSEDRAG)
+	if(!QDELETED(shooter))
+		UnregisterSignal(shooter, COMSIG_MOB_SWAP_HANDS)
+	target = null
+	target_loc = null
+	mouse_parameters = null
+
+	if(autofire_sound_loop)
+		autofire_sound_loop.stop()

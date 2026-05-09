@@ -620,3 +620,23 @@ GLOBAL_LIST_EMPTY(virtual_pets_list)
 #undef PET_STATE_HAPPY
 #undef PET_STATE_NEUTRAL
 #undef MAX_UPDATE_LENGTH
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/computer_file/program/virtual_pet/on_install()
+	. = ..()
+	profile_picture = getFlatIcon(image(icon = 'icons/ui/virtualpet/pet_state.dmi', icon_state = "pet_preview"))
+	GLOB.virtual_pets_list += src
+	pet = new pet_type(computer)
+	pet.forceMove(computer)
+	pet.AddComponent(/datum/component/leash, computer, 9, force_teleport_out_effect = /obj/effect/temp_visual/guardian/phase/out)
+	RegisterSignal(pet, COMSIG_QDELETING, PROC_REF(remove_pet))
+	RegisterSignal(pet, COMSIG_ATOM_UPDATE_OVERLAYS, PROC_REF(on_overlays_updated)) //hologramic hat management
+	RegisterSignal(pet, COMSIG_ATOM_DIR_CHANGE, PROC_REF(on_change_dir))
+	RegisterSignal(pet, COMSIG_MOVABLE_MOVED, PROC_REF(after_pet_move))
+	RegisterSignal(pet, COMSIG_MOB_ATE, PROC_REF(after_pet_eat)) // WE ATEEE
+	RegisterSignal(pet, COMSIG_ATOM_PRE_CLEAN, PROC_REF(pet_pre_clean))
+	RegisterSignal(pet, COMSIG_LIVING_DEATH, PROC_REF(on_death))
+	RegisterSignal(pet, COMSIG_COMPONENT_CLEAN_ACT, PROC_REF(post_cleaned))
+	RegisterSignal(pet, COMSIG_AI_BLACKBOARD_KEY_SET(BB_NEARBY_PLAYMATE), PROC_REF(on_playmate_find))
+	RegisterSignal(computer, COMSIG_ATOM_ENTERED, PROC_REF(on_pet_entered))
+	RegisterSignal(computer, COMSIG_ATOM_EXITED, PROC_REF(on_pet_exit))

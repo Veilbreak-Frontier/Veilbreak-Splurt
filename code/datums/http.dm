@@ -101,3 +101,18 @@
 	.["errored"] = errored
 	.["error"] = error
 	return .
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/http_request/proc/into_response()
+	var/datum/http_response/R = new()
+
+	try
+		var/list/L = json_decode(_raw_response)
+		R.status_code = L["status_code"]
+		R.headers = L["headers"]
+		R.body = L["body"]
+	catch
+		R.errored = TRUE
+		R.error = _raw_response
+
+	return R

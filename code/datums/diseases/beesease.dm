@@ -39,3 +39,31 @@
 				affected_mob.visible_message(span_danger("[affected_mob] coughs up a swarm of bees!"), \
 													span_userdanger("You cough up a swarm of bees!"))
 				new /mob/living/basic/bee(affected_mob.loc)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/disease/beesease/stage_act(seconds_per_tick, times_fired)
+	. = ..()
+	if(!.)
+		return
+
+	switch(stage)
+		if(2) //also changes say, see say.dm
+			if(SPT_PROB(1, seconds_per_tick))
+				to_chat(affected_mob, span_notice("You taste honey in your mouth."))
+		if(3)
+			if(SPT_PROB(5, seconds_per_tick))
+				to_chat(affected_mob, span_notice("Your stomach rumbles."))
+			if(SPT_PROB(1, seconds_per_tick))
+				to_chat(affected_mob, span_danger("Your stomach stings painfully."))
+				if(prob(20))
+					affected_mob.adjust_tox_loss(2)
+		if(4)
+			if(SPT_PROB(5, seconds_per_tick))
+				affected_mob.visible_message(span_danger("[affected_mob] buzzes."), \
+												span_userdanger("Your stomach buzzes violently!"))
+			if(SPT_PROB(2.5, seconds_per_tick))
+				to_chat(affected_mob, span_danger("You feel something moving in your throat."))
+			if(SPT_PROB(0.5, seconds_per_tick))
+				affected_mob.visible_message(span_danger("[affected_mob] coughs up a swarm of bees!"), \
+													span_userdanger("You cough up a swarm of bees!"))
+				new /mob/living/basic/bee(affected_mob.loc)

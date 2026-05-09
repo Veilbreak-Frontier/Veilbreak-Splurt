@@ -937,3 +937,163 @@ GLOBAL_LIST_INIT(canvas_dimensions, init_canvas_dimensions())
 	current_color = chosen_color
 
 #undef AVAILABLE_PALETTE_SPACE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/structure/easel/attackby(obj/item/I, mob/user, list/modifiers, list/attack_modifiers)
+	if(istype(I, /obj/item/canvas))
+		var/obj/item/canvas/canvas = I
+		user.transfer_item_to_turf(canvas, get_turf(src), silent = FALSE)
+		painting = canvas
+		canvas.layer = layer+0.1
+		user.visible_message(span_notice("[user] puts \the [canvas] on \the [src]."),span_notice("You place \the [canvas] on \the [src]."))
+	else
+		return ..()
+
+
+//Stick to the easel like glue
+
+/obj/item/canvas/proc/reset_grid()
+	grid = new/list(width,height)
+	for(var/x in 1 to width)
+		for(var/y in 1 to height)
+			grid[x][y] = canvas_color
+
+/obj/item/canvas/ui_status(mob/user, datum/ui_state/state)
+	if(state == GLOB.default_state || !state)
+		return ..()
+	//Skip the can_interact() check from atom/ui_status() and let them zoom in/out!
+	var/src_object = ui_host(user)
+	return state.can_use_topic(src_object, user)
+
+/obj/item/canvas/attackby(obj/item/I, mob/living/user, list/modifiers, list/attack_modifiers)
+	if(!user.combat_mode)
+		ui_interact(user)
+	else
+		return ..()
+
+/obj/item/canvas/ui_close(mob/user)
+	. = ..()
+	LAZYREMOVE(zoom_by_observer, user.key)
+
+/obj/item/canvas/proc/canvas_fill(x, y, new_color)
+	var/prev_color = grid[x][y]
+	//If the colors are the same, don't do anything.
+	if(prev_color == new_color)
+		return FALSE
+
+	//The queue for coordinates to the right of the current line
+	var/list/queue_right = list()
+	//Inversely for those to our left
+	var/list/queue_left = list()
+	//Whether we're currently checking the right or left queue.
+	var/go_right = TRUE
+
+	//The current coordinates. The only reason this is outside the loop
+	//is because we first go up, then reset our vertical position to just below
+	//the starting position and go down from there.
+	var/list/coords = list(x, y)
+
+	//Basically, the way it works is that each cycle we first go up, then down until we
+	//either reach the vertical borders of the raster or find a pixel that is not of the color we want
+	//to flood. As we do this, we try to queue a minimum of coordinates to our
+	//left and right to use for future cycles, moving horizontally in one direction until there are no
+	//more queued coordinates for that dir. Then we turn around and repeat
+	//until both left and right queues are completely empty.
+	while(coords)
+		//The current vertical line, the right and the left ones.
+		var/list/curr_line = grid[x]
+		var/list/right_line = x < width ? grid[x+1] : null
+		var/list/left_line = x > 1 ? grid[x-1] : null
+		//the queue we're on, depending on direction
+		var/list/curr_queue = go_right ? queue_right : queue_left
+		//Instead of queueing every point to our left and right that shares our prevous color,
+		//Causing a lot of empty cycles, we only queue an extremity of a vertical segment
+		//delimited by pixels of other colors or the y boundaries of the raster. To do this,
+		//we need to track where the segment (called line for simplicity) starts (or ends).
+		var/r_line_start
+		var/l_line_start
+
+		//go up first (y = 1 is the upper border is)
+		while(y >= 1 && curr_line[y] == prev_color)
+			var/return_flags = canvas_scan_step(x, y, queue_left, queue_right, left_line, right_line, l_line_start, r_line_start, prev_color)
+			if(return_flags & CANVAS_FILL_R_MATCH)
+				r_line_start = y
+			else
+				r_line_start = null
+			if(return_flags & CANVAS_FILL_L_MATCH)
+				l_line_start = y
+			else
+				l_line_start = null
+			curr_line[y] = new_color
+			curr_queue -= CANVAS_COORD(x, y) //remove it from the queue if possible.
+			y--
+
+		//Any unqueued coordinate is queued and cleared before the next half of the cycle
+		QUEUE_CANVAS_COORD(x + 1, r_line_start, queue_right)
+		QUEUE_CANVAS_COORD(x - 1, l_line_start, queue_left)
+		r_line_start = l_line_start = null
+
+		//set y to the pixel immediately below the starting y
+		y = coords[2] + 1
+
+		//then go down (y = height is the bottom border)
+		while(y <= height && curr_line[y] == prev_color)
+			var/return_flags = canvas_scan_step(x, y, queue_left, queue_right, left_line, right_line, l_line_start, r_line_start, prev_color)
+			if(!(return_flags & CANVAS_FILL_R_MATCH))
+				r_line_start = null
+			else if(!r_line_start)
+				r_line_start = y
+			if(!(return_flags & CANVAS_FILL_L_MATCH))
+				l_line_start = null
+			else if(!l_line_start)
+				l_line_start = y
+			curr_line[y] = new_color
+			curr_queue -= CANVAS_COORD(x, y)
+			y++
+
+		QUEUE_CANVAS_COORD(x + 1, r_line_start, queue_right)
+		QUEUE_CANVAS_COORD(x - 1, l_line_start, queue_left)
+
+		//Pick the next set of coords from the queue (and change direction if necessary)
+		if(!length(curr_queue))
+			var/list/other_queue = go_right ? queue_left : queue_right
+			coords = other_queue[other_queue[1]]
+			other_queue.Cut(1, 2)
+			go_right = !go_right
+		else
+			coords = curr_queue[curr_queue[1]]
+			curr_queue.Cut(1, 2)
+
+		x = coords?[1]
+		y = coords?[2]
+
+	return TRUE
+
+/proc/canvas_scan_step(x, y, list/queue_left, list/queue_right, list/left_line, list/right_line, left_pos, right_pos, prev_color)
+	if(left_line)
+		if(left_line[y] == prev_color)
+			. += CANVAS_FILL_L_MATCH
+		else
+			QUEUE_CANVAS_COORD(x - 1, left_pos, queue_left)
+
+	if(!right_line)
+		return
+
+	if(right_line[y] == prev_color)
+		. += CANVAS_FILL_R_MATCH
+	else
+		QUEUE_CANVAS_COORD(x + 1, right_pos, queue_right)
+
+#undef CANVAS_FILL_R_MATCH
+#undef CANVAS_FILL_L_MATCH
+#undef CANVAS_COORD
+#undef QUEUE_CANVAS_COORD
+
+/obj/structure/sign/painting/attackby(obj/item/I, mob/user, list/modifiers, list/attack_modifiers)
+	if(!current_canvas && istype(I, /obj/item/canvas))
+		frame_canvas(user,I)
+	else if(current_canvas && current_canvas.painting_metadata.title == initial(current_canvas.painting_metadata.title) && istype(I,/obj/item/pen))
+		if(try_rename(user))
+			SStgui.update_uis(src)
+	else
+		return ..()

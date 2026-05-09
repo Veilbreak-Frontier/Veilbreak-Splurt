@@ -348,3 +348,9 @@
 	name = "Scrubs, MD"
 	req_one_access = list(ACCESS_ROBOTICS, ACCESS_JANITOR, ACCESS_MEDICAL)
 	bot_mode_flags = ~(BOT_MODE_ON | BOT_MODE_REMOTE_ENABLED)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/bot/cleanbot/proc/apply_custom_bucket(obj/item/custom_bucket)
+	if(!isnull(build_bucket))
+		QDEL_NULL(build_bucket)
+	custom_bucket.forceMove(src)

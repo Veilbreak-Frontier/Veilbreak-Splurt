@@ -48,3 +48,16 @@
 	if(QDELETED(src))
 		return
 	handle_organs(seconds_per_tick)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/carbon/alien/Life(seconds_per_tick = SSMOBS_DT, times_fired)
+	. = ..()
+	if(!.) //dead or deleted
+		return
+	findQueen()
+
+/mob/living/carbon/alien/adult/Life(seconds_per_tick, times_fired)
+	. = ..()
+	if(QDELETED(src))
+		return
+	handle_organs(seconds_per_tick, times_fired)

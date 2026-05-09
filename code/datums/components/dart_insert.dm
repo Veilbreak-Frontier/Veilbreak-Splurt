@@ -155,3 +155,8 @@
 	if(var_modifiers["embedding"])
 		projectile.set_embed(initial(projectile.embed_type))
 	var_modifiers.Cut()
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/component/dart_insert/proc/on_reskin(datum/source, mob/user, skin)
+	SIGNAL_HANDLER
+	SEND_SIGNAL(parent, COMSIG_DART_INSERT_PARENT_RESKINNED)

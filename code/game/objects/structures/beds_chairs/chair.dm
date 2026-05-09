@@ -763,3 +763,12 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 			vision_distance = COMBAT_MESSAGE_RANGE,
 		)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/structure/chair/stool/bar/post_buckle_mob(mob/living/M)
+	M.pixel_y += 4
+
+/obj/structure/chair/stool/bar/post_unbuckle_mob(mob/living/M)
+	M.pixel_y -= 4
+
+MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)

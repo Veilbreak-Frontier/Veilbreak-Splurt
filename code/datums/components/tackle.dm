@@ -704,3 +704,53 @@
 	resetTackle()
 
 #undef MAX_TABLE_MESSES
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/component/tackler/on_source_add(source, stamina_cost = 25, base_knockdown = 1 SECONDS, range = 4, speed = 1, skill_mod = 0, min_distance = 0, silent_gain = FALSE)
+	LAZYSET(tackle_source_params, source, list(
+		"stamina_cost" = stamina_cost,
+		"base_knockdown" = base_knockdown,
+		"range" = range,
+		"speed" = speed,
+		"skill_mod" = skill_mod,
+		"min_distance" = min_distance,
+	))
+	. = ..()
+	refresh_tackle_stats()
+
+/datum/component/tackler/on_source_remove(source)
+	LAZYREMOVE(tackle_source_params, source)
+	. = ..()
+	if(!QDELETED(src))
+		refresh_tackle_stats()
+
+/// Gloves take priority over the warfighter tackler power; everything else uses first registered source order.
+
+/datum/component/tackler/proc/pick_active_tackle_params()
+	if(!LAZYLEN(sources))
+		return null
+	for(var/tackle_source in sources)
+		if(resolve_tackle_gloves(tackle_source))
+			return tackle_source_params[tackle_source]
+	for(var/tackle_source in sources)
+		if(istype(tackle_source, /datum/power/warfighter/tackler) && !istype(tackle_source, /datum/power/warfighter/tackler/greater_tackler))
+			return tackle_source_params[tackle_source]
+	return tackle_source_params[sources[1]]
+
+/datum/component/tackler/proc/resolve_tackle_gloves(source)
+	if(istype(source, /obj/item/clothing/gloves/tackler))
+		return source
+	if(istext(source))
+		return locate(source)
+	return null
+
+/datum/component/tackler/proc/refresh_tackle_stats()
+	var/list/params = pick_active_tackle_params()
+	if(!params)
+		return
+	stamina_cost = params["stamina_cost"]
+	base_knockdown = params["base_knockdown"]
+	range = params["range"]
+	speed = params["speed"]
+	skill_mod = params["skill_mod"]
+	min_distance = params["min_distance"]

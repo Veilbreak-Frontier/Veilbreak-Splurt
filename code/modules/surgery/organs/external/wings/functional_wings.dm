@@ -251,3 +251,10 @@
 
 #undef FUNCTIONAL_WING_FORCE
 #undef FUNCTIONAL_WING_STABILIZATION
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/wings/functional/on_life(seconds_per_tick, times_fired)
+	. = ..()
+	handle_flight(owner)
+
+///Called on_life(). Handle flight code and check if we're still flying

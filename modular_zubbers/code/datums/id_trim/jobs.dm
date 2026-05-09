@@ -37,9 +37,10 @@
 	honorific_positions = HONORIFIC_POSITION_FIRST | HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_FIRST_FULL | HONORIFIC_POSITION_NONE
 	return ..()
 
+/* SPLURT REMOVAL
 /datum/id_trim/job/nanotrasen_consultant
 	job = /datum/job/nanotrasen_consultant
-	honorifics = list("Advisor", "Consultant", "Representative", "Rep.", "Interest Officer", "Liaison")
+	honorifics = list("Advisor", "Consultant", "Representative", "Rep.", "Interest Officer", "Liason")
 	honorific_positions = HONORIFIC_POSITION_FIRST | HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_FIRST_FULL | HONORIFIC_POSITION_NONE
 
 /datum/id_trim/job/captain/New()
@@ -71,11 +72,6 @@
 	honorifics += list("Analyst", "Doctor", "Dr.")
 	honorific_positions = HONORIFIC_POSITION_FIRST | HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_FIRST_FULL | HONORIFIC_POSITION_NONE
 	return ..()
-
-/datum/id_trim/job/security_medic
-	job = /datum/job/security_medic
-	honorifics = list("Line Medic", "Squad Physician", "Medical Specialist", "Support Specialist", "Doc.")
-	honorific_positions = HONORIFIC_POSITION_FIRST | HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_FIRST_FULL | HONORIFIC_POSITION_NONE
 
 /datum/id_trim/job/security_officer/New()
 	job = /datum/job/security_officer
@@ -153,3 +149,4 @@
 	job = /datum/job/coroner
 	honorifics = list("Coroner", "Medical Examiner", "Medical Investigator", "Forensic Pathologist", "Funeral Director", "Mortician", "Undertaker")
 	honorific_positions = HONORIFIC_POSITION_FIRST | HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_FIRST_FULL | HONORIFIC_POSITION_NONE
+*/

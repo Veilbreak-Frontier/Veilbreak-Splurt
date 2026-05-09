@@ -1230,3 +1230,63 @@ SUBSYSTEM_DEF(shuttle)
 #undef MAX_TRANSIT_REQUEST_RETRIES
 #undef MAX_TRANSIT_TILE_COUNT
 #undef SOFT_TRANSIT_RESERVATION_THRESHOLD
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/controller/subsystem/shuttle/proc/centcom_recall(old_timer, admiral_message)
+	if(emergency.mode != SHUTTLE_CALL || emergency.timer != old_timer)
+		return
+	emergency.cancel()
+
+	if(!admiral_message)
+		admiral_message = pick(GLOB.admiral_messages)
+	var/intercepttext = "<font size = 3><b>Nanotrasen Update</b>: Request For Shuttle.</font><hr>\
+						To whom it may concern:<br><br>\
+						We have taken note of the situation upon [station_name()] and have come to the \
+						conclusion that it does not warrant the abandonment of the station.<br>\
+						If you do not agree with our opinion we suggest that you open a direct \
+						line with us and explain the nature of your crisis.<br><br>\
+						<i>This message has been automatically generated based upon readings from long \
+						range diagnostic tools. To assure the quality of your request every finalized report \
+						is reviewed by an on-call rear admiral.<br>\
+						<b>Rear Admiral's Notes:</b> \
+						[admiral_message]"
+	print_command_report(intercepttext, announce = TRUE)
+
+// Called when an emergency shuttle mobile docking port is
+// destroyed, which will only happen with admin intervention
+
+/datum/controller/subsystem/shuttle/proc/cancelEvac(mob/user)
+	if(canRecall())
+		emergency.cancel(get_area(user))
+		log_shuttle("[key_name(user)] has recalled the shuttle.")
+		message_admins("[ADMIN_LOOKUPFLW(user)] has recalled the shuttle.")
+		deadchat_broadcast(" has recalled the shuttle from [span_name("[get_area_name(user, TRUE)]")].", span_name("[user.real_name]"), user, message_type=DEADCHAT_ANNOUNCEMENT)
+		return 1
+
+/datum/controller/subsystem/shuttle/proc/canRecall()
+	if(!emergency || emergency.mode != SHUTTLE_CALL || admin_emergency_no_recall || emergency_no_recall)
+		return
+	var/security_num = SSsecurity_level.get_current_level_as_number()
+	switch(security_num)
+		if(SEC_LEVEL_GREEN)
+			if(emergency.timeLeft(1) < emergency_call_time)
+				return
+		if(SEC_LEVEL_BLUE)
+			//if(emergency.timeLeft(1) < emergency_call_time * 0.5) ORIGINAL
+			if(emergency.timeLeft(1) < emergency_call_time * 0.6) //SKYRAT EDIT CHANGE - ALERTS
+				return
+		//SKYRAT EDIT ADDITION BEGIN - ALERTS
+		if(SEC_LEVEL_ORANGE)
+			if(emergency.timeLeft(1) < emergency_call_time * 0.4)
+				return
+		if(SEC_LEVEL_VIOLET)
+			if(emergency.timeLeft(1) < emergency_call_time * 0.4)
+				return
+		if(SEC_LEVEL_AMBER)
+			if(emergency.timeLeft(1) < emergency_call_time * 0.4)
+				return
+		//SKYRAT EDIT ADDITION END
+		else
+			if(emergency.timeLeft(1) < emergency_call_time * 0.25)
+				return
+	return 1

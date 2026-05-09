@@ -840,3 +840,9 @@ GLOBAL_LIST_INIT(command_strings, list(
 	return
 
 #undef SENTIENT_BOT_RESET_TIMER
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/bot/proc/attempt_access(mob/bot, obj/door_attempt)
+	SIGNAL_HANDLER
+
+	return (door_attempt.check_access(access_card) ? ACCESS_ALLOWED : ACCESS_DISALLOWED)

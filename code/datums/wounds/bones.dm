@@ -569,3 +569,49 @@
 	else if(limb.body_zone == BODY_ZONE_CHEST && CAN_HAVE_BLOOD(victim))
 		. += "Ribcage Trauma Detected: Further trauma to chest is likely to worsen internal bleeding until bone is repaired."
 	. += "</div>"
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/wound/blunt/bone/remove_wound(ignore_limb, replaced)
+	limp_slowdown = 0
+	limp_chance = 0
+	QDEL_NULL(active_trauma)
+	return ..()
+
+/datum/wound/blunt/bone/handle_process(seconds_per_tick, times_fired)
+	. = ..()
+
+	if (!victim || HAS_TRAIT(victim, TRAIT_STASIS))
+		return
+
+	if(limb.body_zone == BODY_ZONE_HEAD && brain_trauma_group && world.time > next_trauma_cycle)
+		if(active_trauma)
+			QDEL_NULL(active_trauma)
+		else
+			active_trauma = victim.gain_trauma_type(brain_trauma_group, TRAUMA_RESILIENCE_WOUND)
+		next_trauma_cycle = world.time + (rand(100-WOUND_BONE_HEAD_TIME_VARIANCE, 100+WOUND_BONE_HEAD_TIME_VARIANCE) * 0.01 * trauma_cycle_cooldown)
+
+	var/is_bone_limb = ((limb.biological_state & BIO_BONE) && !(limb.biological_state & BIO_FLESH))
+	if(!gelled || (!taped && !is_bone_limb))
+		return
+
+	regen_ticks_current++
+	if(victim.body_position == LYING_DOWN)
+		if(SPT_PROB(30, seconds_per_tick))
+			regen_ticks_current += 1
+		if(victim.IsSleeping() && SPT_PROB(30, seconds_per_tick))
+			regen_ticks_current += 1
+
+	if(!is_bone_limb && SPT_PROB(severity * 1.5, seconds_per_tick))
+		victim.take_bodypart_damage(rand(1, severity * 2), wound_bonus=CANT_WOUND)
+		victim.adjust_stamina_loss(rand(2, severity * 2.5))
+		if(prob(33))
+			to_chat(victim, span_danger("You feel a sharp pain in your body as your bones are reforming!"))
+
+	if(regen_ticks_current > regen_ticks_needed)
+		if(!victim || !limb)
+			qdel(src)
+			return
+		to_chat(victim, span_green("Your [limb.plaintext_zone] has recovered from its [LOWER_TEXT(undiagnosed_name || name)]!"))
+		remove_wound()
+
+/// If we're a human who's punching something with a broken arm, we might hurt ourselves doing so

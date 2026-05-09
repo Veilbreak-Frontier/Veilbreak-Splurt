@@ -3049,3 +3049,626 @@
 
 #undef ALCOHOL_EXPONENT
 #undef ALCOHOL_THRESHOLD_MODIFIER
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/reagent/consumable/ethanol/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.get_drunk_amount() < volume * boozepwr * ALCOHOL_THRESHOLD_MODIFIER || boozepwr < 0)
+		var/booze_power = boozepwr
+		if(HAS_TRAIT(drinker, TRAIT_ALCOHOL_TOLERANCE)) // we're an accomplished drinker
+			booze_power *= 0.7
+		if(HAS_TRAIT(drinker, TRAIT_LIGHT_DRINKER))
+			booze_power *= 1.33 // SKYRAT EDIT CHANGE - ALCOHOL_PROCESSING - ORIGINAL: booze_power *= 2
+
+		// water will dilute alcohol effects
+		var/total_water_volume = 0
+		var/total_alcohol_volume = 0
+		for(var/datum/reagent/water/sobriety in drinker.reagents.reagent_list)
+			total_water_volume += sobriety.volume
+
+		for(var/datum/reagent/consumable/ethanol/alcohol in drinker.reagents.reagent_list)
+			total_alcohol_volume += alcohol.volume
+
+		var/combined_dilute_volume = total_alcohol_volume + total_water_volume
+		if(combined_dilute_volume) // safety check to prevent division by zero
+			booze_power *= (total_alcohol_volume / combined_dilute_volume)
+
+		// Volume, power, and server alcohol rate effect how quickly one gets drunk
+		drinker.adjust_drunk_effect(booze_power * ALCOHOL_RATE * REM * seconds_per_tick) // SKYRAT EDIT CHANGE - ALCOHOL_PROCESSING - ORIGINAL: (sqrt(volume) * booze_power * ALCOHOL_RATE * REM * seconds_per_tick)
+		if(boozepwr > 0)
+			var/obj/item/organ/liver/liver = drinker.get_organ_slot(ORGAN_SLOT_LIVER)
+			var/heavy_drinker_multiplier = (HAS_TRAIT(drinker, TRAIT_HEAVY_DRINKER) ? 0.5 : 1)
+			if (istype(liver))
+				if(liver.apply_organ_damage(((max(sqrt(volume) * (boozepwr ** ALCOHOL_EXPONENT) * liver.alcohol_tolerance * heavy_drinker_multiplier * seconds_per_tick, 0))/300))) // SKYRAT EDIT CHANGE - ALCOHOL_PROCESSING - ORIGINAL: if((((max(sqrt(volume) * (boozepwr ** ALCOHOL_EXPONENT) * liver.alcohol_tolerance * heavy_drinker_multiplier * seconds_per_tick, 0))/150)))
+					return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/beer/green/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.color != color)
+		drinker.add_atom_colour(color, TEMPORARY_COLOUR_PRIORITY)
+
+/datum/reagent/consumable/ethanol/beer/green/overdose_process(mob/living/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	metabolization_rate = 1 * REAGENTS_METABOLISM
+
+	if(!ishuman(affected_mob))
+		return
+
+	var/mob/living/carbon/human/affected_human = affected_mob
+	if(HAS_TRAIT(affected_human, TRAIT_USES_SKINTONES))
+		affected_human.skin_tone = "green"
+	else if(HAS_TRAIT(affected_human, TRAIT_MUTANT_COLORS) && !HAS_TRAIT(affected_human, TRAIT_FIXED_MUTANT_COLORS)) //Code stolen from spraytan overdose
+		affected_human.dna.features[FEATURE_MUTANT_COLOR] = "#a8e61d"
+	affected_human.update_body(is_creating = TRUE)
+
+/datum/reagent/consumable/ethanol/kahlua/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.set_dizzy_if_lower(10 SECONDS * REM * seconds_per_tick)
+	drinker.adjust_drowsiness(-6 SECONDS * REM * seconds_per_tick)
+	drinker.AdjustSleeping(-4 SECONDS * REM * seconds_per_tick)
+	if(!HAS_TRAIT(drinker, TRAIT_ALCOHOL_TOLERANCE))
+		drinker.set_jitter_if_lower(10 SECONDS)
+
+/datum/reagent/consumable/ethanol/whiskey/candycorn/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(SPT_PROB(5, seconds_per_tick))
+		drinker.adjust_hallucinations(4 SECONDS * REM * seconds_per_tick)
+
+/datum/reagent/consumable/ethanol/thirteenloko/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_drowsiness(-14 SECONDS * REM * seconds_per_tick)
+	drinker.AdjustSleeping(-4 SECONDS * REM * seconds_per_tick)
+	drinker.adjust_bodytemperature(-5 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, drinker.get_body_temp_normal())
+	if(!HAS_TRAIT(drinker, TRAIT_ALCOHOL_TOLERANCE))
+		drinker.set_jitter_if_lower(10 SECONDS)
+
+/datum/reagent/consumable/ethanol/thirteenloko/overdose_start(mob/living/drinker)
+	. = ..()
+	to_chat(drinker, span_userdanger("Your entire body violently jitters as you start to feel queasy. You really shouldn't have drank all of that [name]!"))
+	drinker.set_jitter_if_lower(40 SECONDS)
+	drinker.Stun(1.5 SECONDS)
+
+/datum/reagent/consumable/ethanol/thirteenloko/overdose_process(mob/living/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(SPT_PROB(3.5, seconds_per_tick) && iscarbon(drinker))
+		var/obj/item/held_item = drinker.get_active_held_item()
+		if(held_item)
+			drinker.dropItemToGround(held_item)
+			to_chat(drinker, span_notice("Your hands jitter and you drop what you were holding!"))
+			drinker.set_jitter_if_lower(20 SECONDS)
+
+	if(SPT_PROB(3.5, seconds_per_tick))
+		to_chat(drinker, span_notice("[pick("You have a really bad headache.", "Your eyes hurt.", "You find it hard to stay still.", "You feel your heart practically beating out of your chest.")]"))
+
+	if(SPT_PROB(2.5, seconds_per_tick) && iscarbon(drinker))
+		var/obj/item/organ/eyes/eyes = drinker.get_organ_slot(ORGAN_SLOT_EYES)
+		if(eyes && IS_ORGANIC_ORGAN(eyes)) // doesn't affect robotic eyes
+			if(drinker.is_blind())
+				eyes.Remove(drinker)
+				eyes.forceMove(get_turf(drinker))
+				to_chat(drinker, span_userdanger("You double over in pain as you feel your eyeballs liquify in your head!"))
+				drinker.emote("scream")
+				if(drinker.adjust_brute_loss(15 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype))
+					. = UPDATE_MOB_HEALTH
+			else
+				to_chat(drinker, span_userdanger("You scream in terror as you go blind!"))
+				if(eyes.apply_organ_damage(eyes.maxHealth))
+					. = UPDATE_MOB_HEALTH
+				drinker.emote("scream")
+
+	if(SPT_PROB(1.5, seconds_per_tick) && iscarbon(drinker))
+		drinker.visible_message(span_danger("[drinker] starts having a seizure!"), span_userdanger("You have a seizure!"))
+		if(drinker.Unconscious(10 SECONDS))
+			. = UPDATE_MOB_HEALTH
+		drinker.set_jitter_if_lower(700 SECONDS)
+
+	if(SPT_PROB(0.5, seconds_per_tick) && iscarbon(drinker))
+		drinker.apply_status_effect(/datum/status_effect/heart_attack)
+		to_chat(drinker, span_userdanger("You're pretty sure you just felt your heart stop for a second there.."))
+		drinker.playsound_local(drinker, 'sound/effects/singlebeat.ogg', 100, 0)
+
+/datum/reagent/consumable/ethanol/bilk/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.get_brute_loss() && SPT_PROB(5, seconds_per_tick))
+		if(drinker.heal_bodypart_damage(brute = 1 * REM * seconds_per_tick, updating_health = FALSE))
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/threemileisland/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.set_drugginess(100 SECONDS * REM * seconds_per_tick)
+
+/datum/reagent/consumable/ethanol/absinthe/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(SPT_PROB(5, seconds_per_tick) && !HAS_TRAIT(drinker, TRAIT_ALCOHOL_TOLERANCE))
+		drinker.adjust_hallucinations(8 SECONDS * REM * seconds_per_tick)
+
+/datum/reagent/consumable/ethanol/cuba_libre/on_mob_life(mob/living/carbon/cubano, seconds_per_tick, times_fired)
+	. = ..()
+	var/need_mob_update
+	if(cubano.mind && cubano.mind.has_antag_datum(/datum/antagonist/rev)) //Cuba Libre, the traditional drink of revolutions! Heals revolutionaries.
+		need_mob_update = cubano.adjust_brute_loss(-1 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update += cubano.adjust_fire_loss(-1 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update += cubano.adjust_tox_loss(-1 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype)
+		need_mob_update += cubano.adjust_oxy_loss(-5 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype, required_respiration_type = affected_respiration_type)
+	if(need_mob_update)
+		return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/screwdrivercocktail/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	var/obj/item/organ/liver/liver = drinker.get_organ_slot(ORGAN_SLOT_LIVER)
+	if(HAS_TRAIT(liver, TRAIT_ENGINEER_METABOLISM))
+		ADD_TRAIT(drinker, TRAIT_HALT_RADIATION_EFFECTS, "[type]")
+		if (HAS_TRAIT(drinker, TRAIT_IRRADIATED))
+			if(drinker.adjust_tox_loss(-2 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
+				return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/bloody_mary/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_blood_volume(3 * REM * seconds_per_tick, maximum = BLOOD_VOLUME_NORMAL) // Bloody Mary quickly restores blood loss.
+
+/datum/reagent/consumable/ethanol/tequila_sunrise/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	if(QDELETED(light_holder))
+		holder.del_reagent(type) //If we lost our light object somehow, remove the reagent
+	else if(light_holder.loc != drinker)
+		light_holder.forceMove(drinker)
+	return ..()
+
+/datum/reagent/consumable/ethanol/toxins_special/on_mob_life(mob/living/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_bodytemperature(15 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, 0, drinker.get_body_temp_normal() + 20) //310.15 is the normal bodytemp.
+
+/datum/reagent/consumable/ethanol/beepsky_smash/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.set_jitter_if_lower(4 SECONDS)
+	var/obj/item/organ/liver/liver = drinker.get_organ_slot(ORGAN_SLOT_LIVER)
+	// if you have a liver and that liver is an officer's liver
+	if(liver && HAS_TRAIT(liver, TRAIT_LAW_ENFORCEMENT_METABOLISM))
+		if(drinker.adjust_stamina_loss(-10 * REM * seconds_per_tick, updating_stamina = FALSE, required_biotype = affected_biotype))
+			. = UPDATE_MOB_HEALTH
+		if(SPT_PROB(10, seconds_per_tick))
+			drinker.cause_hallucination(get_random_valid_hallucination_subtype(/datum/hallucination/nearby_fake_item), name)
+		if(SPT_PROB(5, seconds_per_tick))
+			drinker.cause_hallucination(/datum/hallucination/stray_bullet, name)
+
+/datum/reagent/consumable/ethanol/beepsky_smash/overdose_start(mob/living/carbon/drinker)
+	. = ..()
+	var/obj/item/organ/liver/liver = drinker.get_organ_slot(ORGAN_SLOT_LIVER)
+	// if you don't have a liver, or your liver isn't an officer's liver
+	if(!liver || !HAS_TRAIT(liver, TRAIT_LAW_ENFORCEMENT_METABOLISM))
+		drinker.gain_trauma(/datum/brain_trauma/mild/phobia/security, TRAUMA_RESILIENCE_BASIC)
+
+/datum/reagent/consumable/ethanol/manly_dorf/on_mob_life(mob/living/carbon/dwarf, seconds_per_tick, times_fired)
+	. = ..()
+	if(dorf_mode)
+		var/need_mob_update
+		need_mob_update = dwarf.adjust_brute_loss(-2 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update += dwarf.adjust_fire_loss(-2 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+		if(need_mob_update)
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/manhattan_proj/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.set_drugginess(1 MINUTES * REM * seconds_per_tick)
+
+/datum/reagent/consumable/ethanol/antifreeze/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_bodytemperature(20 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, 0, drinker.get_body_temp_normal() + 20) //310.15 is the normal bodytemp.
+
+/datum/reagent/consumable/ethanol/barefoot/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(ishuman(drinker)) //Barefoot causes the imbiber to quickly regenerate brute trauma if they're not wearing shoes.
+		var/mob/living/carbon/human/unshoed = drinker
+		if(!unshoed.shoes)
+			if(unshoed.adjust_brute_loss(-3 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype))
+				return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/singulo/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(SPT_PROB(2.5, seconds_per_tick))
+		// 20u = 1x1, 45u = 2x2, 80u = 3x3
+		var/volume_to_radius = FLOOR(sqrt(volume/3), 1) - 1 // BUBBER EDIT CHANGE - Original: volume/5
+		var/suck_range = clamp(volume_to_radius, 0, 3)
+
+		if(!suck_range)
+			return ..()
+
+		var/turf/gravity_well_turf = get_turf(drinker)
+		goonchem_vortex(gravity_well_turf, 0, suck_range)
+		playsound(get_turf(drinker), 'sound/effects/supermatter.ogg', 150, TRUE)
+		drinker.add_filter("singulo_rays", 1, ray_filter)
+		animate(drinker.get_filter("singulo_rays"), offset = 10, time = 1.5 SECONDS, loop = -1)
+		addtimer(CALLBACK(drinker, TYPE_PROC_REF(/datum, remove_filter), "singulo_rays"), 1.5 SECONDS)
+		drinker.emote("burp")
+
+/datum/reagent/consumable/ethanol/sbiten/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_bodytemperature(50 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, 0, BODYTEMP_HEAT_DAMAGE_LIMIT) //310.15 is the normal bodytemp.
+
+/datum/reagent/consumable/ethanol/iced_beer/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_bodytemperature(-20 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, T0C) //310.15 is the normal bodytemp.
+
+/datum/reagent/consumable/ethanol/changelingsting/on_mob_life(mob/living/carbon/target, seconds_per_tick, times_fired)
+	. = ..()
+	var/datum/antagonist/changeling/changeling = IS_CHANGELING(target)
+	changeling?.adjust_chemicals(metabolization_rate * REM * seconds_per_tick)
+
+/datum/reagent/consumable/ethanol/syndicatebomb/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(SPT_PROB(2.5, seconds_per_tick))
+		playsound(get_turf(drinker), 'sound/effects/explosion/explosionfar.ogg', 100, TRUE)
+
+/datum/reagent/consumable/ethanol/bananahonk/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	var/obj/item/organ/liver/liver = drinker.get_organ_slot(ORGAN_SLOT_LIVER)
+	if((liver && HAS_TRAIT(liver, TRAIT_COMEDY_METABOLISM)) || is_simian(drinker))
+		if(drinker.heal_bodypart_damage(brute = 1 * REM * seconds_per_tick, burn = 1 * REM * seconds_per_tick, updating_health = FALSE))
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/silencer/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(ishuman(drinker) && HAS_MIND_TRAIT(drinker, TRAIT_MIMING))
+		drinker.set_silence_if_lower(MIMEDRINK_SILENCE_DURATION)
+		if(drinker.heal_bodypart_damage(brute = 1 * REM * seconds_per_tick, burn = 1 * REM * seconds_per_tick, updating_health = FALSE))
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/fetching_fizz/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	var/turf/drinker_turf = get_turf(drinker)
+	for(var/obj/item/stack/ore/ore in orange(3, drinker))
+		step_towards(ore, drinker_turf)
+
+//Another reference. Heals those in critical condition extremely quickly.
+
+/datum/reagent/consumable/ethanol/hearty_punch/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.health <= 0)
+		var/need_mob_update
+		need_mob_update = drinker.adjust_brute_loss(-3 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update += drinker.adjust_fire_loss(-3 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update += drinker.adjust_oxy_loss(-4 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype, required_respiration_type = affected_respiration_type)
+		need_mob_update += drinker.adjust_tox_loss(-3 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype)
+		if(need_mob_update)
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/atomicbomb/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.set_drugginess(100 SECONDS * REM * seconds_per_tick)
+	if(!HAS_TRAIT(drinker, TRAIT_ALCOHOL_TOLERANCE))
+		drinker.adjust_confusion(2 SECONDS * REM * seconds_per_tick)
+	drinker.set_dizzy_if_lower(20 SECONDS * REM * seconds_per_tick)
+	drinker.adjust_slurring(6 SECONDS * REM * seconds_per_tick)
+	switch(current_cycle)
+		if(52 to 201)
+			drinker.Sleeping(100 * REM * seconds_per_tick)
+		if(202 to INFINITY)
+			drinker.AdjustSleeping(4 SECONDS * REM * seconds_per_tick)
+			if(drinker.adjust_tox_loss(2 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
+				return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/gargle_blaster/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_dizzy(3 SECONDS * REM * seconds_per_tick)
+	switch(current_cycle)
+		if(16 to 46)
+			drinker.adjust_slurring(3 SECONDS * REM * seconds_per_tick)
+		if(46 to 56)
+			if(SPT_PROB(30, seconds_per_tick))
+				drinker.adjust_confusion(3 SECONDS * REM * seconds_per_tick)
+		if(56 to 201)
+			drinker.set_drugginess(110 SECONDS * REM * seconds_per_tick)
+		if(201 to INFINITY)
+			if(drinker.adjust_tox_loss(2 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
+				return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/neurotoxin/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.set_drugginess(100 SECONDS * REM * seconds_per_tick)
+	drinker.adjust_dizzy(4 SECONDS * REM * seconds_per_tick)
+	var/need_mob_update
+	need_mob_update = drinker.adjust_organ_loss(ORGAN_SLOT_BRAIN, 1 * REM * seconds_per_tick, 150, required_organ_flag = affected_organ_flags)
+	if(SPT_PROB(10, seconds_per_tick))
+		need_mob_update += drinker.adjust_stamina_loss(10 * REM * seconds_per_tick, updating_stamina = FALSE, required_biotype = affected_biotype)
+		drinker.drop_all_held_items()
+		to_chat(drinker, span_notice("You cant feel your hands!"))
+	if(current_cycle > 6)
+		if(SPT_PROB(10, seconds_per_tick))
+			var/paralyzed_limb = pick_paralyzed_limb()
+			ADD_TRAIT(drinker, paralyzed_limb, type)
+			need_mob_update += drinker.adjust_stamina_loss(10 * REM * seconds_per_tick, updating_stamina = FALSE, required_biotype = affected_biotype)
+		if(current_cycle > 31)
+			need_mob_update += drinker.adjust_organ_loss(ORGAN_SLOT_BRAIN, 2 * REM * seconds_per_tick, required_organ_flag = affected_organ_flags)
+			if(current_cycle > 51 && SPT_PROB(7.5, seconds_per_tick))
+				if(!drinker.undergoing_cardiac_arrest() && drinker.can_heartattack())
+					drinker.set_heartattack(TRUE)
+					if(drinker.stat == CONSCIOUS)
+						drinker.visible_message(span_userdanger("[drinker] clutches at [drinker.p_their()] chest as if [drinker.p_their()] heart stopped!"))
+	if(need_mob_update)
+		return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/hippies_delight/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.set_slurring_if_lower(1 SECONDS * REM * seconds_per_tick)
+
+	switch(current_cycle)
+		if(2 to 6)
+			drinker.set_dizzy_if_lower(20 SECONDS * REM * seconds_per_tick)
+			drinker.set_drugginess(1 MINUTES * REM * seconds_per_tick)
+			if(SPT_PROB(5, seconds_per_tick))
+				drinker.emote(pick("twitch","giggle"))
+		if(6 to 11)
+			drinker.set_jitter_if_lower(40 SECONDS * REM * seconds_per_tick)
+			drinker.set_dizzy_if_lower(40 SECONDS * REM * seconds_per_tick)
+			drinker.set_drugginess(1.5 MINUTES * REM * seconds_per_tick)
+			if(SPT_PROB(10, seconds_per_tick))
+				drinker.emote(pick("twitch","giggle"))
+		if (11 to 201)
+			drinker.set_jitter_if_lower(80 SECONDS * REM * seconds_per_tick)
+			drinker.set_dizzy_if_lower(80 SECONDS * REM * seconds_per_tick)
+			drinker.set_drugginess(2 MINUTES * REM * seconds_per_tick)
+			if(SPT_PROB(16, seconds_per_tick))
+				drinker.emote(pick("twitch","giggle"))
+		if(201 to INFINITY)
+			drinker.set_jitter_if_lower(120 SECONDS * REM * seconds_per_tick)
+			drinker.set_dizzy_if_lower(120 SECONDS * REM * seconds_per_tick)
+			drinker.set_drugginess(2.5 MINUTES * REM * seconds_per_tick)
+			if(SPT_PROB(23, seconds_per_tick))
+				drinker.emote(pick("twitch","giggle"))
+			if(SPT_PROB(16, seconds_per_tick))
+				if(drinker.adjust_tox_loss(2 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
+					return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/narsour/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_timed_status_effect(6 SECONDS * REM * seconds_per_tick, /datum/status_effect/speech/slurring/cult, max_duration = 6 SECONDS)
+	drinker.adjust_stutter_up_to(6 SECONDS * REM * seconds_per_tick, 6 SECONDS)
+
+/datum/reagent/consumable/ethanol/quadruple_sec/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	//Securidrink in line with the Screwdriver for engineers or Nothing for mimes
+	var/obj/item/organ/liver/liver = drinker.get_organ_slot(ORGAN_SLOT_LIVER)
+	if(liver && HAS_TRAIT(liver, TRAIT_LAW_ENFORCEMENT_METABOLISM))
+		if(drinker.heal_bodypart_damage(brute = 1 * REM * seconds_per_tick, burn = 1 * REM * seconds_per_tick, updating_health = FALSE))
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/quintuple_sec/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	//Securidrink in line with the Screwdriver for engineers or Nothing for mimes but STRONG..
+	var/obj/item/organ/liver/liver = drinker.get_organ_slot(ORGAN_SLOT_LIVER)
+	if(liver && HAS_TRAIT(liver, TRAIT_LAW_ENFORCEMENT_METABOLISM))
+		var/need_mob_update
+		need_mob_update = drinker.heal_bodypart_damage(2 * REM * seconds_per_tick, 2 * REM *  seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update += drinker.adjust_stamina_loss(-5 * REM * seconds_per_tick, updating_stamina = FALSE, required_biotype = affected_biotype)
+		if(need_mob_update)
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/bastion_bourbon/on_mob_life(mob/living/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.health > 0)
+		var/need_mob_update
+		need_mob_update = drinker.adjust_brute_loss(-1 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update += drinker.adjust_fire_loss(-1 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update += drinker.adjust_tox_loss(-0.5 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype)
+		need_mob_update += drinker.adjust_oxy_loss(-3 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype, required_respiration_type = affected_respiration_type)
+		need_mob_update += drinker.adjust_stamina_loss(-5 * REM * seconds_per_tick, updating_stamina = FALSE, required_biotype = affected_biotype)
+		if(need_mob_update)
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/squirt_cider/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.satiety += 5 * REM * seconds_per_tick //for context, vitamins give 15 satiety per second
+
+/datum/reagent/consumable/ethanol/sugar_rush/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.satiety -= 10 * REM * seconds_per_tick //junky as hell! a whole glass will keep you from being able to eat junk food
+
+/datum/reagent/consumable/ethanol/peppermint_patty/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.apply_status_effect(/datum/status_effect/throat_soothed)
+	drinker.adjust_bodytemperature(5 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, 0, drinker.get_body_temp_normal())
+
+/datum/reagent/consumable/ethanol/alexander/on_mob_life(mob/living/drinker, seconds_per_tick, times_fired)
+	var/obj/item/shield/the_shield = mighty_shield?.resolve()
+	if(the_shield && !(the_shield in drinker.contents)) //If you had a shield and lose it, you lose the reagent as well. Otherwise this is just a normal drink.
+		holder.remove_reagent(type, volume)
+		return
+	return ..()
+
+/datum/reagent/consumable/ethanol/between_the_sheets/on_mob_life(mob/living/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	var/is_between_the_sheets = FALSE
+	for(var/obj/item/bedsheet/bedsheet in range(drinker.loc, 0))
+		if(bedsheet.loc != drinker.loc) // bedsheets in your backpack/neck don't count
+			continue
+		is_between_the_sheets = TRUE
+		break
+
+	if(!drinker.IsSleeping() || !is_between_the_sheets)
+		return
+
+	var/need_mob_update
+	if(drinker.get_brute_loss() && drinker.get_fire_loss()) //If you are damaged by both types, slightly increased healing but it only heals one. The more the merrier wink wink.
+		if(prob(50))
+			need_mob_update = drinker.adjust_brute_loss(-0.25 * REM * seconds_per_tick, updating_health = FALSE,  required_bodytype = affected_bodytype)
+		else
+			need_mob_update = drinker.adjust_fire_loss(-0.25 * REM * seconds_per_tick, updating_health = FALSE,  required_bodytype = affected_bodytype)
+	else if(drinker.get_brute_loss()) //If you have only one, it still heals but not as well.
+		need_mob_update = drinker.adjust_brute_loss(-0.2 * REM * seconds_per_tick, updating_health = FALSE,  required_bodytype = affected_bodytype)
+	else if(drinker.get_fire_loss())
+		need_mob_update = drinker.adjust_fire_loss(-0.2 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+	if(need_mob_update)
+		return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/fernet/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.nutrition <= NUTRITION_LEVEL_STARVING)
+		if(drinker.adjust_tox_loss(1 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
+			. = UPDATE_MOB_HEALTH
+	drinker.adjust_nutrition(-5 * REM * seconds_per_tick)
+	drinker.overeatduration = 0
+
+/datum/reagent/consumable/ethanol/fernet_cola/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.nutrition <= NUTRITION_LEVEL_STARVING)
+		if(drinker.adjust_tox_loss(0.5 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
+			. = UPDATE_MOB_HEALTH
+	drinker.adjust_nutrition(-3 * REM * seconds_per_tick)
+	drinker.overeatduration = 0
+
+/datum/reagent/consumable/ethanol/fanciulli/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_nutrition(-5 * REM * seconds_per_tick)
+	drinker.overeatduration = 0
+
+/datum/reagent/consumable/ethanol/branca_menta/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_bodytemperature(-20 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, T0C)
+
+/datum/reagent/consumable/ethanol/blank_paper/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(ishuman(drinker) && HAS_MIND_TRAIT(drinker, TRAIT_MIMING))
+		drinker.set_silence_if_lower(MIMEDRINK_SILENCE_DURATION)
+		if(drinker.heal_bodypart_damage(brute = 1 * REM * seconds_per_tick, burn = 1 * REM * seconds_per_tick, updating_health = FALSE))
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/wizz_fizz/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	//A healing drink similar to Quadruple Sec, Ling Stings, and Screwdrivers for the Wizznerds; the check is consistent with the changeling sting
+	if(drinker?.mind?.has_antag_datum(/datum/antagonist/wizard))
+		var/need_mob_update
+		need_mob_update = drinker.heal_bodypart_damage(1 * REM * seconds_per_tick, 1 * REM * seconds_per_tick, updating_health = FALSE)
+		need_mob_update += drinker.adjust_oxy_loss(-1 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype, required_respiration_type = affected_respiration_type)
+		need_mob_update += drinker.adjust_tox_loss(-1 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype)
+		need_mob_update += drinker.adjust_stamina_loss(-5  * REM * seconds_per_tick, updating_stamina = FALSE, required_biotype = affected_biotype)
+		if(need_mob_update)
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/bug_spray/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	// Does some damage to bug biotypes
+	if(drinker.adjust_tox_loss(1 * REM * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
+		. = UPDATE_MOB_HEALTH
+		// Random chance of causing a screm if we did some damage
+		if(SPT_PROB(2, seconds_per_tick))
+			drinker.emote("scream")
+
+/datum/reagent/consumable/ethanol/turbo/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(SPT_PROB(2, seconds_per_tick))
+		to_chat(drinker, span_notice("[pick("You feel disregard for the rule of law.", "You feel pumped!", "Your head is pounding.", "Your thoughts are racing..")]"))
+	if(drinker.adjust_stamina_loss(-0.5 * drinker.get_drunk_amount() * REM * seconds_per_tick, updating_stamina = FALSE, required_biotype = affected_biotype))
+		return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/old_timer/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(SPT_PROB(10, seconds_per_tick) && ishuman(drinker))
+		var/mob/living/carbon/human/metabolizer = drinker
+		metabolizer.age += 1
+		if(metabolizer.age > 70)
+			metabolizer.set_facial_haircolor("#cccccc", update = FALSE)
+			metabolizer.set_haircolor("#cccccc", update = TRUE)
+			if(metabolizer.age > 100)
+				metabolizer.become_nearsighted(type)
+				if(metabolizer.gender == MALE)
+					metabolizer.set_facial_hairstyle("Beard (Very Long)", update = TRUE)
+
+				if(metabolizer.age > 969) //Best not let people get older than this or i might incur G-ds wrath
+					metabolizer.visible_message(span_notice("[metabolizer] becomes older than any man should be.. and crumbles into dust!"))
+					metabolizer.dust(just_ash = FALSE, drop_items = TRUE, force = FALSE)
+
+/datum/reagent/consumable/ethanol/trappist/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.mind?.holy_role)
+		if(drinker.adjust_fire_loss(-2.5 * REM * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype))
+			. = UPDATE_MOB_HEALTH
+		drinker.adjust_jitter(-2 SECONDS * REM * seconds_per_tick)
+		drinker.adjust_stutter(-2 SECONDS * REM * seconds_per_tick)
+
+/datum/reagent/consumable/ethanol/blazaam/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.get_drunk_amount() > 40)
+		if(stored_teleports)
+			do_teleport(drinker, get_turf(drinker), rand(1,3), channel = TELEPORT_CHANNEL_WORMHOLE)
+			stored_teleports--
+
+		if(SPT_PROB(5, seconds_per_tick))
+			stored_teleports += rand(2, 6)
+			if(prob(70))
+				drinker.vomit(vomit_flags = VOMIT_CATEGORY_DEFAULT, vomit_type = /obj/effect/decal/cleanable/vomit/purple)
+
+/datum/reagent/consumable/ethanol/mauna_loa/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	// Heats the user up while the reagent is in the body. Occasionally makes you burst into flames.
+	drinker.adjust_bodytemperature(25 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick)
+	if (SPT_PROB(2.5, seconds_per_tick))
+		drinker.adjust_fire_stacks(1 * REM * seconds_per_tick)
+		drinker.ignite_mob()
+
+/datum/reagent/consumable/ethanol/pina_olivada/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(SPT_PROB(8, seconds_per_tick))
+		drinker.manual_emote(pick("coughs up some oil", "swallows the lump in [drinker.p_their()] throat", "gags", "chokes up a bit"))
+	if(SPT_PROB(3, seconds_per_tick))
+		var/static/list/messages = list(
+			"A horrible aftertaste coats your mouth.",
+			"You feel like you're going to choke on the oil in your throat.",
+			"You start to feel some heartburn coming on.",
+			"You want to throw up, but you know that nothing can come out due to the clog in your esophagus.",
+			"Your throat feels horrible.",
+		)
+		to_chat(drinker, span_notice(pick(messages)))
+
+/datum/reagent/consumable/ethanol/pruno/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.adjust_disgust(5 * REM * seconds_per_tick)
+
+/datum/reagent/consumable/ethanol/kortara/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(drinker.get_brute_loss() && SPT_PROB(10, seconds_per_tick))
+		if(drinker.heal_bodypart_damage(brute = 1 * REM * seconds_per_tick, burn = 0, updating_health = FALSE))
+			return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/sea_breeze/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.apply_status_effect(/datum/status_effect/throat_soothed)
+
+/datum/reagent/consumable/ethanol/drunken_espatier/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	drinker.add_mood_event("numb", /datum/mood_event/narcotic_medium, name) //comfortably numb
+
+/datum/reagent/consumable/ethanol/protein_blend/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. =	..()
+	drinker.adjust_nutrition(2 * REM * seconds_per_tick)
+	if(!islizard(drinker))
+		drinker.adjust_disgust(5 * REM * seconds_per_tick)
+	else
+		drinker.adjust_disgust(2 * REM * seconds_per_tick)
+
+/datum/reagent/consumable/ethanol/triumphal_arch/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(islizard(drinker))
+		drinker.add_mood_event("triumph", /datum/mood_event/memories_of_home, name)
+
+/datum/reagent/consumable/ethanol/helianthus/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
+	. = ..()
+	if(SPT_PROB(5, seconds_per_tick))
+		drinker.adjust_hallucinations_up_to(4 SECONDS * REM * seconds_per_tick, 48 SECONDS)
+
+/datum/reagent/consumable/ethanol/gin_garden/on_mob_life(mob/living/carbon/doll, seconds_per_tick, times_fired)
+	. = ..()
+	doll.adjust_bodytemperature(-5 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, doll.get_body_temp_normal())
+
+/datum/reagent/consumable/ethanol/suffering_bastard/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	affected_mob.apply_status_effect(/datum/status_effect/headache_soothed) //prevents headaches
+	affected_mob.adjust_disgust(-5 * REM * seconds_per_tick) //removes disgust, same with sol dry
+	if(affected_mob.adjust_organ_loss(ORGAN_SLOT_BRAIN, -0.5 * REM * seconds_per_tick * normalise_creation_purity(), required_organ_flag = affected_organ_flags)) //heals brain damage very slowly, about 12 damage per 5u
+		return UPDATE_MOB_HEALTH
+
+/datum/reagent/consumable/ethanol/blue_blazer/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	affected_mob.adjust_bodytemperature(25 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, 0, affected_mob.get_body_temp_normal())
+
+/datum/reagent/consumable/ethanol/hot_toddy/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
+	. = ..()
+	affected_mob.adjust_bodytemperature(25 * REM * TEMPERATURE_DAMAGE_COEFFICIENT * seconds_per_tick, 0, affected_mob.get_body_temp_normal())

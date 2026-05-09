@@ -1243,3 +1243,12 @@
 	pupils_name = "slit pupils"
 	penlight_message = "shine under the pearly light"
 
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/eyes/night_vision/maintenance_adapted/on_life(seconds_per_tick, times_fired)
+	if(owner.get_eye_protection() <= FLASH_PROTECTION_SENSITIVE && !owner.is_blind() && isturf(owner.loc) && owner.has_light_nearby(light_amount=0.5)) //we allow a little more than usual so we can produce light from the adapted eyes
+		to_chat(owner, span_danger("Your eyes! They burn in the light!"))
+		apply_organ_damage(10) //blind quickly
+		playsound(owner, 'sound/machines/grill/grillsizzle.ogg', 50)
+	else
+		apply_organ_damage(-10) //heal quickly
+	. = ..()

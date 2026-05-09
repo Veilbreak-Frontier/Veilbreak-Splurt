@@ -742,3 +742,7 @@
 
 #undef BUTTON_COOLDOWN
 #undef BUTTON_DELAY
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/bombcore/syndicate/burn()
+	return ..()

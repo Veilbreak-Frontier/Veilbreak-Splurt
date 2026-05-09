@@ -140,3 +140,12 @@
 	if(spawnpoint)
 		new_character.forceMove(spawnpoint)
 	return TRUE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/antagonist/ninja/apply_innate_effects(mob/living/mob_override)
+	var/mob/ninja = mob_override || owner.current
+	ADD_TRAIT(ninja, TRAIT_DESENSITIZED, REF(src))
+
+/datum/antagonist/ninja/remove_innate_effects(mob/living/mob_override)
+	var/mob/ninja = mob_override || owner.current
+	REMOVE_TRAIT(ninja, TRAIT_DESENSITIZED, REF(src))

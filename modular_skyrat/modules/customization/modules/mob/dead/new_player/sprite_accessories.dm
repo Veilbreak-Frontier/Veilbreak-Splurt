@@ -777,11 +777,13 @@
 	gender = FEMALE
 	use_static = null
 
-/datum/sprite_accessory/bra/strapless_swimsuit_alt
+
+/datum/sprite_accessory/bra/bra_strapless_alt // SPLURT EDIT: Underwear update prevous: strapless_swimsuit_alt
 	name = "Strapless Swimsuit Top (Alt)"
-	icon_state = "strapless_biki_bra_alt"
+	icon_state = "bra_strapless_alt" // SPLURT EDIT: Underwear update
 	gender = FEMALE
 	use_static = null
+
 
 /datum/sprite_accessory/bra/binder
 	name = "Binder"
@@ -799,10 +801,14 @@
 	///Whether this underwear includes a bottom (For Leotards and the likes)
 	var/hides_groin = FALSE
 
+// SPLURT EDIT START: Underwear update
+/*
 /datum/sprite_accessory/undershirt/tanktop_alt
 	name = "Tank Top - Alt"
 	icon_state = "tanktop_alt"
 	use_static = null
+*/
+// SPLURT EDIT END: Underwear update
 
 /datum/sprite_accessory/undershirt/tanktop_midriff
 	name = "Tank Top - Midriff"
@@ -898,3 +904,4 @@
 /datum/sprite_accessory/undershirt/leotard/turtleneck/sleeveless
 	name = "Shirt - Turtleneck Leotard Sleeveless"
 	icon_state = "leotard_turtleneck_sleeveless"
+

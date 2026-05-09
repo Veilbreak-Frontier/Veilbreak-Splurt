@@ -238,3 +238,26 @@
 			return FALSE
 
 #undef HEATER_COEFFICIENT
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/plumbing/reaction_chamber/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/reaction_chamber, bolt, layer)
+
+/// Handles stopping the emptying process when the chamber empties.
+
+/obj/machinery/plumbing/reaction_chamber/chem/Initialize(mapload, bolt, layer)
+	. = ..()
+
+	acidic_beaker = new (src)
+	alkaline_beaker = new (src)
+
+	AddComponent(/datum/component/plumbing/acidic_input, bolt, custom_receiver = acidic_beaker)
+	AddComponent(/datum/component/plumbing/alkaline_input, bolt, custom_receiver = alkaline_beaker)
+
+/// Make sure beakers are deleted when being deconstructed
+
+/obj/machinery/plumbing/reaction_chamber/chem/Destroy()
+	QDEL_NULL(acidic_beaker)
+	QDEL_NULL(alkaline_beaker)
+	return ..()

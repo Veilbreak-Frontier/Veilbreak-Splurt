@@ -71,3 +71,8 @@
 					if(english_right.Find(chem_name))
 						english_right -= chem_name
 						right -= chem_id
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/plumbing/filter/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/filter, bolt, layer)

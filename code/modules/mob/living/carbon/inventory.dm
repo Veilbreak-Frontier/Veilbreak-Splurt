@@ -477,3 +477,7 @@
 		qdel(item)
 
 	return placed_in
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/carbon/get_equipped_speed_mod_items()
+	return ..() + get_equipped_items(INCLUDE_ABSTRACT)

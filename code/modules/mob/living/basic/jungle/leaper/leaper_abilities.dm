@@ -248,3 +248,13 @@
 	. = ..()
 	var/mob/living/summoned_toad = summoned_object
 	SET_FACTION_AND_ALLIES_FROM(summoned_toad, owner) // so they dont attack the leaper or the wizard master
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/reagent/toxin/leaper_venom/on_mob_life(mob/living/carbon/poisoned_mob, seconds_per_tick, times_fired)
+	. = ..()
+	if(volume <= 5)
+		return
+	if(poisoned_mob.adjust_tox_loss(2.5 * REM * seconds_per_tick, updating_health = FALSE))
+		return UPDATE_MOB_HEALTH
+
+// bubble ability structure

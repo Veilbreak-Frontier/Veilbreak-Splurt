@@ -430,3 +430,10 @@
 /obj/item/circuitboard/mecha/savannah_ivanov/main
 	name = "Savannah-Ivanov Combination Control Lock module (Exosuit Board)"
 	icon_state = "mainboard"
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/mecha_parts/chassis/phazon/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(istype(tool, /obj/item/assembly/signaler/anomaly) && !istype(tool, /obj/item/assembly/signaler/anomaly/ectoplasm))
+		to_chat(user, "The anomaly core socket only accepts ectoplasm anomaly cores!")
+		return ITEM_INTERACT_BLOCKING
+	return ..()

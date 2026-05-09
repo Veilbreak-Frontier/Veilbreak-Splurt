@@ -58,3 +58,10 @@
 		return ..()
 	icon_state = "[base_icon_state][panel_open ? "-open" : null]"
 	return ..()
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/plumbing/liquid_pump/Initialize(mapload, bolt, layer)
+	. = ..()
+	AddComponent(/datum/component/plumbing/simple_supply, bolt, layer)
+
+///please note that the component has a hook in the parent call, wich handles activating and deactivating

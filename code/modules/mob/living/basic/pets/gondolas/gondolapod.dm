@@ -102,3 +102,17 @@
 	else
 		to_chat(gondola_owner, span_notice("A closer look inside yourself reveals... nothing."))
 	return TRUE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/mob/living/basic/pet/gondola/gondolapod/setOpened()
+	opened = TRUE
+	layer = initial(layer)
+	update_appearance()
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/atom/, setClosed)), 5 SECONDS)
+
+/mob/living/basic/pet/gondola/gondolapod/setClosed()
+	opened = FALSE
+	layer = LOW_MOB_LAYER
+	update_appearance()
+
+///Opens the gondola pod and delivers its package, one-time use as it removes all delivery-related actions.

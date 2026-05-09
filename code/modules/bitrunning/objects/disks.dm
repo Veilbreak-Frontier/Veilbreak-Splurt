@@ -227,3 +227,105 @@
 	selectable_items = list(
 		/obj/item/gun/ballistic/automatic/mini_uzi,
 	)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/bitrunning_disk/Initialize(mapload)
+	. = ..()
+
+	icon_state = "[base_icon_state][rand(0, 7)]"
+	update_icon()
+
+	AddComponent(/datum/component/loads_avatar_gear, \
+		load_callback = CALLBACK(src, PROC_REF(load_onto_avatar)), \
+	)
+
+/obj/item/bitrunning_disk/examine(mob/user)
+	. = ..()
+	. += span_infoplain("This disk must be carried on your person into a netpod to be used.")
+
+	if(isnull(choice_made))
+		. += span_notice("To make a selection, toggle the disk in hand.")
+		return
+
+	. += span_info("It has been used to select: <b>[choice_made]</b>.")
+	. += span_notice("It cannot make another selection.")
+
+/// Handles loading our stuff onto avatars
+
+/obj/item/bitrunning_disk/proc/load_onto_avatar(mob/living/carbon/human/neo, mob/living/carbon/human/avatar, domain_flags)
+	return NONE
+
+/obj/item/bitrunning_disk/ability/load_onto_avatar(mob/living/carbon/human/neo, mob/living/carbon/human/avatar, domain_flags)
+	if(domain_flags & DOMAIN_FORBIDS_ABILITIES)
+		return BITRUNNER_GEAR_LOAD_BLOCKED
+
+	if(isnull(granted_action))
+		return BITRUNNER_GEAR_LOAD_FAILED
+
+	if(locate(granted_action) in avatar.actions)
+		return BITRUNNER_GEAR_LOAD_FAILED
+
+	var/datum/action/our_action = new granted_action()
+	our_action.Grant(avatar)
+	return NONE
+
+/obj/item/bitrunning_disk/ability/attack_self(mob/user, modifiers)
+	. = ..()
+
+	if(choice_made)
+		return
+
+	var/names = list()
+	for(var/datum/action/thing as anything in selectable_actions)
+		names += initial(thing.name)
+
+	var/choice = tgui_input_list(user, message = "Select an ability",  title = "Bitrunning Program", items = names)
+	if(isnull(choice) || !user.is_holding(src))
+		return
+
+	for(var/datum/action/thing as anything in selectable_actions)
+		if(initial(thing.name) == choice)
+			granted_action = thing
+
+	if(isnull(granted_action))
+		return
+
+	balloon_alert(user, "selected")
+	playsound(user, 'sound/items/click.ogg', 50, TRUE)
+	choice_made = choice
+
+/// Tier 1 programs. Simple, funny, or helpful.
+
+/obj/item/bitrunning_disk/item/load_onto_avatar(mob/living/carbon/human/neo, mob/living/carbon/human/avatar, domain_flags)
+	if(domain_flags & DOMAIN_FORBIDS_ITEMS)
+		return BITRUNNER_GEAR_LOAD_BLOCKED
+
+	if(isnull(granted_item))
+		return BITRUNNER_GEAR_LOAD_FAILED
+
+	avatar.put_in_hands(new granted_item())
+	return NONE
+
+/obj/item/bitrunning_disk/item/attack_self(mob/user, modifiers)
+	. = ..()
+
+	if(choice_made)
+		return
+
+	var/names = list()
+	for(var/obj/thing as anything in selectable_items)
+		names += initial(thing.name)
+
+	var/choice = tgui_input_list(user, message = "Select an ability",  title = "Bitrunning Program", items = names)
+	if(isnull(choice) || !user.is_holding(src))
+		return
+
+	for(var/obj/thing as anything in selectable_items)
+		if(initial(thing.name) == choice)
+			granted_item = thing
+
+	balloon_alert(user, "selected")
+	playsound(user, 'sound/items/click.ogg', 50, TRUE)
+	choice_made = choice
+
+/// Tier 1 items. Simple, funny, or helpful.

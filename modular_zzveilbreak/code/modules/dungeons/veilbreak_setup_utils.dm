@@ -1,0 +1,244 @@
+/// world.incrementMaxZ() creates /turf/open/space/basic tiles. basic/New() skips parent; at runtime they never
+/// get /turf/open/space/Initialize, so they lack starlight overlays and correct PLANE_SPACE offsets (frozen static stars).
+/// ChangeTurf(/turf/open/space/basic) rewrites to /turf/open/space — this mirrors that fix for raw basic turfs.
+/proc/veilbreak_init_runtime_space_turfs(z_level)
+	if(!z_level || z_level < 1 || z_level > world.maxz)
+		return
+	var/processed = 0
+	for(var/turf/open/space/space_turf as anything in Z_TURFS(z_level))
+		if(!istype(space_turf, /turf/open/space/basic))
+			continue
+		if(space_turf.flags_1 & INITIALIZED_1)
+			continue
+		space_turf.Initialize(mapload = TRUE)
+		processed++
+		if(processed % 50 == 0)
+			CHECK_TICK
+
+/datum/portal_destination/veilbreak/proc/veilbreak_initialize_zlevel(z_level, list/metadata, current_step = 1)
+	switch(current_step)
+		if(1)
+			if(z_level > 0 && z_level <= length(SSmapping.z_list))
+				var/datum/space_level/SL = SSmapping.z_list[z_level]
+				if(SL)
+					SL.traits[ZTRAIT_AWAY] = TRUE
+					SL.traits[ZTRAIT_MINING] = TRUE
+
+			atmos_freeze_z_level(z_level)
+			// Do not cleanup here: this staggered init runs after load_dmm_with_ticks(),
+			// and cleaning now would erase the freshly loaded dungeon map.
+
+		if(2)
+			// Map content is already loaded in load_dmm_with_ticks().
+			// Re-loading here duplicates map-placed atoms (mobs, bosses, gateways, etc).
+			// Keep this step as a compatibility no-op in the staggered pipeline.
+			CHECK_TICK
+
+		if(3)
+			replace_map_mobs_with_placeholders(z_level)
+
+		if(4)
+			spawn_mobs_from_placeholders(z_level)
+
+		if(5)
+			initialize_areas_and_power(z_level)
+			initialize_machinery(z_level)
+
+		if(6)
+			force_lighting_initialization(z_level)
+			initialize_enhanced_smoothing(z_level)
+
+		if(7)
+			generated = TRUE
+			generating = FALSE
+
+			atmos_resume_z_level(z_level)
+
+			addtimer(CALLBACK(src, .proc/veilbreak_sync_portal_pair), 5)
+
+			if(connected_control_computer)
+				connected_control_computer.on_generation_success()
+
+			log_world("Veilbreak: Pocket Z-[z_level] stabilized and portals synced.")
+			return
+
+	addtimer(CALLBACK(src, .proc/veilbreak_initialize_zlevel, z_level, metadata, current_step + 1), 1)
+
+/datum/portal_destination/veilbreak/proc/replace_map_mobs_with_placeholders(z_level)
+	var/count = 0
+	for(var/obj/effect/mob_placeholder/placeholder in world)
+		if(placeholder.z == z_level)
+			count++
+			if(count <= 5)
+				log_world("Veilbreak Debug: Found placeholder at [placeholder.x],[placeholder.y],[placeholder.z] with mob_type=[placeholder.mob_type]")
+			CHECK_TICK
+	log_world("Veilbreak Debug: replace_map_mobs_with_placeholders found [count] placeholders on Z-level [z_level]")
+
+/datum/portal_destination/veilbreak/proc/atmos_freeze_z_level(z_level)
+	if(!SSair)
+		return
+	for(var/turf/T in SSair.active_turfs)
+		if(T.z == z_level)
+			SSair.active_turfs -= T
+	for(var/datum/excited_group/EG in SSair.excited_groups)
+		if(length(EG.turf_list))
+			var/turf/check = EG.turf_list[1]
+			if(check && check.z == z_level)
+				qdel(EG)
+
+/datum/portal_destination/veilbreak/proc/atmos_resume_z_level(z_level)
+	if(!SSair)
+		return
+	for(var/turf/open/T in Z_TURFS(z_level))
+		SSair.add_to_active(T)
+
+/datum/portal_destination/veilbreak/proc/spawn_mobs_from_placeholders(z_level)
+	var/placeholders_processed = 0
+	for(var/obj/effect/mob_placeholder/placeholder in world)
+		if(placeholder.z != z_level)
+			continue
+
+		placeholders_processed++
+		var/turf/spawn_turf = get_turf(placeholder)
+		if(!spawn_turf)
+			log_world("Veilbreak Debug: Placeholder at [placeholder.x],[placeholder.y],[placeholder.z] has no turf")
+			continue
+
+		if(!placeholder.mob_type)
+			placeholder.determine_mob_type_from_self()
+
+		if(!placeholder.mob_type)
+			log_world("Veilbreak Debug: Placeholder at [placeholder.x],[placeholder.y],[placeholder.z] has no mob_type")
+			continue
+
+		// Defensive dedupe: skip spawning if a mob of the same type already occupies this turf.
+		var/already_present = FALSE
+		for(var/mob/living/existing in spawn_turf)
+			if(ispath(placeholder.mob_type) && istype(existing, placeholder.mob_type))
+				already_present = TRUE
+				break
+
+		if(already_present)
+			log_world("Veilbreak Debug: Skipping duplicate spawn of [placeholder.mob_type] at [placeholder.x],[placeholder.y],[placeholder.z]")
+			qdel(placeholder)
+			if(placeholders_processed % VEILBREAK_MOB_SPAWN_BATCH_SIZE == 0)
+				CHECK_TICK
+			continue
+
+		log_world("Veilbreak Debug: Spawning [placeholder.mob_type] at [placeholder.x],[placeholder.y],[placeholder.z]")
+		var/mob/living/new_mob = new placeholder.mob_type(spawn_turf)
+		if(new_mob)
+			if(placeholder.mob_faction)
+				new_mob.faction = placeholder.mob_faction.Copy()
+			if(placeholder.mob_name && placeholder.mob_name != "mob placeholder")
+				new_mob.name = placeholder.mob_name
+			if(!(new_mob in GLOB.basic_mobs))
+				GLOB.basic_mobs += new_mob
+		qdel(placeholder)
+
+		if(placeholders_processed % VEILBREAK_MOB_SPAWN_BATCH_SIZE == 0)
+			CHECK_TICK
+
+	log_world("Veilbreak Debug: spawn_mobs_from_placeholders processed [placeholders_processed] placeholders on Z-level [z_level]")
+
+/datum/portal_destination/veilbreak/proc/force_ai_registration(z_level)
+	var/registered = 0
+	for(var/mob/living/basic/mob in world)
+		if(mob.z != z_level)
+			continue
+		if(!(mob in GLOB.basic_mobs))
+			GLOB.basic_mobs += mob
+			registered++
+		if(registered % VEILBREAK_MOB_SPAWN_BATCH_SIZE == 0)
+			CHECK_TICK
+
+/datum/portal_destination/veilbreak/proc/initialize_areas_and_power(z_level)
+	var/processed = 0
+	for(var/area/area as anything in GLOB.areas)
+		var/has_turfs_on_z = FALSE
+		for(var/turf/T in area.contents)
+			if(T.z == z_level)
+				has_turfs_on_z = TRUE
+				break
+		if(has_turfs_on_z)
+			area.power_equip = initial(area.power_equip)
+			area.power_light = initial(area.power_light)
+			area.power_environ = initial(area.power_environ)
+			area.always_unpowered = initial(area.always_unpowered)
+			area.power_change()
+			area.update_icon()
+			processed++
+			if(processed % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
+				CHECK_TICK
+
+/datum/portal_destination/veilbreak/proc/initialize_machinery(z_level)
+	var/processed = 0
+	for(var/obj/machinery/machine in world)
+		if(machine.z != z_level)
+			continue
+		if(machine.use_power)
+			machine.power_change()
+		machine.update_icon()
+		machine.update_appearance()
+		processed++
+		if(processed % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
+			CHECK_TICK
+
+/datum/portal_destination/veilbreak/proc/force_air_initialization(z_level)
+	if(!SSair || !SSair.initialized)
+		return
+	var/list/turfs_to_init = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
+	var/count = 0
+	for(var/turf/open/T in turfs_to_init)
+		if(T && T.air)
+			SSair.add_to_active(T)
+			for(var/turf/adjacent in T.atmos_adjacent_turfs)
+				if(adjacent && adjacent.z == z_level)
+					T.atmos_adjacent_turfs |= adjacent
+					adjacent.atmos_adjacent_turfs |= T
+		count++
+		if(count % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
+			CHECK_TICK
+
+/datum/portal_destination/veilbreak/proc/force_lighting_initialization(z_level)
+	if(!SSlighting)
+		return
+	var/list/turfs_to_init = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
+	var/count = 0
+	for(var/turf/T in turfs_to_init)
+		if(!T)
+			continue
+		var/area/A = T.loc
+		if(A && A.static_lighting && !T.space_lit && !T.lighting_object)
+			var/datum/lighting_object/LO = new(T)
+			if(LO)
+				LO.needs_update = TRUE
+				SSlighting.objects_queue |= LO
+		count++
+		if(count % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
+			CHECK_TICK
+	if(length(SSlighting.objects_queue) && SSlighting.can_fire)
+		SSlighting.can_fire = TRUE
+
+/datum/portal_destination/veilbreak/proc/initialize_enhanced_smoothing(z_level)
+	if(!SSicon_smooth || !SSicon_smooth.initialized)
+		return
+	var/count = 0
+	for(var/turf/closed/wall/wall in world)
+		if(wall && wall.z == z_level)
+			SSicon_smooth.add_to_queue(wall)
+			count++
+			if(count % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
+				CHECK_TICK
+	if(length(SSicon_smooth.smooth_queue) && !SSicon_smooth.can_fire)
+		SSicon_smooth.can_fire = TRUE
+
+/datum/portal_destination/veilbreak/proc/final_ai_activation(z_level)
+	var/activated = 0
+	for(var/mob/living/basic/mob in world)
+		if(mob && mob.z == z_level)
+			if(mob.ai_controller && mob.ai_controller.pawn == mob)
+				mob.ai_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET] = null
+				activated++
+		if(activated % VEILBREAK_MOB_SPAWN_BATCH_SIZE == 0)
+			CHECK_TICK

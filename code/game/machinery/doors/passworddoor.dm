@@ -110,3 +110,14 @@
 
 /obj/machinery/door/password/ex_act(severity, target)
 	return FALSE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/door/password/try_to_activate_door(mob/user, access_bypass = FALSE)
+	add_fingerprint(user)
+	if(operating)
+		return
+	if(density)
+		if(access_bypass || ask_for_pass(user))
+			open()
+		else
+			run_animation(DOOR_DENY_ANIMATION)

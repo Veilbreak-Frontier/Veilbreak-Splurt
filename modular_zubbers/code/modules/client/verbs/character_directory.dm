@@ -11,7 +11,7 @@ GLOBAL_DATUM(character_directory, /datum/character_directory)
 //The advertisement that you show to people looking through the directory
 /datum/preference/text/character_ad
 	savefile_key = "character_ad"
-	category = PREFERENCE_CATEGORY_OOC_PREFS
+	category = PREFERENCE_CATEGORY_NON_CONTEXTUAL
 	savefile_identifier = PREFERENCE_CHARACTER
 	maximum_value_length = MAX_FLAVOR_LEN
 
@@ -25,7 +25,7 @@ GLOBAL_DATUM(character_directory, /datum/character_directory)
 
 /datum/preference/choiced/attraction
 	savefile_key = "attraction"
-	category = PREFERENCE_CATEGORY_OOC_PREFS
+	category = PREFERENCE_CATEGORY_NON_CONTEXTUAL
 	savefile_identifier = PREFERENCE_CHARACTER
 
 /datum/preference/choiced/attraction/init_possible_values()
@@ -39,7 +39,7 @@ GLOBAL_DATUM(character_directory, /datum/character_directory)
 
 /datum/preference/choiced/display_gender
 	savefile_key = "display_gender"
-	category = PREFERENCE_CATEGORY_OOC_PREFS
+	category = PREFERENCE_CATEGORY_NON_CONTEXTUAL
 	savefile_identifier = PREFERENCE_CHARACTER
 
 /datum/preference/choiced/display_gender/init_possible_values()
@@ -193,6 +193,11 @@ GLOBAL_DATUM(character_directory, /datum/character_directory)
 		var/vore = "Ask"
 		var/hypno = "Ask"
 		var/noncon = "Ask"
+		// SPLURT EDIT START: INTERACTION PANEL
+		var/extreme = "Ask"
+		var/extremeharm = "Ask"
+		var/unholy = "Ask"
+		// SPLURT EDIT END: INTERACTION PANEL
 		var/character_ad = ""
 		var/ref = REF(mob)
 		//Just in case something we get is not a mob
@@ -235,6 +240,11 @@ GLOBAL_DATUM(character_directory, /datum/character_directory)
 		noncon = READ_PREFS(mob, choiced/erp_status_nc)
 		character_ad = READ_PREFS(mob, text/character_ad)
 		ooc_notes = READ_PREFS(mob, text/ooc_notes)
+		// SPLURT EDIT START: INTERACTION PANEL
+		extreme = READ_PREFS(mob, choiced/erp_status_extm)
+		extremeharm = READ_PREFS(mob, choiced/erp_status_extmharm)
+		unholy = READ_PREFS(mob, choiced/erp_status_unholy)
+		// SPLURT EDIT END: INTERACTION PANEL
 		name = mob.real_name ? mob.name : mob.real_name
 
 		directory_mobs.Add(list(list(
@@ -247,6 +257,11 @@ GLOBAL_DATUM(character_directory, /datum/character_directory)
 			"vore" = vore,
 			"hypno" = hypno,
 			"noncon" = noncon,
+			// SPLURT EDIT START: INTERACTION PANEL
+			"extreme" = extreme,
+			"extremeharm" = extremeharm,
+			"unholy" = unholy,
+			// SPLURT EDIT END: INTERACTION PANEL
 			"character_ad" = character_ad,
 			"flavor_text" = flavor_text,
 			"nsfw_flavor_text" = nsfw_flavor_text,

@@ -359,3 +359,32 @@
 	name = "important-looking note"
 	desc = "This note is well written, and seems to have been put here so you'd find it."
 	default_raw_text = "If you find this... you don't need to know who I am.<BR><BR>You need to leave this place. I dunno what shit they did to me out here, but I don't think I'm going to be making it out of here.<BR><BR>This place... it wears down your psyche. The other researchers out here laughed it off but... They were the first to go.<BR><BR>One by one they started turning on each other. The more they found out, the more they started fighting and arguing...<BR>As I speak now, I had to... I wound up having to put most of my men down. I know what I had to do, and I know there's no way left for me to live with myself.<BR> If anyone ever finds this, just don't touch the graves.<BR><BR>DO NOT. TOUCH. THE GRAVES. Don't be a dumbass, like we all were."
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/structure/sink/oil_well/attackby(obj/item/O, mob/living/user, list/modifiers, list/attack_modifiers)
+	flick("puddle-oil-splash",src)
+	if(O.tool_behaviour == TOOL_SHOVEL) //attempt to deconstruct the puddle with a shovel
+		to_chat(user, "You fill in the oil well with soil.")
+		O.play_tool_sound(src)
+		deconstruct()
+		return 1
+	if(is_reagent_container(O)) //Refilling bottles with oil
+		var/obj/item/reagent_containers/RG = O
+		if(RG.is_refillable())
+			if(!RG.reagents.holder_full())
+				RG.reagents.add_reagent(dispensedreagent, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+				to_chat(user, span_notice("You fill [RG] from [src]."))
+				return TRUE
+			to_chat(user, span_notice("\The [RG] is full."))
+			return FALSE
+	if(!user.combat_mode)
+		to_chat(user, span_notice("You won't have any luck getting \the [O] out if you drop it in the oil."))
+		return 1
+	else
+		return ..()
+
+/obj/structure/sink/oil_well/drop_materials()
+	new /obj/effect/decal/cleanable/blood/oil(loc)
+
+//***Grave mounds.
+/// has no items inside unless you use the filled subtype

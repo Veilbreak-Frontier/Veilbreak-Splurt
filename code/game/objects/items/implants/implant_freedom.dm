@@ -62,3 +62,15 @@
 	name = "implant case - 'Freedom'"
 	desc = "A glass case containing a freedom implant."
 	imp_type = /obj/item/implant/freedom
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/implant/freedom/get_data()
+	return "<b>Implant Specifications:</b><BR> \
+		<b>Name:</b> Freedom Beacon<BR> \
+		<b>Life:</b> Optimum [initial(uses)] uses<BR> \
+		<b>Important Notes:</b> <font color='red'>Illegal</font><BR> \
+		<HR> \
+		<b>Implant Details:</b> <BR> \
+		<b>Function:</b> Transmits a specialized cluster of signals to override handcuff locking \
+		mechanisms. These signals will release any bindings on both the arms and legs.<BR> \
+		<b>Disclaimer:</b> Heavy-duty restraints such as straightjackets are deemed \"too complex\" to release from."

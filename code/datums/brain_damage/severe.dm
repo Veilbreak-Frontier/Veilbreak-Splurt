@@ -388,3 +388,90 @@
 	owner.setDir(pre_dir)
 	// Gives you a small buffer - not to avoid spam, but to make it more subtle / less predictable
 	COOLDOWN_START(src, steal_cd, 8 SECONDS)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/brain_trauma/severe/narcolepsy/on_life(seconds_per_tick, times_fired)
+	if(owner.IsSleeping())
+		return
+
+	/// If any of these are in the user's blood, return early
+	var/static/list/immunity_medicine = list(
+		/datum/reagent/medicine/modafinil,
+		/datum/reagent/medicine/synaptizine,
+	) //don't add too many, as most stimulant reagents already have a drowsy-removing effect
+	for(var/medicine in immunity_medicine)
+		if(owner.reagents.has_reagent(medicine))
+			return
+
+	var/drowsy = !!owner.has_status_effect(/datum/status_effect/drowsiness)
+	var/caffeinated = HAS_TRAIT(owner, TRAIT_STIMULATED)
+	var/final_sleep_chance = sleep_chance
+	if(owner.move_intent == MOVE_INTENT_RUN)
+		final_sleep_chance += sleep_chance_running
+	if(drowsy)
+		final_sleep_chance += sleep_chance_drowsy //stack drowsy ontop of base or running odds with the += operator
+	if(caffeinated)
+		final_sleep_chance *= 0.5 //make it harder to fall asleep on caffeine
+
+	if(!SPT_PROB(final_sleep_chance, seconds_per_tick))
+		return
+
+	//if not drowsy, don't fall asleep but make them drowsy
+	if(!drowsy)
+		to_chat(owner, span_warning("You feel tired..."))
+		owner.adjust_drowsiness(rand(drowsy_time_minimum, drowsy_time_maximum))
+		if(prob(50))
+			owner.emote("yawn")
+		else if(prob(33)) //rarest message is a custom emote
+			owner.visible_message("rubs [owner.p_their()] eyes.", visible_message_flags = EMOTE_MESSAGE)
+	//drowsy, so fall asleep. you've had your chance to remedy it
+	else
+		to_chat(owner, span_warning("You fall asleep."))
+		owner.Sleeping(rand(sleep_time_minimum, sleep_time_maximum))
+		if(prob(50) && owner.IsSleeping())
+			owner.emote("snore")
+
+/datum/brain_trauma/severe/hypnotic_stupor/on_life(seconds_per_tick, times_fired)
+	..()
+	if(SPT_PROB(0.5, seconds_per_tick) && !owner.has_status_effect(/datum/status_effect/trance))
+		owner.apply_status_effect(/datum/status_effect/trance, rand(100,300), FALSE)
+
+/datum/brain_trauma/severe/kleptomaniac/on_life(seconds_per_tick, times_fired)
+	if(owner.usable_hands <= 0)
+		return
+	if(!SPT_PROB(5, seconds_per_tick))
+		return
+	if(!COOLDOWN_FINISHED(src, steal_cd))
+		return
+	if(!owner.has_active_hand() || !owner.get_empty_held_indexes())
+		return
+
+	// If our main hand is full, that means our offhand is empty, so try stealing with that
+	var/steal_to_offhand = !!owner.get_active_held_item()
+	var/curr_index = owner.active_hand_index
+	var/pre_dir = owner.dir
+	if(steal_to_offhand)
+		owner.swap_hand(owner.get_inactive_hand_index())
+
+	var/list/stealables = list()
+	for(var/obj/item/potential_stealable in oview(1, owner))
+		if(potential_stealable.w_class >= WEIGHT_CLASS_BULKY)
+			continue
+		if(potential_stealable.anchored || !(potential_stealable.interaction_flags_item & INTERACT_ITEM_ATTACK_HAND_PICKUP))
+			continue
+		stealables += potential_stealable
+
+	for(var/obj/item/stealable as anything in shuffle(stealables))
+		if(!stealable.IsReachableBy(owner) || stealable.IsObscured())
+			continue
+		// Try to do a raw click on the item with one of our empty hands, to pick it up (duh)
+		owner.log_message("attempted to pick up (kleptomania)", LOG_ATTACK, color = "orange")
+		owner.ClickOn(stealable)
+		// No feedback message. Intentional, you may not even realize you picked up something
+		break
+
+	if(steal_to_offhand)
+		owner.swap_hand(curr_index)
+	owner.setDir(pre_dir)
+	// Gives you a small buffer - not to avoid spam, but to make it more subtle / less predictable
+	COOLDOWN_START(src, steal_cd, 8 SECONDS)

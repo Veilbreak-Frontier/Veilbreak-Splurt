@@ -97,3 +97,35 @@
 		QDEL_IN(src, 2 SECONDS)
 
 #undef PER_SYSTEM_PARTICLE_CAP
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/effect_system/proc/set_up(number = 3, cardinals_only = FALSE, location)
+	src.number = min(number, 10)
+	src.cardinals_only = cardinals_only
+	src.location = get_turf(location)
+
+/datum/effect_system/proc/attach(atom/atom)
+	holder = atom
+
+/datum/effect_system/proc/generate_effect()
+	if(holder)
+		location = get_turf(holder)
+	var/obj/effect/effect = new effect_type(location)
+	total_effects++
+	var/direction
+	if(cardinals_only)
+		direction = pick(GLOB.cardinals)
+	else
+		direction = pick(GLOB.alldirs)
+	var/step_amt = pick(1,2,3)
+	var/step_delay = 5
+
+	var/datum/move_loop/loop = GLOB.move_manager.move(effect, direction, step_delay, timeout = step_delay * step_amt, priority = MOVEMENT_ABOVE_SPACE_PRIORITY)
+	RegisterSignal(loop, COMSIG_QDELETING, PROC_REF(decrement_total_effect))
+
+/datum/effect_system/proc/decrement_total_effect(datum/source)
+	SIGNAL_HANDLER
+	total_effects--
+	if(!autocleanup || total_effects > 0)
+		return
+	QDEL_IN(src, 2 SECONDS)

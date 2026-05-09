@@ -3,7 +3,7 @@
 /datum/loadout_item/uniform/security/hecu
 	name = "Urban Camouflage BDU"
 	item_path = /obj/item/clothing/under/rank/security/officer/hecu
-	donator_only = TRUE
+	//donator_only = TRUE
 	restricted_roles = list(ALL_JOBS_SEC, JOB_BLUESHIELD)
 
 /datum/loadout_item/uniform/security/camo
@@ -88,7 +88,7 @@
 /datum/loadout_item/uniform/miscellaneous/tactical_maid //Donor item for skyefree
 	name = "Tactical Maid Costume"
 	item_path = /obj/item/clothing/under/misc/maid/tactical
-	donator_only = TRUE
+	//donator_only = TRUE
 
 /datum/loadout_item/uniform/miscellaneous/bubber/clown/skirt/red
 	name = "Clown Skirt"
@@ -175,15 +175,3 @@
 /datum/loadout_item/uniform/miscellaneous/midnightdress
 	name = "Midnight Gown"
 	item_path = /obj/item/clothing/under/dress/bubber/midnight_gown
-
-/datum/loadout_item/uniform/miscellaneous/giant_scarf
-	name = "Giant Scarf"
-	item_path = /obj/item/clothing/under/dress/bubber/giant_scarf
-
-/datum/loadout_item/uniform/miscellaneous/lewdmaid
-	name = "Latex Maid Costume"
-	item_path = /obj/item/clothing/under/costume/lewdmaid
-
-/datum/loadout_item/uniform/miscellaneous/stripper_outfit
-	name = "Stripper Outfit"
-	item_path = /obj/item/clothing/under/stripper_outfit

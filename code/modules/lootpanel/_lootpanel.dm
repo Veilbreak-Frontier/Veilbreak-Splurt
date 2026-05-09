@@ -70,3 +70,10 @@
 			return grab(usr, params)
 
 	return FALSE
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/lootpanel/ui_status(mob/user, datum/ui_state/state)
+	if(user.incapacitated)
+		return UI_DISABLED
+
+	return UI_INTERACTIVE

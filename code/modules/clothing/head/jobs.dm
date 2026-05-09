@@ -857,3 +857,16 @@
 	greyscale_config_worn = /datum/greyscale_config/beret_badge/worn
 	greyscale_colors = "#43523d#a2abb0"
 	armor_type = /datum/armor/cosmetic_sec
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/clothing/head/utility/chefhat/proc/on_mouse_emote(mob/living/source, key, emote_message, type_override)
+	SIGNAL_HANDLER
+	var/mob/living/carbon/wearer = loc
+	if(!wearer || INCAPACITATED_IGNORING(wearer, INCAPABLE_RESTRAINTS))
+		return
+	if (!prob(mouse_control_probability))
+		return COMPONENT_CANT_EMOTE
+	INVOKE_ASYNC(wearer, TYPE_PROC_REF(/mob, emote), key, type_override, emote_message, FALSE)
+	return COMPONENT_CANT_EMOTE
+
+/// Relays movement made by the mouse in your hat to the wearer of the hat

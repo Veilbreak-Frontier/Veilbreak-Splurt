@@ -90,3 +90,9 @@
 	if(!ghost || isliving(ghost))
 		return
 	to_chat(ghost, "[FOLLOW_LINK(ghost, src)] <span class='nicegreen'>The coating of ectoplasmic residue you left on [src]'s sensors has decayed.</span>")
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/machinery/ecto_sniffer/screwdriver_act(mob/living/user, obj/item/I)
+	. = ..()
+	if(!.)
+		return default_deconstruction_screwdriver(user, "ecto_sniffer_open", "ecto_sniffer", I)

@@ -22,3 +22,15 @@
 		var/datum/reagent/consumable/yummy_chem = chem
 		yummy_chem.nutriment_factor = 0
 		return // Do normal metabolism
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/organ/liver/golem/handle_chemical(mob/living/carbon/organ_owner, datum/reagent/chem, seconds_per_tick, times_fired)
+	. = ..()
+	// parent returned COMSIG_MOB_STOP_REAGENT_TICK or we are failing
+	if((. & COMSIG_MOB_STOP_REAGENT_TICK) || (organ_flags & ORGAN_FAILING))
+		return
+	// golems can only eat minerals
+	if(istype(chem, /datum/reagent/consumable) && !istype(chem, /datum/reagent/consumable/nutriment/mineral))
+		var/datum/reagent/consumable/yummy_chem = chem
+		yummy_chem.nutriment_factor = 0
+		return // Do normal metabolism

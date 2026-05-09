@@ -2,7 +2,7 @@
 /datum/preference/choiced/digitigrade_legs
 	savefile_key = "digitigrade_legs"
 	savefile_identifier = PREFERENCE_CHARACTER
-	category = PREFERENCE_CATEGORY_CHARACTER_BASICS
+	category = PREFERENCE_CATEGORY_SECONDARY_FEATURES
 	relevant_mutant_bodypart = "legs"
 
 
@@ -47,4 +47,9 @@
 		target.dna.species.bodypart_overrides = cursed_species_we_need_for_a_list.bodypart_overrides
 	target.update_body()
 	target.dna.species.replace_body(target,target.dna.species) // TODO: Replace this with something less stupidly expensive.
+
+	// SPLURT EDIT START - Update underwear after leg type changes
+	target.update_underwear_on_bodytype_change()
+	// SPLURT EDIT END
+
 	return TRUE

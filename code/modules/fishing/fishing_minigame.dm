@@ -948,3 +948,104 @@ GLOBAL_LIST_EMPTY(fishing_challenges_by_user)
 
 #undef MAX_FISH_COMPLETION_MALUS
 #undef BITING_TIME_WINDOW
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/fishing_challenge/New(datum/component/fishing_spot/comp, obj/item/fishing_rod/rod, mob/user)
+	src.user = user
+	used_rod = rod
+	location = comp.parent
+	float = new(get_turf(location), location)
+	float.spin_frequency = rod.spin_frequency
+	RegisterSignal(location, COMSIG_QDELETING, PROC_REF(on_spot_gone))
+	RegisterSignal(comp, COMSIG_QDELETING, PROC_REF(on_spot_gone))
+	register_reward_signals(comp.fish_source)
+	RegisterSignal(fish_source, COMSIG_FISHING_SOURCE_INTERRUPT_CHALLENGE, PROC_REF(interrupt_challenge))
+	background = comp.fish_source.background
+	if(comp.fish_source.wait_time_range)
+		wait_time_range = comp.fish_source.wait_time_range
+	if(float.spin_frequency) //Using a fishing lure narrows the range a bit, for better or worse.
+		wait_time_range = list(wait_time_range[1] + 8 SECONDS, wait_time_range[2] - 8 SECONDS)
+	SEND_SIGNAL(user, COMSIG_MOB_BEGIN_FISHING, src)
+	SEND_SIGNAL(rod, COMSIG_ROD_BEGIN_FISHING, src)
+	GLOB.fishing_challenges_by_user[user] = src
+
+	/// Enable special parameters
+	if(rod.line)
+		completion_gain += 1 // Any fishing line will provide a small boost by default
+		if(rod.line.fishing_line_traits & FISHING_LINE_BOUNCY)
+			completion_loss -= 2
+		if(rod.line.fishing_line_traits & FISHING_LINE_STIFF)
+			completion_loss += 1
+			completion_gain -= 1
+		if(rod.line.fishing_line_traits & FISHING_LINE_AUTOREEL)
+			special_effects |= FISHING_MINIGAME_AUTOREEL
+	if(rod.hook)
+		if(rod.hook.fishing_hook_traits & FISHING_HOOK_WEIGHTED)
+			bait_bounce_mult = 0.1
+		if(rod.hook.fishing_hook_traits & FISHING_HOOK_BIDIRECTIONAL)
+			special_effects |= FISHING_MINIGAME_RULE_BIDIRECTIONAL
+		if(rod.hook.fishing_hook_traits & FISHING_HOOK_NO_ESCAPE)
+			special_effects |= FISHING_MINIGAME_RULE_NO_ESCAPE
+		if(rod.hook.fishing_hook_traits & FISHING_HOOK_ENSNARE)
+			completion_loss -= 2
+		if(rod.hook.fishing_hook_traits & FISHING_HOOK_KILL)
+			special_effects |= FISHING_MINIGAME_RULE_KILL
+
+	//Finish the minigame faster at higher skill. The value modifiers for fishing are negative values btw.
+	completion_loss += user.mind?.get_skill_modifier(/datum/skill/fishing, SKILL_VALUE_MODIFIER)/5
+	completion_gain -= user.mind?.get_skill_modifier(/datum/skill/fishing, SKILL_VALUE_MODIFIER)/7.5
+
+	reeling_velocity *= rod.bait_speed_mult
+	completion_gain *= rod.completion_speed_mult
+	bait_bounce_mult *= rod.bounciness_mult
+	deceleration_mult *= rod.deceleration_mult
+	gravity_velocity *= rod.gravity_mult
+	/**
+	 * The overlap multiplier is lower than 1 by default and exponentiation will make it even lower,
+	 * to offset the harder control however a bait velocity higher (or lower) than normal.
+	 */
+	overlap_velocity_mult = overlap_velocity_mult ** rod.bait_speed_mult
+
+/datum/fishing_challenge/proc/handle_click(mob/source, atom/target, modifiers)
+	SIGNAL_HANDLER
+	if(HAS_TRAIT(source, TRAIT_HANDS_BLOCKED)) //blocked, can't do stuff
+		return
+	//Doing other stuff
+	if(LAZYACCESS(modifiers, SHIFT_CLICK) || LAZYACCESS(modifiers, CTRL_CLICK) || LAZYACCESS(modifiers, ALT_CLICK))
+		return
+	//You need to be actively holding on the fishing rod to use it, unless you've the profound_fisher trait.
+	if(!HAS_TRAIT(source, TRAIT_PROFOUND_FISHER) && source.get_active_held_item() != used_rod)
+		return
+	if(phase == WAIT_PHASE)
+		if(world.time < last_baiting_click + 0.25 SECONDS)
+			return COMSIG_MOB_CANCEL_CLICKON //Don't punish players if they accidentally double clicked.
+		if(float.spin_frequency)
+			if(!float.spin_ready)
+				send_alert("too early!")
+				start_baiting_phase(TRUE) //Add in another 3 to 5 seconds for that blunder.
+			else
+				send_alert("spun")
+				last_baiting_click = world.time
+			float.spin_ready = FALSE
+			set_lure_timers()
+		else
+			send_alert("miss!")
+			start_baiting_phase(TRUE) //Add in another 3 to 5 seconds for that blunder.
+	else if(phase == BITING_PHASE)
+		start_minigame_phase()
+	return COMSIG_MOB_CANCEL_CLICKON
+
+/// Challenge interrupted by something external
+
+/datum/fishing_challenge/proc/on_attack_self(obj/item/source, mob/user)
+	SIGNAL_HANDLER
+	INVOKE_ASYNC(src, PROC_REF(stop_fishing), source, user)
+
+/datum/fishing_challenge/proc/stop_fishing(obj/item/rod, mob/user)
+	if((phase != MINIGAME_PHASE || do_after(user, 3 SECONDS, rod)) && !QDELETED(src) && !completed)
+		experience_multiplier *= 0.5
+		send_alert("stopped fishing")
+		complete(FALSE)
+
+///The multiplier of the fishing experience malus if the user's level is substantially above the difficulty.
+#define EXPERIENCE_MALUS_MULT 0.08

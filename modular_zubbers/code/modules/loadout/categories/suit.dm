@@ -39,6 +39,11 @@
 	item_path = /obj/item/clothing/suit/toggle/jacket/sec/old
 	restricted_roles = list(ALL_JOBS_SEC)
 
+/datum/loadout_item/suit/secjacket
+	name = "High-Vis Security Jacket"
+	item_path = /obj/item/clothing/suit/armor/vest/secjacket/blue
+	restricted_roles = list(ALL_JOBS_SEC)
+
 /datum/loadout_item/suit/secjacket/bomber
 	name = "Security Bomber Jacket"
 	item_path = /obj/item/clothing/suit/toggle/jacket/zubber/bomber/sec
@@ -85,8 +90,8 @@
 	restricted_roles = list(JOB_SECURITY_MEDIC)
 
 /datum/loadout_item/suit/jacket/security_medic
-	name = "Security Medic's Labcoat"
-	item_path = /obj/item/clothing/suit/toggle/labcoat/skyrat/security_medic
+	name = "Security Medic's Blue Labcoat"
+	item_path = /obj/item/clothing/suit/toggle/labcoat/skyrat/security_medic/blue
 	restricted_roles = list(JOB_SECURITY_MEDIC)
 
 // Silver Jacket Mk2 but for all of Command
@@ -125,28 +130,28 @@
 /datum/loadout_item/suit/runner_engi
 	name = "Engineer Runner Jacket"
 	item_path = /obj/item/clothing/suit/jacket/runner/engi
-	donator_only = TRUE //Dono item for Kan3
+	//donator_only = TRUE //Dono item for Kan3 //Splurt Edit
 
 /datum/loadout_item/suit/runner_syndi
 	name = "Syndicate Runner Jacket"
 	item_path = /obj/item/clothing/suit/jacket/runner/syndicate
-	donator_only = TRUE //Dono item for Kan3
+	//donator_only = TRUE //Dono item for Kan3 //Splurt Edit
 
 /datum/loadout_item/suit/collared_vest
 	name = "GLP-C 'Úlfur' Vest"
 	item_path = /obj/item/clothing/suit/armor/vest/collared_vest
 	restricted_roles = list(ALL_JOBS_SEC, ALL_JOBS_CENTRAL)
-	donator_only = TRUE //Dono item for offwrldr
+	//donator_only = TRUE //Dono item for offwrldr
 
 /datum/loadout_item/suit/highvisjacket //sprites by Keila
 	name = "High Vis Trucker Jacket"
 	item_path = /obj/item/clothing/suit/jacket/trucker/highvis
-	donator_only = TRUE //Donator item for arandomhyena
+	//donator_only = TRUE //Donator item for arandomhyena
 
 /datum/loadout_item/suit/roninjacket //sprites by Keila
 	name = "Ronin Jacket"
 	item_path = /obj/item/clothing/suit/jacket/trucker/ronin
-	donator_only = TRUE //Donator item for arandomhyena
+	//donator_only = TRUE //Donator item for arandomhyena
 
 /datum/loadout_item/suit/flight //Donor item for ironknight060
 	name = "MA-1 flight jacket"
@@ -231,7 +236,3 @@
 /datum/loadout_item/suit/paraimposterbomber
 	name = "Suspicious Bomber Jacket"
 	item_path = /obj/item/clothing/suit/toggle/jacket/zubber/bomber/syndicate/fake
-
-/datum/loadout_item/suit/trenchcoat
-	name = "Trenchcoat"
-	item_path = /obj/item/clothing/suit/toggle/jacket/trenchcoat

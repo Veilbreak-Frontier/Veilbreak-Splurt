@@ -102,3 +102,9 @@
 		computer.visible_message(span_danger("\The [computer]'s screen displays a \"Process [filename].[filetype] (PID [rand(100,999)]) terminated - Network Error\" error"))
 	else
 		computer.visible_message(span_danger("\The [computer]'s screen briefly freezes and then shows \"NETWORK ERROR - NTNet connection lost. Please retry. If problem persists contact your system administrator.\" error."))
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/datum/computer_file/proc/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
+	SIGNAL_HANDLER
+	SHOULD_CALL_PARENT(TRUE)
+	computer_installing.stored_files.Add(src)

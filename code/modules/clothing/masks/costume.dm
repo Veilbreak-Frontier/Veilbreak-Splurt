@@ -93,3 +93,8 @@
 	greyscale_config_worn = /datum/greyscale_config/rebellion_mask/worn
 	flags_1 = IS_PLAYER_COLORABLE_1
 	custom_materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT)
+
+// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
+/obj/item/clothing/mask/joy/reskin_obj(mob/user)
+	. = ..()
+	user.update_worn_mask()
