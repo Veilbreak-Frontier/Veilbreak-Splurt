@@ -21,7 +21,14 @@ GLOBAL_VAR_INIT(guest_pass_uid_counter, 0)
 		return
 	GLOB.pda_guest_pass_programs -= REF(app)
 
-/// TRUE if this mob is a player with a mind, appears on the general crew manifest, and is on a station Z-level.
+/// The human carrying this PDA/tablet (hands, belt, ID slot, bag, etc.), if any.
+/proc/veilbreak_guest_pass_pda_carrier(obj/item/modular_computer/device)
+	if(!istype(device))
+		return null
+	var/mob/living/carbon/human/found = recursive_loc_check(device, /mob/living/carbon/human)
+	return istype(found) ? found : null
+
+/// TRUE if this mob is a player with a mind, appears on the general crew manifest, and is on station or mining Z-levels.
 /proc/veilbreak_guest_pass_is_eligible_recipient(mob/living/carbon/human/recipient)
 	if(!ishuman(recipient))
 		return FALSE
@@ -30,7 +37,9 @@ GLOBAL_VAR_INIT(guest_pass_uid_counter, 0)
 	if(!find_record(recipient.real_name))
 		return FALSE
 	var/turf/here = get_turf(recipient)
-	if(!here || !is_station_level(here.z))
+	if(!here)
+		return FALSE
+	if(!is_station_level(here.z) && !is_mining_level(here.z))
 		return FALSE
 	return TRUE
 
@@ -146,7 +155,6 @@ GLOBAL_VAR_INIT(guest_pass_uid_counter, 0)
 	return TRUE
 
 /datum/computer_file/program/guest_access_pass/kill_program(mob/user)
-	unregister_guest_pass_program(src)
 	return ..()
 
 /datum/computer_file/program/guest_access_pass/can_run(mob/user, loud = FALSE, access_to_check, downloading = FALSE, list/access)
@@ -210,7 +218,7 @@ GLOBAL_VAR_INIT(guest_pass_uid_counter, 0)
 		var/datum/computer_file/program/guest_access_pass/other = GLOB.pda_guest_pass_programs[refkey]
 		if(!istype(other) || other == src || !istype(other.computer))
 			continue
-		var/mob/living/carbon/human/carrier = other.computer.loc
+		var/mob/living/carbon/human/carrier = veilbreak_guest_pass_pda_carrier(other.computer)
 		if(!veilbreak_guest_pass_is_eligible_recipient(carrier))
 			continue
 		var/obj/item/modular_computer/oc = other.computer
@@ -310,7 +318,7 @@ GLOBAL_VAR_INIT(guest_pass_uid_counter, 0)
 		chosen |= num
 	if(!length(chosen))
 		return FALSE
-	var/mob/living/carbon/human/recipient_mob = recipient_app.computer.loc
+	var/mob/living/carbon/human/recipient_mob = veilbreak_guest_pass_pda_carrier(recipient_app.computer)
 	if(!istype(recipient_mob) || recipient_mob.stat >= UNCONSCIOUS)
 		computer.balloon_alert(sponsor, "they need their PDA!")
 		return FALSE
