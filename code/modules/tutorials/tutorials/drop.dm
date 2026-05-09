@@ -107,17 +107,3 @@
 #undef STAGE_DROP_ITEM
 #undef STAGE_PICK_SOMETHING_UP
 #undef TIME_TO_START_MOVING_DROP_ICON
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/tutorial/drop/proc/on_swap_hands()
-	SIGNAL_HANDLER
-
-	if (isnull(user.get_active_held_item()))
-		if (stage != STAGE_PICK_SOMETHING_UP)
-			stage = STAGE_PICK_SOMETHING_UP
-			show_instructions()
-	else if (stage == STAGE_PICK_SOMETHING_UP)
-		stage = STAGE_DROP_ITEM
-		show_instructions()
-
-	update_held_item()

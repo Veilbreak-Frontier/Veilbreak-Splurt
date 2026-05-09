@@ -943,38 +943,3 @@ GLOBAL_LIST_INIT(nullrod_variants, init_nullrod_variants())
 	living_target.apply_damage(round(sneak_attack_dice, DAMAGE_PRECISION), BRUTE, def_zone = affecting, blocked = armor_block, wound_bonus = exposed_wound_bonus, sharpness = SHARP_EDGED)
 	living_target.balloon_alert(user, "sneak attack!")
 	playsound(living_target, 'sound/items/weapons/guillotine.ogg', 50, TRUE)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/nullrod/attack(mob/living/target_mob, mob/living/user, list/modifiers, list/attack_modifiers)
-	if(!user.mind?.holy_role)
-		return ..()
-	if(!IS_CULTIST(target_mob) || istype(target_mob, /mob/living/carbon/human/cult_ghost))
-		return ..()
-
-	var/old_stat = target_mob.stat
-	. = ..()
-	if(old_stat < target_mob.stat)
-		LAZYOR(cultists_slain, REF(target_mob))
-	return .
-
-/obj/item/nullrod/examine(mob/user)
-	. = ..()
-	if(!IS_CULTIST(user) || !GET_ATOM_BLOOD_DNA_LENGTH(src))
-		return
-
-	var/num_slain = LAZYLEN(cultists_slain)
-	. += span_cult_italic("It has the blood of [num_slain] fallen cultist[num_slain == 1 ? "" : "s"] on it. \
-		<b>Offering</b> it to Nar'sie will transform it into a [num_slain >= 3 ? "powerful" : "standard"] cult weapon.")
-
-/obj/item/nullrod/vibro/talking/Initialize(mapload)
-	. = ..()
-	AddComponent(/datum/component/spirit_holding)
-
-/obj/item/nullrod/vibro/talking/chainsword/Initialize(mapload)
-	. = ..()
-	AddElement(/datum/element/cuffable_item) //Thanks goodness it cannot be selected by chappies
-
-/// Other Variants
-/// Not a special category on their own, but usually possess more unique mechanics
-
-// God Hand - Cannot be dropped. Does burn damage.

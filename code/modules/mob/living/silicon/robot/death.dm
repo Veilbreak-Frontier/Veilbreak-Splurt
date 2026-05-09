@@ -42,9 +42,3 @@
 	eye_lights.icon = icon
 	regenerate_icons()
 	add_overlay(eye_lights)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/silicon/robot/dust(just_ash, drop_items, force)
-	// You do not get MMI'd if you are dusted
-	QDEL_NULL(mmi)
-	return ..()

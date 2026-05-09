@@ -321,14 +321,3 @@
 	malf_ai.add_malf_picker()
 
 #undef PROB_SPECIAL
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/antagonist/malf_ai/proc/core_status(datum/source)
-	SIGNAL_HANDLER
-
-	var/mob/living/silicon/ai/malf_owner = owner.current
-	if(malf_owner?.linked_core)
-		return COMPONENT_CORE_ALL_GOOD
-	return COMPONENT_CORE_DISCONNECTED
-
-//Subtype of Malf AI datum, used for one of the traitor final objectives

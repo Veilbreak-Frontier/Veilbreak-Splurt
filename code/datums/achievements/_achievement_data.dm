@@ -135,16 +135,3 @@
 	set desc = "See all of your achievements!"
 
 	persistent_client.achievements.ui_interact(usr)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/achievement_data/proc/unlock(achievement_type, mob/user, value = 1)
-	set waitfor = FALSE
-
-	if(!SSachievements.achievements_enabled)
-		return
-	var/datum/award/award = SSachievements.awards[achievement_type]
-	get_data(achievement_type) //Get the current status first if necessary
-	award.unlock(user, src, value)
-	update_static_data(user)
-
-///Getter for the status/score of an achievement

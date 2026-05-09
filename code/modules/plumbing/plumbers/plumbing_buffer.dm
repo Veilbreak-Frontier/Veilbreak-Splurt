@@ -121,9 +121,3 @@
 #undef UNREADY
 #undef IDLE
 #undef READY
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/plumbing/buffer/Initialize(mapload, bolt, layer)
-	. = ..()
-
-	AddComponent(/datum/component/plumbing/buffer, bolt, layer)

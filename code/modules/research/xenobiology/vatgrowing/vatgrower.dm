@@ -213,23 +213,3 @@
 
 /obj/machinery/vatgrower/small/unanchored
 	anchored = FALSE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/vatgrower/Initialize(mapload, bolt, layer)
-	. = ..()
-	create_reagents(reagent_volume, reagent_flags)
-
-	if(use_plumbing)
-		AddComponent(/datum/component/simple_rotation)
-		AddComponent(/datum/component/plumbing/simple_demand)
-
-	var/static/list/hovering_item_typechecks = list(
-		/obj/item/petri_dish = list(
-			SCREENTIP_CONTEXT_LMB = "Add Sample",
-		),
-		/obj/item/reagent_containers = list(
-			SCREENTIP_CONTEXT_LMB = "Pour Reagents",
-		),
-	)
-	AddElement(/datum/element/contextual_screentip_item_typechecks, hovering_item_typechecks)
-	AddElement(/datum/element/contextual_screentip_bare_hands, lmb_text = "Toggle Resampler", rmb_text = "Flush Soup")

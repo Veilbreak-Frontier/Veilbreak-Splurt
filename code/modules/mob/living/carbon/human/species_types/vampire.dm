@@ -279,28 +279,3 @@
 
 #undef VAMPIRES_PER_HOUSE
 #undef VAMP_DRAIN_AMOUNT
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/species/human/vampire/spec_life(mob/living/carbon/human/vampire, seconds_per_tick, times_fired)
-	. = ..()
-	if(istype(vampire.loc, /obj/structure/closet/crate/coffin))
-		var/need_mob_update = FALSE
-		need_mob_update += vampire.heal_overall_damage(brute = 2 * seconds_per_tick, burn = 2 * seconds_per_tick, updating_health = FALSE, required_bodytype = BODYTYPE_ORGANIC)
-		need_mob_update += vampire.adjust_tox_loss(-2 * seconds_per_tick, updating_health = FALSE,)
-		need_mob_update += vampire.adjust_oxy_loss(-2 * seconds_per_tick, updating_health = FALSE,)
-		if(need_mob_update)
-			vampire.updatehealth()
-		return
-	vampire.adjust_blood_volume(-0.125 * seconds_per_tick)
-	if(vampire.get_blood_volume(apply_modifiers = TRUE) <= BLOOD_VOLUME_SURVIVE)
-		to_chat(vampire, span_danger("You ran out of blood!"))
-		vampire.investigate_log("has been dusted by a lack of blood (vampire).", INVESTIGATE_DEATHS)
-		vampire.dust()
-	var/area/A = get_area(vampire)
-	if(istype(A, /area/station/service/chapel))
-		to_chat(vampire, span_warning("You don't belong here!"))
-		vampire.adjust_fire_loss(10 * seconds_per_tick)
-		vampire.adjust_fire_stacks(3 * seconds_per_tick)
-		vampire.ignite_mob()
-
-///Gives the blood HUD to the vampire so they always know how much blood they have.

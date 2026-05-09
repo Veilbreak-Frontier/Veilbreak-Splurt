@@ -986,7 +986,3 @@ GLOBAL_DATUM_INIT(steal_item_handler, /datum/objective_item_handler, new())
 
 /obj/item/storage/belt/sheath/sabre/add_stealing_item_objective()
 	return add_item_to_steal(src, /obj/item/storage/belt/sheath/sabre)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/computer_disk/hdd_theft/add_stealing_item_objective()
-	return add_item_to_steal(src, /obj/item/computer_disk/hdd_theft)

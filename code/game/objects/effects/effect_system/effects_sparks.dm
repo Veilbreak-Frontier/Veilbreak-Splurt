@@ -106,10 +106,3 @@
 
 /datum/effect_system/basic/lightning_spread
 	effect_type = /obj/effect/particle_effect/sparks/electricity
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/proc/do_sparks(number, cardinal_only, datum/source)
-	var/datum/effect_system/spark_spread/sparks = new
-	sparks.set_up(number, cardinal_only, source)
-	sparks.autocleanup = TRUE
-	sparks.start()

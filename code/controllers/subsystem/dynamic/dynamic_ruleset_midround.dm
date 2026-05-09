@@ -1217,22 +1217,3 @@
 		source = candidate.current,
 		header = "Love Can Bloom",
 	)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/dynamic_ruleset/midround/from_ghosts/xenomorph/proc/find_vents()
-	var/list/vents = list()
-	var/list/vent_pumps = SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/atmospherics/components/unary/vent_pump)
-	for(var/obj/machinery/atmospherics/components/unary/vent_pump/temp_vent as anything in vent_pumps)
-		if(QDELETED(temp_vent))
-			continue
-		if(!is_station_level(temp_vent.loc.z) || temp_vent.welded)
-			continue
-		var/datum/pipeline/temp_vent_parent = temp_vent.parents[1]
-		if(!temp_vent_parent)
-			continue
-		// Stops Aliens getting stuck in small networks.
-		// See: Security, Virology
-		if(length(temp_vent_parent.other_atmos_machines) <= 20)
-			continue
-		vents += temp_vent
-	return vents

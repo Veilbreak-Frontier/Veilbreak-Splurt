@@ -9,13 +9,6 @@ GLOBAL_VAR_INIT(blooper_allowed, TRUE) // For administrators
 	blooper_pitch_range = client.prefs.read_preference(/datum/preference/numeric/blooper_pitch_range)
 	. = ..()
 
-// Mechanics for Changelings
-/datum/changeling_profile
-	var/blooper_id
-	var/blooper_pitch
-	var/blooper_pitch_range
-	var/blooper_speed
-
 /datum/smite/normalblooper
 	name = "Normal blooper"
 
@@ -158,23 +151,3 @@ GLOBAL_VAR_INIT(blooper_allowed, TRUE) // For administrators
 	minimum = 0
 	maximum = 60
 	step = 5
-
-/// It's was stoolen from Splurt build >:3 and from fluffySTG!! nyeehehehheee!~
-/datum/blooper
-	var/name = "None"
-	var/id = "No Voice"
-	var/soundpath
-
-	var/minpitch = BLOOPER_DEFAULT_MINPITCH
-	var/maxpitch = BLOOPER_DEFAULT_MAXPITCH
-	var/minvariance = BLOOPER_DEFAULT_MINVARY
-	var/maxvariance = BLOOPER_DEFAULT_MAXVARY
-
-	// Speed vars. Speed determines the number of characters required for each blooper, with lower speeds being faster with higher blooper density
-	var/minspeed = BLOOPER_DEFAULT_MINSPEED
-	var/maxspeed = BLOOPER_DEFAULT_MAXSPEED
-
-	// Visibility vars. Regardless of what's set below, these can still be obtained via adminbus and genetics. Rule of fun.
-	var/list/ckeys_allowed
-	var/ignore = FALSE // If TRUE - only for admins
-	var/allow_random = FALSE

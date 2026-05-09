@@ -25,5 +25,5 @@
 	filling_color = "#FF4500"
 	bite_consumption_mod = 0.5
 	foodtypes = FRUIT
-	juice_typepath = /datum/reagent/consumable/coconut_milk
+	juice_typepath_stored = /datum/reagent/consumable/coconut_milk
 	tastes = list("milk" = 1)

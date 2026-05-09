@@ -372,8 +372,3 @@
 			log_combat(user, occupant, "sprayed [chem] into", addition = "via [src]")
 		return TRUE
 	return ..()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/sleeper/nap_violation(mob/violator)
-	. = ..()
-	open_machine()

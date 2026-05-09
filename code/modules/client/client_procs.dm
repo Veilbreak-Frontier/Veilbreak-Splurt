@@ -1344,29 +1344,3 @@ GLOBAL_LIST_INIT(unrecommended_builds, list(
 #undef LIMITER_SIZE
 #undef MINUTE_COUNT
 #undef SECOND_COUNT
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/client/proc/init_async_age_check()
-	set waitfor = FALSE
-
-	var/join_date = findJoinDate()
-
-	if(!join_date)
-		return
-
-	account_join_date = join_date
-
-	SSdbcore.FireAndForget(
-		"UPDATE [format_table_name("player")] SET accountjoindate = :date WHERE ckey = :ckey",
-		list("date" = join_date, "ckey" = ckey)
-	)
-
-/client/proc/give_award(achievement_type, mob/user, value = 1)
-	return persistent_client.achievements.unlock(achievement_type, user, value)
-
-///Redirect proc that makes it easier to get the status of an achievement. Achievement type is the typepath to the award.
-
-/client/proc/get_award_status(achievement_type, mob/user, value = 1)
-	return persistent_client.achievements.get_achievement_status(achievement_type)
-
-///Gives someone hearted status for OOC, from behavior commendations

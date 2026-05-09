@@ -45,9 +45,3 @@
 				amount = S.transfer_side
 	S.use_energy(S.active_power_usage)
 	return ..()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/component/plumbing/splitter/Initialize(start=TRUE, _ducting_layer, _turn_connects=TRUE, datum/reagents/custom_receiver)
-	. = ..()
-	if(. && !istype(parent, /obj/machinery/plumbing/splitter))
-		return FALSE

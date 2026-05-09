@@ -251,9 +251,3 @@
 			return FALSE
 	computer.say("Not enough research points...")
 	return FALSE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/computer_file/program/science/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
-	. = ..()
-	if(!CONFIG_GET(flag/no_default_techweb_link) && !stored_research)
-		CONNECT_TO_RND_SERVER_ROUNDSTART(stored_research, computer)

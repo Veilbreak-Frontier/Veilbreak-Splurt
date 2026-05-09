@@ -1,6 +1,8 @@
 /datum/changeling_profile
 	/// The blooper voice used by the profile source
 	var/datum/blooper/blooper
+	/// Blooper preset id (sound-bark system)
+	var/blooper_id
 	/// The blooper speed used by the profile source
 	var/blooper_speed
 	/// The blooper pitch used by the profile source

@@ -100,27 +100,3 @@
 
 /obj/item/organ/zombie_infection/nodamage
 	causes_damage = FALSE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/organ/zombie_infection/process(seconds_per_tick, times_fired)
-	if(!owner)
-		return
-	if(!(src in owner.organs))
-		Remove(owner)
-	if(owner.mob_biotypes & MOB_MINERAL)//does not process in inorganic things
-		return
-	if (causes_damage && !iszombie(owner) && owner.stat != DEAD)
-		owner.adjust_tox_loss(0.5 * seconds_per_tick)
-		if (SPT_PROB(5, seconds_per_tick))
-			to_chat(owner, span_danger("You feel sick..."))
-	if(timer_id || HAS_TRAIT(owner, TRAIT_SUICIDED) || !owner.get_organ_by_type(/obj/item/organ/brain))
-		return
-	if(owner.stat != DEAD && !converts_living)
-		return
-	if(!iszombie(owner))
-		to_chat(owner, span_cult_large("You can feel your heart stopping, but something isn't right... \
-		life has not abandoned your broken form. You can only feel a deep and immutable hunger that \
-		not even death can stop, you will rise again!"))
-	var/revive_time = rand(revive_time_min, revive_time_max)
-	var/flags = TIMER_STOPPABLE
-	timer_id = addtimer(CALLBACK(src, PROC_REF(zombify), owner), revive_time, flags)

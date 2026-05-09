@@ -241,20 +241,3 @@
 // no real reason for most of this weird oldcode
 /datum/action/innate/seek_master/Activate()
 	return
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/basic/construct/harvester/heretic/Life(seconds_per_tick, times_fired)
-	. = ..()
-	if(!.) //dead or deleted
-		return
-
-	if(!SPT_PROB(7, seconds_per_tick))
-		return
-
-	var/turf/adjacent = get_step(src, pick(GLOB.alldirs))
-	// 90% chance to be directional, otherwise what we're on top of
-	var/turf/open/land = (isopenturf(adjacent) && prob(90)) ? adjacent : get_turf(src)
-	do_rust_heretic_act(land)
-
-	if(prob(7))
-		to_chat(src, span_notice("Eldritch energies emanate from your body."))

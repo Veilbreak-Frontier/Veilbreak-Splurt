@@ -418,18 +418,3 @@
 						to_chat(L, span_warning("You cannot attach this assembly to these wires!"))
 
 #undef MAXIMUM_EMP_WIRES
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/wires/proc/pulse_assembly(obj/item/assembly/S)
-	for(var/color in assemblies)
-		if(S == assemblies[color])
-			pulse_color(color, force=TRUE)
-			return TRUE
-
-/datum/wires/proc/attach_assembly(color, obj/item/assembly/S)
-	if(S && istype(S) && S.assembly_behavior && !is_attached(color) && !(SEND_SIGNAL(S, COMSIG_ASSEMBLY_PRE_ATTACH, holder) & COMPONENT_CANCEL_ATTACH))
-		assemblies[color] = S
-		S.forceMove(holder)
-		S.connected = src
-		S.on_attach() // Notify assembly that it is attached
-		return S

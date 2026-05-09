@@ -517,30 +517,3 @@
 
 	if(inhabitant.reagents.get_reagent_amount(/datum/reagent/consumable/milk) < 20)
 		inhabitant.reagents.add_reagent(/datum/reagent/consumable/milk, 2)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/simple_animal/hostile/ooze/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	. = ..()
-
-	if(!.) //dead or deleted
-		return
-
-	if(!mind && stat != DEAD)//no mind no change
-		return
-
-	var/nutrition_change = ooze_nutrition_loss
-
-	//Eat a bit of all the reagents we have. Gaining nutrition for actual nutritional ones.
-	for(var/i in reagents?.reagent_list)
-		var/datum/reagent/reagent = i
-		var/consumption_amount = min(reagents.get_reagent_amount(reagent.type), ooze_metabolism_modifier * REAGENTS_METABOLISM * seconds_per_tick)
-		if(istype(reagent, /datum/reagent/consumable))
-			var/datum/reagent/consumable/consumable = reagent
-			nutrition_change += consumption_amount * consumable.get_nutriment_factor(src)
-		reagents.remove_reagent(reagent.type, consumption_amount)
-	adjust_ooze_nutrition(nutrition_change)
-
-	if(ooze_nutrition <= 0)
-		adjust_brute_loss(0.25 * seconds_per_tick)
-
-/// Returns an applicable list of actions to grant to the mob. Will return a list or null.

@@ -230,13 +230,3 @@
 
 #undef PERCEPTOMATRIX_INACTIVE_FLAGS
 #undef PERCEPTOMATRIX_ACTIVE_FLAGS
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/action/cooldown/spell/pointed/percept_hallucination/New(Target)
-	. = ..()
-
-	spark_sys = new /datum/effect_system/spark_spread/quantum
-
-/datum/action/cooldown/spell/pointed/percept_hallucination/Destroy()
-	QDEL_NULL(spark_sys)
-	return ..()

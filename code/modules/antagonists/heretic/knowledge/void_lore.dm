@@ -315,37 +315,3 @@
 	else
 		hitting_projectile.set_angle(rand(0, 360))//SHING
 	return COMPONENT_BULLET_PIERCED
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/heretic_knowledge/ultimate/void_final/proc/on_life(mob/living/source, seconds_per_tick, times_fired)
-	SIGNAL_HANDLER
-
-	for(var/atom/thing_in_range as anything in range(10, source))
-		if(iscarbon(thing_in_range))
-			var/mob/living/carbon/close_carbon = thing_in_range
-			if(IS_HERETIC_OR_MONSTER(close_carbon))
-				close_carbon.apply_status_effect(/datum/status_effect/void_conduit)
-				continue
-			close_carbon.adjust_silence_up_to(2 SECONDS, 20 SECONDS)
-			close_carbon.apply_status_effect(/datum/status_effect/void_chill, 1)
-			close_carbon.adjust_eye_blur(rand(0 SECONDS, 2 SECONDS))
-			close_carbon.adjust_bodytemperature(-30 * TEMPERATURE_DAMAGE_COEFFICIENT)
-
-		if(istype(thing_in_range, /obj/machinery/door) || istype(thing_in_range, /obj/structure/door_assembly))
-			var/obj/affected_door = thing_in_range
-			affected_door.take_damage(rand(60, 80))
-
-		if(istype(thing_in_range, /obj/structure/window) || istype(thing_in_range, /obj/structure/grille))
-			var/obj/structure/affected_structure = thing_in_range
-			affected_structure.take_damage(rand(20, 40))
-
-		if(isturf(thing_in_range))
-			var/turf/affected_turf = thing_in_range
-			var/datum/gas_mixture/environment = affected_turf.return_air()
-			environment.temperature *= 0.9
-
-	// Telegraph the storm in every area on the station.
-	var/list/station_levels = SSmapping.levels_by_trait(ZTRAIT_STATION)
-	if(!storm)
-		storm = new /datum/weather/void_storm(station_levels)
-		storm.telegraph()

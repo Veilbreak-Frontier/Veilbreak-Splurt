@@ -18,14 +18,3 @@
 	var/obj/machinery/plumbing/acclimator/myacclimator = parent
 	if(!myacclimator.emptying)
 		..()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/component/plumbing/acclimator/Initialize(start=TRUE, _ducting_layer, _turn_connects=TRUE, datum/reagents/custom_receiver)
-	. = ..()
-	if(!istype(parent, /obj/machinery/plumbing/acclimator))
-		return COMPONENT_INCOMPATIBLE
-	myacclimator = parent
-
-/datum/component/plumbing/acclimator/Destroy(force)
-	myacclimator = null
-	return ..()

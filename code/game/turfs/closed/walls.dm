@@ -334,11 +334,3 @@
 	to_chat(user, span_notice("You adjust [src]."))
 	tool.play_tool_sound(src)
 	return ITEM_INTERACT_SUCCESS
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/turf/closed/wall/rust_turf()
-	if(HAS_TRAIT(src, TRAIT_RUSTY))
-		ScrapeAway()
-		return
-
-	return ..()

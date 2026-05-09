@@ -444,27 +444,3 @@
 	icon = 'icons/obj/medical/chemical.dmi'
 	icon_state = "sprayer_med_yellow"
 	list_reagents = list(/datum/reagent/medicine/c2/hercuri = 100)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/reagent_containers/spray/pepper/try_spray(atom/target, mob/user)
-	if (target.loc == user)
-		return FALSE
-	return ..()
-
-//water flower
-
-/obj/item/reagent_containers/spray/chemsprayer/try_spray(atom/target, mob/user)
-	if (target.loc == user)
-		return FALSE
-	return ..()
-
-/obj/item/reagent_containers/spray/medical/reskin_obj(mob/M)
-	..()
-	switch(icon_state)
-		if("sprayer_med_red")
-			inhand_icon_state = "sprayer_med_red"
-		if("sprayer_med_yellow")
-			inhand_icon_state = "sprayer_med_yellow"
-		if("sprayer_med_blue")
-			inhand_icon_state = "sprayer_med_blue"
-	M.update_held_items()

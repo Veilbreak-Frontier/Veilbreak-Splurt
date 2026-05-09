@@ -249,34 +249,3 @@
 	return span_danger("[owner.p_Their()] heart produces [beat_noise].")
 
 #undef DOAFTER_IMPLANTING_HEART
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/organ/heart/cybernetic/anomalock/proc/clear_lightning_overlay()
-	owner.cut_overlay(lightning_overlay)
-	lightning_overlay = null
-
-/obj/item/organ/heart/cybernetic/anomalock/on_life(seconds_per_tick, times_fired)
-	. = ..()
-	if(!core)
-		return
-
-	owner.adjust_blood_volume(5 * seconds_per_tick, maximum = BLOOD_VOLUME_NORMAL)
-
-	if(owner.health <= owner.crit_threshold)
-		activate_survival(owner)
-
-	if(times_fired % (1 SECONDS))
-		return
-
-	var/list/batteries = list()
-	for(var/obj/item/stock_parts/power_store/cell in assoc_to_values(owner.get_all_cells()))
-		if(cell.used_charge())
-			batteries += cell
-
-	if(!length(batteries))
-		return
-
-	var/obj/item/stock_parts/power_store/cell = pick(batteries)
-	cell.give(cell.max_charge() * 0.1)
-
-///Does a few things to try to help you live whatever you may be going through

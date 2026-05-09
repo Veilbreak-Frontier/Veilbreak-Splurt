@@ -102,13 +102,3 @@
 /mob/living/basic/migo/hatsune/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/death_drops, /obj/item/instrument/piano_synth)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/basic/migo/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	. = ..()
-	if(!.) //dead or deleted
-		return
-	if(stat)
-		return
-	if(SPT_PROB(5, seconds_per_tick))
-		make_migo_sound()

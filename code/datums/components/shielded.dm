@@ -205,26 +205,3 @@
 	owner.visible_message(span_danger("[owner]'s shields deflect [attack_text] in a shower of sparks!"))
 	if(current_charges <= 0)
 		owner.visible_message(span_warning("[owner]'s shield overloads!"))
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/component/shielded/Initialize(max_charges = 3, recharge_start_delay = 20 SECONDS, charge_increment_delay = 1 SECONDS, charge_recovery = 1, lose_multiple_charges = FALSE, show_charge_as_alpha = FALSE, recharge_path = null, starting_charges = null, shield_icon_file = 'icons/effects/effects.dmi', shield_icon = "shield-old", shield_inhand = FALSE, run_hit_callback)
-	if(!isitem(parent) || max_charges <= 0)
-		return COMPONENT_INCOMPATIBLE
-
-	src.max_charges = max_charges
-	src.recharge_start_delay = recharge_start_delay
-	src.charge_increment_delay = charge_increment_delay
-	src.charge_recovery = charge_recovery
-	src.lose_multiple_charges = lose_multiple_charges
-	src.show_charge_as_alpha = show_charge_as_alpha
-	src.recharge_path = recharge_path
-	src.shield_icon_file = shield_icon_file
-	src.shield_icon = shield_icon
-	src.shield_inhand = shield_inhand
-	src.on_hit_effects = run_hit_callback || CALLBACK(src, PROC_REF(default_run_hit_callback))
-	if(isnull(starting_charges))
-		current_charges = max_charges
-	else
-		current_charges = starting_charges
-	if(recharge_start_delay)
-		START_PROCESSING(SSdcs, src)

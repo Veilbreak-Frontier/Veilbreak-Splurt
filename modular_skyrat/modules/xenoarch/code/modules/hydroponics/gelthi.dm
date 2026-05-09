@@ -24,5 +24,5 @@
 	filling_color = "#FF4500"
 	bite_consumption_mod = 0.5
 	foodtypes = FRUIT
-	juice_typepath = /datum/reagent/consumable/sugar
+	juice_typepath_stored = /datum/reagent/consumable/sugar
 	tastes = list("overpowering sweetness" = 1)

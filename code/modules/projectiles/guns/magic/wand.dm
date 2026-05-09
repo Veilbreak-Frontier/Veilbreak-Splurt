@@ -430,12 +430,6 @@
 
 #endif
 
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/gun/magic/wand/proc/zap_self(mob/living/user)
-	user.visible_message(span_danger("[user] zaps [user.p_them()]self with [src]."))
-	playsound(user, fire_sound, 50, TRUE)
-	user.log_message("zapped [user.p_them()]self with a <b>[src]</b>", LOG_ATTACK)
-
 
 /////////////////////////////////////
 //WAND OF DEATH
@@ -526,15 +520,3 @@
 	charges--
 	user.AddComponent(/datum/component/shrink, -1) // small forever
 	return ..()
-
-// Wand of debugging
-
-#ifdef TESTING
-
-/obj/item/gun/magic/wand/antag/zap_self(mob/living/user)
-	. = ..()
-	var/obj/item/ammo_casing/magic/antag/casing = new ammo_type()
-	var/obj/projectile/magic/magic_proj = casing.projectile_type
-	magic_proj = new magic_proj(src)
-	magic_proj.on_hit(user)
-	QDEL_NULL(casing)

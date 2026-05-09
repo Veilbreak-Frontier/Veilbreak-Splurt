@@ -84,22 +84,3 @@
 	return id_account.civilian_bounty
 
 #undef CIV_BOUNTY_SPLIT
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/computer_file/program/civilianbounties/proc/generate_bounty_list(bounty_types, bounty_rolls = 3, assistant_failsafe = TRUE)
-	var/list/rolling_list = list()
-	if(assistant_failsafe)
-		rolling_list += random_bounty(CIV_JOB_BASIC)
-	while(bounty_rolls > 1)
-		var/datum/bounty/potential_bounty = random_bounty(bounty_types)
-		var/repeats_bool = FALSE
-		for(var/datum/iterator in rolling_list)
-			if(iterator.type == potential_bounty.type)
-				repeats_bool = TRUE
-		if(repeats_bool)
-			continue
-		rolling_list += potential_bounty
-		bounty_rolls -= 1
-	return rolling_list
-
-#undef CIV_BOUNTY_SPLIT

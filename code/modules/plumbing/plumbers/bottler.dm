@@ -100,9 +100,3 @@
 			reagents.trans_to(AM, wanted_amount, methods = INJECT)
 		else if(istype(AM, /obj/item/slimecross/industrial)) ///no need to move slimecross industrial things
 			reagents.trans_to(AM, wanted_amount, methods = INJECT)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/plumbing/bottler/Initialize(mapload, bolt, layer)
-	. = ..()
-	AddComponent(/datum/component/plumbing/simple_demand, bolt, layer)
-	setDir(dir)

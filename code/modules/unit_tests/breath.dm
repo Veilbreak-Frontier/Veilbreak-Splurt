@@ -105,10 +105,3 @@
 	for(var/turf/open/tile in lavalandable_turfs)
 		tile.copy_air(volumetric_mix)
 		tile.air_update_turf(update = FALSE, remove = FALSE)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/unit_test/breath/breath_sanity_ashwalker/Destroy()
-	//Reset initial_gas_mix to avoid future issues on other tests
-	var/turf/open/to_fill = run_loc_floor_bottom_left
-	to_fill.initial_gas_mix = OPENTURF_DEFAULT_ATMOS
-	return ..()

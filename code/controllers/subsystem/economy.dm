@@ -288,9 +288,3 @@ SUBSYSTEM_DEF(economy)
 #undef ECON_DEPARTMENT_STEP
 #undef ECON_ACCOUNT_STEP
 #undef ECON_PRICE_UPDATE_STEP
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/controller/subsystem/economy/proc/get_dep_account(dep_id)
-	for(var/datum/bank_account/department/D in departmental_accounts)
-		if(D.department_id == dep_id)
-			return D

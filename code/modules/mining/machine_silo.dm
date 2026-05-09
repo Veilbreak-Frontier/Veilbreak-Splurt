@@ -625,29 +625,3 @@
 		separator = ", "
 		msg += "[amount < 0 ? "-" : "+"][val] [M.name]"
 	return msg.Join()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/ore_silo/proc/on_item_consumed(datum/component/material_container/container, obj/item/item_inserted, last_inserted_id, mats_consumed, amount_inserted, atom/context, alist/user_data)
-	SIGNAL_HANDLER
-
-	silo_log(context, "DEPOSITED", amount_inserted, item_inserted.name, mats_consumed, user_data)
-
-	SEND_SIGNAL(context, COMSIG_SILO_ITEM_CONSUMED, container, item_inserted, last_inserted_id, mats_consumed, amount_inserted)
-
-/obj/machinery/ore_silo/proc/log_sheets_ejected(datum/component/material_container/container, obj/item/stack/sheet/sheets, atom/context, alist/user_data)
-	SIGNAL_HANDLER
-
-	silo_log(context, "WITHDRAWN", -sheets.amount * SHEET_MATERIAL_AMOUNT, "[sheets.name]", sheets.custom_materials, user_data)
-
-/obj/machinery/ore_silo/proc/connect_receptacle(datum/component/remote_materials/receptacle, atom/movable/physical_receptacle)
-	ore_connected_machines += receptacle
-	receptacle.mat_container = src.materials
-	receptacle.silo = src
-	RegisterSignal(physical_receptacle, COMSIG_ORE_SILO_PERMISSION_CHECKED, PROC_REF(check_permitted))
-
-/obj/machinery/ore_silo/proc/disconnect_receptacle(datum/component/remote_materials/receptacle, atom/movable/physical_receptacle)
-	ore_connected_machines -= receptacle
-	receptacle.mat_container = null
-	receptacle.silo = null
-	holds -= receptacle
-	UnregisterSignal(physical_receptacle, COMSIG_ORE_SILO_PERMISSION_CHECKED)

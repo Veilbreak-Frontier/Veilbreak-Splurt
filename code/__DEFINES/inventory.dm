@@ -202,6 +202,8 @@ DEFINE_BITFIELD(no_equip_flags, list(
 /// The sprite works fine for vox snouts as is.
 #define CLOTHING_SNOUTED_BETTER_VOX_VARIATION_NO_NEW_ICON (1<<9)
 // SKYRAT EDIT ADDITION END
+/// Clothing skips alternate style / species variation lookups (single sprite set).
+#define CLOTHING_NO_VARIATION (1<<10)
 /// All variation flags which render "correctly" on a digitigrade leg setup
 #define DIGITIGRADE_VARIATIONS (CLOTHING_DIGITIGRADE_VARIATION|CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON|CLOTHING_DIGITIGRADE_MASK)
 

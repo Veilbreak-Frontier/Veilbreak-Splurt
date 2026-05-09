@@ -577,23 +577,3 @@
 
 /datum/mind/p_themselves(temp_gender)
 	return current?.p_themselves(temp_gender) || ..()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/proc/plural_s(pluralize)
-	switch(copytext_char(pluralize, -2))
-		if ("ss")
-			return "es"
-		if ("sh")
-			return "es"
-		if ("ch")
-			return "es"
-		else
-			switch(copytext_char(pluralize, -1))
-				if("s", "x", "z")
-					return "es"
-				else
-					return "s"
-
-/// A proc to replace pronouns in a string with the appropriate pronouns for a target atom.
-/// Uses associative list access from a __DEFINE list, since associative access is slightly
-/// faster

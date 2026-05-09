@@ -48,12 +48,3 @@
 			reagents.add_reagent(G.distill_reagent, amount)
 			use_energy(active_power_usage * amount)
 			qdel(G)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/plumbing/fermenter/Initialize(mapload, bolt, layer)
-	. = ..()
-	AddComponent(/datum/component/plumbing/simple_supply, bolt, layer)
-	var/static/list/loc_connections = list(
-		COMSIG_ATOM_ENTERED = PROC_REF(on_entered),
-	)
-	AddElement(/datum/element/connect_loc, loc_connections)

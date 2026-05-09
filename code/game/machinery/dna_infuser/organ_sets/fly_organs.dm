@@ -161,16 +161,3 @@
 
 #undef FLY_INFUSED_ORGAN_DESC
 #undef FLY_INFUSED_ORGAN_ICON
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/status_effect/organ_set_bonus/fly/proc/flyify(obj/item/organ/source, obj/item/bodypart/limb, movement_flags)
-	SIGNAL_HANDLER
-	var/mob/living/carbon/human/new_fly = owner
-	// just in case?
-	if(isflyperson(new_fly))
-		return
-	// needs to be done before the species is set
-	UnregisterSignal(source, COMSIG_ORGAN_BODYPART_INSERTED)
-	// okay you NEED to be a fly
-	to_chat(new_fly, span_danger("Too much fly DNA! Your skin begins to discolor into a horrible black as you become more fly than person!"))
-	new_fly.set_species(/datum/species/fly)

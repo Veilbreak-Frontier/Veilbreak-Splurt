@@ -271,18 +271,3 @@
 	)
 
 #undef FINAL_BUD_GROWTH_ICON
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/basic/venus_human_trap/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	. = ..()
-	if(!.)
-		return FALSE
-
-	var/vines_in_range = locate(/obj/structure/spacevine) in range(2, src)
-	if(!vines_in_range && !alert_shown)
-		alert_shown = TRUE
-		balloon_alert(src, "do not leave vines!")
-	else if(vines_in_range)
-		alert_shown = FALSE
-
-	adjust_brute_loss(vines_in_range ? -weed_heal : no_weed_damage) //every life tick take 20 damage if not near vines or heal 10 if near vines, 5 times out of weeds = u ded

@@ -631,14 +631,3 @@ GLOBAL_LIST_EMPTY(antagonists)
 /// Return TRUE to prevent the antag's job from handling the respawn
 /datum/antagonist/proc/on_respawn(mob/new_character)
 	return FALSE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/antagonist/proc/give_antag_moodies()
-	if(!antag_moodlet)
-		return
-	owner.current.add_mood_event("antag_moodlet_[type]", antag_moodlet)
-
-/datum/antagonist/proc/clear_antag_moodies()
-	if(!antag_moodlet)
-		return
-	owner.current.clear_mood_event("antag_moodlet_[type]")

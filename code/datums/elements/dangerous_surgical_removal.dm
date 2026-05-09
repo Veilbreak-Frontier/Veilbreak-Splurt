@@ -50,16 +50,3 @@
 	else
 		source.set_organ_damage(source.maxHealth)
 	//EDIT END
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/element/dangerous_organ_removal/Attach(datum/target, surgical = FALSE)
-	. = ..()
-	if(!isorgan(target))
-		return ELEMENT_INCOMPATIBLE
-
-	src.surgical = surgical
-
-	if(surgical)
-		RegisterSignal(target, COMSIG_ORGAN_SURGICALLY_REMOVED, PROC_REF(on_removal))
-	else
-		RegisterSignal(target, COMSIG_ORGAN_REMOVED, PROC_REF(on_removal))

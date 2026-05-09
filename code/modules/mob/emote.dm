@@ -224,36 +224,3 @@
 	if(isliving(user))
 		return ..()
 	return FALSE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/proc/emote(act, m_type = null, message = null, intentional = FALSE, force_silence = FALSE, forced = FALSE)
-	var/param = message
-	var/custom_param = findchar(act, " ")
-	if(custom_param)
-		param = copytext(act, custom_param + length(act[custom_param]))
-		act = copytext(act, 1, custom_param)
-
-	act = LOWER_TEXT(act)
-	var/list/key_emotes = GLOB.emote_list[act]
-
-	if(!length(key_emotes))
-		if(intentional && !force_silence)
-			to_chat(src, span_notice("'[act]' emote does not exist. Say *help for a list."))
-		return FALSE
-	var/silenced = FALSE
-	for(var/datum/emote/emote in key_emotes)
-		if(!emote.check_cooldown(src, intentional))
-			silenced = TRUE
-			continue
-		if(!forced && !emote.can_run_emote(src, TRUE, intentional, param))
-			continue
-		if(SEND_SIGNAL(src, COMSIG_MOB_PRE_EMOTED, emote.key, param, m_type, intentional, emote) & COMPONENT_CANT_EMOTE)
-			silenced = TRUE
-			continue
-		emote.run_emote(src, param, m_type, intentional)
-		SEND_SIGNAL(src, COMSIG_MOB_EMOTE, emote, act, m_type, message, intentional)
-		SEND_SIGNAL(src, COMSIG_MOB_EMOTED(emote.key))
-		return TRUE
-	if(intentional && !silenced && !force_silence)
-		to_chat(src, span_notice("Unusable emote '[act]'. Say *help for a list."))
-	return FALSE

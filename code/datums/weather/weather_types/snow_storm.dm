@@ -50,28 +50,3 @@
 
 	probability = 0
 	weather_temperature = parent_type::weather_temperature - 40 // faster cooling effects at lower temps
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/weather/snow_storm/can_get_alert(mob/player)
-	if(!..())
-		return FALSE
-
-	if(!is_station_level(player.z))
-		return TRUE // bypass checks
-
-	if(isobserver(player))
-		return TRUE
-
-	if(HAS_MIND_TRAIT(player, TRAIT_DETECT_STORM))
-		return TRUE
-
-	if(istype(get_area(player), /area/mine))
-		return TRUE
-
-	for(var/area/snow_area in impacted_areas)
-		if(locate(snow_area) in view(player))
-			return TRUE
-
-	return FALSE
-
-///A storm that doesn't stop storming, and is a bit stronger

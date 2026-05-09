@@ -22,7 +22,7 @@
 	icon = 'modular_skyrat/master_files/icons/obj/hydroponics/harvest.dmi'
 	icon_state = "kiri"
 	foodtypes = FRUIT | SUGAR
-	grind_results = list(/datum/reagent/consumable/kiri_jelly = 0.1)
+	grind_result_reagents = list(/datum/reagent/consumable/kiri_jelly = 0.1)
 	distill_reagent = /datum/reagent/consumable/ethanol/shakiri
 	tastes = list("ultra-sweet jelly" = 1)
 

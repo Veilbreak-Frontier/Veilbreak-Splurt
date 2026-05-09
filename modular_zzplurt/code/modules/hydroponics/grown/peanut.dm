@@ -29,7 +29,7 @@
 	icon = 'modular_zzplurt/icons/obj/service/hydroponics/harvest.dmi'
 	icon_state = "package_peanut"
 	foodtypes = GRAIN | NUTS | CLOTH
-	grind_results = list(/datum/reagent/consumable/peanut_butter/packing = 0)
+	grind_result_reagents = list(/datum/reagent/consumable/peanut_butter/packing = 0)
 	tastes = list("starchy peanuts" = 1)
 	var/packing_type = /obj/item/stack/packing_peanuts
 	var/packing_name = "packing peanuts"

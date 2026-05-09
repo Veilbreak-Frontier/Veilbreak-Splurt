@@ -70,34 +70,3 @@
 				throw_alert(ALERT_CHARGE, /atom/movable/screen/alert/emptycell)
 	else
 		throw_alert(ALERT_CHARGE, /atom/movable/screen/alert/nocell)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/silicon/robot/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	if(HAS_TRAIT(src, TRAIT_NO_TRANSFORM))
-		return
-
-	. = ..()
-	handle_robot_hud_updates()
-	handle_robot_cell(seconds_per_tick, times_fired)
-
-/mob/living/silicon/robot/proc/handle_robot_cell(seconds_per_tick, times_fired)
-	if(stat == DEAD)
-		return
-
-	if(low_power_mode)
-		if(cell?.charge)
-			low_power_mode = FALSE
-	else if(stat == CONSCIOUS)
-		use_energy(seconds_per_tick, times_fired)
-
-/mob/living/silicon/robot/proc/use_energy(seconds_per_tick, times_fired)
-	if(cell?.charge)
-		if(cell.charge <= 0.01 * STANDARD_CELL_CHARGE)
-			drop_all_held_items()
-		var/energy_consumption = max(lamp_power_consumption * lamp_enabled * lamp_intensity * seconds_per_tick, BORG_MINIMUM_POWER_CONSUMPTION * seconds_per_tick) //Lamp will use a max of 5 * [BORG_LAMP_POWER_CONSUMPTION], depending on brightness of lamp. If lamp is off, borg systems consume [BORG_MINIMUM_POWER_CONSUMPTION], or the rest of the cell if it's lower than that.
-		cell.use(energy_consumption, force = TRUE)
-	else
-		drop_all_held_items()
-		low_power_mode = TRUE
-		toggle_headlamp(TRUE)
-	diag_hud_set_borgcell()

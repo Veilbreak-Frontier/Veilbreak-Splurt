@@ -126,9 +126,3 @@
 		guaranteed_drop = 0.6,\
 		drop_immediately = basic_mob_flags & DEL_ON_DEATH,\
 	)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/basic/boss/dust(just_ash, drop_items, force)
-	if(!force && health > 0)
-		return
-	return ..()

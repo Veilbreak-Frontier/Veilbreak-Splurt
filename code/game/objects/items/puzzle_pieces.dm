@@ -666,9 +666,3 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/puzzle/password/pin, 32)
 	for(var/i in 1 to rand(200, 300))
 		scrambled_text += pick(pass_characters)
 	add_raw_text(scrambled_text)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/door/puzzle/try_to_activate_door(mob/user, access_bypass = FALSE)
-	add_fingerprint(user)
-	if(operating)
-		return

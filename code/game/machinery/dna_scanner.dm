@@ -189,12 +189,3 @@
 	for(var/datum/mutation/mut as anything in subtypesof(/datum/mutation))
 		var/datum/mutation/ref = GET_INITIALIZED_MUTATION(mut)
 		mutations += ref
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/disk/data/attack_self(mob/user)
-	read_only = !read_only
-	to_chat(user, span_notice("You flip the write-protect tab to [read_only ? "protected" : "unprotected"]."))
-
-/obj/item/disk/data/examine(mob/user)
-	. = ..()
-	. += "The write-protect tab is set to [read_only ? "protected" : "unprotected"]."

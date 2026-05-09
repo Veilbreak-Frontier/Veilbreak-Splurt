@@ -146,11 +146,3 @@ GLOBAL_DATUM(the_one_and_only_punpun, /mob/living/carbon/human/species/monkey/pu
 			ai_controller = new /datum/ai_controller/monkey/angry(src) //hes always mad
 
 	fully_replace_character_name(real_name, name_to_use)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/carbon/human/species/monkey/punpun/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	if(!stat && SSticker.current_state == GAME_STATE_FINISHED && !memory_saved)
-		Write_Memory(FALSE, FALSE)
-		memory_saved = TRUE
-
-	return ..()

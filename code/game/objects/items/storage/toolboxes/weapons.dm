@@ -347,10 +347,3 @@
 
 /obj/item/storage/toolbox/emergency/turret/nukie/set_toolbox_faction(obj/machinery/porta_turret/turret, mob/user)
 	turret.set_faction(list(ROLE_SYNDICATE))
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/storage/toolbox/emergency/turret/proc/set_faction(obj/machinery/porta_turret/turret, mob/user)
-	turret.faction = list("[REF(user)]")
-
-/obj/item/storage/toolbox/emergency/turret/nukie/set_faction(obj/machinery/porta_turret/turret, mob/user)
-	turret.faction = list(ROLE_SYNDICATE)

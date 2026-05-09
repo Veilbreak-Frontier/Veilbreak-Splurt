@@ -1784,29 +1784,3 @@
  */
 /mob/proc/get_access() as /list
 	return list()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/proc/get_item_by_slot(slot_id)
-	return null
-
-/// Gets what slot the item on the mob is held in.
-/// Returns null if the item isn't in any slots on our mob.
-/// Does not check if the passed item is null, which may result in unexpected outcoms.
-
-/proc/faction_check(list/faction_A, list/faction_B, exact_match)
-	var/list/match_list
-	if(exact_match)
-		match_list = faction_A&faction_B //only items in both lists
-		var/length = LAZYLEN(match_list)
-		if(length)
-			return (length == LAZYLEN(faction_A)) //if they're not the same len(gth) or we don't have a len, then this isn't an exact match.
-	else
-		match_list = faction_A&faction_B
-		return LAZYLEN(match_list)
-	return FALSE
-
-/mob/proc/get_equipped_speed_mod_items()
-	. = list()
-	for(var/obj/item/thing in held_items)
-		if(thing.item_flags & SLOWS_WHILE_IN_HAND)
-			. += thing

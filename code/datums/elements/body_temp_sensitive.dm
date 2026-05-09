@@ -84,38 +84,3 @@
 	var/areatemp = living_mob.get_temperature(environment)
 	if(!ISINRANGE(areatemp, min_body_temp, max_body_temp))
 		stack_trace("[living_mob] loaded on in a loc with unsafe temperature at \[[location.x], [location.y], [location.z]\] (area : [get_area(location)]): [areatemp]K. Acceptable Range: [min_body_temp]K - [max_body_temp]K,")
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/element/body_temp_sensitive/proc/on_life(datum/target, seconds_per_tick, times_fired)
-	SIGNAL_HANDLER
-
-	var/mob/living/living_mob = target
-	var/gave_alert = FALSE
-
-	if(living_mob.bodytemperature < min_body_temp)
-		living_mob.adjust_fire_loss(cold_damage * seconds_per_tick, forced = TRUE)
-		if(!living_mob.has_status_effect(/datum/status_effect/inebriated))
-			switch(cold_damage)
-				if(1 to 5)
-					living_mob.throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/cold, 1)
-				if(5 to 10)
-					living_mob.throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/cold, 2)
-				if(10 to INFINITY)
-					living_mob.throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/cold, 3)
-			gave_alert = TRUE
-
-	else if(living_mob.bodytemperature > max_body_temp)
-		living_mob.adjust_fire_loss(heat_damage * seconds_per_tick, forced = TRUE)
-		switch(heat_damage)
-			if(1 to 5)
-				living_mob.throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/hot, 1)
-			if(5 to 10)
-				living_mob.throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/hot, 2)
-			if(10 to INFINITY)
-				living_mob.throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/hot, 3)
-		gave_alert = TRUE
-
-	if(!gave_alert)
-		living_mob.clear_alert(ALERT_TEMPERATURE)
-
-///Ensures that maploaded mobs are in a safe environment. Unit test stuff.

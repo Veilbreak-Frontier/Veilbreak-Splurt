@@ -535,31 +535,3 @@ ADMIN_VERB(reset_ooc_color, R_FUN, "Reset Player OOC Color", "Returns player OOC
 
 /client/proc/random_string_args(entropychain)
 	return "[entropychain][GUID()][rand()*rand(999999)][world.time][GUID()][rand()*rand(999999)][world.timeofday][GUID()][rand()*rand(999999)][world.realtime][GUID()][rand()*rand(999999)][time2text(world.timeofday)][GUID()][rand()*rand(999999)][world.tick_usage][computer_id][address][ckey][key][GUID()][rand()*rand(999999)]"
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/client/verb/import_preferences()
-	set name = "Import Preferences"
-	set category = "OOC"
-	set desc = "Upload a JSON file to recover your character slots and settings."
-
-	if(!prefs || !prefs.savefile)
-		return
-
-	if(prefs.savefile.import_json_from_client(src))
-		prefs.load_preferences()
-
-		if(!prefs.load_character(1))
-			prefs.randomise_appearance_prefs()
-
-		if(prefs.character_preview_view)
-			prefs.character_preview_view.update_body()
-
-		if(tgui_panel)
-			tgui_panel.emotes_send_list()
-
-		var/new_name = prefs.read_preference(/datum/preference/name/real_name) || "Unknown"
-
-		to_chat(src, span_notice("<b>Recovery Successful:</b> Slot 1 overwritten. Active character: [new_name]."))
-
-		log_admin("[key_name(src)] imported and overwrote their active character slot.")
-		message_admins("[key_name_admin(src)] imported and overwrote their active character slot.")

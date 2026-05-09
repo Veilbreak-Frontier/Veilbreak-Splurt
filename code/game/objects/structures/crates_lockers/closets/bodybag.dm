@@ -657,27 +657,3 @@
 /obj/structure/closet/body_bag/environmental/stasis/get_remote_view_fullscreens(mob/user)
 	if(user.stat == DEAD || !(user.sight & (SEEOBJS|SEEMOBS)))
 		user.overlay_fullscreen("remote_view", /atom/movable/screen/fullscreen/impaired, 2)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/structure/closet/body_bag/Initialize(mapload)
-	. = ..()
-	var/static/list/tool_behaviors = list(
-		TOOL_WIRECUTTER = list(
-			SCREENTIP_CONTEXT_RMB = "Remove Tag",
-		),
-	)
-	AddElement(/datum/element/contextual_screentip_tools, tool_behaviors)
-	AddElement( \
-		/datum/element/contextual_screentip_bare_hands, \
-		rmb_text = "Fold up", \
-	)
-	AddElement(/datum/element/contextual_screentip_sharpness, lmb_text = "Remove Tag")
-	obj_flags |= UNIQUE_RENAME | RENAME_NO_DESC
-
-/obj/structure/closet/body_bag/attackby(obj/item/interact_tool, mob/user, list/modifiers, list/attack_modifiers)
-	if(interact_tool.tool_behaviour == TOOL_WIRECUTTER || interact_tool.get_sharpness())
-		to_chat(user, span_notice("You cut the tag off [src]."))
-		playsound(src, SFX_WRITING_PEN, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE, SOUND_FALLOFF_EXPONENT + 3, ignore_walls = FALSE)
-		tag_name = null
-		update_appearance()
-		qdel(src.GetComponent(/datum/component/rename))

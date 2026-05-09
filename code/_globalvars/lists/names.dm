@@ -1,3 +1,5 @@
+GLOBAL_LIST_INIT(arachnid_first, world.file2list("strings/names/arachnid_first.txt"))
+GLOBAL_LIST_INIT(arachnid_last, world.file2list("strings/names/arachnid_last.txt"))
 GLOBAL_LIST_INIT(ai_names, world.file2list("strings/names/ai.txt"))
 GLOBAL_LIST_INIT(cargorilla_names, world.file2list("strings/names/cargorilla.txt"))
 GLOBAL_LIST_INIT(carp_names, world.file2list("strings/names/carp.txt"))

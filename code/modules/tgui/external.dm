@@ -250,10 +250,3 @@
 	if(window)
 		window.on_message(type, payload, href_list)
 	return TRUE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/proc/update_static_data(mob/user, datum/tgui/ui)
-	if(!ui)
-		ui = SStgui.get_open_ui(user, src)
-	if(ui)
-		ui.send_full_update()

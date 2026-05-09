@@ -465,26 +465,3 @@
 		exceptional accuracy even at long ranges, along with being compact enough to allow a high degree of discretion compared to a full sized rifle. \
 		The weapon is also often utilized by rim pirates and marauders, giving the weapon something of an ill reputation." \
 	)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/gun/energy/laser/soulful/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "The NT Type 3 Heat Delivery System (sometimes referred to as the HDS3 in the memories of security officers) is quite possibly \
-		the most common type of HDS still available on the market. Fondly regarded, with quite a few diehard fans still clinging to their \
-		Type 3's like their lives depended on it, the weapon has its own place in history as the 'gun that could do it all'.<br>\
-		<br>\
-		The Type 3 line ran for several decades before attempts to replace it ever even crossed Nanotrasen's minds. When people think \
-		'laser gun', the Type 3 is usually what comes to mind.<br>\
-		<br>\
-		When Nanotrasen announced its replacement, the Type 4, skeptics were quick to pan the weapon, claiming that it lacked several notable \
-		features that users of the Type 3 had enjoyed for years. As it turns out, most of those critics would end up vindicated after word of \
-		Gulpha 5 and the terrible, terrible consequences of the Type 4's volatile nature came to light. Most stuck to the Type 3 and never \
-		looked back, even when the Type 5 rolled out to considerable success in its own right.<br>\
-		<br>\
-		Nanotrasen still services Type 3's, with many of the parts used in the weapon sharing compatible cousins in the Type 5. Most \
-		examples of the Type 3 today may actually be closer in function and form to the Type 5 than they were during their original \
-		construction, depending on how often it is serviced." \
-	)
-
-// hellfire laser gun

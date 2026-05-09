@@ -248,19 +248,3 @@
 #undef RAGE
 #undef SPAWN_CHILDREN
 #undef TENTACLE_PATCH
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/simple_animal/hostile/asteroid/elite/broodmother/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	. = ..()
-	if(!.) //Checks if they are dead as a rock.
-		return
-	if(health >= maxHealth * 0.5 || !COOLDOWN_FINISHED(src, random_tentacle))
-		return
-	COOLDOWN_START(src, random_tentacle, 3 SECONDS)
-	var/tentacle_amount = 5
-	if(health < maxHealth * 0.25)
-		tentacle_amount = 10
-	var/list/possible_turfs = RANGE_TURFS(5, get_turf(src))
-	for(var/i in 1 to tentacle_amount)
-		var/turf/innsmouth = pick_n_take(possible_turfs)
-		new /obj/effect/goliath_tentacle/broodmother(innsmouth, src)

@@ -526,18 +526,3 @@
 #undef HEATER_MODE_COOL
 #undef HEATER_MODE_AUTO
 #undef BASE_HEATING_ENERGY
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/space_heater/proc/can_use_apc_power()
-	return anchored && powered(ignore_use_power = TRUE)
-
-/// Cell and/or APC — whatever lets the heater run this tick.
-
-/obj/machinery/space_heater/proc/has_power_for_operation()
-	if(can_use_apc_power())
-		return TRUE
-	if(!QDELETED(cell) && cell.charge())
-		return TRUE
-	return FALSE
-
-///Returns the heating power of this machine as an examine

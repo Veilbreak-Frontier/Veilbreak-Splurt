@@ -352,8 +352,3 @@
 	)))
 
 #undef DUMPTIME
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/bank_account/proc/reset_bounty()
-	civilian_bounty = null
-	COOLDOWN_RESET(src, bounty_timer)

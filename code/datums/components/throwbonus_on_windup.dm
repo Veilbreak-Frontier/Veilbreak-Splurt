@@ -176,14 +176,3 @@
 		var/mutable_appearance/bar_overlay =  mutable_appearance(icon = icon, icon_state = bar_color, layer = ABOVE_HUD_PLANE)
 		bar_overlay.pixel_z = bar_positions[curr_number]
 		. += bar_overlay
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/component/throwbonus_on_windup/proc/on_hands_swap(mob/living/source)
-	SIGNAL_HANDLER
-
-	if(source.get_active_held_item() != parent)
-		end_windup()
-		return
-
-	if(source.throw_mode)
-		start_windup()

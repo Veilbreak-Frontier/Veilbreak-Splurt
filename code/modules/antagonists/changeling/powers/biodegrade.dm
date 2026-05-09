@@ -110,38 +110,3 @@
 	hapless_manhandler.emote("scream")
 	hapless_manhandler.stop_pulling()
 	log_combat(user = user, target = hapless_manhandler, what_done = "acid-spewed to escape a grab", addition = "(biodegrade)")
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/action/changeling/biodegrade/proc/dissolve_handcuffs(mob/living/carbon/human/user, obj/O)
-	if(O && user.handcuffed == O)
-		user.visible_message(span_warning("[O] dissolve[O.gender == PLURAL?"":"s"] into a puddle of sizzling goop."))
-		new /obj/effect/decal/cleanable/greenglow(O.drop_location())
-		qdel(O)
-
-/datum/action/changeling/biodegrade/proc/dissolve_legcuffs(mob/living/carbon/human/user, obj/O)
-	if(O && user.legcuffed == O)
-		user.visible_message(span_warning("[O] dissolve[O.gender == PLURAL?"":"s"] into a puddle of sizzling goop."))
-		new /obj/effect/decal/cleanable/greenglow(O.drop_location())
-		qdel(O)
-
-/datum/action/changeling/biodegrade/proc/dissolve_straightjacket(mob/living/carbon/human/user, obj/S)
-	if(S && user.wear_suit == S)
-		user.visible_message(span_warning("[S] dissolves into a puddle of sizzling goop."))
-		new /obj/effect/decal/cleanable/greenglow(S.drop_location())
-		qdel(S)
-
-/datum/action/changeling/biodegrade/proc/open_closet(mob/living/carbon/human/user, obj/structure/closet/C)
-	if(C && user.loc == C)
-		C.visible_message(span_warning("[C]'s door breaks and opens!"))
-		new /obj/effect/decal/cleanable/greenglow(C.drop_location())
-		C.welded = FALSE
-		C.locked = FALSE
-		C.broken = TRUE
-		C.open()
-		to_chat(user, span_warning("We open the container restraining us!"))
-
-/datum/action/changeling/biodegrade/proc/dissolve_cocoon(mob/living/carbon/human/user, obj/structure/spider/cocoon/C)
-	if(C && user.loc == C)
-		new /obj/effect/decal/cleanable/greenglow(C.drop_location())
-		qdel(C) //The cocoon's destroy will move the changeling outside of it without interference
-		to_chat(user, span_warning("We dissolve the cocoon!"))

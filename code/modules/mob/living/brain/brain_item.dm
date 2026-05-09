@@ -743,12 +743,3 @@
 	foodtype_flags = PODPERSON_ORGAN_FOODTYPES
 	color = COLOR_LIME
 	shade_color = "lime"
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/organ/brain/on_life(seconds_per_tick, times_fired)
-	if(HAS_TRAIT(src, TRAIT_BRAIN_DAMAGE_NODEATH))
-		return
-	if(damage >= BRAIN_DAMAGE_DEATH) //rip
-		to_chat(owner, span_userdanger("The last spark of life in your brain fizzles out..."))
-		owner.investigate_log("has been killed by brain damage.", INVESTIGATE_DEATHS)
-		owner.death()

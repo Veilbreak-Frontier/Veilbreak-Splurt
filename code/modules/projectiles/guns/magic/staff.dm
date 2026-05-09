@@ -484,7 +484,3 @@
 	animate(user, transform = matrix() * 0, time = 1 SECONDS)
 	QDEL_IN(user, 1 SECONDS)
 	return MANUAL_SUICIDE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/gun/magic/staff/healing/handle_suicide() //Stops people trying to commit suicide to heal themselves
-	return

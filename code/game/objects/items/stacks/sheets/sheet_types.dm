@@ -1045,9 +1045,3 @@ GLOBAL_LIST_INIT(pizza_sheet_recipes, list(
 	amount = 20
 /obj/item/stack/sheet/hauntium/five
 	amount = 5
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/stack/sheet/paperframes/Initialize(mapload, new_amount, merge = TRUE, list/mat_override=null, mat_amt=1)
-	. = ..()
-	pixel_x = 0
-	pixel_y = 0

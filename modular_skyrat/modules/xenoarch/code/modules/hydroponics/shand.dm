@@ -24,5 +24,5 @@
 	filling_color = "#FF4500"
 	bite_consumption_mod = 0.5
 	foodtypes = FRUIT
-	juice_typepath = /datum/reagent/bromine
+	juice_typepath_stored = /datum/reagent/bromine
 	tastes = list("chemicals" = 1)

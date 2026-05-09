@@ -785,24 +785,3 @@
 
 #undef DOOR_CLOSE_WAIT
 #undef TRAIT_UNRESTRICTED_AIRLOCK_OPENING
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/door/proc/try_to_activate_door(mob/living/user, access_bypass = FALSE)
-	add_fingerprint(user)
-	if(operating || (obj_flags & EMAGGED) || !can_open_with_hands)
-		return
-	if(access_bypass || (requiresID() && allowed(user)))
-		if(density)
-			open()
-		else
-			close()
-		return TRUE
-	if(density)
-		run_animation(DOOR_DENY_ANIMATION)
-
-/obj/machinery/door/allowed(mob/M)
-	if(emergency)
-		return TRUE
-	if(unrestricted_side(M))
-		return TRUE
-	return ..()

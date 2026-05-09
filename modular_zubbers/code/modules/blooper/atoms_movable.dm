@@ -16,10 +16,18 @@ It has also been further modified by Rashcat & other Fluffyfrontier contributors
 /atom/movable/proc/set_blooper(id)
 	if(!id)
 		return FALSE
-	var/datum/blooper/B = GLOB.blooper_list[id]
+	var/datum/blooper/B = islist(GLOB.blooper_list) ? GLOB.blooper_list[id] : null
+	if(!B && islist(SSblooper.blooper_list))
+		B = SSblooper.blooper_list[id]
 	if(!B)
 		return FALSE
-	blooper = sound(initial(B.soundpath))
+	if(length(B.soundpath_list))
+		var/first_sound = B.soundpath_list[1]
+		blooper = istype(first_sound, /sound) ? first_sound : sound(first_sound)
+	else if(B.soundpath)
+		blooper = sound(B.soundpath)
+	else
+		return FALSE
 	blooper_id = id
 	return blooper
 
@@ -65,6 +73,21 @@ It has also been further modified by Rashcat & other Fluffyfrontier contributors
 
 /mob/living/send_speech(message_raw, message_range = 6, obj/source = src, bubble_type = bubble_icon, list/spans, datum/language/message_language = null, list/message_mods = list(), forced = null, tts_message, list/tts_filter)
 	. = ..()
+	if(client?.prefs.read_preference(/datum/preference/toggle/send_blooper) && blooper_id)
+		var/datum/blooper/bloop_datum = islist(GLOB.blooper_list) ? GLOB.blooper_list[blooper_id] : null
+		if(!bloop_datum && islist(SSblooper.blooper_list))
+			bloop_datum = SSblooper.blooper_list[blooper_id]
+		if(bloop_datum)
+			var/volume = BLOOPER_TRANSMIT_VOLUME
+			if(HAS_TRAIT(src, TRAIT_SIGN_LANG) && !HAS_TRAIT(src, TRAIT_MUTE))
+				return
+			if(message_mods[WHISPER_MODE])
+				volume = BLOOPER_TRANSMIT_VOLUME * 0.5
+				message_range++
+			var/list/listeners = get_hearers_in_view(message_range, source)
+			var/is_yelling = (say_test(message_raw) == "2")
+			bloop_datum.play_bloop(source, listeners, message_raw, message_range, volume * (is_yelling ? 2 : 1), blooper_speed, blooper_pitch, blooper_pitch_range)
+		return
 
 	if(!(client?.prefs.read_preference(/datum/preference/toggle/send_sound_blooper)))
 		return

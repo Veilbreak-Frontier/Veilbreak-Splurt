@@ -596,11 +596,3 @@ BUBBERSTATION CHANGE END */
 /obj/item/clothing/under/rank
 	abstract_type = /obj/item/clothing/under/rank
 	dying_key = DYE_REGISTRY_UNDER
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/clothing/under/setup_reskinning()
-	if(!check_setup_reskinning())
-		return
-
-	// We already register context in Initialize.
-	RegisterSignal(src, COMSIG_CLICK_ALT, PROC_REF(on_click_alt_reskin))

@@ -247,33 +247,3 @@
 	return istype(to_insert, /obj/item/mod/control)
 
 #undef PATHFINDER_PRE_ANIMATE_TIME
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/mod/module/pathfinder/proc/on_move(atom/movable/source, atom/old_loc, dir, forced)
-	SIGNAL_HANDLER
-
-	var/matrix/mod_matrix = matrix()
-	mod_matrix.Turn(get_angle(source, implant.imp_in))
-	source.transform = mod_matrix
-
-/obj/item/mod/module/pathfinder/proc/end_recall(successful = TRUE)
-	if(!mod)
-		return
-	QDEL_NULL(mod.ai_controller)
-	mod.interaction_flags_item |= INTERACT_ITEM_ATTACK_HAND_PICKUP
-	REMOVE_TRAIT(mod, TRAIT_MOVE_FLYING, MOD_TRAIT)
-	mod.RemoveElement(/datum/element/movetype_handler)
-	mod.cut_overlay(jet_icon)
-	mod.transform = matrix()
-	UnregisterSignal(mod, COMSIG_MOVABLE_MOVED)
-	if(!successful)
-		balloon_alert(implant.imp_in, "suit lost connection!")
-
-// ###########
-// THE INPLANT
-// ###########
-
-/obj/item/implant/mod/get_data()
-	return "<b>Implant Specifications:</b><BR> \
-		<b>Name:</b> Nakamura Engineering Pathfinder Implant<BR> \
-		<b>Implant Details:</b> Allows for the recall of a Modular Outerwear Device by the implant owner at any time.<BR>"

@@ -76,7 +76,7 @@
 			if(length(contents) >= maximum_contained_items)
 				break
 
-			if(target_item.juice_typepath || target_item.grind_results)
+			if(target_item.juice_typepath() || LAZYLEN(target_item.grind_results()))
 				target_item.forceMove(src)
 
 		if (length(contents) >= maximum_contained_items)
@@ -122,20 +122,20 @@
 		switch(picked_option)
 			if("Juice")
 				for(var/obj/item/target_item as anything in contents)
-					if(target_item.juice_typepath)
+					if(target_item.juice_typepath())
 						juice_target_item(target_item, user)
 					else
 						grind_target_item(target_item, user)
 
 			if("Grind")
 				for(var/obj/item/target_item as anything in contents)
-					if(target_item.grind_results)
+					if(LAZYLEN(target_item.grind_results()))
 						grind_target_item(target_item, user)
 					else
 						juice_target_item(target_item, user)
 		return
 
-	if(!attacking_item.grind_results && !attacking_item.juice_typepath)
+	if(!LAZYLEN(attacking_item.grind_results()) && !attacking_item.juice_typepath())
 		balloon_alert(user, "can't grind this")
 		return ..()
 

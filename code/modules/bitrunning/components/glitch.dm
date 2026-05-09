@@ -81,13 +81,3 @@
 
 /datum/movespeed_modifier/status_effect/glitch_slowdown
 	multiplicative_slowdown = 1.5
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/component/glitch/proc/dust_mob()
-	if(QDELETED(parent))
-		return
-
-	var/mob/living/owner = parent
-	owner.dust()
-
-/// We don't want digital entities just lingering around as corpses.

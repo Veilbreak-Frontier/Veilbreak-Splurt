@@ -594,38 +594,3 @@
 	SSeconomy.get_dep_account(payment_department)?.adjust_money(fair_market_price)
 	say("Fine paid: Thank you for your compliance. Your account been charged [fair_market_price] [MONEY_NAME].")
 	return FALSE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/simple_animal/bot/secbot/proc/check_nap_violations()
-	if(!SSeconomy.full_ancap)
-		return TRUE
-	if(!target)
-		return TRUE
-	if(!ishuman(target))
-		return TRUE
-	var/mob/living/carbon/human/human_target = target
-	var/obj/item/card/id/target_id = human_target.get_idcard()
-	if(!target_id)
-		say("Suspect NAP Violation: No ID card found.")
-		nap_violation(target)
-		return FALSE
-	var/datum/bank_account/insurance = target_id.registered_account
-	if(!insurance)
-		say("Suspect NAP Violation: No bank account found.")
-		nap_violation(target)
-		return FALSE
-	var/fair_market_price = (security_mode_flags & SECBOT_HANDCUFF_TARGET ? fair_market_price_detain : fair_market_price_arrest)
-	if(!insurance.adjust_money(-fair_market_price))
-		say("Suspect NAP Violation: Unable to pay.")
-		nap_violation(target)
-		return FALSE
-	var/datum/bank_account/beepsky_department_account = SSeconomy.get_dep_account(payment_department)
-	say("Thank you for your compliance. Your account been charged [fair_market_price] credits.")
-	if(beepsky_department_account)
-		beepsky_department_account.adjust_money(fair_market_price)
-		return TRUE
-
-/// Does nothing
-
-/mob/living/simple_animal/bot/secbot/proc/nap_violation(mob/violator)
-	return

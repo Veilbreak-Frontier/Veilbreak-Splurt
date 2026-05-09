@@ -443,19 +443,3 @@
 			return player
 
 	return null
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/song/proc/sync_play()
-	for(var/datum/song/other_instrument as anything in SSinstruments.songs)
-		if(other_instrument == src || other_instrument.id != id)
-			continue
-		if(other_instrument.playing)
-			continue
-		var/atom/other_player = other_instrument.find_sync_player()
-		if(isnull(other_player) || !(other_player in view(parent)))
-			continue
-		// copies the main song info to target songs
-		other_instrument.lines = lines.Copy()
-		other_instrument.max_repeats = max_repeats
-		other_instrument.tempo = tempo
-		other_instrument.start_playing(other_player)

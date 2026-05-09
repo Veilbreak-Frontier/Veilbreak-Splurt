@@ -314,9 +314,3 @@
 	time = 10 SECONDS
 	category = CAT_EQUIPMENT
 	tool_behaviors = list(TOOL_WELDER, TOOL_SCREWDRIVER, TOOL_WIRECUTTER)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/crafting_recipe/radiogloves/New()
-	..()
-	blacklist |= typesof(/obj/item/radio/headset)
-	blacklist |= typesof(/obj/item/radio/intercom)

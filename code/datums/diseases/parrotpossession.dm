@@ -51,15 +51,3 @@
 	SIGNAL_HANDLER
 	UnregisterSignal(source, list(COMSIG_PREQDELETED, COMSIG_MOVABLE_MOVED))
 	cure()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/disease/parrot_possession/stage_act(seconds_per_tick, times_fired)
-	. = ..()
-
-	if(!. || isnull(parrot_controller))
-		return
-
-	var/potential_phrase = parrot_controller.blackboard[BB_PARROT_REPEAT_STRING]
-
-	if(SPT_PROB(speak_chance, seconds_per_tick) && !isnull(potential_phrase))
-		affected_mob.say(potential_phrase, forced = "parrot possession")

@@ -40,14 +40,3 @@
 	name = "implant case - 'Beacon'"
 	desc = "A glass case containing a beacon implant."
 	imp_type = /obj/item/implant/beacon
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/implant/beacon/get_data()
-	return "<b>Implant Specifications:</b><BR> \
-		<b>Name:</b> Robust Corp JMP-21 Fugitive Retrieval Implant<BR> \
-		<b>Life:</b> Deactivates upon death after ten minutes, but remains within the body.<BR> \
-		<b>Important Notes: N/A</B><BR> \
-		<HR> \
-		<b>Implant Details: </b><BR> \
-		<b>Function:</b> Acts as a teleportation beacon that can be tracked by any standard bluespace transponder. \
-		Using this, you can teleport directly to whoever has this implant inside of them."

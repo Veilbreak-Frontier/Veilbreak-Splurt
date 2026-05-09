@@ -338,8 +338,3 @@
 	data["trim_access"] = card_trim?.access || list()
 
 	return data
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/computer_file/program/card_mod/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
-	. = ..()
-	ADD_TRAIT(computer_installing, TRAIT_MODPC_TWO_ID_SLOTS, REF(src))

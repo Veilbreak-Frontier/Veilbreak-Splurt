@@ -1,4 +1,6 @@
 //Underwear and extra slots
+/// Left headset slot (aliases upstream single ear slot)
+#define ITEM_SLOT_EARS_LEFT ITEM_SLOT_EARS
 /// Right ear slot
 #define ITEM_SLOT_EARS_RIGHT (1<<22) // It can't use extra because it's linked to ITEM_SLOT_EARS_LEFT
 /// Slot to indicate it's an extra slot

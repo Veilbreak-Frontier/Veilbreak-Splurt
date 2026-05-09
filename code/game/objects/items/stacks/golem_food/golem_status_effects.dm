@@ -496,9 +496,3 @@
 	return ..()
 
 #undef LIGHTBULB_FILTER
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/status_effect/golem/diamond/tick(delta_time, times_fired)
-	owner.alpha = max(owner.alpha - alpha_per_tick, 0)
-
-/// Reset alpha to starting value

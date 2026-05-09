@@ -482,11 +482,3 @@
 	meteorsound = SFX_HALLUCINATION_I_M_HERE
 
 #undef DEFAULT_METEOR_LIFETIME
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/effect/meteor/attackby(obj/item/I, mob/user, list/modifiers, list/attack_modifiers)
-	if(I.tool_behaviour == TOOL_MINING)
-		make_debris()
-		qdel(src)
-	else
-		. = ..()

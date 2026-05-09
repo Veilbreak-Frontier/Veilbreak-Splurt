@@ -175,38 +175,3 @@
 	if(!program_to_check || !program_to_check.is_supported_by_hardware(hardware_flag = computer.hardware_flag, loud = FALSE))
 		return FALSE
 	return TRUE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/computer_file/program/ntnetdownload/proc/begin_file_download(filename)
-	if(downloaded_file)
-		return FALSE
-
-	var/datum/computer_file/program/PRG = SSmodular_computers.find_ntnet_file_by_name(filename)
-
-	if(!PRG || !istype(PRG))
-		return FALSE
-
-	// Attempting to download antag only program, but without having emagged/syndicate computer. No.
-	if((PRG.program_flags & PROGRAM_ON_SYNDINET_STORE) && !(computer.obj_flags & EMAGGED))
-		return FALSE
-
-	if(!computer || !computer.can_store_file(PRG))
-		return FALSE
-
-	ui_header = "downloader_running.gif"
-
-	if(PRG in SSmodular_computers.available_station_software)
-		generate_network_log("Began downloading file [PRG.filename].[PRG.filetype] from NTNet Software Repository.")
-		hacked_download = FALSE
-	else if(PRG in SSmodular_computers.available_antag_software)
-		generate_network_log("Began downloading file **ENCRYPTED**.[PRG.filetype] from unspecified server.")
-		hacked_download = TRUE
-	else
-		generate_network_log("Began downloading file [PRG.filename].[PRG.filetype] from unspecified server.")
-		hacked_download = FALSE
-
-	downloaded_file = PRG.clone()
-
-	// If the filesize is 0 (or somehow lower), we instantly download to avoid invalid number issues with stepwise download.
-	if(downloaded_file.size <= 0)
-		complete_file_download()

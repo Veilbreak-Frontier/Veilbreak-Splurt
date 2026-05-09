@@ -48,8 +48,3 @@
 					transfer_side = value
 				else
 					return FALSE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/plumbing/splitter/Initialize(mapload, bolt, layer)
-	. = ..()
-	AddComponent(/datum/component/plumbing/splitter, bolt, layer)

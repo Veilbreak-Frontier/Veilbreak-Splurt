@@ -45,25 +45,3 @@
 	var/obj/item/bodypart/head = victim?.get_bodypart(BODY_ZONE_HEAD)
 	if(head)
 		REMOVE_TRAIT(head, TRAIT_DISFIGURED, DISEASE_TRAIT)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/symptom/disfiguration/Activate(datum/disease/advance/A)
-	. = ..()
-	if(!.)
-		return
-	var/mob/living/M = A.affected_mob
-	if (HAS_TRAIT(M, TRAIT_DISFIGURED))
-		return
-	switch(A.stage)
-		if(5)
-			ADD_TRAIT(M, TRAIT_DISFIGURED, DISEASE_TRAIT)
-			M.visible_message(span_warning("[M]'s face appears to cave in!"), span_notice("You feel your face crumple and cave in!"))
-		else
-			M.visible_message(span_warning("[M]'s face begins to contort..."), span_notice("Your face feels wet and malleable..."))
-
-/datum/symptom/disfiguration/End(datum/disease/advance/A)
-	. = ..()
-	if(!.)
-		return
-	if(A.affected_mob)
-		REMOVE_TRAIT(A.affected_mob, TRAIT_DISFIGURED, DISEASE_TRAIT)

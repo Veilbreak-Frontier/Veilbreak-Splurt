@@ -5,4 +5,4 @@
 	icon_state = "rzippo"
 	light_color = "#952CF4"
 	overlay_state = "royal"
-	grind_results = list(/datum/reagent/gold = 1, /datum/reagent/fuel = 5, /datum/reagent/colorful_reagent/powder/purple/crayon = 1.5)
+	grind_result_reagents = list(/datum/reagent/gold = 1, /datum/reagent/fuel = 5, /datum/reagent/colorful_reagent/powder/purple/crayon = 1.5)

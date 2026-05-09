@@ -138,17 +138,3 @@
 
 #undef APPENDICITIS_PROB
 #undef INFLAMATION_ADVANCEMENT_PROB
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/organ/appendix/on_life(seconds_per_tick, times_fired)
-	. = ..()
-	if(!owner)
-		return
-
-	if(organ_flags & ORGAN_FAILING)
-		// forced to ensure people don't use it to gain tox as slime person
-		owner.adjust_tox_loss(2 * seconds_per_tick, forced = TRUE)
-	else if(inflamation_stage)
-		inflamation(seconds_per_tick)
-	else if(SPT_PROB(APPENDICITIS_PROB, seconds_per_tick) && !HAS_TRAIT(owner, TRAIT_TEMPORARY_BODY))
-		become_inflamed()

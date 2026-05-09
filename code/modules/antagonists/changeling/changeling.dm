@@ -1194,21 +1194,3 @@
 	l_hand = /obj/item/melee/arm_blade
 
 #undef FORMAT_CHEM_CHARGES_TEXT
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/antagonist/changeling/proc/on_life(datum/source, seconds_per_tick, times_fired)
-	SIGNAL_HANDLER
-
-	var/delta_time = DELTA_WORLD_TIME(SSmobs)
-	var/mob/living/living_owner = owner.current
-
-	// If dead, we only regenerate up to half chem storage.
-	if(owner.current.stat == DEAD)
-		adjust_chemicals((chem_recharge_rate - chem_recharge_slowdown) * delta_time, total_chem_storage * 0.5)
-
-	// If we're not dead and not on fire - we go up to the full chem cap at normal speed. If on fire we only regenerate at 1/4th the normal speed
-	else
-		if(living_owner.fire_stacks && living_owner.on_fire)
-			adjust_chemicals((chem_recharge_rate - 0.75) * delta_time)
-		else
-			adjust_chemicals((chem_recharge_rate - chem_recharge_slowdown) * delta_time)

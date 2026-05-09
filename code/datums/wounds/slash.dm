@@ -418,29 +418,3 @@
 	can_be_randomly_generated = FALSE
 
 	wound_path_to_generate = /datum/wound/slash/flesh/critical/cleave
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/wound/slash/flesh/remove_wound(ignore_limb, replaced)
-	if(!replaced && highest_scar)
-		already_scarred = TRUE
-		highest_scar.lazy_attach(limb)
-	return ..()
-
-/datum/wound/slash/flesh/handle_process(seconds_per_tick, times_fired)
-	if (!victim || HAS_TRAIT(victim, TRAIT_STASIS))
-		return
-
-	// in case the victim has the NOBLOOD trait, the wound will simply not clot on its own
-	if(limb.can_bleed())
-		if(clot_rate > 0)
-			adjust_blood_flow(-clot_rate * seconds_per_tick)
-			if(QDELETED(src))
-				return
-
-		if(HAS_TRAIT(victim, TRAIT_BLOOD_FOUNTAIN))
-			adjust_blood_flow(0.25) // old heparin used to just add +2 bleed stacks per tick, this adds 0.5 bleed flow to all open cuts which is probably even stronger as long as you can cut them first
-
-	if(limb.current_gauze)
-		var/gauze_power = limb.current_gauze.absorption_rate
-		limb.seep_gauze(gauze_power * seconds_per_tick)
-		adjust_blood_flow(-gauze_power * seconds_per_tick)

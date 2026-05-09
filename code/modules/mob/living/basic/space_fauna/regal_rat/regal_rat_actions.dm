@@ -194,24 +194,3 @@
 
 /datum/pet_command/protect_owner/glockroach
 	protect_behavior = /datum/ai_behavior/basic_ranged_attack/glockroach
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/reagent/rat_spit/overdose_start(mob/living/affected_mob)
-	. = ..()
-	var/mob/living/carbon/victim = affected_mob
-	if (istype(victim) && !(FACTION_RAT in victim.faction))
-		to_chat(victim, span_userdanger("With this last sip, you feel your body convulsing horribly from the contents you've ingested. As you contemplate your actions, you sense an awakened kinship with rat-kind and their newly risen leader!"))
-		victim.faction |= FACTION_RAT
-		victim.vomit(VOMIT_CATEGORY_DEFAULT)
-	metabolization_rate = 10 * REAGENTS_METABOLISM
-
-/datum/reagent/rat_spit/on_mob_life(mob/living/carbon/affected_mob)
-	. = ..()
-	if(prob(15))
-		to_chat(affected_mob, span_notice("You feel queasy!"))
-		affected_mob.adjust_disgust(3)
-	else if(prob(10))
-		to_chat(affected_mob, span_warning("That food does not sit up well!"))
-		affected_mob.adjust_disgust(5)
-	else if(prob(5))
-		affected_mob.vomit(VOMIT_CATEGORY_DEFAULT)

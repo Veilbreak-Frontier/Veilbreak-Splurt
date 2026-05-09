@@ -52,9 +52,3 @@
 /mob/eye/update_sight()
 	lighting_color_cutoffs = list(lighting_cutoff_red, lighting_cutoff_green, lighting_cutoff_blue)
 	return ..()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/eye/emote(act, m_type=1, message = null, intentional = FALSE, force_silence = FALSE, forced = FALSE)
-	if(has_emotes)
-		return ..()
-	return FALSE

@@ -420,22 +420,3 @@
 #undef STAIR_TERMINATOR_YES
 
 #undef STAIR_INDICATOR_RANGE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/structure/stairs/Move() //Look this should never happen but...
-	. = ..()
-	if(force_open_above)
-		build_signal_listener()
-	update_surrounding()
-
-/obj/structure/stairs/proc/on_exit(datum/source, atom/movable/leaving, direction)
-	SIGNAL_HANDLER
-
-	if(leaving == src)
-		return //Let's not block ourselves.
-
-	if(!isobserver(leaving) && isTerminator() && direction == dir)
-		leaving.set_currently_z_moving(CURRENTLY_Z_ASCENDING)
-		INVOKE_ASYNC(src, PROC_REF(stair_ascend), leaving)
-		leaving.Bump(src)
-		return COMPONENT_ATOM_BLOCK_EXIT

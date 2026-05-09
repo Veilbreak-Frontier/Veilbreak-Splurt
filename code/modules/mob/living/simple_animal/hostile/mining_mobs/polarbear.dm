@@ -65,10 +65,3 @@
 	name = "magic polar bear"
 	desc = "It seems sentient somehow."
 	faction = list(FACTION_NEUTRAL)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/simple_animal/hostile/asteroid/polarbear/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	. = ..()
-	if(!. || target)
-		return
-	aggressive_message_said = FALSE

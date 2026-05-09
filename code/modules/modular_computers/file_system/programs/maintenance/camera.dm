@@ -125,10 +125,3 @@
 	SIGNAL_HANDLER
 	photographed.set_output(target)
 	photo_taken.set_output(COMPONENT_SIGNAL)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/computer_file/program/maintenance/camera/on_install()
-	. = ..()
-	internal_camera = new(computer)
-	internal_camera.print_picture_on_snap = FALSE
-	RegisterSignal(internal_camera, COMSIG_CAMERA_IMAGE_CAPTURED, PROC_REF(save_picture))

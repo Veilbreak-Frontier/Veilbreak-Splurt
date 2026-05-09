@@ -755,20 +755,3 @@
 		. &= ~SHOVE_CAN_KICK_SIDE
 
 #undef SHAKE_ANIMATION_OFFSET
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/carbon/proc/secondary_shock(paralyze, stun_duration)
-	if (paralyze)
-		Paralyze(stun_duration)
-	else
-		Knockdown(stun_duration)
-
-/// When another mob touches us, they may messy us up.
-
-/mob/living/carbon/can_hear()
-	. = FALSE
-	var/obj/item/organ/ears/ears = get_organ_slot(ORGAN_SLOT_EARS)
-	if(ears && !HAS_TRAIT(src, TRAIT_DEAF))
-		. = TRUE
-	if(health <= hardcrit_threshold && !HAS_TRAIT(src, TRAIT_NOHARDCRIT))
-		. = FALSE

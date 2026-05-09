@@ -36,9 +36,3 @@
 	name = "implant case - 'Sad Trombone'"
 	desc = "A glass case containing a sad trombone implant."
 	imp_type = /obj/item/implant/sad_trombone
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/implant/sad_trombone/get_data()
-	return "<b>Implant Specifications:</b><BR> \
-		<b>Name:</b> Honk Co. Sad Trombone Implant<BR> \
-		<b>Life:</b> Activates upon death.<BR>"

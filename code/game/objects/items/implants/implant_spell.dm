@@ -67,11 +67,3 @@
 	name = "implant case - 'Wizardry'"
 	desc = "A glass case containing an implant that can teach the user the arts of Wizardry."
 	imp_type = /obj/item/implant/spell
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/implant/spell/get_data()
-	return "<b>Implant Specifications:</b><BR> \
-		<b>Name:</b> Spell Implant<BR> \
-		<b>Life:</b> 4 hours after death of host<BR> \
-		<b>Implant Details:</b> <BR> \
-		<b>Function:</b> [spell_to_give ? "Allows a non-wizard to cast [spell_to_give] as if they were a wizard." : "None."]"

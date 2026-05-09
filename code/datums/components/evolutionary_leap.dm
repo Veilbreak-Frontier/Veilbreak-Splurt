@@ -57,14 +57,3 @@
 	var/new_mob_name = initial(new_mob.name)
 	old_mob.visible_message(span_warning("[old_mob] evolves into \a [new_mob_name]!"))
 	old_mob.change_mob_type(evolve_path, old_mob.loc, new_name = new_mob_name, delete_old_mob = TRUE)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/component/evolutionary_leap/proc/leap(silent)
-	var/mob/living/old_mob = parent
-	if (old_mob.stat == DEAD)
-		return
-	var/mob/living/new_mob = evolve_path
-	var/new_mob_name = initial(new_mob.name)
-	if(!silent)
-		old_mob.visible_message(span_warning("[old_mob] evolves into \a [new_mob_name]!"))
-	old_mob.change_mob_type(evolve_path, old_mob.loc, new_name = new_mob_name, delete_old_mob = TRUE)

@@ -226,9 +226,9 @@
 	var/dying_key
 
 	///Grinder var:A reagent list containing the reagents this item produces when ground up in a grinder - this can be an empty list to allow for reagent transferring only
-	var/list/grind_results
+	var/list/grind_result_reagents
 	///A reagent the nutriments are converted into when the item is juiced.
-	var/datum/reagent/consumable/juice_typepath
+	var/datum/reagent/consumable/juice_typepath_stored
 
 	/// Used in obj/item/examine to give additional notes on what the weapon does, separate from the predetermined output variables
 	var/offensive_notes
@@ -1090,6 +1090,16 @@
 
 	return SEND_SIGNAL(src, COMSIG_ITEM_ON_GRIND)
 
+/// Reagents produced when this item is ground (see [/obj/item/var/grind_result_reagents] and overrides).
+/obj/item/proc/grind_results()
+	RETURN_TYPE(/list)
+	return grind_result_reagents
+
+/// Reagent type nutriments convert to when juiced (see [/obj/item/var/juice_typepath_stored] and overrides).
+/obj/item/proc/juice_typepath()
+	RETURN_TYPE(/datum/reagent/consumable)
+	return juice_typepath_stored
+
 ///Grind item, adding grind_results to item's reagents and transfering to target_holder if specified
 /obj/item/proc/grind(datum/reagents/target_holder, mob/user, atom/movable/grinder = loc)
 	SHOULD_NOT_OVERRIDE(TRUE)
@@ -1118,8 +1128,9 @@
 	PROTECTED_PROC(TRUE)
 
 	. = FALSE
-	if(length(grind_results))
-		target_holder.add_reagent_list(grind_results)
+	var/list/from_grind = grind_results()
+	if(length(from_grind))
+		target_holder.add_reagent_list(from_grind)
 		. = TRUE
 	if(reagents?.trans_to(target_holder, reagents.total_volume, transferred_by = user))
 		. = TRUE
@@ -1128,7 +1139,7 @@
 /obj/item/proc/on_juice()
 	PROTECTED_PROC(TRUE)
 
-	if(!juice_typepath)
+	if(!juice_typepath())
 		return -1
 
 	return SEND_SIGNAL(src, COMSIG_ITEM_ON_JUICE)
@@ -1162,9 +1173,10 @@
 
 	. = FALSE
 
-	if(ispath(juice_typepath))
-		reagents.convert_reagent(/datum/reagent/consumable/nutriment, juice_typepath, include_source_subtypes = FALSE)
-		reagents.convert_reagent(/datum/reagent/consumable/nutriment/vitamin, juice_typepath, include_source_subtypes = FALSE)
+	var/juice_path = juice_typepath()
+	if(ispath(juice_path))
+		reagents.convert_reagent(/datum/reagent/consumable/nutriment, juice_path, include_source_subtypes = FALSE)
+		reagents.convert_reagent(/datum/reagent/consumable/nutriment/vitamin, juice_path, include_source_subtypes = FALSE)
 		. = TRUE
 
 	if(!QDELETED(target_holder))
@@ -1577,74 +1589,9 @@
 	if(SEND_SIGNAL(src, COMSIG_ITEM_OFFER_TAKEN, offerer, taker) & COMPONENT_OFFER_INTERRUPT)
 		return TRUE
 
-/// SKYRAT EDIT ADDITION START
-/obj/item/reskin_obj(mob/M)
-	if(!uses_advanced_reskins)
-		return ..()
-	if(!LAZYLEN(unique_reskin))
-		return
-
-	/// Is the obj a glasses icon with swappable item states?
-	var/is_swappable = FALSE
-	/// if the item are glasses, this variable stores the item.
-	var/obj/item/clothing/glasses/reskinned_glasses
-
-	if(istype(src, /obj/item/clothing/glasses)) // TODO - Remove this mess about glasses, it shouldn't be necessary anymore.
-		reskinned_glasses = src
-		if(reskinned_glasses.can_switch_eye)
-			is_swappable = TRUE
-
-	var/list/items = list()
-
-
-	for(var/reskin_option in unique_reskin)
-		var/image/item_image = image(icon = unique_reskin[reskin_option][RESKIN_ICON] ? unique_reskin[reskin_option][RESKIN_ICON] : icon, icon_state = "[unique_reskin[reskin_option][RESKIN_ICON_STATE]]")
-		items += list("[reskin_option]" = item_image)
-	sort_list(items)
-
-	var/pick = show_radial_menu(M, src, items, custom_check = CALLBACK(src, PROC_REF(check_reskin_menu), M), radius = 38, require_near = TRUE)
-	if(!pick)
-		return
-	if(!unique_reskin[pick])
-		return
-	current_skin = pick
-
-	if(unique_reskin[pick][RESKIN_ICON])
-		icon = unique_reskin[pick][RESKIN_ICON]
-
-	if(unique_reskin[pick][RESKIN_ICON_STATE])
-		if(is_swappable)
-			base_icon_state = unique_reskin[pick][RESKIN_ICON_STATE]
-			icon_state = base_icon_state
-		else
-			icon_state = unique_reskin[pick][RESKIN_ICON_STATE]
-
-	if(unique_reskin[pick][RESKIN_WORN_ICON])
-		worn_icon = unique_reskin[pick][RESKIN_WORN_ICON]
-
-	if(unique_reskin[pick][RESKIN_WORN_ICON_STATE])
-		worn_icon_state = unique_reskin[pick][RESKIN_WORN_ICON_STATE]
-
-	if(unique_reskin[pick][RESKIN_INHAND_L])
-		lefthand_file = unique_reskin[pick][RESKIN_INHAND_L]
-	if(unique_reskin[pick][RESKIN_INHAND_R])
-		righthand_file = unique_reskin[pick][RESKIN_INHAND_R]
-	if(unique_reskin[pick][RESKIN_INHAND_STATE])
-		inhand_icon_state = unique_reskin[pick][RESKIN_INHAND_STATE]
-	if(unique_reskin[pick][RESKIN_SUPPORTS_VARIATIONS_FLAGS])
-		supports_variations_flags = unique_reskin[pick][RESKIN_SUPPORTS_VARIATIONS_FLAGS]
-	if(ishuman(M))
-		var/mob/living/carbon/human/wearer = M
-		wearer.regenerate_icons() // update that mf
-	to_chat(M, "[src] is now skinned as '[pick].'")
-	post_reskin(M)
-	return TRUE
-
 /// Automatically called after a reskin, for any extra variable changes.
 /obj/item/proc/post_reskin(mob/our_mob)
 	return
-
-/// SKYRAT EDIT ADDITION END
 
 /// Special stuff you want to do when an outfit equips this item.
 /obj/item/proc/on_outfit_equip(mob/living/carbon/human/outfit_wearer, visuals_only, item_slot)

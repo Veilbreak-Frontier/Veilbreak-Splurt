@@ -26,7 +26,7 @@
 	throw_range = 7
 	attack_verb_continuous = list("attacks", "colours")
 	attack_verb_simple = list("attack", "colour")
-	grind_results = list()
+	grind_result_reagents = list()
 	interaction_flags_atom = parent_type::interaction_flags_atom | INTERACT_ATOM_IGNORE_MOBILITY
 
 	/// Bitflag of which types of enigmatist powers this can invoke.

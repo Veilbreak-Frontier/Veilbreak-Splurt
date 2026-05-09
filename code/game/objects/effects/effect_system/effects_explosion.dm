@@ -56,11 +56,3 @@
 /datum/effect_system/explosion/smoke/start()
 	..()
 	addtimer(CALLBACK(src, PROC_REF(create_smoke)), 0.5 SECONDS)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/effect_system/expl_particles/start()
-	for(var/i in 1 to number)
-		new /obj/effect/particle_effect/expl_particles(location)
-
-/datum/effect_system/explosion/set_up(location)
-	src.location = get_turf(location)

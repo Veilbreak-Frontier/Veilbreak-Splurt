@@ -247,11 +247,3 @@
 
 #undef BOOK_WINDOW_BROWSE_SIZE
 #undef WIKI_PAGE_IFRAME
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/book/manual/wiki/security_space_law/attack_self(mob/user)
-	if(user.can_read(src) && prob(30))
-		to_chat(user, span_notice("As you inhale the book's contents, you feel more sophisticated. After reading Space Law just once, you feel like you are an expert in pretending you know Latin. You can now speak Legalese."))
-		user.grant_language(/datum/language/legalese, SPOKEN_LANGUAGE) //can speak but not understand
-	else return
-//BUBBER EDIT ADDITION END

@@ -239,17 +239,3 @@
 	cam_screen.show_camera(visible_turfs, size_x, size_y)
 
 #undef DEFAULT_MAP_SIZE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/computer_file/program/secureye/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
-	. = ..()
-	// Map name has to start and end with an A-Z character,
-	// and definitely NOT with a square bracket or even a number.
-	var/map_name = "camera_console_[REF(src)]_map"
-	// Convert networks to lowercase
-	for(var/i in network)
-		network -= i
-		network += LOWER_TEXT(i)
-	// Initialize map objects
-	cam_screen = new
-	cam_screen.generate_view(map_name)

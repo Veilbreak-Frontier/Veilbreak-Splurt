@@ -580,10 +580,3 @@
 	. = ..()
 	//void puppies can spacewalk and can harass people from within a container because they're void puppies
 	add_traits(list(TRAIT_AI_BAGATTACK, TRAIT_SPACEWALK), INNATE_TRAIT)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/basic/pet/dog/corgi/proc/on_tried_access(mob/accessor, obj/locked_thing)
-	SIGNAL_HANDLER
-	return locked_thing?.check_access(access_card) ? ACCESS_ALLOWED : ACCESS_DISALLOWED
-
-///Handles updating any existing overlays for the corgi (such as fashion items) when it changes how it appears, as in, dead or alive.

@@ -74,6 +74,9 @@ def normalize_proc_header(header_line: str) -> str | None:
     code = _strip_dm_comment(raw)
     if "(" not in code:
         return None
+    # Skip markdown tables / junk mistaken for paths (e.g. "| col | col |" with a leading /)
+    if re.search(r"/\s+/", code):
+        return None
     # Collapse whitespace for stable comparison
     return re.sub(r"\s+", " ", code.strip())
 

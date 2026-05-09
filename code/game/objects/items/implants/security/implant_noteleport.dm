@@ -57,10 +57,3 @@
 	name = "implant case - 'Bluespace Grounding'"
 	desc = "A glass case containing a bluespace grounding implant."
 	imp_type = /obj/item/implant/teleport_blocker
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/implant/teleport_blocker/get_data()
-	return "<b>Implant Specifications:</b><BR> \
-		<b>Name:</b> Robust Corp EXP-001 'Bluespace Grounder'<BR> \
-		<b>Implant Details:</b> Upon implantation, grounds the user's bluespace signature to their currently occupied plane of existence. \
-		Most, if not all forms of teleportation on the implantee will be rendered ineffective. Useful for keeping especially slippery prisoners in place.<BR>"

@@ -13,8 +13,8 @@
 
 	/// Processing speed in seconds
 	var/processing_speed = 6 SECONDS
-	/// Remote materials component for silo linking
-	var/datum/component/remote_materials/materials
+	/// Remote materials connection for silo linking
+	var/datum/remote_materials/materials
 	/// List of all available ores that can be produced
 	var/static/list/available_ores = list(
     /obj/item/stack/sheet/iron = 80,
@@ -33,11 +33,11 @@
 
 /obj/machinery/void_miner/Initialize(mapload)
 	. = ..()
-	materials = AddComponent(/datum/component/remote_materials, allow_standalone = FALSE, force_connect = TRUE)
+	materials = new /datum/remote_materials(src, mapload, allow_standalone = FALSE, force_connect = TRUE)
 	update_appearance()
 
 /obj/machinery/void_miner/Destroy()
-	materials = null
+	QDEL_NULL(materials)
 	return ..()
 
 /obj/machinery/void_miner/RefreshParts()

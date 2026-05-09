@@ -23,5 +23,5 @@
 	icon = 'modular_skyrat/master_files/icons/obj/hydroponics/harvest.dmi'
 	icon_state = "nakati"
 	foodtypes = VEGETABLES
-	grind_results = list(/datum/reagent/consumable/nakati_spice = 0)
+	grind_result_reagents = list(/datum/reagent/consumable/nakati_spice = 0)
 	tastes = list("overwhelming spicyness" = 1)

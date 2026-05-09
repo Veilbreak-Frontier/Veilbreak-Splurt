@@ -5,7 +5,7 @@
 	icon_state = "hemo_suture"
 	heal_brute = 7
 	stop_bleeding = 1
-	grind_results = list(/datum/reagent/medicine/coagulant = 2)
+	grind_result_reagents = list(/datum/reagent/medicine/coagulant = 2)
 	merge_type = /obj/item/stack/medical/suture/bloody
 
 /obj/item/stack/medical/suture/bloody/post_heal_effects(amount_healed, mob/living/carbon/healed_mob, mob/user)
@@ -23,7 +23,7 @@
 	sanitization = 0.5
 	flesh_regeneration = 1.75
 	stop_bleeding = 0.25
-	grind_results = list(/datum/reagent/medicine/coagulant = 2)
+	grind_result_reagents = list(/datum/reagent/medicine/coagulant = 2)
 	merge_type = /obj/item/stack/medical/mesh/bloody
 
 /obj/item/stack/medical/mesh/bloody/update_icon_state()

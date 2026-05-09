@@ -68,20 +68,3 @@
 		source.vomit(VOMIT_CATEGORY_DEFAULT)
 		source.adjust_organ_loss(pick(ORGAN_SLOT_BRAIN, ORGAN_SLOT_APPENDIX, ORGAN_SLOT_LUNGS, ORGAN_SLOT_HEART, ORGAN_SLOT_LIVER, ORGAN_SLOT_STOMACH), 10)
 	return NONE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/quirk/item_quirk/allergic/proc/block_metab(mob/living/carbon/source, datum/reagent/chem, seconds_per_tick, times_fired)
-	SIGNAL_HANDLER
-
-	if(!is_type_in_list(chem, allergies))
-		return NONE
-	// Having epinephrine stops metabolization of an allergen, but doesn't remove it from the system
-	if(source.reagents.has_reagent(/datum/reagent/medicine/epinephrine))
-		return COMSIG_MOB_STOP_REAGENT_METABOLISM
-	// Otherwise the allergen causes a ton of damage though otherwise processes normally
-	source.apply_damage(3 * seconds_per_tick, TOX)
-	source.reagents.add_reagent(/datum/reagent/toxin/histamine, 3 * seconds_per_tick)
-	if(SPT_PROB(10, seconds_per_tick))
-		source.vomit(VOMIT_CATEGORY_DEFAULT)
-		source.adjust_organ_loss(pick(ORGAN_SLOT_BRAIN, ORGAN_SLOT_APPENDIX, ORGAN_SLOT_LUNGS, ORGAN_SLOT_HEART, ORGAN_SLOT_LIVER, ORGAN_SLOT_STOMACH), 10)
-	return NONE

@@ -71,8 +71,3 @@
 	UnregisterSignal(game, COMSIG_MAFIA_GAME_END)
 	ui_header = null
 	update_static_data_for_all_viewers()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/computer_file/program/mafia/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
-	. = ..()
-	RegisterSignal(SSdcs, COMSIG_MAFIA_GAME_START, PROC_REF(on_game_start))

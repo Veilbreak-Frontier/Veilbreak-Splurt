@@ -53,9 +53,3 @@
 	if(reagents)
 		return TRUE
 	return FALSE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/grown/on_grind()
-	. = ..()
-	for(var/i in 1 to grind_results.len)
-		grind_results[grind_results[i]] = round(seed.potency)

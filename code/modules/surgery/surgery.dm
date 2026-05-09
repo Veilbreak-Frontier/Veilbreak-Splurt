@@ -46,7 +46,7 @@
 	if(!surgery_target)
 		return
 	target = surgery_target
-	target.surgeries += src
+	LAZYADD(target.surgeries, src)
 	if(surgery_location)
 		location = surgery_location
 	if(!surgery_bodypart)
@@ -63,7 +63,7 @@
 		operated_wound.attached_surgery = null
 		operated_wound = null
 	if(target)
-		target.surgeries -= src
+		LAZYREMOVE(target.surgeries, src)
 		if(!QDELING(target))
 			SEND_SIGNAL(target, COMSIG_MOB_SURGERY_FINISHED, type, location, operated_bodypart)
 	target = null

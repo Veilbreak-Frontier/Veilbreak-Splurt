@@ -186,9 +186,3 @@
 	if(!ISINRANGE(T.y, min(y0, y1), max(y0, y1)))
 		return FALSE
 	return TRUE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/docking_port/shuttleRotate()
-	return //we don't rotate with shuttles via this code.
-
-///returns a list(x0,y0, x1,y1) where points 0 and 1 are bounding corners of the projected rectangle

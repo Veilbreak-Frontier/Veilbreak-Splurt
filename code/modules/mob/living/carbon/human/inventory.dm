@@ -429,7 +429,3 @@
 			new_bodypart.try_attach_limb(src, TRUE)
 			hand_bodyparts[i] = new_bodypart
 	..() //Don't redraw hands until we have organs for them
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/carbon/human/get_equipped_speed_mod_items()
-	return ..() - list(l_store, r_store, s_store)

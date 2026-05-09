@@ -303,12 +303,3 @@
 	role = "Emergency Medical Technician"
 	outfit = /datum/outfit/centcom/ert/medical_technician
 	plasmaman_outfit = /datum/outfit/plasmaman/medical_technician
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/antagonist/ert/apply_innate_effects(mob/living/mob_override)
-	var/mob/living/carbon/human/officer = mob_override || owner.current
-	ADD_TRAIT(officer, TRAIT_DESENSITIZED, REF(src))
-
-/datum/antagonist/ert/remove_innate_effects(mob/living/mob_override)
-	var/mob/living/carbon/human/officer = mob_override || owner.current
-	REMOVE_TRAIT(officer, TRAIT_DESENSITIZED, REF(src))

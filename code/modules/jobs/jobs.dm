@@ -71,12 +71,3 @@ GLOBAL_PROTECT(exp_specialmap)
 	job = chef_expand.Replace(job, "cook")
 	job = borg_expand.Replace(job, "cyborg")
 	return job
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/proc/get_department_heads(job_title)
-	if(!job_title)
-		return list()
-
-	for(var/datum/job/job as anything in SSjob.joinable_occupations)
-		if(job.title == job_title)
-			return job.department_head //this is a list

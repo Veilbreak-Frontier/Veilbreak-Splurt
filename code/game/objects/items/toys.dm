@@ -1911,14 +1911,3 @@ for further reading, please see: https://github.com/tgstation/tgstation/pull/301
 	playsound(loc, 'sound/effects/adminhelp.ogg', 15) //keep it at 15% volume so people don't jump out of their skin too much
 	if(user.combat_mode)
 		return ..(M, user)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/toy/snappop/proc/pop_burst(n=3, c=1)
-	var/datum/effect_system/spark_spread/s = new()
-	s.set_up(n, c, src)
-	s.start()
-	new ash_type(loc)
-	visible_message(span_warning("[src] explodes!"),
-		span_hear("You hear a snap!"))
-	playsound(src, 'sound/effects/snap.ogg', 50, TRUE)
-	qdel(src)

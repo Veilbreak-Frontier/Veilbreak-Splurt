@@ -338,22 +338,3 @@
 	desc = "Strangest salad you've ever seen."
 	foodtype_flags = PODPERSON_ORGAN_FOODTYPES
 	color = COLOR_LIME
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/organ/ears/on_life(seconds_per_tick, times_fired)
-	// only inform when things got worse, needs to happen before we heal
-	if((damage > low_threshold && prev_damage < low_threshold) || (damage > high_threshold && prev_damage < high_threshold))
-		to_chat(owner, span_warning("The ringing in your ears grows louder, blocking out any external noises for a moment."))
-
-	. = ..()
-	// if we have non-damage related deafness like mutations, quirks or clothing (earmuffs), don't bother processing here.
-	// Ear healing from earmuffs or chems happen elsewhere
-	if(HAS_TRAIT_NOT_FROM(owner, TRAIT_DEAF, EAR_DAMAGE))
-		return
-	// no healing if failing
-	if(organ_flags & ORGAN_FAILING)
-		return
-	adjust_temporary_deafness(-seconds_per_tick SECONDS)
-	if((damage > low_threshold) && SPT_PROB(damage / 60, seconds_per_tick))
-		adjust_temporary_deafness(4 SECONDS)
-		SEND_SOUND(owner, sound('sound/items/weapons/flash_ring.ogg'))

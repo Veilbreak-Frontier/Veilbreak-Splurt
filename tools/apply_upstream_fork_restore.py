@@ -52,9 +52,13 @@ def git_ls_dm_upstream(repo: Path, upstream_ref: str) -> list[str]:
 
 
 def merge_dme_includes(upstream_text: str, fork_text: str) -> tuple[str, int]:
-    """Append fork #include lines not present in upstream (exact line match after strip)."""
-    up_lines = upstream_text.splitlines()
-    up_inc = {ln.strip() for ln in up_lines if ln.strip().startswith("#include")}
+    """Insert fork #include lines (not already in upstream) immediately before // END_INCLUDE."""
+    up_lines = upstream_text.splitlines(keepends=True)
+    up_inc = {
+        ln.strip()
+        for ln in up_lines
+        if ln.strip().startswith("#include")
+    }
     extras: list[str] = []
     for ln in fork_text.splitlines():
         s = ln.strip()
@@ -63,12 +67,25 @@ def merge_dme_includes(upstream_text: str, fork_text: str) -> tuple[str, int]:
             up_inc.add(s)
     if not extras:
         return upstream_text, 0
-    out = "\n".join(up_lines)
-    if out and not out.endswith("\n"):
-        out += "\n"
-    banner = "\n// --- Fork-only #includes restored by apply_upstream_fork_restore.py ---\n"
-    out += banner + "\n".join(extras) + "\n"
-    return out, len(extras)
+    try:
+        end_i = next(
+            i for i, ln in enumerate(up_lines) if ln.strip() == "// END_INCLUDE"
+        )
+    except StopIteration:
+        banner = "\n// --- Fork-only #includes restored by apply_upstream_fork_restore.py ---\n"
+        return (
+            upstream_text.rstrip("\n")
+            + banner
+            + "\n".join(extras)
+            + "\n",
+            len(extras),
+        )
+    banner = "// --- Fork-only #includes restored by apply_upstream_fork_restore.py ---\n"
+    fork_block = [banner] + [
+        ln if ln.endswith("\n") else ln + "\n" for ln in extras
+    ]
+    merged = "".join(up_lines[:end_i] + fork_block + up_lines[end_i:])
+    return merged, len(extras)
 
 
 def main() -> int:

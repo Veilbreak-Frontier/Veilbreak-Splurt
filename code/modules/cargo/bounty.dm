@@ -103,21 +103,3 @@
 		else
 			qdel(bounty_ref)
 	return bounty_ref
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/bounty/proc/claim()
-	if(can_claim())
-		var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_CAR)
-		if(D)
-			D.adjust_money(reward * SSeconomy.bounty_modifier)
-		claimed = TRUE
-
-/// If an item in question can satisfy the bounty.
-
-/datum/bounty/proc/applies_to(obj/O)
-	return FALSE
-
-/// Called when an object is sent on the bounty pad.
-
-/datum/bounty/proc/ship(obj/O)
-	return

@@ -182,9 +182,3 @@
 	return default_deconstruction_crowbar(I) || .
 
 #undef STASIS_TOGGLE_COOLDOWN
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/stasis/nap_violation(mob/violator)
-	unbuckle_mob(violator, TRUE)
-
-#undef STASIS_TOGGLE_COOLDOWN

@@ -24,5 +24,5 @@
 	filling_color = "#FF4500"
 	bite_consumption_mod = 0.5
 	foodtypes = FRUIT
-	juice_typepath = /datum/reagent/nitrous_oxide
+	juice_typepath_stored = /datum/reagent/nitrous_oxide
 	tastes = list("sleep" = 1)

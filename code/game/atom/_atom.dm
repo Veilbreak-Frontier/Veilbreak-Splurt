@@ -990,12 +990,3 @@
 /// Logic for adding reskin components goes here. Override for atom-specific reskin setups.
 /atom/proc/setup_reskins()
 	return
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/atom/proc/setOpened()
-	return
-
-/atom/proc/setClosed()
-	return
-
-///Called after the atom is 'tamed' for type-specific operations, Usually called by the tameable component but also other things.

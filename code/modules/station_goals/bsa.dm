@@ -384,12 +384,3 @@ GLOBAL_VAR_INIT(bsa_unlock, FALSE)
 	to_chat(user, span_warning("You emag [src] and hear the focusing crystal short out. You get the feeling it wouldn't be wise to stand near [src] when the BSA fires..."))
 	return TRUE
 */
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/bsa/full/proc/reload()
-	ready = FALSE
-	use_energy(power_used_per_shot)
-	addtimer(CALLBACK(src,"ready_cannon"), 1 MINUTES)
-
-/obj/machinery/bsa/full/proc/ready_cannon()
-	ready = TRUE

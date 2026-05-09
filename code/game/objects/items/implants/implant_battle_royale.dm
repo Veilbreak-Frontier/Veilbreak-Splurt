@@ -137,15 +137,3 @@
 /obj/item/implant/explosive/battle_royale/proc/announce()
 	var/datum/antagonist/survivalist/battle_royale/royale = imp_in.mind?.add_antag_datum(/datum/antagonist/survivalist/battle_royale)
 	royale?.set_target_area(target_area_name)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/implant/explosive/battle_royale/get_data()
-	return "<b>Implant Specifications:</b><BR> \
-		<b>Name:</b> Donk Co. 'Rumble Royale' Contestant Motivation Implant<BR> \
-		<b>Life:</b> Activates upon death, or expiry of an internal timer.<BR> \
-		<b>Important Notes:</b> Explodes.<BR> \
-		<HR> \
-		<b>Implant Details:</b><BR> \
-		<b>Function:</b> Contains a compact, electrically detonated explosive that detonates upon receiving a specially encoded signal or upon host death. \
-		Upon triggering the timer, the implant will begin to broadcast the surrounding area for the purposes of televised entertainment. This signal can be detected by GPS trackers.<BR> \
-		<b>Special Features:</b> Exploding.<BR>"

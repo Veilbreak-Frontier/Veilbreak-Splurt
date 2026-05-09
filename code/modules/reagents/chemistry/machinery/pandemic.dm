@@ -383,26 +383,3 @@
 	update_appearance()
 	playsound(src, 'sound/machines/ping.ogg', 30, TRUE)
 	return TRUE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/computer/pandemic/proc/get_beaker_cures(disease_id)
-	var/list/cures = list()
-	if(!beaker)
-		return cures
-
-	var/datum/reagent/blood = get_blood_reagent()
-	if(!blood)
-		return cures
-
-	var/list/viruses = blood.data["viruses"]
-	if(!length(viruses))
-		return cures
-
-	// Only check for cure if there is a beaker AND the beaker contains blood AND the blood contains a virus.
-	for(var/datum/disease/advance/disease in viruses)
-		if(disease.GetDiseaseID() == disease_id)	// Double check the ids match.
-			cures.Add(disease.cures)
-			cures.Add(disease.cure_text)
-			break
-
-	return cures

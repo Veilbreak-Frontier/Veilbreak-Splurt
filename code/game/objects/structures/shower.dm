@@ -440,10 +440,3 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/shower, (-16))
 #undef SHOWER_NORMAL
 #undef SHOWER_FREEZING_TEMP
 #undef SHOWER_FREEZING
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/structure/sinkframe/wrench_act_secondary(mob/living/user, obj/item/tool)
-	. = ..()
-	tool.play_tool_sound(src)
-	deconstruct()
-	return TRUE

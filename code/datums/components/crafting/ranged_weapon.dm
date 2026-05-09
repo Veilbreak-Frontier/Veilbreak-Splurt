@@ -505,16 +505,3 @@
 	steps = list(
 		"use high quality gibtonite and advanced release or large grenades for better yield",
 	)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/crafting_recipe/xraylaser/New()
-	..()
-	blacklist += subtypesof(/obj/item/gun/energy/laser)
-
-/datum/crafting_recipe/hellgun/New()
-	..()
-	blacklist += subtypesof(/obj/item/gun/energy/laser)
-
-/datum/crafting_recipe/ioncarbine/New()
-	..()
-	blacklist += subtypesof(/obj/item/gun/energy/laser)

@@ -403,7 +403,3 @@ Difficulty: Hard
 #undef BUBBLEGUM_CAN_ENRAGE
 #undef BUBBLEGUM_IS_ENRAGED
 #undef BUBBLEGUM_SMASH
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/simple_animal/hostile/megafauna/bubblegum/hallucination/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	return

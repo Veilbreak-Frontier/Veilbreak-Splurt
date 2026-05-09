@@ -85,11 +85,3 @@
 
 	INVOKE_ASYNC(client, TYPE_VERB_REF(/client, refresh_tgui))
 	client.tgui_say?.load()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/preference/toggle/tgui_fancy/apply_to_client(client/client, value)
-	for (var/datum/tgui/tgui as anything in client.mob?.tgui_open_uis)
-		// Force it to reload either way
-		tgui.update_static_data(client.mob)
-
-// Determines if input boxes are in tgui or old fashioned

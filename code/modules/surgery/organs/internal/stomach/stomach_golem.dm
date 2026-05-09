@@ -81,32 +81,3 @@
 	owner.visible_message(span_notice("[owner] slowly stirs back into motion!"), span_notice("You have gathered enough strength to move your body once more."))
 	owner.remove_traits(list(TRAIT_IMMOBILIZED, TRAIT_FORCED_STANDING, TRAIT_HANDS_BLOCKED, TRAIT_INCAPACITATED), TRAIT_STATUS_EFFECT(id))
 	return ..()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/organ/stomach/golem/on_life(delta_time, times_fired)
-	for(var/datum/reagent/consumable/food in reagents.reagent_list)
-		if (istype(food, /datum/reagent/consumable/nutriment/mineral))
-			continue
-		food.nutriment_factor = 0
-	return ..()
-
-/// Slow down based on how full you are
-
-/obj/item/organ/stomach/golem/handle_hunger(mob/living/carbon/human/human, delta_time, times_fired)
-	// the effects are all negative, so just don't run them if you have the trait
-	. = ..()
-	if(HAS_TRAIT(human, TRAIT_NOHUNGER))
-		return
-	var/hunger = (NUTRITION_LEVEL_HUNGRY - human.nutrition) / NUTRITION_LEVEL_HUNGRY // starving = 1, satisfied = 0
-	if(hunger > 0)
-		var/slowdown = LERP(min_hunger_slowdown, max_hunger_slowdown, hunger)
-		human.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/golem_hunger, multiplicative_slowdown = slowdown)
-	else
-		human.remove_movespeed_modifier(/datum/movespeed_modifier/golem_hunger)
-
-	if (hunger >= 1)
-		human.apply_status_effect(/datum/status_effect/golem_statued)
-	else
-		human.remove_status_effect(/datum/status_effect/golem_statued)
-
-/// Uh oh, you can't move, yell for help

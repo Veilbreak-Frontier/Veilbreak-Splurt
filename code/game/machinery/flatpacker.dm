@@ -406,31 +406,3 @@
 	return CLICK_ACTION_SUCCESS
 
 #undef CREATE_AND_INCREMENT
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/flatpacker/proc/silo_material_insert(datum/source, datum/component/material_container/container, obj/item/item_inserted, last_inserted_id, list/mats_consumed, amount_inserted)
-	SIGNAL_HANDLER
-
-	AfterMaterialInsert(container, item_inserted, last_inserted_id, mats_consumed, amount_inserted)
-
-/obj/machinery/flatpacker/proc/finish_build(obj/item/circuitboard/machine/board, alist/user_data)
-	PRIVATE_PROC(TRUE)
-
-	if(QDELETED(board))
-		busy = FALSE
-		SStgui.update_uis(src)
-		return
-
-	busy = FALSE
-
-	var/obj/item/circuitboard/machine/board_ref = board
-	var/build_name = "machine"
-	if(istype(board_ref))
-		var/atom/build_path = initial(board_ref.build_path)
-		build_name = initial(build_path.name)
-	materials.use_materials(needed_mats, creation_efficiency, 1, "flatpacked", build_name, user_data = user_data)
-	var/obj/item/flatpack/box = new (drop_location(), board)
-	for(var/obj/item/component as anything in flatpacked_components)
-		component.forceMove(box)
-
-	SStgui.update_uis(src)

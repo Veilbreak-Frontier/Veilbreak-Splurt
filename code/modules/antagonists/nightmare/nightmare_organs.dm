@@ -156,39 +156,3 @@
 
 #undef HEART_SPECIAL_SHADOWIFY
 #undef HEART_RESPAWN_THRESHHOLD
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/organ/brain/shadow/nightmare/on_life(seconds_per_tick, times_fired)
-	. = ..()
-
-	var/turf/owner_turf = owner.loc
-	if(!isturf(owner_turf))
-		return
-	var/light_amount = owner_turf.get_lumcount()
-
-	if (light_amount < SHADOW_SPECIES_LIGHT_THRESHOLD) //dodge in the dark
-		owner.apply_status_effect(/datum/status_effect/shadow/nightmare)
-
-/obj/item/organ/heart/nightmare/on_death(seconds_per_tick, times_fired)
-	if(!owner)
-		return
-	var/turf/T = get_turf(owner)
-	if(istype(T))
-		var/light_amount = T.get_lumcount()
-		if(light_amount < SHADOW_SPECIES_LIGHT_THRESHOLD)
-			respawn_progress += seconds_per_tick SECONDS
-			playsound(owner, 'sound/effects/singlebeat.ogg', 40, TRUE)
-	if(respawn_progress < HEART_RESPAWN_THRESHHOLD)
-		return
-
-	owner.revive(HEAL_ALL & ~HEAL_REFRESH_ORGANS)
-	if(!(owner.dna.species.id == SPECIES_SHADOW || owner.dna.species.id == SPECIES_NIGHTMARE))
-		var/mob/living/carbon/old_owner = owner
-		Remove(owner, HEART_SPECIAL_SHADOWIFY)
-		old_owner.set_species(/datum/species/shadow)
-		Insert(old_owner, HEART_SPECIAL_SHADOWIFY)
-		to_chat(owner, span_userdanger("You feel the shadows invade your skin, leaping into the center of your chest! You're alive!"))
-		SEND_SOUND(owner, sound('sound/effects/ghost.ogg'))
-	owner.visible_message(span_warning("[owner] staggers to [owner.p_their()] feet!"))
-	playsound(owner, 'sound/effects/hallucinations/far_noise.ogg', 50, TRUE)
-	respawn_progress = 0

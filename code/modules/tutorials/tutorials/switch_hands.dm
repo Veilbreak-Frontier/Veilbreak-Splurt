@@ -94,19 +94,3 @@
 #undef STAGE_PICK_UP_ITEM
 #undef STAGE_SHOULD_SWAP_HAND
 #undef TIME_TO_START_MOVING_HAND_ICON
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/tutorial/switch_hands/proc/on_swap_hands()
-	SIGNAL_HANDLER
-
-	//FIXME: this checking breaks easily
-	if (isnull(user.get_active_held_item()))
-		stage = STAGE_PICK_UP_ITEM
-		show_instructions()
-	else if (isnull(user.get_inactive_held_item()))
-		stage = STAGE_SHOULD_SWAP_HAND
-		show_instructions()
-	else
-		// You somehow got an item in both hands during the tutorial without switching hands.
-		// Good job I guess?
-		complete()

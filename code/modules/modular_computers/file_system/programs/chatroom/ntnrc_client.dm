@@ -303,9 +303,3 @@
 #undef STATUS_ONLINE
 #undef STATUS_AWAY
 #undef STATUS_OFFLINE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/computer_file/program/chatclient/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
-	. = ..()
-	if(!username)
-		username = "DefaultUser[rand(100, 999)]"

@@ -56,16 +56,3 @@
 		if(blood_bag::blood_type == new_blood_type.name)
 			mail_goodies = list(blood_bag)
 			return
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/quirk/blooddeficiency/proc/lose_blood(datum/source, seconds_per_tick, times_fired)
-	SIGNAL_HANDLER
-
-	var/mob/living/carbon/human/human_holder = quirk_holder
-
-	if(human_holder.stat == DEAD)
-		return
-
-	human_holder.adjust_blood_volume(-human_holder.dna.species.blood_deficiency_drain_rate * seconds_per_tick, minimum = min_blood)
-
-/// Try to update the mail goodies to match the quirk holder's blood type. If we fail for whatever reason then it will just default to the initial O- blood pack that we start with.

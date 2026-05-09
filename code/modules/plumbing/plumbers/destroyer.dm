@@ -92,8 +92,3 @@
 	use_energy((disposal_rate / MAX_DISPOSAL_RATE) * active_power_usage * seconds_per_tick)
 
 #undef MAX_DISPOSAL_RATE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/plumbing/disposer/Initialize(mapload, bolt, layer)
-	. = ..()
-	AddComponent(/datum/component/plumbing/simple_demand, bolt, layer)

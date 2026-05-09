@@ -916,11 +916,3 @@
 #undef KIT_DEAD_MONEY
 #undef KIT_SAM_FISHER
 #undef KIT_PROP_HUNT
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/implant/nuclear_operative/get_data()
-	return "<b>Implant Specifications:</b><BR> \
-		<b>Name:</b> Suspicious Implant<BR> \
-		<b>Life:</b> UNKNOWN <BR> \
-		<b>Implant Details:</b> <BR> \
-		<b>Function:</b> Strange implant that seems to resist any attempts at scanning it."

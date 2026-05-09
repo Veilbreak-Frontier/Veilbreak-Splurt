@@ -216,10 +216,3 @@
 	AddComponent(/datum/component/germ_sensitive, mapload)
 	transform *= 1.25
 	AddComponent(/datum/component/decomposition, mapload, decomp_req_handle = TRUE, custom_time = 1 MINUTES, decomp_result = /obj/item/food/badrecipe/moldy)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/food/grown/banana/generate_trash(atom/location)
-	. = ..()
-	var/obj/item/grown/bananapeel/peel = .
-	if(istype(peel))
-		peel.grind_results = list(/datum/reagent/medicine/coagulant/banana_peel = peel.seed.potency * 0.2)

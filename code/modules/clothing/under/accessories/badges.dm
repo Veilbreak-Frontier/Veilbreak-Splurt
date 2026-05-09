@@ -308,11 +308,3 @@
 		examine(interacting_living)
 		to_chat(interacting_living, span_boldwarning("[user] shows the [src] to you."))
 		user.visible_message(span_notice("[user] shows a [src] to [interacting_living]."))
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/clothing/accessory/pride/setup_reskinning()
-	if(!check_setup_reskinning())
-		return
-
-	// We already register context regardless in Initialize.
-	RegisterSignal(src, COMSIG_CLICK_ALT, PROC_REF(on_click_alt_reskin))

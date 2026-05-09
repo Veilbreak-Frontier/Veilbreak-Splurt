@@ -8,10 +8,3 @@
 	text = replacetext(text, "%FEMALE%", !!findtext(speaker, "Woman"))
 	text = replacetext(text, "%BLIPS%", blips)
 	return url_encode(text)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/proc/tts_filter_encode(text, atom/movable/speaker, blips)
-	text = replacetext(text, "%PITCH%", SStts.pitch_enabled ? speaker.pitch : 0)
-	text = replacetext(text, "%FEMALE%", !!findtext(speaker.voice, "Woman"))
-	text = replacetext(text, "%BLIPS%", blips)
-	return url_encode(text)

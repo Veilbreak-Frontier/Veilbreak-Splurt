@@ -139,22 +139,3 @@
 	to_chat(user, span_notice("You insert [src] into [AI]'s compartment, and it beeps as it processes the data."))
 	to_chat(AI, span_notice("You process [src], and find yourself able to manipulate electronics from up to [AI.interaction_range] meters!"))
 	qdel(src)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/computer_disk/syndie_ai_upgrade/pre_attack(atom/target, mob/living/user, list/modifiers, list/attack_modifiers)
-	var/mob/living/silicon/ai/AI
-	if(isAI(target))
-		AI = target
-	else
-		AI = locate() in target
-	if(!AI || AI.interaction_range == INFINITY)
-		playsound(src,'sound/machines/buzz/buzz-sigh.ogg',50,FALSE)
-		to_chat(user, span_notice("Error! Incompatible object!"))
-		return ..()
-	AI.interaction_range += 2
-	if(AI.interaction_range > 7)
-		AI.interaction_range = INFINITY
-	playsound(src,'sound/machines/beep/twobeep.ogg',50,FALSE)
-	to_chat(user, span_notice("You insert [src] into [AI]'s compartment, and it beeps as it processes the data."))
-	to_chat(AI, span_notice("You process [src], and find yourself able to manipulate electronics from up to [AI.interaction_range] meters!"))
-	qdel(src)

@@ -344,32 +344,3 @@
 #undef ETHEREAL_CELL_DRAIN_TIME
 #undef ETHEREAL_CELL_POWER_DRAIN
 #undef ETHEREAL_CELL_POWER_GAIN_FACTOR
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/stock_parts/power_store/create_reagents(max_vol, flags)
-	. = ..()
-	RegisterSignal(reagents, COMSIG_REAGENTS_HOLDER_UPDATED, PROC_REF(on_reagent_change))
-
-/obj/item/stock_parts/power_store/proc/on_reagent_change(datum/reagents/holder)
-	SIGNAL_HANDLER
-
-	rigged = corrupted || !!holder.has_reagent(/datum/reagent/toxin/plasma, 5) //has_reagent returns the reagent datum
-
-/obj/item/stock_parts/power_store/proc/explode()
-	if(!charge)
-		return
-	var/range_devastation = -1
-	var/range_heavy = round(sqrt(charge / (3.6 * rating_base)))
-	var/range_light = round(sqrt(charge / (0.9 * rating_base)))
-	var/range_flash = range_light
-	if(!range_light)
-		rigged = FALSE
-		corrupt()
-		return
-
-	message_admins("[ADMIN_LOOKUPFLW(usr)] has triggered a rigged/corrupted power cell explosion at [AREACOORD(loc)].")
-	usr?.log_message("triggered a rigged/corrupted power cell explosion", LOG_GAME)
-	usr?.log_message("triggered a rigged/corrupted power cell explosion", LOG_VICTIM, log_globally = FALSE)
-
-	explosion(src, devastation_range = range_devastation, heavy_impact_range = range_heavy, light_impact_range = range_light, flash_range = range_flash)
-	qdel(src)

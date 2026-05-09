@@ -242,10 +242,3 @@ Lizard subspecies: SILVER SCALED
 	was_silverscale.remove_eye_color(EYE_COLOR_SPECIES_PRIORITY)
 	was_silverscale.remove_filter("silver_glint")
 	return ..()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/species/lizard/body_temperature_core(mob/living/carbon/human/humi, seconds_per_tick, times_fired)
-	return
-
-
-//SKYRAT EDIT REMOVAL BEGIN

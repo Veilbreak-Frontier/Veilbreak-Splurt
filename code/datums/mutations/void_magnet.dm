@@ -79,27 +79,3 @@
 		return
 
 	cast(source)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/action/cooldown/spell/void/cursed/proc/on_life(mob/living/source, seconds_per_tick, times_fired)
-	SIGNAL_HANDLER
-
-	if(!isliving(source) || HAS_TRAIT(source, TRAIT_STASIS) || source.stat == DEAD || HAS_TRAIT(source, TRAIT_NO_TRANSFORM))
-		return
-
-	if(!is_valid_target(source))
-		return
-
-	var/prob_of_curse = 0.25
-
-	var/mob/living/carbon/carbon_source = source
-	if(istype(carbon_source) && carbon_source.dna)
-		// If we have DNA, the probability of curse changes based on how stable we are
-		prob_of_curse += ((100 - carbon_source.dna.stability) / 40)
-
-	prob_of_curse *= curse_probability_modifier
-
-	if(!SPT_PROB(prob_of_curse, seconds_per_tick))
-		return
-
-	cast(source)

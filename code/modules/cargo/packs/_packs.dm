@@ -3,6 +3,14 @@
 	var/name = "Crate"
 	/// The group that the supply pack is sorted into within the cargo purchasing UI.
 	var/group = ""
+	/// Skyrat/modular cargo UI flags (TG uses order_flags; these remain for downstream type definitions).
+	var/hidden = FALSE
+	var/contraband = FALSE
+	var/dangerous = FALSE
+	var/special = FALSE
+	var/special_enabled = FALSE
+	var/drop_pod_only = FALSE
+	var/goody = FALSE
 	/// Cost of the crate. DO NOT GO ANY LOWER THAN X1.4 the "CARGO_CRATE_VALUE" value if using regular crates, or infinite profit will be possible!
 	var/cost = CARGO_CRATE_VALUE * 1.4
 	/// What access is required to open the crate when spawned?

@@ -145,7 +145,7 @@
 	heal_brute = 5
 	flesh_regeneration = 5
 	sanitization = 3
-	grind_results = list(/datum/reagent/medicine/oxandrolone = 3)
+	grind_result_reagents = list(/datum/reagent/medicine/oxandrolone = 3)
 	merge_type = /obj/item/stack/medical/ointment/red_sun
 	custom_price = PAYCHECK_LOWER * 1.5
 

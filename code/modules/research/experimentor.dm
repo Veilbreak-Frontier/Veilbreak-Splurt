@@ -863,8 +863,3 @@
 		message_admins("[relic_type] relic activated by [ADMIN_LOOKUPFLW(user)] in [ADMIN_VERBOSEJMP(location)]")
 	log_game(log_msg)
 	investigate_log(log_msg, "experimentor")
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/relic/Destroy(force)
-	QDEL_NULL(sparks)
-	. = ..()

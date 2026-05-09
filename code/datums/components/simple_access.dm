@@ -25,14 +25,3 @@
 /datum/component/simple_access/proc/on_donor_removed(datum/source)
 	SIGNAL_HANDLER
 	qdel(src)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/component/simple_access/proc/on_tried_access(datum/source, atom/locked_thing)
-	SIGNAL_HANDLER
-	if(!isobj(locked_thing))
-		return LOCKED_ATOM_INCOMPATIBLE
-	var/obj/locked_object = locked_thing
-	if(locked_object.check_access_list(access))
-		return ACCESS_ALLOWED
-	else
-		return ACCESS_DISALLOWED

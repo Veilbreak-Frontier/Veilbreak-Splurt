@@ -1014,10 +1014,3 @@
 #undef CONSTRUCTION_NO_CIRCUIT
 #undef REACTIVATION_DELAY
 #undef DEFAULT_STEP_TIME
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/machinery/door/firedoor/bumpopen(mob/living/user)
-	return FALSE //No bumping to open, not even in mechs
-
-/obj/machinery/door/firedoor/try_to_activate_door(mob/user, access_bypass = FALSE)
-	return

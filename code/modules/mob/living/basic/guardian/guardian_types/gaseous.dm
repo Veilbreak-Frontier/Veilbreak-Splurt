@@ -168,26 +168,3 @@
 	mix_to_spawn.temperature = T20C
 	var/turf/open/our_turf = get_turf(owner)
 	our_turf.assume_air(mix_to_spawn)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/basic/guardian/gaseous/proc/on_summoner_life(mob/living/source, seconds_per_tick, times_fired)
-	SIGNAL_HANDLER
-	source.adjust_bodytemperature(get_temp_change_amount((summoner.get_body_temp_normal() - summoner.bodytemperature), temp_stabilization_rate * seconds_per_tick))
-
-/datum/action/cooldown/mob_cooldown/expel_gas/proc/on_life(datum/source, seconds_per_tick, times_fired)
-	SIGNAL_HANDLER
-	if (isnull(active_gas))
-		return // We shouldn't even be registered at this point but just in case
-
-	if(isguardian(owner))
-		var/mob/living/basic/guardian/guardian_owner = owner
-		if(!guardian_owner.is_deployed())
-			stop_gas()
-			return
-
-	var/datum/gas_mixture/mix_to_spawn = new()
-	mix_to_spawn.add_gas(active_gas)
-	mix_to_spawn.gases[active_gas][MOLES] = possible_gases[active_gas] * seconds_per_tick
-	mix_to_spawn.temperature = T20C
-	var/turf/open/our_turf = get_turf(owner)
-	our_turf.assume_air(mix_to_spawn)

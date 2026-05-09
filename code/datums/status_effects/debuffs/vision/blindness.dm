@@ -119,25 +119,3 @@
 		to_chat(owner, span_green("Your [thing_covering_eyes?.name || "eye covering"] soothes your eyes."))
 
 #undef CAN_BE_BLIND
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/status_effect/grouped/blindness/proc/update_blindness()
-	if (!CAN_BE_BLIND(owner)) // future proofing
-		qdel(src)
-		return
-
-	if (!HAS_TRAIT(owner, TRAIT_SIGHT_BYPASS))
-		make_blind()
-		return
-
-	for (var/blocker in blocking_sources)
-		if (owner.is_blind_from(blocker))
-			make_blind()
-			return
-
-	make_unblind()
-
-/datum/status_effect/grouped/blindness/proc/make_blind()
-	owner.overlay_fullscreen(id, /atom/movable/screen/fullscreen/blind)
-	// You are blind - at most, able to make out shapes near you
-	owner.add_client_colour(/datum/client_colour/monochrome, REF(src))

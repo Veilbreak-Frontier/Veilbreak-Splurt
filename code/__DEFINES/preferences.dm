@@ -165,6 +165,8 @@
 #define LOADOUT_FLAG_GREYSCALING_ALLOWED (1<<2)
 /// Allows the item to be renamed by the player.
 #define LOADOUT_FLAG_ALLOW_NAMING (1<<3)
+/// Allows loadout items that support unique reskins to be reskinned.
+#define LOADOUT_FLAG_ALLOW_RESKIN (1<<4)
 
 // Loadout item info keys
 // Changing these will break existing loadouts

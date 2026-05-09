@@ -116,17 +116,3 @@
 
 /obj/item/organ/heart/gland/proc/activate()
 	return
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/organ/heart/gland/on_life(seconds_per_tick, times_fired)
-	if(!active)
-		return
-	if(!ownerCheck())
-		active = FALSE
-		return
-	if(COOLDOWN_FINISHED(src, activation_cooldown))
-		activate()
-		uses--
-		COOLDOWN_START(src, activation_cooldown, rand(cooldown_low, cooldown_high))
-	if(!uses)
-		active = FALSE

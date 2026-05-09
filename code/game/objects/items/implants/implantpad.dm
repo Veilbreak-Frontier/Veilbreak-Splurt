@@ -162,14 +162,3 @@
 	inserted_case.name += " - [saved_deathrattle_group.name]"
 	update_static_data_for_all_viewers()
 	return TRUE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/implantpad/ui_static_data(mob/user)
-	var/list/data = list()
-	data["has_case"] = !!inserted_case
-	if(!inserted_case)
-		return data
-	data["has_implant"] = !!inserted_case.imp
-	if(inserted_case.imp)
-		data["case_information"] = inserted_case.imp.get_data()
-	return data

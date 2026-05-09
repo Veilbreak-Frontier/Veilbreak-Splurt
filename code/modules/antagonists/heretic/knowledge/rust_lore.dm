@@ -307,24 +307,3 @@
 
 	if(need_mob_update)
 		source.updatehealth()
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/heretic_knowledge/ultimate/rust_final/proc/on_life(mob/living/source, seconds_per_tick, times_fired)
-	SIGNAL_HANDLER
-
-	var/turf/our_turf = get_turf(source)
-	if(!HAS_TRAIT(our_turf, TRAIT_RUSTY))
-		return
-
-	var/need_mob_update = FALSE
-	var/base_heal_amt = 1 * DELTA_WORLD_TIME(SSmobs)
-	need_mob_update += source.adjust_brute_loss(-base_heal_amt, updating_health = FALSE)
-	need_mob_update += source.adjust_fire_loss(-base_heal_amt, updating_health = FALSE)
-	need_mob_update += source.adjust_tox_loss(-base_heal_amt, updating_health = FALSE, forced = TRUE)
-	need_mob_update += source.adjust_oxy_loss(-base_heal_amt, updating_health = FALSE)
-	need_mob_update += source.adjust_stamina_loss(-base_heal_amt * 4, updating_stamina = FALSE)
-
-	source.adjust_blood_volume(base_heal_amt, maximum = BLOOD_VOLUME_NORMAL)
-
-	if(need_mob_update)
-		source.updatehealth()

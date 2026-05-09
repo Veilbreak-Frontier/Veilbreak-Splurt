@@ -24,12 +24,3 @@
 		resilience = trauma.resilience
 	if(resilience <= TRAUMA_RESILIENCE_BASIC) // there SHOULD be nothing lower than TRAUMA_RESILIENCE_BASIC, but I'd prefer to not make assumptions in case this ever gets some sort of refactor
 		return COMSIG_CARBON_BLOCK_TRAUMA
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/status_effect/bioware/cortex/folded/bioware_gained()
-	ADD_TRAIT(owner, TRAIT_SPECIAL_TRAUMA_BOOST, TRAIT_STATUS_EFFECT(id))
-
-/datum/status_effect/bioware/cortex/folded/bioware_lost()
-	REMOVE_TRAIT(owner, TRAIT_SPECIAL_TRAUMA_BOOST, TRAIT_STATUS_EFFECT(id))
-
-// Imprinted brain - Cures basic traumas continuously

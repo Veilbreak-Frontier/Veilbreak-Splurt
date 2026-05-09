@@ -5,6 +5,8 @@
 	var/id = null
 	/// List of sounds, one is chosen randomly each time the blooper is played
 	var/list/sound/soundpath_list = list()
+	/// Single-sound path (bark_list / legacy citadel entries); copied into soundpath_list on init
+	var/soundpath
 
 	var/min_pitch = BLOOPER_DEFAULT_MINPITCH
 	var/max_pitch = BLOOPER_DEFAULT_MAXPITCH
@@ -14,6 +16,23 @@
 	// Speed vars. Speed determines the number of characters required for each blooper, with lower speeds being faster with higher blooper density
 	var/min_speed = BLOOPER_DEFAULT_MINSPEED
 	var/max_speed = BLOOPER_DEFAULT_MAXSPEED
+	/// Legacy names from bark_list.dm (mapped to min_speed / max_speed in Init)
+	var/minspeed
+	var/maxspeed
+
+	var/list/ckeys_allowed
+	var/ignore = FALSE
+	var/allow_random = FALSE
+
+/datum/blooper/New()
+	. = ..()
+	if(soundpath && !length(soundpath_list))
+		soundpath_list = list(sound(soundpath))
+	if(!isnull(minspeed))
+		min_speed = minspeed
+	if(!isnull(maxspeed))
+		max_speed = maxspeed
+
 
 /**
  * Plays the vocal blooper for all listeners, duration is controlled by length of the message argument

@@ -97,6 +97,9 @@
 	/// Lazylist of surgery speed modifiers - id to number - 2 = 2x faster, 0.5x = 0.5x slower
 	var/list/mob_surgery_speed_mods
 
+	/// Active legacy [/datum/surgery] datums (classic step-based surgery on this mob).
+	var/list/surgeries
+
 	/// Used by [living/Bump()][/mob/living/proc/Bump] and [living/PushAM()][/mob/living/proc/PushAM] to prevent potential infinite loop.
 	var/now_pushing = null
 

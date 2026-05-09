@@ -405,14 +405,3 @@
 #undef SLIME_EXTRA_SHOCK_THRESHOLD
 #undef SLIME_BASE_SHOCK_PERCENTAGE
 #undef SLIME_SHOCK_PERCENTAGE_PER_LEVEL
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/mob/living/basic/slime/proc/set_slime_type(new_type = null)
-	if(isnull(new_type))
-		new_type = pick(subtypesof(/datum/slime_type))
-
-	slime_type = possible_slime_types[new_type]
-	update_name()
-	regenerate_icons()
-
-///Handles slime attacking restrictions, and any extra effects that would trigger

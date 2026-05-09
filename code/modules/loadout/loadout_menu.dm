@@ -127,8 +127,3 @@
 
 	data["loadout_tabs"] = loadout_tabs
 	return data
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/preference_middleware/loadout/on_new_character(mob/user)
-    ..()
-    preferences.read_preference(/datum/preference/loadout)

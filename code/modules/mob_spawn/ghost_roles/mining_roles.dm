@@ -369,9 +369,3 @@
 	flavour_text = "Unfortunately, your hated enemy, Nanotrasen, has begun mining in this sector. Monitor enemy activity as best you can, and try to keep a low profile. Use the communication equipment to provide support to any field agents, and sow disinformation to throw Nanotrasen off your trail. Do not let the outpost fall into enemy hands!"
 	important_text = "Do NOT let the outpost fall into enemy hands"
 	outfit = /datum/outfit/lavaland_syndicate/comms/icemoon
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/outfit/lavaland_syndicate/post_equip(mob/living/carbon/human/syndicate, visualsOnly = FALSE)
-	syndicate.faction |= ROLE_SYNDICATE
-*/
-// SKYRAT EDIT REMOVAL END

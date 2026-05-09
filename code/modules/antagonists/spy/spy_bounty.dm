@@ -742,7 +742,3 @@
 
 /datum/spy_bounty/some_bot/scrubs/can_claim(mob/user)
 	return !(user.mind?.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_MEDICAL)
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/spy_bounty/some_bot/scrubbs/can_claim(mob/user)
-	return !(user.mind?.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_MEDICAL)

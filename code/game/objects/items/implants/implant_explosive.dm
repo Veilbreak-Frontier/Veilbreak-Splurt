@@ -260,14 +260,3 @@
 #undef MICROBOMB_EXPLOSION_LIGHT
 #undef MICROBOMB_EXPLOSION_HEAVY
 #undef MICROBOMB_EXPLOSION_DEVASTATE
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/item/implant/explosive/get_data()
-	return "<b>Implant Specifications:</b><BR> \
-		<b>Name:</b> Robust Corp RX-78 Employee Management Implant<BR> \
-		<b>Life:</b> Activates upon death.<BR> \
-		<b>Important Notes:</b> Explodes<BR> \
-		<HR> \
-		<b>Implant Details:</b><BR> \
-		<b>Function:</b> Contains a compact, electrically detonated explosive that detonates upon receiving a specially encoded signal or upon host death.<BR> \
-		<b>Special Features:</b> Explodes<BR>"

@@ -193,7 +193,3 @@
 		ball.pickup_restriction_ckeys |= team_ckeys
 
 #undef PICKUP_RESTRICTION_TIME
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/obj/structure/hoop/proc/reset_appearance()
-	update_appearance()

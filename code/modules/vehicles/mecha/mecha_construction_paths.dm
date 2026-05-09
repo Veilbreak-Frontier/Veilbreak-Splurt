@@ -838,14 +838,3 @@
 
 	outer_plating = /obj/item/stack/sheet/plasteel
 	outer_plating_amount = 5
-
-// VEILBREAK/SPLURT fork sync: procs present in fork but missing from upstream (auto-restored)
-/datum/component/construction/mecha/update_parent(step_index)
-	steps = get_steps()
-	..()
-	// By default, each step in mech construction has a single icon_state:
-	// "[base_icon][index - 1]"
-	// For example, Ripley's step 1 icon_state is "ripley0"
-	var/atom/parent_atom = parent
-	if(!steps[index]["icon_state"] && base_icon)
-		parent_atom.icon_state = "[base_icon][index - 1]"
