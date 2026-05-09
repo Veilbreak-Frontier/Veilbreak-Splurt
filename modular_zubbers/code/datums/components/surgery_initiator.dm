@@ -1,4 +1,4 @@
-/datum/component/surgery_initiator/try_choose_surgery(mob/user, mob/living/target, datum/surgery/surgery)
+/datum/component/surgery_initiator/proc/try_choose_surgery(mob/user, mob/living/target, datum/surgery/surgery)
 	. = ..()
 	if(!.)
 		return

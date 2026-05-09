@@ -45,8 +45,7 @@
 	user.AddElementTrait(TRAIT_ASTRAL_TOUCHED_FLIGHT, REF(src), /datum/element/forced_gravity, 0)
 	user.AddElementTrait(TRAIT_ASTRAL_TOUCHED_FLIGHT, REF(src), /datum/element/simple_flying)
 	if(!flight_trail)
-		flight_trail = new
-	flight_trail.set_up(user)
+		flight_trail = new /datum/effect_system/trail_follow/ion/grav_allowed(user)
 	flight_trail.start()
 
 /// Removes the flight trait and particles on alignment deactivation

@@ -167,6 +167,14 @@
 /obj/item/canvas/drawingtablet/finalize()
 	return // no finalizing this piece
 
+/obj/item/canvas/drawingtablet/proc/reset_grid()
+	if(workspace)
+		UnregisterSignal(workspace, COMSIG_SPRITE_EDITOR_VALIDATE_COLOR)
+	workspace = new(width, height, color_mode = SPRITE_EDITOR_COLOR_MODE_RGB, config_flags = NONE, tool_flags = SPRITE_EDITOR_TOOL_PENCIL | SPRITE_EDITOR_TOOL_BUCKET, initial_layer_color = "[canvas_color]ff")
+	RegisterSignal(workspace, COMSIG_SPRITE_EDITOR_VALIDATE_COLOR, PROC_REF(validate_color))
+	used = FALSE
+	update_appearance()
+
 /obj/structure/sign/painting/frame_canvas(mob/user,obj/item/canvas/new_canvas)
 	if(istype(new_canvas, /obj/item/canvas/drawingtablet)) // NO FINALIZING THIS BITCH.
 		return FALSE

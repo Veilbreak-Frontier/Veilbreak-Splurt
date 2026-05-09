@@ -103,9 +103,9 @@
 	if(teleport_option == teleport_options[1])
 		new_player.forceMove(current_turf)
 		playsound(new_player, 'sound/effects/magic/Disable_Tech.ogg', 100, FALSE)
-		var/datum/effect_system/spark_spread/quantum/sparks = new
-		sparks.set_up(10, 1, new_player)
-		sparks.attach(get_turf(new_player))
+		var/datum/effect_system/basic/spark_spread/quantum/sparks = new(get_turf(new_player), 10, TRUE)
+		sparks.attach(new_player)
+		sparks.autocleanup = TRUE
 		sparks.start()
 	else if(teleport_option == teleport_options[2])
 		var/obj/structure/closet/supplypod/podspawn/empty_pod = new(null, pod_style)

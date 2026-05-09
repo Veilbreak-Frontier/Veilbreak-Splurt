@@ -86,6 +86,8 @@
 
 /obj/machinery/power/rbmk2/Destroy()
 
+	GLOB.active_rbmk_machines -= src
+
 	for(var/obj/machinery/rbmk2_sniffer/sniffer as anything in linked_sniffers)
 		sniffer.unlink_reactor(src)
 
@@ -273,6 +275,7 @@
 		return FALSE
 
 	active = desired_state
+	sync_active_rbmk_glob()
 
 	if(active)
 		var/turf/T = get_turf(src)

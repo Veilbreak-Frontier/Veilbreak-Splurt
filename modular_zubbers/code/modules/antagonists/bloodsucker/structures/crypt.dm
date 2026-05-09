@@ -537,7 +537,7 @@
 
 // Add rotating and armrest
 /obj/structure/bloodsucker/bloodthrone/Initialize(mapload)
-	AddComponent(/datum/component/simple_rotation)
+	AddElement(/datum/element/simple_rotation)
 	armrest = GetArmrest()
 	armrest.layer = ABOVE_MOB_LAYER
 	return ..()

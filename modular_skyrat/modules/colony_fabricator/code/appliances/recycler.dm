@@ -12,7 +12,7 @@
 	/// The sound made when an item is eaten
 	var/item_recycle_sound = 'modular_skyrat/modules/reagent_forging/sound/forge.ogg'
 	/// The recycler's internal materials storage, for when items recycled don't produce enough to make a full sheet of that material
-	var/datum/component/material_container/materials
+	var/datum/material_container/materials
 	/// The list of all the materials we can recycle
 	var/static/list/allowed_materials = list(
 		/datum/material/iron,
@@ -34,16 +34,18 @@
 	. = ..()
 	AddElement(/datum/element/repackable, repacked_type, 5 SECONDS)
 	AddElement(/datum/element/manufacturer_examine, COMPANY_FRONTIER)
-	materials = AddComponent( \
-		/datum/component/material_container, \
-		allowed_materials, \
-		INFINITY, \
-		MATCONTAINER_EXAMINE, \
-		container_signals = list(COMSIG_MATCONTAINER_ITEM_CONSUMED = TYPE_PROC_REF(/obj/machinery/colony_recycler, has_eaten_materials)), \
+	materials = new /datum/material_container(
+		src,
+		list(),
+		INFINITY,
+		MATCONTAINER_EXAMINE,
+		allowed_materials,
+		/obj/item,
+		list(COMSIG_MATCONTAINER_ITEM_CONSUMED = TYPE_PROC_REF(/obj/machinery/colony_recycler, has_eaten_materials)),
 	)
 
 /obj/machinery/colony_recycler/Destroy()
-	materials = null
+	QDEL_NULL(materials)
 	return ..()
 
 /obj/machinery/colony_recycler/examine(mob/user)

@@ -305,6 +305,10 @@
 	icon_state = "hoteldoor"
 	explosive_resistance = INFINITY
 	var/obj/item/hilbertshotel/parentSphere
+	/// Exit confirmation prompt (Condos / Hilbert doors).
+	var/leave_message = "Hilbert's Hotel would like to remind you that while we will do everything we can to protect the belongings \
+		you leave behind, we make no guarantees of their safety while you're gone, especially that of the health of any living creatures. \
+		With that in mind, are you ready to leave?"
 	// Stores the list of users entry points by ckey, so that they can be returned to the sphere they interacted with
 	var/list/entry_points = list()
 

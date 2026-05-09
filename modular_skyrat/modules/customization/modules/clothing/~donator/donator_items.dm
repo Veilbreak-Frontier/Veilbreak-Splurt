@@ -74,14 +74,13 @@
 	icon_state = "transponder"
 	w_class = WEIGHT_CLASS_SMALL
 	slot_flags = ITEM_SLOT_BELT
-	var/datum/effect_system/spark_spread/sparks
+	var/datum/effect_system/basic/spark_spread/sparks
 	var/current_state = TURN_DIAL
 	var/next_activate = 0
 
 /obj/item/donator/transponder/Initialize(mapload)
 	. = ..()
-	sparks = new
-	sparks.set_up(2, 0, src)
+	sparks = new /datum/effect_system/basic/spark_spread(get_turf(src), 2, FALSE)
 	sparks.attach(src)
 
 /obj/item/donator/transponder/Destroy()

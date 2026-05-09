@@ -11,6 +11,7 @@
 	SEND_SOUND(target, sound('modular_zzplurt/sound/misc/slamofthenorthstar.ogg', volume=60))
 	for(var/area/A in areas)
 		for(var/obj/structure/table/T in A)
-			var/datum/component/table_smash/table_smash = T.GetComponent(/datum/component/table_smash)
-			table_smash.tablepush(target, target)
+			var/datum/element/table_smash/helper = new
+			helper.tablepush(target, target, T)
+			qdel(helper)
 			sleep(1)

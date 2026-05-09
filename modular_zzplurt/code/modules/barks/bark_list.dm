@@ -108,7 +108,7 @@
 	soundpath = 'modular_zzplurt/code/modules/barks/voice/ace_attorney/aa_blip.ogg'
 	allow_random = TRUE
 	minspeed = 4
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/ace_blip/alt1
 	name = "Ace Talk 2"
@@ -125,7 +125,7 @@
 	id = "acewrite"
 	soundpath = 'modular_zzplurt/code/modules/barks/voice/ace_attorney/aa_blip_typewriter.ogg'
 	minspeed = 4
-	minvariance = 0
+	min_vary = 0
 
 //More
 /datum/blooper/nomi

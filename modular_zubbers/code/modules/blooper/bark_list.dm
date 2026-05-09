@@ -38,7 +38,7 @@
 	name = "Beepy"
 	id = "beep"
 	soundpath = 'sound/machines/terminal/terminal_select.ogg'
-	maxpitch = 1 //Bringing the pitch higher just hurts your ears :<
+	max_pitch = 1 //Bringing the pitch higher just hurts your ears :<
 	maxspeed = 4 //This soundbyte's too short for larger speeds to not sound awkward
 
 /datum/blooper/chitter
@@ -60,7 +60,7 @@
 /datum/blooper/bullet
 	name = "Windy"
 	id = "bullet"
-	maxpitch = 1.6
+	max_pitch = 1.6
 	soundpath = 'sound/items/weapons/bulletflyby.ogg'
 
 /datum/blooper/coggers
@@ -100,92 +100,92 @@
 	name = "Alphys"
 	id = "alphys"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_alphys.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/asgore
 	name = "Asgore"
 	id = "asgore"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_asgore.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/flowey
 	name = "Flowey (normal)"
 	id = "flowey1"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_flowey_1.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/flowey/evil
 	name = "Flowey (evil)"
 	id = "flowey2"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_flowey_2.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/papyrus
 	name = "Papyrus"
 	id = "papyrus"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_papyrus.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/ralsei
 	name = "Ralsei"
 	id = "ralsei"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_ralsei.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/sans //real
 	name = "Sans"
 	id = "sans"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_sans.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/toriel
 	name = "Toriel"
 	id = "toriel"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_toriel.ogg'
-	minvariance = 0
-	maxpitch = BLOOPER_DEFAULT_MAXPITCH*2
+	min_vary = 0
+	max_pitch = BLOOPER_DEFAULT_MAXPITCH*2
 
 /datum/blooper/undyne
 	name = "Undyne"
 	id = "undyne"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_undyne.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/temmie
 	name = "Temmie"
 	id = "temmie"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_temmie.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/susie
 	name = "Susie"
 	id = "susie"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_susie.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/gaster
 	name = "Gaster"
 	id = "gaster"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_gaster_1.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/mettaton
 	name = "Mettaton"
 	id = "mettaton"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_metta_1.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/gen_monster
 	name = "Generic Monster 1"
 	id = "gen_monster_1"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_monster1.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/gen_monster/alt
 	name = "Generic Monster 2"
 	id = "gen_monster_2"
 	soundpath = 'modular_zubbers/code/modules/blooper/voice/bloopers/undertale/voice_monster2.ogg'
-	minvariance = 0
+	min_vary = 0
 
 /datum/blooper/wilson
 	name = "Wilson"

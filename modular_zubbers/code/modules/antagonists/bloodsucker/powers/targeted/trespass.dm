@@ -72,8 +72,7 @@
 	// Effect Origin
 	var/sound_strength = max(60, 70 - level_current * 10)
 	playsound(get_turf(owner), 'sound/effects/magic/summon_karp.ogg', sound_strength, 1)
-	var/datum/effect_system/steam_spread/bloodsucker/puff = new /datum/effect_system/steam_spread()
-	puff.set_up(3, 0, my_turf)
+	var/datum/effect_system/basic/steam_spread/bloodsucker/puff = new(my_turf, 3, FALSE)
 	puff.start()
 
 	var/mist_delay = GetTeleportDelay() // Level up and do this faster.
@@ -100,9 +99,7 @@
 	user.invisibility = invis_was
 	// Effect Destination
 	playsound(get_turf(owner), 'sound/effects/magic/summon_karp.ogg', 60, 1)
-	puff = new /datum/effect_system/steam_spread/()
-	puff.effect_type = /obj/effect/particle_effect/fluid/smoke/vampsmoke
-	puff.set_up(3, 0, target_turf)
+	puff = new /datum/effect_system/basic/steam_spread/bloodsucker(target_turf, 3, FALSE)
 	puff.start()
 
 /datum/action/cooldown/bloodsucker/targeted/trespass/proc/GetTeleportDelay()

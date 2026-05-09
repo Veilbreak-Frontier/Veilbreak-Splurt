@@ -26,6 +26,8 @@
 	var/undershirt_name
 	/// String for the socks we use.
 	var/socks_name
+	/// String for bra accessory (Skyrat customization).
+	var/bra_name
 	/// Static list of slot flags we have clothing slots for.
 	var/static/list/slot_flags = list(
 		ITEM_SLOT_HEAD,

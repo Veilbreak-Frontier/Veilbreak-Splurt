@@ -280,8 +280,7 @@
 	var/prev_lockcharge = borg.lockcharge
 	borg.SetLockdown(TRUE)
 	borg.set_anchored(TRUE)
-	var/datum/effect_system/fluid_spread/smoke/smoke = new
-	smoke.set_up(1, holder = borg, location = borg.loc)
+	var/datum/effect_system/fluid_spread/smoke/smoke = new(borg.loc, 1, null, borg)
 	smoke.start()
 	sleep(0.2 SECONDS)
 	for(var/i in 1 to 4)

@@ -116,8 +116,7 @@
 
 	playsound(current_turf, 'sound/effects/magic/summon_karp.ogg', 60, 1)
 
-	var/datum/effect_system/steam_spread/bloodsucker/puff = new /datum/effect_system/steam_spread/bloodsucker()
-	puff.set_up(3, 0, current_turf)
+	var/datum/effect_system/basic/steam_spread/bloodsucker/puff = new(current_turf, 3, FALSE)
 	puff.start()
 
 	/// STEP FIVE: Create animal at prev location
@@ -131,7 +130,7 @@
 	DeactivatePower()
 	pay_cost()
 
-/datum/effect_system/steam_spread/bloodsucker
+/datum/effect_system/basic/steam_spread/bloodsucker
 	effect_type = /obj/effect/particle_effect/fluid/smoke/vampsmoke
 
 #undef GOHOME_START

@@ -102,6 +102,9 @@
 	if(target == occupant)
 		use_power = IDLE_POWER_USE
 
+/obj/machinery/stasissleeper/proc/check_nap_violations()
+	return TRUE
+
 
 /obj/machinery/stasissleeper/process()
 	if( !( occupant && isliving(occupant) && check_nap_violations() ) )

@@ -418,8 +418,7 @@
 				var/turf/tile = get_step(src, direction)
 				new /mob/living/basic/clockwork_marauder(tile)
 
-				var/datum/effect_system/fluid_spread/smoke/smoke_cloud = new
-				smoke_cloud.set_up(4, holder = src, location = src)
+				var/datum/effect_system/fluid_spread/smoke/smoke_cloud = new(get_turf(src), 4, null, src)
 				smoke_cloud.start()
 
 		if(21 to 30) // Fuck up the power

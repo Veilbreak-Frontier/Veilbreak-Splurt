@@ -116,7 +116,7 @@
 
 	if(istype(loaded_projectile, /obj/projectile/bullet/smart))
 		var/obj/projectile/bullet/smart/smart_proj = loaded_projectile
-		smart_proj.ignored_factions = iff_factions.Copy()
+		smart_proj.faction = iff_factions.Copy()
 
 /obj/item/ammo_casing/smart
 	firing_effect_type = null

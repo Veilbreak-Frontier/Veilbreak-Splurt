@@ -114,9 +114,8 @@
 	var/datum/reagents/spewed_reagents = new /datum/reagents(reagent_capacity)
 	spewed_reagents.my_atom = source
 	spewed_reagents.add_reagent(reagent_to_add, amount_of_reagent)
-	var/datum/effect_system/fluid_spread/foam/foam = new
 	var/turf/source_turf = get_turf(source)
-	foam.set_up(range, location = source_turf, carry = spewed_reagents)
+	var/datum/effect_system/fluid_spread/foam/foam = new(source_turf, range, null, source, spewed_reagents)
 	foam.start()
 
 
@@ -179,16 +178,8 @@
 	var/datum/reagents/reagents = new/datum/reagents(TEMP_REAGENT_HOLDER_CAPACITY_LARGE)
 	reagents.my_atom = source
 	reagents.add_reagent(/datum/reagent/toxin/histamine, PUFF_REAGENT_AMOUNT)
-	var/datum/effect_system/fluid_spread/smoke/chem/smoke_machine/puff = new
 	var/turf/source_turf = get_turf(source)
-	puff.set_up(
-		range,
-		location = source_turf,
-		carry = reagents,
-		efficiency = PUFF_REAGENT_EFFICIENCY,
-	)
-	puff.attach(source)
-	puff.start()
+	do_chem_smoke(range, holder = source, location = source_turf, carry = reagents, smoke_type = /datum/effect_system/fluid_spread/smoke/chem/smoke_machine, log = FALSE)
 
 
 /**

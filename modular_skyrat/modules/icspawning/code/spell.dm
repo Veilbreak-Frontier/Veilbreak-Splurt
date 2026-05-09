@@ -21,9 +21,9 @@
 
 	var/mob/dead/observer/ghost = user.ghostize(FALSE)
 
-	var/datum/effect_system/spark_spread/quantum/sparks = new
-	sparks.set_up(10, 1, user)
-	sparks.attach(user.loc)
+	var/datum/effect_system/basic/spark_spread/quantum/sparks = new(get_turf(user), 10, TRUE)
+	sparks.attach(user)
+	sparks.autocleanup = TRUE
 	sparks.start()
 
 	qdel(user)

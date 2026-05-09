@@ -175,8 +175,8 @@
 		var/mob/living/carbon/human/H = host_mob
 		potential_items += H.wear_id
 	else if(isanimal(host_mob))
-		var/mob/living/simple_animal/A = host_mob
-		potential_items += A.access_card
+		var/mob/living/simple_animal/simple = host_mob
+		potential_items += simple.get_simple_access_id()
 
 	var/list/new_access = list()
 	for(var/obj/item/I in potential_items)

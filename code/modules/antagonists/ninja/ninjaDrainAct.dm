@@ -28,8 +28,7 @@
 	var/drain = 0 //Drain amount from batteries
 	var/drain_total = 0
 	if(cell?.charge)
-		var/datum/effect_system/spark_spread/spark_system = new /datum/effect_system/spark_spread()
-		spark_system.set_up(5, 0, loc)
+		var/datum/effect_system/basic/spark_spread/spark_system = new /datum/effect_system/basic/spark_spread(get_turf(loc), 5, FALSE)
 		while(cell.charge> 0 && !maxcapacity)
 			drain = rand(NINJA_MIN_DRAIN, NINJA_MAX_DRAIN)
 			if(cell.charge < drain)
@@ -64,8 +63,7 @@
 	var/maxcapacity = FALSE //Safety check for batteries
 	var/drain = 0 //Drain amount from batteries
 	var/drain_total = 0
-	var/datum/effect_system/spark_spread/spark_system = new /datum/effect_system/spark_spread()
-	spark_system.set_up(5, 0, loc)
+	var/datum/effect_system/basic/spark_spread/spark_system = new /datum/effect_system/basic/spark_spread(get_turf(loc), 5, FALSE)
 	while(charge > 0 && !maxcapacity)
 		drain = rand(NINJA_MIN_DRAIN, NINJA_MAX_DRAIN)
 		if(charge < drain)
@@ -269,6 +267,7 @@
 	var/maxcapacity = FALSE //Safety check
 	var/drain = 0 //Drain amount
 	var/drain_total = 0
+	var/datum/effect_system/basic/spark_spread/spark_system = new /datum/effect_system/basic/spark_spread(get_turf(loc), 5, FALSE)
 	if(get_charge())
 		while(cell.charge > 0 && !maxcapacity)
 			drain = rand(NINJA_MIN_DRAIN, NINJA_MAX_DRAIN)
@@ -305,7 +304,7 @@
 	//BUBBER ADDITION END - Role selection
 	if(!do_after(ninja, 6 SECONDS, target = src, hidden = TRUE))
 		return
-	spark_system.start()
+	do_sparks(5, FALSE, loc)
 	playsound(loc, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 	//BUBBER ADDITION BEGIN - No ai shells
 	if(shell)
@@ -345,8 +344,7 @@
 	//20 uses for a standard cell. 200 for high capacity cells.
 	if(hacking_module.mod.subtract_charge(DEFAULT_CHARGE_DRAIN*10))
 		//Got that electric touch
-		var/datum/effect_system/spark_spread/spark_system = new /datum/effect_system/spark_spread()
-		spark_system.set_up(5, 0, loc)
+		var/datum/effect_system/basic/spark_spread/spark_system = new /datum/effect_system/basic/spark_spread(get_turf(loc), 5, FALSE)
 		spark_system.start()
 		visible_message(span_danger("[ninja] electrocutes [src] with [ninja.p_their()] touch!"), span_userdanger("[ninja] electrocutes you with [ninja.p_their()] touch!"))
 		addtimer(CALLBACK(src, PROC_REF(ninja_knockdown)), 0.3 SECONDS)

@@ -86,7 +86,7 @@ GLOBAL_VAR_INIT(guest_pass_uid_counter, 0)
 	src.grant_id = grant_id
 	sponsor_mind_wr = WEAKREF(sponsor_mind)
 	RegisterSignal(parent, COMSIG_MOB_TRIED_ACCESS, PROC_REF(try_door))
-	RegisterSignal(parent, COMSIG_MOB_RETRIEVE_SIMPLE_ACCESS, PROC_REF(merge_access))
+	RegisterSignal(parent, COMSIG_MOB_RETRIEVE_ACCESS, PROC_REF(merge_access))
 	return ..()
 
 /datum/component/guest_access_pass/proc/try_door(datum/source, obj/locked_object)

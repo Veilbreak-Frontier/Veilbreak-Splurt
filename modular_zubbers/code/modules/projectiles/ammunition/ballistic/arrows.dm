@@ -69,7 +69,6 @@
 	damage = 5 // ow
 	stamina = 40 // its okay
 	wound_bonus = 35 // will sometimes cause dislocations at close range
-	gets_tribal_bonus = FALSE // technically a modern arrow + meant to be less lethal
 	embed_type = null
 	sharpness = NONE
 
@@ -106,7 +105,6 @@
 	stamina = 5
 	/// Staimna damage to be dealt by the shock. Separate from stamina - insulated individuals might be immune to the shock.
 	var/shock_damage = 50 //stamcrit in two but any armor at all reduces it to three
-	gets_tribal_bonus = FALSE // technically a modern arrow + meant to be less lethal
 	embed_type = null
 	sharpness = NONE
 

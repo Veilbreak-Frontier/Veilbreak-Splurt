@@ -103,8 +103,7 @@
 /obj/projectile/bullet/c980grenade/smoke/fuse_activation(atom/target)
 	playsound(src, 'modular_zubbers/sound/weapons/grenade_burst.ogg', 50, TRUE, -3)
 	playsound(src, 'sound/effects/smoke.ogg', 50, TRUE, -3)
-	var/datum/effect_system/fluid_spread/smoke/bad/smoke = new
-	smoke.set_up(GRENADE_SMOKE_RANGE, holder = src, location = src)
+	var/datum/effect_system/fluid_spread/smoke/bad/smoke = new(get_turf(src), GRENADE_SMOKE_RANGE, null, src)
 	smoke.start()
 
 
@@ -194,8 +193,7 @@
 	. = ..()
 
 	playsound(src, 'sound/effects/smoke.ogg', 50, TRUE, -3)
-	var/datum/effect_system/fluid_spread/smoke/quick/smoke = new
-	smoke.set_up(GRENADE_SMOKE_RANGE, holder = src, location = src)
+	var/datum/effect_system/fluid_spread/smoke/quick/smoke = new(get_turf(src), GRENADE_SMOKE_RANGE, null, src)
 	smoke.start()
 
 
@@ -239,9 +237,9 @@
 /obj/projectile/bullet/c980grenade/riot/fuse_activation(atom/target)
 	playsound(src, 'modular_zubbers/sound/weapons/grenade_burst.ogg', 50, TRUE, -3)
 	playsound(src, 'sound/effects/smoke.ogg', 50, TRUE, -3)
-	var/datum/effect_system/fluid_spread/smoke/chem/smoke = new()
-	smoke.chemholder.add_reagent(/datum/reagent/consumable/condensedcapsaicin, 10)
-	smoke.set_up(GRENADE_SMOKE_RANGE, holder = src, location = src)
+	var/datum/reagents/chem_payload = new(1000)
+	chem_payload.add_reagent(/datum/reagent/consumable/condensedcapsaicin, 10)
+	var/datum/effect_system/fluid_spread/smoke/chem/smoke = new(get_turf(src), GRENADE_SMOKE_RANGE, null, src, chem_payload, null, TRUE)
 	smoke.start()
 
 

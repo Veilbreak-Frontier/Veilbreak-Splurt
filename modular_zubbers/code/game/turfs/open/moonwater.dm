@@ -33,6 +33,14 @@
 
 	fishing_datum = /datum/fish_source/lunar/surface
 
+/turf/open/water/moonstation/infested
+	name = "infested lunar water"
+	desc = "Something hostile has claimed this stretch of shallows."
+
+/turf/open/water/moonstation/surface/infested
+	name = "infested lunar surface water"
+	desc = "Something hostile has claimed this stretch of shallows."
+
 #define MOON_FISH_MYTHICAL 1
 #define MOON_FISH_RARE 2
 #define MOON_FISH_UNCOMMON 4
