@@ -1402,7 +1402,7 @@
 	},
 /obj/structure/fake_stairs{
 	icon_state = "stairs-old";
-	icon = 'modular_skyrat/modules/aesthetics/floors/icons/floors.dmi';
+	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
 	color = "#45464a";
 	dir = 8
 	},
