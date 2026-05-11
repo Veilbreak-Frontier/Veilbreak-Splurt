@@ -29,20 +29,25 @@
 	var/loaded_check = (syringes.len || chambered) ? "_l" : "_u"
 	icon_state = "[base][loaded_check]"
 
+	if(ismob(loc))
+		var/matrix/M = matrix()
+		M.Scale(0.66, 1)
+		transform = M
+	else
+		transform = null
+
 /obj/item/gun/syringe/crossbow/equipped(mob/user, slot)
 	. = ..()
 	if(slot & ITEM_SLOT_HANDS)
 		pixel_x = 0
-		pixel_w = 0
-		overlays.Cut()
+		transform = null
 	else
-		pixel_x = -8
-		pixel_w = -16
+		update_appearance()
 
 /obj/item/gun/syringe/crossbow/dropped(mob/user)
 	. = ..()
 	pixel_x = 0
-	pixel_w = 0
+	update_appearance()
 
 /obj/item/gun/syringe/crossbow/wood/red
 	name = "royal wooden crossbow (red)"
