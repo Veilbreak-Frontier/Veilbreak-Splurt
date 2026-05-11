@@ -17,6 +17,7 @@
 	has_syringe_overlay = FALSE
 	layer = OBJ_LAYER
 	plane = GAME_PLANE
+	appearance_flags = KEEP_TOGETHER | LONG_GLIDE | TILE_BOUND
 
 /obj/item/gun/syringe/crossbow/Initialize(mapload)
 	. = ..()
@@ -33,6 +34,7 @@
 	if(slot & ITEM_SLOT_HANDS)
 		pixel_w = 0
 		pixel_x = 0
+		overlays.Cut()
 		var/matrix/M = matrix()
 		transform = M
 	else
@@ -88,12 +90,6 @@
 	desc = "A single-shot medical crossbow with a matte black finish and crimson accents."
 	id = "crusader_crossbow_matte_red"
 	build_path = /obj/item/gun/syringe/crossbow/matte/red
-
-/datum/design/crusader_crossbow/matte_blue
-	name = "Cerulean Surgeon"
-	desc = "A matte-black medical crossbow with chilling azure accents. Designed for the steady, cold-blooded precision of a serpentine prince, it delivers treatment with the swiftness of a striking viper."
-	id = "crusader_crossbow_matte_blue"
-	build_path = /obj/item/gun/syringe/crossbow/matte/blue
 
 /datum/loadout_item/inhand/cerulean_surgeon
 	name = "Cerulean Surgeon"
