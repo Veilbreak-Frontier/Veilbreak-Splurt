@@ -13,11 +13,19 @@
 	force = 4
 	throw_speed = 3
 	throw_range = 7
+	has_syringe_overlay = FALSE
+	layer = OBJ_LAYER
+	plane = GAME_PLANE
+
+/obj/item/gun/syringe/crossbow/Initialize(mapload)
+	. = ..()
+	update_appearance()
 
 /obj/item/gun/syringe/crossbow/update_appearance(updates)
 	. = ..()
-	var/loaded_state = syringes.len ? "l" : "u"
-	icon_state = "[initial(icon_state)]_[loaded_state]"
+	var/base = initial(icon_state)
+	var/suffix = syringes.len ? "_l" : "_u"
+	icon_state = "[base][suffix]"
 
 /obj/item/gun/syringe/crossbow/wood/red
 	name = "royal wooden crossbow (red)"
@@ -64,13 +72,11 @@
 	id = "crusader_crossbow_matte_red"
 	build_path = /obj/item/gun/syringe/crossbow/matte/red
 
-/*
 /datum/design/crusader_crossbow/matte_blue
 	name = "Cerulean Surgeon"
 	desc = "A matte-black medical crossbow with chilling azure accents. Designed for the steady, cold-blooded precision of a serpentine prince, it delivers treatment with the swiftness of a striking viper."
 	id = "crusader_crossbow_matte_blue"
 	build_path = /obj/item/gun/syringe/crossbow/matte/blue
-*/
 
 /datum/loadout_item/inhand/cerulean_surgeon
 	name = "Cerulean Surgeon"
