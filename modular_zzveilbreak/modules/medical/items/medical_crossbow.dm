@@ -24,8 +24,21 @@
 /obj/item/gun/syringe/crossbow/update_appearance(updates)
 	. = ..()
 	var/base = initial(icon_state)
-	var/suffix = syringes.len ? "_l" : "_u"
-	icon_state = "[base][suffix]"
+	var/loaded_check = (syringes.len || chambered) ? "_l" : "_u"
+	icon_state = "[base][loaded_check]"
+
+/obj/item/gun/syringe/crossbow/equipped(mob/user, slot)
+	. = ..()
+	if(slot & (ITEM_SLOT_HANDS))
+		var/matrix/M = matrix()
+		transform = M
+		pixel_x = 0
+		pixel_y = 0
+
+/obj/item/gun/syringe/crossbow/dropped(mob/user)
+	. = ..()
+	pixel_x = base_pixel_x
+	pixel_y = base_pixel_y
 
 /obj/item/gun/syringe/crossbow/wood/red
 	name = "royal wooden crossbow (red)"
