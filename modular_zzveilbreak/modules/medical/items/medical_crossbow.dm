@@ -6,8 +6,6 @@
 	righthand_file = 'modular_zzveilbreak/icons/item_icons/crusader_crossbow_inhands.dmi'
 	inhand_x_dimension = 32
 	inhand_y_dimension = 32
-	pixel_w = -8
-	base_pixel_x = -8
 	w_class = WEIGHT_CLASS_NORMAL
 	slot_flags = ITEM_SLOT_BELT | ITEM_SLOT_BACK
 	max_syringes = 1
@@ -18,6 +16,8 @@
 	layer = OBJ_LAYER
 	plane = GAME_PLANE
 	appearance_flags = KEEP_TOGETHER | LONG_GLIDE | TILE_BOUND
+	pixel_x = 0
+	pixel_y = 0
 
 /obj/item/gun/syringe/crossbow/Initialize(mapload)
 	. = ..()
@@ -29,30 +29,20 @@
 	var/loaded_check = (syringes.len || chambered) ? "_l" : "_u"
 	icon_state = "[base][loaded_check]"
 
-	if(ismob(loc))
-		var/matrix/M = matrix()
-		M.Scale(0.66)
-		transform = M
-	else
-		transform = null
-
 /obj/item/gun/syringe/crossbow/equipped(mob/user, slot)
 	. = ..()
 	if(slot & ITEM_SLOT_HANDS)
-		pixel_w = 0
 		pixel_x = 0
+		pixel_w = 0
 		overlays.Cut()
-		transform = null
 	else
-		pixel_w = -8
-		pixel_x = base_pixel_x
-		update_appearance()
+		pixel_x = -8
+		pixel_w = -16
 
 /obj/item/gun/syringe/crossbow/dropped(mob/user)
 	. = ..()
-	pixel_w = -8
-	pixel_x = base_pixel_x
-	update_appearance()
+	pixel_x = 0
+	pixel_w = 0
 
 /obj/item/gun/syringe/crossbow/wood/red
 	name = "royal wooden crossbow (red)"
