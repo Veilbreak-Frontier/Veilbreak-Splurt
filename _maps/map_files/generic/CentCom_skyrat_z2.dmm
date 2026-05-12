@@ -5360,7 +5360,7 @@
 /area/centcom/holding/cafe)
 "cma" = (
 /turf/open/indestructible/hotelwood{
-	icon = 'modular_skyrat/modules/aesthetics/floors/icons/floors.dmi';
+	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
 	icon_state = "wood_large"
 	},
 /area/centcom/holding/cafe)
@@ -7795,7 +7795,7 @@
 	dir = 4
 	},
 /turf/open/indestructible/hotelwood{
-	icon = 'modular_skyrat/modules/aesthetics/floors/icons/floors.dmi';
+	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
 	icon_state = "wood_large"
 	},
 /area/centcom/holding/cafe)
@@ -8796,7 +8796,7 @@
 	},
 /obj/machinery/light/small/directional/west,
 /turf/open/indestructible/hotelwood{
-	icon = 'modular_skyrat/modules/aesthetics/floors/icons/floors.dmi';
+	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
 	icon_state = "wood_large"
 	},
 /area/centcom/holding/cafe)
@@ -11347,7 +11347,7 @@
 	dir = 6
 	},
 /turf/open/indestructible/hotelwood{
-	icon = 'modular_skyrat/modules/aesthetics/floors/icons/floors.dmi';
+	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
 	icon_state = "wood_large"
 	},
 /area/centcom/holding/cafe)
@@ -12102,7 +12102,7 @@
 /obj/effect/turf_decal/siding/wood,
 /obj/machinery/light/small/directional/west,
 /turf/open/indestructible/hotelwood{
-	icon = 'modular_skyrat/modules/aesthetics/floors/icons/floors.dmi';
+	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
 	icon_state = "wood_large"
 	},
 /area/centcom/holding/cafe)
@@ -15504,7 +15504,7 @@
 	},
 /obj/structure/table/wood/fancy/black,
 /turf/open/indestructible/hotelwood{
-	icon = 'modular_skyrat/modules/aesthetics/floors/icons/floors.dmi';
+	icon = 'modular_zubbers/icons/turf/floors/floors.dmi';
 	icon_state = "wood_large"
 	},
 /area/centcom/holding/cafe)

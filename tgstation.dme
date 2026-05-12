@@ -10937,5 +10937,6 @@
 #include "modular_zzveilbreak\modules\mapping\mapgen_tick_safe.dm"
 #include "modular_zzveilbreak\modules\mapping\massdelete_tick_safe.dm"
 #include "modular_zzveilbreak\modules\mapping\tick_budget_globals.dm"
+#include "modular_zzveilbreak\modules\medical\items\medical_crossbow.dm"
 #include "modular_zzveilbreak\modules\spells\expanding_fire_ring.dm"
 // END_INCLUDE

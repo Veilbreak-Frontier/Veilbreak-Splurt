@@ -106,9 +106,6 @@
 	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /obj/item/gun/syringe/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
-	if(istype(tool, /obj/item/reagent_containers/syringe/bluespace))
-		balloon_alert(user, "[tool.name] is too big!")
-		return ITEM_INTERACT_BLOCKING
 
 	if(!istype(tool, /obj/item/reagent_containers/syringe))
 		return NONE
