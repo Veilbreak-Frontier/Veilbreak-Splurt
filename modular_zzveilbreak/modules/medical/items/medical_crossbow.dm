@@ -102,3 +102,4 @@
 	name = "Cerulean Surgeon"
 	item_path = /obj/item/gun/syringe/crossbow/matte/blue
 	ckeywhitelist = list("nuetterden")
+	donator_only=FALSE
