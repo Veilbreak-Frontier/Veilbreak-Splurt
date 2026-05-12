@@ -21,6 +21,11 @@
 
 /obj/item/gun/syringe/crossbow/Initialize(mapload)
 	. = ..()
+	original_icon = icon;
+	var/icon/scaled = icon(icon, icon_state)
+	scaled.Scale(32,32)
+	icon=scaled
+
 	update_appearance()
 
 /obj/item/gun/syringe/crossbow/update_appearance(updates)
@@ -29,24 +34,26 @@
 	var/loaded_check = (syringes.len || chambered) ? "_l" : "_u"
 	icon_state = "[base][loaded_check]"
 
-	if(ismob(loc))
+	if(isturf(loc))
+		icon = original_icon
+		icon_state = desired_state
 		var/matrix/M = matrix()
-		M.Scale(0.66, 1)
+		M.Scale(1.5, 1)
 		transform = M
+		pixel_x = -8
+		pixel_y = 0
 	else
+		icon_state = desired_state
 		transform = null
+		pixel_x = initial(pixel_x)
+		pixel_y = initial(pixel_y)
 
 /obj/item/gun/syringe/crossbow/equipped(mob/user, slot)
 	. = ..()
-	if(slot & ITEM_SLOT_HANDS)
-		pixel_x = 0
-		transform = null
-	else
-		update_appearance()
+	update_appearance()
 
 /obj/item/gun/syringe/crossbow/dropped(mob/user)
 	. = ..()
-	pixel_x = 0
 	update_appearance()
 
 /obj/item/gun/syringe/crossbow/wood/red
