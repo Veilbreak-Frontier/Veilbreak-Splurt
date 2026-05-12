@@ -18,31 +18,28 @@
 	appearance_flags = KEEP_TOGETHER | LONG_GLIDE | TILE_BOUND
 	pixel_x = 0
 	pixel_y = 0
+	var/icon/small_icon
 
 /obj/item/gun/syringe/crossbow/Initialize(mapload)
 	. = ..()
-	original_icon = icon;
-	var/icon/scaled = icon(icon, icon_state)
-	scaled.Scale(32,32)
-	icon=scaled
-
+	small_icon = icon(icon, icon_state)
+	small_icon.Scale(32, 32)
 	update_appearance()
 
 /obj/item/gun/syringe/crossbow/update_appearance(updates)
 	. = ..()
 	var/base = initial(icon_state)
 	var/loaded_check = (syringes.len || chambered) ? "_l" : "_u"
-	icon_state = "[base][loaded_check]"
+	var/desired_state = "[base][loaded_check]"
 
 	if(isturf(loc))
-		icon = original_icon
+		icon = initial(icon)
 		icon_state = desired_state
-		var/matrix/M = matrix()
-		M.Scale(1.5, 1)
-		transform = M
-		pixel_x = -8
-		pixel_y = 0
+		transform = null
+		pixel_x = initial(pixel_x)
+		pixel_y = initial(pixel_y)
 	else
+		icon = small_icon
 		icon_state = desired_state
 		transform = null
 		pixel_x = initial(pixel_x)
