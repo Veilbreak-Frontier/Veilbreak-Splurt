@@ -83,11 +83,14 @@
 	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
 	var/loadout_index = preferences.read_preference(/datum/preference/loadout_index)
 
-	if(!istext(loadout_index) || !islist(loadout_entries[loadout_index]))
+	if (!istext(loadout_index) || !(loadout_index in loadout_entries))
 		loadout_index = "Default"
-		if(!islist(loadout_entries[loadout_index]))
-			loadout_entries[loadout_index] = list()
-			preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
+
+	if (!islist(loadout_entries[loadout_index]))
+		loadout_entries[loadout_index] = list()
+		preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
+
+	if (loadout_index != preferences.read_preference(/datum/preference/loadout_index))
 		preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout_index], loadout_index)
 
 	return loadout_entries[loadout_index]

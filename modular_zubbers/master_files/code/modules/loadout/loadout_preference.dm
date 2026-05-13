@@ -40,6 +40,16 @@
 	var/list/loadout_list = list()
 	for(var/key in data)
 		loadout_list += key
-	data = list("loadout" = data[user?.client?.prefs.read_preference(/datum/preference/loadout_index)] || "Default") // Fail nicely and hopefully avoid runtiming, though this is client bullshit we're on about
-	data["loadouts"] = loadout_list
-	return data
+
+	var/active_name = user?.client?.prefs.read_preference(/datum/preference/loadout_index)
+	if (!istext(active_name) || !(active_name in data))
+		active_name = "Default"
+
+	var/list/active_loadout = data[active_name]
+	if (!islist(active_loadout))
+		active_loadout = list()
+
+	return list(
+		"loadout" = active_loadout,
+		"loadouts" = loadout_list,
+	)

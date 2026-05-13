@@ -30,10 +30,12 @@
  * Removes all invalid paths from loadout lists.
  * This is a general sanitization for preference loading.
  *
- * Returns a list, or null if empty
+ * Empty loadouts remain an associative list (`list()`), never null; nested preset slots rely on this.
  */
 /datum/preference/loadout/proc/sanitize_loadout_list(list/passed_list, mob/optional_loadout_owner, client/owner_client) as /list // SKYRAT EDIT CHANGE - client/owner_client
-	var/list/sanitized_list
+	if (isnull(passed_list))
+		return list()
+	var/list/sanitized_list = list()
 	for(var/path in passed_list)
 		// Loading from json has each path in the list as a string that we need to convert back to typepath
 		var/obj/item/real_path = istext(path) ? text2path(path) : path
