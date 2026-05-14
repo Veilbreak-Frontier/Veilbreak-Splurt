@@ -247,15 +247,26 @@ function LoadoutTabs(props: LoadoutTabsProps) {
               <Stack vertical>
                 <Stack.Item>
                   <Dropdown
+                    key={
+                      data.character_preferences.misc.loadout_lists.loadouts?.join(
+                        '\0',
+                      ) ?? ''
+                    }
                     mb="2px"
                     width="100%"
                     options={
                       data.character_preferences.misc.loadout_lists.loadouts
                     }
                     selected={data.character_preferences.misc.loadout_index}
-                    onSelected={(value) =>
-                      act('set_loadout_preset', { name: value })
-                    }
+                    onSelected={(value) => {
+                      if (
+                        value ===
+                        data.character_preferences.misc.loadout_index
+                      ) {
+                        return;
+                      }
+                      act('set_loadout_preset', { name: value });
+                    }}
                   />
                 </Stack.Item>
                 <Stack.Item>

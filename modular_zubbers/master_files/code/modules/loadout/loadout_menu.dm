@@ -53,6 +53,8 @@
 	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
 
 	if (loadout_name in loadout_entries)
+		if (loadout_name == preferences.read_preference(/datum/preference/loadout_index))
+			return TRUE
 		preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout_index], loadout_name)
 
 	return TRUE
