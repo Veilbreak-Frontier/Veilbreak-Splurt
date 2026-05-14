@@ -12,7 +12,7 @@
 	var/list/loadouts = preferences.read_preference(/datum/preference/loadout)
 	if (!length(loadouts))
 		return "Default"
-	// Assoc list of preset name -> item list; numeric [1] is not a preset name.
+	// Assoc list: numeric [1] is not reliably a preset name.
 	for (var/preset_name in loadouts)
 		if (istext(preset_name) && islist(loadouts[preset_name]))
 			return preset_name
@@ -42,25 +42,13 @@
 
 /datum/preference/loadout/compile_ui_data(mob/user, value)
 	var/list/data = ..()
-	if (!islist(data))
-		return list("loadout" = list(), "loadouts" = list())
-
-	var/list/loadout_names = list()
-	for (var/preset_name in data)
-		UNTYPED_LIST_ADD(loadout_names, preset_name)
-
-	var/datum/preferences/prefs = user?.client?.prefs
-	var/index = prefs?.read_preference(/datum/preference/loadout_index)
-	if (!istext(index) || !(index in data))
-		if ("Default" in data)
-			index = "Default"
-		else if (length(loadout_names))
-			index = loadout_names[1]
-		else
-			return list("loadout" = list(), "loadouts" = list())
-
-	var/list/current = data[index]
-	if (!islist(current))
-		current = list()
-
-	return list("loadout" = current, "loadouts" = loadout_names)
+	var/list/loadout_list = list()
+	for(var/key in data)
+		loadout_list += key
+	var/index = user?.client?.prefs.read_preference(/datum/preference/loadout_index)
+	var/list/chosen = (istext(index) && (index in data) && islist(data[index])) ? data[index] : null
+	if (!islist(chosen))
+		chosen = islist(data["Default"]) ? data["Default"] : list()
+	data = list("loadout" = chosen)
+	data["loadouts"] = loadout_list
+	return data
