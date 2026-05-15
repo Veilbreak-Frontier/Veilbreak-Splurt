@@ -455,7 +455,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	save_data["all_quirks"] = all_quirks
 	save_character_skyrat(save_data, update) // SKYRAT EDIT ADDITION
 	save_character_doppler(save_data) // DOPPLER EDIT ADDITION - Powers savefile migration
-	save_custom_tattoo_data(save_data)
+	save_custom_tattoo_data(save_data, !isnull(override_slot) ? override_slot : default_slot)
 	return TRUE
 
 /datum/preferences/proc/switch_to_slot(new_slot)

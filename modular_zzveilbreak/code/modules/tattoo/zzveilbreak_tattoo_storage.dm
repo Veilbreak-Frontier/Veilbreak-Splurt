@@ -1,4 +1,5 @@
-/datum/preferences/proc/save_custom_tattoo_data(list/save_data)
+/datum/preferences/proc/save_custom_tattoo_data(list/save_data, saved_slot)
+	// saved_slot: which character slot save_data belongs to when called from save_character; null treats as default_slot
 	var/mob/living/carbon/human/H
 	if(parent?.mob && ishuman(parent.mob))
 		H = parent.mob
@@ -7,6 +8,9 @@
 		if(save_data && islist(features?["custom_tattoos"]))
 			save_data["custom_tattoos"] = features["custom_tattoos"]
 		return
+
+	if(isnull(saved_slot))
+		saved_slot = default_slot
 
 	var/list/tattoo_serialization = list()
 	for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
@@ -26,14 +30,32 @@
 		)
 		tattoo_serialization += list(T_dict)
 
-	if(save_data)
+	var/body_slot = H.mind?.original_character_slot_index || default_slot
+
+	// In-memory prefs only represent the character slot currently selected in prefs (default_slot).
+	if(body_slot == default_slot)
+		if(!features)
+			features = list()
+		features["custom_tattoos"] = tattoo_serialization
+		features -= "custom_tattoos_loaded"
+
+	// Inject into the save blob only when this save belongs to the same slot as the inked body.
+	if(save_data && body_slot == saved_slot)
 		save_data["custom_tattoos"] = tattoo_serialization
+		if(islist(save_data["features"]))
+			save_data["features"]["custom_tattoos"] = tattoo_serialization
 
-	if(!features)
-		features = list()
-
-	features["custom_tattoos"] = tattoo_serialization
-	features -= "custom_tattoos_loaded"
+	// Mid-round tattoo changes call this without save_data; if prefs are open on another slot, persist ink to the body's slot directly.
+	if(isnull(save_data) && body_slot != default_slot && load_and_save && savefile && path != DEV_PREFS_PATH)
+		var/tree_key = "character[body_slot]"
+		var/list/char_data = savefile.get_entry(tree_key)
+		if(islist(char_data))
+			char_data["custom_tattoos"] = tattoo_serialization
+			if(!islist(char_data["features"]))
+				char_data["features"] = list()
+			char_data["features"]["custom_tattoos"] = tattoo_serialization
+			savefile.set_entry(tree_key, char_data)
+			savefile.save()
 
 /datum/preferences/proc/load_custom_tattoo_data()
 	if(!features)
