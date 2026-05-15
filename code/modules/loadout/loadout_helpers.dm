@@ -139,9 +139,7 @@
         else if(!(path in GLOB.all_loadout_datums))
             stack_trace("invalid loadout slot found in loadout list! Path: [path]")
             LAZYREMOVE(list_to_clean, path)
-            continue
-        if(!islist(list_to_clean[path]))
-            list_to_clean[path] = list()
+
     return list_to_clean
 
 /obj/item/storage/briefcase/empty/PopulateContents()
