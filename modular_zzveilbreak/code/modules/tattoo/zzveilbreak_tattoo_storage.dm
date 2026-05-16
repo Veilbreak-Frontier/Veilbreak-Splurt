@@ -65,10 +65,13 @@
 	var/list/tattoo_serialization = source_data["custom_tattoos"]
 	var/list/reconstructed_objects = list()
 
-	for(var/i in 1 to length(tattoo_serialization))
-		var/list/data = tattoo_serialization[i]
+	for(var/data_entry in tattoo_serialization)
+		var/list/data = data_entry
 		if(!islist(data))
-			continue
+			if(islist(tattoo_serialization[data_entry]))
+				data = tattoo_serialization[data_entry]
+			else
+				continue
 
 		var/datum/custom_tattoo/T = new(
 			data["artist"],
