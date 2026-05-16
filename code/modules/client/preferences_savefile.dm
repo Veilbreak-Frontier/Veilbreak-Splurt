@@ -457,9 +457,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 				write_preference(preference, preference.serialize(value_cache[preference.type]))
 
 	save_data["version"] = SAVEFILE_VERSION_MAX
-#if SAVEFILE_VERSION_MIN > 40
-	#warn The prefered_security_department check in code/modules/client/preferences/security_department.dm is no longer necessary.
-#endif
 
 	save_data["randomise"] = randomise
 	save_data["job_preferences"] = job_preferences
