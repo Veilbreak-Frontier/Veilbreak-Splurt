@@ -260,7 +260,13 @@
 			languages[language] = language_number_updates[save_languages[language] + 1]// fuck you indexing from 1
 
 	if(current_version < VERSION_LOADOUT_PRESETS)
-		write_preference(GLOB.preference_entries[/datum/preference/loadout], list("Default" = save_data["loadout_list"])) // So easy. I wish the synth refactor was this easy.
+		var/list/legacy_loadout = save_data["loadout_list"]
+		var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+		var/list/migrated = list("Default" = list())
+		if(islist(legacy_loadout))
+			migrated["Default"] = loadout_pref.sanitize_loadout_list(legacy_loadout, parent?.mob, parent)
+		write_preference(loadout_pref, migrated)
+		write_preference(GLOB.preference_entries[/datum/preference/loadout_index], "Default")
 
 	if(current_version < VERSION_INTERNAL_EXTERNAL_ORGANS)
 		var/list/save_augments = SANITIZE_LIST(save_data["augments"])

@@ -1,3 +1,15 @@
+/datum/preference_middleware/loadout/proc/ensure_loadout_preset_structure()
+	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
+	if(!loadout_pref.is_flat_loadout_structure(loadout_entries))
+		return
+	preferences.update_preference(loadout_pref, list("Default" = loadout_entries))
+	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout_index], "Default")
+
+/datum/preference_middleware/loadout/on_new_character(mob/user)
+	. = ..()
+	ensure_loadout_preset_structure()
+
 /datum/preference_middleware/loadout/New(datum/preferences)
 	. = ..()
 	action_delegations += list(
@@ -70,25 +82,28 @@
 	if(new_loadout_name in loadout_entries)
 		return TRUE
 
-	loadout_entries[new_loadout_name] = deep_copy_list(loadout_entries[loadout_name])
+	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+	loadout_entries[new_loadout_name] = loadout_pref.sanitize_loadout_list(loadout_entries[loadout_name], preferences.parent?.mob, preferences.parent)
 	loadout_entries.Remove(loadout_name)
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout_index], new_loadout_name)
 	return TRUE
 
 /datum/preference_middleware/loadout/proc/get_current_loadout()
+	ensure_loadout_preset_structure()
 	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
 	var/active_name = preferences.get_active_loadout_preset_name()
 	var/list/current = loadout_entries[active_name]
 	if(!islist(current))
-		current = list()
-		loadout_entries[active_name] = current
-	return current
+		return list()
+	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+	return loadout_pref.sanitize_loadout_list(current, preferences.parent?.mob, preferences.parent)
 
 /datum/preference_middleware/loadout/proc/save_current_loadout(list/loadout)
-	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
+	var/list/loadout_entries = deep_copy_list(preferences.read_preference(/datum/preference/loadout))
 	var/active_name = preferences.get_active_loadout_preset_name()
-	loadout_entries[active_name] = loadout
+	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+	loadout_entries[active_name] = loadout_pref.sanitize_loadout_list(loadout, preferences.parent?.mob, preferences.parent)
 	var/datum/preference/loadout_index/index_pref = GLOB.preference_entries[/datum/preference/loadout_index]
 	if(preferences.read_preference(/datum/preference/loadout_index) != active_name)
 		preferences.update_preference(index_pref, active_name)

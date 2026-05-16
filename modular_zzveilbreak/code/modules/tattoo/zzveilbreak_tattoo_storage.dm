@@ -2,9 +2,6 @@
 	if(!slot)
 		slot = default_slot
 
-	if(slot == default_slot && islist(features?["custom_tattoos"]))
-		return features["custom_tattoos"]
-
 	if(load_and_save && savefile && path != DEV_PREFS_PATH)
 		var/list/char_data = savefile.get_entry("character[slot]")
 		if(islist(char_data))
@@ -13,6 +10,9 @@
 				return from_features
 			if(islist(char_data["custom_tattoos"]))
 				return char_data["custom_tattoos"]
+
+	if(slot == default_slot && islist(features?["custom_tattoos"]))
+		return features["custom_tattoos"]
 
 	return list()
 
@@ -61,7 +61,7 @@
 		if(islist(save_data["features"]))
 			save_data["features"]["custom_tattoos"] = tattoo_serialization
 
-	if(isnull(save_data) && body_slot != default_slot && load_and_save && savefile && path != DEV_PREFS_PATH)
+	if(isnull(save_data) && load_and_save && savefile && path != DEV_PREFS_PATH)
 		var/tree_key = "character[body_slot]"
 		var/list/char_data = savefile.get_entry(tree_key)
 		if(islist(char_data))
@@ -79,7 +79,7 @@
 	features["custom_tattoos_loaded"] = list()
 
 	var/list/tattoo_serialization = get_custom_tattoos_serialized_for_slot(slot)
-	if(!islist(tattoo_serialization))
+	if(!islist(tattoo_serialization) || !length(tattoo_serialization))
 		return
 
 	var/list/reconstructed_objects = list()
@@ -112,6 +112,10 @@
 	if(isnull(slot))
 		slot = H.mind?.original_character_slot_index || default_slot
 
+	var/list/tattoo_serialization = get_custom_tattoos_serialized_for_slot(slot)
+	if(!length(tattoo_serialization))
+		return
+
 	H.custom_body_tattoos.Cut()
 
 	load_custom_tattoo_data(slot)
@@ -138,3 +142,5 @@
 	if(!H.tattoos_signal_registered)
 		RegisterSignal(H, COMSIG_CARBON_REMOVE_LIMB, TYPE_PROC_REF(/mob/living/carbon/human, _tattoo_on_limb_removed))
 		H.tattoos_signal_registered = TRUE
+
+	H.regenerate_icons()
