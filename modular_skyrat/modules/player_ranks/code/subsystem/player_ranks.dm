@@ -47,17 +47,9 @@ SUBSYSTEM_DEF(player_ranks)
  * * admin_bypass - Whether or not admins can succeed this check, even if they
  * do not actually possess the role. Defaults to `TRUE`.
  */
+// EVERYONES A DONOR
 /datum/controller/subsystem/player_ranks/proc/is_donator(client/user, admin_bypass = TRUE)
-	if(!istype(user))
-		CRASH("Invalid user type provided to is_donator(), expected 'client' and obtained '[user ? user.type : "null"]'.")
-
-	if(GLOB.donator_list[user.ckey])
-		return TRUE
-
-	if(admin_bypass && is_admin(user))
-		return TRUE
-
-	return FALSE
+	return TRUE
 
 
 /**
