@@ -265,6 +265,27 @@
 	eggshell.egg = null
 	QDEL_NULL(eggshell)
 
+/// Ghost-role quirks replace organs after species setup; lung quirks must not remove Lavaland-compatible lungs.
+/obj/effect/mob_spawn/ghost_role/human/ash_walker/post_transfer_prefs(mob/living/new_spawn)
+	. = ..()
+	var/mob/living/carbon/human/human_spawn = new_spawn
+	if(!ishuman(human_spawn))
+		return
+	if(!isashwalker(human_spawn))
+		return
+	var/datum/species/species_datum = human_spawn.dna.species
+	var/obj/item/organ/lungs/canon_lungs = initial(species_datum.mutantlungs)
+	if(!canon_lungs)
+		return
+	var/obj/item/organ/lungs/current_lungs = human_spawn.get_organ_slot(ORGAN_SLOT_LUNGS)
+	if(istype(current_lungs, canon_lungs))
+		species_datum.mutantlungs = canon_lungs
+		return
+
+	species_datum.mutantlungs = canon_lungs
+	var/obj/item/organ/lungs/restored = new canon_lungs()
+	restored.Insert(human_spawn, special = TRUE, movement_flags = DELETE_IF_REPLACED)
+
 /obj/effect/mob_spawn/ghost_role/human/ash_walker/Initialize(mapload, datum/team/ashwalkers/ashteam)
 	. = ..()
 	var/area/spawner_area = get_area(src)
