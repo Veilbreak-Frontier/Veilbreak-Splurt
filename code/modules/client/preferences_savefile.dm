@@ -335,7 +335,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	savefile.save()
 	return TRUE
 
-/datum/preferences/proc/load_character(slot)
+/datum/preferences/proc/load_character(slot, mob/living/carbon/human/explicit_target_mob)
 	SHOULD_NOT_SLEEP(TRUE)
 	value_cache = list()
 	all_quirks = list()
@@ -364,16 +364,13 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		for(var/datum/preference/preference as anything in get_preferences_in_priority_order())
 			if(preference.savefile_identifier == PREFERENCE_CHARACTER)
 				read_preference(preference.type)
-		if(parent?.mob && ishuman(parent.mob))
-			var/mob/living/carbon/human/H = parent.mob
-			if(H.custom_body_tattoos)
-				H.custom_body_tattoos.Cut()
 		return FALSE
 
 	if(!features)
 		features = list()
 
 	if(islist(save_data["custom_tattoos"]))
+		features["custom_tattoos"] = save_data["save_data_custom_tattoos"]
 		features["custom_tattoos"] = save_data["custom_tattoos"]
 	else
 		features["custom_tattoos"] = list()
@@ -382,10 +379,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(IS_DATA_OBSOLETE(data_validity_integer))
 		if(features)
 			features["custom_tattoos"] = list()
-		if(parent?.mob && ishuman(parent.mob))
-			var/mob/living/carbon/human/H = parent.mob
-			if(H.custom_body_tattoos)
-				H.custom_body_tattoos.Cut()
 		return FALSE
 
 	for(var/datum/preference/preference as anything in get_preferences_in_priority_order())
@@ -421,8 +414,14 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	custom_emote_panel = save_data["custom_emote_panel"] || list()
 	custom_emote_panel = SANITIZE_LIST(custom_emote_panel)
 
-	if(parent?.mob && ishuman(parent.mob))
-		apply_custom_tattoos_to_mob(parent.mob, save_data)
+	load_custom_tattoo_data(save_data)
+
+	var/mob/living/carbon/human/H = explicit_target_mob
+	if(!istype(H) && parent?.mob && ishuman(parent.mob))
+		H = parent.mob
+
+	if(istype(H) && !QDELETED(H))
+		apply_custom_tattoos_to_mob(H, null)
 
 	return needs_update != -3
 
@@ -465,7 +464,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	save_character_doppler(save_data)
 	save_custom_tattoo_data(save_data, parent?.mob)
 	return TRUE
-
 /datum/preferences/proc/switch_to_slot(new_slot)
 	value_cache = list()
 
@@ -476,12 +474,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 	for (var/datum/preference_middleware/preference_middleware as anything in middleware)
 		preference_middleware.on_new_character(usr)
-
-	if(parent?.mob && ishuman(parent.mob))
-		var/tree_key = "character[default_slot]"
-		var/list/save_data = savefile.get_entry(tree_key)
-		if(islist(save_data))
-			apply_custom_tattoos_to_mob(parent.mob, save_data)
 
 	character_preview_view.update_body()
 

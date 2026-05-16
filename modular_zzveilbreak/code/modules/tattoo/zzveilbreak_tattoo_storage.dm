@@ -91,12 +91,13 @@
 	H_custom_tattoos_loaded = reconstructed_objects
 
 /datum/preferences/proc/apply_custom_tattoos_to_mob(mob/living/carbon/human/H, list/source_data)
-	if(!istype(H))
+	if(!istype(H) || QDELETED(H))
 		return
 
 	H.custom_body_tattoos.Cut()
 
-	load_custom_tattoo_data(source_data)
+	if(source_data)
+		load_custom_tattoo_data(source_data)
 
 	if(!islist(H_custom_tattoos_loaded) || !length(H_custom_tattoos_loaded))
 		return
