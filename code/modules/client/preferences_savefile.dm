@@ -350,13 +350,24 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		default_slot = slot
 		savefile.set_entry("default_slot", slot)
 
+	if(islist(H_custom_tattoos_loaded))
+		for(var/datum/custom_tattoo/T in H_custom_tattoos_loaded)
+			qdel(T)
+	H_custom_tattoos_loaded = list()
+
 	var/tree_key = "character[slot]"
 	var/list/save_data = savefile.get_entry(tree_key)
 
 	if(!islist(save_data))
-		for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
-			if (preference.savefile_identifier == PREFERENCE_CHARACTER)
+		if(features)
+			features["custom_tattoos"] = list()
+		for(var/datum/preference/preference as anything in get_preferences_in_priority_order())
+			if(preference.savefile_identifier == PREFERENCE_CHARACTER)
 				read_preference(preference.type)
+		if(parent?.mob && ishuman(parent.mob))
+			var/mob/living/carbon/human/H = parent.mob
+			if(H.custom_body_tattoos)
+				H.custom_body_tattoos.Cut()
 		return FALSE
 
 	if(!features)
@@ -369,10 +380,16 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 	var/data_validity_integer = check_savedata_version(save_data)
 	if(IS_DATA_OBSOLETE(data_validity_integer))
+		if(features)
+			features["custom_tattoos"] = list()
+		if(parent?.mob && ishuman(parent.mob))
+			var/mob/living/carbon/human/H = parent.mob
+			if(H.custom_body_tattoos)
+				H.custom_body_tattoos.Cut()
 		return FALSE
 
-	for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
-		if (preference.savefile_identifier != PREFERENCE_CHARACTER)
+	for(var/datum/preference/preference as anything in get_preferences_in_priority_order())
+		if(preference.savefile_identifier != PREFERENCE_CHARACTER)
 			continue
 
 		value_cache -= preference.type
@@ -404,75 +421,75 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	custom_emote_panel = save_data["custom_emote_panel"] || list()
 	custom_emote_panel = SANITIZE_LIST(custom_emote_panel)
 
+	if(parent?.mob && ishuman(parent.mob))
+		apply_custom_tattoos_to_mob(parent.mob, save_data)
+
 	return needs_update != -3
 
-/datum/preferences/proc/save_character(update, override_slot) // Skyrat edit - Choose when to update (This is stupid) //Bubber Edit - duplication support
+/datum/preferences/proc/save_character(update, override_slot)
 	SHOULD_NOT_SLEEP(TRUE)
 	if(!path)
 		return FALSE
 	var/tree_key = "character[default_slot]"
 	if(!(tree_key in savefile.get_entry()))
 		savefile.set_entry(tree_key, list())
-	var/save_data //BUBBER EDIT START - Original var/save_data = savefile.get_entry(tree_key)
+	var/save_data
 	if(!isnull(override_slot))
 		var/override_tree_key = "character[override_slot]"
 		savefile.set_entry(override_tree_key, list())
 		save_data = savefile.get_entry(override_tree_key)
 	else
-		save_data = savefile.get_entry(tree_key) //BUBBER EDIT END
+		save_data = savefile.get_entry(tree_key)
 
 	for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
 		if (preference.savefile_identifier != PREFERENCE_CHARACTER)
 			continue
 
-		if (!update && !(preference.type in recently_updated_keys)) // BUBBER EDIT
+		if (!update && !(preference.type in recently_updated_keys))
 			continue
 
 		recently_updated_keys -= preference.type
 
 		if (preference.type in value_cache)
-			if(!isnull(override_slot)) //BUBBER EDIT ADDITION START - Original: write_preference(preference, preference.serialize(value_cache[preference.type]))
+			if(!isnull(override_slot))
 				write_preference_special(preference, preference.serialize(value_cache[preference.type]), override_slot)
 			else
-				write_preference(preference, preference.serialize(value_cache[preference.type])) //BUBBER EDIT ADDITION END
+				write_preference(preference, preference.serialize(value_cache[preference.type]))
 
-	save_data["version"] = SAVEFILE_VERSION_MAX //load_character will sanitize any bad data, so assume up-to-date.
-
-	// This is the version when the random security department was removed.
-	// When the minimum is higher than that version, it's impossible for someone to have the "Random" department.
-	#if SAVEFILE_VERSION_MIN > 40
+	save_data["version"] = SAVEFILE_VERSION_MAX
+#if SAVEFILE_VERSION_MIN > 40
 	#warn The prefered_security_department check in code/modules/client/preferences/security_department.dm is no longer necessary.
-	#endif
+#endif
 
-	//Character
 	save_data["randomise"] = randomise
-
-	//Write prefs
 	save_data["job_preferences"] = job_preferences
-
-
-	//Quirks
 	save_data["all_quirks"] = all_quirks
-	save_character_skyrat(save_data, update) // SKYRAT EDIT ADDITION
-	save_character_doppler(save_data) // DOPPLER EDIT ADDITION - Powers savefile migration
-	save_custom_tattoo_data(save_data)
+	save_character_skyrat(save_data, update)
+	save_character_doppler(save_data)
+	save_custom_tattoo_data(save_data, parent?.mob)
 	return TRUE
 
 /datum/preferences/proc/switch_to_slot(new_slot)
-    value_cache = list()
+	value_cache = list()
 
-    if (!load_character(new_slot))
-        tainted_character_profiles = TRUE
-        randomise_appearance_prefs()
-        save_character(TRUE)
+	if (!load_character(new_slot))
+		tainted_character_profiles = TRUE
+		randomise_appearance_prefs()
+		save_character(TRUE)
 
-    for (var/datum/preference_middleware/preference_middleware as anything in middleware)
-        preference_middleware.on_new_character(usr)
+	for (var/datum/preference_middleware/preference_middleware as anything in middleware)
+		preference_middleware.on_new_character(usr)
 
-    character_preview_view.update_body()
+	if(parent?.mob && ishuman(parent.mob))
+		var/tree_key = "character[default_slot]"
+		var/list/save_data = savefile.get_entry(tree_key)
+		if(islist(save_data))
+			apply_custom_tattoos_to_mob(parent.mob, save_data)
 
-    if(usr.client?.prefs)
-        usr.client.tgui_panel?.emotes_send_list()
+	character_preview_view.update_body()
+
+	if(usr.client?.prefs)
+		usr.client.tgui_panel?.emotes_send_list()
 
 /datum/preferences/proc/remove_current_slot()
 	PRIVATE_PROC(TRUE)
@@ -495,6 +512,13 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		stack_trace("remove_current_slot() being called when there are no slots to go to, the client should prevent this")
 		return
 
+	if(islist(H_custom_tattoos_loaded))
+		for(var/datum/custom_tattoo/T in H_custom_tattoos_loaded)
+			qdel(T)
+	H_custom_tattoos_loaded = list()
+	if(features)
+		features["custom_tattoos"] = list()
+
 	savefile.remove_entry("character[default_slot]")
 	tainted_character_profiles = TRUE
 	switch_to_slot(closest_slot)
@@ -503,7 +527,14 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	PRIVATE_PROC(TRUE)
 	if(isnull(target_slot))
 		return
+	var/tree_key = "character[default_slot]"
+	var/list/save_data = savefile.get_entry(tree_key)
+	if(islist(save_data) && islist(save_data["custom_tattoos"]))
+		if(!features)
+			features = list()
+		features["custom_tattoos"] = deep_copy_list(save_data["custom_tattoos"])
 	save_character(TRUE, target_slot)
+	savefile.save()
 
 /datum/preferences/proc/write_preference_special(datum/preference/preference, preference_value, override_slot)
 	var/save_data = savefile.get_entry("character[override_slot]")
