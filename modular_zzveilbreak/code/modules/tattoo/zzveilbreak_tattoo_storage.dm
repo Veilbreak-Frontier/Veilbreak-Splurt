@@ -7,24 +7,29 @@
 		H = parent.mob
 
 	if(!H || QDELETED(H))
-		if(save_data && islist(H_custom_tattoos_loaded))
-			var/list/fallback_serialization = list()
-			for(var/datum/custom_tattoo/T as anything in H_custom_tattoos_loaded)
-				if(!istype(T) || QDELETED(T))
-					continue
-				fallback_serialization += list(list(
-					"artist" = T.artist,
-					"design" = T.design,
-					"body_part" = T.body_part,
-					"color" = T.color,
-					"date_applied" = T.date_applied,
-					"layer" = T.layer,
-					"is_signature" = T.is_signature,
-					"font" = T.font,
-					"flair" = T.flair
-				))
-			if(length(fallback_serialization))
-				save_data["custom_tattoos"] = fallback_serialization
+		if(save_data)
+			var/tree_key = "character[default_slot]"
+			var/list/existing_disk_data = savefile.get_entry(tree_key)
+			if(islist(existing_disk_data) && islist(existing_disk_data["custom_tattoos"]))
+				save_data["custom_tattoos"] = existing_disk_data["custom_tattoos"]
+			else if(islist(H_custom_tattoos_loaded) && length(H_custom_tattoos_loaded))
+				var/list/fallback_serialization = list()
+				for(var/datum/custom_tattoo/T as anything in H_custom_tattoos_loaded)
+					if(!istype(T) || QDELETED(T))
+						continue
+					fallback_serialization += list(list(
+						"artist" = T.artist,
+						"design" = T.design,
+						"body_part" = T.body_part,
+						"color" = T.color,
+						"date_applied" = T.date_applied,
+						"layer" = T.layer,
+						"is_signature" = T.is_signature,
+						"font" = T.font,
+						"flair" = T.flair
+					))
+				if(length(fallback_serialization))
+					save_data["custom_tattoos"] = fallback_serialization
 		return
 
 	var/list/tattoo_serialization = list()
@@ -90,10 +95,10 @@
 
 	load_custom_tattoo_data(source_data)
 
-	if(!islist(H_custom_tattoos_loaded))
+	if(!islist(H_custom_tattoos_loaded) || !length(H_custom_tattoos_loaded))
 		return
 
-	for(var/datum/custom_tattoo/T as anything in H_custom_tattoos_loaded)
+	for(var/datum/custom_tattoo/T in H_custom_tattoos_loaded)
 		if(!istype(T) || QDELETED(T))
 			continue
 		var/datum/custom_tattoo/cloned = new(
@@ -107,5 +112,4 @@
 			T.flair
 		)
 		cloned.date_applied = T.date_applied
-		if(!H.add_custom_tattoo(cloned))
-			qdel(cloned)
+		H.add_custom_tattoo(cloned)
