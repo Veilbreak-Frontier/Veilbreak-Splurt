@@ -395,6 +395,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	load_character_doppler(save_data)
 	check_doppler_character_savefile(save_data)
 
+	validate_loadout_index()
+
 	if(SHOULD_UPDATE_DATA(data_validity_integer))
 		update_character(data_validity_integer, save_data)
 
