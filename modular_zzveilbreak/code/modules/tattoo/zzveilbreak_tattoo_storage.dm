@@ -105,8 +105,6 @@
 
 	H.custom_body_tattoos.Cut()
 
-	load_custom_tattoo_data(source_data)
-
 	if(islist(H_custom_tattoos_loaded) && length(H_custom_tattoos_loaded))
 		for(var/datum/custom_tattoo/T in H_custom_tattoos_loaded)
 			var/datum/custom_tattoo/cloned = new(

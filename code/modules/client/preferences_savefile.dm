@@ -370,7 +370,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		features = list()
 
 	if(islist(save_data["custom_tattoos"]))
-		features["custom_tattoos"] = save_data["save_data_custom_tattoos"]
 		features["custom_tattoos"] = save_data["custom_tattoos"]
 	else
 		features["custom_tattoos"] = list()
