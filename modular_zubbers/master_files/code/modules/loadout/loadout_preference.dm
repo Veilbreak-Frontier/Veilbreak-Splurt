@@ -10,8 +10,13 @@
 
 /datum/preference/loadout_index/create_informed_default_value(datum/preferences/preferences)
 	var/list/loadouts = preferences.read_preference(/datum/preference/loadout)
-	if(length(loadouts))
-		return loadouts[1]
+	if (!length(loadouts))
+		return "Default"
+	// Assoc list: numeric [1] is not reliably a preset name.
+	for (var/preset_name in loadouts)
+		if (istext(preset_name) && islist(loadouts[preset_name]))
+			return preset_name
+	return "Default"
 
 /datum/preference/loadout_index/deserialize(input, datum/preferences/preferences)
 	if (istext(input))
@@ -40,6 +45,10 @@
 	var/list/loadout_list = list()
 	for(var/key in data)
 		loadout_list += key
-	data = list("loadout" = data[user?.client?.prefs.read_preference(/datum/preference/loadout_index)] || "Default") // Fail nicely and hopefully avoid runtiming, though this is client bullshit we're on about
+	var/index = user?.client?.prefs.read_preference(/datum/preference/loadout_index)
+	var/list/chosen = (istext(index) && (index in data) && islist(data[index])) ? data[index] : null
+	if (!islist(chosen))
+		chosen = islist(data["Default"]) ? data["Default"] : list()
+	data = list("loadout" = chosen)
 	data["loadouts"] = loadout_list
 	return data

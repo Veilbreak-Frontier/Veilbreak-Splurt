@@ -81,9 +81,6 @@
 		to_chat(preferences.parent, span_warning("You cannot select this item!"))
 		return
 
-	if(selected_item.donator_only && !SSplayer_ranks.is_donator(preferences.parent))
-		to_chat(preferences.parent, span_warning("This item is for donators only."))
-		return
 	// SKYRAT EDIT END
 	// SPLURT EDIT START: Donator tier check
 	if(selected_item.donator_tier && GLOB.donator_list[preferences?.parent?.ckey] < selected_item.donator_tier)
