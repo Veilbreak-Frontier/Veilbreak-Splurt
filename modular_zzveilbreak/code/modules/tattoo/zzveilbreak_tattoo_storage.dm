@@ -6,9 +6,9 @@
 		var/list/char_data = savefile.get_entry("character[slot]")
 		if(islist(char_data))
 			var/list/from_features = char_data["features"]?["custom_tattoos"]
-			if(islist(from_features))
+			if(islist(from_features) && length(from_features))
 				return from_features
-			if(islist(char_data["custom_tattoos"]))
+			if(islist(char_data["custom_tattoos"]) && length(char_data["custom_tattoos"]))
 				return char_data["custom_tattoos"]
 
 	if(slot == default_slot && islist(features?["custom_tattoos"]))
@@ -50,27 +50,29 @@
 
 	var/body_slot = H.mind?.original_character_slot_index || default_slot
 
+	if(!features)
+		features = list()
 	if(body_slot == default_slot)
-		if(!features)
-			features = list()
 		features["custom_tattoos"] = tattoo_serialization
 		features -= "custom_tattoos_loaded"
 
 	if(save_data && body_slot == saved_slot)
 		save_data["custom_tattoos"] = tattoo_serialization
-		if(islist(save_data["features"]))
-			save_data["features"]["custom_tattoos"] = tattoo_serialization
+		if(!islist(save_data["features"]))
+			save_data["features"] = list()
+		save_data["features"]["custom_tattoos"] = tattoo_serialization
 
 	if(isnull(save_data) && load_and_save && savefile && path != DEV_PREFS_PATH)
 		var/tree_key = "character[body_slot]"
 		var/list/char_data = savefile.get_entry(tree_key)
-		if(islist(char_data))
-			char_data["custom_tattoos"] = tattoo_serialization
-			if(!islist(char_data["features"]))
-				char_data["features"] = list()
-			char_data["features"]["custom_tattoos"] = tattoo_serialization
-			savefile.set_entry(tree_key, char_data)
-			savefile.save()
+		if(!islist(char_data))
+			char_data = list()
+		char_data["custom_tattoos"] = tattoo_serialization
+		if(!islist(char_data["features"]))
+			char_data["features"] = list()
+		char_data["features"]["custom_tattoos"] = tattoo_serialization
+		savefile.set_entry(tree_key, char_data)
+		savefile.save()
 
 /datum/preferences/proc/load_custom_tattoo_data(slot)
 	if(!features)
@@ -142,5 +144,3 @@
 	if(!H.tattoos_signal_registered)
 		RegisterSignal(H, COMSIG_CARBON_REMOVE_LIMB, TYPE_PROC_REF(/mob/living/carbon/human, _tattoo_on_limb_removed))
 		H.tattoos_signal_registered = TRUE
-
-	H.regenerate_icons()

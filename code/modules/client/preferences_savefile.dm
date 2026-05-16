@@ -386,6 +386,14 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	load_character_doppler(save_data)
 	check_doppler_character_savefile(save_data)
 
+	// Top-level custom_tattoos can be wiped when features is replaced from save_data["features"] only.
+	if(islist(save_data["custom_tattoos"]) && length(save_data["custom_tattoos"]))
+		LAZYINITLIST(features)
+		features["custom_tattoos"] = save_data["custom_tattoos"]
+		features -= "custom_tattoos_loaded"
+
+	validate_loadout_index()
+
 	if(SHOULD_UPDATE_DATA(data_validity_integer))
 		update_character(data_validity_integer, save_data)
 
