@@ -10750,7 +10750,6 @@
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_mob.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_preferences.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_removal.dm"
-#include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_session.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_storage.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_tool.dm"
 #include "modular_zzveilbreak\maps\veilbreak_shuttles.dm"
