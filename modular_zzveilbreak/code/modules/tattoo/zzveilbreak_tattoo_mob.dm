@@ -15,7 +15,7 @@
 	var/list/tattoo_ui_data = list()
 
 // Add a tattoo datum to the mob. Returns TRUE on success.
-/mob/living/carbon/human/proc/add_custom_tattoo(datum/custom_tattoo/new_tattoo)
+/mob/living/carbon/human/proc/add_custom_tattoo(datum/custom_tattoo/new_tattoo, skip_prefs_save = FALSE)
 	if(!istype(new_tattoo) || QDELETED(new_tattoo))
 		return FALSE
 
@@ -40,8 +40,8 @@
 	LAZYADD(custom_body_tattoos, new_tattoo)
 	sortTim(custom_body_tattoos, GLOBAL_PROC_REF(cmp_custom_tattoo_layer_asc))
 
-	if(client?.prefs)
-		client.prefs.save_custom_tattoo_data()
+	if(client?.prefs && !skip_prefs_save)
+		client.prefs.save_custom_tattoo_data(null, null, src)
 
 	if(!tattoos_signal_registered)
 		RegisterSignal(src, COMSIG_CARBON_REMOVE_LIMB, PROC_REF(_tattoo_on_limb_removed))
@@ -51,15 +51,15 @@
 	return TRUE
 
 // Remove a tattoo from the mob.
-/mob/living/carbon/human/proc/remove_custom_tattoo(datum/custom_tattoo/tattoo)
+/mob/living/carbon/human/proc/remove_custom_tattoo(datum/custom_tattoo/tattoo, skip_prefs_save = FALSE)
 	if(!tattoo || !custom_body_tattoos || !(tattoo in custom_body_tattoos))
 		return FALSE
 
 	custom_body_tattoos -= tattoo
 	qdel(tattoo)
 
-	if(client?.prefs)
-		client.prefs.save_custom_tattoo_data()
+	if(client?.prefs && !skip_prefs_save)
+		client.prefs.save_custom_tattoo_data(null, null, src)
 
 	regenerate_icons()
 	return TRUE

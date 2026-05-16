@@ -10,17 +10,32 @@
 
 /datum/preference/loadout_index/create_informed_default_value(datum/preferences/preferences)
 	var/list/loadouts = preferences.read_preference(/datum/preference/loadout)
-	if(length(loadouts))
-		return loadouts[1]
+	if("Default" in loadouts)
+		return "Default"
+	for(var/name in loadouts)
+		return name
 
 /datum/preference/loadout_index/deserialize(input, datum/preferences/preferences)
 	if (istext(input))
-		return input
+		var/list/loadouts = preferences.read_preference(/datum/preference/loadout)
+		if(input in loadouts)
+			return input
 
 	return create_informed_default_value(preferences)
 
 /datum/preference/loadout_index/is_valid(value)
 	return istext(value)
+
+/// Resolves which named loadout preset is active, with the same fallback rules as the prefs UI.
+/datum/preferences/proc/get_active_loadout_preset_name()
+	var/list/loadout_entries = read_preference(/datum/preference/loadout)
+	var/active_name = read_preference(/datum/preference/loadout_index)
+	if(!istext(active_name) || !(active_name in loadout_entries))
+		if("Default" in loadout_entries)
+			return "Default"
+		for(var/name in loadout_entries)
+			return name
+	return active_name
 
 /datum/preference/loadout
 	savefile_key = "loadout_lists" // Change the savefile key to avoid data corruption if this goes COMPLETELY WRONG during a test merge.

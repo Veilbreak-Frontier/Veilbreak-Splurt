@@ -1,7 +1,25 @@
-/datum/preferences/proc/save_custom_tattoo_data(list/save_data, saved_slot)
+/datum/preferences/proc/get_custom_tattoos_serialized_for_slot(slot)
+	if(!slot)
+		slot = default_slot
+
+	if(slot == default_slot && islist(features?["custom_tattoos"]))
+		return features["custom_tattoos"]
+
+	if(load_and_save && savefile && path != DEV_PREFS_PATH)
+		var/list/char_data = savefile.get_entry("character[slot]")
+		if(islist(char_data))
+			var/list/from_features = char_data["features"]?["custom_tattoos"]
+			if(islist(from_features))
+				return from_features
+			if(islist(char_data["custom_tattoos"]))
+				return char_data["custom_tattoos"]
+
+	return list()
+
+/datum/preferences/proc/save_custom_tattoo_data(list/save_data, saved_slot, mob/living/carbon/human/target)
 	// saved_slot: which character slot save_data belongs to when called from save_character; null treats as default_slot
-	var/mob/living/carbon/human/H
-	if(parent?.mob && ishuman(parent.mob))
+	var/mob/living/carbon/human/H = target
+	if(!H && parent?.mob && ishuman(parent.mob))
 		H = parent.mob
 
 	if(!H || QDELETED(H))
@@ -32,20 +50,17 @@
 
 	var/body_slot = H.mind?.original_character_slot_index || default_slot
 
-	// In-memory prefs only represent the character slot currently selected in prefs (default_slot).
 	if(body_slot == default_slot)
 		if(!features)
 			features = list()
 		features["custom_tattoos"] = tattoo_serialization
 		features -= "custom_tattoos_loaded"
 
-	// Inject into the save blob only when this save belongs to the same slot as the inked body.
 	if(save_data && body_slot == saved_slot)
 		save_data["custom_tattoos"] = tattoo_serialization
 		if(islist(save_data["features"]))
 			save_data["features"]["custom_tattoos"] = tattoo_serialization
 
-	// Mid-round tattoo changes call this without save_data; if prefs are open on another slot, persist ink to the body's slot directly.
 	if(isnull(save_data) && body_slot != default_slot && load_and_save && savefile && path != DEV_PREFS_PATH)
 		var/tree_key = "character[body_slot]"
 		var/list/char_data = savefile.get_entry(tree_key)
@@ -57,13 +72,13 @@
 			savefile.set_entry(tree_key, char_data)
 			savefile.save()
 
-/datum/preferences/proc/load_custom_tattoo_data()
+/datum/preferences/proc/load_custom_tattoo_data(slot)
 	if(!features)
 		features = list()
 
 	features["custom_tattoos_loaded"] = list()
 
-	var/list/tattoo_serialization = features["custom_tattoos"]
+	var/list/tattoo_serialization = get_custom_tattoos_serialized_for_slot(slot)
 	if(!islist(tattoo_serialization))
 		return
 
@@ -90,13 +105,16 @@
 
 	features["custom_tattoos_loaded"] = reconstructed_objects
 
-/datum/preferences/proc/apply_custom_tattoos_to_mob(mob/living/carbon/human/H)
+/datum/preferences/proc/apply_custom_tattoos_to_mob(mob/living/carbon/human/H, slot)
 	if(!istype(H))
 		return
 
+	if(isnull(slot))
+		slot = H.mind?.original_character_slot_index || default_slot
+
 	H.custom_body_tattoos.Cut()
 
-	load_custom_tattoo_data()
+	load_custom_tattoo_data(slot)
 
 	var/list/stored = features["custom_tattoos_loaded"]
 	if(!islist(stored))
@@ -115,7 +133,7 @@
 				T.flair
 			)
 			copy.date_applied = T.date_applied
-			H.add_custom_tattoo(copy)
+			H.add_custom_tattoo(copy, skip_prefs_save = TRUE)
 
 	if(!H.tattoos_signal_registered)
 		RegisterSignal(H, COMSIG_CARBON_REMOVE_LIMB, TYPE_PROC_REF(/mob/living/carbon/human, _tattoo_on_limb_removed))

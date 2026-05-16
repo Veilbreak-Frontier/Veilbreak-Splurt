@@ -54,7 +54,7 @@
         CRASH("Invalid outfit passed to equip_outfit_and_loadout ([outfit])")
 
     var/list/preference_list = preference_source.read_preference(/datum/preference/loadout)
-    preference_list = preference_list[preference_source.read_preference(/datum/preference/loadout_index)]
+    preference_list = preference_list[preference_source.get_active_loadout_preset_name()]
     var/list/loadout_datums = loadout_list_to_datums(preference_list)
     var/obj/item/storage/briefcase/empty/travel_suitcase
     var/loadout_placement_preference = preference_source.read_preference(/datum/preference/choiced/loadout_override_preference)

@@ -70,7 +70,7 @@
 	if(new_loadout_name in loadout_entries)
 		return TRUE
 
-	loadout_entries[new_loadout_name] = loadout_entries[loadout_name]
+	loadout_entries[new_loadout_name] = deep_copy_list(loadout_entries[loadout_name])
 	loadout_entries.Remove(loadout_name)
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout_index], new_loadout_name)
@@ -78,11 +78,20 @@
 
 /datum/preference_middleware/loadout/proc/get_current_loadout()
 	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
-	return loadout_entries[preferences.read_preference(/datum/preference/loadout_index)]
+	var/active_name = preferences.get_active_loadout_preset_name()
+	var/list/current = loadout_entries[active_name]
+	if(!islist(current))
+		current = list()
+		loadout_entries[active_name] = current
+	return current
 
 /datum/preference_middleware/loadout/proc/save_current_loadout(list/loadout)
 	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
-	loadout_entries[preferences.read_preference(/datum/preference/loadout_index)] = loadout
+	var/active_name = preferences.get_active_loadout_preset_name()
+	loadout_entries[active_name] = loadout
+	var/datum/preference/loadout_index/index_pref = GLOB.preference_entries[/datum/preference/loadout_index]
+	if(preferences.read_preference(/datum/preference/loadout_index) != active_name)
+		preferences.update_preference(index_pref, active_name)
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
 
 /datum/preference_middleware/loadout/proc/action_clear_all(list/params, mob/user)

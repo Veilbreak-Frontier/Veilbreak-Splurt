@@ -14,15 +14,28 @@
 /datum/preferences/proc/add_loadout_item(typepath, list/data = list())
 	PRIVATE_PROC(TRUE)
 
-	var/list/loadout_list = read_preference(/datum/preference/loadout) || list()
+	var/list/loadout_entries = read_preference(/datum/preference/loadout) || list("Default" = list())
+	var/active_name = get_active_loadout_preset_name()
+
+	var/list/loadout_list = loadout_entries[active_name]
+	if(!islist(loadout_list))
+		loadout_list = list()
+
 	loadout_list[typepath] = data
-	write_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_list)
+	loadout_entries[active_name] = loadout_list
+	write_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
 
 /// Helper for removing a loadout item
 /datum/preferences/proc/remove_loadout_item(typepath)
 	PRIVATE_PROC(TRUE)
 
-	var/list/loadout_list = read_preference(/datum/preference/loadout)
+	var/list/loadout_entries = read_preference(/datum/preference/loadout)
+	if(!islist(loadout_entries))
+		return
+
+	var/active_name = get_active_loadout_preset_name()
+
+	var/list/loadout_list = loadout_entries[active_name]
 	if(loadout_list?.Remove(typepath))
-		write_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_list)
+		write_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
 
