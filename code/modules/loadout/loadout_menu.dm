@@ -83,11 +83,12 @@
 
 	// SKYRAT EDIT END
 	// SPLURT EDIT START: Donator tier check
+	/*
 	if(selected_item.donator_tier && GLOB.donator_list[preferences?.parent?.ckey] < selected_item.donator_tier)
 		to_chat(preferences.parent, span_warning("Tier [selected_item.donator_tier] donator access required."))
 		return
 	// SPLURT EDIT END
-
+	*/
 	LAZYSET(loadout, selected_item.item_path, list())
 	save_current_loadout(loadout) // BUBBER EDIT: Multiple loadout presets: ORIGINAL: preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout)
 
