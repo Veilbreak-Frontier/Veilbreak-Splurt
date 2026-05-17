@@ -10,6 +10,7 @@
 	outfit = /datum/outfit/ashwalker/slave
 	spawner_job_path = /datum/job/ash_walker
 	random_appearance = FALSE
+	allow_custom_character = GHOSTROLE_TAKE_PREFS_SPECIES | GHOSTROLE_TAKE_PREFS_APPEARANCE
 	var/datum/team/ashwalkers/team
 
 /obj/effect/mob_spawn/ghost_role/human/ash_walkers_slave/special(mob/living/new_spawn)
