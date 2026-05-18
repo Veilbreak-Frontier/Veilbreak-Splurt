@@ -15,3 +15,4 @@
 
 	LAZYSET(loadout, selected_item.item_path, list())
 	save_current_loadout(loadout)
+	preferences.character_preview_view?.update_body()

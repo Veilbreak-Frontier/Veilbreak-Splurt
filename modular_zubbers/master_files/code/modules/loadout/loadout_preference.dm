@@ -99,8 +99,8 @@
 			continue
 		if(!is_loadout_preset_name(key))
 			continue
-		if(is_flat_loadout_structure(preset_items))
-			continue
+		// Preset item maps always look like a "flat" loadout (item path keys only).
+		// is_flat_loadout_structure() is only valid on the top-level save, not per-preset.
 		output[key] = loadout_pref.sanitize_loadout_list(preset_items, preferences.parent?.mob, preferences.parent)
 
 	if(length(orphaned_items))
