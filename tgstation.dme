@@ -10938,4 +10938,5 @@
 #include "modular_zzveilbreak\modules\mapping\tick_budget_globals.dm"
 #include "modular_zzveilbreak\modules\medical\items\medical_crossbow.dm"
 #include "modular_zzveilbreak\modules\spells\expanding_fire_ring.dm"
+#include "modular_zzveilbreak\code\modules\loadout\donator_public.dm"
 // END_INCLUDE

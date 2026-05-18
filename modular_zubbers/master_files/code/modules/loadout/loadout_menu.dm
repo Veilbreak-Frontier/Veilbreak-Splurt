@@ -31,9 +31,10 @@
 	PRIVATE_PROC(TRUE)
 	ensure_loadout_preset_structure()
 
-	var/list/loadout_entries = deep_copy_list(preferences.read_preference(/datum/preference/loadout))
+	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+	var/list/loadout_entries = loadout_pref.copy_loadout_presets(preferences.read_preference(/datum/preference/loadout))
 
-	if (loadout_entries.len >= LOADOUT_MAX_PRESETS)
+	if(length(loadout_pref.get_loadout_preset_names(loadout_entries)) >= LOADOUT_MAX_PRESETS)
 		return TRUE
 
 	var/loadout_name = params["name"]
@@ -59,12 +60,13 @@
 	if(loadout_name == "Default")
 		return TRUE
 
-	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
+	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+	var/list/loadout_entries = loadout_pref.copy_loadout_presets(preferences.read_preference(/datum/preference/loadout))
 
-	if (loadout_entries.len <= 1)
+	if(length(loadout_pref.get_loadout_preset_names(loadout_entries)) <= 1)
 		return TRUE
 
-	loadout_entries.Remove(loadout_name)
+	loadout_entries -= loadout_name
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout_index], "Default")
 	return TRUE
@@ -82,7 +84,8 @@
 	if(!(loadout_name in loadout_entries))
 		if(loadout_name != "Default")
 			return TRUE
-		var/list/updated = deep_copy_list(loadout_entries)
+		var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+		var/list/updated = loadout_pref.copy_loadout_presets(loadout_entries)
 		updated["Default"] = list()
 		preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], updated)
 
@@ -101,14 +104,14 @@
 	if(length(new_loadout_name) > LOADOUT_MAX_NAME_LENGTH || length(new_loadout_name) < 1)
 		return TRUE
 
-	var/list/loadout_entries = preferences.read_preference(/datum/preference/loadout)
+	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+	var/list/loadout_entries = loadout_pref.copy_loadout_presets(preferences.read_preference(/datum/preference/loadout))
 
 	if(new_loadout_name in loadout_entries)
 		return TRUE
 
-	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
 	loadout_entries[new_loadout_name] = loadout_pref.sanitize_loadout_list(loadout_entries[loadout_name], preferences.parent?.mob, preferences.parent)
-	loadout_entries.Remove(loadout_name)
+	loadout_entries -= loadout_name
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_entries)
 	preferences.update_preference(GLOB.preference_entries[/datum/preference/loadout_index], new_loadout_name)
 	return TRUE
@@ -125,9 +128,9 @@
 
 /datum/preference_middleware/loadout/proc/save_current_loadout(list/loadout)
 	ensure_loadout_preset_structure()
-	var/list/loadout_entries = deep_copy_list(preferences.read_preference(/datum/preference/loadout))
-	var/active_name = preferences.get_active_loadout_preset_name()
 	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+	var/list/loadout_entries = loadout_pref.copy_loadout_presets(preferences.read_preference(/datum/preference/loadout))
+	var/active_name = preferences.get_active_loadout_preset_name()
 	loadout_entries[active_name] = loadout_pref.sanitize_loadout_list(loadout, preferences.parent?.mob, preferences.parent)
 	var/datum/preference/loadout_index/index_pref = GLOB.preference_entries[/datum/preference/loadout_index]
 	if(preferences.read_preference(/datum/preference/loadout_index) != active_name)

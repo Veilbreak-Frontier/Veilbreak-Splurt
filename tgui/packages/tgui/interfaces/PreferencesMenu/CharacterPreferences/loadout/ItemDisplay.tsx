@@ -168,19 +168,8 @@ export function ItemListDisplay(props: ListProps) {
   );
 }
 
-// BUBBER EDIT ADDITION BEGIN: Filter ckey-locked items
-const FilterItemList = (items: LoadoutItem[]) => {
-  const { data } = useBackend<LoadoutManagerData>();
-  const ckey = data.ckey;
-
-  return items.filter((item: LoadoutItem) => {
-    if (item.ckey_whitelist && item.ckey_whitelist.indexOf(ckey) === -1) {
-      return false;
-    }
-    return true;
-  });
-};
-// BUBBER EDIT ADDITION END: Filter ckey-locked items
+// VEILBREAK EDIT: Show all loadout items (no ckey filtering).
+const FilterItemList = (items: LoadoutItem[]) => items;
 
 type TabProps = {
   category: LoadoutCategory | undefined;
