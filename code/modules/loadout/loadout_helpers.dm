@@ -79,12 +79,12 @@
                 if(preference_source.parent)
                     to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to species restrictions!"))
                 continue
-
+	/*
             if(item.donator_only && !SSplayer_ranks.is_donator(preference_source?.parent))
                 if(preference_source.parent)
                     to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to donator restrictions!"))
                 continue
-
+	*/
         if(item.ckeywhitelist && !ckey_pass)
             if(preference_source.parent)
                 to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to CKEY restrictions!"))

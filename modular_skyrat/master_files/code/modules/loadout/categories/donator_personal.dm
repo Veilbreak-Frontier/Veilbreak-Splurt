@@ -303,7 +303,7 @@
 /datum/loadout_item/toys/zappplush
 	name = "Lil' Zapp Plushie"
 	item_path = /obj/item/toy/plush/skyrat/zapp
-	donator_only = TRUE
+	//donator_only = TRUE
 
 /datum/loadout_item/pocket_items/tacticalbrush
 	name = "Tactical Brush"
