@@ -1,17 +1,13 @@
 /mob/Login()
-	if(!ishuman(src) || !client?.prefs)
-		return ..()
+    if(!ishuman(src) || !client?.prefs)
+        return ..()
+    var/mob/living/carbon/human/H = src
+    var/datum/preferences/prefs = client.prefs
 
-	var/mob/living/carbon/human/H = src
-	var/datum/preferences/prefs = client.prefs
+    // Check the correct variables
+    var/has_tattoos = length(prefs.H_custom_tattoos_loaded) > 0
 
-	if(!prefs.features)
-		prefs.features = list()
+    if(has_tattoos)
+        prefs.apply_custom_tattoos_to_mob(H)
 
-	var/has_data = length(prefs.features["custom_tattoos"])
-	var/has_loaded = length(prefs.features["custom_tattoos_loaded"])
-
-	if(has_data || has_loaded)
-		prefs.apply_custom_tattoos_to_mob(H)
-
-	. = ..()
+    return ..()

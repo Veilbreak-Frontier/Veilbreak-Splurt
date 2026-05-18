@@ -10750,7 +10750,6 @@
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_mob.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_preferences.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_removal.dm"
-#include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_session.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_storage.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_tool.dm"
 #include "modular_zzveilbreak\maps\veilbreak_shuttles.dm"
@@ -10937,6 +10936,7 @@
 #include "modular_zzveilbreak\modules\mapping\mapgen_tick_safe.dm"
 #include "modular_zzveilbreak\modules\mapping\massdelete_tick_safe.dm"
 #include "modular_zzveilbreak\modules\mapping\tick_budget_globals.dm"
+#include "modular_zzveilbreak\modules\medical\items\medical_crossbow.dm"
 #include "modular_zzveilbreak\modules\spells\expanding_fire_ring.dm"
 #include "modular_zzveilbreak\code\modules\loadout\donator_public.dm"
 // END_INCLUDE

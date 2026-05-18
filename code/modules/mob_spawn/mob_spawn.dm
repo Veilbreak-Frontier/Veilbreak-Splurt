@@ -86,7 +86,12 @@
 		spawned_human.undershirt = "Nude"
 		spawned_human.socks = "Nude"
 		spawned_human.bra = "Nude" //SKYRAT EDIT ADDITION
-		randomize_human_normie(spawned_human)
+		var/apply_random_appearance = TRUE
+		if(istype(src, /obj/effect/mob_spawn/ghost_role))
+			var/obj/effect/mob_spawn/ghost_role/ghost_spawner = src
+			apply_random_appearance = ghost_spawner.random_appearance
+		if(apply_random_appearance)
+			randomize_human_normie(spawned_human)
 		if(hairstyle)
 			spawned_human.set_hairstyle(hairstyle, update = FALSE)
 		if(facial_hairstyle)

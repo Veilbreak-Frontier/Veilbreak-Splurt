@@ -129,10 +129,8 @@ function sortByGroup(items: LoadoutItem[]): LoadoutGroup[] {
 
 export function ItemListDisplay(props: ListProps) {
   const { data } = useBackend<LoadoutManagerData>();
-  const loadout_list =
-    data.character_preferences.misc.loadout_lists[
-      data.character_preferences.misc.loadout_index
-    ]; // BUBBER EDIT CHANGE: Multiple loadout presets: Original: data.character_preferences.misc;
+  // compile_ui_data sends active items under `loadout`, not loadout_lists[presetName].
+  const loadout_list = data.character_preferences.misc.loadout_lists.loadout;
   const itemGroups = sortByGroup(FilterItemList(props.items)); // BUBBER EDIT CHANGE: Filter ckey-locked items - ORIGINAL: const itemGroups = sortByGroup(props.items);
 
   return (
