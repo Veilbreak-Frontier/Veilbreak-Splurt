@@ -51,6 +51,7 @@
 				to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to species restrictions!"))
 			continue
 
+		/* VEILBREAK EDIT REMOVAL: Donator/ckey loadout items are public.
 		if(item.donator_only && !SSplayer_ranks.is_donator(preference_source?.parent))
 			if(preference_source.parent)
 				to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to donator restrictions!"))
@@ -60,6 +61,7 @@
 			if(preference_source.parent)
 				to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to CKEY restrictions!"))
 			continue
+		*/
 
 		if(loadout_placement_preference == LOADOUT_OVERRIDE_CASE && !visuals_only)
 			if(!travel_suitcase)
@@ -136,11 +138,6 @@
 		else if(!(path in GLOB.all_loadout_datums))
 			stack_trace("invalid loadout slot found in loadout list! Path: [path]")
 			LAZYREMOVE(list_to_clean, path)
-			continue
-
-		// Keep selected items even if payload is malformed, but normalize metadata shape.
-		if(!islist(list_to_clean[path]))
-			list_to_clean[path] = list()
 
 	return list_to_clean
 

@@ -81,7 +81,7 @@
 
 /datum/loadout_item/suit/jacket/corrections_officer
 	name = "Correction's Officer's Blazer"
-	item_path = /obj/item/clothing/suit/toggle/jacket/corrections_officer
+	item_path = /obj/item/clothing/suit/armor/vest/secjacket/corrections_officer //SPLURT EDIT, ORIGINAL: /obj/item/clothing/suit/toggle/jacket/corrections_officer
 	restricted_roles = list(JOB_CORRECTIONS_OFFICER, JOB_WARDEN)
 
 /datum/loadout_item/suit/jacket/security_medic
@@ -141,17 +141,17 @@
 	name = "GLP-C 'Úlfur' Vest"
 	item_path = /obj/item/clothing/suit/armor/vest/collared_vest
 	restricted_roles = list(ALL_JOBS_SEC, ALL_JOBS_CENTRAL)
-	//donator_only = TRUE //Dono item for offwrldr
+	donator_only = TRUE //Dono item for offwrldr
 
 /datum/loadout_item/suit/highvisjacket //sprites by Keila
 	name = "High Vis Trucker Jacket"
 	item_path = /obj/item/clothing/suit/jacket/trucker/highvis
-	//donator_only = TRUE //Donator item for arandomhyena
+	donator_only = TRUE //Donator item for arandomhyena
 
 /datum/loadout_item/suit/roninjacket //sprites by Keila
 	name = "Ronin Jacket"
 	item_path = /obj/item/clothing/suit/jacket/trucker/ronin
-	//donator_only = TRUE //Donator item for arandomhyena
+	donator_only = TRUE //Donator item for arandomhyena
 
 /datum/loadout_item/suit/flight //Donor item for ironknight060
 	name = "MA-1 flight jacket"
