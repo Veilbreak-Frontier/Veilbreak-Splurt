@@ -46,6 +46,22 @@
 	var/path = text2path(name)
 	return !ispath(path, /obj/item)
 
+/// Preset maps use string-keyed assoc `/list`s — not alists. deep_copy_list() breaks those.
+/datum/preference/loadout/proc/copy_loadout_presets(list/input)
+	if(!islist(input))
+		return list("Default" = list())
+	return deep_copy_list_alt(input)
+
+/// All valid preset name keys in a loadout_lists save.
+/datum/preference/loadout/proc/get_loadout_preset_names(list/input)
+	var/list/names = list()
+	if(!islist(input))
+		return names
+	for(var/key in input)
+		if(is_loadout_preset_name(key))
+			names += key
+	return names
+
 /// True when the list is a single-preset item map (legacy flat save) rather than preset names -> item maps.
 /datum/preference/loadout/proc/is_flat_loadout_structure(list/input)
 	if(!islist(input) || !length(input))
@@ -137,10 +153,8 @@
 
 /datum/preference/loadout/compile_ui_data(mob/user, value)
 	var/list/data = islist(value) ? value : list()
-	var/list/loadout_list = list()
-	for(var/key in data)
-		if(is_loadout_preset_name(key))
-			loadout_list += key
+	var/datum/preference/loadout/loadout_pref = GLOB.preference_entries[/datum/preference/loadout]
+	var/list/loadout_list = loadout_pref.get_loadout_preset_names(data)
 
 	var/datum/preferences/prefs = user?.client?.prefs
 	var/active_name = prefs?.get_active_loadout_preset_name() || "Default"
