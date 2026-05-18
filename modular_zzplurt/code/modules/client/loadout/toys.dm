@@ -47,5 +47,5 @@
 
 /datum/loadout_item/toys/mutt
 	name = "A advanced sauna pod"
-	item_path = /obj/item/survivalcapsule/advanced_sauna
+	item_path = /obj/item/survivalcapsule/sauna // VEILBREAK: advanced_sauna + shelter_mutt not in this fork
 	ckeywhitelist = list("charlesterrah")
