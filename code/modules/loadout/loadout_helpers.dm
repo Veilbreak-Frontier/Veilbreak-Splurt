@@ -24,17 +24,18 @@
     if(isnull(name))
         name = item_path::name
 
-		/* VEILBREAK EDIT REMOVAL: Donator/ckey loadout items are public.
-		if(item.donator_only && !SSplayer_ranks.is_donator(preference_source?.parent))
-			if(preference_source.parent)
-				to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to donator restrictions!"))
-			continue
+    if(isnull(ui_icon) && isnull(ui_icon_state))
+        ui_icon = item_path::icon_preview || item_path::icon
+        ui_icon_state = item_path::icon_state_preview || item_path::icon_state
 
-		if(item.ckeywhitelist && !(preference_source?.parent?.ckey in item.ckeywhitelist)) // Sanity checking
-			if(preference_source.parent)
-				to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to CKEY restrictions!"))
-			continue
-		*/
+    if(loadout_flags & LOADOUT_FLAG_ALLOW_RESKIN)
+        var/obj/item/dummy_item = new item_path()
+        if(!length(dummy_item.unique_reskin))
+            loadout_flags &= ~LOADOUT_FLAG_ALLOW_RESKIN
+            stack_trace("Loadout item [item_path] has LOADOUT_FLAG_ALLOW_RESKIN but has no unique reskins.")
+        else
+            cached_reskin_options = dummy_item.unique_reskin.Copy()
+        qdel(dummy_item)
 
     if(ckeywhitelist)
         for(var/i in 1 to length(ckeywhitelist))
