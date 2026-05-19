@@ -65,11 +65,10 @@
 				music_player.active_song_sound = null
 				for(var/mob/M in GLOB.player_list)
 					if(M?.client)
-						M.stop_sound_channel(CHANNEL_ONLINE_JUKEBOX)
+						M.stop_sound_channel(CHANNEL_JUKEBOX)
 		update_appearance()
 		return TRUE
 	return ..()
-
 
 /obj/machinery/jukebox/online/power_change()
 	. = ..()

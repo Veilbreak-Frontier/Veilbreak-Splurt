@@ -5,11 +5,15 @@ GLOBAL_VAR_INIT(jukebox_api_url, "http://localhost:8001")
 GLOBAL_VAR_INIT(jukebox_api_status, FALSE)
 GLOBAL_VAR_INIT(jukebox_last_check, 0)
 GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/jukebox_api_handler)
+GLOBAL_LIST_EMPTY(jukebox_sorted_tracks_cache)
+GLOBAL_VAR_INIT(jukebox_sorted_cache_valid, FALSE)
+GLOBAL_LIST_EMPTY(jukebox_used_channels)
 
 #define JUKEBOX_MUSIC_DIR_NAME "jukebox_music"
 #define JUKEBOX_SOUNDS_DIR_NAME "jukebox_music/sounds"
 #define JUKEBOX_LIBRARY_FILE_NAME "jukebox_music/music_library.json"
 #define JUKEBOX_HTTP_TIMEOUT 300
+#define JUKEBOX_DOWNLOAD_COOLDOWN 100
 
 /proc/mob_by_key(key_to_find)
 	if(!key_to_find)
@@ -79,13 +83,22 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 			"play_count" = play_counts?[url_hash] || 0,
 			"last_played" = last_played_times?[url_hash] || 0
 		)
+	invalidate_library_cache()
 	update_all_jukebox_uis()
 
+/proc/invalidate_library_cache()
+	GLOB.jukebox_sorted_cache_valid = FALSE
+	GLOB.jukebox_sorted_tracks_cache = null
+
 /proc/get_sorted_library_tracks()
+	if(GLOB.jukebox_sorted_cache_valid && GLOB.jukebox_sorted_tracks_cache)
+		return GLOB.jukebox_sorted_tracks_cache
 	var/list/tracks = list()
 	for(var/url_hash in GLOB.jukebox_library_tracks)
 		tracks += list(GLOB.jukebox_library_tracks[url_hash])
 	sortTim(tracks, GLOBAL_PROC_REF(cmp_jukebox_tracks))
+	GLOB.jukebox_sorted_tracks_cache = tracks
+	GLOB.jukebox_sorted_cache_valid = TRUE
 	return tracks
 
 /proc/cmp_jukebox_tracks(list/a, list/b)
@@ -131,6 +144,7 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 		return
 	track["play_count"]++
 	track["last_played"] = world.realtime
+	invalidate_library_cache()
 	var/datum/http_request/request = new()
 	request.prepare(RUSTG_HTTP_METHOD_POST, "[GLOB.jukebox_api_url]/record_play/[url_hash]", "", "")
 	request.begin_async()
@@ -145,6 +159,11 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 	var/remove_hash = to_remove["url_hash"]
 
 	GLOB.jukebox_library_tracks -= remove_hash
+	invalidate_library_cache()
+
+	var/sound_path = "[get_jukebox_sounds_dir()]/[remove_hash].ogg"
+	if(fexists(sound_path))
+		fdel(sound_path)
 
 	var/datum/http_request/request = new()
 	request.prepare(RUSTG_HTTP_METHOD_DELETE, "[GLOB.jukebox_api_url]/remove_track/[remove_hash]", "", "")
@@ -154,9 +173,26 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 /proc/jukebox_api_healthy()
 	return GLOB.jukebox_api_status
 
+/proc/allocate_jukebox_channel()
+	var/static/next_channel = CHANNEL_JUKEBOX
+	while(next_channel in GLOB.jukebox_used_channels)
+		next_channel++
+		if(next_channel > 1024)
+			next_channel = CHANNEL_JUKEBOX
+	var/new_channel = next_channel
+	GLOB.jukebox_used_channels |= new_channel
+	next_channel++
+	if(next_channel > 1024)
+		next_channel = CHANNEL_JUKEBOX
+	return new_channel
+
+/proc/free_jukebox_channel(channel)
+	GLOB.jukebox_used_channels -= channel
+
 /datum/jukebox_api_handler
 	var/list/active_requests = list()
 	var/current_request_id = 0
+	var/list/last_download_time_by_ckey = list()
 
 /datum/jukebox_api_handler/proc/check_health_async()
 	var/request_id = ++current_request_id
@@ -186,10 +222,26 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 /datum/jukebox_api_handler/proc/download_track_async(url, mob/user, datum/online_jukebox/jukebox)
 	if(!url || !jukebox || QDELETED(jukebox))
 		return
+	if(!user?.ckey)
+		return
+	var/last_time = last_download_time_by_ckey[user.ckey]
+	if(last_time && world.time < last_time + JUKEBOX_DOWNLOAD_COOLDOWN)
+		jukebox.online_error_message = "Please wait before downloading another track."
+		jukebox.ui?.update_ui()
+		return
+	if(jukebox.downloading)
+		jukebox.online_error_message = "Already downloading a track. Please wait."
+		jukebox.ui?.update_ui()
+		return
+	last_download_time_by_ckey[user.ckey] = world.time
+	jukebox.downloading = TRUE
+	jukebox.online_error_message = "Downloading track... Please wait."
+	jukebox.ui?.update_ui()
 	var/request_id = ++current_request_id
 	var/datum/http_request/request = new()
 	if(!request)
 		jukebox.online_error_message = "HTTP system not available"
+		jukebox.downloading = FALSE
 		jukebox.ui?.update_ui()
 		return
 	active_requests["[request_id]"] = list("request" = request, "jukebox" = jukebox, "user" = WEAKREF(user), "url" = url, "start" = world.time)
@@ -206,6 +258,7 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 	if(world.time > req_data["start"] + JUKEBOX_HTTP_TIMEOUT)
 		if(!QDELETED(jukebox))
 			jukebox.online_error_message = "Download timeout"
+			jukebox.downloading = FALSE
 			jukebox.ui?.update_ui()
 		active_requests -= "[request_id]"
 		return
@@ -224,15 +277,15 @@ GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/ju
 	if(QDELETED(jukebox))
 		return
 
+	jukebox.downloading = FALSE
+
 	if(response.errored || response.status_code != 200)
 		jukebox.online_error_message = "API Error ([response.status_code])"
 	else
 		var/list/result = json_decode(response.body)
 		if(result?["success"])
 			check_and_prune_library()
-
 			load_jukebox_library()
-
 			jukebox.play_library_track_on_success(result["url_hash"], user)
 			update_all_jukebox_uis()
 		else
