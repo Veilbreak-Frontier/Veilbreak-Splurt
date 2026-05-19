@@ -7,6 +7,9 @@
 	if(!istype(H) && parent?.mob && ishuman(parent.mob))
 		H = parent.mob
 
+	if(!istype(H))
+		return
+
 	var/list/target_list = save_data
 	if(islist(save_data))
 		var/slot_key = "character[default_slot]"
