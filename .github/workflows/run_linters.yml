@@ -5,8 +5,8 @@ on:
 
 jobs:
   linters:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v6
