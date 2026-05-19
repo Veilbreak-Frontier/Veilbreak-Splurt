@@ -29,9 +29,13 @@
 	return ..()
 
 /obj/item/mob_holder/Destroy()
-	if(held_mob?.loc == src)
-		release()
-	held_mob = null
+	if(held_mob)
+		var/mob/living/M = held_mob
+		held_mob = null
+		UnregisterSignal(M, COMSIG_QDELETING)
+		if(M.loc == src)
+			M.forceMove(drop_location())
+			M.reset_perspective()
 	return ..()
 
 /obj/item/mob_holder/proc/insert_mob(mob/living/new_prisoner)
@@ -46,13 +50,16 @@
 	desc = new_prisoner.desc
 	return TRUE
 
-/obj/item/mob_holder/proc/on_mob_deleted()
+/obj/item/mob_holder/proc/on_mob_deleted(datum/source)
 	SIGNAL_HANDLER
-	held_mob = null
+	if(held_mob)
+		UnregisterSignal(held_mob, COMSIG_QDELETING)
+		held_mob = null
 	if (isliving(loc))
 		var/mob/living/holder = loc
 		holder.temporarilyRemoveItemFromInventory(src, force = TRUE)
-	qdel(src)
+	if(!QDELETED(src) && !QDELING(src))
+		qdel(src)
 
 /obj/item/mob_holder/proc/update_visuals(mob/living/held_guy)
 	appearance = held_guy.appearance
@@ -75,11 +82,14 @@
 		release()
 
 /obj/item/mob_holder/proc/release(display_messages = TRUE)
+	if(QDELETED(src) || QDELING(src))
+		return FALSE
 	if(!held_mob)
-		if(!QDELETED(src))
-			qdel(src)
+		qdel(src)
 		return FALSE
 	var/mob/living/released_mob = held_mob
+	held_mob = null
+	UnregisterSignal(released_mob, COMSIG_QDELETING)
 	if(isliving(loc))
 		var/mob/living/captor = loc
 		if(display_messages)
@@ -90,8 +100,7 @@
 	released_mob.setDir(SOUTH)
 	if(display_messages)
 		released_mob.visible_message(span_warning("[released_mob] uncurls!"))
-	if(!QDELETED(src))
-		qdel(src)
+	qdel(src)
 	return TRUE
 
 /obj/item/mob_holder/relaymove(mob/living/user, direction)
@@ -137,12 +146,18 @@
 
 /obj/item/mob_holder/destructible/Destroy()
 	if(held_mob)
+		var/mob/living/M = held_mob
+		held_mob = null
+		UnregisterSignal(M, COMSIG_QDELETING)
 		release(display_messages = TRUE, delete_mob = TRUE)
 	return ..()
 
 /obj/item/mob_holder/destructible/release(display_messages = TRUE, delete_mob = FALSE)
 	if(delete_mob && held_mob)
-		QDEL_NULL(held_mob)
+		var/mob/living/M = held_mob
+		held_mob = null
+		UnregisterSignal(M, COMSIG_QDELETING)
+		qdel(M)
 	return ..()
 
 /obj/item/mob_holder/attack_self(mob/user, modifiers)

@@ -135,4 +135,5 @@
 
 	REMOVE_TRAIT(source, TRAIT_SKIP_BASIC_REACH_CHECK, REF(src))
 	UnregisterSignal(source, COMSIG_MOVABLE_MOVED)
-	packing_overlay.update_contents(src)
+	if(packing_overlay)
+		packing_overlay.update_contents(src)
