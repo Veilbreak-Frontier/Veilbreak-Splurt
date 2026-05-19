@@ -6,3 +6,5 @@
 	path = POWER_PATH_EXPERT
 	priority = POWER_PRIORITY_BASIC
 	abstract_parent_type = /datum/power/expert
+	/// Used by starting-credit expert powers (Rich, Filthy Rich) to avoid double payout.
+	var/riches_applied = FALSE
