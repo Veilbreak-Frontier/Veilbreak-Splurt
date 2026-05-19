@@ -7,13 +7,15 @@ GLOBAL_VAR_INIT(jukebox_last_check, 0)
 GLOBAL_DATUM_INIT(jukebox_api_handler, /datum/jukebox_api_handler, new /datum/jukebox_api_handler)
 GLOBAL_LIST_EMPTY(jukebox_sorted_tracks_cache)
 GLOBAL_VAR_INIT(jukebox_sorted_cache_valid, FALSE)
-GLOBAL_LIST_EMPTY(jukebox_used_channels)
+GLOBAL_LIST_EMPTY(jukebox_available_channels)
 
 #define JUKEBOX_MUSIC_DIR_NAME "jukebox_music"
 #define JUKEBOX_SOUNDS_DIR_NAME "jukebox_music/sounds"
 #define JUKEBOX_LIBRARY_FILE_NAME "jukebox_music/music_library.json"
 #define JUKEBOX_HTTP_TIMEOUT 300
 #define JUKEBOX_DOWNLOAD_COOLDOWN 100
+#define JUKEBOX_CHANNEL_MIN 190
+#define JUKEBOX_CHANNEL_MAX 1024
 
 /proc/mob_by_key(key_to_find)
 	if(!key_to_find)
@@ -28,13 +30,14 @@ GLOBAL_LIST_EMPTY(jukebox_used_channels)
 	var/static/jukebox_dir_cache
 	if(jukebox_dir_cache)
 		return jukebox_dir_cache
-
+	var/local_path = "data/config/jukebox_music"
+	if(fexists(local_path))
+		jukebox_dir_cache = local_path
+		return local_path
 	var/shared_path = "/srv/tgstation_instances/livenew/Configuration/GameStaticFiles/config/jukebox_music"
-
 	if(fexists(shared_path))
 		jukebox_dir_cache = shared_path
 		return shared_path
-
 	jukebox_dir_cache = "config/jukebox_music"
 	return jukebox_dir_cache
 
@@ -92,12 +95,18 @@ GLOBAL_LIST_EMPTY(jukebox_used_channels)
 
 /proc/get_sorted_library_tracks()
 	if(GLOB.jukebox_sorted_cache_valid && GLOB.jukebox_sorted_tracks_cache)
-		return GLOB.jukebox_sorted_tracks_cache
+		var/list/cached_return = list()
+		for(var/list/L in GLOB.jukebox_sorted_tracks_cache)
+			cached_return += list(L.Copy())
+		return cached_return
 	var/list/tracks = list()
 	for(var/url_hash in GLOB.jukebox_library_tracks)
-		tracks += list(GLOB.jukebox_library_tracks[url_hash])
+		var/list/track_entry = GLOB.jukebox_library_tracks[url_hash]
+		tracks += list(track_entry.Copy())
 	sortTim(tracks, GLOBAL_PROC_REF(cmp_jukebox_tracks))
-	GLOB.jukebox_sorted_tracks_cache = tracks
+	GLOB.jukebox_sorted_tracks_cache = list()
+	for(var/list/L in tracks)
+		GLOB.jukebox_sorted_tracks_cache += list(L.Copy())
 	GLOB.jukebox_sorted_cache_valid = TRUE
 	return tracks
 
@@ -153,18 +162,14 @@ GLOBAL_LIST_EMPTY(jukebox_used_channels)
 /proc/check_and_prune_library()
 	if(length(GLOB.jukebox_library_tracks) < 50)
 		return TRUE
-
 	var/list/sorted = get_sorted_library_tracks()
 	var/list/to_remove = sorted[length(sorted)]
 	var/remove_hash = to_remove["url_hash"]
-
 	GLOB.jukebox_library_tracks -= remove_hash
 	invalidate_library_cache()
-
 	var/sound_path = "[get_jukebox_sounds_dir()]/[remove_hash].ogg"
 	if(fexists(sound_path))
 		fdel(sound_path)
-
 	var/datum/http_request/request = new()
 	request.prepare(RUSTG_HTTP_METHOD_DELETE, "[GLOB.jukebox_api_url]/remove_track/[remove_hash]", "", "")
 	request.begin_async()
@@ -173,21 +178,25 @@ GLOBAL_LIST_EMPTY(jukebox_used_channels)
 /proc/jukebox_api_healthy()
 	return GLOB.jukebox_api_status
 
+/proc/populate_jukebox_channels()
+	GLOB.jukebox_available_channels = list()
+	for(var/i in JUKEBOX_CHANNEL_MIN to JUKEBOX_CHANNEL_MAX)
+		GLOB.jukebox_available_channels += i
+
 /proc/allocate_jukebox_channel()
-	var/static/next_channel = CHANNEL_JUKEBOX
-	while(next_channel in GLOB.jukebox_used_channels)
-		next_channel++
-		if(next_channel > 1024)
-			next_channel = CHANNEL_JUKEBOX
-	var/new_channel = next_channel
-	GLOB.jukebox_used_channels |= new_channel
-	next_channel++
-	if(next_channel > 1024)
-		next_channel = CHANNEL_JUKEBOX
-	return new_channel
+	if(!GLOB.jukebox_available_channels || !length(GLOB.jukebox_available_channels))
+		populate_jukebox_channels()
+	var/allocated_channel = GLOB.jukebox_available_channels[length(GLOB.jukebox_available_channels)]
+	GLOB.jukebox_available_channels.Cut(length(GLOB.jukebox_available_channels))
+	return allocated_channel
 
 /proc/free_jukebox_channel(channel)
-	GLOB.jukebox_used_channels -= channel
+	if(!channel || channel < JUKEBOX_CHANNEL_MIN || channel > JUKEBOX_CHANNEL_MAX)
+		return
+	if(!GLOB.jukebox_available_channels)
+		GLOB.jukebox_available_channels = list()
+	if(!(channel in GLOB.jukebox_available_channels))
+		GLOB.jukebox_available_channels += channel
 
 /datum/jukebox_api_handler
 	var/list/active_requests = list()
@@ -244,7 +253,7 @@ GLOBAL_LIST_EMPTY(jukebox_used_channels)
 		jukebox.downloading = FALSE
 		jukebox.ui?.update_ui()
 		return
-	active_requests["[request_id]"] = list("request" = request, "jukebox" = jukebox, "user" = WEAKREF(user), "url" = url, "start" = world.time)
+	active_requests["[request_id]"] = list("request" = request, "jukebox" = WEAKREF(jukebox), "user" = WEAKREF(user), "url" = url, "start" = world.time)
 	request.prepare(RUSTG_HTTP_METHOD_GET, "[GLOB.jukebox_api_url]/download?url=[url_encode(url)]", "", "")
 	request.begin_async()
 	addtimer(CALLBACK(src, PROC_REF(poll_download), request_id), 10)
@@ -254,9 +263,10 @@ GLOBAL_LIST_EMPTY(jukebox_used_channels)
 	if(!req_data)
 		return
 	var/datum/http_request/request = req_data["request"]
-	var/datum/online_jukebox/jukebox = req_data["jukebox"]
+	var/datum/weakref/juke_ref = req_data["jukebox"]
+	var/datum/online_jukebox/jukebox = juke_ref?.resolve()
 	if(world.time > req_data["start"] + JUKEBOX_HTTP_TIMEOUT)
-		if(!QDELETED(jukebox))
+		if(jukebox && !QDELETED(jukebox))
 			jukebox.online_error_message = "Download timeout"
 			jukebox.downloading = FALSE
 			jukebox.ui?.update_ui()
@@ -270,15 +280,13 @@ GLOBAL_LIST_EMPTY(jukebox_used_channels)
 	active_requests -= "[request_id]"
 
 /datum/jukebox_api_handler/proc/handle_download_completion(list/req_data, datum/http_response/response)
-	var/datum/online_jukebox/jukebox = req_data["jukebox"]
+	var/datum/weakref/juke_ref = req_data["jukebox"]
+	var/datum/online_jukebox/jukebox = juke_ref?.resolve()
 	var/datum/weakref/user_ref = req_data["user"]
 	var/mob/user = user_ref?.resolve()
-
-	if(QDELETED(jukebox))
+	if(!jukebox || QDELETED(jukebox))
 		return
-
 	jukebox.downloading = FALSE
-
 	if(response.errored || response.status_code != 200)
 		jukebox.online_error_message = "API Error ([response.status_code])"
 	else
@@ -290,7 +298,6 @@ GLOBAL_LIST_EMPTY(jukebox_used_channels)
 			update_all_jukebox_uis()
 		else
 			jukebox.online_error_message = result?["error"] || "Unknown API error"
-
 	jukebox.ui?.update_ui()
 
 SUBSYSTEM_DEF(jukebox)
@@ -302,6 +309,7 @@ SUBSYSTEM_DEF(jukebox)
 	var/next_health_check = 0
 
 /datum/controller/subsystem/jukebox/Initialize()
+	populate_jukebox_channels()
 	initialize_jukebox_library()
 	return SS_INIT_SUCCESS
 
@@ -310,7 +318,6 @@ SUBSYSTEM_DEF(jukebox)
 		if(GLOB.jukebox_api_handler)
 			GLOB.jukebox_api_handler.check_health_async()
 		next_health_check = world.time + 600
-
 	for(var/datum/online_jukebox/juke in GLOB.online_jukeboxes)
 		if(QDELETED(juke))
 			GLOB.online_jukeboxes -= juke
