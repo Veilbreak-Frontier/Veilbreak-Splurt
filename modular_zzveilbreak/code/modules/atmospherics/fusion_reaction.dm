@@ -17,9 +17,22 @@
 /datum/gas_reaction/fusion
 	name = "Fusion"
 	id = "fusion"
+	desc = "" // Shown in the atmos handbook on chamber monitors — fill in a short overview.
 	/// Runs before PRIORITY_FIRE so plasmafire can see reaction_results when fusion actually reacted.
 	priority_group = PRIORITY_POST_FORMATION
 	expands_hotspot = TRUE
+
+/datum/gas_reaction/fusion/init_factors()
+	factor = list(
+		/datum/gas/plasma = "Fuel for the fusion reaction. As the temperature increases, the fuel burn rate increases.",
+		/datum/gas/oxygen = "Oxygen is consumed at a rate that scales with the difference between the temperature and [FUSION_MINIMUM_TEMPERATURE]K, with maximum scaling at [FUSION_MAXIMUM_TEMPERATURE]K.",
+		/datum/gas/healium = "Healium is a catalyst for the fusion reaction. It does not burn, but it does help the reaction to start.",
+		/datum/gas/carbon_dioxide = "Carbon dioxide is a product of the fusion reaction. It is not consumed, but it is produced.",
+		/datum/gas/quark_matter = "Quark matter is a product of the fusion reaction. It is not consumed, but it is produced.",
+		"Temperature" = "Minimum temperature of [FUSION_MINIMUM_TEMPERATURE] kelvin to occur. Higher temperature up to [FUSION_MAXIMUM_TEMPERATURE]K increases the fuel burn rate.",
+		"Energy" = "[FIRE_PLASMA_ENERGY_RELEASED] joules of energy is released per mole of plasma consumed.",
+		"Radiation" = "This reaction emits radiation proportional to the amount of energy released.",
+	)
 
 /datum/gas_reaction/fusion/init_reqs()
 	requirements = list(

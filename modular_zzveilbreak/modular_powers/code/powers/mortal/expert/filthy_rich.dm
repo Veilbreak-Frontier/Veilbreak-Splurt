@@ -12,11 +12,22 @@
 
 	// we just make it the same as rich but reduced because we are lazy.
 	var/riches = 7500
+	var/riches_applied = FALSE
 
 /datum/power/expert/filthy_rich/add_unique(client/client_source)
 	var/mob/living/carbon/human/human_holder = power_holder
-	var/datum/bank_account/account = get_bank_account_for_rich_power(human_holder)
-	if(!account)
+	if(try_grant_rich_power_credits(src, human_holder, riches))
 		return
-	account.account_balance += riches
+	if(!human_holder)
+		return
+	RegisterSignal(human_holder, COMSIG_HUMAN_CHARACTER_SETUP_FINISHED, PROC_REF(on_character_setup_finished))
 
+/datum/power/expert/filthy_rich/proc/on_character_setup_finished(mob/living/carbon/human/source)
+	SIGNAL_HANDLER
+	UnregisterSignal(source, COMSIG_HUMAN_CHARACTER_SETUP_FINISHED)
+	try_grant_rich_power_credits(src, source, riches)
+
+/datum/power/expert/filthy_rich/remove()
+	if(power_holder)
+		UnregisterSignal(power_holder, COMSIG_HUMAN_CHARACTER_SETUP_FINISHED)
+	return ..()
