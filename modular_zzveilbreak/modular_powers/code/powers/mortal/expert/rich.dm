@@ -15,7 +15,7 @@
 	return id_card.registered_account
 
 /// Attempts to grant starting credits for a rich-type power. Returns TRUE if granted.
-/proc/try_grant_rich_power_credits(datum/power/power_source, mob/living/carbon/human/human_holder, amount)
+/proc/try_grant_rich_power_credits(datum/power/expert/power_source, mob/living/carbon/human/human_holder, amount)
 	if(!power_source || !human_holder || power_source.riches_applied)
 		return FALSE
 	var/datum/bank_account/account = get_bank_account_for_rich_power(human_holder)
@@ -32,8 +32,6 @@
 	security_record_text = "Subject has access to a high amount of wealth and resources."
 	/// how rich are we?
 	var/riches = 2500
-	/// Whether starting credits were already granted.
-	var/riches_applied = FALSE
 
 /datum/power/expert/rich/add_unique(client/client_source)
 	var/mob/living/carbon/human/human_holder = power_holder

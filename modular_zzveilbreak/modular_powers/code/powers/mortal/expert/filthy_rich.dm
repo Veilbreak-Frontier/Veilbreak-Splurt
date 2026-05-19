@@ -12,7 +12,6 @@
 
 	// we just make it the same as rich but reduced because we are lazy.
 	var/riches = 7500
-	var/riches_applied = FALSE
 
 /datum/power/expert/filthy_rich/add_unique(client/client_source)
 	var/mob/living/carbon/human/human_holder = power_holder
