@@ -178,6 +178,7 @@ Temporary Items
 
 #Visual studio stuff
 *.vscode/*
+.vscode/
 
 # Cursor stuff
 *.cursor/*
