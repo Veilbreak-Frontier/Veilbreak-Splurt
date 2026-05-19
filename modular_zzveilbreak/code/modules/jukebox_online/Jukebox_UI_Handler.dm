@@ -80,8 +80,11 @@
 				update_ui()
 				return TRUE
 			if(jukebox_api_healthy())
+				if(jukebox.downloading)
+					jukebox.online_error_message = "Already downloading a track. Please wait."
+					update_ui()
+					return TRUE
 				GLOB.jukebox_api_handler.download_track_async(url, user, jukebox)
-				jukebox.online_error_message = "Download started. Please wait..."
 			else
 				jukebox.online_error_message = "API is currently offline. Cannot download."
 			update_ui()
@@ -90,6 +93,10 @@
 		if("play_library")
 			var/url_hash = params["url_hash"]
 			if(url_hash)
+				if(jukebox.downloading)
+					jukebox.online_error_message = "Cannot play while downloading."
+					update_ui()
+					return TRUE
 				jukebox.play_library_track(url_hash, user)
 				update_ui()
 				return TRUE
@@ -121,11 +128,8 @@
 
 	return FALSE
 
-	
 /datum/online_jukebox_ui/proc/update_ui()
 	if(world.time < last_update + update_cooldown)
 		return
 	last_update = world.time
 	SStgui.update_uis(src)
-
-

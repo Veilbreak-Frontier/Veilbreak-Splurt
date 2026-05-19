@@ -1,5 +1,6 @@
 /datum/preferences
 	var/list/H_custom_tattoos_loaded
+	var/tattoo_version = 1
 
 /datum/preferences/proc/save_custom_tattoo_data(list/save_data, mob/living/carbon/human/explicit_mob)
 	var/mob/living/carbon/human/H = explicit_mob
@@ -12,8 +13,11 @@
 		if(islist(save_data[slot_key]))
 			target_list = save_data[slot_key]
 
+	if(!islist(target_list))
+		return
+
 	if(!H || QDELETED(H))
-		if(islist(target_list) && islist(H_custom_tattoos_loaded))
+		if(islist(H_custom_tattoos_loaded))
 			var/list/fallback_serialization = list()
 			for(var/datum/custom_tattoo/T as anything in H_custom_tattoos_loaded)
 				if(!istype(T) || QDELETED(T))
@@ -27,35 +31,38 @@
 					"layer" = T.layer,
 					"is_signature" = T.is_signature,
 					"font" = T.font,
-					"flair" = T.flair
+					"flair" = T.flair,
+					"version" = tattoo_version
 				))
-			if(length(fallback_serialization))
-				target_list["custom_tattoos"] = fallback_serialization
+			target_list["custom_tattoos"] = fallback_serialization
 		return
 
 	var/list/tattoo_serialization = list()
-	for(var/datum/custom_tattoo/T as anything in H.custom_body_tattoos)
-		if(!istype(T) || QDELETED(T))
-			continue
-		tattoo_serialization += list(list(
-			"artist" = T.artist,
-			"design" = T.design,
-			"body_part" = T.body_part,
-			"color" = T.color,
-			"date_applied" = T.date_applied,
-			"layer" = T.layer,
-			"is_signature" = T.is_signature,
-			"font" = T.font,
-			"flair" = T.flair
-		))
+	var/list/all_tattoos = H.custom_body_tattoos
+	if(islist(all_tattoos))
+		for(var/datum/custom_tattoo/T as anything in all_tattoos)
+			if(!istype(T) || QDELETED(T))
+				continue
+			tattoo_serialization += list(list(
+				"artist" = T.artist,
+				"design" = T.design,
+				"body_part" = T.body_part,
+				"color" = T.color,
+				"date_applied" = T.date_applied,
+				"layer" = T.layer,
+				"is_signature" = T.is_signature,
+				"font" = T.font,
+				"flair" = T.flair,
+				"version" = tattoo_version
+			))
 
-	if(islist(target_list))
-		target_list["custom_tattoos"] = tattoo_serialization
+	target_list["custom_tattoos"] = tattoo_serialization
 
 /datum/preferences/proc/load_custom_tattoo_data(list/source_data)
 	if(islist(H_custom_tattoos_loaded))
 		for(var/datum/custom_tattoo/T in H_custom_tattoos_loaded)
-			qdel(T)
+			if(T && !QDELETED(T))
+				qdel(T)
 	H_custom_tattoos_loaded = list()
 
 	if(!source_data)
@@ -99,18 +106,29 @@
 
 	H_custom_tattoos_loaded = reconstructed_objects
 
-/datum/preferences/proc/apply_custom_tattoos_to_mob(mob/living/carbon/human/H, list/source_data)
+/datum/preferences/proc/apply_custom_tattoos_to_mob(mob/living/carbon/human/H)
 	if(!istype(H))
 		return
 
-	H.custom_body_tattoos.Cut()
+	if(islist(H.custom_body_tattoos))
+		for(var/datum/custom_tattoo/T in H.custom_body_tattoos)
+			if(T && !QDELETED(T))
+				qdel(T)
+		H.custom_body_tattoos.Cut()
+	else
+		H.custom_body_tattoos = list()
 
 	if(islist(H_custom_tattoos_loaded) && length(H_custom_tattoos_loaded))
 		for(var/datum/custom_tattoo/T in H_custom_tattoos_loaded)
+			if(!T || QDELETED(T))
+				continue
+			var/current_zone = T.body_part
+			if(!is_custom_tattoo_bodypart_valid(current_zone))
+				continue
 			var/datum/custom_tattoo/cloned = new(
 				T.artist,
 				T.design,
-				T.body_part,
+				current_zone,
 				T.color,
 				T.layer,
 				T.is_signature,
@@ -119,3 +137,33 @@
 			)
 			cloned.date_applied = T.date_applied
 			H.add_custom_tattoo(cloned)
+
+/datum/preferences/proc/update_tattoo_cache_from_mob(mob/living/carbon/human/H)
+	if(!istype(H) || QDELETED(H))
+		return
+
+	if(islist(H_custom_tattoos_loaded))
+		for(var/datum/custom_tattoo/T in H_custom_tattoos_loaded)
+			if(T && !QDELETED(T))
+				qdel(T)
+	H_custom_tattoos_loaded = list()
+
+	var/list/all_tattoos = H.custom_body_tattoos
+	if(!islist(all_tattoos) || !length(all_tattoos))
+		return
+
+	for(var/datum/custom_tattoo/T in all_tattoos)
+		if(!T || QDELETED(T))
+			continue
+		var/datum/custom_tattoo/cached = new(
+			T.artist,
+			T.design,
+			T.body_part,
+			T.color,
+			T.layer,
+			T.is_signature,
+			T.font,
+			T.flair
+		)
+		cached.date_applied = T.date_applied
+		H_custom_tattoos_loaded += cached

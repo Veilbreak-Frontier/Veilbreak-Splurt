@@ -1,4 +1,3 @@
-#define CHANNEL_ONLINE_JUKEBOX CHANNEL_JUKEBOX
 #define MUTE_DEAF (1<<0)
 #define MUTE_PREF (1<<1)
 #define MUTE_RANGE (1<<2)
@@ -22,9 +21,12 @@
 	var/sound_range
 	var/x_cutoff
 	var/z_cutoff
+	var/online_channel
+	var/downloading = FALSE
 
 /datum/online_jukebox/New(atom/new_parent)
 	parent_atom = new_parent
+	online_channel = allocate_jukebox_channel()
 
 	if(isnull(sound_range))
 		sound_range = world.view
@@ -44,6 +46,8 @@
 /datum/online_jukebox/Destroy()
 	GLOB.online_jukeboxes -= src
 	stop_music()
+	if(online_channel)
+		free_jukebox_channel(online_channel)
 	QDEL_NULL(ui)
 	parent_atom = null
 	return ..()
@@ -89,6 +93,7 @@
 	data["library_tracks"] = get_library_tracks_ui_data()
 	data["library_stats"] = get_jukebox_library_stats()
 	data["update_timestamp"] = world.time
+	data["downloading"] = downloading
 	return data
 
 /datum/online_jukebox/proc/get_track_progress()
@@ -125,8 +130,7 @@
 	online_error_message = "Waiting for sound file..."
 	ui?.update_ui()
 
-	addtimer(CALLBACK(src, PROC_REF(poll_for_file), url_hash, user, sound_path, 5), 30)
-	return TRUE
+	addtimer(CALLBACK(src, PROC_REF(poll_for_file), url_hash, user, sound_path, 10), 30)
 
 /datum/online_jukebox/proc/poll_for_file(url_hash, mob/user, sound_path, attempts)
 	if(QDELETED(src))
@@ -151,22 +155,33 @@
 		ui?.update_ui()
 		return FALSE
 
+	if(parent_obj?.music_player && parent_obj.music_player.active_song_sound)
+		var/legacy_channel = parent_obj.music_player.active_song_sound.channel || CHANNEL_JUKEBOX
+		parent_obj.music_player.active_song_sound = null
+		for(var/mob/M in GLOB.player_list)
+			if(M?.client)
+				M.stop_sound_channel(legacy_channel)
+
 	stop_music()
 
 	online_track_name = track_data["track_name"]
 	online_track_duration = track_data["duration"] * 10
 	playing_online = TRUE
 	track_start_time = world.time
+	online_error_message = ""
 
 	var/sound_path = "[get_jukebox_sounds_dir()]/[url_hash].ogg"
 	var/area/juke_area = get_area(parent_atom)
 
 	var/sound/S = sound(file(sound_path))
-	S.channel = CHANNEL_ONLINE_JUKEBOX
+	S.channel = online_channel
 	S.priority = 255
 	S.falloff = 2
 	S.volume = volume
-	S.environment = juke_area?.sound_environment || SOUND_ENVIRONMENT_NONE
+	if(juke_area)
+		S.environment = juke_area.sound_environment
+	else
+		S.environment = SOUND_ENVIRONMENT_NONE
 	S.repeat = sound_loops
 	S.status = SOUND_STREAM
 
@@ -186,6 +201,7 @@
 
 	playing_online = FALSE
 	active_song_sound = null
+	online_error_message = ""
 
 	var/list/current_listeners = listeners.Copy()
 	for(var/mob/M in current_listeners)
@@ -253,7 +269,7 @@
 	listeners -= no_longer_listening
 
 	var/sound/stop_cmd = sound(null)
-	stop_cmd.channel = CHANNEL_ONLINE_JUKEBOX
+	stop_cmd.channel = online_channel
 	stop_cmd.priority = 255
 	SEND_SOUND(no_longer_listening, stop_cmd)
 
@@ -289,7 +305,7 @@
 		return
 
 	var/sound/sending = sound(active_song_sound)
-	sending.channel = CHANNEL_ONLINE_JUKEBOX
+	sending.channel = online_channel
 	sending.x = sound_turf.x - listener_turf.x
 	sending.y = sound_turf.y - listener_turf.y
 	sending.z = 0
