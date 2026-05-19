@@ -118,14 +118,15 @@ const DateDropdown = (props) => {
 };
 
 const ChangelogList = (props) => {
-  const { contents, bubberContents, splurtContents } = props; // SPLURT EDIT ADDITION: Changelog 3
+  const { contents, bubberContents, splurtContents, veilbreakContents } = props; // VEILBREAK EDIT
 
   const combinedDates = {};
   Object.assign(
     combinedDates,
     typeof contents === 'object' ? contents : {},
     typeof bubberContents === 'object' ? bubberContents : {},
-    typeof splurtContents === 'object' ? splurtContents : {}, // SPLURT EDIT ADDITION: Changelog 3
+    typeof splurtContents === 'object' ? splurtContents : {},
+    typeof veilbreakContents === 'object' ? veilbreakContents : {}, // VEILBREAK EDIT
   );
 
   if (Object.keys(combinedDates).length < 1) {
@@ -151,6 +152,21 @@ const ChangelogList = (props) => {
             </Section>
           )}
           {/* SPLURT EDIT ADDITION END */}
+          {/* VEILBREAK EDIT ADDITION BEGIN */}
+          {veilbreakContents[date] && (
+            <Section mb={-2}>
+              {Object.entries(veilbreakContents[date]).map(
+                ([name, changes]) => (
+                  <VeilbreakChangelogEntry
+                    key={name}
+                    author={name}
+                    changes={changes}
+                  />
+                ),
+              )}
+            </Section>
+          )}
+          {/* VEILBREAK EDIT ADDITION END */}
           {bubberContents[date] && (
             <Section mb={-2}>
               {Object.entries(bubberContents[date]).map(([name, changes]) => (
@@ -323,19 +339,72 @@ const SplurtChangelogEntry = (props) => {
 };
 // SPLURT EDIT ADDITION END
 
+// VEILBREAK EDIT ADDITION BEGIN
+const VeilbreakChangelogEntry = (props) => {
+  const { author, changes } = props;
+
+  return (
+    <Stack.Item mb={-1} pb={1} key={author}>
+      <Box>
+        <h4>
+          <Image verticalAlign="bottom" src={resolveAsset('crystal_16.png')} />{' '}
+          {author} changed:
+        </h4>
+      </Box>
+      <Box ml={3} mt={-0.2}>
+        <Table>
+          {changes.map((change) => {
+            const changeType = Object.keys(change)[0];
+            return (
+              <Table.Row key={changeType + change[changeType]}>
+                <Table.Cell
+                  className={classes([
+                    'Changelog__Cell',
+                    'Changelog__Cell--Icon',
+                  ])}
+                >
+                  <Icon
+                    color={
+                      icons[changeType]
+                        ? icons[changeType].color
+                        : icons['unknown'].color
+                    }
+                    name={
+                      icons[changeType]
+                        ? icons[changeType].icon
+                        : icons['unknown'].icon
+                    }
+                    verticalAlign="middle"
+                  />
+                </Table.Cell>
+                <Table.Cell className="Changelog__Cell">
+                  {change[changeType]}
+                </Table.Cell>
+              </Table.Row>
+            );
+          })}
+        </Table>
+      </Box>
+    </Stack.Item>
+  );
+};
+// VEILBREAK EDIT ADDITION END
+
 export const BubberChangelog = (props) => {
   const { data } = useBackend();
   const { dates } = data;
   const [contents, setContents] = useState('');
   const [bubberContents, setBubberContents] = useState('');
-  const [splurtContents, setSplurtContents] = useState(''); // SPLURT EDIT ADDITION: Changelog 3
+  const [splurtContents, setSplurtContents] = useState('');
+  const [veilbreakContents, setVeilbreakContents] = useState(''); // VEILBREAK EDIT
   const [selectedDate, setSelectedDate] = useState(dates[0]);
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
 
   useEffect(() => {
     setContents('Loading changelog data...');
     setBubberContents('Loading changelog data...');
-    setSplurtContents('Loading changelog data...'); // SPLURT EDIT ADDITION: Changelog 3
+    setSplurtContents('Loading changelog data...');
+    setVeilbreakContents('Loading changelog data...'); // VEILBREAK EDIT
     getData(selectedDate);
   }, [selectedDate]);
 
@@ -353,30 +422,33 @@ export const BubberChangelog = (props) => {
     Promise.all([
       fetch(resolveAsset(`${date}.yml`)),
       fetch(resolveAsset(`bubber_${date}.yml`)),
-      fetch(resolveAsset(`splurt_${date}.yml`)), // SPLURT EDIT ADDITION: Changelog 3
+      fetch(resolveAsset(`splurt_${date}.yml`)),
+      fetch(resolveAsset(`veilbreak_${date}.yml`)), // VEILBREAK EDIT
     ]).then(async (links) => {
       const result = await links[0].text();
       const bubberResult = await links[1].text();
-      const splurtResult = await links[2].text(); // SPLURT EDIT ADDITION: Changelog 3
+      const splurtResult = await links[2].text();
+      const veilbreakResult = await links[3].text(); // VEILBREAK EDIT
 
-      // SPLURT EDIT ADDITION: Changelog 3
       if (
         links[0].status !== 200 &&
         links[1].status !== 200 &&
-        links[2].status !== 200
+        links[2].status !== 200 &&
+        links[3].status !== 200 // VEILBREAK EDIT
       ) {
-        // SPLURT EDIT ADDITION END
         const timeout = 50 + attemptNumber * 50;
 
         setContents(`Loading changelog data${'.'.repeat(attemptNumber + 3)}`);
         setBubberContents(
           `Loading changelog data${'.'.repeat(attemptNumber + 3)}`,
         );
-        // SPLURT EDIT ADDITION: Changelog 3
         setSplurtContents(
           'Loading changelog data' + '.'.repeat(attemptNumber + 3),
         );
-        // SPLURT EDIT ADDITION END
+        setVeilbreakContents(
+          // VEILBREAK EDIT
+          'Loading changelog data' + '.'.repeat(attemptNumber + 3),
+        );
         setTimeout(() => {
           getData(date, attemptNumber + 1);
         }, timeout);
@@ -389,20 +461,25 @@ export const BubberChangelog = (props) => {
             yaml.load(bubberResult, { schema: yaml.CORE_SCHEMA }),
           );
         }
-        // SPLURT EDIT ADDITION: Changelog 3
         if (links[2].status === 200) {
           setSplurtContents(
             yaml.load(splurtResult, { schema: yaml.CORE_SCHEMA }),
           );
         }
-        // SPLURT EDIT ADDITION END
+        // VEILBREAK EDIT ADDITION BEGIN
+        if (links[3].status === 200) {
+          setVeilbreakContents(
+            yaml.load(veilbreakResult, { schema: yaml.CORE_SCHEMA }),
+          );
+        }
+        // VEILBREAK EDIT ADDITION END
       }
     });
   }
 
   const header = (
     <Section>
-      <h1>Veilbreak-Frontier</h1> {/* SPLURT EDIT ADDITION: Changelog 3 */}
+      <h1>Veilbreak-Frontier</h1>
       <p>
         <b>Thanks to: </b>
         S.P.L.U.R.T, /tg/station 13, Effigy, Stellar Haven, Baystation 12,
@@ -551,13 +628,12 @@ export const BubberChangelog = (props) => {
     <Window title="Changelog" width={730} height={700}>
       <Window.Content scrollable>
         {header}
-        {/* SPLURT EDIT ADDITION: Changelog 3 */}
         <ChangelogList
           contents={contents}
           bubberContents={bubberContents}
           splurtContents={splurtContents}
+          veilbreakContents={veilbreakContents} // VEILBREAK EDIT
         />
-        {/* SPLURT EDIT ADDITION END */}
         {footer}
       </Window.Content>
     </Window>
