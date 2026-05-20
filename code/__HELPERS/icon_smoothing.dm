@@ -175,7 +175,6 @@ xxx xxx xxx
 /atom/proc/bitmask_smooth()
 	var/new_junction = NONE
 
-	// cache for sanic speed
 	var/canSmoothWith = src.canSmoothWith
 	var/area/home_base = get_area(src)
 	var/area_limited_icon_smoothing = home_base?.area_limited_icon_smoothing
@@ -202,17 +201,17 @@ xxx xxx xxx
 							continue; \
 						}; \
 						SMOOTH_AGAINST(thing, direction, direction_flag, thing_smoothing_groups); \
-					} \
-				} \
-			} else if (smooth_border) { \
-				JUNCTION_FOUND(null, direction, direction_flag); \
-			} \
-			} \
-		} while(FALSE)
+                    } \
+                } \
+            } else if (smooth_border) { \
+                JUNCTION_FOUND(null, direction, direction_flag); \
+            } \
+            } \
+        } while(FALSE)
 
 	#define SMOOTH_AGAINST(thing, direction, direction_flag, their_groups) \
 		for(var/target in canSmoothWith) { \
-			if(canSmoothWith[target] & their_groups[target] && \
+			if(their_groups[target] && (canSmoothWith[target] & their_groups[target]) && \
 				(!(thing.smoothing_flags & SMOOTH_PROC_FILTER) || thing.smoothing_allowed(src, REVERSE_DIR(direction), reverse_junction(direction_flag)))) { \
 				JUNCTION_FOUND(thing, direction, direction_flag); \
 			} \
@@ -225,7 +224,7 @@ xxx xxx xxx
 		} \
 		if (border_object_smoothing) { \
 			new_junction |= smoothing_allowed(target, direction, direction_flag); \
-			break; /* border objects can find more then one junction on one turf, sooo */ \
+			break; \
 		} \
 		if(smooth_proc_filter) { \
 			var/old_junction = new_junction; \
@@ -236,15 +235,12 @@ xxx xxx xxx
 			break set_adj_in_dir; \
 		}
 
-	// Let's go over all our cardinals
 	if(border_object_smoothing)
 		SEARCH_ADJ_IN_DIR(NORTH, NORTH)
 		SEARCH_ADJ_IN_DIR(SOUTH, SOUTH)
 		SEARCH_ADJ_IN_DIR(EAST, EAST)
 		SEARCH_ADJ_IN_DIR(WEST, WEST)
-		// We want to check against stuff in our own turf
 		SEARCH_ADJ_IN_DIR(NONE, NONE)
-		// Border objects don't do diagonals, so GO HOME
 		set_smoothed_icon_state(new_junction)
 		return
 
@@ -253,7 +249,6 @@ xxx xxx xxx
 	SEARCH_ADJ_IN_DIR(EAST, EAST)
 	SEARCH_ADJ_IN_DIR(WEST, WEST)
 
-	// If there's nothing going on already
 	if(smoothing_flags & SMOOTH_BITMASK_CARDINALS || !(new_junction & (NORTH|SOUTH)) || !(new_junction & (EAST|WEST)))
 		set_smoothed_icon_state(new_junction)
 		return

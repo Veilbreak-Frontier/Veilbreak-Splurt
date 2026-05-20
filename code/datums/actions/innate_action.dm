@@ -89,11 +89,10 @@
 /datum/action/innate/proc/do_ability(mob/living/clicker, atom/clicked_on)
 	return FALSE
 
-/datum/action/innate/Remove(mob/removed_from)
-	if(!removed_from)
-		removed_from = owner
-	if(!removed_from)
+/datum/action/innate/soulcatcher/Remove(mob/living/M)
+	if(!M)
+		M = owner
+	if(!M)
 		return ..()
-	if(removed_from.click_intercept == src)
-		unset_ranged_ability(removed_from)
+	UnregisterSignal(M, "mob_key_down")
 	return ..()

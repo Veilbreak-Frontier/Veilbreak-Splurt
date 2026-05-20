@@ -89,8 +89,8 @@
             continue
 
         var/b_part = data["body_part"]
-        if(b_part == "butt" || b_part == "groin")
-            b_part = "chest"
+        if(!b_part)
+            continue
 
         var/datum/custom_tattoo/T = new(
             data["artist"],
