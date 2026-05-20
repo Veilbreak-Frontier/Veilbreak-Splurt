@@ -90,6 +90,10 @@
 	return FALSE
 
 /datum/action/innate/Remove(mob/removed_from)
+	if(!removed_from)
+		removed_from = owner
+	if(!removed_from)
+		return ..()
 	if(removed_from.click_intercept == src)
 		unset_ranged_ability(removed_from)
 	return ..()

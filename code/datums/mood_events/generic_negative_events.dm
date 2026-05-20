@@ -612,6 +612,8 @@
 	description = replacetext(normal_message, "%DEAD_MOB%", get_descriptor(dead_mob))
 
 /datum/mood_event/see_death/be_refreshed(datum/mood/home, mob/dead_mob, ...)
+	if(!dead_mob)
+		return ..()
 	// Every time we get refreshed we get worse if not desensitized
 	if(!HAS_TRAIT(owner, TRAIT_DESENSITIZED) && !HAS_TRAIT(dead_mob, TRAIT_SPAWNED_MOB))
 		mood_change *= 1.5
