@@ -1,3 +1,4 @@
+/*
 /datum/asset/changelog_item/New(date)
 	. = ..()
 	item_filename = SANITIZE_FILENAME("[date].yml")
@@ -18,3 +19,4 @@
 	if(!item_filename)
 		return
 	SSassets.transport.unregister_asset("splurt_[item_filename]")
+*/
