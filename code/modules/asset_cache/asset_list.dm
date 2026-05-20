@@ -142,31 +142,38 @@ GLOBAL_LIST_EMPTY(asset_datums)
 		A.unregister()
 
 /datum/asset/changelog_item
-	_abstract = /datum/asset/changelog_item
 	var/item_filename
+	var/subfolder
 
-/datum/asset/changelog_item/New(date)
+/datum/asset/changelog_item/New(date, subfolder = "archive")
+	. = ..()
+	src.subfolder = subfolder
 	item_filename = SANITIZE_FILENAME("[date].yml")
-	SSassets.transport.register_asset(item_filename, file("html/changelogs/archive/" + item_filename))
-	SSassets.transport.register_asset("bubber_[item_filename]", file("html/changelogs/bubber_archive/" + item_filename)) // BUBBER EDIT ADDITION: Changelog 2
+	// The asset name must match what the UI fetches, e.g., "veilbreak_2026-05.yml"
+	var/prefix = replacetext(subfolder, "_archive", "") // "veilbreak", "bubber", "splurt", or "" for base
+	var/asset_name = (prefix ? "[prefix]_[item_filename]" : item_filename)
+	SSassets.transport.register_asset(asset_name, file("html/changelogs/[subfolder]/" + item_filename))
 
 /datum/asset/changelog_item/send(client)
 	if (!item_filename)
 		return
-	// BUBBER EDIT CHANGE: Changelog 2: Original: . = SSassets.transport.send_assets(client, item_filename)
-	. = SSassets.transport.send_assets(client, list(item_filename, "bubber_[item_filename]"))
+	var/prefix = replacetext(subfolder, "_archive", "")
+	var/asset_name = (prefix ? "[prefix]_[item_filename]" : item_filename)
+	return SSassets.transport.send_assets(client, asset_name)
 
 /datum/asset/changelog_item/get_url_mappings()
 	if (!item_filename)
 		return
-	. = list("[item_filename]" = SSassets.transport.get_asset_url(item_filename))
-	. += list("bubber_[item_filename]" = SSassets.transport.get_asset_url("bubber_[item_filename]")) // BUBBER EDIT ADDITION: Changelog 2
+	var/prefix = replacetext(subfolder, "_archive", "")
+	var/asset_name = (prefix ? "[prefix]_[item_filename]" : item_filename)
+	return list("[asset_name]" = SSassets.transport.get_asset_url(asset_name))
 
 /datum/asset/changelog_item/unregister()
 	if (!item_filename)
 		return
-	SSassets.transport.unregister_asset(item_filename)
-	SSassets.transport.unregister_asset("bubber_[item_filename]") // BUBBER EDIT ADDITION: Changelog 2
+	var/prefix = replacetext(subfolder, "_archive", "")
+	var/asset_name = (prefix ? "[prefix]_[item_filename]" : item_filename)
+	SSassets.transport.unregister_asset(asset_name)
 
 //Generates assets based on iconstates of a single icon
 /datum/asset/simple/icon_states

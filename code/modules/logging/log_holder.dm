@@ -321,14 +321,22 @@ ADMIN_VERB(log_viewer_new, R_ADMIN|R_DEBUG, "View Round Logs", "View the rounds 
 		return null
 
 	var/list/jsonified_list = list()
+	var/is_associative = FALSE
+
+	for(var/check_key in data_list)
+		if(isnum(check_key))
+			continue
+		if(!isnull(data_list[check_key]))
+			is_associative = TRUE
+			break
+
 	for(var/key in data_list)
 		var/datum/data
-		if(isnum(key))
+
+		if(is_associative)
 			data = data_list[key]
 		else
-			data = data_list[key]
-			if(isnull(data) && !(key in data_list))
-				data = key
+			data = key
 
 		if(isnull(data))
 			pass()
@@ -357,12 +365,9 @@ ADMIN_VERB(log_viewer_new, R_ADMIN|R_DEBUG, "View Round Logs", "View the rounds 
 			stack_trace("recursive_jsonify got an empty list after serialization")
 			continue
 
-		if(isnum(key))
+		if(is_associative)
 			jsonified_list[key] = data
 		else
-			if(key == data)
-				jsonified_list += key
-			else
-				jsonified_list[key] = data
+			jsonified_list += data
 
 	return jsonified_list
