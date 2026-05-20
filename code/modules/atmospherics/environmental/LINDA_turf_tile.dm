@@ -45,7 +45,7 @@
 	var/planetary_atmos = FALSE
 	/// once our paired turfs are finished with all other shares, do one 100% share
 	/// exists so things like space can ask to take 100% of a tile's gas
-	var/run_later = FALSE
+	//var/run_later = FALSE
 
 	///gas IDs of current active gas overlays
 	var/list/atmos_overlay_types
