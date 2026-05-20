@@ -1,0 +1,6 @@
+author: "Veilbreak-Frontier"
+delete-after: True
+changes:
+  - bugfix: "\"Fixed a runtime error when closing the preferences menu as a ghost or observer.\""
+  - bugfix: "\"Fixed a server runtime crash when unpacking cardboard ration crates or closets containing packing peanuts.\""
+  - bugfix: "\"Fixed a hard-deletion loop crash that occurred when a mob inside a mob_holder (such as a cockroach) died or was otherwise deleted while being carried.\""
