@@ -322,10 +322,16 @@ ADMIN_VERB(log_viewer_new, R_ADMIN|R_DEBUG, "View Round Logs", "View the rounds 
 
 	var/list/jsonified_list = list()
 	for(var/key in data_list)
-		var/datum/data = data_list[key]
+		var/datum/data
+		if(isnum(key))
+			data = data_list[key]
+		else
+			data = data_list[key]
+			if(isnull(data) && !(key in data_list))
+				data = key
 
 		if(isnull(data))
-			pass() // nulls are allowed
+			pass()
 
 		else if(islist(data))
 			data = recursive_jsonify(data, semvers)
@@ -341,7 +347,7 @@ ADMIN_VERB(log_viewer_new, R_ADMIN|R_DEBUG, "View Round Logs", "View the rounds 
 				stack_trace("serialization of data had an invalid semver")
 				semvers[data.type] = LOG_CATEGORY_SCHEMA_VERSION_NOT_SET
 
-			if(!length(serialization_data)) // serialize_list wasn't implemented, and errored
+			if(!length(serialization_data))
 				stack_trace("serialization data was empty")
 				continue
 
@@ -351,6 +357,12 @@ ADMIN_VERB(log_viewer_new, R_ADMIN|R_DEBUG, "View Round Logs", "View the rounds 
 			stack_trace("recursive_jsonify got an empty list after serialization")
 			continue
 
-		jsonified_list[key] = data
+		if(isnum(key))
+			jsonified_list[key] = data
+		else
+			if(key == data)
+				jsonified_list += key
+			else
+				jsonified_list[key] = data
 
 	return jsonified_list

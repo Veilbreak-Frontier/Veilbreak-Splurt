@@ -154,7 +154,7 @@
  * Shows the titlescreen to a new player.
  */
 /mob/dead/new_player/proc/show_title_screen()
-	if (client?.interviewee)
+	if(!client || client.interviewee)
 		return
 
 	winset(src, "title_browser", "is-disabled=false;is-visible=true")
@@ -169,6 +169,8 @@
  * Hard updates the title screen HTML, it causes visual glitches if used.
  */
 /mob/dead/new_player/proc/update_title_screen()
+	if(!client)
+		return
 	var/dat = get_title_html()
 	//SPLURT EDIT START - Splashscreen toggle
 	//src << browse(SStitle.current_title_screen, "file=loading_screen.gif;display=0")
@@ -250,9 +252,8 @@
 /mob/dead/new_player/proc/playerpolls()
 	if(!usr || !client)
 		return
-
 	var/output
-	if (!SSdbcore.Connect())
+	if(!SSdbcore.Connect())
 		return
 	var/isadmin = FALSE
 	if(client?.holder)
@@ -273,15 +274,15 @@
 			AND deleted = 0
 		)
 	"}, list("isadmin" = isadmin, "ckey" = ckey))
-
 	if(!query_get_new_polls.Execute())
 		qdel(query_get_new_polls)
 		return
-	if(query_get_new_polls.NextRow())
-		output +={"<a class="menu_button menu_newpoll" href='byond://?src=[text_ref(src)];polls_menu=1'>POLLS (NEW)</a>"}
-	else
-		output +={"<a class="menu_button" href='byond://?src=[text_ref(src)];polls_menu=1'>POLLS</a>"}
+	var/has_rows = query_get_new_polls.NextRow()
 	qdel(query_get_new_polls)
+	if(has_rows)
+		output = {"<a class="menu_button menu_newpoll" href='byond://?src=[text_ref(src)];polls_menu=1'>POLLS (NEW)</a>"}
+	else
+		output = {"<a class="menu_button" href='byond://?src=[text_ref(src)];polls_menu=1'>POLLS</a>"}
 	if(QDELETED(src))
 		return
 	return output
