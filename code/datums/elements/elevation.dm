@@ -56,19 +56,38 @@
 /datum/element/elevation/proc/register_turf(atom/movable/source, atom/location)
 	if(!isturf(location))
 		return
-	if(!HAS_TRAIT(location, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift)))
-		RegisterSignal(location, COMSIG_TURF_RESET_ELEVATION, PROC_REF(check_elevation))
-		reset_elevation(location) // This needs to go in the before COMSIG_TURF_CHANGE, or we can end up bouncing back into this and getting a runtime
-		RegisterSignal(location, COMSIG_TURF_CHANGE, PROC_REF(pre_change_turf))
-	ADD_TRAIT(location, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift), ref(source))
+	var/turf/target_turf = location
+	var/has_any_elevation_signal = FALSE
+
+	if(target_turf._status_traits)
+		for(var/trait_name in target_turf._status_traits)
+			if(findtext(trait_name, "turf_has_elevated_obj_"))
+				has_any_elevation_signal = TRUE
+				break
+
+	if(!has_any_elevation_signal)
+		RegisterSignal(target_turf, COMSIG_TURF_RESET_ELEVATION, PROC_REF(check_elevation))
+		reset_elevation(target_turf)
+		RegisterSignal(target_turf, COMSIG_TURF_CHANGE, PROC_REF(pre_change_turf))
+
+	ADD_TRAIT(target_turf, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift), ref(source))
 
 /datum/element/elevation/proc/unregister_turf(atom/movable/source, atom/location)
 	if(!isturf(location))
 		return
-	REMOVE_TRAIT(location, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift), ref(source))
-	if(!HAS_TRAIT(location, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift)))
-		UnregisterSignal(location, list(COMSIG_TURF_RESET_ELEVATION, COMSIG_TURF_CHANGE))
-		reset_elevation(location)
+	var/turf/target_turf = location
+	REMOVE_TRAIT(target_turf, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift), ref(source))
+
+	var/has_any_elevation_signal = FALSE
+	if(target_turf._status_traits)
+		for(var/trait_name in target_turf._status_traits)
+			if(findtext(trait_name, "turf_has_elevated_obj_"))
+				has_any_elevation_signal = TRUE
+				break
+
+	if(!has_any_elevation_signal)
+		UnregisterSignal(target_turf, list(COMSIG_TURF_RESET_ELEVATION, COMSIG_TURF_CHANGE))
+		reset_elevation(target_turf)
 
 /// When a turf with elevated objects changes, we need to unregister all the elevating objects on it. When a turf Initializes(),
 /// it calls Entered() on all of its moveable contents, which will invoke on_source_entering(), which will register each elevating
