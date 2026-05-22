@@ -256,17 +256,4 @@
  * Apply actual vote effects here.
  */
 /datum/vote/proc/finalize_vote(winning_option)
-    if(name == "restart" || name == "extend" || findtext(name, "continue") || findtext(name, "evacuate"))
-        var/round_time = ""
-        if(SSticker && SSticker.round_start_time)
-            var/duration = world.time - SSticker.round_start_time
-            var/hours = floor(duration / 36000)
-            var/minutes = floor((duration % 36000) / 600)
-            round_time = "[hours]h [minutes]m"
-        else
-            round_time = "Pre-round"
-        var/player_count = length(GLOB.clients)
-        var/msg_text = "[GLOB.round_id ? "Round #[GLOB.round_id]" : "The round"] update: The Endgame Vote has concluded. Result: **[winning_option]**. | Duration: [round_time] | Players: [player_count]"
-        for(var/channel_tag in CONFIG_GET(str_list/channel_announce_end_game))
-            send2chat(new /datum/tgs_message_content(msg_text), channel_tag)
-    return
+	return
