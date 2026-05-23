@@ -22,35 +22,40 @@ def dictToTuples(inp):
     return [(k, v) for k, v in inp.items()]
 
 print('Reading changelogs...')
+
+formattedDate = today.strftime(fileDateFormat)
+branches = ['veilbreak', 'splurt', 'bubber', 'upstream']
+branch_entries = {b: {} for b in branches}
+
+for branch in branches:
+    prefix = "" if branch == "upstream" else branch + "_"
+    monthFile = os.path.join(args.ymlDir, "{}{}.yml".format(prefix, formattedDate))
+    if os.path.exists(monthFile):
+        with open(monthFile, 'r', encoding='utf-8') as f:
+            branch_entries[branch] = yaml.load(f, Loader=yaml.SafeLoader) or {}
+
 for fileName in glob.glob(os.path.join(args.ymlDir, "*.yml")):
     name, ext = os.path.splitext(os.path.basename(fileName))
     if name.startswith('.'): continue
     if name == 'example': continue
 
-    branch_prefix = ""
     if "veilbreak" in name:
-        branch_prefix = "veilbreak_"
+        target_branch = "veilbreak"
     elif "splurt" in name:
-        branch_prefix = "splurt_"
+        target_branch = "splurt"
     elif "bubber" in name:
-        branch_prefix = "bubber_"
+        target_branch = "bubber"
     else:
-        branch_prefix = ""
+        target_branch = "upstream"
 
     fileName = os.path.abspath(fileName)
-    formattedDate = today.strftime(fileDateFormat)
+    print(' Reading {} (Targeting branch: {})...'.format(fileName, target_branch))
 
-    monthFile = os.path.join(args.ymlDir, "{}{}.yml".format(branch_prefix, formattedDate))
-
-    print(' Reading {} (Target: {})...'.format(fileName, os.path.basename(monthFile)))
     cl = {}
     with open(fileName, 'r', encoding='utf-8') as f:
         cl = yaml.load(f, Loader=yaml.SafeLoader)
 
-    currentEntries = {}
-    if os.path.exists(monthFile):
-        with open(monthFile, 'r', encoding='utf-8') as f:
-            currentEntries = yaml.load(f, Loader=yaml.SafeLoader) or {}
+    currentEntries = branch_entries[target_branch]
 
     if today not in currentEntries:
         currentEntries[today] = {}
@@ -68,18 +73,23 @@ for fileName in glob.glob(os.path.join(args.ymlDir, "*.yml")):
                 new += 1
         currentEntries[today][cl['author']] = author_entries
         if new > 0:
-            print('  Added {0} new changelog entries.'.format(new))
+            print('  Added {0} new changelog entries to {1}.'.format(new, target_branch))
 
     if cl.get('delete-after', False):
         if os.path.isfile(fileName):
             print('  Deleting {0} (delete-after set)...'.format(fileName))
             os.remove(fileName)
 
-    with open(monthFile, 'w', encoding='utf-8') as f:
-        yaml.dump(currentEntries, f, default_flow_style=False)
+print('Writing master consolidated files to directories...')
+for branch in branches:
+    prefix = "" if branch == "upstream" else branch + "_"
+
+    targetPath = os.path.join(args.ymlDir, "{}{}.yml".format(prefix, formattedDate))
+    with open(targetPath, 'w', encoding='utf-8') as f:
+        yaml.dump(branch_entries[branch], f, default_flow_style=False)
 
     if not os.path.exists(archiveDir):
         os.makedirs(archiveDir)
-    archiveFile = os.path.join(archiveDir, "{}{}.yml".format(branch_prefix, formattedDate))
+    archiveFile = os.path.join(archiveDir, "{}{}.yml".format(prefix, formattedDate))
     with open(archiveFile, 'w', encoding='utf-8') as f:
-        yaml.dump(currentEntries, f, default_flow_style=False)
+        yaml.dump(branch_entries[branch], f, default_flow_style=False)
