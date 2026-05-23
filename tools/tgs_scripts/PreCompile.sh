@@ -5,15 +5,11 @@
 set -e
 set -x
 
-#load dep exports
-#need to switch to game dir for Dockerfile weirdness
 original_dir=$PWD
 cd "$1"
 . dependencies.sh
 cd "$original_dir"
 
-
-# update rust-g
 if [ ! -d "rust-g" ]; then
 	echo "Cloning rust-g..."
 	git clone https://github.com/tgstation/rust-g
@@ -32,9 +28,7 @@ env PKG_CONFIG_ALLOW_CROSS=1 ~/.cargo/bin/cargo build --ignore-rust-version --re
 cp -f target/i686-unknown-linux-gnu/release/librust_g.so "$1/librust_g.so"
 cd ..
 
-#
 cd "$original_dir"
-# update dreamluau
 if [ ! -d "dreamluau" ]; then
 	echo "Cloning dreamluau..."
 	git clone https://github.com/tgstation/dreamluau
@@ -53,7 +47,13 @@ env PKG_CONFIG_ALLOW_CROSS=1 ~/.cargo/bin/cargo build --ignore-rust-version --re
 cp -f target/i686-unknown-linux-gnu/release/libdreamluau.so "$1/libdreamluau.so"
 cd ..
 
-# compile tgui
+if [ -f "$1/tools/ss13_genchangelog.py" ]; then
+	echo "Compiling downstream server changelogs..."
+	python3 "$1/tools/ss13_genchangelog.py" "$1/html/changelogs"
+else
+	echo "Error: ss13_genchangelog.py not found in tools directory!"
+fi
+
 echo "Compiling tgui..."
 cd "$1"
 env TG_BOOTSTRAP_CACHE="$original_dir" CBT_BUILD_MODE="TGS" tools/bootstrap/javascript.sh tools/build/build.ts
