@@ -1,30 +1,3 @@
-'''
-Usage:
-    $ python ss13_genchangelog.py html/changelogs/
-
-ss13_genchangelog.py - Generate changelog from YAML.
-
-Copyright 2013 Rob "N3X15" Nelson <nexis@7chan.org>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
-
 from __future__ import print_function
 import yaml, os, glob, sys, re, time, argparse
 from datetime import datetime, date, timedelta
@@ -38,11 +11,10 @@ opt = argparse.ArgumentParser()
 opt.add_argument('ymlDir', help='The directory of YAML changelogs we will use.')
 
 args = opt.parse_args()
-archiveDir = os.path.join(args.ymlDir, 'veilbreak_archive')  # VEILBREAK EDIT: Use veilbreak_archive
+archiveDir = os.path.join(args.ymlDir, 'veilbreak_archive')
 
 all_changelog_entries = {}
 
-# Do not change the order, add to the bottom of the array if necessary
 validPrefixes = [
     'bugfix',
     'wip',
@@ -78,14 +50,12 @@ if os.path.isfile(old_changelog_cache):
         with open(old_changelog_cache,encoding='utf-8') as f:
             (_, all_changelog_entries) = yaml.load_all(f, Loader=yaml.SafeLoader)
 
-            # Categorize changes by year and month
             for _date in all_changelog_entries.keys():
                 ty = type(_date).__name__
                 formattedDate = _date.strftime(fileDateFormat)
                 if not formattedDate in data:
                     data[formattedDate] = {}
                 data[formattedDate][_date] = all_changelog_entries[_date]
-            # Write files with changes by year and month
             for month in data.keys():
                 print("Writing " + month + ".yml...")
                 if not os.path.exists(archiveDir):
@@ -93,7 +63,6 @@ if os.path.isfile(old_changelog_cache):
                 currentFile = os.path.join(archiveDir, month + '.yml')
                 with open(currentFile, 'w', encoding='utf-8') as f:
                     yaml.dump(data[month], f, default_flow_style=False)
-        # Remove the old changelog cache, as we won't use it anymore
         print("Removing old changelog cache...")
         os.remove(old_changelog_cache)
         old_changelog_html = os.path.join(args.ymlDir, '..', 'changelog.html')
@@ -109,7 +78,7 @@ for fileName in glob.glob(os.path.join(args.ymlDir, "*.yml")):
     name, ext = os.path.splitext(os.path.basename(fileName))
     if name.startswith('.'): continue
     if name == 'example': continue
-    if "veilbreak" not in name: continue  # VEILBREAK EDIT: Only process files with "veilbreak" in the name
+    if "veilbreak" not in name: continue
     fileName = os.path.abspath(fileName)
     formattedDate = today.strftime(fileDateFormat)
     monthFile = os.path.join(archiveDir, formattedDate + '.yml')
@@ -145,3 +114,9 @@ for fileName in glob.glob(os.path.join(args.ymlDir, "*.yml")):
 
     with open(monthFile, 'w', encoding='utf-8') as f:
         yaml.dump(currentEntries, f, default_flow_style=False)
+
+    prefixes = ['veilbreak_', 'splurt_', 'bubber_', '']
+    for prefix in prefixes:
+        targetPath = os.path.join(args.ymlDir, "{}{}.yml".format(prefix, formattedDate))
+        with open(targetPath, 'w', encoding='utf-8') as f:
+            yaml.dump(currentEntries, f, default_flow_style=False)

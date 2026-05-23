@@ -118,19 +118,24 @@ const DateDropdown = (props) => {
 };
 
 const ChangelogList = (props) => {
-  const { contents, bubberContents, splurtContents, veilbreakContents } = props; // VEILBREAK EDIT
+  const { contents, bubberContents, splurtContents, veilbreakContents } = props;
+
+  const safeContents = typeof contents === 'object' && contents !== null ? contents : {};
+  const safeBubber = typeof bubberContents === 'object' && bubberContents !== null ? bubberContents : {};
+  const safeSplurt = typeof splurtContents === 'object' && splurtContents !== null ? splurtContents : {};
+  const safeVeilbreak = typeof veilbreakContents === 'object' && veilbreakContents !== null ? veilbreakContents : {};
 
   const combinedDates = {};
   Object.assign(
     combinedDates,
-    typeof contents === 'object' ? contents : {},
-    typeof bubberContents === 'object' ? bubberContents : {},
-    typeof splurtContents === 'object' ? splurtContents : {},
-    typeof veilbreakContents === 'object' ? veilbreakContents : {}, // VEILBREAK EDIT
+    safeContents,
+    safeBubber,
+    safeSplurt,
+    safeVeilbreak,
   );
 
   if (Object.keys(combinedDates).length < 1) {
-    return <p>{contents}</p>;
+    return <p>No changelog records found for this period.</p>;
   }
 
   return Object.keys(combinedDates)
@@ -139,10 +144,9 @@ const ChangelogList = (props) => {
     .map((date) => (
       <Section key={date} title={dateformat(date, 'd mmmm yyyy', true)} pb={1}>
         <Box ml={3}>
-          {/* SPLURT EDIT ADDITION: Changelog 3 */}
-          {splurtContents[date] && (
+          {safeSplurt[date] && (
             <Section mb={-2}>
-              {Object.entries(splurtContents[date]).map(([name, changes]) => (
+              {Object.entries(safeSplurt[date]).map(([name, changes]) => (
                 <SplurtChangelogEntry
                   key={name}
                   author={name}
@@ -151,25 +155,20 @@ const ChangelogList = (props) => {
               ))}
             </Section>
           )}
-          {/* SPLURT EDIT ADDITION END */}
-          {/* VEILBREAK EDIT ADDITION BEGIN */}
-          {veilbreakContents[date] && (
+          {safeVeilbreak[date] && (
             <Section mb={-2}>
-              {Object.entries(veilbreakContents[date]).map(
-                ([name, changes]) => (
-                  <VeilbreakChangelogEntry
-                    key={name}
-                    author={name}
-                    changes={changes}
-                  />
-                ),
-              )}
+              {Object.entries(safeVeilbreak[date]).map(([name, changes]) => (
+                <VeilbreakChangelogEntry
+                  key={name}
+                  author={name}
+                  changes={changes}
+                />
+              ))}
             </Section>
           )}
-          {/* VEILBREAK EDIT ADDITION END */}
-          {bubberContents[date] && (
+          {safeBubber[date] && (
             <Section mb={-2}>
-              {Object.entries(bubberContents[date]).map(([name, changes]) => (
+              {Object.entries(safeBubber[date]).map(([name, changes]) => (
                 <BubberChangelogEntry
                   key={name}
                   author={name}
@@ -178,9 +177,9 @@ const ChangelogList = (props) => {
               ))}
             </Section>
           )}
-          {contents[date] && (
+          {safeContents[date] && (
             <Section mt={-1}>
-              {Object.entries(contents[date]).map(([name, changes]) => (
+              {Object.entries(safeContents[date]).map(([name, changes]) => (
                 <ChangelogEntry key={name} author={name} changes={changes} />
               ))}
             </Section>
@@ -288,7 +287,6 @@ const ChangelogEntry = (props) => {
   );
 };
 
-// SPLURT EDIT ADDITION: Changelog 3
 const SplurtChangelogEntry = (props) => {
   const { author, changes } = props;
 
@@ -337,9 +335,7 @@ const SplurtChangelogEntry = (props) => {
     </Stack.Item>
   );
 };
-// SPLURT EDIT ADDITION END
 
-// VEILBREAK EDIT ADDITION BEGIN
 const VeilbreakChangelogEntry = (props) => {
   const { author, changes } = props;
 
@@ -388,15 +384,14 @@ const VeilbreakChangelogEntry = (props) => {
     </Stack.Item>
   );
 };
-// VEILBREAK EDIT ADDITION END
 
 export const BubberChangelog = (props) => {
   const { data } = useBackend();
   const { dates } = data;
-  const [contents, setContents] = useState('');
-  const [bubberContents, setBubberContents] = useState('');
-  const [splurtContents, setSplurtContents] = useState('');
-  const [veilbreakContents, setVeilbreakContents] = useState(''); // VEILBREAK EDIT
+  const [contents, setContents] = useState('Loading changelog data...');
+  const [bubberContents, setBubberContents] = useState('Loading changelog data...');
+  const [splurtContents, setSplurtContents] = useState('Loading changelog data...');
+  const [veilbreakContents, setVeilbreakContents] = useState('Loading changelog data...');
   const [selectedDate, setSelectedDate] = useState(dates[0]);
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
 
@@ -404,75 +399,65 @@ export const BubberChangelog = (props) => {
     setContents('Loading changelog data...');
     setBubberContents('Loading changelog data...');
     setSplurtContents('Loading changelog data...');
-    setVeilbreakContents('Loading changelog data...'); // VEILBREAK EDIT
+    setVeilbreakContents('Loading changelog data...');
     getData(selectedDate);
   }, [selectedDate]);
 
   function getData(date, attemptNumber = 1) {
     const { act } = useBackend();
-    const maxAttempts = 6;
-
-    if (attemptNumber > maxAttempts) {
-      setContents(`Failed to load data after ${maxAttempts} attempts.`);
-      return;
-    }
+    const maxAttempts = 3;
 
     act('get_month', { date });
 
     Promise.all([
-      fetch(resolveAsset(`${date}.yml`)),
-      fetch(resolveAsset(`bubber_${date}.yml`)),
-      fetch(resolveAsset(`splurt_${date}.yml`)),
-      fetch(resolveAsset(`veilbreak_${date}.yml`)), // VEILBREAK EDIT
+      fetch(resolveAsset(`${date}.yml`)).catch(() => ({ status: 404 })),
+      fetch(resolveAsset(`bubber_${date}.yml`)).catch(() => ({ status: 404 })),
+      fetch(resolveAsset(`splurt_${date}.yml`)).catch(() => ({ status: 404 })),
+      fetch(resolveAsset(`veilbreak_${date}.yml`)).catch(() => ({ status: 404 })),
     ]).then(async (links) => {
-      const result = await links[0].text();
-      const bubberResult = await links[1].text();
-      const splurtResult = await links[2].text();
-      const veilbreakResult = await links[3].text(); // VEILBREAK EDIT
+      const statuses = links.map(link => link.status);
 
-      if (
-        links[0].status !== 200 &&
-        links[1].status !== 200 &&
-        links[2].status !== 200 &&
-        links[3].status !== 200 // VEILBREAK EDIT
-      ) {
+      if (statuses.every(status => status !== 200) && attemptNumber <= maxAttempts) {
         const timeout = 50 + attemptNumber * 50;
+        const loadingString = `Loading changelog data${'.'.repeat(attemptNumber + 3)}`;
 
-        setContents(`Loading changelog data${'.'.repeat(attemptNumber + 3)}`);
-        setBubberContents(
-          `Loading changelog data${'.'.repeat(attemptNumber + 3)}`,
-        );
-        setSplurtContents(
-          'Loading changelog data' + '.'.repeat(attemptNumber + 3),
-        );
-        setVeilbreakContents(
-          // VEILBREAK EDIT
-          'Loading changelog data' + '.'.repeat(attemptNumber + 3),
-        );
+        setContents(loadingString);
+        setBubberContents(loadingString);
+        setSplurtContents(loadingString);
+        setVeilbreakContents(loadingString);
+
         setTimeout(() => {
           getData(date, attemptNumber + 1);
         }, timeout);
+        return;
+      }
+
+      if (links[0].status === 200) {
+        const text = await links[0].text();
+        try { setContents(yaml.load(text, { schema: yaml.CORE_SCHEMA }) || {}); } catch (e) { setContents({}); }
       } else {
-        if (links[0].status === 200) {
-          setContents(yaml.load(result, { schema: yaml.CORE_SCHEMA }));
-        }
-        if (links[1].status === 200) {
-          setBubberContents(
-            yaml.load(bubberResult, { schema: yaml.CORE_SCHEMA }),
-          );
-        }
-        if (links[2].status === 200) {
-          setSplurtContents(
-            yaml.load(splurtResult, { schema: yaml.CORE_SCHEMA }),
-          );
-        }
-        // VEILBREAK EDIT ADDITION BEGIN
-        if (links[3].status === 200) {
-          setVeilbreakContents(
-            yaml.load(veilbreakResult, { schema: yaml.CORE_SCHEMA }),
-          );
-        }
-        // VEILBREAK EDIT ADDITION END
+        setContents({});
+      }
+
+      if (links[1].status === 200) {
+        const text = await links[1].text();
+        try { setBubberContents(yaml.load(text, { schema: yaml.CORE_SCHEMA }) || {}); } catch (e) { setBubberContents({}); }
+      } else {
+        setBubberContents({});
+      }
+
+      if (links[2].status === 200) {
+        const text = await links[2].text();
+        try { setSplurtContents(yaml.load(text, { schema: yaml.CORE_SCHEMA }) || {}); } catch (e) { setSplurtContents({}); }
+      } else {
+        setSplurtContents({});
+      }
+
+      if (links[3].status === 200) {
+        const text = await links[3].text();
+        try { setVeilbreakContents(yaml.load(text, { schema: yaml.CORE_SCHEMA }) || {}); } catch (e) { setVeilbreakContents({}); }
+      } else {
+        setVeilbreakContents({});
       }
     });
   }
@@ -632,7 +617,7 @@ export const BubberChangelog = (props) => {
           contents={contents}
           bubberContents={bubberContents}
           splurtContents={splurtContents}
-          veilbreakContents={veilbreakContents} // VEILBREAK EDIT
+          veilbreakContents={veilbreakContents}
         />
         {footer}
       </Window.Content>
