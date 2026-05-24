@@ -12,7 +12,7 @@
 	return ..()
 
 /datum/online_jukebox_ui/ui_host(mob/user)
-    return jukebox?.parent_atom || src
+	return jukebox?.parent_atom || src
 
 /datum/online_jukebox_ui/ui_state(mob/user)
 	var/obj/machinery/jukebox/online/parent = jukebox?.parent_atom

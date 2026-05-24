@@ -73,7 +73,10 @@
 		if(!sound_loops)
 			stop_music()
 		else
-			track_start_time = world.time
+			if(online_track_hash)
+				play_library_track_internal(online_track_hash, null)
+			else
+				stop_music()
 
 /datum/online_jukebox/proc/get_ui_handler()
 	return ui
@@ -166,6 +169,7 @@
 
 	online_track_name = track_data["track_name"]
 	online_track_duration = track_data["duration"] * 10
+	online_track_hash = url_hash
 	playing_online = TRUE
 	track_start_time = world.time
 	online_error_message = ""
@@ -310,6 +314,12 @@
 	sending.y = sound_turf.y - listener_turf.y
 	sending.z = 0
 	sending.volume = volume * (pref_volume / 100)
+
+	if(track_start_time)
+		var/elapsed_ticks = world.time - track_start_time
+		if(elapsed_ticks > 0)
+			sending.offset = elapsed_ticks / 10
+
 	sending.status = active_song_sound.status | (listeners[listener] & SOUND_UPDATE)
 
 	SEND_SOUND(listener, sending)
