@@ -36,7 +36,7 @@ GLOBAL_LIST_EMPTY(jukebox_available_channels)
 		return local_path
 	var/shared_path = "/srv/tgstation_instances/livenew/Configuration/GameStaticFiles/config/jukebox_music"
 	if(fexists(shared_path))
-		jukebox_dir_cache = shared_path
+		shared_path = shared_path
 		return shared_path
 	jukebox_dir_cache = "config/jukebox_music"
 	return jukebox_dir_cache
@@ -112,8 +112,8 @@ GLOBAL_LIST_EMPTY(jukebox_available_channels)
 
 /proc/cmp_jukebox_tracks(list/a, list/b)
 	if(a["play_count"] != b["play_count"])
-		return b["play_count"] - a["play_count"]
-	return b["last_played"] - a["last_played"]
+		return a["play_count"] - b["play_count"]
+	return a["last_played"] - b["last_played"]
 
 /proc/validate_jukebox_url(url)
 	if(!url || !findtext(url, "http"))
@@ -140,9 +140,15 @@ GLOBAL_LIST_EMPTY(jukebox_available_channels)
 /proc/get_jukebox_library_stats()
 	var/list/sorted = get_sorted_library_tracks()
 	var/list/most_played = list()
-	for(var/i in 1 to min(length(sorted), 3))
-		var/list/track = sorted[i]
-		most_played += list(list("name" = track["track_name"], "plays" = track["play_count"]))
+	var/total_len = length(sorted)
+	if(total_len)
+		var/count = 0
+		for(var/i = total_len; i >= 1; i--)
+			var/list/track = sorted[i]
+			most_played += list(list("name" = track["track_name"], "plays" = track["play_count"]))
+			count++
+			if(count >= 3)
+				break
 	return list("total_tracks" = length(GLOB.jukebox_library_tracks), "max_tracks" = 50, "most_played" = most_played)
 
 /proc/record_jukebox_play(url_hash)
@@ -163,7 +169,9 @@ GLOBAL_LIST_EMPTY(jukebox_available_channels)
 	if(length(GLOB.jukebox_library_tracks) < 50)
 		return TRUE
 	var/list/sorted = get_sorted_library_tracks()
-	var/list/to_remove = sorted[length(sorted)]
+	if(!length(sorted))
+		return FALSE
+	var/list/to_remove = sorted[1]
 	var/remove_hash = to_remove["url_hash"]
 	GLOB.jukebox_library_tracks -= remove_hash
 	invalidate_library_cache()
