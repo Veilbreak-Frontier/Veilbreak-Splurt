@@ -17,16 +17,13 @@
     spawner_job_path = /datum/job/ghostcafe
     you_are_text = "You are a Cafe Robot!"
     flavour_text = "Who could have thought? This awesome local cafe accepts cyborgs too!"
-    mob_type = /mob/living/silicon/robot
+    mob_type = /mob/living/silicon/robot/model/roleplay
     allow_custom_character = ALL
     var/custom_robot_model = /obj/item/robot_model/roleplay
 
 /obj/effect/mob_spawn/ghost_role/robot/ghostcafe/special(mob/living/silicon/robot/new_spawn)
     if(!istype(new_spawn))
         return ..()
-
-    if(new_spawn.powers && islist(new_spawn.powers))
-        new_spawn.powers.Cut()
 
     if(custom_robot_model)
         var/obj/item/robot_model/RP_model = new custom_robot_model(new_spawn)
@@ -36,24 +33,10 @@
         else if(hascall(new_spawn, "respawn_modules"))
             call(new_spawn, "respawn_modules")()
 
-    var/client/saved_client = new_spawn.client
-    if(saved_client)
-        new_spawn.client = null
-
     . = ..()
 
-    if(saved_client)
-        new_spawn.client = saved_client
-
     if(new_spawn.client)
-        new_spawn.custom_name = null
-        new_spawn.updatename(new_spawn.client)
-        new_spawn.transfer_emote_pref(new_spawn.client)
         new_spawn.gender = NEUTER
-
-        if(new_spawn.powers && islist(new_spawn.powers))
-            new_spawn.powers.Cut()
-
         var/area/A = get_area(src)
         new_spawn.AddElement(/datum/element/dusts_on_catatonia)
         new_spawn.AddElement(/datum/element/dusts_on_leaving_area, list(A.type, /area/misc/hilbertshotel, /area/misc/hilbertshotel/winterwoods, /area/centcom/holding/cafe, /area/centcom/holding/cafe/vox, /area/centcom/holding/cafe/dorms, /area/centcom/holding/cafe/park))
