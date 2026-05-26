@@ -680,29 +680,30 @@ GLOBAL_LIST_EMPTY(preferences_datums)
  * * do_not_apply - A list of preference types to skip when applying preferences.
  */
 /// Applies the given preferences to a human mob.
-/datum/preferences/proc/apply_prefs_to(mob/living/carbon/human/character, icon_updates = TRUE, list/do_not_apply, visuals_only = FALSE)  // SKYRAT EDIT - Customization - ORIGINAL: /datum/preferences/proc/apply_prefs_to(mob/living/carbon/human/character, icon_updates = TRUE)
-	character.dna.features = MANDATORY_FEATURE_LIST //SKYRAT EDIT CHANGE - We need to instansiate the list with the basic features.
+/datum/preferences/proc/apply_prefs_to(mob/living/carbon/human/character, icon_updates = TRUE, list/do_not_apply, visuals_only = FALSE)
+    if(!ishuman(character))
+        return
 
-	for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
-		if (preference.savefile_identifier != PREFERENCE_CHARACTER)
-			continue
-		if (preference.type in do_not_apply)
-			continue
+    character.dna.features = MANDATORY_FEATURE_LIST
 
-		preference.apply_to_human(character, read_preference(preference.type), src) // SKYRAT EDIT - src
+    for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
+        if (preference.savefile_identifier != PREFERENCE_CHARACTER)
+            continue
+        if (preference.type in do_not_apply)
+            continue
 
-	// SKYRAT EDIT ADDITION START - middleware apply human prefs
-	for (var/datum/preference_middleware/preference_middleware as anything in middleware)
-		preference_middleware.apply_to_human(character, src, visuals_only = visuals_only)
-	// SKYRAT EDIT ADDITION END
+        preference.apply_to_human(character, read_preference(preference.type), src)
 
-	character.dna.real_name = character.real_name
+    for (var/datum/preference_middleware/preference_middleware as anything in middleware)
+        preference_middleware.apply_to_human(character, src, visuals_only = visuals_only)
 
-	if(icon_updates)
-		character.icon_render_keys = list()
-		character.update_body(is_creating = TRUE)
+    character.dna.real_name = character.real_name
 
-	SEND_SIGNAL(character, COMSIG_HUMAN_PREFS_APPLIED)
+    if(icon_updates)
+        character.icon_render_keys = list()
+        character.update_body(is_creating = TRUE)
+
+    SEND_SIGNAL(character, COMSIG_HUMAN_PREFS_APPLIED)
 
 /// Returns whether the parent mob should have the random hardcore settings enabled. Assumes it has a mind.
 /datum/preferences/proc/should_be_random_hardcore(datum/job/job, datum/mind/mind)
