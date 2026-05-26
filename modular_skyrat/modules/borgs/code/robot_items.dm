@@ -703,7 +703,7 @@
     var/success = do_after(user, 5 SECONDS, user, IGNORE_HELD_ITEM) // fourth argument is timed_action_flags
     to_chat(user, span_notice("DEBUG: do_after returned [success]"))
 
-    if(success && user.cell.use(activationCost))
+    if(success && (activationCost <= 0 || user.cell.use(activationCost)))
         to_chat(user, span_notice("DEBUG: do_after succeeded and cell.use succeeded"))
         playsound(src, 'sound/effects/bamf.ogg', 100, TRUE, -6)
         to_chat(user, span_notice("You are now disguised."))
