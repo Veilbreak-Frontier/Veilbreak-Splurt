@@ -819,12 +819,6 @@
     else
         to_chat(user, span_notice("DEBUG: disrupt called but not active"))
 
-/obj/item/borg_shapeshifter/proc/disrupt(mob/living/silicon/robot/user)
-	SIGNAL_HANDLER
-	if(active)
-		to_chat(user, span_danger("Your chameleon field deactivates."))
-		deactivate(user)
-
 // Quadruped tongue - lick lick
 /obj/item/quadborg_tongue
 	name = "synthetic tongue"
