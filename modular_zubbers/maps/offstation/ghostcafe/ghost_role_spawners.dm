@@ -27,16 +27,17 @@
         return
 
     if(custom_robot_model)
-        var/obj/item/robot_model/RP_model = new custom_robot_model(null)
-        RP_model.loc = new_spawn
-        new_spawn.model = RP_model
-        RP_model.transform_to(custom_robot_model, forced = TRUE)
+        new_spawn.model = new custom_robot_model(new_spawn)
 
     if(new_spawn.client)
         new_spawn.custom_name = null
         new_spawn.updatename(new_spawn.client)
         new_spawn.transfer_emote_pref(new_spawn.client)
         new_spawn.gender = NEUTER
+
+        if(new_spawn.powers && islist(new_spawn.powers))
+            new_spawn.powers.Cut()
+
         var/area/A = get_area(src)
         new_spawn.AddElement(/datum/element/dusts_on_catatonia)
         new_spawn.AddElement(/datum/element/dusts_on_leaving_area, list(A.type, /area/misc/hilbertshotel, /area/misc/hilbertshotel/winterwoods, /area/centcom/holding/cafe, /area/centcom/holding/cafe/vox, /area/centcom/holding/cafe/dorms, /area/centcom/holding/cafe/park))
