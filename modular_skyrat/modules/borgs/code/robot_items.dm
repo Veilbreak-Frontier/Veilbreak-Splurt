@@ -748,60 +748,76 @@
 	return TRUE
 
 /obj/item/borg_shapeshifter/process()
-	if (user && !user.cell?.use(activationUpkeep))
-		disrupt(user)
-	else
-		return PROCESS_KILL
+    if (user && activationUpkeep > 0 && !user.cell?.use(activationUpkeep))
+        to_chat(user, span_warning("DEBUG: process() killed due to upkeep failure"))
+        disrupt(user)
+    else
+        return PROCESS_KILL
 
 /obj/item/borg_shapeshifter/proc/activate(mob/living/silicon/robot/user)
-	src.user = user
-	START_PROCESSING(SSobj, src)
-	saved_icon = user.model.cyborg_base_icon
-	saved_bubble_icon = user.bubble_icon
-	saved_icon_override = user.model.cyborg_icon_override
-	saved_name = user.model.name
-	saved_model_features = user.model.model_features
-	saved_special_light_key = user.model.special_light_key
-	saved_hat_offset = user.model.hat_offset
-	user.model.name = disguise_model_name
-	user.model.cyborg_base_icon = disguise
-	user.model.cyborg_icon_override = disguise_icon_override
-	user.model.model_features = disguise_model_features
-	user.model.special_light_key = disguise_special_light_key
-	user.bubble_icon = "robot"
-	active = TRUE
-	user.update_icons()
-	user.model.update_tallborg()
-	user.model.update_quadruped()
-	user.model.update_robot_rest()
-	user.model.update_footsteps()
+    to_chat(user, span_notice("DEBUG: activate() started"))
+    src.user = user
+    START_PROCESSING(SSobj, src)
+    saved_icon = user.model.cyborg_base_icon
+    saved_bubble_icon = user.bubble_icon
+    saved_icon_override = user.model.cyborg_icon_override
+    saved_name = user.model.name
+    saved_model_features = user.model.model_features
+    saved_special_light_key = user.model.special_light_key
+    saved_hat_offset = user.model.hat_offset
+    user.model.name = disguise_model_name
+    user.model.cyborg_base_icon = disguise
+    user.model.cyborg_icon_override = disguise_icon_override
+    user.model.model_features = disguise_model_features
+    user.model.special_light_key = disguise_special_light_key
+    user.bubble_icon = "robot"
+    active = TRUE
+    user.update_icons()
+    user.model.update_tallborg()
+    user.model.update_quadruped()
+    user.model.update_robot_rest()
+    user.model.update_footsteps()
+    to_chat(user, span_notice("DEBUG: activate() finished, registering signals"))
 
-	if(listeningTo == user)
-		return
-	if(listeningTo)
-		UnregisterSignal(listeningTo, signalCache)
-	RegisterSignals(user, signalCache, PROC_REF(disrupt))
-	listeningTo = user
+    if(listeningTo == user)
+        to_chat(user, span_notice("DEBUG: listeningTo already user"))
+        return
+    if(listeningTo)
+        UnregisterSignal(listeningTo, signalCache)
+    RegisterSignals(user, signalCache, PROC_REF(disrupt))
+    listeningTo = user
+    to_chat(user, span_notice("DEBUG: signals registered"))
 
 /obj/item/borg_shapeshifter/proc/deactivate(mob/living/silicon/robot/user)
-	STOP_PROCESSING(SSobj, src)
-	if(listeningTo)
-		UnregisterSignal(listeningTo, signalCache)
-		listeningTo = null
-	do_sparks(5, FALSE, user)
-	user.model.name = saved_name
-	user.model.cyborg_base_icon = saved_icon
-	user.model.cyborg_icon_override = saved_icon_override
-	user.icon = saved_icon_override
-	user.model.model_features = saved_model_features
-	user.model.special_light_key = saved_special_light_key
-	user.bubble_icon = saved_bubble_icon
-	active = FALSE
-	user.update_icons()
-	user.model.update_tallborg()
-	user.model.update_quadruped()
-	user.model.update_robot_rest()
-	user.model.update_footsteps()
+    to_chat(user, span_notice("DEBUG: deactivate() called"))
+    STOP_PROCESSING(SSobj, src)
+    if(listeningTo)
+        UnregisterSignal(listeningTo, signalCache)
+        listeningTo = null
+    do_sparks(5, FALSE, user)
+    user.model.name = saved_name
+    user.model.cyborg_base_icon = saved_icon
+    user.model.cyborg_icon_override = saved_icon_override
+    user.icon = saved_icon_override
+    user.model.model_features = saved_model_features
+    user.model.special_light_key = saved_special_light_key
+    user.bubble_icon = saved_bubble_icon
+    active = FALSE
+    user.update_icons()
+    user.model.update_tallborg()
+    user.model.update_quadruped()
+    user.model.update_robot_rest()
+    user.model.update_footsteps()
+    to_chat(user, span_notice("DEBUG: deactivate() finished"))
+
+/obj/item/borg_shapeshifter/proc/disrupt(mob/living/silicon/robot/user)
+    SIGNAL_HANDLER
+    to_chat(user, span_warning("DEBUG: disrupt() called, active=[active]"))
+    if(active)
+        to_chat(user, span_danger("Your chameleon field deactivates."))
+        deactivate(user)
+    else
+        to_chat(user, span_notice("DEBUG: disrupt called but not active"))
 
 /obj/item/borg_shapeshifter/proc/disrupt(mob/living/silicon/robot/user)
 	SIGNAL_HANDLER
