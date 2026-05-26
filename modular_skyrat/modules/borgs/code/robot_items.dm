@@ -588,95 +588,141 @@
 		to_chat(user, span_warning("You need at least [activationCost] charge in your cell to use [src]!"))
 
 /obj/item/borg_shapeshifter/proc/toggle(mob/living/silicon/robot/user)
-	if(active)
-		playsound(src, 'sound/effects/pop.ogg', 100, TRUE, -6)
-		to_chat(user, span_notice("You deactivate \the [src]."))
-		deactivate(user)
-	else
-		if(animation_playing)
-			to_chat(user, span_notice("\the [src] is recharging."))
-			return
-		var/static/list/model_icons = sort_list(list(
-			"Standard" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "robot"),
-			"Medical" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "medical"),
-			"Cargo" = image(icon = CYBORG_ICON_CARGO, icon_state = "cargoborg"),
-			"Engineer" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "engineer"),
-			"Security" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "sec"),
-			"Service" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "service_f"),
-			"Janitor" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "janitor"),
-			"Miner" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "miner"),
-			"Peacekeeper" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "peace"),
-			"Clown" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "clown"),
-			"Syndicate" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "synd_sec"),
-			"Spider Clan" = image(icon = CYBORG_ICON_NINJA, icon_state = "ninja_engi"),
-			"Research" = image(icon = 'modular_zubbers/code/modules/silicons/borgs/sprites/robot_sci.dmi', icon_state = "research"),
-		))
-		var/model_selection = show_radial_menu(user, user, model_icons, custom_check = CALLBACK(src, PROC_REF(check_menu), user), radius = 42, require_near = TRUE)
-		if(!model_selection)
-			return FALSE
+    to_chat(user, span_notice("DEBUG: toggle() started. active = [active]"))
+    log_silicon("DEBUG: [user] toggling chameleon projector, active=[active]")
 
-		var/obj/item/robot_model/model
-		switch(model_selection)
-			if("Standard")
-				model = new /obj/item/robot_model/standard(user)
-			if("Medical")
-				model = new /obj/item/robot_model/medical(user)
-			if("Cargo")
-				model = new /obj/item/robot_model/cargo(user)
-			if("Engineer")
-				model = new /obj/item/robot_model/engineering(user)
-			if("Security")
-				model = new /obj/item/robot_model/security(user)
-			if("Service")
-				model = new /obj/item/robot_model/service(user)
-			if("Janitor")
-				model = new /obj/item/robot_model/janitor(user)
-			if("Miner")
-				model = new /obj/item/robot_model/miner(user)
-			if("Peacekeeper")
-				model = new /obj/item/robot_model/peacekeeper(user)
-			if("Clown")
-				model = new /obj/item/robot_model/clown(user)
-			if("Syndicate")
-				model = new /obj/item/robot_model/syndicatejack(user)
-			if("Spider Clan")
-				model = new /obj/item/robot_model/ninja(user)
-			if("Research")
-				model = new /obj/item/robot_model/sci(user)
-			else
-				return FALSE
-		if (!set_disguise_vars(model, user))
-			qdel(model)
-			return FALSE
-		qdel(model)
-		animation_playing = TRUE
-		to_chat(user, span_notice("You activate \the [src]."))
-		playsound(src, 'sound/effects/seedling_chargeup.ogg', 100, TRUE, -6)
-		var/start = user.filters.len
-		var/X,Y,rsq,i,f
-		for(i=1, i<=7, ++i)
-			do
-				X = 60*rand() - 30
-				Y = 60*rand() - 30
-				rsq = X*X + Y*Y
-			while(rsq<100 || rsq>900)
-			user.filters += filter(type="wave", x=X, y=Y, size=rand()*2.5+0.5, offset=rand())
-		for(i=1, i<=7, ++i)
-			f = user.filters[start+i]
-			animate(f, offset=f:offset, time=0, loop=3, flags=ANIMATION_PARALLEL)
-			animate(offset=f:offset-1, time=rand()*20+10)
-		if (do_after(user, 5 SECONDS, user, IGNORE_HELD_ITEM) && user.cell.use(activationCost))
-			playsound(src, 'sound/effects/bamf.ogg', 100, TRUE, -6)
-			to_chat(user, span_notice("You are now disguised."))
-			activate(user)
-		else
-			to_chat(user, span_warning("The chameleon field fizzles."))
-			do_sparks(3, FALSE, user)
-			for(i=1, i<=min(7, user.filters.len), ++i) // removing filters that are animating does nothing, we gotta stop the animations first
-				f = user.filters[start+i]
-				animate(f)
-		user.filters = null
-		animation_playing = FALSE
+    if(active)
+        playsound(src, 'sound/effects/pop.ogg', 100, TRUE, -6)
+        to_chat(user, span_notice("You deactivate \the [src]."))
+        deactivate(user)
+        return
+
+    // Not active, attempting to activate
+    if(animation_playing)
+        to_chat(user, span_notice("\the [src] is recharging."))
+        log_silicon("DEBUG: animation_playing = TRUE, aborting")
+        return
+
+    // Cell check
+    if(!user.cell)
+        to_chat(user, span_warning("DEBUG: No cell detected!"))
+        log_silicon("DEBUG: [user] has no cell")
+        return
+    to_chat(user, span_notice("DEBUG: Cell charge = [user.cell.charge] / [user.cell.maxcharge]"))
+    if(user.cell.charge < activationCost)
+        to_chat(user, span_warning("DEBUG: Not enough charge. Need [activationCost], have [user.cell.charge]"))
+        return
+
+    // Radial menu for model selection
+    var/static/list/model_icons = sort_list(list(
+        "Standard" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "robot"),
+        "Medical" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "medical"),
+        "Cargo" = image(icon = CYBORG_ICON_CARGO, icon_state = "cargoborg"),
+        "Engineer" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "engineer"),
+        "Security" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "sec"),
+        "Service" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "service_f"),
+        "Janitor" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "janitor"),
+        "Miner" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "miner"),
+        "Peacekeeper" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "peace"),
+        "Clown" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "clown"),
+        "Syndicate" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "synd_sec"),
+        "Spider Clan" = image(icon = CYBORG_ICON_NINJA, icon_state = "ninja_engi"),
+        "Research" = image(icon = 'modular_zubbers/code/modules/silicons/borgs/sprites/robot_sci.dmi', icon_state = "research"),
+    ))
+    var/model_selection = show_radial_menu(user, user, model_icons, custom_check = CALLBACK(src, PROC_REF(check_menu), user), radius = 42, require_near = TRUE)
+    if(!model_selection)
+        to_chat(user, span_notice("DEBUG: No model selected, cancelling."))
+        log_silicon("DEBUG: No model selected")
+        return
+    to_chat(user, span_notice("DEBUG: Selected model = [model_selection]"))
+
+    // Create temporary model to read skin data
+    var/obj/item/robot_model/model
+    switch(model_selection)
+        if("Standard")
+            model = new /obj/item/robot_model/standard(user)
+        if("Medical")
+            model = new /obj/item/robot_model/medical(user)
+        if("Cargo")
+            model = new /obj/item/robot_model/cargo(user)
+        if("Engineer")
+            model = new /obj/item/robot_model/engineering(user)
+        if("Security")
+            model = new /obj/item/robot_model/security(user)
+        if("Service")
+            model = new /obj/item/robot_model/service(user)
+        if("Janitor")
+            model = new /obj/item/robot_model/janitor(user)
+        if("Miner")
+            model = new /obj/item/robot_model/miner(user)
+        if("Peacekeeper")
+            model = new /obj/item/robot_model/peacekeeper(user)
+        if("Clown")
+            model = new /obj/item/robot_model/clown(user)
+        if("Syndicate")
+            model = new /obj/item/robot_model/syndicatejack(user)
+        if("Spider Clan")
+            model = new /obj/item/robot_model/ninja(user)
+        if("Research")
+            model = new /obj/item/robot_model/sci(user)
+        else
+            to_chat(user, span_warning("DEBUG: Invalid model selection"))
+            return
+
+    to_chat(user, span_notice("DEBUG: Temporary model created: [model]"))
+
+    if(!set_disguise_vars(model, user))
+        to_chat(user, span_warning("DEBUG: set_disguise_vars() returned FALSE – skin selection cancelled or failed."))
+        qdel(model)
+        return
+    to_chat(user, span_notice("DEBUG: Disguise vars set successfully"))
+    qdel(model)
+
+    // Start transformation
+    animation_playing = TRUE
+    to_chat(user, span_notice("You activate \the [src]."))
+    playsound(src, 'sound/effects/seedling_chargeup.ogg', 100, TRUE, -6)
+
+    // Visual effect (wave filters)
+    var/start = user.filters.len
+    var/X,Y,rsq,i,f
+    for(i=1, i<=7, ++i)
+        do
+            X = 60*rand() - 30
+            Y = 60*rand() - 30
+            rsq = X*X + Y*Y
+        while(rsq<100 || rsq>900)
+        user.filters += filter(type="wave", x=X, y=Y, size=rand()*2.5+0.5, offset=rand())
+    for(i=1, i<=7, ++i)
+        f = user.filters[start+i]
+        animate(f, offset=f:offset, time=0, loop=3, flags=ANIMATION_PARALLEL)
+        animate(offset=f:offset-1, time=rand()*20+10)
+
+    // The critical do_after call with flags
+    to_chat(user, span_notice("DEBUG: Starting do_after with delay 5 seconds, flags = IGNORE_HELD_ITEM"))
+    var/success = do_after(user, 5 SECONDS, user, IGNORE_HELD_ITEM) // fourth argument is timed_action_flags
+    to_chat(user, span_notice("DEBUG: do_after returned [success]"))
+
+    if(success && user.cell.use(activationCost))
+        to_chat(user, span_notice("DEBUG: do_after succeeded and cell.use succeeded"))
+        playsound(src, 'sound/effects/bamf.ogg', 100, TRUE, -6)
+        to_chat(user, span_notice("You are now disguised."))
+        activate(user)
+    else
+        to_chat(user, span_warning("The chameleon field fizzles."))
+        if(!success)
+            to_chat(user, span_warning("DEBUG: do_after failed (interrupted or conditions not met)."))
+        else if(!user.cell.use(activationCost))
+            to_chat(user, span_warning("DEBUG: cell.use([activationCost]) failed – charge = [user.cell ? user.cell.charge : "null"]"))
+        do_sparks(3, FALSE, user)
+
+    // Clean up filters
+    for(i=1, i<=min(7, user.filters.len), ++i)
+        f = user.filters[start+i]
+        animate(f)
+    user.filters = null
+    animation_playing = FALSE
+    to_chat(user, span_notice("DEBUG: toggle() finished"))
 
 /obj/item/borg_shapeshifter/proc/set_disguise_vars(obj/item/robot_model/disguise_model, mob/living/silicon/robot/cyborg)
 	if (!disguise_model || !cyborg)
