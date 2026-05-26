@@ -59,9 +59,11 @@
 	. = ..()
 	robot = loc
 	if(!istype(robot))
-		stack_trace("Robot model ([src]) initialized outside of a robot at [AREACOORD(robot)]! \
-			This should never happen, make sure this item is not map-placed.")
-		return INITIALIZE_HINT_QDEL
+		if(istype(loc, /mob/living/silicon/robot))
+			robot = loc
+		else
+			stack_trace("Robot model ([src]) initialized outside of a robot at [AREACOORD(robot)]! This should never happen, make sure this item is not map-placed.")
+			return INITIALIZE_HINT_QDEL
 	create_storage(storage_type = /datum/storage/cyborg_internal_storage)
 	//src is what we store items visible to borgs, we'll store things in the bot itself otherwise.
 	for(var/path in basic_modules)
@@ -239,40 +241,35 @@
 	..()
 
 /obj/item/robot_model/proc/transform_to(new_config_type, forced = FALSE, transform = TRUE)
-	var/mob/living/silicon/robot/cyborg = loc
-	var/obj/item/robot_model/new_model = new new_config_type(cyborg)
-	if(!new_model.be_transformed_to(src, forced))
-		qdel(new_model)
-		return
-	cyborg.drop_all_held_items()
-	cyborg.model = new_model
-	cyborg.update_module_innate()
-	// SPLURT EDIT START - CYBORGS - Dogborg specific modules
-	if(TRAIT_R_DOGBORG in new_model.model_features)
-		new_model.dogborg_equip()
-	// SPLURT EDIT END
-	new_model.rebuild_modules()
-	cyborg.radio.recalculateChannels()
-	cyborg.set_modularInterface_theme()
-	cyborg.diag_hud_set_health()
-	cyborg.diag_hud_set_status()
-	cyborg.diag_hud_set_borgcell()
-	cyborg.diag_hud_set_aishell()
-	log_silicon("CYBORG: [key_name(cyborg)] has transformed into the [new_model] model.")
+    var/mob/living/silicon/robot/cyborg = loc
+    var/obj/item/robot_model/new_model = new new_config_type(cyborg)
+    if(!new_model.be_transformed_to(src, forced))
+        qdel(new_model)
+        return
+    cyborg.drop_all_held_items()
+    cyborg.model = new_model
+    cyborg.update_module_innate()
+    if(TRAIT_R_DOGBORG in new_model.model_features)
+        new_model.dogborg_equip()
+    new_model.rebuild_modules()
+    if(cyborg.radio)
+        cyborg.radio.recalculateChannels()
+    cyborg.set_modularInterface_theme()
+    cyborg.diag_hud_set_health()
+    cyborg.diag_hud_set_status()
+    cyborg.diag_hud_set_borgcell()
+    cyborg.diag_hud_set_aishell()
+    log_silicon("CYBORG: [key_name(cyborg)] has transformed into the [new_model] model.")
 
-	//SKYRAT EDIT ADDITION BEGIN - ALTBORGS - Old check for 'dogborg' var no longer necessary, refactored into model_features instead.
-	new_model.update_tallborg()
-	//SKYRAT EDIT ADDITION END
-	//BUBBER EDIT ADDTION BEGIN
-	new_model.update_quadruped()
-	new_model.update_lightweight()
-	new_model.update_robot_rest()
-	new_model.update_footsteps()
-	//BUBBER EDIT ADDTION END
-	if(transform)
-		INVOKE_ASYNC(new_model, PROC_REF(do_transform_animation))
-	qdel(src)
-	return new_model
+    new_model.update_tallborg()
+    new_model.update_quadruped()
+    new_model.update_lightweight()
+    new_model.update_robot_rest()
+    new_model.update_footsteps()
+    if(transform)
+        INVOKE_ASYNC(new_model, PROC_REF(do_transform_animation))
+    qdel(src)
+    return new_model
 
 /obj/item/robot_model/proc/be_transformed_to(obj/item/robot_model/old_model, forced = FALSE)
 	if(HAS_TRAIT(robot, TRAIT_NO_TRANSFORM))

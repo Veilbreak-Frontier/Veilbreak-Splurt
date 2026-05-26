@@ -12,44 +12,49 @@
 	var/restricted_species
 
 /obj/effect/mob_spawn/ghost_role/create(mob/mob_possessor, newname, apply_prefs = FALSE)
-	//if we can load our own appearance and its not restricted, try
+    var/mob/living/spawned_mob = ..(mob_possessor, newname, apply_prefs)
 
-	var/mob/living/carbon/human/spawned_human = ..(mob_possessor, newname, apply_prefs)
+    if(!spawned_mob)
+        return null
 
-	if(!apply_prefs)
-		var/datum/language_holder/holder = spawned_human.get_language_holder()
-		holder.get_selected_language() //we need this here so a language starts off selected
+    if(!apply_prefs)
+        if(ishuman(spawned_mob))
+            var/mob/living/carbon/human/H = spawned_mob
+            var/datum/language_holder/holder = H.get_language_holder()
+            holder.get_selected_language()
+        return spawned_mob
 
-		return spawned_human
+    if(spawned_mob.client && spawned_mob.client.prefs)
+        spawned_mob.client.prefs.safe_transfer_prefs_to(spawned_mob)
 
-	spawned_human?.client?.prefs?.safe_transfer_prefs_to(spawned_human)
-	spawned_human.dna.update_dna_identity()
-	if(spawned_human.mind)
-		spawned_human.mind.name = spawned_human.real_name // the mind gets initialized with the random name given as a result of the parent create() so we need to readjust it
-	spawned_human.dna.species.give_important_for_life(spawned_human) // make sure they get plasmaman/vox internals etc before anything else
+    if(ishuman(spawned_mob))
+        var/mob/living/carbon/human/H = spawned_mob
+        if(H.dna)
+            H.dna.update_dna_identity()
+            if(H.mind)
+                H.mind.name = H.real_name
+            H.dna.species.give_important_for_life(H)
 
-	if(quirks_enabled)
-		SSquirks.AssignQuirks(spawned_human, spawned_human.client)
-		// Latejoin assigns quirks first, then powers. safe_transfer_prefs_to already ran assign_powers; quirks can swap limbs/organs afterward, so augments would be missing while power datums remain. Reset and re-apply.
-		spawned_human.cleanse_power_datums()
-		SSpowers.assign_powers(spawned_human, spawned_human.client)
+        if(quirks_enabled)
+            SSquirks.AssignQuirks(H, H.client)
+            H.cleanse_power_datums()
+            SSpowers.assign_powers(H, H.client)
 
-	post_transfer_prefs(spawned_human)
+        if(loadout_enabled)
+            ASYNC
+                H.equip_outfit_and_loadout(outfit, H.client.prefs)
+        else
+            equip(H)
+    else
+        equip(spawned_mob)
 
-	if(loadout_enabled)
-		ASYNC // Expensive and not needing to return
-			spawned_human.equip_outfit_and_loadout(outfit, spawned_human.client.prefs)
-	else
-		equip(spawned_human)
+    var/obj/machinery/computer/cryopod/control_computer = find_control_computer()
+    var/alt_name = get_spawner_outfit_name()
+    GLOB.ghost_records.Add(list(list("name" = spawned_mob.real_name, "rank" = alt_name ? alt_name : name)))
+    if(control_computer)
+        control_computer.announce("CRYO_JOIN", spawned_mob.real_name, name)
 
-	var/obj/machinery/computer/cryopod/control_computer = find_control_computer()
-
-	var/alt_name = get_spawner_outfit_name()
-	GLOB.ghost_records.Add(list(list("name" = spawned_human.real_name, "rank" = alt_name ? alt_name : name)))
-	if(control_computer)
-		control_computer.announce("CRYO_JOIN", spawned_human.real_name, name)
-
-	return spawned_human
+    return spawned_mob
 
 
 // Anything that can potentially be overwritten by transferring prefs must go in this proc
