@@ -1,9 +1,9 @@
 /obj/effect/mob_spawn/ghost_role/robot
-	name = "Ghost Role Robot"
-	prompt_name = "a robot"
-	you_are_text = "You are a robot. This probably shouldn't be happening."
-	flavour_text = "You are a robot. This probably shouldn't be happening."
-	mob_type = /mob/living/silicon/robot
+    name = "Ghost Role Robot"
+    prompt_name = "a robot"
+    you_are_text = "You are a robot. This probably shouldn't be happening."
+    flavour_text = "You are a robot. This probably shouldn't be happening."
+    mob_type = /mob/living/silicon/robot
 
 /obj/effect/mob_spawn/ghost_role/robot/ghostcafe
     name = "Cafe Robotic Storage"
@@ -27,7 +27,12 @@
         return
 
     if(custom_robot_model)
-        new_spawn.model = new custom_robot_model(new_spawn)
+        var/obj/item/robot_model/RP_model = new custom_robot_model(new_spawn)
+        new_spawn.model = RP_model
+        if(hascall(RP_model, "transform_to"))
+            call(RP_model, "transform_to")(custom_robot_model, forced = TRUE)
+        else if(hascall(new_spawn, "respawn_modules"))
+            call(new_spawn, "respawn_modules")()
 
     if(new_spawn.client)
         new_spawn.custom_name = null
@@ -35,7 +40,9 @@
         new_spawn.transfer_emote_pref(new_spawn.client)
         new_spawn.gender = NEUTER
 
-        if(new_spawn.powers && islist(new_spawn.powers))
+        if(hascall(new_spawn, "cleanse_power_datums"))
+            call(new_spawn, "cleanse_power_datums")()
+        else if(new_spawn.powers && islist(new_spawn.powers))
             new_spawn.powers.Cut()
 
         var/area/A = get_area(src)
