@@ -12,9 +12,12 @@
 		make_laws()
 
 /mob/living/silicon/proc/log_current_laws()
-	var/list/the_laws = laws.get_law_list(include_zeroth = TRUE)
-	var/lawtext = the_laws.Join(" ")
-	log_silicon("LAW: [key_name(src)] spawned with [lawtext]")
+    if(!laws)
+        addtimer(CALLBACK(src, .proc/log_current_laws), 1 SECONDS)
+        return
+    var/list/the_laws = laws.get_law_list(include_zeroth = TRUE)
+    var/lawtext = the_laws.Join(" ")
+    log_silicon("LAW: [key_name(src)] spawned with [lawtext]")
 
 /mob/living/silicon/proc/deadchat_lawchange()
 	var/list/the_laws = laws.get_law_list(include_zeroth = TRUE)
