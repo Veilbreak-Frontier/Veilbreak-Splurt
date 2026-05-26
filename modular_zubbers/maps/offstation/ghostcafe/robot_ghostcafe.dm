@@ -4,18 +4,26 @@
     set_model = /obj/item/robot_model/roleplay
     radio = null
 
-/mob/living/silicon/robot/model/roleplay/add_archetype_power(datum/power/P, client/C, forced)
+/mob/living/silicon/robot/model/roleplay/add_archetype_power(datum/power/P, client/override_client, add_unique = TRUE)
     return FALSE
 
 /mob/living/silicon/robot/model/roleplay/Initialize(mapload)
-    . = ..()
     cell = new /obj/item/stock_parts/power_store/cell/infinite(src, 30000)
-    laws = new /datum/ai_laws/roleplay()
     if(!QDELETED(builtInCamera))
         QDEL_NULL(builtInCamera)
+    return ..()   // parent will call make_laws()
 
 /mob/living/silicon/robot/model/roleplay/binarycheck()
     return FALSE
+
+/mob/living/silicon/robot/model/roleplay/make_laws()
+    laws = new /datum/ai_laws/roleplay()
+    if(islist(laws?.inherent))
+        laws.inherent = list()   // roleplay borgs have no inherent laws
+    set_zeroth_law(laws.zeroth)
+    laws_sanity_check()
+    log_current_laws()
+
 
 /obj/item/modular_computer/pda/silicon/cyborg/roleplay
     starting_programs = list(

@@ -618,31 +618,31 @@
 		var/obj/item/robot_model/model
 		switch(model_selection)
 			if("Standard")
-				model = new /obj/item/robot_model/standard
+				model = new /obj/item/robot_model/standard(user)
 			if("Medical")
-				model = new /obj/item/robot_model/medical
+				model = new /obj/item/robot_model/medical(user)
 			if("Cargo")
-				model = new /obj/item/robot_model/cargo
+				model = new /obj/item/robot_model/cargo(user)
 			if("Engineer")
-				model = new /obj/item/robot_model/engineering
+				model = new /obj/item/robot_model/engineering(user)
 			if("Security")
-				model = new /obj/item/robot_model/security
+				model = new /obj/item/robot_model/security(user)
 			if("Service")
-				model = new /obj/item/robot_model/service
+				model = new /obj/item/robot_model/service(user)
 			if("Janitor")
-				model = new /obj/item/robot_model/janitor
+				model = new /obj/item/robot_model/janitor(user)
 			if("Miner")
-				model = new /obj/item/robot_model/miner
+				model = new /obj/item/robot_model/miner(user)
 			if("Peacekeeper")
-				model = new /obj/item/robot_model/peacekeeper
+				model = new /obj/item/robot_model/peacekeeper(user)
 			if("Clown")
-				model = new /obj/item/robot_model/clown
+				model = new /obj/item/robot_model/clown(user)
 			if("Syndicate")
-				model = new /obj/item/robot_model/syndicatejack
+				model = new /obj/item/robot_model/syndicatejack(user)
 			if("Spider Clan")
-				model = new /obj/item/robot_model/ninja
+				model = new /obj/item/robot_model/ninja(user)
 			if("Research")
-				model = new /obj/item/robot_model/sci
+				model = new /obj/item/robot_model/sci(user)
 			else
 				return FALSE
 		if (!set_disguise_vars(model, user))
