@@ -22,9 +22,11 @@
     var/custom_robot_model = /obj/item/robot_model/roleplay
 
 /obj/effect/mob_spawn/ghost_role/robot/ghostcafe/special(mob/living/silicon/robot/new_spawn)
-    . = ..()
     if(!istype(new_spawn))
-        return
+        return ..()
+
+    if(new_spawn.powers && islist(new_spawn.powers))
+        new_spawn.powers.Cut()
 
     if(custom_robot_model)
         var/obj/item/robot_model/RP_model = new custom_robot_model(new_spawn)
@@ -34,15 +36,22 @@
         else if(hascall(new_spawn, "respawn_modules"))
             call(new_spawn, "respawn_modules")()
 
+    var/client/saved_client = new_spawn.client
+    if(saved_client)
+        new_spawn.client = null
+
+    . = ..()
+
+    if(saved_client)
+        new_spawn.client = saved_client
+
     if(new_spawn.client)
         new_spawn.custom_name = null
         new_spawn.updatename(new_spawn.client)
         new_spawn.transfer_emote_pref(new_spawn.client)
         new_spawn.gender = NEUTER
 
-        if(hascall(new_spawn, "cleanse_power_datums"))
-            call(new_spawn, "cleanse_power_datums")()
-        else if(new_spawn.powers && islist(new_spawn.powers))
+        if(new_spawn.powers && islist(new_spawn.powers))
             new_spawn.powers.Cut()
 
         var/area/A = get_area(src)
