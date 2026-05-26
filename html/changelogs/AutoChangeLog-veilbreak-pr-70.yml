@@ -1,0 +1,5 @@
+author: "Veilbreak-Frontier"
+delete-after: True
+changes:
+  - bugfix: "Fixed chameleon projector in ghost cafe."
+  - bugfix: "Fixed ghost cafe law logging."
