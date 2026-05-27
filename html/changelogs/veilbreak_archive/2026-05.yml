@@ -1,0 +1,17 @@
+2026-05-27:
+  Veilbreak-Frontier:
+  - rscadd: '"Added Veilbreak''s own changelog archive and UI integration"'
+  - code_imp: '"Created veilbreak_archive folder for separate changelog storage"'
+  - code_imp: '"Updated changelog.dm to send veilbreak_YYYY-MM.yml assets"'
+  - code_imp: '"Modified autoChangelog.js to write Veilbreak PR changelogs to the
+      correct path"'
+  - code_imp: '"Adjusted ss13_genchangelog.py to compile Veilbreak monthly YAMLs"'
+  - code_imp: '"Extended BubberChangelog.tsx to display Veilbreak entries with crystal_16.png
+      logo"'
+  - config: '"Added crystal_16.png to server_logos asset datum"'
+  - bugfix: '"Fixed a runtime error when closing the preferences menu as a ghost or
+      observer."'
+  - bugfix: '"Fixed a server runtime crash when unpacking cardboard ration crates
+      or closets containing packing peanuts."'
+  - bugfix: '"Fixed a hard-deletion loop crash that occurred when a mob inside a mob_holder
+      (such as a cockroach) died or was otherwise deleted while being carried."'
