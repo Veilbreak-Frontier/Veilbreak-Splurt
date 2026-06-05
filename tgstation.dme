@@ -11295,3 +11295,4 @@
 #include "modular_zzplurt/code/game/objects/items/plushes.dm"
 #include "modular_zzplurt/code/modules/vending/games.dm"
 #include "modular_zzplurt/code/modules/client/loadout/toys.dm"
+#include "modular_zzplurt/code/game/objects/items/toys.dm"
