@@ -40,7 +40,7 @@
 /datum/action/cooldown/power/warfighter/command/can_use(mob/living/user, mob/living/target)
 	. = ..()
 	// If the target can't hear or see you
-	if(!target.can_hear() && !can_see(target, user))
+	if(HAS_TRAIT(target, TRAIT_DEAF) && !can_see(target, user))
 		owner.balloon_alert(user, "target can't perceive you!")
 		return FALSE
 	// If we can't talk nor use our hands.

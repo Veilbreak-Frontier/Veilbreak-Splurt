@@ -239,7 +239,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	var/obj/item/stock_parts/power_store/cell/cell = attacking_item
 	if(cell.charge == cell.maxcharge) // Punishment for greed
 		to_chat(user, span_danger("You try to charge [cell], but it is already fully energized. You are not sure if this was a good idea..."))
-		cell.explode()
+		cell.try_explode(TRUE)
 		return
 	to_chat(user, span_notice("You charge [cell] on [src]!"))
 	cell.give(cell.maxcharge)
