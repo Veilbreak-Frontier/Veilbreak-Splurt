@@ -44,43 +44,45 @@
     inherent = list()
 
 /obj/item/robot_model/roleplay
-    name = "Roleplay"
-    basic_modules = list(
-        /obj/item/assembly/flash/cyborg,
-        /obj/item/extinguisher/mini,
-        /obj/item/weldingtool/largetank/cyborg,
-        /obj/item/borg/cyborg_omnitool/engineering,
-        /obj/item/borg/cyborg_omnitool/engineering,
-        /obj/item/multitool/cyborg,
-        /obj/item/stack/sheet/iron,
-        /obj/item/stack/sheet/glass,
-        /obj/item/borg/apparatus/sheet_manipulator,
-        /obj/item/borg/apparatus/beaker/service,
-        /obj/item/stack/rods/cyborg,
-        /obj/item/stack/tile/iron,
-        /obj/item/stack/cable_coil,
-        /obj/item/restraints/handcuffs/cable/zipties,
-        /obj/item/rsf/cyborg,
-        /obj/item/reagent_containers/borghypo/borgshaker/specific/juice,
-        /obj/item/reagent_containers/borghypo/borgshaker/specific/soda,
-        /obj/item/reagent_containers/borghypo/borgshaker/specific/alcohol,
-        /obj/item/reagent_containers/borghypo/borgshaker/specific/misc,
-        /obj/item/borg/apparatus/beaker,
-        /obj/item/borg/apparatus/beaker,
-        /obj/item/soap/nanotrasen,
-        /obj/item/mop,
-        /obj/item/lightreplacer,
-        /obj/item/borg/cyborghug,
-        /obj/item/quadborg_nose,
-        /obj/item/quadborg_tongue,
-        /obj/item/reagent_containers/borghypo,
-        /obj/item/borg_shapeshifter/stable)
-    hat_offset = list("north" = list(0, -3), "south" = list(0, -3), "east" = list(0, -3), "west" = list(0, -3))
+	name = "Roleplay"
+	basic_modules = list(
+		/obj/item/assembly/flash/cyborg,
+		/obj/item/extinguisher/mini,
+		/obj/item/weldingtool/largetank/cyborg,
+		/obj/item/borg/cyborg_omnitool/engineering,
+		/obj/item/borg/cyborg_omnitool/engineering,
+		/obj/item/multitool/cyborg,
+		/obj/item/stack/sheet/iron,
+		/obj/item/stack/sheet/glass,
+		/obj/item/borg/apparatus/sheet_manipulator,
+		/obj/item/borg/apparatus/beaker/service,
+		/obj/item/stack/rods/cyborg,
+		/obj/item/stack/tile/iron,
+		/obj/item/stack/cable_coil,
+		/obj/item/restraints/handcuffs/cable/zipties,
+		/obj/item/rsf/cyborg,
+		/obj/item/reagent_containers/borghypo/borgshaker/specific/juice, // They can make glasses, and have their own, let them serve drinks!
+		/obj/item/reagent_containers/borghypo/borgshaker/specific/soda,
+		/obj/item/reagent_containers/borghypo/borgshaker/specific/alcohol,
+		/obj/item/reagent_containers/borghypo/borgshaker/specific/misc,
+		/obj/item/borg/apparatus/beaker,
+		/obj/item/borg/apparatus/beaker,
+		/obj/item/soap/nanotrasen,
+		/obj/item/mop, // Soap's good and all, but a mop is good, too
+		/obj/item/lightreplacer,
+		/obj/item/borg/cyborghug,
+		/obj/item/quadborg_nose,
+		/obj/item/quadborg_tongue,
+		/obj/item/reagent_containers/borghypo,
+		/obj/item/borg_shapeshifter/stable,
+		/obj/item/borg_shapeshifter)
+	hat_offset = list("north" = list(0, -3), "south" = list(0, -3), "east" = list(0, -3), "west" = list(0, -3))
 
 /obj/item/borg_shapeshifter/stable
-    signalCache = list()
-    activationCost = 0
-    activationUpkeep = 0
+	name = "Stable Shapeshifter Module"
+	signalCache = list()
+	activationCost = 0
+	activationUpkeep = 0
 
 /obj/item/robot_model/roleplay/respawn_consumable(mob/living/silicon/robot/cyborg, coeff = 1)
     ..()

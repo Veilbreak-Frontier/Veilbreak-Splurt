@@ -579,7 +579,7 @@
 	return TRUE
 
 /obj/item/borg_shapeshifter/attack_self(mob/living/silicon/robot/user)
-	if (user && user.cell && user.cell.charge >  activationCost)
+	if (user && use_power(user, activationCost))
 		if (isturf(user.loc))
 			toggle(user)
 		else
@@ -594,62 +594,60 @@
 		deactivate(user)
 		return
 
-	if(animation_playing)
-		to_chat(user, span_notice("\the [src] is recharging."))
-		return
-
-	if(!user.cell || user.cell.charge < activationCost)
-		to_chat(user, span_warning("You need at least [activationCost] charge in your cell to use [src]!"))
-		return
-
-	var/static/list/model_icons = sort_list(list(
-		"Standard" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "robot"),
-		"Medical" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "medical"),
-		"Cargo" = image(icon = CYBORG_ICON_CARGO, icon_state = "cargoborg"),
-		"Engineer" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "engineer"),
-		"Security" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "sec"),
-		"Service" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "service_f"),
-		"Janitor" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "janitor"),
-		"Miner" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "miner"),
-		"Peacekeeper" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "peace"),
-		"Clown" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "clown"),
-		"Syndicate" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "synd_sec"),
-		"Spider Clan" = image(icon = CYBORG_ICON_NINJA, icon_state = "ninja_engi"),
-		"Research" = image(icon = 'modular_zubbers/code/modules/silicons/borgs/sprites/robot_sci.dmi', icon_state = "research"),
-	))
-
-	var/model_selection = show_radial_menu(user, user, model_icons, custom_check = CALLBACK(src, PROC_REF(check_menu), user), radius = 42, require_near = TRUE)
-	if(!model_selection)
-		return
-
-	var/obj/item/robot_model/model
-	switch(model_selection)
-		if("Standard")
-			model = new /obj/item/robot_model/standard(user)
-		if("Medical")
-			model = new /obj/item/robot_model/medical(user)
-		if("Cargo")
-			model = new /obj/item/robot_model/cargo(user)
-		if("Engineer")
-			model = new /obj/item/robot_model/engineering(user)
-		if("Security")
-			model = new /obj/item/robot_model/security(user)
-		if("Service")
-			model = new /obj/item/robot_model/service(user)
-		if("Janitor")
-			model = new /obj/item/robot_model/janitor(user)
-		if("Miner")
-			model = new /obj/item/robot_model/miner(user)
-		if("Peacekeeper")
-			model = new /obj/item/robot_model/peacekeeper(user)
-		if("Clown")
-			model = new /obj/item/robot_model/clown(user)
-		if("Syndicate")
-			model = new /obj/item/robot_model/syndicatejack(user)
-		if("Spider Clan")
-			model = new /obj/item/robot_model/ninja(user)
-		if("Research")
-			model = new /obj/item/robot_model/sci(user)
+		var/obj/item/robot_model/model
+		switch(model_selection)
+			if("Standard")
+				model = new /obj/item/robot_model/standard
+			if("Medical")
+				model = new /obj/item/robot_model/medical
+			if("Cargo")
+				model = new /obj/item/robot_model/cargo
+			if("Engineer")
+				model = new /obj/item/robot_model/engineering
+			if("Security")
+				model = new /obj/item/robot_model/security
+			if("Service")
+				model = new /obj/item/robot_model/service
+			if("Janitor")
+				model = new /obj/item/robot_model/janitor
+			if("Miner")
+				model = new /obj/item/robot_model/miner
+			if("Peacekeeper")
+				model = new /obj/item/robot_model/peacekeeper
+			if("Clown")
+				model = new /obj/item/robot_model/clown
+			if("Syndicate")
+				model = new /obj/item/robot_model/syndicatejack
+			if("Spider Clan")
+				model = new /obj/item/robot_model/ninja
+			if("Research")
+				model = new /obj/item/robot_model/sci
+			else
+				return FALSE
+		if (!set_disguise_vars(model, user))
+			qdel(model)
+			return FALSE
+		qdel(model)
+		animation_playing = TRUE
+		to_chat(user, span_notice("You activate \the [src]."))
+		playsound(src, 'sound/effects/seedling_chargeup.ogg', 100, TRUE, -6)
+		var/start = user.filters.len
+		var/X,Y,rsq,i,f
+		for(i=1, i<=7, ++i)
+			do
+				X = 60*rand() - 30
+				Y = 60*rand() - 30
+				rsq = X*X + Y*Y
+			while(rsq<100 || rsq>900)
+			user.filters += filter(type="wave", x=X, y=Y, size=rand()*2.5+0.5, offset=rand())
+		for(i=1, i<=7, ++i)
+			f = user.filters[start+i]
+			animate(f, offset=f:offset, time=0, loop=3, flags=ANIMATION_PARALLEL)
+			animate(offset=f:offset-1, time=rand()*20+10)
+		if (do_after(user, 5 SECONDS, target=user) && use_power(user, activationCost))
+			playsound(src, 'sound/effects/bamf.ogg', 100, TRUE, -6)
+			to_chat(user, span_notice("You are now disguised."))
+			activate(user)
 		else
 			return
 
@@ -716,10 +714,17 @@
 	return TRUE
 
 /obj/item/borg_shapeshifter/process()
-	if(user && activationUpkeep > 0 && !user.cell?.use(activationUpkeep))
+	if (user && !use_power(user, activationUpkeep))
 		disrupt(user)
 	else
 		return PROCESS_KILL
+
+/obj/item/borg_shapeshifter/proc/use_power(mob/living/silicon/robot/user, amount)
+	if(!istype(user))
+		return 0
+	if(!amount)
+		return 1
+	return user.cell?.use(amount)
 
 /obj/item/borg_shapeshifter/proc/activate(mob/living/silicon/robot/user)
 	src.user = user

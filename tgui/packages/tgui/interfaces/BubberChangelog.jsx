@@ -314,12 +314,12 @@ const SplurtChangelogEntry = (props) => {
                     color={
                       icons[changeType]
                         ? icons[changeType].color
-                        : icons['unknown'].color
+                        : icons.unknown.color
                     }
                     name={
                       icons[changeType]
                         ? icons[changeType].icon
-                        : icons['unknown'].icon
+                        : icons.unknown.icon
                     }
                     verticalAlign="middle"
                   />
@@ -426,6 +426,15 @@ export const BubberChangelog = (props) => {
         setSplurtContents(loadingString);
         setVeilbreakContents(loadingString);
 
+        setContents(`Loading changelog data${'.'.repeat(attemptNumber + 3)}`);
+        setBubberContents(
+          `Loading changelog data${'.'.repeat(attemptNumber + 3)}`,
+        );
+        // SPLURT EDIT ADDITION: Changelog 3
+        setSplurtContents(
+          `Loading changelog data${'.'.repeat(attemptNumber + 3)}`,
+        );
+        // SPLURT EDIT ADDITION END
         setTimeout(() => {
           getData(date, attemptNumber + 1);
         }, timeout);

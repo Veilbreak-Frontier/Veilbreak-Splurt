@@ -26,7 +26,7 @@
 
 /obj/item/clothing/gloves/tackler/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/adjust_fishing_difficulty, fishing_modifier) //fishing tackle equipment (ba dum tsh)
+	AddElement(/datum/element/adjust_fishing_difficulty, fishing_modifier) //fishing tackle equipment (ba dum tsh)
 
 /obj/item/clothing/gloves/tackler/equipped(mob/user, slot)
 	. = ..()

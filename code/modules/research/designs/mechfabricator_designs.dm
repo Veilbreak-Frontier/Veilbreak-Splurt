@@ -1987,6 +1987,18 @@
 	)
 	research_icon_state = "civilian-plating"
 
+/datum/design/mod_plating/portable_suit
+	name = "MOD Portable Suit Plating"
+	id = "mod_plating_portable_suit"
+	build_path = /obj/item/mod/construction/plating/portable_suit
+	materials = list(
+		/datum/material/iron = SHEET_MATERIAL_AMOUNT * 3,
+		/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 1,
+		/datum/material/plasma = HALF_SHEET_MATERIAL_AMOUNT,
+		/datum/material/plastic = SHEET_MATERIAL_AMOUNT,
+	)
+	research_icon_state = "psuit-plating"
+
 /datum/design/mod_plating/engineering
 	name = "MOD Engineering Plating"
 	id = "mod_plating_engineering"
@@ -2091,7 +2103,7 @@
 	desc = "[initial(module.desc)] It uses [initial(module.complexity)] complexity."
 
 /datum/design/module/mod_storage
-	name = "Storage Module"
+	name = "Compact Storage Module"
 	id = "mod_storage"
 	materials = list(
 		/datum/material/iron = SHEET_MATERIAL_AMOUNT *1.25,
@@ -2100,13 +2112,24 @@
 	build_path = /obj/item/mod/module/storage
 
 /datum/design/module/mod_storage_expanded
-	name = "Expanded Storage Module"
+	name = "Storage Module"
 	id = "mod_storage_expanded"
 	materials = list(
 		/datum/material/iron =SHEET_MATERIAL_AMOUNT * 2.5,
 		/datum/material/uranium =SHEET_MATERIAL_AMOUNT,
 	)
 	build_path = /obj/item/mod/module/storage/large_capacity
+
+/datum/design/module/mod_storage_holding
+	name = "Storage Module of Holding"
+	id = "mod_storage_holding"
+	materials = list(
+		/datum/material/gold =SHEET_MATERIAL_AMOUNT * 1.5,
+		/datum/material/diamond =HALF_SHEET_MATERIAL_AMOUNT * 1.5,
+		/datum/material/uranium = SMALL_MATERIAL_AMOUNT*2.5,
+		/datum/material/bluespace =SHEET_MATERIAL_AMOUNT
+	)
+	build_path = /obj/item/mod/module/storage/holding
 
 /datum/design/module/mod_visor_medhud
 	name = "Medical Visor Module"
