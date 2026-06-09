@@ -61,7 +61,6 @@
 			if(loadout_item?.ckeywhitelist && !(owner_client?.ckey in loadout_item.ckeywhitelist))
 				continue
 		// SKYRAT EDIT END
-		*/
 
 		// Set into sanitize list using converted path key
 		var/list/data = passed_list[path]

@@ -592,7 +592,28 @@
 		playsound(src, 'sound/effects/pop.ogg', 100, TRUE, -6)
 		to_chat(user, span_notice("You deactivate \the [src]."))
 		deactivate(user)
-		return
+	else
+		if(animation_playing)
+			to_chat(user, span_notice("\the [src] is recharging."))
+			return
+		var/static/list/model_icons = sort_list(list(
+			"Standard" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "robot"),
+			"Medical" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "medical"),
+			"Cargo" = image(icon = CYBORG_ICON_CARGO, icon_state = "cargoborg"),
+			"Engineer" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "engineer"),
+			"Security" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "sec"),
+			"Service" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "service_f"),
+			"Janitor" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "janitor"),
+			"Miner" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "miner"),
+			"Peacekeeper" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "peace"),
+			"Clown" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "clown"),
+			"Syndicate" = image(icon = 'icons/mob/silicon/robots.dmi', icon_state = "synd_sec"),
+			"Spider Clan" = image(icon = CYBORG_ICON_NINJA, icon_state = "ninja_engi"),
+			"Research" = image(icon = 'modular_zubbers/code/modules/silicons/borgs/sprites/robot_sci.dmi', icon_state = "research"),
+		))
+		var/model_selection = show_radial_menu(user, user, model_icons, custom_check = CALLBACK(src, PROC_REF(check_menu), user), radius = 42, require_near = TRUE)
+		if(!model_selection)
+			return FALSE
 
 		var/obj/item/robot_model/model
 		switch(model_selection)
@@ -649,46 +670,13 @@
 			to_chat(user, span_notice("You are now disguised."))
 			activate(user)
 		else
-			return
-
-	if(!set_disguise_vars(model, user))
-		qdel(model)
-		return
-	qdel(model)
-
-	animation_playing = TRUE
-	to_chat(user, span_notice("You activate \the [src]."))
-	playsound(src, 'sound/effects/seedling_chargeup.ogg', 100, TRUE, -6)
-
-	var/start = user.filters.len
-	var/X,Y,rsq,i,f
-	for(i=1, i<=7, ++i)
-		do
-			X = 60*rand() - 30
-			Y = 60*rand() - 30
-			rsq = X*X + Y*Y
-		while(rsq<100 || rsq>900)
-		user.filters += filter(type="wave", x=X, y=Y, size=rand()*2.5+0.5, offset=rand())
-	for(i=1, i<=7, ++i)
-		f = user.filters[start+i]
-		animate(f, offset=f:offset, time=0, loop=3, flags=ANIMATION_PARALLEL)
-		animate(offset=f:offset-1, time=rand()*20+10)
-
-	var/success = do_after(user, 5 SECONDS, user, IGNORE_HELD_ITEM)
-
-	if(success && (activationCost <= 0 || user.cell.use(activationCost)))
-		playsound(src, 'sound/effects/bamf.ogg', 100, TRUE, -6)
-		to_chat(user, span_notice("You are now disguised."))
-		activate(user)
-	else
-		to_chat(user, span_warning("The chameleon field fizzles."))
-		do_sparks(3, FALSE, user)
-
-	for(i=1, i<=min(7, user.filters.len), ++i)
-		f = user.filters[start+i]
-		animate(f)
-	user.filters = null
-	animation_playing = FALSE
+			to_chat(user, span_warning("The chameleon field fizzles."))
+			do_sparks(3, FALSE, user)
+			for(i=1, i<=min(7, user.filters.len), ++i) // removing filters that are animating does nothing, we gotta stop the animations first
+				f = user.filters[start+i]
+				animate(f)
+		user.filters = null
+		animation_playing = FALSE
 
 /obj/item/borg_shapeshifter/proc/set_disguise_vars(obj/item/robot_model/disguise_model, mob/living/silicon/robot/cyborg)
 	if (!disguise_model || !cyborg)

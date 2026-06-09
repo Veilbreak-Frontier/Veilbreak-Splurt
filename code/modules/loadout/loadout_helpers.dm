@@ -20,8 +20,13 @@
 	if(isnull(preference_source))
 		return equipOutfit(outfit, visuals_only)
 
-/datum/loadout_item/New(category)
-    src.category = category
+	var/datum/outfit/equipped_outfit
+	if(ispath(outfit, /datum/outfit))
+		equipped_outfit = new outfit()
+	else if(istype(outfit, /datum/outfit))
+		equipped_outfit = outfit
+	else
+		CRASH("Invalid outfit passed to equip_outfit_and_loadout ([outfit])")
 
 	// BUBBER EDIT ADDITION BEGIN - Place in case preference
 	var/obj/item/storage/briefcase/empty/travel_suitcase
@@ -97,82 +102,31 @@
 	if(update)
 		update_clothing(update)
 
-    var/list/preference_list = preference_source.read_preference(/datum/preference/loadout)
-    preference_list = preference_list[preference_source.get_active_loadout_preset_name()]
-    var/list/loadout_datums = loadout_list_to_datums(preference_list)
-    var/obj/item/storage/briefcase/empty/travel_suitcase
-    var/loadout_placement_preference = preference_source.read_preference(/datum/preference/choiced/loadout_override_preference)
+	return TRUE
 
-    for(var/datum/loadout_item/item as anything in loadout_datums)
-        var/ckey_pass = FALSE
-        if(item.ckeywhitelist && (lowertext(ckey) in item.ckeywhitelist))
-            ckey_pass = TRUE
+/**
+ * Takes a list of paths (such as a loadout list)
+ * and returns a list of their singleton loadout item datums
+ *
+ * loadout_list - the list being checked
+ *
+ * Returns a list of singleton datums
+ */
+/proc/loadout_list_to_datums(list/loadout_list) as /list
+	var/list/datums = list()
 
-        if(!ckey_pass)
-            if(item.restricted_roles && equipping && !(equipping.title in item.restricted_roles))
-                if(preference_source.parent)
-                    to_chat(preference_source.parent, span_warning("You were unable to get a loadout item([initial(item.item_path.name)]) due to job restrictions!"))
-                continue
+	if(!length(GLOB.all_loadout_datums))
+		CRASH("No loadout datums in the global loadout list!")
 
-            if(item.blacklisted_roles && equipping && (equipping.title in item.blacklisted_roles))
-                if(preference_source.parent)
-                    to_chat(preference_source.parent, span_warning("You were unable to get a loadout item([initial(item.item_path.name)]) due to job blacklists!"))
-                continue
+	for(var/path in loadout_list)
+		var/actual_datum = GLOB.all_loadout_datums[path]
+		if(!istype(actual_datum, /datum/loadout_item))
+			stack_trace("Could not find ([path]) loadout item in the global list of loadout datums!")
+			continue
 
-            if(item.restricted_species && !(dna.species.id in item.restricted_species))
-                if(preference_source.parent)
-                    to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to species restrictions!"))
-                continue
-	/*
-            if(item.donator_only && !SSplayer_ranks.is_donator(preference_source?.parent))
-                if(preference_source.parent)
-                    to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to donator restrictions!"))
-                continue
-	*/
-        if(item.ckeywhitelist && !ckey_pass)
-            if(preference_source.parent)
-                to_chat(preference_source.parent, span_warning("You were unable to get a loadout item ([initial(item.item_path.name)]) due to CKEY restrictions!"))
-            continue
+		datums += actual_datum
 
-        if(loadout_placement_preference == LOADOUT_OVERRIDE_CASE && !visuals_only)
-            if(!travel_suitcase)
-                travel_suitcase = new(loc)
-            new item.item_path(travel_suitcase)
-        else
-            item.insert_path_into_outfit(equipped_outfit, src, visuals_only, loadout_placement_preference)
-
-    if(!equipped_outfit.equip(src, visuals_only))
-        return FALSE
-
-    if(travel_suitcase)
-        put_in_hands(travel_suitcase)
-
-    var/list/new_contents = get_all_gear(INCLUDE_PROSTHETICS|INCLUDE_ABSTRACT|INCLUDE_ACCESSORIES)
-    var/update = NONE
-    for(var/datum/loadout_item/item as anything in loadout_datums)
-        update |= item.on_equip_item(
-            equipped_item = (loadout_placement_preference == LOADOUT_OVERRIDE_CASE && !visuals_only) ? locate(item.item_path) in travel_suitcase : locate(item.item_path) in new_contents,
-            item_details = preference_list?[item.item_path] || list(),
-            equipper = src,
-            outfit = equipped_outfit,
-            visuals_only = visuals_only,
-        )
-    if(update)
-        update_clothing(update)
-
-    return TRUE
-
-/proc/loadout_list_to_datums(list/loadout_list)
-    var/list/datums = list()
-    if(!length(GLOB.all_loadout_datums))
-        CRASH("No loadout datums in the global loadout list!")
-    for(var/path in loadout_list)
-        var/actual_datum = GLOB.all_loadout_datums[path]
-        if(!istype(actual_datum, /datum/loadout_item))
-            stack_trace("Could not find ([path]) loadout item in the global list of loadout datums!")
-            continue
-        datums += actual_datum
-    return datums
+	return datums
 
 // BUBBER EDIT ADDITION BEGIN
 /*

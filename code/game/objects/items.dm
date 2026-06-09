@@ -452,9 +452,6 @@
 	else if (siemens_coefficient <= 0.5)
 		.["partially insulated"] = "It is made from a poor insulator that will dampen (but not fully block) electric shocks passing through it."
 
-	if(LAZYLEN(unique_reskin) && !current_skin)
-		.["reskinnable"] = "This item is able to be reskinned! Alt-Click to do so!"
-
 	// DOPPLER EDIT START: Thaumaturges can examine items for affinity stat
 	if(affinity && (HAS_TRAIT(user, TRAIT_ARCHETYPE_SORCEROUS) || isobserver(user)))
 		.["affinity [affinity]"] = "Provides affinity [affinity] for thaumaturgic powers."

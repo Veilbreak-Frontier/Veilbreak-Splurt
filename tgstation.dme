@@ -10950,7 +10950,6 @@
 #include "modular_zzplurt\modules\Nanotrasen_Stuff\Nanotrasen_trainer\nanotrasen_crew_trainer.dm"
 #include "modular_zzplurt\modules\primitive_production\code\primitive.dm"
 #include "modular_zzplurt\modules\storyteller\event_defines\crewset\obsessed.dm"
-#include "modular_zzplurt\modules\synthx\code\bodyparts\internal_computer\internal_computer.dm"
 #include "modular_zzveilbreak\code\__DEFINES\auto_update.dm"
 #include "modular_zzveilbreak\code\__DEFINES\veilbreak_antagonists.dm"
 #include "modular_zzveilbreak\code\client\click.dm"
