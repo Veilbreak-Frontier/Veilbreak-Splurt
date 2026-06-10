@@ -14,10 +14,6 @@
 		if(initial(path.research_icon) && initial(path.research_icon_state)) //If the design has an icon replacement skip the rest
 			icon_file = path::research_icon
 			icon_state = path::research_icon_state
-			if (PERFORM_ALL_TESTS(focus_only/invalid_research_designs))
-				if(!icon_exists(icon_file, icon_state))
-					stack_trace("design [path] with icon '[icon_file]' missing state '[icon_state]'")
-					continue
 		else
 			// construct the icon and slap it into the resource cache
 			var/atom/item = initial(path.build_path)
@@ -46,10 +42,6 @@
 			icon_state = item::icon_state
 			if(item::color)
 				transform = color_transform(item::color)
-			if (PERFORM_ALL_TESTS(focus_only/invalid_research_designs))
-				if(!icon_exists(icon_file, icon_state))
-					stack_trace("design [path] with icon '[icon_file]' missing state '[icon_state]'")
-					continue
 
 			// computers (and snowflakes) get their screen and keyboard sprites
 			if (ispath(item, /obj/machinery/computer) || ispath(item, /obj/machinery/power/solar_control))
@@ -63,5 +55,10 @@
 					transform.blend_icon(uni_icon(icon_file, screen), ICON_OVERLAY)
 				if (keyboard && (keyboard in all_states))
 					transform.blend_icon(uni_icon(icon_file, keyboard), ICON_OVERLAY)
+
+		// iconforge reads DMIs from disk, not the compiled RSC
+		if(!rustg_file_exists(icon_file) || !icon_exists(icon_file, icon_state))
+			stack_trace("design [path] with icon '[icon_file]' missing state '[icon_state]'")
+			continue
 
 		insert_icon(initial(path.id), uni_icon(icon_file, icon_state, transform=transform))

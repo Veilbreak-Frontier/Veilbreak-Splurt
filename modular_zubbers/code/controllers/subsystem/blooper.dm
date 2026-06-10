@@ -1,4 +1,5 @@
 #define BLOOPER_CONFIG_PATH "[global.config.directory]/bloopers"
+#define BLOOPER_SOUND_FALLBACK_PATH "modular_zzplurt/sound/voice/barks"
 
 SUBSYSTEM_DEF(blooper)
 	name = "Blooper"
@@ -27,7 +28,15 @@ SUBSYSTEM_DEF(blooper)
 		new_blooper.name = entry["name"]
 		new_blooper.id = entry["id"]
 		for(var/file in entry["files"])
-			new_blooper.soundpath_list += sound("[BLOOPER_CONFIG_PATH]/[file]")
+			var/sound_path = "[BLOOPER_CONFIG_PATH]/[file]"
+			if(!rustg_file_exists(sound_path))
+				sound_path = "[BLOOPER_SOUND_FALLBACK_PATH]/[file]"
+				if(!rustg_file_exists(sound_path))
+					continue
+			new_blooper.soundpath_list += sound(sound_path)
+		if(!length(new_blooper.soundpath_list))
+			logger.Log(LOG_CATEGORY_DEBUG, "Blooper \"[entry["id"]]\" skipped: no sound files found.")
+			continue
 		new_blooper.min_pitch = entry["min_pitch"] || BLOOPER_DEFAULT_MINPITCH
 		new_blooper.max_pitch = entry["max_pitch"] || BLOOPER_DEFAULT_MAXPITCH
 		new_blooper.min_vary = entry["min_vary"] || BLOOPER_DEFAULT_MINVARY
@@ -38,3 +47,4 @@ SUBSYSTEM_DEF(blooper)
 	return blooper_datums
 
 #undef BLOOPER_CONFIG_PATH
+#undef BLOOPER_SOUND_FALLBACK_PATH
