@@ -865,6 +865,20 @@ GLOBAL_LIST_EMPTY(friendly_animal_types)
 	var/list/partial = splittext(iconData, "{")
 	return replacetext(copytext_char(partial[2], 3, -5), "\n", "") //if cleanup fails we want to still return the correct base64
 
+/// Iconforge reads DMIs from the filesystem. TGS deployments often have icons in the RSC only.
+/// Materialize compile-time icons to tmp/ when they are missing on disk.
+/proc/ensure_icon_on_disk(icon/icon_file)
+	var/path = "[icon_file]"
+	if(rustg_file_exists(path))
+		return icon_file
+	if(!length(path) || !length(icon_states(icon_file)))
+		return icon_file
+	var/hash = rustg_hash_string(RUSTG_HASH_MD5, path)
+	var/cache_path = "tmp/iconforge_[hash].dmi"
+	if(!rustg_file_exists(cache_path))
+		fcopy(icon_file, cache_path)
+	return file(cache_path)
+
 ///given a text string, returns whether it is a valid dmi icons folder path
 /proc/is_valid_dmi_file(icon_path)
 	if(!istext(icon_path) || !length(icon_path))

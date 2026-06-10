@@ -56,8 +56,8 @@
 				if (keyboard && (keyboard in all_states))
 					transform.blend_icon(uni_icon(icon_file, keyboard), ICON_OVERLAY)
 
-		// iconforge reads DMIs from disk, not the compiled RSC
-		if(!rustg_file_exists(icon_file) || !icon_exists(icon_file, icon_state))
+		icon_file = ensure_icon_on_disk(icon_file)
+		if(!icon_exists(icon_file, icon_state))
 			stack_trace("design [path] with icon '[icon_file]' missing state '[icon_state]'")
 			continue
 
