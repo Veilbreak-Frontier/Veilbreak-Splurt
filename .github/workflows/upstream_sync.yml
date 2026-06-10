@@ -13,7 +13,16 @@ on:
 jobs:
   sync_with_upstream:
     runs-on: ubuntu-latest
-    name: Sync with upstream repository
+    strategy:
+      matrix:
+        include:
+          - target_branch: master
+            sync_branch: upstream-updates
+            pr_title_prefix: '[UPSTREAM SYNC - SPLURT]'
+          - target_branch: testing
+            sync_branch: testing-upstream-updates
+            pr_title_prefix: '[UPSTREAM SYNC - SPLURT - TESTING]'
+    name: Sync ${{ matrix.target_branch }} with upstream
 
     steps:
       - name: Checkout target repo
@@ -27,12 +36,12 @@ jobs:
         with:
           user: 'bot'
 
-      - name: Sync upstream-updates with master
+      - name: Sync update branch with target
         run: |
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          git checkout master
-          git checkout -B upstream-updates
-          git push -f origin upstream-updates
+          git checkout ${{ matrix.target_branch }}
+          git checkout -B ${{ matrix.sync_branch }}
+          git push -f origin ${{ matrix.sync_branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -40,24 +49,24 @@ jobs:
         id: sync
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.3
         with:
-          target_sync_branch: upstream-updates
+          target_sync_branch: ${{ matrix.sync_branch }}
           target_repo_token: ${{ secrets.GITHUB_TOKEN }}
           upstream_sync_branch: master
-          upstream_sync_repo: SPLURT-Station/S.P.L.U.R.T-tg   # <-- only change here
+          upstream_sync_repo: SPLURT-Station/S.P.L.U.R.T-tg
           test_mode: ${{ inputs.sync_test_mode }}
 
       - name: Get current date
         if: steps.sync.outputs.has_new_commits == 'true'
         run: |
-          echo "NOW=$(date +%d.%m.%Y)" >> $GITHUB_ENV   # fixed syntax (was $env:GITHUB_ENV)
+          echo "NOW=$(date +%d.%m.%Y)" >> $GITHUB_ENV
 
       - name: Create Pull Request
         if: steps.sync.outputs.has_new_commits == 'true'
         uses: diillson/auto-pull-request@v1.0.1
         with:
-          source_branch: "upstream-updates"
-          destination_branch: "master"
-          pr_title: "[UPSTREAM SYNC - SPLURT] ${{ env.NOW }}"
+          source_branch: ${{ matrix.sync_branch }}
+          destination_branch: ${{ matrix.target_branch }}
+          pr_title: "${{ matrix.pr_title_prefix }} ${{ env.NOW }}"
           pr_body: "Upstream update from SPLURT-Station/S.P.L.U.R.T-tg as of ${{ env.NOW }}"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
