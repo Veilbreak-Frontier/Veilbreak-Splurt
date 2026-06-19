@@ -10,7 +10,12 @@ opt = argparse.ArgumentParser()
 opt.add_argument('ymlDir', help='The directory of YAML changelogs we will use.')
 args = opt.parse_args()
 
-archiveDir = os.path.join(args.ymlDir, 'veilbreak_archive')
+archive_dirs = {
+    "upstream": os.path.join(args.ymlDir, "archive"),
+    "bubber": os.path.join(args.ymlDir, "bubber_archive"),
+    "splurt": os.path.join(args.ymlDir, "splurt_archive"),
+    "veilbreak": os.path.join(args.ymlDir, "veilbreak_archive"),
+}
 
 validPrefixes = [
     'bugfix', 'wip', 'qol', 'soundadd', 'sounddel', 'rscadd', 'rscdel',
@@ -24,20 +29,24 @@ def dictToTuples(inp):
 print('Reading changelogs...')
 
 formattedDate = today.strftime(fileDateFormat)
+compiled_month_pattern = re.compile(r'^(?:bubber_|splurt_|veilbreak_)?\d{4}-\d{2}$')
 branches = ['veilbreak', 'splurt', 'bubber', 'upstream']
 branch_entries = {b: {} for b in branches}
 
 for branch in branches:
-    prefix = "" if branch == "upstream" else branch + "_"
-    monthFile = os.path.join(args.ymlDir, "{}{}.yml".format(prefix, formattedDate))
-    if os.path.exists(monthFile):
-        with open(monthFile, 'r', encoding='utf-8') as f:
+    archive_month_file = os.path.join(archive_dirs[branch], "{}.yml".format(formattedDate))
+    legacy_prefix = "" if branch == "upstream" else branch + "_"
+    legacy_month_file = os.path.join(args.ymlDir, "{}{}.yml".format(legacy_prefix, formattedDate))
+    source_file = archive_month_file if os.path.exists(archive_month_file) else legacy_month_file
+    if os.path.exists(source_file):
+        with open(source_file, 'r', encoding='utf-8') as f:
             branch_entries[branch] = yaml.load(f, Loader=yaml.SafeLoader) or {}
 
 for fileName in glob.glob(os.path.join(args.ymlDir, "*.yml")):
     name, ext = os.path.splitext(os.path.basename(fileName))
     if name.startswith('.'): continue
     if name == 'example': continue
+    if compiled_month_pattern.match(name): continue
 
     if "veilbreak" in name:
         target_branch = "veilbreak"
@@ -83,13 +92,13 @@ for fileName in glob.glob(os.path.join(args.ymlDir, "*.yml")):
 print('Writing master consolidated files to directories...')
 for branch in branches:
     prefix = "" if branch == "upstream" else branch + "_"
-
     targetPath = os.path.join(args.ymlDir, "{}{}.yml".format(prefix, formattedDate))
     with open(targetPath, 'w', encoding='utf-8') as f:
         yaml.dump(branch_entries[branch], f, default_flow_style=False)
 
-    if not os.path.exists(archiveDir):
-        os.makedirs(archiveDir)
-    archiveFile = os.path.join(archiveDir, "{}{}.yml".format(prefix, formattedDate))
+    archive_dir = archive_dirs[branch]
+    if not os.path.exists(archive_dir):
+        os.makedirs(archive_dir)
+    archiveFile = os.path.join(archive_dir, "{}.yml".format(formattedDate))
     with open(archiveFile, 'w', encoding='utf-8') as f:
         yaml.dump(branch_entries[branch], f, default_flow_style=False)

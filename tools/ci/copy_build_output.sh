@@ -11,3 +11,7 @@ cp -r tgui/public/* $1/tgui/public/
 # BUBBER EDIT ADDITION BEGIN - Call our deploy too
 source modular_zubbers/tools/deploy_bubber.sh
 # BUBBER EDIT ADDITION END - Call our deploy too
+
+# SPLURT EDIT ADDITION BEGIN - Call our deploy too
+source modular_zzplurt/tools/deploy_splurt.sh
+# SPLURT EDIT ADDITION END - Call our deploy too

@@ -30,7 +30,7 @@
 
 			id_list += id
 
-			insert_icon(id, uni_icon(icon_file, icon_state))
+			insert_icon(id, uni_icon(ensure_icon_on_disk(icon_file), icon_state))
 
 		// And now scripture icons
 		for(var/datum/scripture/unlocked_scripture as anything in new_research.unlocked_scriptures)
@@ -43,6 +43,6 @@
 
 			id_list += id
 
-			insert_icon(id, uni_icon(icon_file, icon_state))
+			insert_icon(id, uni_icon(ensure_icon_on_disk(icon_file), icon_state))
 
 		qdel(new_research)

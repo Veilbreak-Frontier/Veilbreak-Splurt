@@ -13,8 +13,8 @@
 
 	/// Processing speed in seconds
 	var/processing_speed = 6 SECONDS
-	/// Remote materials component for silo linking
-	var/datum/component/remote_materials/materials
+	/// Remote materials link for silo connection
+	var/datum/remote_materials/materials
 	/// List of all available ores that can be produced
 	var/static/list/available_ores = list(
     /obj/item/stack/sheet/iron = 80,
@@ -33,11 +33,11 @@
 
 /obj/machinery/void_miner/Initialize(mapload)
 	. = ..()
-	materials = AddComponent(/datum/component/remote_materials, allow_standalone = FALSE, force_connect = TRUE)
+	materials = new(src, mapload, FALSE, TRUE)
 	update_appearance()
 
 /obj/machinery/void_miner/Destroy()
-	materials = null
+	QDEL_NULL(materials)
 	return ..()
 
 /obj/machinery/void_miner/RefreshParts()
@@ -104,11 +104,9 @@
 	var/obj/item/stack/sheet/chosen_stack = new chosen_ore(null, 1)
 
 	// Insert the stack into the silo
-	var/alist/user_data = ID_DATA(null)
-	user_data[SILICON_OVERRIDE] = TRUE
-	var/insert_result = materials.insert_item(chosen_stack, 1, user_data)
+	var/insert_result = materials.insert_item(chosen_stack, 1)
 
-	if(insert_result == MATERIAL_INSERT_ITEM_FAILURE)
+	if(insert_result == MATERIAL_INSERT_ITEM_FAILURE || insert_result == MATERIAL_INSERT_ITEM_NO_SPACE || insert_result == MATERIAL_INSERT_ITEM_NO_MATS)
 		// If insertion failed, drop it on the ground as fallback
 		new chosen_ore(get_turf(src))
 		visible_message(span_warning("[src] beeps: Silo connection lost, material ejected."))

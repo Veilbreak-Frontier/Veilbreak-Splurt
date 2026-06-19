@@ -16,6 +16,7 @@ static_files:
 # This one is for Linux hosted servers
 linux_scripts:
   PreCompile.sh: tools/tgs_scripts/PreCompile.sh
+  PostCompile.sh: tools/tgs_scripts/PostCompile.sh
   WatchdogLaunch.sh: tools/tgs_scripts/WatchdogLaunch.sh
   InstallDeps.sh: tools/tgs_scripts/InstallDeps.sh
 # Same as above for Windows hosted servers

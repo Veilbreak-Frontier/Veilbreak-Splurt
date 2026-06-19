@@ -86,6 +86,8 @@
 #define SLIME_EFFECT_LIGHT_PINK (1<<19)
 #define SLIME_EFFECT_ADAMANTINE (1<<20)
 #define SLIME_EFFECT_RAINBOW (1<<21)
+// Not a real slime type, used to create random slimes
+#define SLIME_TYPE_RANDOM "random"
 
 // The alpha value of transperent slime types
 #define SLIME_TRANSPARENCY_ALPHA 180

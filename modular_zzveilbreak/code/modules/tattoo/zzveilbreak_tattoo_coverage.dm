@@ -182,7 +182,7 @@ GLOBAL_LIST_EMPTY(cached_body_parts)
         var/list/children = GLOB.coverage_relationships[parent_zone]
         if(actual_zone in children)
             // If parent zone is covered, this child zone is also covered
-            if(!get_location_accessible(H, parent_zone))
+            if(!H.is_location_accessible(parent_zone, IGNORED_OPERATION_CLOTHING_SLOTS))
                 return FALSE
 
     // Special handling for organ slots
@@ -193,13 +193,13 @@ GLOBAL_LIST_EMPTY(cached_body_parts)
         // For organs, check if the general area is accessible
         switch(actual_zone)
             if(ORGAN_SLOT_PENIS, ORGAN_SLOT_VAGINA, ORGAN_SLOT_TESTICLES, ORGAN_SLOT_ANUS, ORGAN_SLOT_BUTT, ORGAN_SLOT_WOMB, ORGAN_SLOT_SLIT, ORGAN_SLOT_SHEATH)
-                return get_location_accessible(H, BODY_ZONE_PRECISE_GROIN)
+                return H.is_location_accessible(BODY_ZONE_PRECISE_GROIN, IGNORED_OPERATION_CLOTHING_SLOTS)
             if(ORGAN_SLOT_BREASTS, ORGAN_SLOT_NIPPLES, ORGAN_SLOT_BELLY)
-                return get_location_accessible(H, BODY_ZONE_CHEST)
+                return H.is_location_accessible(BODY_ZONE_CHEST, IGNORED_OPERATION_CLOTHING_SLOTS)
             else
                 return TRUE
 
-    return get_location_accessible(H, actual_zone)
+    return H.is_location_accessible(actual_zone, IGNORED_OPERATION_CLOTHING_SLOTS)
 
 /proc/is_custom_tattoo_bodypart_valid(body_zone)
     return (body_zone in GLOB.custom_tattooable_body_parts) && !(body_zone in GLOB.custom_tattoo_blacklist)

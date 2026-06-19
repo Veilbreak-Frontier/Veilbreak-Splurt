@@ -34,7 +34,8 @@ type ContentPrefsInfo = {
   cumflates_partners_pref: boolean;
   knotting_pref: boolean;
   knots_partners_pref: boolean;
-    // Vore prefs
+  smothering_pref: boolean;
+  // Vore prefs
   vore_enable_pref: boolean;
   vore_overlays: boolean;
   vore_overlay_options: boolean;
@@ -79,8 +80,7 @@ export const ContentPreferencesTab = ({
     cumflates_partners_pref,
     knotting_pref,
     knots_partners_pref,
-    // Veilbreak additions
-    allow_bodywriting,
+    smothering_pref,
     // Vore prefs
     vore_enable_pref,
     vore_overlays,
@@ -250,10 +250,10 @@ export const ContentPreferencesTab = ({
             'Your character knots partners.',
           )}
           {renderToggle(
-            'allow_bodywriting',
-            allow_bodywriting,
-            'Allow Bodywriting',
-            'Lets people tattoo you or remove tattoos.',
+            'smothering_pref',
+            smothering_pref,
+            'Smothering',
+            'Allow smothering interactions.',
           )}
 
           {/* Vore Preferences */}
