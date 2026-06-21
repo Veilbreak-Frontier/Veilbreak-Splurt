@@ -20,7 +20,7 @@ type ExosuitFabricatorData = FabricatorData & {
 
 export const ExosuitFabricator = (props) => {
   const { act, data } = useBackend<ExosuitFabricatorData>();
-  const { materials, SHEET_MATERIAL_AMOUNT } = data;
+  const { materials = [], SHEET_MATERIAL_AMOUNT } = data;
 
   const availableMaterials: MaterialMap = {};
 

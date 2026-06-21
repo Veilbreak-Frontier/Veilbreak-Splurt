@@ -73,6 +73,11 @@ export type MaterialIconProps = {
  */
 export const MaterialIcon = (props: MaterialIconProps) => {
   const { materialName, sheets = 0 } = props;
+
+  if (!materialName) {
+    return <Icon name="question-circle" />;
+  }
+
   const icons = MATERIAL_ICONS[materialName];
 
   if (!icons) {

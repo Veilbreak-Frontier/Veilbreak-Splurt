@@ -37,8 +37,8 @@ export const Autolathe = (props) => {
   const {
     materialtotal,
     materialsmax,
-    materials,
-    designs,
+    materials = [],
+    designs = [],
     active,
     SHEET_MATERIAL_AMOUNT,
   } = data;

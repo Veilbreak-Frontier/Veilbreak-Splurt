@@ -35,7 +35,7 @@ type Design = {
 
 export const Flatpacker = (props: any) => {
   const { act, data } = useBackend<Data>();
-  const { SHEET_MATERIAL_AMOUNT, materials, design, busy, onHold } = data;
+  const { SHEET_MATERIAL_AMOUNT, materials = [], design, busy, onHold } = data;
 
   return (
     <Window width={670} height={400} title="Flatpacker">
