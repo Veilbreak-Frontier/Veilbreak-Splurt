@@ -2,13 +2,18 @@ import { Flex } from 'tgui-core/components';
 import { formatSiUnit } from 'tgui-core/format';
 
 import { MaterialIcon } from './MaterialIcon';
-import type { Design, MaterialMap } from './Types';
+import type { Design, Material, MaterialMap } from './Types';
 
 export type MaterialCostSequenceProps = {
   /**
    * A map of available materials.
    */
   available?: MaterialMap;
+
+  /**
+   * Materials available to the machine, used to resolve icons for costs.
+   */
+  materials?: Material[];
 
   /**
    * If provided, the materials to be consumed. By default, generated from
@@ -54,8 +59,15 @@ export type MaterialCostSequenceProps = {
  * Otherwise, the labels are white.
  */
 export const MaterialCostSequence = (props: MaterialCostSequenceProps) => {
-  const { design, amount, available, align, justify, SHEET_MATERIAL_AMOUNT } =
-    props;
+  const {
+    design,
+    amount,
+    available,
+    materials,
+    align,
+    justify,
+    SHEET_MATERIAL_AMOUNT,
+  } = props;
   let { costMap } = props;
 
   if (!costMap && !design) {
@@ -72,35 +84,43 @@ export const MaterialCostSequence = (props: MaterialCostSequenceProps) => {
 
   return (
     <Flex wrap justify={justify ?? 'space-around'} align={align ?? 'center'}>
-      {Object.entries(costMap).map(([material, quantity]) => (
-        <Flex.Item key={material} style={{ padding: '0.25em' }}>
-          <Flex direction={'column'} align="center">
-            <Flex.Item>
-              <MaterialIcon
-                materialName={material}
-                sheets={((amount || 1) * quantity) / SHEET_MATERIAL_AMOUNT}
-              />
-            </Flex.Item>
-            <Flex.Item
-              style={
-                available && {
-                  color:
-                    (amount || 1) * quantity * 2 <= available[material]
-                      ? '#fff'
-                      : (amount || 1) * quantity <= available[material]
-                        ? '#f08f11'
-                        : '#db2828',
+      {Object.entries(costMap).map(([material, quantity]) => {
+        const materialData = materials?.find((entry) => entry.name === material);
+
+        return (
+          <Flex.Item key={material} style={{ padding: '0.25em' }}>
+            <Flex direction={'column'} align="center">
+              <Flex.Item>
+                <MaterialIcon
+                  icon={materialData?.icon}
+                  icon_state={materialData?.icon_state}
+                  novariants={materialData?.novariants}
+                  sheets={
+                    ((amount || 1) * quantity) / SHEET_MATERIAL_AMOUNT
+                  }
+                />
+              </Flex.Item>
+              <Flex.Item
+                style={
+                  available && {
+                    color:
+                      (amount || 1) * quantity * 2 <= available[material]
+                        ? '#fff'
+                        : (amount || 1) * quantity <= available[material]
+                          ? '#f08f11'
+                          : '#db2828',
+                  }
                 }
-              }
-            >
-              {formatSiUnit(
-                ((amount || 1) * quantity) / SHEET_MATERIAL_AMOUNT,
-                0,
-              )}
-            </Flex.Item>
-          </Flex>
-        </Flex.Item>
-      ))}
+              >
+                {formatSiUnit(
+                  ((amount || 1) * quantity) / SHEET_MATERIAL_AMOUNT,
+                  0,
+                )}
+              </Flex.Item>
+            </Flex>
+          </Flex.Item>
+        );
+      })}
     </Flex>
   );
 };

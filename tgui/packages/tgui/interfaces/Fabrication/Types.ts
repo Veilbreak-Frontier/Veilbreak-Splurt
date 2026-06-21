@@ -29,6 +29,21 @@ export type Material = {
    * The color of the material.
    */
   color: string;
+
+  /**
+   * The icon file for this material's sheet type.
+   */
+  icon?: string;
+
+  /**
+   * The base icon state for this material's sheet type.
+   */
+  icon_state?: string;
+
+  /**
+   * If true, the sheet does not use stack-size icon variants.
+   */
+  novariants?: boolean;
 };
 
 /**

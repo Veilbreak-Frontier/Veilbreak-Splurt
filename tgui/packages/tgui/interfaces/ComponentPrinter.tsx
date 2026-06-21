@@ -102,6 +102,7 @@ function Recipe(props: RecipeProps) {
           <MaterialCostSequence
             design={design}
             amount={1}
+            materials={data.materials}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             available={available}
           />

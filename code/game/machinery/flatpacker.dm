@@ -299,6 +299,10 @@
 			var/list/new_entry = list()
 			new_entry["name"] = initial(mat_type.name)
 			new_entry["amount"] = OPTIMAL_COST(needed_mats[mat_type] * creation_efficiency)
+			if(mat_type.sheet_type)
+				new_entry["icon"] = mat_type.sheet_type::icon
+				new_entry["icon_state"] = mat_type.sheet_type::icon_state
+				new_entry["novariants"] = mat_type.sheet_type::novariants
 			cost_mats += list(new_entry)
 
 		var/atom/build = initial(inserted_board.build_path)

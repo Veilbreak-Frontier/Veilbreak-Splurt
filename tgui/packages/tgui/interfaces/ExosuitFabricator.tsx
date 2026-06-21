@@ -91,7 +91,7 @@ type RecipeProps = {
 };
 
 const Recipe = (props: RecipeProps) => {
-  const { act } = useBackend<ExosuitFabricatorData>();
+  const { act, data } = useBackend<ExosuitFabricatorData>();
   const { design, available, SHEET_MATERIAL_AMOUNT } = props;
 
   const canPrint = !Object.entries(design.cost).some(
@@ -118,6 +118,7 @@ const Recipe = (props: RecipeProps) => {
           <MaterialCostSequence
             design={design}
             amount={1}
+            materials={data.materials}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             available={available}
           />
@@ -238,6 +239,7 @@ const Queue = (props: QueueProps) => {
             <MaterialCostSequence
               SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
               available={availableMaterials}
+              materials={data.materials}
               costMap={materialCosts}
             />
           </Section>
@@ -315,6 +317,7 @@ const QueueList = (props: QueueListProps) => {
                 <MaterialCostSequence
                   design={entry.design}
                   amount={1}
+                  materials={data.materials}
                   SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                   available={availableMaterials}
                 />

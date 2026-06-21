@@ -58,7 +58,7 @@ export const MaterialAccessBar = (props: MaterialAccessBarProps) => {
       {sortBy(availableMaterials, [
         (m: Material) => MATERIAL_RARITY[m.name],
       ]).map((material) => (
-        <Flex.Item grow basis={4.5} key={material.name}>
+        <Flex.Item grow basis={4.5} key={material.ref}>
           <MaterialCounter
             material={material}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
@@ -103,7 +103,12 @@ const MaterialCounter = (props: MaterialCounterProps) => {
           className="MaterialDock__Label"
         >
           <Flex.Item>
-            <MaterialIcon materialName={material.name} sheets={sheets} />
+            <MaterialIcon
+              icon={material.icon}
+              icon_state={material.icon_state}
+              novariants={material.novariants}
+              sheets={sheets}
+            />
           </Flex.Item>
           <Flex.Item>
             <AnimatedNumber value={sheets} format={LABEL_FORMAT} />
