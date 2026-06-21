@@ -17,13 +17,6 @@ export function LootPanel(props) {
   const { data } = useBackend<Data>();
   const { contents = [] } = data;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      act('refresh');
-    }, 7000);
-    return () => clearInterval(interval);
-  }, [act]);
-
   // limitations: items with different stack counts, charges etc.
   const contentsByPathName = useMemo(() => {
     const acc: Record<string, SearchItem[]> = {};

@@ -51,14 +51,18 @@ const LABEL_FORMAT = (value: number) => formatSiUnit(value, 0);
  * fifty sheets.
  */
 export const MaterialAccessBar = (props: MaterialAccessBarProps) => {
-  const { availableMaterials, SHEET_MATERIAL_AMOUNT, onEjectRequested } = props;
+  const {
+    availableMaterials = [],
+    SHEET_MATERIAL_AMOUNT,
+    onEjectRequested,
+  } = props;
 
   return (
     <Flex wrap>
       {sortBy(availableMaterials, [
-        (m: Material) => MATERIAL_RARITY[m.name],
+        (m: Material) => MATERIAL_RARITY[m.name] ?? Infinity,
       ]).map((material) => (
-        <Flex.Item grow basis={4.5} key={material.name}>
+        <Flex.Item grow basis={4.5} key={material.ref || material.name}>
           <MaterialCounter
             material={material}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
