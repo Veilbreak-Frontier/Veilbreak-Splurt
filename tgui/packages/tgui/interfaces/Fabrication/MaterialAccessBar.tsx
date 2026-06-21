@@ -103,12 +103,7 @@ const MaterialCounter = (props: MaterialCounterProps) => {
           className="MaterialDock__Label"
         >
           <Flex.Item>
-            <MaterialIcon
-              icon={material.icon}
-              icon_state={material.icon_state}
-              novariants={material.novariants}
-              sheets={sheets}
-            />
+            <MaterialIcon materialName={material.name} sheets={sheets} />
           </Flex.Item>
           <Flex.Item>
             <AnimatedNumber value={sheets} format={LABEL_FORMAT} />

@@ -176,13 +176,11 @@ const CostPreview = (props: CostPreviewProps) => {
       {materials ? (
         <Table>
           {materials.map((material) => (
-            <Table.Row key={material.ref || material.name} className="candystripe">
+            <Table.Row key={material.name} className="candystripe">
               <Table.Cell verticalAlign="middle">
                 <div style={{ width: '200px' }}>
                   <MaterialIcon
-                    icon={material.icon}
-                    icon_state={material.icon_state}
-                    novariants={material.novariants}
+                    materialName={material.name}
                     sheets={material.amount / SHEET_MATERIAL_AMOUNT}
                   />
                 </div>

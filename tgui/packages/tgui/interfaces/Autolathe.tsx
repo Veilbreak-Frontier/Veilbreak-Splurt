@@ -140,7 +140,7 @@ type PrintButtonProps = {
 };
 
 const PrintButton = (props: PrintButtonProps) => {
-  const { act, data } = useBackend<AutolatheData>();
+  const { act } = useBackend<AutolatheData>();
   const {
     design,
     quantity,
@@ -156,7 +156,6 @@ const PrintButton = (props: PrintButtonProps) => {
         <MaterialCostSequence
           design={design}
           amount={quantity}
-          materials={data.materials}
           SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
           available={availableMaterials}
         />
@@ -185,7 +184,7 @@ type AutolatheRecipeProps = {
 };
 
 const AutolatheRecipe = (props: AutolatheRecipeProps) => {
-  const { act, data } = useBackend<AutolatheData>();
+  const { act } = useBackend<AutolatheData>();
   const { design, availableMaterials, SHEET_MATERIAL_AMOUNT } = props;
 
   let maxmult = 0;
@@ -240,7 +239,6 @@ const AutolatheRecipe = (props: AutolatheRecipeProps) => {
           <MaterialCostSequence
             design={design}
             amount={1}
-            materials={data.materials}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             available={availableMaterials}
           />

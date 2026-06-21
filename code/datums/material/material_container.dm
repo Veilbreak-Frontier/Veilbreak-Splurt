@@ -756,19 +756,13 @@
 
 	for(var/datum/material/material as anything in materials)
 		var/amount = materials[material]
-		var/list/entry = list(
+
+		data += list(list(
 			"name" = material.name,
 			"ref" = REF(material),
 			"amount" = amount,
 			"color" = material.greyscale_color || material.color
-		)
-
-		if(material.sheet_type)
-			entry["icon"] = material.sheet_type::icon
-			entry["icon_state"] = material.sheet_type::icon_state
-			entry["novariants"] = material.sheet_type::novariants
-
-		data += list(entry)
+		))
 
 	return data
 

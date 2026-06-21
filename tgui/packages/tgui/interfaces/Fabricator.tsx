@@ -75,7 +75,7 @@ type PrintButtonProps = {
 };
 
 const PrintButton = (props: PrintButtonProps) => {
-  const { act, data } = useBackend<FabricatorData>();
+  const { act } = useBackend<FabricatorData>();
   const { design, quantity, available, SHEET_MATERIAL_AMOUNT } = props;
 
   const canPrint = !Object.entries(design.cost).some(
@@ -89,7 +89,6 @@ const PrintButton = (props: PrintButtonProps) => {
         <MaterialCostSequence
           design={design}
           amount={quantity}
-          materials={data.materials}
           SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
           available={available}
         />
@@ -154,7 +153,7 @@ type RecipeProps = {
 };
 
 const Recipe = (props: RecipeProps) => {
-  const { act, data } = useBackend<FabricatorData>();
+  const { act } = useBackend<FabricatorData>();
   const { design, available, SHEET_MATERIAL_AMOUNT } = props;
 
   const canPrint = !Object.entries(design.cost).some(
@@ -180,7 +179,6 @@ const Recipe = (props: RecipeProps) => {
           <MaterialCostSequence
             design={design}
             amount={1}
-            materials={data.materials}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             available={available}
           />
