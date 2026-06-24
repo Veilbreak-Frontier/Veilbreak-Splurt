@@ -12,7 +12,7 @@
 	)
 
 /datum/preference/choiced/widescreen/create_default_value()
-	return WIDESCREEN_VIEWPORT_SIZE
+	return EXTRAWIDESCREEN_VIEWPORT_SIZE
 
 /datum/preference/choiced/widescreen/compile_constant_data()
 	var/list/data = ..()
