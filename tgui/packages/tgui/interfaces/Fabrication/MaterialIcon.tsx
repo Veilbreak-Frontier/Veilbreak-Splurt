@@ -1,5 +1,4 @@
-import { Icon } from 'tgui-core/components';
-import { classes } from 'tgui-core/react';
+import { DmIcon, Icon } from 'tgui-core/components';
 
 const MATERIAL_ICONS: Record<string, [number, string][]> = {
   iron: [
@@ -90,19 +89,15 @@ export const MaterialIcon = (props: MaterialIconProps) => {
     activeIdx += 1;
   }
 
+  const iconState = icons[activeIdx][1];
+
   return (
-    <div className={'FabricatorMaterialIcon'}>
-      {icons.map(([_, iconState], idx) => (
-        <div
-          key={`${materialName}-${iconState}`}
-          className={classes([
-            'FabricatorMaterialIcon__Icon',
-            idx === activeIdx && 'FabricatorMaterialIcon__Icon--active',
-            'sheetmaterials32x32',
-            iconState,
-          ])}
-        />
-      ))}
-    </div>
+    <DmIcon
+      icon="icons/obj/stack_objects.dmi"
+      icon_state={iconState}
+      width="32px"
+      height="32px"
+      fallback={<Icon name="question-circle" />}
+    />
   );
 };
