@@ -7,7 +7,14 @@
 	// no bloopers configured, return dummy list to avoid runtimes
 	if(!length(SSblooper.blooper_list))
 		return list("none")
-	return assoc_to_keys(SSblooper.blooper_list)
+	var/list/choices = assoc_to_keys(SSblooper.blooper_list)
+	return sort_list(choices, GLOBAL_PROC_REF(cmp_blooper_choice_by_name))
+
+/// Sorts blooper preference choices alphabetically by their display name.
+/proc/cmp_blooper_choice_by_name(blooper_id_a, blooper_id_b)
+	var/datum/blooper/blooper_a = SSblooper.blooper_list[blooper_id_a]
+	var/datum/blooper/blooper_b = SSblooper.blooper_list[blooper_id_b]
+	return sorttext(blooper_a.name, blooper_b.name)
 
 /datum/preference/choiced/blooper/apply_to_human(mob/living/carbon/human/target, value)
 	target.blooper = SSblooper.blooper_list[value]

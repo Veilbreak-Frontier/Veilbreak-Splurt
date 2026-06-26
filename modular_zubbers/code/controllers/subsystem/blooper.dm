@@ -9,6 +9,9 @@ SUBSYSTEM_DEF(blooper)
 
 /datum/controller/subsystem/blooper/OnConfigLoad()
 	blooper_list = initialize_blooper_datums()
+	var/datum/preference/choiced/blooper/blooper_pref = GLOB.preference_entries[/datum/preference/choiced/blooper]
+	if(blooper_pref)
+		blooper_pref.cached_values = null
 
 /datum/controller/subsystem/blooper/proc/initialize_blooper_datums()
 	var/list/blooper_datums = list()
