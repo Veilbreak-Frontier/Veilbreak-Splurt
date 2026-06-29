@@ -183,6 +183,11 @@ Temporary Items
 # Cursor stuff
 *.cursor/*
 .cursorrules
+.continue/
+.continue/*
+config.json
+config.ts
+
 
 /tools/MapAtmosFixer/MapAtmosFixer/obj/*
 /tools/MapAtmosFixer/MapAtmosFixer/bin/*
