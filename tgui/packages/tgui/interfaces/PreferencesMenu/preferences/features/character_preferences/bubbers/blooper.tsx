@@ -1,5 +1,8 @@
+import { type ComponentProps, useEffect, useState } from 'react';
 import { useBackend } from 'tgui/backend';
-import { Button, Stack } from 'tgui-core/components';
+import { Button, Dropdown, Stack } from 'tgui-core/components';
+import { capitalizeFirst } from 'tgui-core/string';
+
 import {
   type FeatureChoiced,
   type FeatureChoicedServerData,
@@ -7,17 +10,50 @@ import {
   FeatureSliderInput,
   type FeatureValueProps,
 } from '../../base';
-import { FeatureDropdownInput } from '../../dropdowns';
+import { generateOptions } from '../../dropdowns';
+
+type DropdownOptions = ComponentProps<typeof Dropdown>['options'];
+
+function populateSortedBlooperOptions(
+  serverData: FeatureChoicedServerData,
+  setDropdownOptions: (newValue: DropdownOptions) => void,
+) {
+  const options = generateOptions(serverData);
+  options.sort((a, b) =>
+    String(a.displayText).localeCompare(String(b.displayText), undefined, {
+      sensitivity: 'base',
+    }),
+  );
+  setDropdownOptions(options);
+}
 
 const FeatureBlooperDropdownInput = (
   props: FeatureValueProps<string, string, FeatureChoicedServerData>,
 ) => {
   const { act } = useBackend();
+  const { serverData, handleSetValue, value } = props;
+  const [dropdownOptions, setDropdownOptions] = useState<DropdownOptions>([]);
+
+  useEffect(() => {
+    if (serverData) {
+      populateSortedBlooperOptions(serverData, setDropdownOptions);
+    }
+  }, [serverData]);
+
+  const displayText = serverData?.display_names?.[value] || String(value);
 
   return (
     <Stack>
       <Stack.Item grow>
-        <FeatureDropdownInput {...props} />
+        <Dropdown
+          disabled={!serverData}
+          onSelected={handleSetValue}
+          displayText={displayText ? capitalizeFirst(displayText) : ''}
+          options={dropdownOptions}
+          selected={value}
+          width="100%"
+          menuWidth="max-content"
+        />
       </Stack.Item>
       <Stack.Item>
         <Button
@@ -27,6 +63,7 @@ const FeatureBlooperDropdownInput = (
           icon="play"
           width="100%"
           height="100%"
+          disabled={!serverData?.choices?.length}
         />
       </Stack.Item>
     </Stack>
