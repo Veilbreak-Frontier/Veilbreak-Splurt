@@ -22,7 +22,6 @@
 #define isprotean(A) (is_species(A, /datum/species/protean))
 #define iscursekin(A) (is_species(A, /datum/species/human/cursekin))
 #define islycan(A) (is_species(A, /datum/species/lycan))
-#define isprotean(A) (is_species(A, /datum/species/protean))
 #define isgas(A) (is_species(A, /datum/species/gas))
 //Antags
 #define ishorrorling(A) (istype(A, /mob/living/simple_animal/hostile/true_changeling))
