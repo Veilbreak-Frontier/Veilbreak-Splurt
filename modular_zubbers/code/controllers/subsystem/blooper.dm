@@ -49,5 +49,6 @@ SUBSYSTEM_DEF(blooper)
 		blooper_datums[new_blooper.id] = new_blooper
 	return blooper_datums
 
+
 #undef BLOOPER_CONFIG_PATH
 #undef BLOOPER_SOUND_FALLBACK_PATH

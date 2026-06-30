@@ -93,3 +93,4 @@ export const blooper_pitch_range: FeatureNumeric = {
     'Lower number, less pitch range. Higher number, more pitch range.',
   component: FeatureSliderInput,
 };
+
