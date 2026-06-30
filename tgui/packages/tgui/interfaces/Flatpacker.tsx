@@ -182,6 +182,7 @@ const CostPreview = (props: CostPreviewProps) => {
                   <MaterialIcon
                     materialName={material.name}
                     sheets={material.amount / SHEET_MATERIAL_AMOUNT}
+                    icon={material.icon}
                   />
                 </div>
               </Table.Cell>
