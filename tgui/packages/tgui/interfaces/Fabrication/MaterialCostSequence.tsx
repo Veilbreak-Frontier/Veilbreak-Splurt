@@ -40,6 +40,11 @@ export type MaterialCostSequenceProps = {
    * Definition of how much units 1 sheet has.
    */
   SHEET_MATERIAL_AMOUNT: number;
+
+  /**
+   * Base64 sheet icons keyed by material name, when sent by the server.
+   */
+  icons?: Record<string, string>;
 };
 
 /**
@@ -54,7 +59,7 @@ export type MaterialCostSequenceProps = {
  * Otherwise, the labels are white.
  */
 export const MaterialCostSequence = (props: MaterialCostSequenceProps) => {
-  const { design, amount, available, align, justify, SHEET_MATERIAL_AMOUNT } =
+  const { design, amount, available, align, justify, SHEET_MATERIAL_AMOUNT, icons } =
     props;
   let { costMap } = props;
 
@@ -79,6 +84,7 @@ export const MaterialCostSequence = (props: MaterialCostSequenceProps) => {
               <MaterialIcon
                 materialName={material}
                 sheets={((amount || 1) * quantity) / SHEET_MATERIAL_AMOUNT}
+                icon={icons?.[material]}
               />
             </Flex.Item>
             <Flex.Item

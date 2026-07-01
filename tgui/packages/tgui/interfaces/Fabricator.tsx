@@ -22,9 +22,13 @@ export const Fabricator = (props) => {
 
   // Reduce the material count array to a map of actually available materials.
   const availableMaterials: MaterialMap = {};
+  const materialIcons: Record<string, string> = {};
 
   for (const material of data.materials ?? []) {
     availableMaterials[material.name] = material.amount;
+    if (material.icon) {
+      materialIcons[material.name] = material.icon;
+    }
   }
 
   return (
@@ -40,6 +44,7 @@ export const Fabricator = (props) => {
                 <Recipe
                   design={design}
                   available={availableMaterials}
+                  materialIcons={materialIcons}
                   SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                 />
               )}
@@ -72,11 +77,13 @@ type PrintButtonProps = {
   quantity: number;
   SHEET_MATERIAL_AMOUNT: number;
   available: MaterialMap;
+  materialIcons: Record<string, string>;
 };
 
 const PrintButton = (props: PrintButtonProps) => {
   const { act } = useBackend<FabricatorData>();
-  const { design, quantity, available, SHEET_MATERIAL_AMOUNT } = props;
+  const { design, quantity, available, SHEET_MATERIAL_AMOUNT, materialIcons } =
+    props;
 
   const canPrint = !Object.entries(design.cost).some(
     ([material, amount]) =>
@@ -91,6 +98,7 @@ const PrintButton = (props: PrintButtonProps) => {
           amount={quantity}
           SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
           available={available}
+          icons={materialIcons}
         />
       }
     >
@@ -149,12 +157,13 @@ const CustomPrint = (props: CustomPrintProps) => {
 type RecipeProps = {
   design: Design;
   available: MaterialMap;
+  materialIcons: Record<string, string>;
   SHEET_MATERIAL_AMOUNT: number;
 };
 
 const Recipe = (props: RecipeProps) => {
   const { act } = useBackend<FabricatorData>();
-  const { design, available, SHEET_MATERIAL_AMOUNT } = props;
+  const { design, available, materialIcons, SHEET_MATERIAL_AMOUNT } = props;
 
   const canPrint = !Object.entries(design.cost).some(
     ([material, amount]) =>
@@ -181,6 +190,7 @@ const Recipe = (props: RecipeProps) => {
             amount={1}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             available={available}
+            icons={materialIcons}
           />
         }
       >
@@ -207,12 +217,14 @@ const Recipe = (props: RecipeProps) => {
         design={design}
         quantity={5}
         available={available}
+        materialIcons={materialIcons}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
       />
       <PrintButton
         design={design}
         quantity={10}
         available={available}
+        materialIcons={materialIcons}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
       />
       <CustomPrint design={design} available={available} />
