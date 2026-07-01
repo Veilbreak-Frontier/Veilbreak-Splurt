@@ -1,0 +1,6 @@
+author: "Veilbreak-Frontier"
+delete-after: True
+changes:
+  - bugfix: "Fixed stale player data"
+  - bugfix: "Fixed sound bloopers config file which bubber decided to replace."
+  - bugfix: "Icon corrections for fabricators."
