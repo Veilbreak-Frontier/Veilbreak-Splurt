@@ -29,6 +29,12 @@ export type Material = {
    * The color of the material.
    */
   color: string;
+
+  /**
+   * Base64-encoded sheet icon. Sent by the server when the material has a
+   * sheet type.
+   */
+  icon?: string;
 };
 
 /**

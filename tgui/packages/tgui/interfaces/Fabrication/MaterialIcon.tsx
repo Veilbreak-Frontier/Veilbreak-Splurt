@@ -1,4 +1,5 @@
-import { DmIcon, Icon } from 'tgui-core/components';
+import { Box, Icon, Image } from 'tgui-core/components';
+import { classes } from 'tgui-core/react';
 
 const MATERIAL_ICONS: Record<string, [number, string][]> = {
   iron: [
@@ -64,6 +65,11 @@ export type MaterialIconProps = {
    * The number of sheets of the material.
    */
   sheets?: number;
+
+  /**
+   * Base64-encoded sheet icon from the server, when available.
+   */
+  icon?: string;
 };
 
 /**
@@ -71,10 +77,14 @@ export type MaterialIconProps = {
  * material.
  */
 export const MaterialIcon = (props: MaterialIconProps) => {
-  const { materialName, sheets = 0 } = props;
+  const { materialName, sheets = 0, icon } = props;
 
   if (!materialName) {
     return <Icon name="question-circle" />;
+  }
+
+  if (icon) {
+    return <Image src={icon} width="32px" height="32px" />;
   }
 
   const icons = MATERIAL_ICONS[materialName];
@@ -92,12 +102,10 @@ export const MaterialIcon = (props: MaterialIconProps) => {
   const iconState = icons[activeIdx][1];
 
   return (
-    <DmIcon
-      icon="icons/obj/stack_objects.dmi"
-      icon_state={iconState}
+    <Box
       width="32px"
       height="32px"
-      fallback={<Icon name="question-circle" />}
+      className={classes(['sheetmaterials32x32', iconState])}
     />
   );
 };
