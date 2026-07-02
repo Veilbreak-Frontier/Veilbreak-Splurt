@@ -4,8 +4,8 @@ import { AnimatedNumber, Button, Flex } from 'tgui-core/components';
 import { formatSiUnit } from 'tgui-core/format';
 import { classes } from 'tgui-core/react';
 
-import { MaterialIcon } from './MaterialIcon';
-import type { Material } from './Types';
+import { MaterialIcon, resolveMaterialIcon } from './MaterialIcon';
+import type { Material, MaterialIconEntry } from './Types';
 
 // by popular demand of discord people (who are always right and never wrong)
 // this is completely made up
@@ -38,6 +38,11 @@ export type MaterialAccessBarProps = {
    * Invoked when the user requests that a material be ejected.
    */
   onEjectRequested?: (material: Material, quantity: number) => void;
+
+  /**
+   * Base64 sheet icons from ui_static_data, keyed by material ref.
+   */
+  materialIcons?: MaterialIconEntry[];
 };
 
 /**
@@ -55,6 +60,7 @@ export const MaterialAccessBar = (props: MaterialAccessBarProps) => {
     availableMaterials = [],
     SHEET_MATERIAL_AMOUNT,
     onEjectRequested,
+    materialIcons,
   } = props;
 
   return (
@@ -65,6 +71,7 @@ export const MaterialAccessBar = (props: MaterialAccessBarProps) => {
         <Flex.Item grow basis={4.5} key={material.ref || material.name}>
           <MaterialCounter
             material={material}
+            materialIcons={materialIcons}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             onEjectRequested={(quantity) =>
               onEjectRequested?.(material, quantity)
@@ -78,12 +85,14 @@ export const MaterialAccessBar = (props: MaterialAccessBarProps) => {
 
 type MaterialCounterProps = {
   material: Material;
+  materialIcons?: MaterialIconEntry[];
   SHEET_MATERIAL_AMOUNT: number;
   onEjectRequested: (quantity: number) => void;
 };
 
 const MaterialCounter = (props: MaterialCounterProps) => {
-  const { material, onEjectRequested, SHEET_MATERIAL_AMOUNT } = props;
+  const { material, materialIcons, onEjectRequested, SHEET_MATERIAL_AMOUNT } =
+    props;
 
   const [hovering, setHovering] = useState(false);
 
@@ -110,7 +119,7 @@ const MaterialCounter = (props: MaterialCounterProps) => {
             <MaterialIcon
               materialName={material.name}
               sheets={sheets}
-              icon={material.icon}
+              icon={resolveMaterialIcon(material, materialIcons)}
             />
           </Flex.Item>
           <Flex.Item>

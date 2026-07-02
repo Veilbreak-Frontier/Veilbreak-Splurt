@@ -15,12 +15,13 @@ import { toTitleCase } from 'tgui-core/string';
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
 import { MaterialAccessBar } from './Fabrication/MaterialAccessBar';
-import { MaterialIcon } from './Fabrication/MaterialIcon';
-import type { Material } from './Fabrication/Types';
+import { MaterialIcon, resolveMaterialIcon } from './Fabrication/MaterialIcon';
+import type { Material, MaterialIconEntry } from './Fabrication/Types';
 
 type Data = {
   SHEET_MATERIAL_AMOUNT: number;
   materials: Material[];
+  materialIcons?: MaterialIconEntry[];
   design?: Design;
   busy: BooleanLike;
   onHold?: BooleanLike;
@@ -35,7 +36,8 @@ type Design = {
 
 export const Flatpacker = (props: any) => {
   const { act, data } = useBackend<Data>();
-  const { SHEET_MATERIAL_AMOUNT, materials = [], design, busy, onHold } = data;
+  const { SHEET_MATERIAL_AMOUNT, materials = [], materialIcons, design, busy, onHold } =
+    data;
 
   return (
     <Window width={670} height={400} title="Flatpacker">
@@ -91,6 +93,7 @@ export const Flatpacker = (props: any) => {
                   <CostPreview
                     SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                     materials={design.requiredMaterials}
+                    materialIcons={materialIcons}
                   />
                 </Stack.Item>
               </Stack>
@@ -102,6 +105,7 @@ export const Flatpacker = (props: any) => {
             <Section fill>
               <MaterialAccessBar
                 availableMaterials={materials}
+                materialIcons={materialIcons}
                 SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                 onEjectRequested={(material, amount) =>
                   act('eject', { ref: material.ref, amount })
@@ -166,10 +170,11 @@ const BoardPreview = (props: BoardPreviewProps) => {
 type CostPreviewProps = {
   SHEET_MATERIAL_AMOUNT: number;
   materials?: Material[];
+  materialIcons?: MaterialIconEntry[];
 };
 
 const CostPreview = (props: CostPreviewProps) => {
-  const { materials, SHEET_MATERIAL_AMOUNT } = props;
+  const { materials, materialIcons, SHEET_MATERIAL_AMOUNT } = props;
 
   return (
     <Section fill scrollable>
@@ -182,7 +187,7 @@ const CostPreview = (props: CostPreviewProps) => {
                   <MaterialIcon
                     materialName={material.name}
                     sheets={material.amount / SHEET_MATERIAL_AMOUNT}
-                    icon={material.icon}
+                    icon={resolveMaterialIcon(material, materialIcons)}
                   />
                 </div>
               </Table.Cell>

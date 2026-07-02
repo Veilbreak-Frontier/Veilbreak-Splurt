@@ -1,6 +1,8 @@
 import { Icon, Image } from 'tgui-core/components';
 import { classes } from 'tgui-core/react';
 
+import type { Material, MaterialIconEntry } from './Types';
+
 const MATERIAL_ICONS: Record<string, [number, string][]> = {
   iron: [
     [0, 'sheet-metal'],
@@ -72,6 +74,40 @@ export type MaterialIconProps = {
   icon?: string;
 };
 
+export const resolveMaterialIcon = (
+  material: Pick<Material, 'ref' | 'name' | 'icon'>,
+  materialIcons?: MaterialIconEntry[],
+): string | undefined => {
+  if (material.icon) {
+    return material.icon;
+  }
+
+  return materialIcons?.find((entry) => entry.id === material.ref)?.icon;
+};
+
+export const materialIconsByName = (
+  materialIcons?: MaterialIconEntry[],
+  materials?: Material[],
+): Record<string, string> => {
+  const map: Record<string, string> = {};
+
+  for (const entry of materialIcons ?? []) {
+    map[entry.name] = entry.icon;
+  }
+
+  for (const material of materials ?? []) {
+    const icon = resolveMaterialIcon(material, materialIcons);
+    if (icon) {
+      map[material.name] = icon;
+    }
+  }
+
+  return map;
+};
+
+const formatBase64Icon = (icon: string) =>
+  icon.startsWith('data:') ? icon : `data:image/jpeg;base64,${icon}`;
+
 /**
  * A 32x32 material icon. Animates between different stack sizes of the given
  * material.
@@ -84,13 +120,9 @@ export const MaterialIcon = (props: MaterialIconProps) => {
       <Image
         width="32px"
         height="32px"
-        src={`data:image/jpeg;base64,${icon}`}
+        src={formatBase64Icon(icon)}
       />
     );
-  }
-
-  if (!materialName) {
-    return <Icon name="question-circle" />;
   }
 
   const icons = MATERIAL_ICONS[materialName];
@@ -105,18 +137,19 @@ export const MaterialIcon = (props: MaterialIconProps) => {
     activeIdx += 1;
   }
 
-  const iconState = icons[activeIdx][1];
-
   return (
     <div className={'FabricatorMaterialIcon'}>
-      <div
-        className={classes([
-          'FabricatorMaterialIcon__Icon',
-          'FabricatorMaterialIcon__Icon--active',
-          'sheetmaterials32x32',
-          iconState,
-        ])}
-      />
+      {icons.map(([_, iconState], idx) => (
+        <div
+          key={idx}
+          className={classes([
+            'FabricatorMaterialIcon__Icon',
+            idx === activeIdx && 'FabricatorMaterialIcon__Icon--active',
+            'sheetmaterials32x32',
+            iconState,
+          ])}
+        />
+      ))}
     </div>
   );
 };
