@@ -78,4 +78,5 @@
 /datum/loadout_item/toys/toy_mace
 	name = "Balloon Mace"
 	item_path = /obj/item/balloon_mallet/mace
-	ckeywhitelist = null
+	ckeywhitelist = list("fenrir2116")
+
