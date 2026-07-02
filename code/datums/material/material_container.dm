@@ -750,41 +750,19 @@
 	data["SHEET_MATERIAL_AMOUNT"] = SHEET_MATERIAL_AMOUNT
 	return data
 
-/// Returns a base64 sheet icon for the given material amount, or null if unavailable.
-/datum/material_container/proc/get_sheet_icon_base64(datum/material/material, amount)
-	var/obj/item/stack/sheet_type = material.sheet_type
-	if(!sheet_type)
-		return null
-
-	var/icon_state = initial(sheet_type.icon_state)
-	if(!initial(sheet_type.novariants))
-		var/sheets = amount / SHEET_MATERIAL_AMOUNT
-		var/max_amt = initial(sheet_type.max_amount)
-		if(sheets > (max_amt * 2/3))
-			icon_state = "[icon_state]_3"
-		else if(sheets > (max_amt / 3))
-			icon_state = "[icon_state]_2"
-
-	return icon2base64(icon(initial(sheet_type.icon), icon_state = icon_state))
-
 /// List format is list(material_name = list(amount = ..., ref = ..., etc.))
 /datum/material_container/ui_data(mob/user)
 	var/list/data = list()
 
 	for(var/datum/material/material as anything in materials)
 		var/amount = materials[material]
-		var/list/entry = list(
+
+		data += list(list(
 			"name" = material.name,
 			"ref" = REF(material),
 			"amount" = amount,
 			"color" = material.greyscale_color || material.color
-		)
-
-		var/icon_base64 = get_sheet_icon_base64(material, amount)
-		if(icon_base64)
-			entry["icon"] = icon_base64
-
-		data += list(entry)
+		))
 
 	return data
 
