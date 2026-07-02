@@ -1,4 +1,4 @@
-import { Box, Icon, Image } from 'tgui-core/components';
+import { Icon } from 'tgui-core/components';
 import { classes } from 'tgui-core/react';
 
 const MATERIAL_ICONS: Record<string, [number, string][]> = {
@@ -65,11 +65,6 @@ export type MaterialIconProps = {
    * The number of sheets of the material.
    */
   sheets?: number;
-
-  /**
-   * Base64-encoded sheet icon from the server, when available.
-   */
-  icon?: string;
 };
 
 /**
@@ -77,16 +72,7 @@ export type MaterialIconProps = {
  * material.
  */
 export const MaterialIcon = (props: MaterialIconProps) => {
-  const { materialName, sheets = 0, icon } = props;
-
-  if (!materialName) {
-    return <Icon name="question-circle" />;
-  }
-
-  if (icon) {
-    return <Image src={icon} width="32px" height="32px" />;
-  }
-
+  const { materialName, sheets = 0 } = props;
   const icons = MATERIAL_ICONS[materialName];
 
   if (!icons) {
@@ -99,13 +85,19 @@ export const MaterialIcon = (props: MaterialIconProps) => {
     activeIdx += 1;
   }
 
-  const iconState = icons[activeIdx][1];
-
   return (
-    <Box
-      width="32px"
-      height="32px"
-      className={classes(['sheetmaterials32x32', iconState])}
-    />
+    <div className={'FabricatorMaterialIcon'}>
+      {icons.map(([_, iconState], idx) => (
+        <div
+          key={idx}
+          className={classes([
+            'FabricatorMaterialIcon__Icon',
+            idx === activeIdx && 'FabricatorMaterialIcon__Icon--active',
+            'sheetmaterials32x32',
+            iconState,
+          ])}
+        />
+      ))}
+    </div>
   );
 };

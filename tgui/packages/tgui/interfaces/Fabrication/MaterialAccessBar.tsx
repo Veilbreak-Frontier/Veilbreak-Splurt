@@ -51,18 +51,14 @@ const LABEL_FORMAT = (value: number) => formatSiUnit(value, 0);
  * fifty sheets.
  */
 export const MaterialAccessBar = (props: MaterialAccessBarProps) => {
-  const {
-    availableMaterials = [],
-    SHEET_MATERIAL_AMOUNT,
-    onEjectRequested,
-  } = props;
+  const { availableMaterials, SHEET_MATERIAL_AMOUNT, onEjectRequested } = props;
 
   return (
     <Flex wrap>
       {sortBy(availableMaterials, [
-        (m: Material) => MATERIAL_RARITY[m.name] ?? Infinity,
+        (m: Material) => MATERIAL_RARITY[m.name],
       ]).map((material) => (
-        <Flex.Item grow basis={4.5} key={material.ref || material.name}>
+        <Flex.Item grow basis={4.5} key={material.name}>
           <MaterialCounter
             material={material}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
@@ -107,11 +103,7 @@ const MaterialCounter = (props: MaterialCounterProps) => {
           className="MaterialDock__Label"
         >
           <Flex.Item>
-            <MaterialIcon
-              materialName={material.name}
-              sheets={sheets}
-              icon={material.icon}
-            />
+            <MaterialIcon materialName={material.name} sheets={sheets} />
           </Flex.Item>
           <Flex.Item>
             <AnimatedNumber value={sheets} format={LABEL_FORMAT} />
