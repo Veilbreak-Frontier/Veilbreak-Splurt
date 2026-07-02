@@ -16,8 +16,8 @@ import { useBackend } from '../backend';
 import { Window } from '../layouts';
 import { DesignBrowser } from './Fabrication/DesignBrowser';
 import { MaterialCostSequence } from './Fabrication/MaterialCostSequence';
-import { MaterialIcon, materialIconsByName } from './Fabrication/MaterialIcon';
-import type { Design, Material, MaterialIconEntry, MaterialMap } from './Fabrication/Types';
+import type { Design, MaterialMap } from './Fabrication/Types';
+import type { Material } from './Fabrication/Types';
 
 type AutolatheDesign = Design & {
   customMaterials: BooleanLike;
@@ -25,7 +25,6 @@ type AutolatheDesign = Design & {
 
 type AutolatheData = {
   materials: Material[];
-  materialIcons?: MaterialIconEntry[];
   materialtotal: number;
   materialsmax: number;
   SHEET_MATERIAL_AMOUNT: number;
@@ -38,14 +37,11 @@ export const Autolathe = (props) => {
   const {
     materialtotal,
     materialsmax,
-    materials = [],
-    materialIcons,
-    designs = [],
+    materials,
+    designs,
     active,
     SHEET_MATERIAL_AMOUNT,
   } = data;
-
-  const iconsByName = materialIconsByName(materialIcons, materials);
 
   const filteredMaterials = materials.filter((material) => material.amount > 0);
 
@@ -86,18 +82,7 @@ export const Autolathe = (props) => {
                         {filteredMaterials.map((material) => (
                           <LabeledList.Item
                             key={material.name}
-                            label={
-                              <MaterialIcon
-                                materialName={material.name}
-                                sheets={material.amount / SHEET_MATERIAL_AMOUNT}
-                                icon={
-                                  material.icon ||
-                                  materialIcons?.find(
-                                    (entry) => entry.id === material.ref,
-                                  )?.icon
-                                }
-                              />
-                            }
+                            label={capitalize(material.name)}
                           >
                             <ProgressBar
                               style={{
@@ -109,7 +94,6 @@ export const Autolathe = (props) => {
                               color="black"
                             >
                               <div style={{ transform: 'scaleX(-1)' }}>
-                                {capitalize(material.name)}:{' '}
                                 {material.amount / SHEET_MATERIAL_AMOUNT +
                                   ' sheets'}
                               </div>
@@ -135,7 +119,6 @@ export const Autolathe = (props) => {
               ) => (
                 <AutolatheRecipe
                   design={design}
-                  icons={iconsByName}
                   SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                   availableMaterials={availableMaterials}
                 />
@@ -153,7 +136,6 @@ type PrintButtonProps = {
   quantity: number;
   availableMaterials: MaterialMap;
   SHEET_MATERIAL_AMOUNT: number;
-  icons: Record<string, string>;
   maxmult: number;
 };
 
@@ -164,7 +146,6 @@ const PrintButton = (props: PrintButtonProps) => {
     quantity,
     availableMaterials,
     SHEET_MATERIAL_AMOUNT,
-    icons,
     maxmult,
   } = props;
 
@@ -177,7 +158,6 @@ const PrintButton = (props: PrintButtonProps) => {
           amount={quantity}
           SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
           available={availableMaterials}
-          icons={icons}
         />
       }
     >
@@ -201,12 +181,11 @@ type AutolatheRecipeProps = {
   design: AutolatheDesign;
   availableMaterials: MaterialMap;
   SHEET_MATERIAL_AMOUNT: number;
-  icons: Record<string, string>;
 };
 
 const AutolatheRecipe = (props: AutolatheRecipeProps) => {
   const { act } = useBackend<AutolatheData>();
-  const { design, availableMaterials, SHEET_MATERIAL_AMOUNT, icons } = props;
+  const { design, availableMaterials, SHEET_MATERIAL_AMOUNT } = props;
 
   let maxmult = 0;
   if (design.customMaterials) {
@@ -262,7 +241,6 @@ const AutolatheRecipe = (props: AutolatheRecipeProps) => {
             amount={1}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             available={availableMaterials}
-            icons={icons}
           />
         }
       >
@@ -291,7 +269,6 @@ const AutolatheRecipe = (props: AutolatheRecipeProps) => {
         quantity={5}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
         availableMaterials={availableMaterials}
-        icons={icons}
         maxmult={maxmult}
       />
 
@@ -300,7 +277,6 @@ const AutolatheRecipe = (props: AutolatheRecipeProps) => {
         quantity={10}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
         availableMaterials={availableMaterials}
-        icons={icons}
         maxmult={maxmult}
       />
 

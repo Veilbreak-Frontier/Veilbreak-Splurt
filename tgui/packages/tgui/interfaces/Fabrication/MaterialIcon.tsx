@@ -1,7 +1,5 @@
-import { Icon, Image } from 'tgui-core/components';
+import { Icon } from 'tgui-core/components';
 import { classes } from 'tgui-core/react';
-
-import type { Material, MaterialIconEntry } from './Types';
 
 const MATERIAL_ICONS: Record<string, [number, string][]> = {
   iron: [
@@ -67,64 +65,14 @@ export type MaterialIconProps = {
    * The number of sheets of the material.
    */
   sheets?: number;
-
-  /**
-   * Base64-encoded sheet icon from the server, when available.
-   */
-  icon?: string;
 };
-
-export const resolveMaterialIcon = (
-  material: Pick<Material, 'ref' | 'name' | 'icon'>,
-  materialIcons?: MaterialIconEntry[],
-): string | undefined => {
-  if (material.icon) {
-    return material.icon;
-  }
-
-  return materialIcons?.find((entry) => entry.id === material.ref)?.icon;
-};
-
-export const materialIconsByName = (
-  materialIcons?: MaterialIconEntry[],
-  materials?: Material[],
-): Record<string, string> => {
-  const map: Record<string, string> = {};
-
-  for (const entry of materialIcons ?? []) {
-    map[entry.name] = entry.icon;
-  }
-
-  for (const material of materials ?? []) {
-    const icon = resolveMaterialIcon(material, materialIcons);
-    if (icon) {
-      map[material.name] = icon;
-    }
-  }
-
-  return map;
-};
-
-const formatBase64Icon = (icon: string) =>
-  icon.startsWith('data:') ? icon : `data:image/jpeg;base64,${icon}`;
 
 /**
  * A 32x32 material icon. Animates between different stack sizes of the given
  * material.
  */
 export const MaterialIcon = (props: MaterialIconProps) => {
-  const { materialName, sheets = 0, icon } = props;
-
-  if (icon) {
-    return (
-      <Image
-        width="32px"
-        height="32px"
-        src={formatBase64Icon(icon)}
-      />
-    );
-  }
-
+  const { materialName, sheets = 0 } = props;
   const icons = MATERIAL_ICONS[materialName];
 
   if (!icons) {

@@ -5,12 +5,6 @@ import type { BooleanLike } from 'tgui-core/react';
  */
 export type MaterialMap = Record<string, number>;
 
-export type MaterialIconEntry = {
-  id: string;
-  name: string;
-  icon: string;
-};
-
 /**
  * A single, uniquely identifiable material.
  */
@@ -35,11 +29,6 @@ export type Material = {
    * The color of the material.
    */
   color: string;
-
-  /**
-   * Base64-encoded sheet icon from the server.
-   */
-  icon?: string;
 };
 
 /**
@@ -94,11 +83,6 @@ export type FabricatorData = {
    * Definition of how much units 1 sheet has.
    */
   SHEET_MATERIAL_AMOUNT: number;
-
-  /**
-   * Base64 sheet icons from ui_static_data.
-   */
-  materialIcons?: MaterialIconEntry[];
 
   /**
    * The name of the fabricator, as displayed on the title bar.

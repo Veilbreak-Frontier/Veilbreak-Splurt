@@ -6,23 +6,18 @@ import { Window } from '../layouts';
 import { DesignBrowser } from './Fabrication/DesignBrowser';
 import { MaterialAccessBar } from './Fabrication/MaterialAccessBar';
 import { MaterialCostSequence } from './Fabrication/MaterialCostSequence';
-import { materialIconsByName } from './Fabrication/MaterialIcon';
-import type { Design, Material, MaterialIconEntry, MaterialMap } from './Fabrication/Types';
+import type { Design, Material, MaterialMap } from './Fabrication/Types';
 
 type Data = {
   debug: BooleanLike;
   designs: Record<string, Design>;
   materials: Material[];
-  materialIcons?: MaterialIconEntry[];
   SHEET_MATERIAL_AMOUNT: number;
 };
 
 export function ComponentPrinter(props) {
   const { act, data } = useBackend<Data>();
-  const { materials = [], designs, materialIcons, SHEET_MATERIAL_AMOUNT, debug } =
-    data;
-
-  const iconsByName = materialIconsByName(materialIcons, materials);
+  const { materials = [], designs, SHEET_MATERIAL_AMOUNT, debug } = data;
 
   // Reduce the material count array to a map of actually available materials.
   const availableMaterials: MaterialMap = {};
@@ -48,14 +43,13 @@ export function ComponentPrinter(props) {
                 design,
                 availableMaterials,
                 _onPrintDesign,
-              ) => <Recipe design={design} available={availableMaterials} icons={iconsByName} />}
+              ) => <Recipe design={design} available={availableMaterials} />}
             />
           </Stack.Item>
           <Stack.Item>
             <Section>
               <MaterialAccessBar
                 availableMaterials={materials}
-                materialIcons={materialIcons}
                 SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                 onEjectRequested={(material, amount) =>
                   act('remove_mat', { ref: material.ref, amount })
@@ -72,11 +66,10 @@ export function ComponentPrinter(props) {
 type RecipeProps = {
   available: MaterialMap;
   design: Design;
-  icons: Record<string, string>;
 };
 
 function Recipe(props: RecipeProps) {
-  const { available, design, icons } = props;
+  const { available, design } = props;
 
   const { act, data } = useBackend<Data>();
   const { SHEET_MATERIAL_AMOUNT, debug } = data;
@@ -111,7 +104,6 @@ function Recipe(props: RecipeProps) {
             amount={1}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             available={available}
-            icons={icons}
           />
         }
       >
