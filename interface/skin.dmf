@@ -48,7 +48,6 @@ menu "menu"
 		command = "adminhelp"
 		category = "&Help"
 		saved-params = "is-checked"
-        is-default = false
 	elem
 		name = "&Hotkeys"
 		command = "Hotkeys-Help"
