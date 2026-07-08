@@ -3738,7 +3738,7 @@
 /area/ruin/space/has_grav/bubbers/persistance/sec/holding)
 "hO" = (
 /obj/machinery/light/directional/west,
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4;
 	req_access = list("syndicate")
 	},
@@ -21829,7 +21829,7 @@
 /turf/open/floor/iron/dark/textured_large,
 /area/ruin/space/has_grav/bubbers/persistance/service/lockers)
 "SI" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4;
 	req_access = list("syndicate")
 	},

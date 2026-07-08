@@ -432,7 +432,7 @@
 	req_access = list(ACCESS_RESEARCH) // Research access is required to toggle the lock.
 
 	var/silence_announcements = FALSE
-	var/locked = TRUE
+	var/locked = FALSE
 
 // An unlocked subtype of the board for mapping.
 /obj/item/circuitboard/computer/rdconsole/unlocked

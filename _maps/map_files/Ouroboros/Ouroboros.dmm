@@ -66283,7 +66283,7 @@
 /turf/open/floor/iron/half,
 /area/station/hallway/secondary/command)
 "tga" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 1
 	},
 /obj/effect/turf_decal/box,
@@ -66361,7 +66361,7 @@
 /turf/open/floor/iron/dark/small,
 /area/station/service/library/lounge)
 "thU" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 8
 	},
 /obj/machinery/firealarm/directional/east,

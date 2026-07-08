@@ -9995,7 +9995,7 @@
 /turf/open/openspace,
 /area/station/biodome/aft)
 "dAb" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 8
 	},
 /obj/effect/turf_decal/tile/purple/opposingcorners,
@@ -37221,7 +37221,7 @@
 /turf/open/floor/grass,
 /area/station/biodome/aft)
 "mZX" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4
 	},
 /obj/effect/turf_decal/tile/purple/anticorner/contrasted{
@@ -44780,7 +44780,7 @@
 /turf/open/floor/circuit,
 /area/station/ai/satellite/chamber)
 "pKj" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 1
 	},
 /obj/effect/turf_decal/tile/purple/half/contrasted,

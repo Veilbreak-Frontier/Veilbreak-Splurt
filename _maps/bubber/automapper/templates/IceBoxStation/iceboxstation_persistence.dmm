@@ -1455,7 +1455,7 @@
 	},
 /area/ruin/space/has_grav/bubbers/persistance/sci/xenobio)
 "de" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4;
 	req_access = list("syndicate")
 	},
@@ -4746,7 +4746,7 @@
 /area/ruin/space/has_grav/bubbers/persistance/engineering/atmospherics)
 "kr" = (
 /obj/machinery/light/directional/west,
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4;
 	req_access = list("syndicate")
 	},

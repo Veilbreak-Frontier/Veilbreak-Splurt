@@ -433,7 +433,7 @@
 /turf/open/floor/plating,
 /area/station/medical/pharmacy)
 "aeJ" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 8
 	},
 /obj/effect/turf_decal/bot,
@@ -20998,7 +20998,7 @@
 /area/station/medical/medbay/central)
 "gPy" = (
 /obj/effect/turf_decal/bot,
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4
 	},
 /obj/effect/turf_decal/tile/neutral/anticorner/contrasted{
@@ -48432,7 +48432,7 @@
 "pFs" = (
 /obj/structure/cable,
 /obj/machinery/newscaster/directional/west,
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4
 	},
 /obj/effect/turf_decal/tile/red/half/contrasted{

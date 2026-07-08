@@ -76855,7 +76855,7 @@
 /turf/open/floor/engine,
 /area/station/engineering/supermatter/room)
 "vqt" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4
 	},
 /obj/effect/turf_decal/stripes/box,

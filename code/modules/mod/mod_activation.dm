@@ -73,76 +73,94 @@
 /// Deploys a part of the suit onto the user.
 /obj/item/mod/control/proc/deploy(mob/user, obj/item/part, instant = FALSE)
 	var/datum/mod_part/part_datum = get_part_datum(part)
-	if(!wearer || part.loc != src)
+	if(!wearer)
+		playsound(src, 'sound/machines/scanner/scanbuzz.ogg', 25, TRUE, SILENCED_SOUND_EXTRARANGE)
+		return FALSE // pAI is trying to deploy it from your hands
+	if(part.loc != src)
+		if(!user)
+			return FALSE
+		balloon_alert(user, "already deployed!")
+		playsound(src, 'sound/machines/scanner/scanbuzz.ogg', 25, TRUE, SILENCED_SOUND_EXTRARANGE)
+	if(part_datum.can_overslot)
+		var/obj/item/overslot = wearer.get_item_by_slot(part.slot_flags)
+		if(can_part_overslot_item(part, overslot)) // BUBBER EDIT - check for /obj/item, not /obj/item/clothing - ORIGINAL: if(istype(overslot, /obj/item/clothing))
+			part_datum.overslotting = overslot
+			wearer.transferItemToLoc(overslot, part, force = TRUE)
+			RegisterSignal(part, COMSIG_ATOM_EXITED, PROC_REF(on_overslot_exit))
+	if(wearer.equip_to_slot_if_possible(part, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
+		ADD_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
+		wearer.update_clothing(slot_flags|part.slot_flags)
+		SEND_SIGNAL(src, COMSIG_MOD_PART_DEPLOYED, user, part_datum)
+		if(user)
+			wearer.visible_message(span_notice("[wearer]'s [part.name] deploy[part.p_s()] with a mechanical hiss."),
+				span_notice("[part] deploy[part.p_s()] with a mechanical hiss."),
+				span_hear("You hear a mechanical hiss."))
+			playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+		if(!active || part_datum.sealed)
+			return TRUE
+		if(instant)
+			seal_part(part, is_sealed = TRUE)
+			return TRUE
+		else if(delayed_seal_part(part))
+			return TRUE
+		balloon_alert(user, "can't seal, retracting!")
+		retract(user, part, instant = TRUE)
+	else
+		if(part_datum.overslotting)
+			var/obj/item/overslot = part_datum.overslotting
+			if(!wearer.equip_to_slot_if_possible(overslot, overslot.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
+				wearer.dropItemToGround(overslot, force = TRUE, silent = TRUE)
+		if(!user)
+			return FALSE
+		balloon_alert(user, "bodypart clothed!")
+		playsound(src, 'sound/machines/scanner/scanbuzz.ogg', 25, TRUE, SILENCED_SOUND_EXTRARANGE)
+	return FALSE
+
+//BUBBER ADDITION START
+/// Checks whether an item can be nested inside a deploying MOD part as its overslotted visual underlay.
+/obj/item/mod/control/proc/can_part_overslot_item(obj/item/part, obj/item/overslot)
+	if(!istype(overslot))
+		return FALSE
+	if(is_mod_part_or_control(overslot))
 		return FALSE
 
-	var/obj/item/old_equipment = wearer.get_item_by_slot(part.slot_flags)
-	var/cleared_slot = FALSE
+	return TRUE
 
-	if(part_datum.can_overslot && istype(old_equipment) && old_equipment != part)
-		part_datum.overslotting = old_equipment
-		wearer.transferItemToLoc(old_equipment, part, force = TRUE)
-		cleared_slot = TRUE
-
-	if(wearer.equip_to_slot_if_possible(part, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
-		if(cleared_slot)
-			RegisterSignal(part, COMSIG_ATOM_EXITED, PROC_REF(on_overslot_exit))
-			RegisterSignal(old_equipment, COMSIG_ITEM_POST_UNEQUIP, PROC_REF(on_overslot_exit))
-
-		ADD_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
-		sync_taur_logic()
-		SEND_SIGNAL(src, COMSIG_MOD_PART_DEPLOYED, user, part_datum)
-
-		if(user)
-			wearer.visible_message(span_notice("[wearer]'s [part.name] deploys with a mechanical hiss."), span_notice("[part] deploys with a mechanical hiss."), span_hear("You hear a mechanical hiss."))
-			playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
-
-		if(active && !part_datum.sealed)
-			if(instant)
-				seal_part(part, is_sealed = TRUE)
-			else
-				delayed_seal_part(part)
-
-		wearer.update_body_parts()
-		wearer.update_appearance(UPDATE_OVERLAYS)
-		return TRUE
-
-	if(cleared_slot)
-		wearer.equip_to_slot_if_possible(old_equipment, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE)
-		part_datum.overslotting = null
-
-	return FALSE
+//BUBBER ADDITION END
 
 /// Retract a part of the suit from the user.
 /obj/item/mod/control/proc/retract(mob/user, obj/item/part, instant = FALSE)
 	var/datum/mod_part/part_datum = get_part_datum(part)
-	if(!part_datum || part.loc == src)
-		return FALSE
-
-	if(!instant && wearer)
-		if(!do_after(wearer, activation_step_time, wearer, MOD_ACTIVATION_STEP_FLAGS, extra_checks = CALLBACK(src, PROC_REF(get_wearer)), hidden = TRUE))
+	if(part.loc == src)
+		if(!user)
 			return FALSE
-		to_chat(wearer, span_notice("[part] unseals with a mechanical hiss."))
-		playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
-
-	if(wearer)
-		var/obj/item/overslot = part_datum.overslotting
-		if(overslot)
-			on_overslot_exit(part, overslot)
-		REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
-		if(part_datum.sealed)
+		balloon_alert(user, "already retracted!")
+		playsound(src, 'sound/machines/scanner/scanbuzz.ogg', 25, TRUE, SILENCED_SOUND_EXTRARANGE)
+		return FALSE
+	if(SEND_SIGNAL(src, COMSIG_MOD_PART_RETRACTING, user, part_datum) & MOD_CANCEL_RETRACTION)
+		return FALSE
+	var/unsealing = FALSE
+	if(active && part_datum.sealed)
+		unsealing = TRUE
+		if(instant)
 			seal_part(part, is_sealed = FALSE)
-		wearer.temporarilyRemoveItemFromInventory(part, TRUE)
-		wearer.update_body_parts()
-		wearer.update_appearance(UPDATE_OVERLAYS)
-		wearer.update_equipment_speed_mods()
-
-	part.forceMove(src)
-	sync_taur_logic()
-
-	if(user)
-		var/msg = "[part.name] retracts with a mechanical hiss."
-		wearer.visible_message(span_notice("[wearer]'s [msg]"), span_notice("Your [msg]"))
+		else if(!delayed_seal_part(part))
+			balloon_alert(user, "can't unseal!")
+			playsound(src, 'sound/machines/scanner/scanbuzz.ogg', 25, TRUE, SILENCED_SOUND_EXTRARANGE)
+			return FALSE
+	REMOVE_TRAIT(part, TRAIT_NODROP, MOD_TRAIT)
+	wearer.transferItemToLoc(part, src, force = TRUE)
+	if(part_datum.overslotting)
+		var/obj/item/overslot = part_datum.overslotting
+		if(!QDELING(wearer) && !wearer.equip_to_slot_if_possible(overslot, overslot.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
+			wearer.dropItemToGround(overslot, force = TRUE, silent = TRUE)
+	wearer.update_clothing(slot_flags|part.slot_flags)
+	if(!user)
+		return TRUE
+	wearer.visible_message(span_notice("[wearer]'s [part.name] retract[part.p_s()] back into [src] with a mechanical hiss."),
+		span_notice("[part] retract[part.p_s()] back into [src] with a mechanical hiss."),
+		span_hear("You hear a mechanical hiss."))
+	if (!unsealing)
 		playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 	return TRUE
 
@@ -181,6 +199,7 @@
 	mod_link.end_call()
 	var/original_active_status = active
 	to_chat(wearer, span_notice("MODsuit [active ? "shutting down" : "starting up"]."))
+	//deploy the control unit
 	if(original_active_status)
 		if(delayed_activation())
 			playsound(src, 'sound/machines/synth/synth_no.ogg', 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE, frequency = 6000)
@@ -191,10 +210,10 @@
 
 	var/list/sealed_parts = list()
 
-	for(var/obj/item/part as anything in get_parts())
+	for(var/obj/item/part as anything in get_parts()) //seals/unseals all deployed parts
 		if(part.loc == src)
 			continue
-		if(!delayed_seal_part(part))
+		if(!delayed_seal_part(part)) //shit something broke, revert it all
 			activating = FALSE
 			for(var/obj/item/sealed_part as anything in sealed_parts)
 				seal_part(sealed_part, is_sealed = !get_part_datum(sealed_part).sealed)
@@ -229,6 +248,7 @@
 	. = FALSE
 	var/datum/mod_part/part_datum = get_part_datum(part)
 	if(do_after(wearer, activation_step_time, wearer, MOD_ACTIVATION_STEP_FLAGS, extra_checks = CALLBACK(src, PROC_REF(get_wearer)), hidden = TRUE))
+		to_chat(wearer, span_notice("[part] [!part_datum.sealed ? part_datum.sealed_message : part_datum.unsealed_message]."))
 		playsound(src, 'sound/vehicles/mecha/mechmove03.ogg', 25, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		seal_part(part, is_sealed = !part_datum.sealed)
 		return TRUE
@@ -265,15 +285,13 @@
 		if((part.slot_flags & ITEM_SLOT_HEAD) && istype(part, /obj/item/clothing/head/mod))
 			qdel(part.GetComponent(/datum/component/wearertargeting/earprotection))
 	update_speed()
-	if(wearer)
-		wearer.update_clothing(part.slot_flags | slot_flags)
-		wearer.refresh_obscured()
-		wearer.update_body_parts()
-	if((part.clothing_flags & (MASKINTERNALS|HEADINTERNALS)) && wearer?.invalid_internals())
+	wearer.update_clothing(part.slot_flags | slot_flags)
+	wearer.refresh_obscured()
+	if((part.clothing_flags & (MASKINTERNALS|HEADINTERNALS)) && wearer.invalid_internals())
 		wearer.cutoff_internals()
 	SEND_SIGNAL(src, COMSIG_MOD_PART_SEALED, part_datum)
 	if(is_sealed)
-		if(!active)
+		if (!active)
 			return
 		for(var/obj/item/mod/module/module as anything in modules)
 			if(module.part_activated || !module.has_required_parts(mod_parts, need_active = TRUE))
@@ -295,25 +313,23 @@
 	var/datum/mod_part/part_datum = get_part_datum(src)
 	part_datum.sealed = is_on
 	active = is_on
-
-	if(!active)
-		for(var/slot_key in mod_parts)
-			var/datum/mod_part/P = mod_parts[slot_key]
-			if(P.overslotting)
-				on_overslot_exit(P.part_item, P.overslotting)
+	if(active)
+		for(var/obj/item/mod/module/module as anything in modules)
+			if(!module.part_activated && module.has_required_parts(mod_parts, need_active = TRUE))
+				module.on_part_activation()
+				module.part_activated = TRUE
 	else
 		for(var/obj/item/mod/module/module as anything in modules)
-			if(module.part_activated || !module.has_required_parts(mod_parts, need_active = TRUE))
+			if(!module.part_activated)
 				continue
-			module.on_part_activation()
-			module.part_activated = TRUE
-
-	sync_taur_logic()
+			module.on_part_deactivation()
+			module.part_activated = FALSE
 	update_charge_alert()
 	update_appearance(UPDATE_ICON_STATE)
-	if(wearer)
-		wearer.regenerate_icons()
-		wearer.update_body_parts()
+	var/updated_slots = slot_flags
+	for (var/slot_key in mod_parts)
+		updated_slots |= text2num(slot_key)
+	wearer.update_clothing(updated_slots)
 
 /// Quickly deploys all the suit parts and if successful, seals them and turns on the suit. Intended mostly for outfits.
 /obj/item/mod/control/proc/quick_activation()

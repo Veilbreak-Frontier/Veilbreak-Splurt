@@ -7172,7 +7172,7 @@
 /area/ruin/space/tcommsat_oldaisat)
 "cVB" = (
 /obj/item/radio/intercom/directional/south,
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 1
 	},
 /obj/effect/turf_decal/trimline/purple/filled/end,
@@ -29352,7 +29352,7 @@
 /turf/open/floor/plating,
 /area/station/maintenance/starboard/fore)
 "lhq" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4
 	},
 /turf/open/floor/iron/showroomfloor,
