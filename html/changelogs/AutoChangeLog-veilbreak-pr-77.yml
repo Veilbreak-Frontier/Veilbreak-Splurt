@@ -1,0 +1,5 @@
+author: "YourName"
+delete-after: True
+changes:
+  - bugfix: "Fixed R&D consoles being locked at round start"
+  - bugfix: "Repaired modsuits by reversion"
