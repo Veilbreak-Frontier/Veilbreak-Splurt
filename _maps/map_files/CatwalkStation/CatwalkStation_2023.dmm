@@ -77307,7 +77307,6 @@
 /turf/closed/wall/r_wall,
 /area/station/hallway/primary/aft)
 "uBo" = (
-/mob/living/basic/parrot/poly,
 /obj/structure/filingcabinet/chestdrawer,
 /obj/effect/turf_decal/siding/yellow{
 	dir = 6
