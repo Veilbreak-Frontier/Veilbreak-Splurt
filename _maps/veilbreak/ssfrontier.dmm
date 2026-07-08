@@ -22020,7 +22020,7 @@
 /turf/open/floor/grass,
 /area/station/service/hydroponics)
 "lug" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 1
 	},
 /obj/structure/cable,

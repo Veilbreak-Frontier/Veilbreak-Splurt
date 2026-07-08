@@ -7983,7 +7983,7 @@
 /turf/open/floor/iron/dark/smooth_large,
 /area/station/command/bridge)
 "aSE" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 8
 	},
 /obj/effect/turf_decal/tile/dark_green{
@@ -20322,7 +20322,7 @@
 /turf/open/floor/plating,
 /area/station/maintenance/aft)
 "ccI" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 8
 	},
 /turf/open/floor/iron/dark/textured,
@@ -32992,7 +32992,7 @@
 /turf/open/floor/iron,
 /area/station/science/explab)
 "fut" = (
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4
 	},
 /obj/machinery/requests_console/directional/west{

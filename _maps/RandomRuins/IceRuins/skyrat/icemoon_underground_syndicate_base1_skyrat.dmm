@@ -731,7 +731,7 @@
 /area/ruin/syndicate_lava_base/cargo)
 "dO" = (
 /obj/effect/turf_decal/tile/dark/full,
-/obj/machinery/computer/rdconsole{
+/obj/machinery/computer/rdconsole/unlocked{
 	dir = 4
 	},
 /turf/open/floor/iron/dark/textured_large,
