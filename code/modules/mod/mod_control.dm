@@ -731,29 +731,14 @@
 		return
 	atom_destruction(damage_flag)
 
-/obj/item/mod/control/proc/on_overslot_exit(obj/item/part, atom/movable/overslot)
+/obj/item/mod/control/proc/on_overslot_exit(obj/item/part, atom/movable/overslot, direction)
 	SIGNAL_HANDLER
+
 	var/datum/mod_part/part_datum = get_part_datum(part)
-	if(!part_datum || !overslot)
+	if(overslot != part_datum.overslotting)
 		return
-
-	UnregisterSignal(part, list(COMSIG_ATOM_EXITED, COMSIG_ITEM_GET_WORN_OVERLAYS))
-	UnregisterSignal(overslot, list(COMSIG_ITEM_POST_UNEQUIP, COMSIG_ITEM_GET_WORN_OVERLAYS))
-
-	if(wearer && overslot.loc == part)
-		var/current_item = wearer.get_item_by_slot(part.slot_flags)
-		if(!current_item || current_item == part)
-			if(current_item == part)
-				wearer.transferItemToLoc(part, src, force = TRUE)
-
-			if(!wearer.equip_to_slot_if_possible(overslot, part.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
-				overslot.forceMove(wearer.drop_location())
-		else
-			overslot.forceMove(wearer.drop_location())
-
+	UnregisterSignal(part, COMSIG_ATOM_EXITED)
 	part_datum.overslotting = null
-	if(wearer)
-		wearer.update_appearance(UPDATE_OVERLAYS)
 
 /obj/item/mod/control/proc/on_potion(atom/movable/source, obj/item/slimepotion/speed/speed_potion, mob/living/user)
 	SIGNAL_HANDLER
@@ -787,24 +772,3 @@
 	if (length(overrides))
 		return overrides[1]
 	return mutable_appearance(worn_icon, "[skin]-helmet-visor", layer = standing.layer + 0.1)
-
-
-/obj/item/mod/control/proc/sync_taur_logic()
-	if(!wearer || !wearer.dna || !wearer.dna.species)
-		return
-
-	var/should_shield = FALSE
-	if(active)
-		for(var/slot_key in mod_parts)
-			var/datum/mod_part/P = mod_parts[slot_key]
-			if(P.part_item && P.part_item.loc == wearer && (P.part_item.slot_flags & ITEM_SLOT_FEET))
-				should_shield = TRUE
-				break
-
-	if(should_shield)
-		wearer.dna.species.modsuit_slot_exceptions |= ITEM_SLOT_FEET
-	else
-		wearer.dna.species.modsuit_slot_exceptions &= ~ITEM_SLOT_FEET
-
-	wearer.update_body_parts()
-	wearer.update_appearance(UPDATE_OVERLAYS)
