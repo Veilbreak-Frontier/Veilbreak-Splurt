@@ -1,6 +1,6 @@
 # Creates a changelog entry in html/changelogs/ for Veilbreak-frontier.
 # The entry is later compiled by compile_changelogs.
-name: Veilbreak-frontier Auto Changelog
+name: Auto Changelog
 
 on:
   pull_request_target:
