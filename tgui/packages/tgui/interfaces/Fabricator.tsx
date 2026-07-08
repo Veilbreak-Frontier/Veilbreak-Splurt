@@ -14,16 +14,19 @@ import { Window } from '../layouts';
 import { DesignBrowser } from './Fabrication/DesignBrowser';
 import { MaterialAccessBar } from './Fabrication/MaterialAccessBar';
 import { MaterialCostSequence } from './Fabrication/MaterialCostSequence';
-import type { Design, FabricatorData, MaterialMap } from './Fabrication/Types';
+import { materialIconsByName } from './Fabrication/MaterialIcon';
+import type { Design, FabricatorData, MaterialMap, MaterialIconEntry } from './Fabrication/Types';
 
 export const Fabricator = (props) => {
   const { act, data } = useBackend<FabricatorData>();
-  const { fabName, onHold, designs, busy, SHEET_MATERIAL_AMOUNT } = data;
+  const { fabName, onHold, designs, busy, SHEET_MATERIAL_AMOUNT, materials, materialIcons } = data;
+
+  const iconsByName = materialIconsByName(materialIcons, materials);
 
   // Reduce the material count array to a map of actually available materials.
   const availableMaterials: MaterialMap = {};
 
-  for (const material of data.materials) {
+  for (const material of materials) {
     availableMaterials[material.name] = material.amount;
   }
 
@@ -49,6 +52,7 @@ export const Fabricator = (props) => {
             <Section>
               <MaterialAccessBar
                 availableMaterials={data.materials ?? []}
+                materialIcons={materialIcons}
                 SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                 onEjectRequested={(material, amount) =>
                   act('remove_mat', { ref: material.ref, amount })
@@ -72,11 +76,12 @@ type PrintButtonProps = {
   quantity: number;
   SHEET_MATERIAL_AMOUNT: number;
   available: MaterialMap;
+  icons: Record<string, string>;
 };
 
 const PrintButton = (props: PrintButtonProps) => {
   const { act } = useBackend<FabricatorData>();
-  const { design, quantity, available, SHEET_MATERIAL_AMOUNT } = props;
+  const { design, quantity, available, SHEET_MATERIAL_AMOUNT, icons } = props;
 
   const canPrint = !Object.entries(design.cost).some(
     ([material, amount]) =>
@@ -91,6 +96,7 @@ const PrintButton = (props: PrintButtonProps) => {
           amount={quantity}
           SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
           available={available}
+          icons={icons}
         />
       }
     >
@@ -149,12 +155,13 @@ const CustomPrint = (props: CustomPrintProps) => {
 type RecipeProps = {
   design: Design;
   available: MaterialMap;
+  icons: Record<string, string>;
   SHEET_MATERIAL_AMOUNT: number;
 };
 
 const Recipe = (props: RecipeProps) => {
   const { act } = useBackend<FabricatorData>();
-  const { design, available, SHEET_MATERIAL_AMOUNT } = props;
+  const { design, available, SHEET_MATERIAL_AMOUNT, icons } = props;
 
   const canPrint = !Object.entries(design.cost).some(
     ([material, amount]) =>
@@ -181,6 +188,7 @@ const Recipe = (props: RecipeProps) => {
             amount={1}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             available={available}
+            icons={icons}
           />
         }
       >
@@ -207,12 +215,14 @@ const Recipe = (props: RecipeProps) => {
         design={design}
         quantity={5}
         available={available}
+        icons={icons}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
       />
       <PrintButton
         design={design}
         quantity={10}
         available={available}
+        icons={icons}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
       />
       <CustomPrint design={design} available={available} />

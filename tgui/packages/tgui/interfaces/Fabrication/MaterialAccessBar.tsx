@@ -4,8 +4,8 @@ import { AnimatedNumber, Button, Flex } from 'tgui-core/components';
 import { formatSiUnit } from 'tgui-core/format';
 import { classes } from 'tgui-core/react';
 
-import { MaterialIcon } from './MaterialIcon';
-import type { Material } from './Types';
+import { MaterialIcon, resolveMaterialIcon } from './MaterialIcon';
+import type { Material, MaterialIconEntry } from './Types';
 
 // by popular demand of discord people (who are always right and never wrong)
 // this is completely made up
@@ -35,6 +35,11 @@ export type MaterialAccessBarProps = {
   SHEET_MATERIAL_AMOUNT: number;
 
   /**
+   * Base64 sheet icons from ui_static_data, keyed by material ref.
+   */
+  materialIcons?: MaterialIconEntry[];
+
+  /**
    * Invoked when the user requests that a material be ejected.
    */
   onEjectRequested?: (material: Material, quantity: number) => void;
@@ -51,16 +56,17 @@ const LABEL_FORMAT = (value: number) => formatSiUnit(value, 0);
  * fifty sheets.
  */
 export const MaterialAccessBar = (props: MaterialAccessBarProps) => {
-  const { availableMaterials, SHEET_MATERIAL_AMOUNT, onEjectRequested } = props;
+  const { availableMaterials, SHEET_MATERIAL_AMOUNT, onEjectRequested, materialIcons } = props;
 
   return (
     <Flex wrap>
       {sortBy(availableMaterials, [
-        (m: Material) => MATERIAL_RARITY[m.name],
+        (m: Material) => MATERIAL_RARITY[m.name] ?? Infinity,
       ]).map((material) => (
-        <Flex.Item grow basis={4.5} key={material.name}>
+        <Flex.Item grow basis={4.5} key={material.ref || material.name}>
           <MaterialCounter
             material={material}
+            materialIcons={materialIcons}
             SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
             onEjectRequested={(quantity) =>
               onEjectRequested?.(material, quantity)
@@ -74,12 +80,13 @@ export const MaterialAccessBar = (props: MaterialAccessBarProps) => {
 
 type MaterialCounterProps = {
   material: Material;
+  materialIcons?: MaterialIconEntry[];
   SHEET_MATERIAL_AMOUNT: number;
   onEjectRequested: (quantity: number) => void;
 };
 
 const MaterialCounter = (props: MaterialCounterProps) => {
-  const { material, onEjectRequested, SHEET_MATERIAL_AMOUNT } = props;
+  const { material, materialIcons, onEjectRequested, SHEET_MATERIAL_AMOUNT } = props;
 
   const [hovering, setHovering] = useState(false);
 
@@ -103,7 +110,11 @@ const MaterialCounter = (props: MaterialCounterProps) => {
           className="MaterialDock__Label"
         >
           <Flex.Item>
-            <MaterialIcon materialName={material.name} sheets={sheets} />
+            <MaterialIcon
+              materialName={material.name}
+              sheets={sheets}
+              icon={resolveMaterialIcon(material, materialIcons)}
+            />
           </Flex.Item>
           <Flex.Item>
             <AnimatedNumber value={sheets} format={LABEL_FORMAT} />

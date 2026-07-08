@@ -748,7 +748,57 @@
 /datum/material_container/ui_static_data(mob/user)
 	var/list/data = list()
 	data["SHEET_MATERIAL_AMOUNT"] = SHEET_MATERIAL_AMOUNT
+	data["materialIcons"] = ui_static_material_icons()
 	return data
+
+/// Icons for all materials this container can hold, keyed by material ref.
+/datum/material_container/proc/ui_static_material_icons()
+	var/list/icons = list()
+
+	for(var/datum/material/material as anything in allowed_materials)
+		ui_static_material_icon_entry(material, icons)
+
+	for(var/datum/material/material as anything in materials)
+		ui_static_material_icon_entry(material, icons)
+
+	return icons
+
+/datum/material_container/proc/ui_static_material_icon_entry(datum/material/material, list/icons)
+	if(!material?.sheet_type)
+		return
+
+	var/mat_ref = REF(material)
+	for(var/list/existing as anything in icons)
+		if(existing["id"] == mat_ref)
+			return
+
+	var/obj/sheet_type = material.sheet_type
+	var/icon_base64 = icon2base64(icon(initial(sheet_type.icon), icon_state = initial(sheet_type.icon_state), frame = 1))
+	if(!icon_base64)
+		return
+
+	icons += list(list(
+		"id" = mat_ref,
+		"name" = material.name,
+		"icon" = icon_base64,
+	))
+
+/// Returns a base64 sheet icon for the given material amount, or null if unavailable.
+/datum/material_container/proc/get_sheet_icon_base64(datum/material/material, amount)
+	var/obj/item/stack/sheet_type = material.sheet_type
+	if(!sheet_type)
+		return null
+
+	var/icon_state = initial(sheet_type.icon_state)
+	if(!initial(sheet_type.novariants))
+		var/sheets = amount / SHEET_MATERIAL_AMOUNT
+		var/max_amt = initial(sheet_type.max_amount)
+		if(sheets > (max_amt * 2/3))
+			icon_state = "[icon_state]_3"
+		else if(sheets > (max_amt / 3))
+			icon_state = "[icon_state]_2"
+
+	return icon2base64(icon(initial(sheet_type.icon), icon_state = icon_state, frame = 1))
 
 /// List format is list(material_name = list(amount = ..., ref = ..., etc.))
 /datum/material_container/ui_data(mob/user)
@@ -757,12 +807,18 @@
 	for(var/datum/material/material as anything in materials)
 		var/amount = materials[material]
 
-		data += list(list(
+		var/list/entry = list(
 			"name" = material.name,
 			"ref" = REF(material),
 			"amount" = amount,
 			"color" = material.greyscale_color || material.color
-		))
+		)
+
+		var/icon_base64 = get_sheet_icon_base64(material, amount)
+		if(icon_base64)
+			entry["icon"] = icon_base64
+
+		data += list(entry)
 
 	return data
 
