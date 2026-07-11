@@ -79,7 +79,7 @@ export const OreSilo = (props: Data) => {
   const {
     SHEET_MATERIAL_AMOUNT,
     machines = [],
-    logs,
+    logs = [],
   } = data;
 
   const [currentTab, setCurrentTab] = useState<Tab>(Tab.Logs);
