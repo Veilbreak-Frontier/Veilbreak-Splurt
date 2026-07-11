@@ -73,7 +73,6 @@ export type MaterialIconProps = {
  */
 export const MaterialIcon = (props: MaterialIconProps) => {
   const { materialName, sheets = 0 } = props;
-
   const icons = MATERIAL_ICONS[materialName];
 
   if (!icons) {

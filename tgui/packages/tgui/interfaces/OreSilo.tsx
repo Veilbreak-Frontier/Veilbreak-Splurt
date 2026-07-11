@@ -19,7 +19,7 @@ import { capitalize } from 'tgui-core/string';
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
 import { MaterialAccessBar } from './Fabrication/MaterialAccessBar';
-import type { Material, MaterialIconEntry } from './Fabrication/Types';
+import type { Material } from './Fabrication/Types';
 
 type Machine = {
   name: string;
@@ -60,7 +60,6 @@ enum Tab {
 type Data = {
   SHEET_MATERIAL_AMOUNT: number;
   materials: Material[];
-  materialIcons?: MaterialIconEntry[];
   machines: Machine[];
   logs: Log[];
   // Banned users is a list of bank account datum IDs
@@ -77,7 +76,7 @@ const actionToColor = {
 
 export const OreSilo = (props: Data) => {
   const { act, data } = useBackend<Data>();
-  const { SHEET_MATERIAL_AMOUNT, machines, logs, materialIcons } = data;
+  const { SHEET_MATERIAL_AMOUNT, machines, logs } = data;
 
   const [currentTab, setCurrentTab] = useState<Tab>(Tab.Logs);
 
@@ -117,7 +116,6 @@ export const OreSilo = (props: Data) => {
             <Section fill>
               <MaterialAccessBar
                 availableMaterials={data.materials}
-                materialIcons={materialIcons}
                 SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                 onEjectRequested={(material, amount) =>
                   act('eject', { ref: material.ref, amount })

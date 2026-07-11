@@ -266,17 +266,36 @@ const AutolatheRecipe = (props: AutolatheRecipeProps) => {
       <PrintButton
         design={design}
         quantity={5}
-        availableMaterials={availableMaterials}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
+        availableMaterials={availableMaterials}
         maxmult={maxmult}
       />
+
       <PrintButton
         design={design}
         quantity={10}
-        availableMaterials={availableMaterials}
         SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
+        availableMaterials={availableMaterials}
         maxmult={maxmult}
       />
+
+      <div
+        className={classes([
+          'FabricatorRecipe__Button',
+          !canPrint && 'FabricatorRecipe__Button--disabled',
+        ])}
+      >
+        <Button.Input
+          color="transparent"
+          buttonText={`[Max: ${maxmult}]`}
+          onCommit={(value) =>
+            act('make', {
+              id: design.id,
+              multiplier: value,
+            })
+          }
+        />
+      </div>
     </div>
   );
 };
