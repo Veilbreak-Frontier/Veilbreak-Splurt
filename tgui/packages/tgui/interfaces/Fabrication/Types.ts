@@ -29,17 +29,6 @@ export type Material = {
    * The color of the material.
    */
   color: string;
-
-  /**
-   * Optional base64-encoded icon for the material.
-   */
-  icon?: string;
-};
-
-export type MaterialIconEntry = {
-  id: string;
-  name: string;
-  icon: string;
 };
 
 /**

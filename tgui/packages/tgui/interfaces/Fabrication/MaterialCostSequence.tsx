@@ -40,11 +40,6 @@ export type MaterialCostSequenceProps = {
    * Definition of how much units 1 sheet has.
    */
   SHEET_MATERIAL_AMOUNT: number;
-
-  /**
-   * Optional material icons keyed by material name.
-   */
-  icons?: Record<string, string>;
 };
 
 /**
@@ -59,7 +54,7 @@ export type MaterialCostSequenceProps = {
  * Otherwise, the labels are white.
  */
 export const MaterialCostSequence = (props: MaterialCostSequenceProps) => {
-  const { design, amount, available, align, justify, SHEET_MATERIAL_AMOUNT, icons } =
+  const { design, amount, available, align, justify, SHEET_MATERIAL_AMOUNT } =
     props;
   let { costMap } = props;
 
@@ -70,7 +65,9 @@ export const MaterialCostSequence = (props: MaterialCostSequenceProps) => {
   costMap ??= {};
 
   if (design) {
-    for (const [name, value] of Object.entries(design.cost)) {
+    const designCost = design.cost ?? {};
+
+    for (const [name, value] of Object.entries(designCost)) {
       costMap[name] = (costMap[name] || 0) + value;
     }
   }
@@ -84,7 +81,6 @@ export const MaterialCostSequence = (props: MaterialCostSequenceProps) => {
               <MaterialIcon
                 materialName={material}
                 sheets={((amount || 1) * quantity) / SHEET_MATERIAL_AMOUNT}
-                icon={icons?.[material]}
               />
             </Flex.Item>
             <Flex.Item
