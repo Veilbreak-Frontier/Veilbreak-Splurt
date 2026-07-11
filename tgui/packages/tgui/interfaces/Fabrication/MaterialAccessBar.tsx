@@ -27,7 +27,7 @@ export type MaterialAccessBarProps = {
   /**
    * All materials currently available to the user.
    */
-  availableMaterials: Material[];
+  availableMaterials?: Material[];
 
   /**
    * Definition of how much units 1 sheet has.
@@ -51,7 +51,11 @@ const LABEL_FORMAT = (value: number) => formatSiUnit(value, 0);
  * fifty sheets.
  */
 export const MaterialAccessBar = (props: MaterialAccessBarProps) => {
-  const { availableMaterials, SHEET_MATERIAL_AMOUNT, onEjectRequested } = props;
+  const {
+    availableMaterials = [],
+    SHEET_MATERIAL_AMOUNT,
+    onEjectRequested,
+  } = props;
 
   return (
     <Flex wrap>
