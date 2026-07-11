@@ -65,7 +65,9 @@ export const MaterialCostSequence = (props: MaterialCostSequenceProps) => {
   costMap ??= {};
 
   if (design) {
-    for (const [name, value] of Object.entries(design.cost)) {
+    const designCost = design.cost ?? {};
+
+    for (const [name, value] of Object.entries(designCost)) {
       costMap[name] = (costMap[name] || 0) + value;
     }
   }

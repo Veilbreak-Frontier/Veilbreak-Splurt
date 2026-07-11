@@ -35,12 +35,12 @@ type AutolatheData = {
 export const Autolathe = (props) => {
   const { data } = useBackend<AutolatheData>();
   const {
-    materialtotal,
-    materialsmax,
-    materials,
-    designs,
-    active,
-    SHEET_MATERIAL_AMOUNT,
+    materialtotal = 0,
+    materialsmax = 0,
+    materials = [],
+    designs = [],
+    active = false,
+    SHEET_MATERIAL_AMOUNT = 1,
   } = data;
 
   const filteredMaterials = materials.filter((material) => material.amount > 0);
