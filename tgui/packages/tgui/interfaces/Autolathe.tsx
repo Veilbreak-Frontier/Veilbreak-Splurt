@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Collapsible,
   Icon,
   LabeledList,
