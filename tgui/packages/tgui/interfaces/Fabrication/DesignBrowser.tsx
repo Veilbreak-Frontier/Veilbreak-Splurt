@@ -126,8 +126,8 @@ export const DesignBrowser = <T extends Design = Design>(
   props: DesignBrowserProps<T>,
 ) => {
   const {
-    designs = [],
-    availableMaterials = {},
+    designs,
+    availableMaterials,
     onPrintDesign,
     buildRecipeElement,
     busy,
@@ -164,9 +164,7 @@ export const DesignBrowser = <T extends Design = Design>(
     // For designs without any categories, assign them to the "uncategorized"
     // category.
     const categories =
-      (design.categories ?? []).length === 0
-        ? [UNCATEGORIZED]
-        : design.categories;
+      design.categories.length === 0 ? [UNCATEGORIZED] : design.categories;
 
     for (const category of categories) {
       // If the category is a blacklisted meta-category, skip it entirely.
