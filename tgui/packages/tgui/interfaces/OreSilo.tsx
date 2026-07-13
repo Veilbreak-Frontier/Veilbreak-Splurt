@@ -76,11 +76,7 @@ const actionToColor = {
 
 export const OreSilo = (props: Data) => {
   const { act, data } = useBackend<Data>();
-  const {
-    SHEET_MATERIAL_AMOUNT,
-    machines = [],
-    logs = [],
-  } = data;
+  const { SHEET_MATERIAL_AMOUNT, machines, logs } = data;
 
   const [currentTab, setCurrentTab] = useState<Tab>(Tab.Logs);
 
@@ -119,7 +115,7 @@ export const OreSilo = (props: Data) => {
           <Stack.Item>
             <Section fill>
               <MaterialAccessBar
-                availableMaterials={data.materials ?? []}
+                availableMaterials={data.materials}
                 SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                 onEjectRequested={(material, amount) =>
                   act('eject', { ref: material.ref, amount })
