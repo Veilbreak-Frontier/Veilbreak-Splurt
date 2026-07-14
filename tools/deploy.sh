@@ -50,3 +50,5 @@ source modular_zubbers/tools/deploy_bubber.sh
 # SPLURT EDIT ADDITION BEGIN - Call our deploy too
 source modular_zzplurt/tools/deploy_splurt.sh
 # SPLURT EDIT ADDITION END - Call our deploy too
+# VEILBREAK EDIT ADDITION - Call our deploy too
+source modular_zzveilbreak/tools/deploy_veilbreak.sh
