@@ -11011,6 +11011,7 @@
 #include "modular_zzveilbreak\code\modules\modular_nif\vore_nifsofts.dm"
 #include "modular_zzveilbreak\code\modules\nanites\program_designs.dm"
 #include "modular_zzveilbreak\code\modules\nanites\programs.dm"
+
 #include "modular_zzveilbreak\code\modules\research\experiments.dm"
 #include "modular_zzveilbreak\code\modules\research\quantum_parts.dm"
 #include "modular_zzveilbreak\code\modules\research\veilbreak_research_defines.dm"
@@ -11206,6 +11207,7 @@
 #include "modular_zzveilbreak\modules\bosses\inai.dm"
 #include "modular_zzveilbreak\modules\bosses\inai_ai.dm"
 #include "modular_zzveilbreak\modules\bosses\melos_vecare\melos_vecare.dm"
+#include "modular_zzveilbreak\modules\clothing\head\hats.dm"
 #include "modular_zzveilbreak\modules\machinery\entropic_converter.dm"
 #include "modular_zzveilbreak\modules\machinery\void_miner.dm"
 #include "modular_zzveilbreak\modules\mapping\async_map_loader.dm"
