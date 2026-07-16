@@ -4450,13 +4450,13 @@
 	pixel_x = 7;
 	pixel_y = 1
 	},
-/obj/item/stamp{
-	pixel_x = -9;
-	pixel_y = 11
-	},
 /obj/item/stamp/denied{
 	pixel_x = -9;
 	pixel_y = 5
+	},
+/obj/item/stamp/granted{
+	pixel_x = -9;
+	pixel_y = 9
 	},
 /turf/open/floor/carpet/purple,
 /area/station/command/heads_quarters/rd)
@@ -4862,7 +4862,6 @@
 /obj/structure/cable,
 /obj/effect/landmark/navigate_destination,
 /obj/effect/turf_decal/delivery,
-/obj/item/hilbertshotel/ghostdojo,
 /turf/open/floor/iron,
 /area/station/commons/dorms)
 "cDi" = (
@@ -9294,7 +9293,6 @@
 "eQp" = (
 /obj/structure/table/glass,
 /obj/machinery/smartfridge/disks,
-/obj/item/disk/plantgene,
 /obj/machinery/reagentgrinder{
 	desc = "Used to grind things up into raw materials and liquids.";
 	pixel_y = 13;
@@ -13964,9 +13962,6 @@
 /obj/item/instrument/piano_synth/headphones/catear_headphone{
 	pixel_x = -11
 	},
-/obj/item/bitrunning_disk/prefs{
-	pixel_x = 8
-	},
 /turf/open/floor/iron/dark,
 /area/station/cargo/bitrunning/den)
 "hqo" = (
@@ -14078,10 +14073,6 @@
 /turf/open/floor/iron/dark,
 /area/station/hallway/primary/central)
 "htL" = (
-/obj/item/computer_disk/maintenance/arcade{
-	pixel_x = -10;
-	pixel_y = 5
-	},
 /obj/machinery/byteforge,
 /obj/machinery/light/directional/south,
 /turf/open/floor/iron/dark,
@@ -16725,6 +16716,7 @@
 	dir = 10;
 	color = "#a56dc2"
 	},
+/obj/structure/reagent_dispensers/fueltank/large,
 /turf/open/floor/iron/dark,
 /area/station/science/robotics/lab)
 "iJb" = (
@@ -16954,16 +16946,16 @@
 /obj/machinery/recharger{
 	pixel_x = 9
 	},
-/obj/item/stamp{
-	pixel_x = 7;
-	pixel_y = 9
-	},
 /obj/item/stamp/denied{
 	pixel_y = 9
 	},
 /obj/item/stamp/centcom{
 	pixel_y = -2;
 	pixel_x = 7
+	},
+/obj/item/stamp/granted{
+	pixel_x = -9;
+	pixel_y = 9
 	},
 /turf/open/floor/carpet/royalblack,
 /area/station/command/heads_quarters/nt_rep)
@@ -17183,18 +17175,6 @@
 /obj/item/stamp/head/qm{
 	pixel_y = 6;
 	pixel_x = 6
-	},
-/obj/item/computer_disk/quartermaster{
-	pixel_y = 6;
-	pixel_x = -6
-	},
-/obj/item/computer_disk/quartermaster{
-	pixel_x = -6;
-	pixel_y = 9
-	},
-/obj/item/computer_disk/quartermaster{
-	pixel_x = -6;
-	pixel_y = 12
 	},
 /obj/machinery/light_switch/directional/south,
 /obj/structure/disposalpipe/segment,
@@ -31138,13 +31118,13 @@
 	dir = 4
 	},
 /obj/item/stamp/head/ce,
-/obj/item/stamp{
-	pixel_x = -9;
-	pixel_y = 11
-	},
 /obj/item/stamp/denied{
 	pixel_x = -9;
 	pixel_y = 5
+	},
+/obj/item/stamp/granted{
+	pixel_x = -9;
+	pixel_y = 9
 	},
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/ce)
@@ -31431,16 +31411,16 @@
 "pUf" = (
 /obj/structure/table/reinforced,
 /obj/item/stamp/head/cmo,
-/obj/item/stamp{
-	pixel_x = -9;
-	pixel_y = 11
-	},
 /obj/item/stamp/denied{
 	pixel_x = -9;
 	pixel_y = 5
 	},
 /obj/item/paper_bin/carbon{
 	pixel_x = 8
+	},
+/obj/item/stamp/granted{
+	pixel_x = -9;
+	pixel_y = 9
 	},
 /turf/open/floor/carpet/blue,
 /area/station/command/heads_quarters/cmo)
@@ -31883,6 +31863,12 @@
 	dir = 1
 	},
 /area/station/science/research)
+"qfn" = (
+/obj/item/hilbertshotel{
+	anchored = 1
+	},
+/turf/open/floor/iron,
+/area/station/commons/dorms)
 "qfw" = (
 /obj/structure/extinguisher_cabinet/directional/south,
 /obj/effect/turf_decal/tile/purple{
@@ -32027,12 +32013,12 @@
 	pixel_y = 3
 	},
 /obj/item/stamp/head/hop,
-/obj/item/stamp{
-	pixel_x = -9;
-	pixel_y = 11
-	},
 /obj/item/stamp/denied{
 	pixel_x = -5;
+	pixel_y = 9
+	},
+/obj/item/stamp/granted{
+	pixel_x = -9;
 	pixel_y = 9
 	},
 /turf/open/floor/wood/parquet,
@@ -32592,10 +32578,6 @@
 	pixel_y = 1
 	},
 /obj/structure/table/reinforced,
-/obj/item/infuser_book{
-	pixel_y = 13;
-	pixel_x = -9
-	},
 /obj/structure/window/reinforced/spawner/directional/east,
 /obj/machinery/camera/directional/south{
 	c_tag = "Genetics South"
@@ -35978,7 +35960,6 @@
 	desc = "Imbued with an ancient power";
 	name = "golden wrench"
 	},
-/obj/item/computer_disk/engineering,
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 8
 	},
@@ -36330,10 +36311,6 @@
 	},
 /obj/structure/table/reinforced,
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
-/obj/item/stamp{
-	pixel_x = -9;
-	pixel_y = 11
-	},
 /obj/item/stamp/denied{
 	pixel_x = -9;
 	pixel_y = 5
@@ -36341,6 +36318,10 @@
 /obj/item/stamp/head/qm{
 	pixel_y = 13;
 	pixel_x = 8
+	},
+/obj/item/stamp/granted{
+	pixel_x = -9;
+	pixel_y = 9
 	},
 /turf/open/floor/carpet/orange,
 /area/station/command/heads_quarters/qm)
@@ -36805,13 +36786,13 @@
 	pixel_x = -6
 	},
 /obj/structure/disposalpipe/segment,
-/obj/item/stamp{
-	pixel_x = -6;
-	pixel_y = 9
-	},
 /obj/item/stamp/denied{
 	pixel_y = 2;
 	pixel_x = 8
+	},
+/obj/item/stamp/granted{
+	pixel_x = -9;
+	pixel_y = 9
 	},
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/hos)
@@ -38332,14 +38313,6 @@
 /area/station/command/heads_quarters/qm)
 "tqS" = (
 /obj/structure/table,
-/obj/item/computer_disk{
-	pixel_x = -5;
-	pixel_y = 8
-	},
-/obj/item/computer_disk/ordnance{
-	pixel_x = 7;
-	pixel_y = 8
-	},
 /obj/item/raw_anomaly_core/random{
 	pixel_y = -2
 	},
@@ -40890,6 +40863,11 @@
 	},
 /turf/open/floor/carpet/blue,
 /area/station/hallway/primary/central)
+"uGt" = (
+/obj/structure/railing,
+/obj/structure/reagent_dispensers/fueltank/large,
+/turf/open/floor/iron/textured,
+/area/station/cargo/storage)
 "uGD" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2{
 	dir = 8
@@ -45575,10 +45553,6 @@
 	pixel_x = 6;
 	pixel_y = 4
 	},
-/obj/item/stamp{
-	pixel_x = -9;
-	pixel_y = 11
-	},
 /obj/item/stamp/denied{
 	pixel_x = -9;
 	pixel_y = 5
@@ -45588,6 +45562,10 @@
 	name = "Cargo Desk";
 	req_access = list("cargo");
 	dir = 4
+	},
+/obj/item/stamp/granted{
+	pixel_x = -9;
+	pixel_y = 9
 	},
 /turf/open/floor/iron/dark/textured_large,
 /area/station/cargo/office)
@@ -47890,10 +47868,6 @@
 /area/station/command/heads_quarters/qm)
 "yiX" = (
 /obj/machinery/computer/quantum_console,
-/obj/item/bitrunning_disk{
-	pixel_x = 9;
-	name = "generic disk"
-	},
 /turf/open/floor/iron/dark,
 /area/station/cargo/bitrunning/den)
 "yja" = (
@@ -73547,7 +73521,7 @@ xvv
 xvv
 xvv
 thq
-iPu
+uGt
 qrO
 jzg
 kNu
@@ -74624,7 +74598,7 @@ iRy
 lBW
 iRy
 qZX
-dSG
+qfn
 oKD
 mMA
 bWq
