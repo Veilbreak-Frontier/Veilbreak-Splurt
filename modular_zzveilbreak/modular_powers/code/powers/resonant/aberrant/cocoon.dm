@@ -269,9 +269,14 @@
 	user.last_special = world.time + CLICK_CD_BREAKOUT
 	to_chat(user, span_notice("You struggle against the webs... (This will take about [DisplayTimeText(breakout_time)].)"))
 	visible_message(span_notice("You see something struggling and writhing in \the [src]!"))
+
 	if(do_after(user, breakout_time, target = src))
 		if(user.stat != CONSCIOUS || user.loc != src)
 			return
+		var/turf/drop_turf = get_turf(src)
+		if(drop_turf)
+			for(var/atom/movable/thing as anything in contents)
+				thing.forceMove(drop_turf)
 		qdel(src)
 
 /// Starts tearing the mob cocoon open
