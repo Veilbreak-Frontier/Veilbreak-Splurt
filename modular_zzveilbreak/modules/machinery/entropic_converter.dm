@@ -11,7 +11,7 @@
 	processing_flags = START_PROCESSING_ON_INIT
 
 	/// Power supplied to the grid, in watts (see [/proc/power_to_energy]).
-	var/power_output = 500 KILO WATTS
+	var/power_output = 800 KILO WATTS
 
 /obj/machinery/power/entropic_converter/Initialize(mapload)
 	. = ..()
