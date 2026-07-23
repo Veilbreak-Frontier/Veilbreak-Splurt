@@ -16949,7 +16949,9 @@
 /turf/open/floor/iron/dark,
 /area/station/common/cryopods)
 "iOB" = (
-/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/machinery/cafe_condo_teleporter,
+/obj/effect/turf_decal/delivery/red,
+/obj/effect/turf_decal/stripes/line,
 /obj/machinery/light/directional/south,
 /turf/open/floor/iron/dark/side,
 /area/station/commons/dorms)
@@ -31908,10 +31910,13 @@
 	},
 /area/station/science/research)
 "qfn" = (
-/obj/item/hilbertshotel{
-	anchored = 1
+/obj/machinery/computer{
+	name = "Condo Teleportation Console";
+	desc = "Due to various fly related incident, management has disabled direct control of this console.";
+	dir = 1
 	},
-/turf/open/floor/iron,
+/obj/effect/turf_decal/stripes/line,
+/turf/open/floor/iron/dark/side,
 /area/station/commons/dorms)
 "qfw" = (
 /obj/structure/extinguisher_cabinet/directional/south,
@@ -46714,6 +46719,12 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/hallway/primary/central)
+"xDM" = (
+/obj/machinery/cafe_condo_teleporter,
+/obj/effect/turf_decal/delivery/blue,
+/obj/effect/turf_decal/stripes/line,
+/turf/open/floor/iron/dark/side,
+/area/station/commons/dorms)
 "xDQ" = (
 /obj/structure/table/reinforced,
 /obj/item/weldingtool,
@@ -74402,7 +74413,7 @@ fri
 iRy
 bEF
 dSG
-oKD
+qfn
 mMA
 szS
 mnB
@@ -74658,8 +74669,8 @@ iRy
 lBW
 iRy
 qZX
-qfn
-oKD
+dSG
+xDM
 mMA
 bWq
 wBS
