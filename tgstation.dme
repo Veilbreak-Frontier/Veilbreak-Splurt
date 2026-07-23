@@ -10957,6 +10957,7 @@
 #include "modular_zzveilbreak\code\datums\quirks\static.dm"
 #include "modular_zzveilbreak\code\datums\quirks\negative\hard_of_hearing.dm"
 #include "modular_zzveilbreak\code\datums\storage\science_xeno_bags.dm"
+#include "modular_zzveilbreak\code\datums\wires\interactable_override.dm"
 #include "modular_zzveilbreak\code\food-drink\chugging.dm"
 #include "modular_zzveilbreak\code\game\area\areas.dm"
 #include "modular_zzveilbreak\code\game\controllers\void_ai.dm"
@@ -11011,7 +11012,6 @@
 #include "modular_zzveilbreak\code\modules\modular_nif\vore_nifsofts.dm"
 #include "modular_zzveilbreak\code\modules\nanites\program_designs.dm"
 #include "modular_zzveilbreak\code\modules\nanites\programs.dm"
-
 #include "modular_zzveilbreak\code\modules\research\experiments.dm"
 #include "modular_zzveilbreak\code\modules\research\quantum_parts.dm"
 #include "modular_zzveilbreak\code\modules\research\veilbreak_research_defines.dm"
