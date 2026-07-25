@@ -58,15 +58,16 @@
 	var/datum/stock_part/as_part = stock_part_datum_type
 	return initial(as_part.physical_object_type)
 
-/obj/machinery/flatpacker/proc/get_tiered_variants(base_type)
+/obj/machinery/flatpacker/proc/get_stock_part_datum_for_item(item_type)
+	var/datum/stock_part/part = GLOB.stock_part_datums_per_object[item_type]
+	if(part)
+		return part.type
+	return null
+
+/obj/machinery/flatpacker/proc/get_tiered_variants(physical_type)
 	PRIVATE_PROC(TRUE)
 	var/list/variants = list()
-	var/actual_base = base_type
-	if(ispath(base_type, /datum/stock_part))
-		actual_base = get_physical_type(base_type)
-		if(!actual_base)
-			return variants
-	for(var/typepath in subtypesof(actual_base))
+	for(var/typepath in subtypesof(physical_type))
 		var/datum/stock_part/part = GLOB.stock_part_datums_per_object[typepath]
 		if(part && part.tier > 0)
 			variants[typepath] = part.tier
@@ -114,11 +115,16 @@
 		inserted_board = attacking_item
 
 		var/list/required_components = inserted_board.req_components
+		var/list/component_counts = list()
 		var/list/component_variants = list()
 		var/max_possible_tier = max_part_tier
 
 		for(var/comp_type in required_components)
+			var/count = required_components[comp_type]
 			var/physical_type = get_base_component_type(comp_type)
+			if(!physical_type)
+				continue
+			component_counts[physical_type] = count
 			var/list/variants = get_tiered_variants(physical_type)
 			if(length(variants))
 				component_variants[physical_type] = variants
@@ -130,8 +136,7 @@
 						highest_tier = tier
 				max_possible_tier = min(max_possible_tier, highest_tier)
 			else
-				var/use_type = physical_type || comp_type
-				component_variants[use_type] = list(use_type)
+				component_variants[physical_type] = list(physical_type)
 
 		var/selected_tier = 0
 		var/list/best_components = list()
@@ -147,8 +152,9 @@
 				var/chosen_type = variants[1]
 				if(length(variants) > 1)
 					chosen_type = get_variant_for_tier(variants, tier)
-				analyze_cost(chosen_type, temp_mats, required_components[base_type])
-				tier_components[chosen_type] = required_components[base_type]
+				var/cost_type = get_stock_part_datum_for_item(chosen_type) || chosen_type
+				analyze_cost(cost_type, temp_mats, component_counts[base_type])
+				tier_components[chosen_type] = component_counts[base_type]
 
 			if(materials.has_materials(temp_mats, creation_efficiency))
 				selected_tier = tier
@@ -160,8 +166,9 @@
 			for(var/base_type in component_variants)
 				var/list/variants = component_variants[base_type]
 				var/chosen_type = variants[1]
-				analyze_cost(chosen_type, best_mats, required_components[base_type])
-				best_components[chosen_type] = required_components[base_type]
+				var/cost_type = get_stock_part_datum_for_item(chosen_type) || chosen_type
+				analyze_cost(cost_type, best_mats, component_counts[base_type])
+				best_components[chosen_type] = component_counts[base_type]
 			CREATE_AND_INCREMENT(best_mats, /datum/material/iron, SHEET_MATERIAL_AMOUNT * 5 + SHEET_MATERIAL_AMOUNT / 20)
 			CREATE_AND_INCREMENT(best_mats, /datum/material/glass, SHEET_MATERIAL_AMOUNT / 20)
 
