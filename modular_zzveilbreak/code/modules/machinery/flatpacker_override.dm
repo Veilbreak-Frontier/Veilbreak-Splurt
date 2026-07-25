@@ -50,10 +50,23 @@
 		if(remote.mat_container)
 			remote.mat_container.max_amount = mat_capacity
 
+/obj/machinery/flatpacker/proc/get_physical_type(stock_part_datum_type)
+	PRIVATE_PROC(TRUE)
+	var/datum/stock_part/part = GLOB.stock_part_datums_per_object[stock_part_datum_type]
+	if(part && part.physical_object_type)
+		return part.physical_object_type
+	var/datum/stock_part/as_part = stock_part_datum_type
+	return initial(as_part.physical_object_type)
+
 /obj/machinery/flatpacker/proc/get_tiered_variants(base_type)
 	PRIVATE_PROC(TRUE)
 	var/list/variants = list()
-	for(var/typepath in subtypesof(base_type))
+	var/actual_base = base_type
+	if(ispath(base_type, /datum/stock_part))
+		actual_base = get_physical_type(base_type)
+		if(!actual_base)
+			return variants
+	for(var/typepath in subtypesof(actual_base))
 		var/datum/stock_part/part = GLOB.stock_part_datums_per_object[typepath]
 		if(part && part.tier > 0)
 			variants[typepath] = part.tier
@@ -63,7 +76,8 @@
 	var/best_type = null
 	var/best_tier = 0
 	for(var/typepath in variants)
-		var/tier = variants[typepath]
+		var/datum/stock_part/part = GLOB.stock_part_datums_per_object[typepath]
+		var/tier = part ? part.tier : 0
 		if(tier == target_tier)
 			return typepath
 		if(tier < target_tier && tier > best_tier)
@@ -72,6 +86,17 @@
 	if(best_type)
 		return best_type
 	return variants[1]
+
+/obj/machinery/flatpacker/proc/get_base_component_type(component_type)
+	if(ispath(component_type, /datum/stock_part))
+		return get_physical_type(component_type) || component_type
+	if(ispath(component_type, /obj/item))
+		return component_type
+	for(var/obj/item/typepath as anything in GLOB.stock_part_datums_per_object)
+		var/datum/stock_part/part = GLOB.stock_part_datums_per_object[typepath]
+		if(part && part.type == component_type)
+			return typepath
+	return component_type
 
 /obj/machinery/flatpacker/base_item_interaction(mob/living/user, obj/item/attacking_item, list/modifiers)
 	if(attacking_item.flags_1 & HOLOGRAM_1)
@@ -93,16 +118,20 @@
 		var/max_possible_tier = max_part_tier
 
 		for(var/comp_type in required_components)
-			var/list/variants = get_tiered_variants(comp_type)
+			var/physical_type = get_base_component_type(comp_type)
+			var/list/variants = get_tiered_variants(physical_type)
 			if(length(variants))
-				component_variants[comp_type] = variants
+				component_variants[physical_type] = variants
 				var/highest_tier = 0
 				for(var/t in variants)
-					if(variants[t] > highest_tier)
-						highest_tier = variants[t]
+					var/datum/stock_part/part = GLOB.stock_part_datums_per_object[t]
+					var/tier = part ? part.tier : 0
+					if(tier > highest_tier)
+						highest_tier = tier
 				max_possible_tier = min(max_possible_tier, highest_tier)
 			else
-				component_variants[comp_type] = list(comp_type)
+				var/use_type = physical_type || comp_type
+				component_variants[use_type] = list(use_type)
 
 		var/selected_tier = 0
 		var/list/best_components = list()
@@ -115,7 +144,9 @@
 
 			for(var/base_type in component_variants)
 				var/list/variants = component_variants[base_type]
-				var/chosen_type = get_variant_for_tier(variants, tier)
+				var/chosen_type = variants[1]
+				if(length(variants) > 1)
+					chosen_type = get_variant_for_tier(variants, tier)
 				analyze_cost(chosen_type, temp_mats, required_components[base_type])
 				tier_components[chosen_type] = required_components[base_type]
 
@@ -126,9 +157,11 @@
 				break
 
 		if(!selected_tier)
-			for(var/base_type in required_components)
-				best_components[base_type] = required_components[base_type]
-				analyze_cost(base_type, best_mats, required_components[base_type])
+			for(var/base_type in component_variants)
+				var/list/variants = component_variants[base_type]
+				var/chosen_type = variants[1]
+				analyze_cost(chosen_type, best_mats, required_components[base_type])
+				best_components[chosen_type] = required_components[base_type]
 			CREATE_AND_INCREMENT(best_mats, /datum/material/iron, SHEET_MATERIAL_AMOUNT * 5 + SHEET_MATERIAL_AMOUNT / 20)
 			CREATE_AND_INCREMENT(best_mats, /datum/material/glass, SHEET_MATERIAL_AMOUNT / 20)
 
@@ -143,7 +176,10 @@
 
 	if(!QDELETED(inserted_board))
 		for(var/comp_type in inserted_board.req_components)
-			if(istype(attacking_item, comp_type))
+			var/check_type = comp_type
+			if(ispath(comp_type, /datum/stock_part))
+				check_type = get_physical_type(comp_type)
+			if(istype(attacking_item, check_type))
 				balloon_alert(user, "components are auto-produced from materials")
 				return ITEM_INTERACT_BLOCKING
 
@@ -227,9 +263,12 @@
 	var/obj/item/flatpack/box = new (drop_location(), inserted_board)
 
 	for(var/obj/item/component_type as anything in chosen_component_types)
+		var/actual_type = component_type
+		if(ispath(component_type, /datum/stock_part))
+			actual_type = get_physical_type(component_type) || component_type
 		var/amount_needed = chosen_component_types[component_type]
 		for(var/i in 1 to amount_needed)
-			new component_type(box)
+			new actual_type(box)
 
 	chosen_component_types = list()
 	SStgui.update_uis(src)
