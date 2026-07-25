@@ -1,16 +1,43 @@
 #define CREATE_AND_INCREMENT(L, I, increment) if(!(I in L)) { L[I] = 0; } L[I] += increment;
 
+/datum/remote_materials/flatpacker
+	check_z_level(obj/silo_to_check)
+		return TRUE
+
+	_PrepareStorage(connect_to_silo)
+		. = ..()
+		update_parent_materials()
+
+	disconnect()
+		. = ..()
+		update_parent_materials()
+
+	OnMultitool(datum/source, mob/user, obj/item/multitool/M)
+		. = ..()
+		if(. != ITEM_INTERACT_BLOCKING)
+			update_parent_materials()
+
+	proc/update_parent_materials()
+		var/obj/machinery/flatpacker/P = parent
+		if(istype(P))
+			P.materials = mat_container
+
 /obj/machinery/flatpacker
 	var/datum/remote_materials/remote
 	var/list/chosen_component_types = list()
 
 /obj/machinery/flatpacker/Initialize(mapload)
 	. = ..()
-	remote = new(src, mapload, TRUE, FALSE, NONE, list(COMSIG_MATCONTAINER_ITEM_CONSUMED = TYPE_PROC_REF(/obj/machinery/flatpacker, AfterMaterialInsert)))
+	remote = new /datum/remote_materials/flatpacker(src, FALSE, TRUE, TRUE, NONE, list(COMSIG_MATCONTAINER_ITEM_CONSUMED = TYPE_PROC_REF(/obj/machinery/flatpacker, AfterMaterialInsert)))
 	materials = remote.mat_container
 
 /obj/machinery/flatpacker/Destroy()
 	QDEL_NULL(remote)
+	materials = null
+	QDEL_NULL(inserted_board)
+	QDEL_LIST(flatpacked_components)
+	chosen_component_types = list()
+	needed_mats.Cut()
 	return ..()
 
 /obj/machinery/flatpacker/RefreshParts()
@@ -114,9 +141,11 @@
 		update_appearance(UPDATE_OVERLAYS)
 		return ITEM_INTERACT_SUCCESS
 
-	if(!QDELETED(inserted_board) && (attacking_item.type in inserted_board.flatpack_components))
-		balloon_alert(user, "components are auto-produced from materials")
-		return ITEM_INTERACT_BLOCKING
+	if(!QDELETED(inserted_board))
+		for(var/comp_type in inserted_board.req_components)
+			if(istype(attacking_item, comp_type))
+				balloon_alert(user, "components are auto-produced from materials")
+				return ITEM_INTERACT_BLOCKING
 
 	return ..()
 
@@ -139,12 +168,13 @@
 			playsound(src, 'sound/items/tools/rped.ogg', 50, TRUE)
 			busy = TRUE
 			flick_overlay_view(mutable_appearance('icons/obj/machines/lathes.dmi', "flatpacker_bar"), flatpack_time)
-			addtimer(CALLBACK(src, PROC_REF(finish_build), inserted_board), flatpack_time)
+			addtimer(CALLBACK(src, PROC_REF(finish_build), inserted_board, ui.user), flatpack_time)
 			return TRUE
 		if("ejectBoard")
 			try_put_in_hand(inserted_board, ui.user)
 			QDEL_LIST(flatpacked_components)
 			chosen_component_types = list()
+			needed_mats.Cut()
 			return TRUE
 		if("eject")
 			if(!materials)
@@ -163,7 +193,25 @@
 		else
 			return ..()
 
-/obj/machinery/flatpacker/finish_build(board)
+/obj/machinery/flatpacker/click_ctrl(mob/user)
+	if(QDELETED(inserted_board) || busy)
+		return CLICK_ACTION_BLOCKING
+	try_put_in_hand(inserted_board, user)
+	QDEL_LIST(flatpacked_components)
+	chosen_component_types = list()
+	needed_mats.Cut()
+	return CLICK_ACTION_SUCCESS
+
+/obj/machinery/flatpacker/Exited(atom/movable/gone, direction)
+	. = ..()
+	if(gone == inserted_board)
+		inserted_board = null
+		chosen_component_types = list()
+		needed_mats.Cut()
+	if(gone in flatpacked_components)
+		flatpacked_components -= gone
+
+/obj/machinery/flatpacker/finish_build(board, mob/user)
 	busy = FALSE
 
 	if(!inserted_board)
@@ -172,7 +220,7 @@
 	var/obj/machinery/build_machine = initial(inserted_board.build_path)
 	var/build_name = initial(build_machine.name) || "machine"
 
-	if(!remote.use_materials(needed_mats, creation_efficiency, 1, "build", build_name, user_data = ID_DATA(usr)))
+	if(!remote.use_materials(needed_mats, creation_efficiency, 1, "build", build_name, user_data = ID_DATA(user)))
 		say("Material consumption failed!")
 		return
 
