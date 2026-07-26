@@ -3,12 +3,14 @@
 */
 /datum/power/warfighter/tackler/greater_tackler
 	name = "Greater Tackler"
-	desc = "Your chances of landing a succesful tackle are greatly increased, as are your range and the duration you knockdown tackled foes."
+	desc = "Your chances of landing a successful tackle are greatly increased, as are your range and the duration you knockdown tackled foes."
 	security_record_text = "Subject is exceedingly good at landing tackles."
 	security_threat = POWER_THREAT_MAJOR
 	value = 5
-
 	required_powers = list(/datum/power/warfighter/tackler)
+
+	menu_icon = 'icons/obj/clothing/gloves.dmi'
+	menu_icon_state = "gorilla"
 
 	/// bonuses to success chance
 	var/skill_mod_bonus = 3
@@ -19,23 +21,15 @@
 
 /datum/power/warfighter/tackler/greater_tackler/post_add()
 	. = ..()
-	var/datum/power/warfighter/tackler/base_tackler = power_holder.get_power(/datum/power/warfighter/tackler)
 	var/datum/component/tackler/component = power_holder.GetComponent(/datum/component/tackler)
-	var/list/params = component?.tackle_source_params?[base_tackler]
-	if(!params)
-		return
-	params["skill_mod"] += skill_mod_bonus
-	params["range"] += tackle_range_bonus
-	params["base_knockdown"] += knockdown_bonus
-	component.refresh_tackle_stats()
+	if(component)
+		component.skill_mod += skill_mod_bonus
+		component.range += tackle_range_bonus
+		component.base_knockdown += knockdown_bonus
 
 /datum/power/warfighter/tackler/greater_tackler/remove()
-	var/datum/power/warfighter/tackler/base_tackler = power_holder.get_power(/datum/power/warfighter/tackler)
 	var/datum/component/tackler/component = power_holder.GetComponent(/datum/component/tackler)
-	var/list/params = component?.tackle_source_params?[base_tackler]
-	if(!params)
-		return
-	params["skill_mod"] -= skill_mod_bonus
-	params["range"] -= tackle_range_bonus
-	params["base_knockdown"] -= knockdown_bonus
-	component.refresh_tackle_stats()
+	if(component)
+		component.skill_mod -= skill_mod_bonus
+		component.range -= tackle_range_bonus
+		component.base_knockdown -= knockdown_bonus

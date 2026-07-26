@@ -28,6 +28,10 @@
 ///from base of mob/update_transform()
 #define COMSIG_LIVING_POST_UPDATE_TRANSFORM "living_post_update_transform"
 
+///from mob/living/living_defense.dm: (mob/living/target, shove_flags, weapon)
+#define COMSIG_LIVING_SHOVE_SUCCESS "living_shove_success"
+
+
 /// from /datum/status_effect/incapacitating/stamcrit/on_apply()
 #define COMSIG_LIVING_ENTER_STAMCRIT "living_enter_stamcrit"
 ///from /obj/structure/door/crush(): (mob/living/crushed, /obj/machinery/door/crushing_door)

@@ -6,7 +6,9 @@
 	desc = "You are aware when a particular something is mentioned; a hunch as it were.\
 	\n Select a specific word or phrase; anytime someone mentions it (no matter where they are), you will trigger the chosen emote. Has a cooldown of 10 seconds."
 	security_record_text = "Subject has strange bodily reactions whenever a certain keyphrase is mentioned."
-	value = 2
+	value = 1
+	menu_icon = 'icons/hud/actions.dmi'
+	menu_icon_state = "language_menu" // all the speechbubles are weird sizes aaaaa, I need a better icon
 
 	/// Trakcs the component
 	var/datum/component/beetlejuice/premonition/premonition_component

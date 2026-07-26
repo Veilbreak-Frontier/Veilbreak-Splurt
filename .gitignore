@@ -268,3 +268,4 @@ define_sanity_output.txt
 tgstation.json
 rust_g64.dll
 .vscode/settings.json
+continue/mcpServers/new-mcp-server.yaml

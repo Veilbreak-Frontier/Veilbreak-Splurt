@@ -6,6 +6,9 @@
 	value = 3
 	required_powers = list(/datum/power/cultivator_root/astral_touched)
 
+	menu_icon = 'icons/effects/effects.dmi'
+	menu_icon_state = "ion_trails"
+
 	/// the trailing particles
 	var/datum/effect_system/trail_follow/ion/grav_allowed/flight_trail
 	/// ref to the root power's action
@@ -45,8 +48,8 @@
 	user.AddElementTrait(TRAIT_ASTRAL_TOUCHED_FLIGHT, REF(src), /datum/element/forced_gravity, 0)
 	user.AddElementTrait(TRAIT_ASTRAL_TOUCHED_FLIGHT, REF(src), /datum/element/simple_flying)
 	if(!flight_trail)
-		flight_trail = new /datum/effect_system/trail_follow/ion/grav_allowed()
-	flight_trail.attach(user)
+		flight_trail = new
+	flight_trail.set_up(user)
 	flight_trail.start()
 
 /// Removes the flight trait and particles on alignment deactivation

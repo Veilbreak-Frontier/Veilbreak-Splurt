@@ -13,9 +13,11 @@
 	security_record_text = "Subject can psychically interact with objects from a distance."
 	security_threat = POWER_THREAT_MAJOR
 	value = 2
+	magic_flags = POWER_MAGIC_STANDARD
 	power_flags = POWER_HUMAN_ONLY | POWER_PROCESSES
 	action_path = /datum/action/cooldown/power/psyker/manipulate
 	required_powers = list(/datum/power/psyker_power/telekinesis) //given this lets you grab items from a distance this is basically a fluff requirement to explain why you can grab objects from a distance.
+	required_allow_subtypes = FALSE
 
 // Normally the golden rule is to let your action handle everything in powers; but in this case we need to actually make it so that we only have TRAIT_NO_UI_DISTANCE while we have a TK'd interface.
 /datum/power/psyker_power/manipulate/process(seconds_per_tick)
@@ -38,6 +40,7 @@
 
 	target_type = /obj
 	click_to_activate = TRUE
+	unset_after_click = FALSE
 	target_range = 12
 
 	/// Saves if its a right click so that all click interactions are routed through use_action.
@@ -53,7 +56,7 @@
 	))
 	/// UI blacklist for targets that should never open a UI via Manipulate.
 	var/static/list/ui_blacklist = typecacheof(list(
-		/obj/machinery/door/airlock,
+		/obj/machinery/door/airlock, // opens the AI interface instead
 	))
 
 // We're manipulating click-on to A distnguish between obj machinery and obj structure and B to distinguish between left and right hand clicks.
@@ -94,7 +97,7 @@
 					break
 		if(ui)
 			var/filter_id = "manipulate_glow"
-			target.add_filter(filter_id, 1, list(type = "outline", color = "#ff66cc", size = 2))
+			target.add_filter(filter_id, 1, list(type = "outline", color = POWER_COLOR_PSYKER, size = 2))
 			var/filter = target.get_filter(filter_id)
 			if(filter)
 				animate(filter, alpha = 110, time = 1.5 SECONDS, loop = -1)

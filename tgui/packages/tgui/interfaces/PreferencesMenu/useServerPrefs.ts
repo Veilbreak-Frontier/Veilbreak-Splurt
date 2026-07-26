@@ -26,12 +26,18 @@ export const ServerPrefs = createContext<ServerData | undefined>({
   loadout: {
     loadout_tabs: [],
   },
-  species: {},
-  background_state: {
-    /* BUBBER EDIT ADDITION: Background Selection - LINES 26 - 29 */
-    choices: [],
+  /* DOPPLER EDIT ADDITION START - Powers constant data */
+  powers: {
+    fallback_power_path_id: 'thaumaturge',
+    power_path_data: {},
+    power_path_archetypes: [],
+    power_paths: {},
+    total_power_points: 0,
   },
+  /* DOPPLER EDIT ADDITION END */
+  species: {},
 });
+
 export function useServerPrefs() {
   return useContext(ServerPrefs);
 }

@@ -7,9 +7,11 @@ Reduces stress for psykers and restores Energy for cultivators
 	desc = "Restores the full potential of your resonant powers."
 	button_icon = 'icons/mob/actions/actions_spells.dmi'
 	button_icon_state = "chuuni"
+	background_icon_state = "bg_irregular"
+	overlay_icon_state = "bg_irregular_border"
 
 	/// Both Cultivator and Psyker can benefit from meditate.
-	var/psyker_spotlight_color = "#ba2cc9"
+	var/psyker_spotlight_color = POWER_COLOR_PSYKER
 
 	/// Reference to the psyker organ, if any
 	var/obj/item/organ/resonant/psyker/psyker_organ
@@ -48,7 +50,13 @@ Reduces stress for psykers and restores Energy for cultivators
 			if(!psyker_organ && !cultivator_energy)
 				to_chat(owner, span_notice("I have nothing to meditate on!"))
 			if(psyker_organ)
-				psyker_organ.modify_stress(-PSYKER_STRESS_MEDITATION_POWER)
+				var/stress_recovery = PSYKER_STRESS_MEDITATION_POWER
+
+				// Checks if you have the right psyker power, otherwise reduces it to a third.
+				if(psyker_organ.has_compatible_root() && !psyker_organ.has_matching_root())
+					stress_recovery *= PSYKER_MISMATCHED_ORGAN_EFFICIENCY
+
+				psyker_organ.modify_stress(-stress_recovery)
 				if(psyker_organ.stress <= 0)
 					to_chat(owner, span_notice("I no longer feel any stress"))
 			if(cultivator_energy)

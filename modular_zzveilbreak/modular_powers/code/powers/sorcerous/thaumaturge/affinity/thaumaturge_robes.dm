@@ -11,10 +11,10 @@
 	cold_protection = CHEST|GROIN|ARMS|HANDS|LEGS
 	heat_protection = CHEST|GROIN|ARMS|HANDS|LEGS
 	fishing_modifier = -6 // high vishing
-	affinity = 3
-	// DOPPLER EDIT - supported_bodyshapes/bodyshape_icon_files not supported in Veilbreak.
+	affinity = 4
 
 // Viszard; affinity 3 head, no bonus perks besides not being flammable.
+
 /obj/item/clothing/head/wizard/viszard
 	name = "viszard hat"
 	desc = "An incredibly obvious wizard hat; as if the pointiness wasn't obvious enough. Despite being granted to the Engineering department, it does not pass as a helmet for workplace safety standards, so please beware falling objects. However, it is fireproof."
@@ -23,7 +23,7 @@
 	icon_state = "hivizhat"
 	armor_type = /datum/armor/none
 	fishing_modifier = -5 // high vishing
-	affinity = 3
+	affinity = 4
 
 // Secrobe; affinity 3 armor. Has the stats of a secjacket and covers the legs, and also has affinity, but also has a slight amount of slowdown.
 /obj/item/clothing/suit/wizrobe/secwiz
@@ -39,9 +39,9 @@
 	affinity = 3
 	slowdown = 0.2
 	fishing_modifier = -3
-	// DOPPLER EDIT - supported_bodyshapes/bodyshape_icon_files not supported in Veilbreak.
 
 // Secrobe; affinity 3 head, no bonus perks besides not being flammable.
+
 /obj/item/clothing/head/wizard/secwiz
 	name = "security thaumaturge hat"
 	desc = "A wizard's hat, painted in the colors of the security department. Jokingly referred to as the Magic Police, Thaumaturges experience an unique skillset that is very useful to have as a Security Officer. Given their requirements to dress \
@@ -52,4 +52,4 @@
 	armor_type = /datum/armor/none
 	fishing_modifier = -2
 	resistance_flags = FLAMMABLE
-	affinity = 3
+	affinity = 4

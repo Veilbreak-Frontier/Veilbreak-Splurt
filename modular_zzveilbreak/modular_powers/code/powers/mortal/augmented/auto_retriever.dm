@@ -4,7 +4,7 @@
 /datum/power/augmented/auto_retriever
 	name = "Premium ANGL Auto Retriever"
 	desc = "Some assets are far too wealthy to risk losing. Created by DeForest, this allows their premium customers to be rescued from the most grievous of circumstances; and recently came with a support API for other healthcare providers.\
-	\n Once you reach critical condition or when manually activated, you begin a slow (and obvious) 10 second teleport towards your station's medbay lobby (regardless of Z-level).\
+	\n Once you reach critical condition or when manually activated, you begin a slow (and obvious) 10 second teleport towards your station's medbay lobby (regardless of Z-level). \
 	Once it fires, a warning message is issued over the radio. The teleportation sets the quality to 0%, and can be interrupted by Epinephrine, Atropine or Stabilizing Agent in the bloodstream, EMP, or healing you above the critical threshold, after which it loses 25% quality and enters a several minute cooldown period.\
 	\n Decreases in quality twice as fast. Lower quality decreases the speed of the teleport."
 	security_record_text = "Subject has a ANGL Auto Retriever and will teleport to medbay if critically injured."
@@ -16,7 +16,7 @@
 /obj/item/organ/cyberimp/chest/auto_retriever
 	name = "ANGL Auto Retriever"
 	desc = "Some assets are far too wealthy to risk losing. Created by DeForest, this allows their premium customers to be rescued from the most grievous of circumstances; and recently came with a support API for other healthcare providers.\
-	\n Once you reach critical condition or when manually activated, you begin a slow (and obvious) 10 second teleport towards your station's medbay lobby (regardless of Z-level).\
+	\n Once you reach critical condition or when manually activated, you begin a slow (and obvious) 10 second teleport towards your station's medbay lobby (regardless of Z-level). \
 	Once it fires, a warning message is issued over the radio. The teleportation sets the quality to 0%, and can be interrupted by Epinephrine, Atropine or Stabilizing Agent in the bloodstream, EMP, or healing you above the critical threshold, after which it loses 25% quality and enters a several minute cooldown period.\
 	\n Decreases in quality twice as fast. Lower quality decreases the speed of the teleport."
 	icon_state = "reviver_implant"
@@ -83,6 +83,7 @@
 	internal_radio.subspace_transmission = TRUE
 	internal_radio.canhear_range = 0 // no free medbay radio 4u
 	internal_radio.recalculateChannels()
+	internal_radio.set_listening(FALSE)
 
 /obj/item/organ/cyberimp/chest/auto_retriever/Destroy()
 	if(teleport_timer_id)
@@ -154,6 +155,7 @@
 
 	var/teleport_success = do_teleport(owner, destination, channel = TELEPORT_CHANNEL_QUANTUM)
 	if(!teleport_success)
+		apply_failed_teleport_penalty("Teleportation blocked; entering cooldown.")
 		return
 
 	augment_speak("Auto Retriever alert: [owner.real_name] has teleported to Medbay for emergency treatment.", RADIO_CHANNEL_MEDICAL)
@@ -181,7 +183,11 @@
 		deltimer(teleport_timer_id)
 		teleport_timer_id = null
 	clear_teleport_effects()
-	augment_speak("Teleportation cancelled; entering cooldown.")
+	apply_failed_teleport_penalty("Teleportation cancelled; entering cooldown.")
+
+/// Applies the shared cooldown and quality loss for an interrupted or blocked teleport.
+/obj/item/organ/cyberimp/chest/auto_retriever/proc/apply_failed_teleport_penalty(message)
+	augment_speak(message)
 	COOLDOWN_START(src, teleport_cooldown, tp_cooldown)
 	if(premium_component)
 		premium_component.adjust_quality(-AUGMENTED_PREMIUM_QUALITY_MODERATE)

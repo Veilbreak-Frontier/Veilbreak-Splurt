@@ -1,21 +1,24 @@
 /*
 	You can be summoned by speaking a specific keywords.
 */
-/datum/power/aberrant/summonable
+/datum/power/imbued/summonable
 	name = "Summonable"
 	desc = "By speaking a specific name or word, you appear next to the speaker after a short delay. The summoning takes time, you are stunned throughout, is entirely involuntary and can only be stopped by being silenced, buckled or dispelled.\
-	\n After being succesfuly summoned, you are unable to be summoned again for 1 minute. \
+	\n After being successfully summoned, you are unable to be summoned again for 1 minute. \
 	\n The chosen word is a partial secret; the Security Records on your powers contain the word as well. It cannot contain any special characters, only standard letters and numbers."
 	security_threat = POWER_THREAT_MAJOR
 	value = 7
+	magic_flags = POWER_MAGIC_STANDARD
+	required_powers = list(/datum/power/imbued_root/enchanted)
 
-	required_powers = list(/datum/power/aberrant_root/anomalous)
+	menu_icon = 'icons/effects/eldritch.dmi'
+	menu_icon_state = "realitycrack"
 
 	/// Reference to the beetlejuice component
 	var/datum/component/beetlejuice/summonable/summon_component
 
 // Lists the word in sec records.
-/datum/power/aberrant/summonable/get_security_record_text()
+/datum/power/imbued/summonable/get_security_record_text()
 	var/keyword = summon_component?.keyword
 	if(!keyword)
 		keyword = power_holder?.client?.prefs?.read_preference(/datum/preference/text/summonable_keyword)
@@ -25,7 +28,7 @@
 	return "Subject is summonable via keyword \"[keyword]\"."
 
 // Adds the custom beetlejuice component and sets the beetlejuiec word.
-/datum/power/aberrant/summonable/post_add()
+/datum/power/imbued/summonable/post_add()
 	if(!power_holder)
 		return
 
@@ -47,7 +50,7 @@
 
 	. = ..()
 
-/datum/power/aberrant/summonable/remove()
+/datum/power/imbued/summonable/remove()
 	. = ..()
 	if(summon_component)
 		QDEL_NULL(summon_component)
@@ -90,6 +93,8 @@
 	var/turf/target_turf = get_adjacent_open_turf(target)
 	if(QDELETED(summoned) || !target_turf)
 		return
+	if(destination_is_visible_to_summoned(summoned, target_turf))
+		return
 	active = FALSE
 	addtimer(VARSET_CALLBACK(src, active, TRUE), cooldown)
 	addtimer(CALLBACK(src, PROC_REF(begin_summon), summoned, target_turf), summon_delay)
@@ -109,6 +114,14 @@
 	if(!length(candidates))
 		return null
 	return pick(candidates)
+
+/// Prevents summoning to locations the summoned can already see.
+/datum/component/beetlejuice/summonable/proc/destination_is_visible_to_summoned(atom/movable/summoned, turf/target_turf)
+	if(!ismob(summoned) || !target_turf)
+		return FALSE
+
+	var/mob/summoned_mob = summoned
+	return (target_turf in view(summoned_mob))
 
 /// Starts the timers and starts manifesting effects.
 /datum/component/beetlejuice/summonable/proc/begin_summon(atom/movable/summoned, turf/target_turf)
@@ -241,7 +254,7 @@
 		else
 			failed_summon.visible_message(span_warning("[failed_summon] suddenly reappears and falls face-first onto the ground!"), span_userdanger("You suddenly fall face-first onto the ground!"))
 			playsound(failed_summon, 'sound/effects/desecration/desecration-02.ogg', 75, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
-			failed_summon.adjust_brute_loss(5)
+			failed_summon.adjustBruteLoss(5)
 			failed_summon.Knockdown(3 SECONDS)
 	return DISPEL_RESULT_DISPELLED
 
@@ -309,7 +322,7 @@
 	return
 
 /datum/power_constant_data/summonable
-	associated_typepath = /datum/power/aberrant/summonable
+	associated_typepath = /datum/power/imbued/summonable
 	customization_options = list(/datum/preference/text/summonable_keyword, /datum/preference/color/summonable_rune_color)
 
 // Orbiting rune for Summonable arrival.

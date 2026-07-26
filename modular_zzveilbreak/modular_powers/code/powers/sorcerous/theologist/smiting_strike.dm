@@ -66,12 +66,12 @@
 		currently_imbued.RemoveElement(/datum/element/theologist_smite)
 		currently_imbued = null
 	currently_imbued = to_imbue
-	currently_imbued.AddElement(/datum/element/theologist_smite, smite_damage, smite_knockback, FALSE, TRUE, TRUE)
+	currently_imbued.AddElement(/datum/element/theologist_smite, smite_damage, unholy_smite_bonus, smite_knockback, FALSE, TRUE, TRUE)
 	to_chat(owner, span_notice("You infuse smiting energies into [currently_imbued]"))
 
 /// Applies the element and does not remove any existing ones.
 /datum/action/cooldown/power/theologist/smiting_strike/proc/imbue_global(obj/to_imbue)
-	to_imbue.AddElement(/datum/element/theologist_smite, smite_damage, smite_knockback, FALSE, TRUE, FALSE)
+	to_imbue.AddElement(/datum/element/theologist_smite, smite_damage, unholy_smite_bonus, smite_knockback, FALSE, TRUE, FALSE)
 	to_chat(owner, span_notice("You infuse smiting energies into [to_imbue]"))
 
 // Whilst I originally considered adding just the knockback element, we kind-of want more control over when the smite fades.
@@ -193,9 +193,9 @@
 	playsound(target, 'sound/effects/magic/magic_block_holy.ogg', 75, TRUE)
 	//If the mob is in the unholy mob typecache, they take more damage from smite.
 	if(is_type_in_typecache(target, GLOB.unholy_mobs))
-		target.adjust_fire_loss(smite_damage + unholy_smite_bonus)
+		target.adjustFireLoss(smite_damage + unholy_smite_bonus)
 	else
-		target.adjust_fire_loss(smite_damage)
+		target.adjustFireLoss(smite_damage)
 	to_chat(target, span_userdanger("You are knocked back by a burning, resonant energy!"))
 	return TRUE
 
