@@ -61,6 +61,12 @@
 	maximum = 50
 	step = 1
 
+/datum/preference/numeric/darkvision_cutoff/is_accessible(datum/preferences/preferences)
+	if (!..(preferences))
+		return FALSE
+
+	return TRUE
+
 /datum/preference/numeric/darkvision_cutoff/apply_to_human(mob/living/carbon/human/target, value, datum/preferences/preferences)
 	return FALSE
 
