@@ -16,7 +16,7 @@ import { MaterialAccessBar } from './Fabrication/MaterialAccessBar';
 import { MaterialCostSequence } from './Fabrication/MaterialCostSequence';
 import type { Design, FabricatorData, MaterialMap } from './Fabrication/Types';
 
-export const Fabricator = (props) => {
+export const ExosuitFabricator = (props) => {
   const { act, data } = useBackend<FabricatorData>();
   const { fabName, onHold, designs, busy, SHEET_MATERIAL_AMOUNT } = data;
 
