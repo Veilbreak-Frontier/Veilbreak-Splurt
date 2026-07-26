@@ -9,7 +9,6 @@ import { exhaustiveCheck } from 'tgui-core/exhaustive';
 
 import { PageButton } from '../components/PageButton';
 import { LanguagesPage } from '../LanguagesMenu'; /* DOPPLER EDIT ADDITION */
-import { LorePage } from '../LorePage'; /* DOPPLER EDIT ADDITION */
 import {
   getPowerCatalogData,
   getPowerPathData,
@@ -34,11 +33,11 @@ enum Page {
   Quirks,
   Loadout,
   Languages /* DOPPLER EDIT ADDITION */,
-  Lore /* DOPPLER EDIT ADDITION */,
   Powers /* DOPPLER EDITION ADDITION */,
   PowerPath /* DOPPLER EDIT ADDITION */,
   SelectedPowers /* DOPPLER EDIT ADDITION */,
 }
+
 
 type ProfileProps = {
   activeSlot: number;
@@ -99,12 +98,10 @@ export function CharacterPreferenceWindow(props) {
       pageContents = <JobsPage />;
       break;
     // DOPPLER EDIT START
-    case Page.Lore:
-      pageContents = <LorePage />;
-      break;
     case Page.Languages:
       pageContents = <LanguagesPage />;
       break;
+
     case Page.PowerPath:
       pageContents = (
         <PowerPathPage
@@ -192,17 +189,7 @@ export function CharacterPreferenceWindow(props) {
             </PageButton>
           </Stack.Item>
 
-          {/* // DOPPLER EDIT ADDITION*/}
-          <Stack.Item grow>
-            <PageButton
-              currentPage={currentPage}
-              page={Page.Lore}
-              setPage={setCurrentPage}
-            >
-              Lore
-            </PageButton>
-          </Stack.Item>
-          {/* // DOPPLER EDIT ADDITION END*/}
+
 
           <Stack.Item grow>
             <PageButton
