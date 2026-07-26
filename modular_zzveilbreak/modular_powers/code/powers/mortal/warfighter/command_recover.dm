@@ -4,7 +4,7 @@
 */
 /datum/power/warfighter/command_recover
 	name = "Commander"
-	desc = "There's many facets to a good leader, but being able to delegate and manage people under pressure is an art of it's own. \
+	desc = "There's many facets to a good leader, but being able to delegate and manage people under pressure is an art of its own. \
 	You gain the 'Command: Recover' ability. Using it on someone will cause them to recover from stuns faster (as if shook on help intent). Has a moderate cooldown. \
 	For any and all command abilities in this category, the effect is increased if you are in the same department as the target, and even further if you are a head of staff (regardless of department). \
 	Command abilities can never be used on yourself, and require the target to be able to see or hear you."
@@ -21,14 +21,16 @@
 	button_icon_state = "dextrous"
 	action_symbol = "move"
 
+	/// How much to reduce the afflictions with. Sleeping is 150% of this.
+	var/seconds_to_reduce = 6 SECONDS
+
 /datum/action/cooldown/power/warfighter/command/recover/use_action(mob/living/user, mob/living/carbon/target)
-	..()
 	// Basically the same amounts as shaking up twice multiplied by commander modifiers.
-	target.AdjustStun(-6 SECONDS * (commander_modifier + 1))
-	target.AdjustKnockdown(-6 SECONDS * (commander_modifier + 1))
-	target.AdjustUnconscious(-6 SECONDS * (commander_modifier + 1))
-	target.AdjustSleeping(-10 SECONDS * (commander_modifier + 1))
-	target.AdjustParalyzed(-6 SECONDS * (commander_modifier + 1))
-	target.AdjustImmobilized(-6 SECONDS * (commander_modifier + 1))
+	target.AdjustStun(-seconds_to_reduce * (commander_modifier + 1))
+	target.AdjustKnockdown(-seconds_to_reduce * (commander_modifier + 1))
+	target.AdjustUnconscious(-seconds_to_reduce * (commander_modifier + 1))
+	target.AdjustSleeping(-(seconds_to_reduce * 1.5) * (commander_modifier + 1))
+	target.AdjustParalyzed(-seconds_to_reduce * (commander_modifier + 1))
+	target.AdjustImmobilized(-seconds_to_reduce * (commander_modifier + 1))
 	target.shake_up_animation() // visual
 	return TRUE

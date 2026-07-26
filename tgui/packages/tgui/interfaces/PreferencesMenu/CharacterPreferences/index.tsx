@@ -1,17 +1,23 @@
 import { useState } from 'react';
 import { useBackend } from 'tgui/backend';
-import { Button, NoticeBox, Stack } from 'tgui-core/components'; // BUBBER EDIT CHANGE - ORIGINAL : import { NoticeBox, Stack } from 'tgui-core/components';
+import {
+  Dropdown,
+  Flex,
+  Stack,
+} from 'tgui-core/components'; /* DOPPLER EDIT: Adds in Dropdown and Flex */
 import { exhaustiveCheck } from 'tgui-core/exhaustive';
 
-import { SideDropdown } from '../../../bubber_components/SideDropdown'; // BUBBER EDIT ADDITION
 import { PageButton } from '../components/PageButton';
-import { LanguagesPage } from '../LanguagesMenu'; // BUBBER EDIT ADDITION
-import { LimbsPage } from '../LimbsPage'; // BUBBER EDIT ADDITION
-import { MortalPage } from '../Mortal';
-import { PowersPage } from '../PowersMenu';
-import { ResonantPage } from '../Resonant';
-import { SorcerousPage } from '../Sorcerous';
-import type { PreferencesMenuData } from '../types';
+import { LanguagesPage } from '../LanguagesMenu'; /* DOPPLER EDIT ADDITION */
+import {
+  getPowerCatalogData,
+  getPowerPathData,
+  useSelectedPowerPath,
+} from '../PowerPathBridge'; /* DOPPLER EDIT ADDITION */
+import { PowerPathPage } from '../PowerPathPage';
+import { PowersPage } from '../PowersMenu'; /* DOPPLER EDIT ADDITION */
+import { SelectedPowersPage } from '../SelectedPowersPage'; /* DOPPLER EDIT ADDITION */
+import type { PreferencesMenuData } from '../types'; /* DOPPLER EDIT ADDITION */
 import { AntagsPage } from './AntagsPage';
 import { JobsPage } from './JobsPage';
 import { LoadoutPage } from './loadout';
@@ -26,15 +32,12 @@ enum Page {
   Species,
   Quirks,
   Loadout,
-  // BUBBER EDIT ADDITION BEGIN
-  Limbs,
-  Languages,
-  // BUBBER EDIT ADDITION END
-  Powers,
-  Mortal,
-  Sorcerous,
-  Resonant,
+  Languages /* DOPPLER EDIT ADDITION */,
+  Powers /* DOPPLER EDITION ADDITION */,
+  PowerPath /* DOPPLER EDIT ADDITION */,
+  SelectedPowers /* DOPPLER EDIT ADDITION */,
 }
+
 
 type ProfileProps = {
   activeSlot: number;
@@ -45,29 +48,16 @@ type ProfileProps = {
 function CharacterProfiles(props: ProfileProps) {
   const { activeSlot, onClick, profiles } = props;
 
-  /* BUBBER EDIT CHANGE BEGIN
   return (
-    <Stack justify="center" wrap>
-      {profiles.map((profile, slot) => (
-        <Stack.Item key={slot} mb={1}>
-          <Button
-            selected={slot === activeSlot}
-            onClick={() => {
-              onClick(slot);
-            }}
-            fluid
-          >
-            {profile ?? 'New Character'}
-          </Button>
-        </Stack.Item>
-      ))}
-    </Stack>
-  ); */
-  return (
-    <Stack align="center" justify="left">
-      <Stack.Item width="285px">
-        <SideDropdown
-          selected={profiles[activeSlot]}
+    <Flex /* DOPPLER EDIT START: Dropdown instead of using buttons */
+      align="center"
+      justify="center"
+    >
+      <Flex.Item width="25%">
+        <Dropdown
+          width="100%"
+          selected={activeSlot as unknown as string}
+          displayText={profiles[activeSlot]}
           options={profiles.map((profile, slot) => ({
             value: slot,
             displayText: profile ?? 'New Character',
@@ -76,16 +66,27 @@ function CharacterProfiles(props: ProfileProps) {
             onClick(slot);
           }}
         />
-      </Stack.Item>
-    </Stack>
+      </Flex.Item>
+    </Flex> /* DOPPLER EDIT END */
   );
-  // BUBBER EDIT CHANGE END
 }
 
 export function CharacterPreferenceWindow(props) {
   const { act, data } = useBackend<PreferencesMenuData>();
 
   const [currentPage, setCurrentPage] = useState(Page.Main);
+  /* DOPPLER EDIT START - Powers data */
+  const { selectedPowerPathId, setSelectedPowerPathId } =
+    useSelectedPowerPath();
+  const powerCatalogData = getPowerCatalogData();
+  const powerPathConfig = getPowerPathData(
+    powerCatalogData,
+    selectedPowerPathId,
+  );
+  /* DOPPLER EDIT END */
+
+  const activePowersThemeColor =
+    currentPage === Page.PowerPath ? powerPathConfig.themeColor : undefined;
 
   let pageContents;
 
@@ -96,6 +97,38 @@ export function CharacterPreferenceWindow(props) {
     case Page.Jobs:
       pageContents = <JobsPage />;
       break;
+    // DOPPLER EDIT START
+    case Page.Languages:
+      pageContents = <LanguagesPage />;
+      break;
+
+    case Page.PowerPath:
+      pageContents = (
+        <PowerPathPage
+          handleClosePath={() => setCurrentPage(Page.Powers)}
+          pathId={selectedPowerPathId}
+        />
+      );
+      break;
+    case Page.SelectedPowers:
+      pageContents = (
+        <SelectedPowersPage
+          handleClosePage={() => setCurrentPage(Page.Powers)}
+        />
+      );
+      break;
+    case Page.Powers:
+      pageContents = (
+        <PowersPage
+          handleOpenSelectedPowers={() => setCurrentPage(Page.SelectedPowers)}
+          handleOpenPath={(pathId) => {
+            setSelectedPowerPathId(pathId);
+            setCurrentPage(Page.PowerPath);
+          }}
+        />
+      );
+      break;
+    // DOPPLER EDIT END
     case Page.Main:
       pageContents = (
         <MainPage openSpecies={() => setCurrentPage(Page.Species)} />
@@ -108,44 +141,6 @@ export function CharacterPreferenceWindow(props) {
       );
 
       break;
-
-    // BUBBER EDIT ADDITION BEGIN
-    case Page.Limbs:
-      pageContents = <LimbsPage />;
-      break;
-
-    case Page.Languages:
-      pageContents = <LanguagesPage />;
-      break;
-    // BUBBER EDIT ADDITION END
-
-    case Page.Mortal:
-      pageContents = (
-        <MortalPage handleCloseMortal={() => setCurrentPage(Page.Powers)} />
-      );
-      break;
-    case Page.Resonant:
-      pageContents = (
-        <ResonantPage handleCloseResonant={() => setCurrentPage(Page.Powers)} />
-      );
-      break;
-    case Page.Sorcerous:
-      pageContents = (
-        <SorcerousPage
-          handleCloseSorcerous={() => setCurrentPage(Page.Powers)}
-        />
-      );
-      break;
-    case Page.Powers:
-      pageContents = (
-        <PowersPage
-          handleOpenMortal={() => setCurrentPage(Page.Mortal)}
-          handleOpenSorcerous={() => setCurrentPage(Page.Sorcerous)}
-          handleOpenResonant={() => setCurrentPage(Page.Resonant)}
-        />
-      );
-      break;
-
     case Page.Quirks:
       pageContents = <QuirkPersonalityPage />;
       break;
@@ -161,43 +156,25 @@ export function CharacterPreferenceWindow(props) {
   return (
     <Stack vertical fill>
       <Stack.Item>
-        <Stack>
-          <Stack.Item>
-            <CharacterProfiles
-              activeSlot={data.active_slot - 1}
-              onClick={(slot) => {
-                act('change_slot', {
-                  slot: slot + 1,
-                });
-              }}
-              profiles={data.character_profiles}
-            />
-          </Stack.Item>
-          {/* BUBBER EDIT ADDITION BEGIN */}
-          <Stack.Item>
-            <Button
-              onClick={() => {
-                act('duplicate_current_slot');
-              }}
-              fontSize="13px"
-              icon="copy"
-              tooltip="Duplicate Current Character (Experimental)" //Delete this comment about being experimental before merge
-              tooltipPosition="top"
-            />
-            {/* BUBBER EDIT ADDITION END */}
-          </Stack.Item>
-          {!data.content_unlocked && (
-            <Stack.Item grow align="center" mb={-1}>
-              <NoticeBox color="grey">
-                <a href="https://www.byond.com/membership">
-                  Become a BYOND Member to unlock more character slots and other
-                  members-only benefits!
-                </a>
-              </NoticeBox>
-            </Stack.Item>
-          )}
-        </Stack>
+        <CharacterProfiles
+          activeSlot={data.active_slot - 1}
+          onClick={(slot) => {
+            act('change_slot', {
+              slot: slot + 1,
+            });
+          }}
+          profiles={data.character_profiles}
+        />
       </Stack.Item>
+      {/* // DOPPLER EDIT: Hide Byond premium banner
+
+      {!data.content_unlocked && (
+        <Stack.Item align="center">
+          Buy BYOND premium for more slots!
+        </Stack.Item>
+      )}
+
+      */}
       <Stack.Divider />
       <Stack.Item>
         <Stack fill>
@@ -211,6 +188,8 @@ export function CharacterPreferenceWindow(props) {
               Character
             </PageButton>
           </Stack.Item>
+
+
 
           <Stack.Item grow>
             <PageButton
@@ -236,17 +215,7 @@ export function CharacterPreferenceWindow(props) {
             </PageButton>
           </Stack.Item>
 
-          {/* BUBBER EDIT ADDITION BEGIN */}
-          <Stack.Item grow>
-            <PageButton
-              currentPage={currentPage}
-              page={Page.Limbs}
-              setPage={setCurrentPage}
-            >
-              Markings/Organs
-            </PageButton>
-          </Stack.Item>
-
+          {/* // DOPPLER EDIT ADDITION*/}
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
@@ -256,18 +225,27 @@ export function CharacterPreferenceWindow(props) {
               Languages
             </PageButton>
           </Stack.Item>
-          {/* BUBBER EDIT ADDITION END */}
 
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
               page={Page.Powers}
               setPage={setCurrentPage}
-              otherActivePages={[Page.Mortal, Page.Sorcerous, Page.Resonant]}
+              activeStyle={
+                activePowersThemeColor
+                  ? {
+                      backgroundColor: activePowersThemeColor,
+                      borderColor: activePowersThemeColor,
+                      color: 'black',
+                    }
+                  : undefined
+              }
+              otherActivePages={[Page.PowerPath, Page.SelectedPowers]}
             >
               Powers
             </PageButton>
           </Stack.Item>
+          {/* // DOPPLER EDIT ADDITION END*/}
 
           <Stack.Item grow>
             <PageButton

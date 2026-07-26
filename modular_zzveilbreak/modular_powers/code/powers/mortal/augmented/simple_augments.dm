@@ -40,15 +40,13 @@ ARMS
 	value = 9
 	augment = /obj/item/organ/cyberimp/arm/toolkit/toolset
 
-// DOPPLER EDIT - drill_arm commented out: /obj/item/organ/cyberimp/arm/toolkit/mining_drill not present in Veilbreak.
-/*
 /datum/power/augmented/drill_arm
 	name = "Integrated Drill Implant"
 	desc = "Extending from a stabilization bracer built into the upper forearm, this implant allows for a steel mining drill to extend over the user's hand."
 
 	value = 4
-	augment = /obj/item/organ/cyberimp/arm/toolkit/mining_drill
-*/
+	augment = /obj/item/organ/cyberimp/arm/toolkit
+
 
 /* I'm not including this one baseline because its just too fkn stron for unarmed stacking.
 /datum/power/augmented/strong_arm
@@ -110,6 +108,13 @@ Not to be confused with HUD eyes above.
 	value = 4
 	augment = /obj/item/organ/eyes/robotic/shield
 	disable_if_prisoner = FALSE // don't go ripping out a man's eyes.
+
+/datum/power/augmented/glow_eyes
+	name = "High Luminosity Eyes"
+	desc = "Special eyes that glow! For when you just want to look cool."
+	value = 1
+	augment = /obj/item/organ/eyes/robotic/glow
+	disable_if_prisoner = FALSE // there's no aura police
 
 /*
 INTERNAL (basically anything that isnt standard slots)

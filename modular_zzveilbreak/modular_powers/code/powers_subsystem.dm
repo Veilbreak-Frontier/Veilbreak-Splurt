@@ -14,6 +14,19 @@ GLOBAL_LIST_INIT(powers_inverse_requirements_list, generate_powers_inverse_requi
 /// Glob list of powers that have species restrictions.
 GLOBAL_LIST_INIT(powers_species_restrictions, generate_powers_species_restrictions())
 
+/// Returns TRUE when selected_power_type satisfies required_power_type.
+/proc/power_matches_requirement(datum/power/selected_power_type, datum/power/required_power_type, allow_subtypes = FALSE)
+	var/selected_typepath = ispath(selected_power_type) ? selected_power_type : selected_power_type.type
+	var/required_typepath = ispath(required_power_type) ? required_power_type : required_power_type.type
+
+	if(selected_typepath == required_typepath)
+		return TRUE
+
+	if(allow_subtypes && ispath(selected_typepath, required_typepath))
+		return TRUE
+
+	return FALSE
+
 /// Gets a power and all their requirements and adds it to the requirements list.
 /proc/generate_powers_requirements_list()
 	var/list/requirements_list = list()
@@ -74,6 +87,8 @@ PROCESSING_SUBSYSTEM_DEF(powers)
 	runlevels = RUNLEVEL_GAME
 	wait = 1 SECONDS
 
+	/// Whether newly spawned mobs should receive preference-selected powers this round.
+	var/spawn_powers_enabled = TRUE
 	/// Assoc. list of all roundstart power datum types; "name" = /path/
 	var/list/powers = list()
 	/// List of all power priorities in order.
@@ -81,16 +96,6 @@ PROCESSING_SUBSYSTEM_DEF(powers)
 		POWER_PRIORITY_ROOT,
 		POWER_PRIORITY_BASIC,
 		POWER_PRIORITY_ADVANCED,
-	)
-	/// Assoc. list of all mutually exclusive power paths. // TODO: NO LONGER TRUE
-	var/static/list/power_paths = list(
-		POWER_ARCHETYPE_SORCEROUS = list(
-			POWER_PATH_THAUMATURGE,
-			POWER_PATH_ENIGMATIST,
-			POWER_PATH_THEOLOGIST,
-		),
-		POWER_ARCHETYPE_RESONANT = list(),
-		POWER_ARCHETYPE_MORTAL = list(),
 	)
 	/// List of powers removed from players by the powers sanitization.
 	var/list/powers_removed
@@ -118,49 +123,38 @@ PROCESSING_SUBSYSTEM_DEF(powers)
 		powers[initial(power_type.name)] = power_type
 
 /// Assigns all powers in the player's preferences onto the mob.
-/datum/controller/subsystem/processing/powers/proc/assign_powers(mob/living/user, client/applied_client, datum/preferences/applied_preferences)
-	applied_preferences ||= applied_client?.prefs
-	if(!user || !applied_preferences)
+/datum/controller/subsystem/processing/powers/proc/assign_powers(mob/living/user, client/applied_client)
+	// No powers are given if the admins have turned on power spawning.
+	if(!spawn_powers_enabled)
 		return
 
-	var/log_ckey = applied_client?.ckey || applied_preferences.parent?.ckey || "unknown"
 	var/bad_power = FALSE
 	var/list/powers_by_priority = list()
-	var/list/available_powers = get_powers()
-	for(var/power_name in applied_preferences.all_powers)
-		var/datum/power/power_type = available_powers[power_name]
+	for(var/power_name in applied_client.prefs.all_powers)
+		var/datum/power/power_type = powers[power_name]
 		if(!ispath(power_type))
-			stack_trace("Invalid power \"[power_name]\" in client [log_ckey] preferences")
-			applied_preferences.all_powers -= power_name
+			stack_trace("Invalid power \"[power_name]\" in client [applied_client.ckey] preferences")
+			applied_client.prefs.all_powers -= power_name
 			bad_power = TRUE
 			continue
 		if(!power_type.priority)
-			stack_trace("Power with invalid priority \"[power_name]\" in client [log_ckey] preferences")
-			applied_preferences.all_powers -= power_name
+			stack_trace("Power with invalid priority \"[power_name]\" in client [applied_client.ckey] preferences")
+			applied_client.prefs.all_powers -= power_name
 			bad_power = TRUE
 			continue
 		LAZYADDASSOCLIST(powers_by_priority, power_type.priority, power_type)
 
 	if(bad_power)
-		applied_preferences.save_character()
+		applied_client.prefs.save_character()
 
 	for(var/power_priority in power_priorities)
 		var/list/priority_powers = powers_by_priority[power_priority]
 		if(isnull(priority_powers))
 			continue
 		for(var/datum/power/power_type as anything in priority_powers)
-			if(!user.add_archetype_power(power_type, override_client = applied_client))
+			if(!user.add_archetype_power(power_type, client_source = applied_client))
 				continue
 			SSblackbox.record_feedback("tally", "powers_taken", 1, "[power_type.name]")
-
-/// After quirks or other body changes, re-implant augmented organs only. Avoids re-running assign_powers (which would double-apply credits, items, etc.).
-/datum/controller/subsystem/processing/powers/proc/reapply_augmented_powers(mob/living/carbon/human/wearer, client/wearer_client)
-	if(!wearer)
-		return
-	wearer_client ||= wearer.client
-	for(var/datum/power/augmented/aug_power as anything in wearer.powers.Copy())
-		aug_power.remove()
-		aug_power.add_unique(wearer_client)
 
 /// Takes a list of power names,
 /// and returns a new list of powers that would be valid.
@@ -196,8 +190,9 @@ PROCESSING_SUBSYSTEM_DEF(powers)
 			LAZYADD(powers_removed, "Power point limit exceeded.")
 			return list()
 
-		// Make sure we only have up to two distinct paths.
-		if(!(power_type.path in unique_paths))
+		// Checks if we have no more than 2 paths, unless the path datum explicitly opts out.
+		var/datum/power_path/path_data = GLOB.power_paths_by_define[power_type.path]
+		if(!path_data?.path_limit_exempt && !(power_type.path in unique_paths))
 			if(length(unique_paths) >= 2)
 				continue // Third distinct path, discard.
 			unique_paths[power_type.path] = TRUE
@@ -243,25 +238,17 @@ PROCESSING_SUBSYSTEM_DEF(powers)
 		var/any_satisfied = FALSE
 
 		for(var/datum/power/req_type as anything in required)
-			// Exact requirement satisfied
-			if(selected_types[req_type])
-				any_satisfied = TRUE
-				if(allow_any)  // check to end early if any requirements are validated and allow_any is true.
+			// checks if we satisfy any requirements first
+			for(var/datum/power/selected_type as anything in selected_types)
+				if(power_matches_requirement(selected_type, req_type, allow_subtypes))
+					any_satisfied = TRUE
+					break
+
+			// check to end early if any requirements are validated and allow_any is true.
+			if(any_satisfied)
+				if(allow_any)
 					break
 				continue
-
-			// Optional: allow subtypes
-			if(allow_subtypes)
-				var/required_typepath = ispath(req_type) ? req_type : req_type.type
-				for(var/datum/power/selected_type as anything in selected_types)
-					if(ispath(selected_type, required_typepath))
-						any_satisfied = TRUE
-						break
-
-				if(any_satisfied) // check to end early if any requirements are validated and allow_any is true.
-					if(allow_any)
-						break
-					continue
 
 			// If we require all, any missing invalidates.
 			if(!allow_any)
@@ -296,3 +283,12 @@ PROCESSING_SUBSYSTEM_DEF(powers)
 		return is_listed
 	// if its in there, yes/no.
 	return !is_listed
+
+/// Admin verb that disables players from getting powers on spawn based on their prefs. This in essence prevents powers application except through VV.
+ADMIN_VERB(toggle_spawn_powers, R_ADMIN, "Toggle Spawn Powers", "Toggles whether newly spawned players receive powers from their preferences this round.", ADMIN_CATEGORY_GAME)
+	SSpowers.spawn_powers_enabled = !SSpowers.spawn_powers_enabled
+
+	to_chat(user, span_adminnotice("Newly spawned players will [SSpowers.spawn_powers_enabled ? "now" : "no longer"] receive powers this round."), confidential = TRUE)
+	message_admins(span_adminnotice("[key_name_admin(user)] has toggled spawn power assignment [SSpowers.spawn_powers_enabled ? "ON" : "OFF"] for this round."))
+	log_admin("[key_name(user)] toggled spawn power assignment [SSpowers.spawn_powers_enabled ? "ON" : "OFF"] for this round.")
+	SSblackbox.record_feedback("nested tally", "admin_toggle", 1, list("Toggle Spawn Powers", "[SSpowers.spawn_powers_enabled ? "Enabled" : "Disabled"]"))

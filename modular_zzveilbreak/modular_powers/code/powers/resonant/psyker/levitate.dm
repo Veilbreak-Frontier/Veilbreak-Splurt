@@ -1,20 +1,17 @@
 /datum/power/psyker_power/levitate
 	name = "Levitate"
-	desc = "Grants the ability to levitate yourself above surfaces and letting you propel yourself in zero-gravity. Passively drains stress while in use."
+	desc = "Grants the ability to levitate yourself above surfaces and lets you propel yourself in zero-gravity. Passively causes stress while in use."
 	security_record_text = "Subject can levitate their body regardless of the current gravity."
 	value = 4
+	magic_flags = POWER_MAGIC_STANDARD
 	required_powers = list(/datum/power/psyker_root)
 	action_path = /datum/action/cooldown/power/psyker/levitate
 
 /datum/action/cooldown/power/psyker/levitate
 	name = "Levitate"
-	desc = "Toggles levitation, causing you to ignore the ground. Also allows for propulsion in zero-gravity. Passively drains stress while in use."
+	desc = "Toggles levitation, causing you to ignore the ground. Also allows for propulsion in zero-gravity. Passively causes stress while in use."
 	button_icon = 'icons/mob/actions/actions_minor_antag.dmi'
 	button_icon_state = "beam_up"
-
-	mental = FALSE
-	/// Overlay we add to the caster
-	var/mutable_appearance/caster_effect
 
 /datum/action/cooldown/power/psyker/levitate/use_action()
 	. = ..()
@@ -24,25 +21,12 @@
 		to_chat(owner, span_boldnotice("Your body gently floats in the air!"))
 		START_PROCESSING(SSfastprocess, src)
 		active = TRUE
-		//visual fx
-		caster_effect = mutable_appearance(
-			icon = 'icons/effects/effects.dmi',
-			icon_state = "psychic",
-			layer = owner.layer - 0.1,
-			alpha = 100,
-			appearance_flags = RESET_ALPHA|RESET_COLOR|RESET_TRANSFORM|KEEP_APART
-		)
-		owner.add_overlay(caster_effect)
 		playsound(owner, 'sound/effects/magic/magic_missile.ogg', 75, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 	else
 		REMOVE_TRAIT(owner, TRAIT_PSYKER_LEVITATE_FLIGHT, REF(src))
 		to_chat(owner, span_boldnotice("You let yourself gently drop the ground."))
 		STOP_PROCESSING(SSfastprocess, src)
 		active = FALSE
-		// visual fx
-		if(caster_effect)
-			owner.cut_overlay(caster_effect)
-		caster_effect = null
 		playsound(owner, 'sound/effects/magic/cosmic_energy.ogg', 75, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 
 	return TRUE
@@ -65,12 +49,12 @@
 // Dispel function; basically off-switch and possibly comedic faceplant
 /datum/action/cooldown/power/psyker/levitate/Grant(mob/granted_to)
 	. = ..()
-	if(resonant)
+	if(is_magical())
 		RegisterSignal(granted_to, COMSIG_ATOM_DISPEL, PROC_REF(on_dispel))
 
 /datum/action/cooldown/power/psyker/levitate/Remove(mob/removed_from)
 	. = ..()
-	if(resonant)
+	if(is_magical())
 		UnregisterSignal(removed_from, COMSIG_ATOM_DISPEL)
 
 /// Ends the effect; makes them splat if they can't catch themselves.
@@ -82,10 +66,6 @@
 		REMOVE_TRAIT(owner, TRAIT_PSYKER_LEVITATE_FLIGHT, REF(src))
 		STOP_PROCESSING(SSfastprocess, src)
 		active = FALSE
-		// visual fx
-		if(caster_effect)
-			owner.cut_overlay(caster_effect)
-		caster_effect = null
 		playsound(owner, 'sound/effects/magic/cosmic_energy.ogg', 75, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 
 		// Do you have anything to brace your fall? Or do you possibly manage to get lucky?
@@ -95,7 +75,7 @@
 		else
 			to_chat(owner, span_userdanger("You drop to the ground!"))
 			playsound(owner, 'sound/effects/desecration/desecration-02.ogg', 75, TRUE, SHORT_RANGE_SOUND_EXTRARANGE) // Research (vibes) shows desecration-02 is the best "hit the ground"-type splat; so we're using it instead of a random desecration.
-			victim.adjust_brute_loss(5)
+			victim.adjustBruteLoss(5)
 			victim.Knockdown(3 SECONDS)
 		return DISPEL_RESULT_DISPELLED
 

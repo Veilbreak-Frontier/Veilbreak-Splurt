@@ -4,7 +4,7 @@
     set_model = /obj/item/robot_model/roleplay
     radio = null
 
-/mob/living/silicon/robot/model/roleplay/add_archetype_power(datum/power/P, client/override_client, add_unique = TRUE)
+/mob/living/silicon/robot/model/roleplay/add_archetype_power(datum/power/P, client/client_source, add_unique = TRUE)
     return FALSE
 
 /mob/living/silicon/robot/model/roleplay/Initialize(mapload)

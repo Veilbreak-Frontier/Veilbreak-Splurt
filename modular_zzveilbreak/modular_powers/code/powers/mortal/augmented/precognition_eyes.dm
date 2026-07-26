@@ -13,7 +13,7 @@
 	augment = /obj/item/organ/eyes/robotic/precognition_eyes
 
 /obj/item/organ/eyes/robotic/precognition_eyes
-	name = "Premium PRCG Precognitive Scanners"
+	name = "PRCG Precognitive Scanners"
 	desc = "Though some market it as being able to see the future, this invention by Oracle Neuro-Systems is instead a specialized AI recognition model hooked into a BULLET DODGER skillchip, allowing you to automatically dodge any incoming projectiles.\
 	\n This doesn't come without drawbacks, as the visual load is exhausting and suffers from the same drawbacks as the skillchip by tiring you out, causing more exhaustion than usual. This has no safeguard, meaning you can be stamina-critted by any projectiles.\
 	\n Requires a BULLET DODGER Skillchip to function."
@@ -137,6 +137,10 @@
 		return NONE
 	if(HAS_TRAIT(source, TRAIT_UNHITTABLE_BY_PROJECTILES))
 		return NONE
+	// Need a nat20 to evade this
+	if(istype(proj, /obj/projectile/magic/death) && rand(95))
+		to_chat(source, span_userdanger("You foresee your death, and yet your body fails to move!"))
+		return NONE
 	ADD_TRAIT(source, TRAIT_UNHITTABLE_BY_PROJECTILES, AUGMENTATION_TRAIT)
 
 	// stam + quality loss.
@@ -145,7 +149,7 @@
 	// If the projectile deals more damage, we use that for stamina cost instead of dodge_stamloss.
 	if(proj)
 		base_cost = max(base_cost, proj.damage)
-	source.adjust_stamina_loss(round(base_cost * (1 / max(efficiency, 0.01))))
+	source.adjustStaminaLoss(round(base_cost * (1 / max(efficiency, 0.01))))
 	premium_component?.adjust_quality(-AUGMENTED_PREMIUM_QUALITY_MINOR)
 	source.visible_message(span_warning("[source] dodges the [proj] with little effort!"), span_danger("You automatically dodge the [proj]!"))
 

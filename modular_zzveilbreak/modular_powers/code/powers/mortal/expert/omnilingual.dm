@@ -3,6 +3,10 @@
 	name = "Omnilingual"
 	desc = "You speak an absurd amount of languages; you are able to understand and speak every language at full proficiency. Does not apply to languages not available to your character at character selection."
 	value = 4
+
+	menu_icon = 'icons/obj/service/library.dmi'
+	menu_icon_state = "book1"
+
 	/// Saved list of languages that were given by this power to remove when the power is removed.
 	var/list/given_languages_list = list()
 
@@ -26,11 +30,10 @@
 		lang_holder = new species.species_language_holder()
 
 	given_languages_list = list()
-	// DOPPLER EDIT - Veilbreak has no all_languages_by_priority list; iterate GLOB.all_languages instead.
-	for (var/language_type in GLOB.all_languages)
+	// Doppler languages specifically filter all languages, so we mimmick those filters.
+	for (var/language_type in GLOB.language_datum_instances)
 		var/datum/language/language = GLOB.language_datum_instances[language_type]
-		if(!language)
-			continue
+
 
 		// If we already have the language, skip
 		if(power_holder.has_language(language.type, ALL))

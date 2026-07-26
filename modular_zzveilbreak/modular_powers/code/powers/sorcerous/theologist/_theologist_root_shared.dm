@@ -1,7 +1,7 @@
 /datum/power/theologist_root/shared
 	name = "A Burden Shared"
-	desc = "Channels a beam of energy between you and a target, equalizing damage over a period of time, scaling with severity. The beam requires continous line of sight to function, and neither you or your target can be incapacitated.\
-	\nGenerates Piety if you are transfering damage to yourself. Works on synthetic bodyparts"
+	desc = "Channels a beam of energy between you and a target, equalizing damage over a period of time, scaling with severity. The beam requires continuous line of sight to function, and ends prematurely if you are knocked down or incapacitated.\
+	\nGenerates Piety if you are transferring damage to yourself. Works on synthetic body parts."
 	security_record_text = "Subject can transfer the injuries of a target onto themselves, or visa versa."
 	security_threat = POWER_THREAT_MAJOR
 	action_path = /datum/action/cooldown/power/theologist/theologist_root/shared
@@ -11,7 +11,7 @@
 /datum/action/cooldown/power/theologist/theologist_root/shared
 	name = "A Burden Shared"
 	desc = "Channels a beam of energy between you and a target, equalizing damage over a period of time, scaling with severity. \
-	The beam requires continous line of sight to function, and neither you or your target can be incapacitated. Generates Piety if you are transfering damage to yourself. Works on synthetic bodyparts"
+	The beam requires continuous line of sight to function, and ends prematurely if you are knocked down or incapacitated. Generates Piety if you are transferring damage to yourself. Works on synthetic body parts."
 	button_icon = 'icons/mob/actions/actions_spells.dmi'
 	button_icon_state = "swap"
 	cooldown_time = 150
@@ -155,7 +155,7 @@
 	active = TRUE
 
 	// Create a beam from user -> target. This mirrors medbeam.dm's Beam() lifecycle.
-	current_beam = user.Beam(current_target, icon_state = "light_beam", time = 10 MINUTES, maxdistance = target_range, beam_type = /obj/effect/ebeam/medical, beam_color = "#ddd166")
+	current_beam = user.Beam(current_target, icon_state = "light_beam", time = 10 MINUTES, maxdistance = target_range, beam_type = /obj/effect/ebeam/medical, beam_color = POWER_COLOR_THEOLOGIST)
 	RegisterSignal(current_beam, COMSIG_QDELETING, PROC_REF(beam_died))
 	RegisterSignal(user, COMSIG_ATOM_DISPEL, PROC_REF(on_dispel))
 	RegisterSignal(target, COMSIG_ATOM_DISPEL, PROC_REF(on_dispel))
@@ -236,10 +236,10 @@
 /// Gets the damage of the affected creature.
 /datum/action/cooldown/power/theologist/theologist_root/shared/proc/get_damage_snapshot(mob/living/carbon/subject)
 	return list(
-		"brute" = subject.get_brute_loss(),
-		"burn"  = subject.get_fire_loss(),
-		"tox"   = subject.get_tox_loss(),
-		"oxy"   = subject.get_oxy_loss(),
+		"brute" = subject.getBruteLoss(),
+		"burn"  = subject.getFireLoss(),
+		"tox"   = subject.getToxLoss(),
+		"oxy"   = subject.getOxyLoss(),
 	)
 
 /// Actually calls the proper health adjustments
@@ -249,24 +249,24 @@
 	// To summarize; heals the target by the amount (which is capped at 5)
 	switch(damage_type)
 		if("brute")
-			amount = clamp((giver.get_brute_loss() - taker.get_brute_loss()) / heal_division_factor, heal_min, heal_max)
-			giver.adjust_brute_loss(-amount)
-			taker.adjust_brute_loss(amount)
+			amount = clamp((giver.getBruteLoss() - taker.getBruteLoss()) / heal_division_factor, heal_min, heal_max)
+			giver.adjustBruteLoss(-amount)
+			taker.adjustBruteLoss(amount)
 
 		if("burn")
-			amount = clamp((giver.get_fire_loss() - taker.get_fire_loss()) / heal_division_factor, heal_min, heal_max)
-			giver.adjust_fire_loss(-amount)
-			taker.adjust_fire_loss(amount)
+			amount = clamp((giver.getFireLoss() - taker.getFireLoss()) / heal_division_factor, heal_min, heal_max)
+			giver.adjustFireLoss(-amount)
+			taker.adjustFireLoss(amount)
 
 		if("tox")
-			amount = clamp((giver.get_tox_loss() - taker.get_tox_loss()) / heal_division_factor, heal_min, heal_max)
+			amount = clamp((giver.getToxLoss() - taker.getToxLoss()) / heal_division_factor, heal_min, heal_max)
 			adjust_tox_noinvert(giver, -amount)
 			adjust_tox_noinvert(taker, amount)
 
 		if("oxy")
-			amount = clamp((giver.get_oxy_loss() - taker.get_oxy_loss()) / heal_division_factor, heal_min, heal_max)
-			giver.adjust_oxy_loss(-amount)
-			taker.adjust_oxy_loss(amount)
+			amount = clamp((giver.getOxyLoss() - taker.getOxyLoss()) / heal_division_factor, heal_min, heal_max)
+			giver.adjustOxyLoss(-amount)
+			taker.adjustOxyLoss(amount)
 
 	// Piety buildup increases/deductions
 	// you can't gain piety from taking burdens from a ckey-less creature (sorry pets), but you can lose piety from dumping onto a ckey-less creature.
@@ -287,14 +287,14 @@
 	This section is really ugly. Due for a do-over.
 	*/
 	if(user_missingHP > target_missingHP)
-		var/bruteloss = clamp((user.get_brute_loss() - target.bruteloss) / heal_division_factor, heal_min, heal_max)
-		var/fireloss = clamp((user.get_fire_loss() - target.fireloss) / heal_division_factor, heal_min, heal_max)
-		var/toxloss = clamp((user.get_tox_loss() - target.toxloss) / heal_division_factor, heal_min, heal_max)
-		var/oxyloss = clamp((user.get_oxy_loss() - target.oxyloss) / heal_division_factor, heal_min, heal_max)
-		user.adjust_brute_loss(-bruteloss)
-		user.adjust_fire_loss(-fireloss)
+		var/bruteloss = clamp((user.getBruteLoss() - target.bruteloss) / heal_division_factor, heal_min, heal_max)
+		var/fireloss = clamp((user.getFireLoss() - target.fireloss) / heal_division_factor, heal_min, heal_max)
+		var/toxloss = clamp((user.getToxLoss() - target.toxloss) / heal_division_factor, heal_min, heal_max)
+		var/oxyloss = clamp((user.getOxyLoss() - target.oxyloss) / heal_division_factor, heal_min, heal_max)
+		user.adjustBruteLoss(-bruteloss)
+		user.adjustFireLoss(-fireloss)
 		adjust_tox_noinvert(user, -toxloss)
-		user.adjust_oxy_loss(-oxyloss)
+		user.adjustOxyLoss(-oxyloss)
 		target.bruteloss -= bruteloss
 		target.fireloss -= fireloss
 		target.toxloss -= toxloss
@@ -304,14 +304,14 @@
 
 	// Yaaay, healing the animals :)
 	if(user_missingHP < target_missingHP)
-		var/bruteloss = clamp((target.bruteloss - user.get_brute_loss()) / heal_division_factor, heal_min, heal_max)
-		var/fireloss = clamp((target.fireloss - user.get_fire_loss()) / heal_division_factor, heal_min, heal_max)
-		var/toxloss = clamp((target.toxloss - user.get_tox_loss()) / heal_division_factor, heal_min, heal_max)
-		var/oxyloss = clamp((target.oxyloss - user.get_oxy_loss()) / heal_division_factor, heal_min, heal_max)
-		user.adjust_brute_loss(bruteloss)
-		user.adjust_fire_loss(fireloss)
+		var/bruteloss = clamp((target.bruteloss - user.getBruteLoss()) / heal_division_factor, heal_min, heal_max)
+		var/fireloss = clamp((target.fireloss - user.getFireLoss()) / heal_division_factor, heal_min, heal_max)
+		var/toxloss = clamp((target.toxloss - user.getToxLoss()) / heal_division_factor, heal_min, heal_max)
+		var/oxyloss = clamp((target.oxyloss - user.getOxyLoss()) / heal_division_factor, heal_min, heal_max)
+		user.adjustBruteLoss(bruteloss)
+		user.adjustFireLoss(fireloss)
 		adjust_tox_noinvert(user, toxloss)
-		user.adjust_oxy_loss(oxyloss)
+		user.adjustOxyLoss(oxyloss)
 		target.bruteloss += bruteloss
 		target.fireloss += fireloss
 		target.toxloss += toxloss

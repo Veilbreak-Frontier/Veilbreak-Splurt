@@ -34,12 +34,12 @@
 
 /datum/action/cooldown/power/thaumaturge/summon_light/Grant(mob/granted_to)
 	. = ..()
-	if(resonant)
+	if(is_magical())
 		RegisterSignal(granted_to, COMSIG_ATOM_DISPEL, PROC_REF(on_dispel))
 
 /datum/action/cooldown/power/thaumaturge/summon_light/Remove(mob/removed_from)
 	. = ..()
-	if(resonant)
+	if(is_magical())
 		UnregisterSignal(removed_from, COMSIG_ATOM_DISPEL)
 	disable_summoned_light()
 

@@ -1,9 +1,9 @@
 /datum/power/cultivator_root/astral_touched
 	name = "Astral Touched Alignment"
 	desc = "You gain Energy through Aura by being able to view space (or space adjacent things), proportional to distance. Activating it gives you a radiant, blue aura causing your punches to do extra burn damage.\
-	\nPassively, your cold temprature tolerance is increased by 40C; activating the alignment makes you immune to cold and pressure, allowing you to navigate space unharmed (though you still need to breathe).\
+	\nPassively, your cold temperature tolerance is increased by 40C; activating the alignment makes you immune to cold and pressure, allowing you to navigate space unharmed (though you still need to breathe).\
 	\nYou gain armor IV across your whole body. Has diminishing effects with your worn armor."
-	security_record_text = "Subject is capable of entering a heightened state by observing space, granting them resistance to damage, deadlier punches and the ability to ignore cold tempratures and low pressure."
+	security_record_text = "Subject is capable of entering a heightened state by observing space, granting them resistance to damage, deadlier punches and the ability to ignore cold temperatures and low pressure."
 	security_threat = POWER_THREAT_MAJOR
 	action_path = /datum/action/cooldown/power/cultivator/alignment/astral_touched
 
@@ -59,6 +59,7 @@
 	var/fake_space_value = CULTIVATOR_AURA_FARM_MINOR * 0.4 // looks pretty real.
 	var/space_cube_value = CULTIVATOR_AURA_FARM_MINOR * 0.5 // Praise the space cube.
 	var/in_space_value = CULTIVATOR_AURA_FARM_MAJOR // Being out in space basically guarantees 50% charge.
+	var/voidwalker_value = CULTIVATOR_AURA_FARM_MAJOR // They are void space people-things. Could make for great roleplay.
 
 	// Do we see space turfs?
 	for(var/turf/T in view(owner_mob))
@@ -84,5 +85,9 @@
 	var/turf/owner_turf = get_turf(owner_mob)
 	if(istype(owner_turf, /turf/open/space))
 		total += in_space_value
+
+	// They're made out of space, they're cool.
+	for(var/mob/living/basic/voidwalker/voidman in view(owner_mob))
+		total += voidwalker_value
 
 	return total

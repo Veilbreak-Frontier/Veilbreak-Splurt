@@ -31,7 +31,11 @@
 	attach(location)
 	oldposition = location
 
+/datum/effect_system/trail_follow/proc/set_up(atom/atom_to_follow)
+	attach(atom_to_follow)
+
 /datum/effect_system/trail_follow/Destroy()
+
 	oldposition = null
 	stop()
 	return ..()

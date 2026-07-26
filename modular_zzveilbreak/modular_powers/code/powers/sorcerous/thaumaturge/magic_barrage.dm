@@ -13,6 +13,7 @@
 
 	action_path = /datum/action/cooldown/power/thaumaturge/magical_barrage
 	required_powers = list(/datum/power/thaumaturge_root)
+	required_allow_subtypes = TRUE
 
 /datum/action/cooldown/power/thaumaturge/magical_barrage
 	name = "Magical Barrage"
@@ -126,6 +127,8 @@
 
 	next_single_shot_time = world.time + single_shot_delay
 
+	var/obj/projectile/projectile_type = projectile_path
+	user.visible_message(span_warning("[user] shoots one of their orbiting [initial(projectile_type.name)]!"))
 	playsound(owner, 'sound/effects/magic/magic_missile.ogg', 75, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
 	return fire_projectile(user, target, projectile_path)
 
@@ -149,6 +152,8 @@
 	pellet_count = clamp(pellet_count, 1, 50)
 	cone_degrees = clamp(cone_degrees, 0, 90)
 	angle_jitter_degrees = clamp(angle_jitter_degrees, 0, 15)
+
+	user.visible_message(span_warning("[user] shoots all of their orbiting [initial(projectile.name)]s!"))
 
 	// Base angle from shooter to clicked turf
 	var/base_angle = get_angle(user_turf, target_turf)
@@ -188,27 +193,24 @@
 		return FALSE
 	return TRUE
 
+/// Flavor override: hemomancy users fire blood bolts instead of arcane bolts.
+/datum/action/cooldown/power/thaumaturge/magical_barrage/ready_projectile(obj/projectile/projectile_instance, atom/target, mob/living/user)
+	. = ..()
+	if(!projectile_instance || !isliving(user))
+		return
+	if(user.GetComponent(/datum/component/thaumaturge/hemomancy))
+		projectile_instance.icon_state = "blood_bolt"
+
 
 // the projectile in question
 /obj/projectile/resonant/magic_barrage
 	name = "magic missile"
 	icon_state = "arcane_barrage"
 	damage = 9
-	/// Extra damage dealt to living mobs in FACTION_VOID.
-	var/bonus_vs_void = 35
 	damage_type = BURN
 	armour_penetration = 25 // Great for civilian use, less-so on armored opponents.
 	armor_flag = LASER
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE // unfortunately for you this is a magical LASER
-
-/obj/projectile/resonant/magic_barrage/prehit_pierce(atom/target)
-	. = ..()
-	if(. == PROJECTILE_DELETE_WITHOUT_HITTING || !bonus_vs_void || !isliving(target))
-		return
-
-	var/mob/living/living_target = target
-	if(FACTION_VOID in living_target.faction)
-		damage += bonus_vs_void
 
 /* Code for orbitals below */
 /obj/effect/magic_missile_orbiter
@@ -225,6 +227,8 @@
 	clear_orbitals()
 	if(amount <= 0 || QDELETED(owner))
 		return
+	var/obj/projectile/projectile_type = projectile_path
+	owner.visible_message(span_warning("[initial(projectile_type.name)]s start orbiting around [owner]!"))
 
 	for(var/missile_num in 1 to amount)
 		var/time_until_created = (missile_num - 1) * time_between_initial_missiles
@@ -242,7 +246,7 @@
 	orbiter.transform = matrix()
 	orbiter.transform.Scale(0.5, 0.5)
 	orbiter.icon = projectile_path.icon // if you end up editing the projectile, it should also affect the orbitals.
-	orbiter.icon_state = projectile_path.icon_state // ditto on above
+	orbiter.icon_state = owner?.GetComponent(/datum/component/thaumaturge/hemomancy) ? "blood_bolt" : projectile_path.icon_state // changes the icon_state to the blood ones if we have hemomancy.
 	orbiting_missiles += orbiter
 	orbiter.orbit(owner, missile_orbit_radius, rotation_speed =  missile_rotation_speed)
 	RegisterSignal(orbiter, COMSIG_QDELETING, PROC_REF(on_orbiter_deleted))
@@ -277,12 +281,12 @@
 // Dispel functionality
 /datum/action/cooldown/power/thaumaturge/magical_barrage/Grant(mob/granted_to)
 	. = ..()
-	if(resonant)
+	if(is_magical())
 		RegisterSignal(granted_to, COMSIG_ATOM_DISPEL, PROC_REF(on_dispel))
 
 /datum/action/cooldown/power/thaumaturge/magical_barrage/Remove(mob/removed_from)
 	. = ..()
-	if(resonant)
+	if(is_magical())
 		UnregisterSignal(removed_from, COMSIG_ATOM_DISPEL)
 
 /// On dispel, poof there go your orbitals.

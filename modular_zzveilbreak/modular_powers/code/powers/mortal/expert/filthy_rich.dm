@@ -10,23 +10,17 @@
 	value = 8
 	required_powers = list(/datum/power/expert/rich)
 
+	menu_icon = 'icons/obj/economy.dmi'
+	menu_icon_state = "spacecash1000_4"
+
 	// we just make it the same as rich but reduced because we are lazy.
 	var/riches = 7500
 
 /datum/power/expert/filthy_rich/add_unique(client/client_source)
 	var/mob/living/carbon/human/human_holder = power_holder
-	if(try_grant_rich_power_credits(src, human_holder, riches))
+	if(!human_holder.account_id) // give it to the mob if they don't have a bank account
+		var/obj/item/holochip/riches_chip = new(get_turf(human_holder), riches)
+		give_item_to_holder(riches_chip, list(LOCATION_BACKPACK, LOCATION_HANDS))
 		return
-	if(!human_holder)
-		return
-	RegisterSignal(human_holder, COMSIG_HUMAN_CHARACTER_SETUP_FINISHED, PROC_REF(on_character_setup_finished))
-
-/datum/power/expert/filthy_rich/proc/on_character_setup_finished(mob/living/carbon/human/source)
-	SIGNAL_HANDLER
-	UnregisterSignal(source, COMSIG_HUMAN_CHARACTER_SETUP_FINISHED)
-	try_grant_rich_power_credits(src, source, riches)
-
-/datum/power/expert/filthy_rich/remove()
-	if(power_holder)
-		UnregisterSignal(power_holder, COMSIG_HUMAN_CHARACTER_SETUP_FINISHED)
-	return ..()
+	var/datum/bank_account/account = SSeconomy.bank_accounts_by_id["[human_holder.account_id]"]
+	account.account_balance += riches

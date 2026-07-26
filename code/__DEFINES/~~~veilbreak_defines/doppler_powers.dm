@@ -14,15 +14,64 @@
 #define POWER_ARCHETYPE_RESONANT "Resonant"
 #define POWER_ARCHETYPE_MORTAL "Mortal"
 
+#define POWER_ARCHETYPE_SORT_SORCEROUS 10
+#define POWER_ARCHETYPE_SORT_RESONANT 20
+#define POWER_ARCHETYPE_SORT_MORTAL 30
+
+#define POWER_PATH_SORT_PRIMARY 10
+#define POWER_PATH_SORT_SECONDARY 20
+#define POWER_PATH_SORT_TERTIARY 30
+#define POWER_PATH_SORT_QUATERNARY 40
+
+
+
 #define POWER_PATH_THAUMATURGE "Thaumaturge"
 #define POWER_PATH_ENIGMATIST "Enigmatist"
 #define POWER_PATH_THEOLOGIST "Theologist"
 #define POWER_PATH_PSYKER "Psyker"
 #define POWER_PATH_CULTIVATOR "Cultivator"
 #define POWER_PATH_ABERRANT "Aberrant"
+#define POWER_PATH_IMBUED "Imbued"
 #define POWER_PATH_WARFIGHTER "Warfighter"
 #define POWER_PATH_EXPERT "Expert"
 #define POWER_PATH_AUGMENTED "Augmented"
+#define POWER_PATH_IRREGULAR "Irregular"
+
+#define POWER_COLOR_THAUMATURGE "#7266dd"
+#define POWER_COLOR_ENIGMATIST "#439c27"
+#define POWER_COLOR_THEOLOGIST "#d1c029"
+#define POWER_COLOR_PSYKER "#b94398"
+#define POWER_COLOR_CULTIVATOR "#66c5dd"
+#define POWER_COLOR_ABERRANT "#4F3A57"
+#define POWER_COLOR_IMBUED "#e9874f"
+#define POWER_COLOR_WARFIGHTER "#ac2222"
+#define POWER_COLOR_EXPERT "#38495C"
+#define POWER_COLOR_AUGMENTED "#6b6652"
+#define POWER_COLOR_IRREGULAR "#cacaca"
+
+/// Bitflags defining magic properties for magic detection/dispelling.
+#define POWER_MAGIC_STANDARD (1<<0)
+#define POWER_MAGIC_MENTAL (1<<1)
+#define POWER_MAGIC_UNHOLY (1<<2)
+#define POWER_MAGIC_SCRYING (1<<3)
+
+/// Sent right before a power action resolves through use_action: (mob/living/user, atom/target)
+#define COMSIG_POWER_ACTION_USED "power_action_used"
+/// Sent when a power action successfully resolves (use_action returned TRUE): (mob/living/user, atom/target)
+#define COMSIG_POWER_ACTION_SUCCESS "power_action_success"
+/// Sent when a power is added to a mob's power list: (datum/power/added_power)
+#define COMSIG_MOB_POWER_ADDED "mob_power_added"
+/// Sent when a power is removed from a mob's power list: (datum/power/removed_power)
+#define COMSIG_MOB_POWER_REMOVED "mob_power_removed"
+#define COMSIG_POWER_ADDED COMSIG_MOB_POWER_ADDED
+#define COMSIG_POWER_REMOVED COMSIG_MOB_POWER_REMOVED
+/// Sent by Enchanted to gather additive recovery percentage modifiers.
+#define COMSIG_IMBUED_ENCHANTED_RECOVERY_MODIFIERS "imbued_enchanted_recovery_modifiers"
+/// Sent by thaumaturge get_affinity for external affinity riders: (datum/action/cooldown/power/thaumaturge/action)
+#define COMSIG_THAUMATURGE_AFFINITY_QUERY "thaumaturge_affinity_query"
+
+
+
 
 /// Any traits granted by powers.
 #define POWER_TRAIT "power_trait"
@@ -275,8 +324,83 @@
  * All defines related to the aberrant powers.
  */
 
+#define ABERRANT_HUNGER_COST_BASE (NUTRITION_LEVEL_FULL - NUTRITION_LEVEL_STARVING)
+
+// Hunger costs, as percentages of a stomach's usable resource range.
+#define ABERRANT_HUNGER_TRIVIAL (1 / 100)
+#define ABERRANT_HUNGER_MINOR (1 / 10)
+#define ABERRANT_HUNGER_MODERATE (1 / 5)
+#define ABERRANT_HUNGER_MAJOR (1 / 2)
+#define ABERRANT_HUNGER_EXTREME (1)
+
+// Thaumaturge action resource display modes.
+#define THAUMATURGE_RESOURCE_DISPLAY_CHARGES "charges"
+#define THAUMATURGE_RESOURCE_DISPLAY_PREP_COST "prep_cost"
+
+// Thresholds for hemomancy whenever you are either low blood or ready to overcast, relative to blood volume normal.
+#define THAUMATURGE_HEMOMANCY_LOW_BLOOD_THRESHOLD 0.85
+#define THAUMATURGE_HEMOMANCY_OVERCAST_THRESHOLD 1.10
+
+// The minimum affinity you have with your blood hand.
+#define THAUMATURGE_HEMOMANCY_MIN_AFFINITY 3
+// The maximum affinity you can get with overcasting.
+#define THAUMATURGE_HEMOMANCY_MAX_AFFINITY 6
+// How much blood cost scales from prep_cost (and UI display) for hemomancy.
+#define THAUMATURGE_HEMOMANCY_BLOOD_COST_MULTIPLIER 4
+
+// Psyker organ
+#define PSYKER_STRESS_CHEMOTROPIC_POWER 10
+#define PSYKER_MISMATCHED_ORGAN_EFFICIENCY 0.33
+
+// Martial art define for Tchotchke Style
+#define MARTIALART_TCHOTCHKE_STYLE "tchotchke style"
+
+
 // Trait that lets you use the riftwalker mechanic.
-#define TRAIT_ABERRANT_RIFTWALKER "riftwalker"
+#define TRAIT_IMBUED_RIFTWALKER "riftwalker"
+
+/mob/living/proc/can_hear()
+	return !HAS_TRAIT(src, TRAIT_DEAF)
+
+/mob/living/proc/getBruteLoss()
+	return get_brute_loss()
+
+/mob/living/proc/getFireLoss()
+	return get_fire_loss()
+
+/mob/living/proc/getToxLoss()
+	return get_tox_loss()
+
+/mob/living/proc/getOxyLoss()
+	return get_oxy_loss()
+
+/mob/living/proc/adjustBruteLoss(amount, updating_health = TRUE, forced = FALSE)
+	return adjust_brute_loss(amount, updating_health, forced)
+
+/mob/living/proc/adjustFireLoss(amount, updating_health = TRUE, forced = FALSE)
+	return adjust_fire_loss(amount, updating_health, forced)
+
+/mob/living/proc/adjustToxLoss(amount, updating_health = TRUE, forced = FALSE)
+	return adjust_tox_loss(amount, updating_health, forced)
+
+/mob/living/proc/adjustOxyLoss(amount, updating_health = TRUE, forced = FALSE)
+	return adjust_oxy_loss(amount, updating_health, forced)
+
+/mob/living/proc/adjustStaminaLoss(amount, updating_stamina = TRUE, forced = FALSE)
+	return adjust_stamina_loss(amount, updating_stamina, forced)
+
+/mob/living/proc/adjustOrganLoss(zone, amount, max_damage)
+	return adjust_organ_loss(zone, amount, max_damage)
+
+/mob/living/proc/apply_damage_with_armor(damage, damage_type = BRUTE, def_zone = null, blocked = FALSE, wound_bonus = 0, bare_wound_bonus = 0, sharpness = 0, attack_direction = null, armor_flag = null, forced = FALSE)
+	return apply_damage(damage, damage_type, def_zone, blocked, wound_bonus, bare_wound_bonus, sharpness, attack_direction, armor_flag, forced)
+
+/obj/machinery/power/supermatter_crystal
+	var/tainted_by_mending = FALSE
+
+
+
+
 
 /**MORTAL DEFINES
 * I'm literally just using this to define Breacher Knuckle right now

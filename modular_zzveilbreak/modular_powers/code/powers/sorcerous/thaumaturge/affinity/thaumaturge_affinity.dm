@@ -113,6 +113,10 @@ A lot of Affinity asignments are vibe-based depending on looks, visibility and r
 /obj/item/clothing/neck/cloak/herald_cloak
 	affinity = 3
 
+// It glows. That makes it more magical.
+/obj/item/bedsheet/cult
+	affinity = 3
+
 // Heretic focues arent too pronounced but theyre antag items so they get preferential treatment
 /obj/item/clothing/neck/heretic_focus
 	affinity = 3
@@ -199,6 +203,8 @@ A lot of Affinity asignments are vibe-based depending on looks, visibility and r
 	affinity = 4
 /obj/item/clothing/suit/wizrobe/tape/fake
 	affinity = 4
+/obj/item/clothing/suit/wizrobe/durathread
+	affinity = 4
 
 // Wizrobe hats (Fakes)
 /obj/item/clothing/head/wizard/fake
@@ -261,4 +267,9 @@ A lot of Affinity asignments are vibe-based depending on looks, visibility and r
 // This is the actual magnum opus of Wizardy; unless a Wizard item is made to delibaretely interact with thaumaturge, there shouldn't be anything exceeding this.
 /obj/item/mod/control/pre_equipped/enchanted
 	affinity = 8
+	affinity_worn_override = TRUE
+
+// Just to make testing easier.
+/obj/item/mod/control/pre_equipped/administrative
+	affinity = 5
 	affinity_worn_override = TRUE

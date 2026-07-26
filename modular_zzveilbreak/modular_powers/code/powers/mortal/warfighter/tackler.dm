@@ -8,8 +8,10 @@
 	security_record_text = "Subject is trained in using tackles for takedowns."
 	security_threat = POWER_THREAT_MAJOR
 	value = 4
-
 	required_powers = list(/datum/power/warfighter/martial_artist)
+
+	menu_icon = 'icons/obj/clothing/gloves.dmi'
+	menu_icon_state = "black"
 
 	/// the datum that the tackle system is in
 	var/datum/component/tackler
@@ -29,7 +31,7 @@
 	/// See: [/datum/component/tackler/var/skill_mod]
 	var/skill_mod = 2
 
-	tackler = power_holder.AddComponentFrom(src, /datum/component/tackler, stamina_cost=tackle_stam_cost, base_knockdown = base_knockdown, range = tackle_range, speed = tackle_speed, skill_mod = skill_mod, min_distance = min_distance)
+	tackler = power_holder.AddComponent(/datum/component/tackler, stamina_cost=tackle_stam_cost, base_knockdown = base_knockdown, range = tackle_range, speed = tackle_speed, skill_mod = skill_mod, min_distance = min_distance)
 
 /datum/power/warfighter/tackler/remove()
 	power_holder.RemoveComponentSource(src, /datum/component/tackler)
