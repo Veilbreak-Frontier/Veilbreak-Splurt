@@ -172,6 +172,10 @@
 			CREATE_AND_INCREMENT(best_mats, /datum/material/iron, SHEET_MATERIAL_AMOUNT * 5 + SHEET_MATERIAL_AMOUNT / 20)
 			CREATE_AND_INCREMENT(best_mats, /datum/material/glass, SHEET_MATERIAL_AMOUNT / 20)
 
+		for(var/datum/material/mat_type in best_mats)
+			if(mat_type != /datum/material/iron && mat_type != /datum/material/glass)
+				best_mats -= mat_type
+
 		chosen_component_types = best_components
 		needed_mats = best_mats
 

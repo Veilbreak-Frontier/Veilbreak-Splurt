@@ -212,7 +212,10 @@
 			mat_list = null_comp.custom_materials
 
 	for(var/atom/mat as anything in mat_list)
-		CREATE_AND_INCREMENT(costs, mat.type, mat_list[mat] * count)
+		var/datum/material/mat_type = ispath(mat) ? mat : mat.type
+		if(mat_type != /datum/material/iron && mat_type != /datum/material/glass)
+			continue
+		CREATE_AND_INCREMENT(costs, mat_type, mat_list[mat] * count)
 
 	if(null_comp)
 		qdel(null_comp)
