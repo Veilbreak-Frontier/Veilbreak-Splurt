@@ -93,3 +93,4 @@
 /datum/power/aberrant/vent_crawl/proc/has_restricted_gear(mob/living/source)
 	var/mob/living/carbon/carbon_source = source
 	return carbon_source.get_item_by_slot(ITEM_SLOT_BACK) || carbon_source.get_item_by_slot(ITEM_SLOT_HEAD) || carbon_source.get_item_by_slot(ITEM_SLOT_OCLOTHING)
+

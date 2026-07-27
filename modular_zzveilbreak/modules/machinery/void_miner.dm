@@ -1,5 +1,3 @@
-/// Void Miner
-/// A miner that produces random ores from the void, requires only power and silo link
 /obj/machinery/void_miner
 	name = "void miner"
 	desc = "A mysterious machine that draws materials from the void itself. Only one miner will work."
@@ -11,24 +9,21 @@
 	active_power_usage = 50000
 	processing_flags = START_PROCESSING_ON_INIT
 
-	/// Processing speed in seconds
 	var/processing_speed = 6 SECONDS
-	/// Remote materials link for silo connection
 	var/datum/remote_materials/materials
-	/// List of all available ores that can be produced
 	var/static/list/available_ores = list(
-    /obj/item/stack/sheet/iron = 80,
-    /obj/item/stack/sheet/glass = 80,
-    /obj/item/stack/sheet/plastic = 1,
-    /obj/item/stack/sheet/mineral/plasma = 30,
-    /obj/item/stack/sheet/mineral/silver = 25,
-    /obj/item/stack/sheet/mineral/titanium = 20,
-    /obj/item/stack/sheet/mineral/uranium = 20,
-    /obj/item/stack/sheet/mineral/gold = 10,
-    /obj/item/stack/sheet/mineral/diamond = 5,
-    /obj/item/stack/sheet/mineral/plastitanium = 5,
-    /obj/item/stack/sheet/bluespace_crystal = 2
-)
+		/obj/item/stack/sheet/iron = 80,
+		/obj/item/stack/sheet/glass = 80,
+		/obj/item/stack/sheet/plastic = 1,
+		/obj/item/stack/sheet/mineral/plasma = 30,
+		/obj/item/stack/sheet/mineral/silver = 25,
+		/obj/item/stack/sheet/mineral/titanium = 20,
+		/obj/item/stack/sheet/mineral/uranium = 20,
+		/obj/item/stack/sheet/mineral/gold = 10,
+		/obj/item/stack/sheet/mineral/diamond = 5,
+		/obj/item/stack/sheet/mineral/plastitanium = 5,
+		/obj/item/stack/sheet/bluespace_crystal = 2
+	)
 	COOLDOWN_DECLARE(process_cooldown)
 
 /obj/machinery/void_miner/Initialize(mapload)
@@ -42,7 +37,6 @@
 
 /obj/machinery/void_miner/RefreshParts()
 	. = ..()
-
 	processing_speed = 6 SECONDS
 	for(var/datum/stock_part/servo/servo_part in component_parts)
 		processing_speed -= (servo_part.tier * (0.5 SECONDS))
@@ -72,48 +66,42 @@
 		if(dominant && dominant != src)
 			. += span_warning("Another void miner on this z-level is already channeling the void; only one can operate per level.")
 
-
 /obj/machinery/void_miner/proc/check_factors()
 	if(!COOLDOWN_FINISHED(src, process_cooldown))
 		return FALSE
 	COOLDOWN_START(src, process_cooldown, processing_speed)
-
-	// Must be powered
 	if(machine_stat & (NOPOWER|BROKEN))
 		return FALSE
-
-	// Must be anchored and panel closed
 	if(!anchored || panel_open)
 		return FALSE
-
-	// Must have silo connection
 	if(!materials?.mat_container)
 		return FALSE
-
-	// Only one void miner may draw from the void per z-level (deterministic tie-break by ref)
+	var/datum/material_container/container = materials.mat_container
+	if(container.max_amount <= 0)
+		return FALSE
 	if(!is_dominant_void_miner_on_z())
 		return FALSE
-
 	return TRUE
 
 /obj/machinery/void_miner/proc/spawn_mats()
 	if(!materials?.mat_container)
 		return
-
+	var/datum/material_container/container = materials.mat_container
+	if(container.max_amount <= 0)
+		return
 	var/chosen_ore = pick_weight(available_ores)
 	var/obj/item/stack/sheet/chosen_stack = new chosen_ore(null, 1)
-
-	// Insert the stack into the silo
+	if(container.total_amount() + 1 > container.max_amount)
+		new chosen_ore(get_turf(src))
+		visible_message(span_warning("[src] beeps: Silo storage full, material ejected."))
+		qdel(chosen_stack)
+		return
 	var/insert_result = materials.insert_item(chosen_stack, 1)
-
 	if(insert_result == MATERIAL_INSERT_ITEM_FAILURE || insert_result == MATERIAL_INSERT_ITEM_NO_SPACE || insert_result == MATERIAL_INSERT_ITEM_NO_MATS)
-		// If insertion failed, drop it on the ground as fallback
 		new chosen_ore(get_turf(src))
 		visible_message(span_warning("[src] beeps: Silo connection lost, material ejected."))
-
 	qdel(chosen_stack)
 
-/// Among eligible void miners on this z, only the one with the lowest ref() may process (stable for the round).
 /obj/machinery/void_miner/proc/is_dominant_void_miner_on_z()
 	var/turf/here = get_turf(src)
 	if(!here)
@@ -123,7 +111,6 @@
 /obj/machinery/void_miner/process()
 	if(!check_factors())
 		return
-
 	spawn_mats()
 	playsound(src, 'sound/machines/ping.ogg', 50, FALSE, SILENCED_SOUND_EXTRARANGE, ignore_walls = FALSE)
 	update_appearance()

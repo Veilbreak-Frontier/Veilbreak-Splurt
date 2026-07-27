@@ -22,6 +22,13 @@
 		if(istype(P))
 			P.materials = mat_container
 
+	can_use_resource(check_hold = TRUE, alist/user_data)
+		if(!mat_container)
+			return FALSE
+		if(check_hold && on_hold())
+			return FALSE
+		return TRUE
+
 /obj/machinery/flatpacker
 	var/datum/remote_materials/remote
 	var/list/chosen_component_types = list()
