@@ -10,7 +10,7 @@ import { exhaustiveCheck } from 'tgui-core/exhaustive';
 
 import { PageButton } from '../components/PageButton';
 import { LanguagesPage } from '../LanguagesMenu';
-import { LimbsPage } from '../LimbsPage';          // BUBBER
+import { LimbsPage } from '../LimbsPage';
 import {
   getPowerCatalogData,
   getPowerPathData,
@@ -38,7 +38,7 @@ enum Page {
   Powers,
   PowerPath,
   SelectedPowers,
-  Limbs,          // BUBBER
+  Limbs,
 }
 
 type ProfileProps = {
