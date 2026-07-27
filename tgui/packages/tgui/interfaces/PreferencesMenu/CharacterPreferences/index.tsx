@@ -50,12 +50,11 @@ type ProfileProps = {
 function CharacterProfiles(props: ProfileProps) {
   const { activeSlot, onClick, profiles } = props;
 
-  // Dropdown width auto‑fits the longest profile name
   return (
     <Flex align="center">
       <Flex.Item>
         <Dropdown
-          width="auto"                     // fits content
+          width="auto"
           selected={activeSlot as unknown as string}
           displayText={profiles[activeSlot]}
           options={profiles.map((profile, slot) => ({
@@ -67,7 +66,7 @@ function CharacterProfiles(props: ProfileProps) {
           }}
         />
       </Flex.Item>
-      <Flex.Item ml={1}>                   // small gap
+      <Flex.Item ml={1}>
         <Button
           onClick={() => {
             act('duplicate_current_slot');
