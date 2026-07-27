@@ -1,23 +1,26 @@
 import { useState } from 'react';
 import { useBackend } from 'tgui/backend';
 import {
+  Button,        // BUBBER MERGE: added for duplicate button & banner
   Dropdown,
   Flex,
+  NoticeBox,     // BUBBER MERGE: added for premium banner
   Stack,
-} from 'tgui-core/components'; /* DOPPLER EDIT: Adds in Dropdown and Flex */
+} from 'tgui-core/components';
 import { exhaustiveCheck } from 'tgui-core/exhaustive';
 
 import { PageButton } from '../components/PageButton';
-import { LanguagesPage } from '../LanguagesMenu'; /* DOPPLER EDIT ADDITION */
+import { LanguagesPage } from '../LanguagesMenu';
+import { LimbsPage } from '../LimbsPage';          // BUBBER MERGE: new import
 import {
   getPowerCatalogData,
   getPowerPathData,
   useSelectedPowerPath,
-} from '../PowerPathBridge'; /* DOPPLER EDIT ADDITION */
+} from '../PowerPathBridge';
 import { PowerPathPage } from '../PowerPathPage';
-import { PowersPage } from '../PowersMenu'; /* DOPPLER EDIT ADDITION */
-import { SelectedPowersPage } from '../SelectedPowersPage'; /* DOPPLER EDIT ADDITION */
-import type { PreferencesMenuData } from '../types'; /* DOPPLER EDIT ADDITION */
+import { PowersPage } from '../PowersMenu';
+import { SelectedPowersPage } from '../SelectedPowersPage';
+import type { PreferencesMenuData } from '../types';
 import { AntagsPage } from './AntagsPage';
 import { JobsPage } from './JobsPage';
 import { LoadoutPage } from './loadout';
@@ -32,12 +35,12 @@ enum Page {
   Species,
   Quirks,
   Loadout,
-  Languages /* DOPPLER EDIT ADDITION */,
-  Powers /* DOPPLER EDITION ADDITION */,
-  PowerPath /* DOPPLER EDIT ADDITION */,
-  SelectedPowers /* DOPPLER EDIT ADDITION */,
+  Languages,
+  Powers,
+  PowerPath,
+  SelectedPowers,
+  Limbs,          // BUBBER MERGE: new enum value
 }
-
 
 type ProfileProps = {
   activeSlot: number;
@@ -49,10 +52,7 @@ function CharacterProfiles(props: ProfileProps) {
   const { activeSlot, onClick, profiles } = props;
 
   return (
-    <Flex /* DOPPLER EDIT START: Dropdown instead of using buttons */
-      align="center"
-      justify="center"
-    >
+    <Flex align="center" justify="center">
       <Flex.Item width="25%">
         <Dropdown
           width="100%"
@@ -67,7 +67,7 @@ function CharacterProfiles(props: ProfileProps) {
           }}
         />
       </Flex.Item>
-    </Flex> /* DOPPLER EDIT END */
+    </Flex>
   );
 }
 
@@ -75,7 +75,7 @@ export function CharacterPreferenceWindow(props) {
   const { act, data } = useBackend<PreferencesMenuData>();
 
   const [currentPage, setCurrentPage] = useState(Page.Main);
-  /* DOPPLER EDIT START - Powers data */
+
   const { selectedPowerPathId, setSelectedPowerPathId } =
     useSelectedPowerPath();
   const powerCatalogData = getPowerCatalogData();
@@ -83,7 +83,6 @@ export function CharacterPreferenceWindow(props) {
     powerCatalogData,
     selectedPowerPathId,
   );
-  /* DOPPLER EDIT END */
 
   const activePowersThemeColor =
     currentPage === Page.PowerPath ? powerPathConfig.themeColor : undefined;
@@ -97,9 +96,13 @@ export function CharacterPreferenceWindow(props) {
     case Page.Jobs:
       pageContents = <JobsPage />;
       break;
-    // DOPPLER EDIT START
     case Page.Languages:
       pageContents = <LanguagesPage />;
+      break;
+
+    // BUBBER MERGE: new Limbs case
+    case Page.Limbs:
+      pageContents = <LimbsPage />;
       break;
 
     case Page.PowerPath:
@@ -128,27 +131,22 @@ export function CharacterPreferenceWindow(props) {
         />
       );
       break;
-    // DOPPLER EDIT END
     case Page.Main:
       pageContents = (
         <MainPage openSpecies={() => setCurrentPage(Page.Species)} />
       );
-
       break;
     case Page.Species:
       pageContents = (
         <SpeciesPage closeSpecies={() => setCurrentPage(Page.Main)} />
       );
-
       break;
     case Page.Quirks:
       pageContents = <QuirkPersonalityPage />;
       break;
-
     case Page.Loadout:
       pageContents = <LoadoutPage />;
       break;
-
     default:
       exhaustiveCheck(currentPage);
   }
@@ -156,25 +154,47 @@ export function CharacterPreferenceWindow(props) {
   return (
     <Stack vertical fill>
       <Stack.Item>
-        <CharacterProfiles
-          activeSlot={data.active_slot - 1}
-          onClick={(slot) => {
-            act('change_slot', {
-              slot: slot + 1,
-            });
-          }}
-          profiles={data.character_profiles}
-        />
+        {/* BUBBER MERGE: wrap profiles and duplicate button in a horizontal Stack */}
+        <Stack>
+          <Stack.Item>
+            <CharacterProfiles
+              activeSlot={data.active_slot - 1}
+              onClick={(slot) => {
+                act('change_slot', {
+                  slot: slot + 1,
+                });
+              }}
+              profiles={data.character_profiles}
+            />
+          </Stack.Item>
+
+          {/* BUBBER MERGE: duplicate button */}
+          <Stack.Item>
+            <Button
+              onClick={() => {
+                act('duplicate_current_slot');
+              }}
+              fontSize="13px"
+              icon="copy"
+              tooltip="Duplicate Current Character (Experimental)"
+              tooltipPosition="top"
+            />
+          </Stack.Item>
+
+          {/* BUBBER MERGE: BYOND premium banner (uncommented + improved text) */}
+          {!data.content_unlocked && (
+            <Stack.Item grow align="center" mb={-1}>
+              <NoticeBox color="grey">
+                <a href="https://www.byond.com/membership">
+                  Become a BYOND Member to unlock more character slots and other
+                  members-only benefits!
+                </a>
+              </NoticeBox>
+            </Stack.Item>
+          )}
+        </Stack>
       </Stack.Item>
-      {/* // DOPPLER EDIT: Hide Byond premium banner
 
-      {!data.content_unlocked && (
-        <Stack.Item align="center">
-          Buy BYOND premium for more slots!
-        </Stack.Item>
-      )}
-
-      */}
       <Stack.Divider />
       <Stack.Item>
         <Stack fill>
@@ -188,8 +208,6 @@ export function CharacterPreferenceWindow(props) {
               Character
             </PageButton>
           </Stack.Item>
-
-
 
           <Stack.Item grow>
             <PageButton
@@ -207,15 +225,11 @@ export function CharacterPreferenceWindow(props) {
               page={Page.Jobs}
               setPage={setCurrentPage}
             >
-              {/*
-                    Fun fact: This isn't "Jobs" so that it intentionally
-                    catches your eyes, because it's really important!
-                  */}
               Occupations
             </PageButton>
           </Stack.Item>
 
-          {/* // DOPPLER EDIT ADDITION*/}
+          {/* BUBBER MERGE: Languages tab (already present, keeping) */}
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
@@ -226,6 +240,18 @@ export function CharacterPreferenceWindow(props) {
             </PageButton>
           </Stack.Item>
 
+          {/* BUBBER MERGE: new Limbs tab */}
+          <Stack.Item grow>
+            <PageButton
+              currentPage={currentPage}
+              page={Page.Limbs}
+              setPage={setCurrentPage}
+            >
+              Markings/Organs
+            </PageButton>
+          </Stack.Item>
+
+          {/* Doppler Powers tab (preserved with dynamic theming) */}
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
@@ -245,7 +271,6 @@ export function CharacterPreferenceWindow(props) {
               Powers
             </PageButton>
           </Stack.Item>
-          {/* // DOPPLER EDIT ADDITION END*/}
 
           <Stack.Item grow>
             <PageButton
