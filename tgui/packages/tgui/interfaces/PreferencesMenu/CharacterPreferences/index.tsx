@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { useBackend } from 'tgui/backend';
 import {
-  Button,        // BUBBER MERGE: added for duplicate button & banner
+  Button,
   Dropdown,
   Flex,
-  NoticeBox,     // BUBBER MERGE: added for premium banner
   Stack,
 } from 'tgui-core/components';
 import { exhaustiveCheck } from 'tgui-core/exhaustive';
 
 import { PageButton } from '../components/PageButton';
 import { LanguagesPage } from '../LanguagesMenu';
-import { LimbsPage } from '../LimbsPage';          // BUBBER MERGE: new import
+import { LimbsPage } from '../LimbsPage';          // BUBBER
 import {
   getPowerCatalogData,
   getPowerPathData,
@@ -39,7 +38,7 @@ enum Page {
   Powers,
   PowerPath,
   SelectedPowers,
-  Limbs,          // BUBBER MERGE: new enum value
+  Limbs,          // BUBBER
 }
 
 type ProfileProps = {
@@ -51,11 +50,12 @@ type ProfileProps = {
 function CharacterProfiles(props: ProfileProps) {
   const { activeSlot, onClick, profiles } = props;
 
+  // Dropdown width auto‑fits the longest profile name
   return (
-    <Flex align="center" justify="center">
-      <Flex.Item width="25%">
+    <Flex align="center">
+      <Flex.Item>
         <Dropdown
-          width="100%"
+          width="auto"                     // fits content
           selected={activeSlot as unknown as string}
           displayText={profiles[activeSlot]}
           options={profiles.map((profile, slot) => ({
@@ -65,6 +65,17 @@ function CharacterProfiles(props: ProfileProps) {
           onSelected={(slot) => {
             onClick(slot);
           }}
+        />
+      </Flex.Item>
+      <Flex.Item ml={1}>                   // small gap
+        <Button
+          onClick={() => {
+            act('duplicate_current_slot');
+          }}
+          fontSize="13px"
+          icon="copy"
+          tooltip="Duplicate Current Character (Experimental)"
+          tooltipPosition="top"
         />
       </Flex.Item>
     </Flex>
@@ -99,12 +110,9 @@ export function CharacterPreferenceWindow(props) {
     case Page.Languages:
       pageContents = <LanguagesPage />;
       break;
-
-    // BUBBER MERGE: new Limbs case
     case Page.Limbs:
       pageContents = <LimbsPage />;
       break;
-
     case Page.PowerPath:
       pageContents = (
         <PowerPathPage
@@ -153,46 +161,17 @@ export function CharacterPreferenceWindow(props) {
 
   return (
     <Stack vertical fill>
+      {/* Profile selector + Duplicate button – on their own line */}
       <Stack.Item>
-        {/* BUBBER MERGE: wrap profiles and duplicate button in a horizontal Stack */}
-        <Stack>
-          <Stack.Item>
-            <CharacterProfiles
-              activeSlot={data.active_slot - 1}
-              onClick={(slot) => {
-                act('change_slot', {
-                  slot: slot + 1,
-                });
-              }}
-              profiles={data.character_profiles}
-            />
-          </Stack.Item>
-
-          {/* BUBBER MERGE: duplicate button */}
-          <Stack.Item>
-            <Button
-              onClick={() => {
-                act('duplicate_current_slot');
-              }}
-              fontSize="13px"
-              icon="copy"
-              tooltip="Duplicate Current Character (Experimental)"
-              tooltipPosition="top"
-            />
-          </Stack.Item>
-
-          {/* BUBBER MERGE: BYOND premium banner (uncommented + improved text) */}
-          {!data.content_unlocked && (
-            <Stack.Item grow align="center" mb={-1}>
-              <NoticeBox color="grey">
-                <a href="https://www.byond.com/membership">
-                  Become a BYOND Member to unlock more character slots and other
-                  members-only benefits!
-                </a>
-              </NoticeBox>
-            </Stack.Item>
-          )}
-        </Stack>
+        <CharacterProfiles
+          activeSlot={data.active_slot - 1}
+          onClick={(slot) => {
+            act('change_slot', {
+              slot: slot + 1,
+            });
+          }}
+          profiles={data.character_profiles}
+        />
       </Stack.Item>
 
       <Stack.Divider />
@@ -229,7 +208,6 @@ export function CharacterPreferenceWindow(props) {
             </PageButton>
           </Stack.Item>
 
-          {/* BUBBER MERGE: Languages tab (already present, keeping) */}
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
@@ -240,7 +218,6 @@ export function CharacterPreferenceWindow(props) {
             </PageButton>
           </Stack.Item>
 
-          {/* BUBBER MERGE: new Limbs tab */}
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
@@ -251,7 +228,6 @@ export function CharacterPreferenceWindow(props) {
             </PageButton>
           </Stack.Item>
 
-          {/* Doppler Powers tab (preserved with dynamic theming) */}
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
