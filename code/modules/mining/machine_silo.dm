@@ -569,16 +569,18 @@
 
 /datum/ore_silo_log/New(obj/machinery/M, _action, _amount, _noun, list/mats=list(), alist/user_data)
 	timestamp = station_time_timestamp()
-	machine_name = M.name
-	area_name = get_area_name(M, TRUE)
+	machine_name = M ? M.name : "Unknown Machine"
+	area_name = M ? get_area_name(M, TRUE) : "Unknown Area"
 	action = _action
 	amount = _amount
 	noun = _noun
-	materials = mats.Copy()
+	materials = mats ? mats.Copy() : list()
+	if(!user_data)
+		user_data = ID_DATA(null)
 	src.user_data = user_data
 	var/list/data = list(
 		"machine_name" = machine_name,
-		"area_name" = AREACOORD(M),
+		"area_name" = M ? AREACOORD(M) : "Unknown",
 		"action" = action,
 		"amount" = abs(amount),
 		"noun" = noun,
@@ -588,7 +590,7 @@
 	)
 	logger.Log(
 		LOG_CATEGORY_SILO,
-		"[machine_name] in \[[AREACOORD(M)]\] [action] [abs(amount)]x [noun] | [get_raw_materials("")] | [user_data["name"]]",
+		"[machine_name] in \[[M ? AREACOORD(M) : "Unknown"\]] [action] [abs(amount)]x [noun] | [get_raw_materials("")] | [user_data["name"]]",
 		data,
 	)
 
