@@ -590,7 +590,7 @@
 	)
 	logger.Log(
 		LOG_CATEGORY_SILO,
-		"[machine_name] in \[[M ? AREACOORD(M) : "Unknown"\]] [action] [abs(amount)]x [noun] | [get_raw_materials("")] | [user_data["name"]]",
+		"[machine_name] in \[[M ? AREACOORD(M) : "Unknown"]\] [action] [abs(amount)]x [noun] | [get_raw_materials("")] | [user_data["name"]]",
 		data,
 	)
 
