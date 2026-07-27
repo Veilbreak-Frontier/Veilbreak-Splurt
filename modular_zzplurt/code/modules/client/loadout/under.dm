@@ -235,3 +235,22 @@
 /datum/loadout_item/uniform/purple_kimono
 	name = "Purple Kimono"
 	item_path = /obj/item/clothing/under/costume/kimono/purple
+
+//I'm not f****king around with GAGS since it already has integration for it, it's just that this doesn't exist as a loadout item and there is no gear recoloring as far as I am aware, except in vendors
+
+/datum/loadout_item/uniform/cin_surplus
+	name = "CIN Combat Uniform"
+	item_path = /obj/item/clothing/under/syndicate/rus_army/cin_surplus
+	loadout_flags = /datum/loadout_item/uniform::loadout_flags | LOADOUT_FLAG_GREYSCALING_ALLOWED
+
+/datum/loadout_item/uniform/cin_surplus/desert
+	name = "CIN Combat Uniform (Desert)"
+	item_path = /obj/item/clothing/under/syndicate/rus_army/cin_surplus/desert
+
+/datum/loadout_item/uniform/cin_surplus/forest
+	name = "CIN Combat Uniform (Forest)"
+	item_path = /obj/item/clothing/under/syndicate/rus_army/cin_surplus/forest
+
+/datum/loadout_item/uniform/cin_surplus/marine
+	name = "CIN Combat Uniform (Marine)"
+	item_path = /obj/item/clothing/under/syndicate/rus_army/cin_surplus/marine
