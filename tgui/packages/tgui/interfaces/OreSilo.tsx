@@ -76,7 +76,7 @@ const actionToColor = {
 
 export const OreSilo = (props: Data) => {
   const { act, data } = useBackend<Data>();
-  const { SHEET_MATERIAL_AMOUNT, machines, logs } = data;
+  const { SHEET_MATERIAL_AMOUNT = 0, machines = [], logs = [] } = data || {};
 
   const [currentTab, setCurrentTab] = useState<Tab>(Tab.Logs);
 
@@ -105,20 +105,20 @@ export const OreSilo = (props: Data) => {
           <Stack.Item grow>
             {currentTab === Tab.Machines ? (
               <MachineList
-                machines={machines!}
+                machines={machines || []}
                 onPause={(index) => act('hold', { id: index })}
                 onRemove={(index) => act('remove', { id: index })}
               />
             ) : null}
-            {currentTab === Tab.Logs && <LogsList logs={logs} />}
+            {currentTab === Tab.Logs && <LogsList logs={logs || []} />}
           </Stack.Item>
           <Stack.Item>
             <Section fill>
               <MaterialAccessBar
-                availableMaterials={data.materials}
+                availableMaterials={data?.materials || []}
                 SHEET_MATERIAL_AMOUNT={SHEET_MATERIAL_AMOUNT}
                 onEjectRequested={(material, amount) =>
-                  act('eject', { ref: material.ref, amount })
+                  act('eject', { ref: material?.ref, amount })
                 }
               />
             </Section>
@@ -136,9 +136,9 @@ type MachineListProps = {
 };
 
 const MachineList = (props: MachineListProps) => {
-  const { machines, onPause, onRemove } = props;
+  const { machines = [], onPause, onRemove } = props || {};
 
-  return machines.length > 0 ? (
+  return (machines?.length || 0) > 0 ? (
     <Section fill scrollable>
       {machines.map((machine, index) => (
         <MachineDisplay
@@ -161,20 +161,20 @@ type MachineProps = {
 };
 
 const MachineDisplay = (props: MachineProps) => {
-  const { machine, onPause, onRemove } = props;
+  const { machine, onPause, onRemove } = props || {};
 
-  let machineName = machine.name;
+  let machineName = machine?.name || 'Unknown Machine';
   const index = machineName.indexOf('('); // some techfabs have their location attached to their name
   if (index >= 0) {
     machineName = machineName.substring(0, index);
   }
-  machineName = `${machineName.trimEnd()} (${machine.location})`;
+  machineName = `${machineName.trimEnd()} (${machine?.location || 'Unknown Area'})`;
 
   return (
     <Box className="FabricatorRecipe">
       <Box
         className={
-          machine.on_hold
+          machine?.on_hold
             ? classes([
                 'FabricatorRecipe__Title',
                 'FabricatorRecipe__Title--disabled',
@@ -186,7 +186,7 @@ const MachineDisplay = (props: MachineProps) => {
           <Image
             width={'32px'}
             height={'32px'}
-            src={`data:image/jpeg;base64,${machine.icon}`}
+            src={`data:image/jpeg;base64,${machine?.icon || ''}`}
           />
         </Box>
         <Box className="FabricatorRecipe__Label">{machineName}</Box>
@@ -194,9 +194,9 @@ const MachineDisplay = (props: MachineProps) => {
 
       <Tooltip
         content={
-          machine.on_hold
-            ? `Resume ${machine.name} usage.`
-            : `Put ${machine.name} on hold.`
+          machine?.on_hold
+            ? `Resume ${machine?.name || 'machine'} usage.`
+            : `Put ${machine?.name || 'machine'} on hold.`
         }
       >
         <Box
@@ -208,10 +208,10 @@ const MachineDisplay = (props: MachineProps) => {
             onPause();
           }}
         >
-          <Icon name={machine.on_hold ? 'circle-play' : 'circle-pause'} />
+          <Icon name={machine?.on_hold ? 'circle-play' : 'circle-pause'} />
         </Box>
       </Tooltip>
-      <Tooltip content={`Disconnect ${machine.name}.`}>
+      <Tooltip content={`Disconnect ${machine?.name || 'machine'}.`}>
         <Box
           className={classes([
             'FabricatorRecipe__Button',
@@ -234,7 +234,7 @@ type LogsListProps = {
 
 const RestrictButton = () => {
   const { act, data } = useBackend<Data>();
-  const { ID_required } = data;
+  const { ID_required } = data || {};
   return (
     <Box align="center">
       <Button
@@ -254,19 +254,19 @@ const RestrictButton = () => {
 };
 
 const LogsList = (props: LogsListProps) => {
-  const { logs } = props;
+  const { logs = [] } = props || {};
 
-  const searchableLogs = logs.map((log, index) => ({
+  const searchableLogs = (logs || []).map((log, index) => ({
     id: index,
     log,
     searchString: [
-      log.action.toLowerCase(),
-      log.user_data.name.toLowerCase(),
-      log.user_data.assignment.toLowerCase(),
-      log.raw_materials.toLowerCase(),
-      log.machine_name.toLowerCase(),
-      log.area_name.toLowerCase(),
-      log.noun.toLowerCase(),
+      log?.action?.toLowerCase() || '',
+      log?.user_data?.name?.toLowerCase() || '',
+      log?.user_data?.assignment?.toLowerCase() || '',
+      log?.raw_materials?.toLowerCase() || '',
+      log?.machine_name?.toLowerCase() || '',
+      log?.area_name?.toLowerCase() || '',
+      log?.noun?.toLowerCase() || '',
     ].join(' '),
   }));
 
@@ -276,7 +276,7 @@ const LogsList = (props: LogsListProps) => {
     getSearchString: (item) => item.searchString,
   });
 
-  const filteredLogs = query ? results.map((result) => result.log) : logs;
+  const filteredLogs = query ? results.map((result) => result.log) : (logs || []);
 
   return (
     <Stack vertical fill>
@@ -336,22 +336,22 @@ const UserItem = (props: UserData) => {
     chamelon_override,
     silicon_override,
     id_read_failure,
-  } = props;
+  } = props || {};
   const { act, data } = useBackend<Data>();
-  const { banned_users } = data;
+  const { banned_users = [] } = data || {};
+  const isBanned = (banned_users || []).includes(account_id);
   return (
     <Stack align="center">
-      <Stack.Item>{name},</Stack.Item>
-      <Stack.Item>{assignment}</Stack.Item>
+      <Stack.Item>{name || 'Unknown'},</Stack.Item>
+      <Stack.Item>{assignment || 'Unassigned'}</Stack.Item>
       {!id_read_failure && !silicon_override && (
         <Stack.Item>
           <Button
-            color={banned_users.includes(account_id) ? 'bad' : 'good'}
+            color={isBanned ? 'bad' : 'good'}
             onClick={() => act('toggle_ban', { user_data: props })}
             lineHeight={1.6}
           >
-            {banned_users.includes(account_id) ? 'Unrestrict' : 'Restrict'}{' '}
-            access
+            {isBanned ? 'Unrestrict' : 'Restrict'} access
           </Button>
         </Stack.Item>
       )}
@@ -361,7 +361,7 @@ const UserItem = (props: UserData) => {
 
 const formatAmount = (action: string, amount: number) => {
   const isSheetAction = action === 'WITHDRAWN' || action === 'DEPOSITED';
-  const rawAmount = Math.abs(amount);
+  const rawAmount = Math.abs(amount || 0);
   if (!isSheetAction) {
     return rawAmount;
   }
@@ -371,16 +371,19 @@ const formatAmount = (action: string, amount: number) => {
 
 const LogEntry = (props: Log) => {
   const {
-    raw_materials,
-    machine_name,
-    area_name,
-    action,
-    amount,
-    time,
-    noun,
+    raw_materials = '',
+    machine_name = 'Unknown Machine',
+    area_name = 'Unknown Area',
+    action = 'PROCESSED',
+    amount = 0,
+    time = '',
+    noun = 'units',
     user_data,
-  } = props;
+  } = props || {};
   const [expanded, setExpanded] = useState(false);
+
+  const actionUpper = (action || '').toUpperCase();
+  const actionColor = actionToColor[actionUpper] || 'blue';
 
   return (
     <Box>
@@ -400,22 +403,22 @@ const LogEntry = (props: Log) => {
           </Stack.Item>
           <Stack.Item>
             <Button
-              color={actionToColor[action.toUpperCase()]}
+              color={actionColor}
               width="8em"
               textAlign="center"
             >
-              {action.toUpperCase()}
+              {actionUpper}
             </Button>
           </Stack.Item>
           <Stack.Item style={{ display: 'flex', alignItems: 'center' }}>
             <Icon name="arrow-right" ml={1} mr={1} />
           </Stack.Item>
           <Stack.Item grow style={{ display: 'flex', alignItems: 'center' }}>
-            {` ${formatAmount(action, amount)} ${noun}`}
+            {` ${formatAmount(action, amount)} ${noun || ''}`}
           </Stack.Item>
           <Stack.Item style={{ display: 'flex', alignItems: 'center' }}>
             <Button icon="user" color="gray">
-              {user_data.name} ({user_data.assignment})
+              {user_data?.name || 'Unknown'} ({user_data?.assignment || 'Unassigned'})
             </Button>
           </Stack.Item>
         </Stack>
@@ -430,7 +433,7 @@ const LogEntry = (props: Log) => {
             </Table.Row>
             <Table.Row className="candystripe" lineHeight={2}>
               <Table.Cell pl={1}>Machine</Table.Cell>
-              <Table.Cell>{capitalize(machine_name)}</Table.Cell>
+              <Table.Cell>{capitalize(machine_name || '')}</Table.Cell>
             </Table.Row>
             <Table.Row className="candystripe" lineHeight={2}>
               <Table.Cell pl={1}>Location</Table.Cell>
@@ -445,7 +448,7 @@ const LogEntry = (props: Log) => {
             <Table.Row className="candystripe" lineHeight={2}>
               <Table.Cell pl={1}>User</Table.Cell>
               <Table.Cell>
-                <UserItem {...user_data} />
+                {user_data ? <UserItem {...user_data} /> : 'No User Data'}
               </Table.Cell>
             </Table.Row>
           </Table>
