@@ -48,12 +48,13 @@
 
 	var/datum/species/mob_species = preferences.read_preference(/datum/preference/choiced/species)
 
+	var/client/user_client = user?.client || preferences.parent?.client
 	for(var/power_name in SSpowers.powers)
 		var/datum/power/power_type = SSpowers.powers[power_name]
 
 		var/has_given_power = (power_name in preferences.all_powers)
 		var/species_allowed = is_species_appropriate(power_type, mob_species)
-		var/achievement_unlocked = power_type.is_achievement_unlocked(user?.client)
+		var/achievement_unlocked = power_type.is_achievement_unlocked(user_client)
 
 		var/locked_in = FALSE
 		if(has_given_power)
@@ -151,9 +152,10 @@
 
 	var/req_ach_name = null
 	var/req_ach_desc = null
-	if(power_type.required_achievement)
-		req_ach_name = initial(power_type.required_achievement.name)
-		req_ach_desc = initial(power_type.required_achievement.desc)
+	var/datum/award/req_ach_type = initial(power_type.required_achievement)
+	if(req_ach_type)
+		req_ach_name = initial(req_ach_type.name)
+		req_ach_desc = initial(req_ach_type.desc)
 
 	return list(
 		"description" = power_type.desc,
@@ -268,8 +270,10 @@
 		return FALSE
 
 	// Check against required achievement.
-	if(!power_type.is_achievement_unlocked(user?.client))
-		var/req_name = initial(power_type.required_achievement.name) || "Achievement"
+	var/client/user_client = user?.client || preferences.parent?.client
+	if(!power_type.is_achievement_unlocked(user_client))
+		var/datum/award/req_ach_type = initial(power_type.required_achievement)
+		var/req_name = req_ach_type ? initial(req_ach_type.name) : "Achievement"
 		to_chat(user, span_boldwarning("[power_name] requires unlocking the '[req_name]' achievement!"))
 		return FALSE
 

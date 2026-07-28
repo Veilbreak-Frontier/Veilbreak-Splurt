@@ -82,11 +82,12 @@
  * Returns TRUE if no achievement is required, or if user_client has completed the award.
  */
 /datum/power/proc/is_achievement_unlocked(client/user_client)
-	if(!required_achievement)
+	var/datum/award/req_ach = initial(required_achievement)
+	if(!req_ach)
 		return TRUE
 	if(!user_client)
 		return FALSE
-	return user_client.get_award_status(required_achievement) ? TRUE : FALSE
+	return user_client.get_award_status(req_ach) ? TRUE : FALSE
 
 
 /datum/power/Destroy()
