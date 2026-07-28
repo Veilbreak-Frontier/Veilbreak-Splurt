@@ -54,7 +54,10 @@
 
 		var/has_given_power = (power_name in preferences.all_powers)
 		var/species_allowed = is_species_appropriate(power_type, mob_species)
-		var/achievement_unlocked = power_type.is_achievement_unlocked(user_client)
+		var/datum/award/req_ach_type = initial(power_type.required_achievement)
+		var/achievement_unlocked = TRUE
+		if(req_ach_type)
+			achievement_unlocked = user_client ? (user_client.get_award_status(req_ach_type) ? TRUE : FALSE) : FALSE
 
 		var/locked_in = FALSE
 		if(has_given_power)
@@ -271,11 +274,13 @@
 
 	// Check against required achievement.
 	var/client/user_client = user?.client || preferences.parent
-	if(!power_type.is_achievement_unlocked(user_client))
-		var/datum/award/req_ach_type = initial(power_type.required_achievement)
-		var/req_name = req_ach_type ? initial(req_ach_type.name) : "Achievement"
-		to_chat(user, span_boldwarning("[power_name] requires unlocking the '[req_name]' achievement!"))
-		return FALSE
+	var/datum/award/req_ach_type = initial(power_type.required_achievement)
+	if(req_ach_type)
+		var/achievement_unlocked = user_client ? (user_client.get_award_status(req_ach_type) ? TRUE : FALSE) : FALSE
+		if(!achievement_unlocked)
+			var/req_name = initial(req_ach_type.name) || "Achievement"
+			to_chat(user, span_boldwarning("[power_name] requires unlocking the '[req_name]' achievement!"))
+			return FALSE
 
 	// Make sure we don't exceed 2 distinct paths.
 	if(length(preferences.all_powers) && !is_path_limit_exempt(power_type))
