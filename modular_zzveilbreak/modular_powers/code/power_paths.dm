@@ -94,7 +94,7 @@
 	power_path = POWER_PATH_VOID
 	archetype_type = /datum/power_archetype/void
 	display_name = "The Path Unseen"
-	icon_asset_name = "voidicon.png"
+	icon_asset_name = "seal.png"
 	mechanics_text = "Powers of The Path Unseen are unlocked by completing specific achievements across your shifts. They do not count toward your 2-path limit!"
 	overview_text = "Some powers are not born of study, nor inherited, nor bestowed. Some powers are simply... earned through trial by fire."
 	theme_color = POWER_COLOR_VOID
