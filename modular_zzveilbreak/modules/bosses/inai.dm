@@ -1,6 +1,7 @@
 /mob/living/simple_animal/hostile/megafauna/inai
 	name = "Inai"
 	desc = "Spirit of the Void, enduring the mortal indignities of the coil."
+	achievement_type = /datum/award/achievement/veilbreak/inai_kill
 	icon = 'modular_zzveilbreak/icons/bosses/inai_model.dmi'
 	icon_state = "inai"
 	pixel_x = -16

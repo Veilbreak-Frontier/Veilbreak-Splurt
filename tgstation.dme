@@ -11052,6 +11052,7 @@
 #include "modular_zzveilbreak\modular_powers\code\cargo\antiresonant_cuffs.dm"
 #include "modular_zzveilbreak\modular_powers\code\cargo\reality_anchor.dm"
 #include "modular_zzveilbreak\modular_powers\code\cargo\thaumaturgic_supplies.dm"
+#include "modular_zzveilbreak\modular_powers\code\powers\achievement\_achievement_power.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\mortal\augmented\_augmented_power.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\mortal\augmented\_premium_action.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\mortal\augmented\_premium_augment.dm"

@@ -69,11 +69,25 @@
 	var/menu_icon_state
 	/// Bitflags which determine what type of magic the power is. This is largely used in the powers menu to convey what anti-magics they may trigger, but is also used by some powers to check if a certain power is a certain type of magic.
 	var/magic_flags = NONE
+	/// Typepath to a required achievement (/datum/award) needed to unlock this power in preferences.
+	var/datum/award/required_achievement
 
 /datum/power/New()
 	. = ..()
 	for(var/trait in no_process_traits)
 		LAZYADD(process_update_signals, list(SIGNAL_ADDTRAIT(trait), SIGNAL_REMOVETRAIT(trait)))
+
+/**
+ * Checks if the client has unlocked the required achievement for this power.
+ * Returns TRUE if no achievement is required, or if user_client has completed the award.
+ */
+/datum/power/proc/is_achievement_unlocked(client/user_client)
+	if(!required_achievement)
+		return TRUE
+	if(!user_client)
+		return FALSE
+	return user_client.get_award_status(required_achievement) ? TRUE : FALSE
+
 
 /datum/power/Destroy()
 	if(power_holder)

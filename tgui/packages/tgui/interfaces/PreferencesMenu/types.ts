@@ -147,6 +147,8 @@ export type PowerStatic = {
   required_powers?: string[];
   required_allow_any?: boolean;
   required_allow_subtypes?: boolean;
+  required_achievement_name?: string | null;
+  required_achievement_desc?: string | null;
   action_icon?: string | null;
   action_icon_state?: string | null;
   customizable?: boolean;
@@ -159,6 +161,7 @@ export type PowerState = {
   name: string;
   has_power?: boolean;
   state: string;
+  achievement_unlocked?: boolean;
   augment?: PowerAugmentState | null;
 };
 

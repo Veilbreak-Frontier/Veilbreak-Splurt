@@ -53,13 +53,14 @@
 
 		var/has_given_power = (power_name in preferences.all_powers)
 		var/species_allowed = is_species_appropriate(power_type, mob_species)
+		var/achievement_unlocked = power_type.is_achievement_unlocked(user?.client)
 
 		var/locked_in = FALSE
 		if(has_given_power)
 			if(get_requiring_power(power_type))
 				locked_in = TRUE
 		else
-			if(!species_allowed || get_incompatible_power(power_type) || length(get_required_power(power_type)) || would_exceed_path_limit(power_type))
+			if(!species_allowed || !achievement_unlocked || get_incompatible_power(power_type) || length(get_required_power(power_type)) || would_exceed_path_limit(power_type))
 				locked_in = TRUE
 
 		var/state
@@ -74,6 +75,7 @@
 				"name" = power_type.name,
 				"has_power" = has_given_power,
 				"state" = state,
+				"achievement_unlocked" = achievement_unlocked,
 				"augment" = build_power_runtime_augment_info(power_type, preferences),
 			))
 
@@ -147,6 +149,12 @@
 			if(isnull(action_icon_state) && initial_augment_icon_state)
 				action_icon_state = "[initial_augment_icon_state]"
 
+	var/req_ach_name = null
+	var/req_ach_desc = null
+	if(power_type.required_achievement)
+		req_ach_name = initial(power_type.required_achievement.name)
+		req_ach_desc = initial(power_type.required_achievement.desc)
+
 	return list(
 		"description" = power_type.desc,
 		"name" = power_type.name,
@@ -157,6 +165,8 @@
 		"required_powers" = get_required_power_names(power_type),
 		"required_allow_any" = power_type.required_allow_any,
 		"required_allow_subtypes" = power_type.required_allow_subtypes,
+		"required_achievement_name" = req_ach_name,
+		"required_achievement_desc" = req_ach_desc,
 		"action_icon" = action_icon,
 		"action_icon_state" = action_icon_state,
 		"augment" = build_power_constant_augment_info(power_type),
@@ -255,6 +265,12 @@
 	var/datum/species/mob_species = preferences.read_preference(/datum/preference/choiced/species)
 	if(!is_species_appropriate(power_type, mob_species))
 		to_chat(user, span_boldwarning("[power_name] is not available to your species!"))
+		return FALSE
+
+	// Check against required achievement.
+	if(!power_type.is_achievement_unlocked(user?.client))
+		var/req_name = initial(power_type.required_achievement.name) || "Achievement"
+		to_chat(user, span_boldwarning("[power_name] requires unlocking the '[req_name]' achievement!"))
 		return FALSE
 
 	// Make sure we don't exceed 2 distinct paths.
