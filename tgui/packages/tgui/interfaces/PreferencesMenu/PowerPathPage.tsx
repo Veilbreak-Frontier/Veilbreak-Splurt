@@ -188,17 +188,23 @@ export function flattenPowerTreeNodes(nodes: PowerTreeNode[]): Power[] {
 }
 
 function formatRequirementText(power: Power) {
-  if (!power.required_powers?.length) {
-    return null;
+  const parts: string[] = [];
+
+  if (power.required_achievement_name) {
+    const status = power.achievement_unlocked ? 'Unlocked' : 'Locked';
+    parts.push(`🏆 Achievement: ${power.required_achievement_name} (${status})`);
   }
 
-  const requirementPrefix = power.required_allow_subtypes
-    ? 'Requires any subtype of'
-    : power.required_allow_any
-      ? 'Requires any of'
-      : 'Requires';
+  if (power.required_powers?.length) {
+    const requirementPrefix = power.required_allow_subtypes
+      ? 'Requires any subtype of'
+      : power.required_allow_any
+        ? 'Requires any of'
+        : 'Requires';
+    parts.push(`${requirementPrefix}: ${power.required_powers.join(', ')}`);
+  }
 
-  return `${requirementPrefix}: ${power.required_powers.join(', ')}`;
+  return parts.length ? parts.join(' | ') : null;
 }
 
 function getPowerButtonIcon(power: Power) {
@@ -230,6 +236,10 @@ function getPowerButtonWord(power: Power) {
 
   if (power.state === 'good') {
     return 'Learn';
+  }
+
+  if (power.required_achievement_name && !power.achievement_unlocked) {
+    return 'Locked';
   }
 
   return 'N/A';

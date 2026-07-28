@@ -48,18 +48,23 @@
 
 	var/datum/species/mob_species = preferences.read_preference(/datum/preference/choiced/species)
 
+	var/client/user_client = user?.client || preferences.parent
 	for(var/power_name in SSpowers.powers)
 		var/datum/power/power_type = SSpowers.powers[power_name]
 
 		var/has_given_power = (power_name in preferences.all_powers)
 		var/species_allowed = is_species_appropriate(power_type, mob_species)
+		var/datum/award/req_ach_type = initial(power_type.required_achievement)
+		var/achievement_unlocked = TRUE
+		if(req_ach_type)
+			achievement_unlocked = user_client ? (user_client.get_award_status(req_ach_type) ? TRUE : FALSE) : FALSE
 
 		var/locked_in = FALSE
 		if(has_given_power)
 			if(get_requiring_power(power_type))
 				locked_in = TRUE
 		else
-			if(!species_allowed || get_incompatible_power(power_type) || length(get_required_power(power_type)) || would_exceed_path_limit(power_type))
+			if(!species_allowed || !achievement_unlocked || get_incompatible_power(power_type) || length(get_required_power(power_type)) || would_exceed_path_limit(power_type))
 				locked_in = TRUE
 
 		var/state
@@ -74,6 +79,7 @@
 				"name" = power_type.name,
 				"has_power" = has_given_power,
 				"state" = state,
+				"achievement_unlocked" = achievement_unlocked,
 				"augment" = build_power_runtime_augment_info(power_type, preferences),
 			))
 
@@ -147,6 +153,13 @@
 			if(isnull(action_icon_state) && initial_augment_icon_state)
 				action_icon_state = "[initial_augment_icon_state]"
 
+	var/req_ach_name = null
+	var/req_ach_desc = null
+	var/datum/award/req_ach_type = initial(power_type.required_achievement)
+	if(req_ach_type)
+		req_ach_name = initial(req_ach_type.name)
+		req_ach_desc = initial(req_ach_type.desc)
+
 	return list(
 		"description" = power_type.desc,
 		"name" = power_type.name,
@@ -157,6 +170,8 @@
 		"required_powers" = get_required_power_names(power_type),
 		"required_allow_any" = power_type.required_allow_any,
 		"required_allow_subtypes" = power_type.required_allow_subtypes,
+		"required_achievement_name" = req_ach_name,
+		"required_achievement_desc" = req_ach_desc,
 		"action_icon" = action_icon,
 		"action_icon_state" = action_icon_state,
 		"augment" = build_power_constant_augment_info(power_type),
@@ -256,6 +271,16 @@
 	if(!is_species_appropriate(power_type, mob_species))
 		to_chat(user, span_boldwarning("[power_name] is not available to your species!"))
 		return FALSE
+
+	// Check against required achievement.
+	var/client/user_client = user?.client || preferences.parent
+	var/datum/award/req_ach_type = initial(power_type.required_achievement)
+	if(req_ach_type)
+		var/achievement_unlocked = user_client ? (user_client.get_award_status(req_ach_type) ? TRUE : FALSE) : FALSE
+		if(!achievement_unlocked)
+			var/req_name = initial(req_ach_type.name) || "Achievement"
+			to_chat(user, span_boldwarning("[power_name] requires unlocking the '[req_name]' achievement!"))
+			return FALSE
 
 	// Make sure we don't exceed 2 distinct paths.
 	if(length(preferences.all_powers) && !is_path_limit_exempt(power_type))
@@ -569,6 +594,8 @@
 		"experticon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/experticon.png',
 		"augmentedicon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/augmentedicon.png',
 		"irregularicon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/irregularicon.png',
+		"voidicon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/voidicon.png',
+		"seal.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/seal.png',
 		"magic_standard_icon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/magic_standard_icon.png',
 		"magic_mental_icon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/magic_mental_icon.png',
 		"magic_scrying_icon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/magic_scrying_icon.png',
