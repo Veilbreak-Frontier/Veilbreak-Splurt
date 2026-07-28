@@ -48,7 +48,7 @@
 
 	var/datum/species/mob_species = preferences.read_preference(/datum/preference/choiced/species)
 
-	var/client/user_client = user?.client || preferences.parent?.client
+	var/client/user_client = user?.client || preferences.parent
 	for(var/power_name in SSpowers.powers)
 		var/datum/power/power_type = SSpowers.powers[power_name]
 
@@ -270,7 +270,7 @@
 		return FALSE
 
 	// Check against required achievement.
-	var/client/user_client = user?.client || preferences.parent?.client
+	var/client/user_client = user?.client || preferences.parent
 	if(!power_type.is_achievement_unlocked(user_client))
 		var/datum/award/req_ach_type = initial(power_type.required_achievement)
 		var/req_name = req_ach_type ? initial(req_ach_type.name) : "Achievement"
