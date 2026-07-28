@@ -38,9 +38,10 @@
 /// Void power unlocked by slaying Melos Vecare
 /datum/power/void/melos_silencer
 	name = "Silence the Siren"
-	desc = "Having silenced Melos Vecare, her chaotic melodies no longer shake your resolve. Grants sound and ear damage protection."
+	desc = "Having silenced Melos Vecare, her chaotic melodies no longer shake your resolve. Grants sound/ear damage protection and total immunity to slipping."
 	required_achievement = /datum/award/achievement/veilbreak/melos_vecare_kill
 	value = 5
+	mob_trait = TRAIT_NO_SLIP_ALL
 
 /datum/power/void/melos_silencer/add(client/client_source)
 	RegisterSignal(power_holder, COMSIG_LIVING_GET_EAR_PROTECTION, PROC_REF(on_get_ear_protection))
@@ -56,7 +57,33 @@
 /// Void power unlocked by slaying Inai
 /datum/power/void/inai_defiance
 	name = "Unshakable Stance"
-	desc = "Having stood your ground against Inai, you stand firm against displacement, slipping, and knockback."
+	desc = "Having stood your ground against Inai, you possess a 15% chance to phase through incoming melee strikes, dodging the hit and stepping behind your attacker."
 	required_achievement = /datum/award/achievement/veilbreak/inai_kill
 	value = 5
-	mob_trait = TRAIT_NO_SLIP_ALL
+
+/datum/power/void/inai_defiance/add(client/client_source)
+	RegisterSignal(power_holder, COMSIG_LIVING_CHECK_BLOCK, PROC_REF(on_check_block))
+
+/datum/power/void/inai_defiance/remove()
+	if(power_holder)
+		UnregisterSignal(power_holder, COMSIG_LIVING_CHECK_BLOCK)
+
+/datum/power/void/inai_defiance/proc/on_check_block(mob/living/source, atom/hit_by, damage, attack_text, attack_type, armour_penetration, damage_type)
+	SIGNAL_HANDLER
+	if(attack_type != MELEE_ATTACK && attack_type != UNARMED_ATTACK)
+		return FAILED_BLOCK
+	if(!prob(15))
+		return FAILED_BLOCK
+
+	var/mob/living/attacker = isliving(hit_by) ? hit_by : (hit_by ? hit_by.loc : null)
+	if(isliving(attacker) && attacker != power_holder)
+		var/turf/behind_turf = get_step(attacker, attacker.dir)
+		if(behind_turf && !behind_turf.density)
+			power_holder.forceMove(behind_turf)
+		else
+			var/turf/attacker_turf = get_turf(attacker)
+			if(attacker_turf)
+				power_holder.forceMove(attacker_turf)
+
+	to_chat(power_holder, span_notice("You phase through space, dodging the attack!"))
+	return SUCCESSFUL_BLOCK
