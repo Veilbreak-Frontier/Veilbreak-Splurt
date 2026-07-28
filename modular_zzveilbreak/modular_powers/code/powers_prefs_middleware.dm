@@ -585,6 +585,7 @@
 		"experticon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/experticon.png',
 		"augmentedicon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/augmentedicon.png',
 		"irregularicon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/irregularicon.png',
+		"voidicon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/voidicon.png',
 		"magic_standard_icon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/magic_standard_icon.png',
 		"magic_mental_icon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/magic_mental_icon.png',
 		"magic_scrying_icon.png" = 'modular_zzveilbreak/modular_powers/icons/ui/powers/magic_scrying_icon.png',
