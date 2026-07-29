@@ -10957,6 +10957,7 @@
 #include "modular_zzveilbreak\code\datums\quirks\static.dm"
 #include "modular_zzveilbreak\code\datums\quirks\negative\hard_of_hearing.dm"
 #include "modular_zzveilbreak\code\datums\storage\science_xeno_bags.dm"
+#include "modular_zzveilbreak\code\datums\terror\monophobia_override.dm"
 #include "modular_zzveilbreak\code\datums\wires\interactable_override.dm"
 #include "modular_zzveilbreak\code\datums\vote\transfer_vote.dm"
 #include "modular_zzveilbreak\code\food-drink\chugging.dm"
