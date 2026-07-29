@@ -16,14 +16,16 @@ import type {
 } from './types';
 
 export function mergePowerPathData(
-  powerStaticPaths: PowerStaticByPathId,
-  powerStatePaths: PowerStateByPathId,
+  powerStaticPaths: PowerStaticByPathId = {} as PowerStaticByPathId,
+  powerStatePaths: PowerStateByPathId = {} as PowerStateByPathId,
 ): PowerByPathId {
   const mergedPowerPaths = {} as PowerByPathId;
+  const staticPaths = powerStaticPaths || {};
+  const statePaths = powerStatePaths || {};
 
-  for (const pathId of Object.keys(powerStaticPaths) as PowerPathId[]) {
-    const staticPowers = powerStaticPaths[pathId] || [];
-    const statePowers = powerStatePaths[pathId] || [];
+  for (const pathId of Object.keys(staticPaths) as PowerPathId[]) {
+    const staticPowers = staticPaths[pathId] || [];
+    const statePowers = statePaths?.[pathId] || [];
     const stateByName = new Map(
       statePowers.map((powerState) => [powerState.name, powerState]),
     );

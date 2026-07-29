@@ -58,6 +58,7 @@
 		var/datum/antagonist/succubus/S = owner_mind.has_antag_datum(/datum/antagonist/succubus)
 		if(S)
 			S.has_reached_level5 = TRUE
+		owner_mind.current?.client?.give_award(/datum/award/achievement/veilbreak/succubus_max_mark, owner_mind.current)
 	apply_effects_for_level(level)
 	var/victim_name = victim_mind?.current?.name || "Someone"
 	var/antag_name = owner_mind?.current?.name || "Succubus"

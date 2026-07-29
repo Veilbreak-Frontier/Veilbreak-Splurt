@@ -1,6 +1,7 @@
 /mob/living/simple_animal/hostile/megafauna/melos_vecare
 	name = "Melos Vecare"
 	desc = "A siren corrupted by the void, her song now weaves destruction and chaos."
+	achievement_type = /datum/award/achievement/veilbreak/melos_vecare_kill
 	icon = 'modular_zzveilbreak/icons/bosses/melos.dmi'
 	icon_state = "idle"
 	icon_living = "idle"

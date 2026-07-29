@@ -39,7 +39,7 @@ export function getPowerPathData(
   powerCatalogData: PowerCatalogData | undefined,
   pathId: PowerPathId,
 ): PowerPathData {
-  return powerCatalogData?.power_path_data[pathId] || fallbackPowerPathData;
+  return powerCatalogData?.power_path_data?.[pathId] || fallbackPowerPathData;
 }
 
 /// Returns the serverPref's powers property from serverprefs, which lists all powers, archetypes, etc..
@@ -67,7 +67,7 @@ export function useValidatedPowerPathId(
   }
 
   // If a path's ID was given that matches an existing path.
-  if (powerCatalogData?.power_path_data[requestedPathId]) {
+  if (powerCatalogData?.power_path_data?.[requestedPathId]) {
     return requestedPathId;
   }
 
