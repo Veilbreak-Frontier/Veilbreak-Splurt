@@ -1,9 +1,11 @@
 // PRIVATE SECURITY ERT - MORE BALLISTIC THAN LASER
 /datum/ert/private_security
-	code = "Crimson"
+	code = "Cardinal Red"
 	roles = list(/datum/antagonist/ert/private_security/operative, /datum/antagonist/ert/private_security/medic, /datum/antagonist/ert/private_security/sergeant)
 	leader_role = /datum/antagonist/ert/private_security/leader
 	teamsize = 7
+	opendoors = FALSE
+	notify_players = FALSE
 	rename_team = "Squad of Private Security"
 	mission = "Assist the station."
 	polldesc = "a Nanotrasen Private Security Team"
@@ -118,7 +120,8 @@
 	else
 		uniform = pick(list(
 			/obj/item/clothing/under/rank/security/splurt/ntps,
-			/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck
+			/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck,
+			/obj/item/clothing/under/rank/security/splurt/ntps/fatigues
 		))
 
 	head = pick(list(
@@ -184,7 +187,8 @@
 
 	uniform = pick(list(
 		/obj/item/clothing/under/rank/security/splurt/ntps,
-		/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck
+		/obj/item/clothing/under/rank/security/splurt/ntps/turtleneck,
+		/obj/item/clothing/under/rank/security/splurt/ntps/fatigues
 	))
 
 	return ..()
@@ -244,7 +248,7 @@
 	id = /obj/item/card/id/advanced/platinum
 	id_trim = /datum/id_trim/centcom/ert/commander/privatesecurity
 	uniform = /obj/item/clothing/under/rank/security/splurt/ntps/captain
-	belt = /obj/item/storage/belt/security/webbing/privsec/full
+	belt = /obj/item/storage/belt/security/webbing/peacekeeper/armadyne/privsec/full
 	ears = /obj/item/radio/headset/headset_cent/alt/privsec/leader
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
 
@@ -357,13 +361,9 @@
 	new /obj/item/melee/baton/security/loaded(src)
 	update_appearance()
 
-/obj/item/storage/belt/security/webbing/privsec
+/obj/item/storage/belt/security/webbing/peacekeeper/armadyne/privsec
 	name = "private security webbing"
 	desc = "A tactical chest rig issued to fit security equipment, the added holster seems to help fit sidearms too."
-	icon = 'modular_skyrat/master_files/icons/obj/clothing/belts.dmi'
-	worn_icon = 'modular_skyrat/master_files/icons/mob/clothing/belt.dmi'
-	icon_state = "armadyne_webbing"
-	worn_icon_state = "armadyne_webbing"
 	storage_type = /datum/storage/security_belt/webbing/holster
 
 /datum/storage/security_belt/webbing/holster/New(atom/parent, max_slots, max_specific_storage, max_total_storage, rustle_sound, remove_rustle_sound)
@@ -391,7 +391,7 @@
 		/obj/item/gun/energy/disabler,
 	))
 
-/obj/item/storage/belt/security/webbing/privsec/full/PopulateContents()
+/obj/item/storage/belt/security/webbing/peacekeeper/armadyne/privsec/full/PopulateContents()
 	new /obj/item/reagent_containers/spray/pepper(src)
 	new /obj/item/restraints/handcuffs(src)
 	new /obj/item/grenade/flashbang(src)
