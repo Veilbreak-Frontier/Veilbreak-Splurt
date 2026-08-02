@@ -1,6 +1,6 @@
 // PRIVATE SECURITY ERT - MORE BALLISTIC THAN LASER
 /datum/ert/private_security
-	code = "Cardinal Red"
+	code = "Security Red"
 	roles = list(/datum/antagonist/ert/private_security/operative, /datum/antagonist/ert/private_security/medic, /datum/antagonist/ert/private_security/sergeant)
 	leader_role = /datum/antagonist/ert/private_security/leader
 	teamsize = 7
@@ -151,7 +151,7 @@
 	id_trim = /datum/id_trim/centcom/ert/medical/privatesecurity
 	belt = /obj/item/storage/belt/medical/privsec/full
 	ears = /obj/item/radio/headset/headset_cent/alt/privsec/medic
-	head = /obj/item/clothing/head/beret/sec/medical
+	head = /obj/item/clothing/head/helmet/swat/nanotrasen/ntps
 	glasses = /obj/item/clothing/glasses/hud/medsechud/sunglasses
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
 	l_pocket = /obj/item/storage/pouch/medical/loaded
@@ -257,6 +257,7 @@
 		/obj/item/gun/energy/e_gun/advtaser = 1,\
 		/obj/item/ammo_box/magazine/c68 = 3,\
 		/obj/item/shield/riot/tele = 1,\
+		/obj/item/suppressor = 1,\
 		/obj/item/melee/baton/telescopic/gold = 1,
 		)
 
@@ -275,7 +276,6 @@
 	l_hand = pick(list(
 		/obj/item/gun/ballistic/automatic/bulwark/loyalpin,
 		/obj/item/gun/ballistic/automatic/bulwark/loyalpin,
-		/obj/item/gun/ballistic/automatic/bulwark/suppressed/loyalpin,
 		/obj/item/gun/ballistic/automatic/bulwark/taser/loyalpin
 	))
 
@@ -291,6 +291,18 @@
 		return
 
 	apply_rank(H, "Captain")
+
+	var/has_taser_bulwark = FALSE
+
+	// Check both hands
+	for(var/obj/item/I in H.get_equipped_items())
+		if(istype(I, /obj/item/gun/ballistic/automatic/bulwark/taser))
+			has_taser_bulwark = TRUE
+			break
+
+	if(has_taser_bulwark)
+		for(var/obj/item/gun/energy/e_gun/advtaser/T in H.contents)
+			qdel(T)
 
 	return ..()
 
@@ -446,14 +458,6 @@
 	pin = /obj/item/firing_pin/implant/mindshield
 
 /obj/item/gun/ballistic/automatic/bulwark/loyalpin
-	pin = /obj/item/firing_pin/implant/mindshield
-
-/obj/item/gun/ballistic/automatic/bulwark/suppressed/Initialize(mapload)
-	. = ..()
-	var/obj/item/suppressor/S = new(src)
-	install_suppressor(S)
-
-/obj/item/gun/ballistic/automatic/bulwark/suppressed/loyalpin
 	pin = /obj/item/firing_pin/implant/mindshield
 
 /obj/item/gun/ballistic/automatic/bulwark/taser/loyalpin
