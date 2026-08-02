@@ -318,30 +318,7 @@
 	corpse = /obj/effect/mob_spawn/corpse/human/privatesecurity/captain
 	mob_spawner = /obj/effect/mob_spawn/corpse/human/privatesecurity/captain
 	r_hand = /obj/item/gun/ballistic/automatic/bulwark
-	death_message = "collapses to the ground, their gun self-destructing after leaving their grip."
-
-/mob/living/basic/trooper/nanotrasen/ranged/assault
-	name = "\improper Nanotrasen Assault Team Officer"
-	desc = "A member of Nanotrasen's Private Security, one of their underfunded Assault Division officers. If you see them, they're probably here to kill everything on-sight. They are armed with a NT-ARG Boarder."
-	maxHealth = 175
-	health = 175
-	ai_controller = /datum/ai_controller/basic_controller/trooper/ranged/burst
-	casingtype = /obj/item/ammo_casing/a223
-	burst_shots = 3
-	projectilesound = 'sound/items/weapons/gun/smg/shot.ogg'
-	ranged_cooldown = 3 SECONDS
-	corpse = /obj/effect/mob_spawn/corpse/human/privatesecurity/assault
-	mob_spawner = /obj/effect/mob_spawn/corpse/human/privatesecurity/assault
-	r_hand = /obj/item/gun/ballistic/automatic/ar
-	death_message = "collapses to the ground, their gun self-destructing after leaving their grip."
-
-/mob/living/basic/trooper/nanotrasen/ranged/assault/elite
-	name = "\improper Nanotrasen Assault Team Elite"
-	desc = "A member of Nanotrasen's Private Security, one of their underfunded Assault Division officers. If you see them, they're probably here to kill everything on-sight. They are armed with a L6 SAW."
-	casingtype = /obj/item/ammo_casing/m7mm
-	burst_shots = 4
-	projectilesound = 'sound/items/weapons/gun/l6/shot.ogg'
-	r_hand = /obj/item/gun/ballistic/automatic/l6_saw
+	death_message = "collapses to the ground, their gun self-destructing after losing their grip."
 
 /mob/living/basic/trooper/nanotrasen/energy/assault
 	name = "\improper Nanotrasen ERT Security Officer"
@@ -378,7 +355,7 @@
 
 /mob/living/basic/trooper/nanotrasen/energy/elite
 	name = "Deathsquad Trooper"
-	desc = "A member of Nanotrasen's Deathsquad, THE elite strike team. Central Command won't help you, prepare to die if you're spotted. They are armed with a pulse rifle."
+	desc = "A member of Nanotrasen's Deathsquad, THE elite strike team. Central Command won't help you, prepare to die if you're spotted. They are armed with a Pulse Rifle."
 	maxHealth = 250
 	health = 250
 	speed = 1.8
@@ -396,21 +373,6 @@
 	ADD_TRAIT(src, TRAIT_SPACEWALK, INNATE_TRAIT)
 	set_light_color(COLOR_RED)
 	set_light(4)
-
-/mob/living/basic/trooper/nanotrasen/energy/elite/asset_protection
-	name = "Asset Protection Specialist"
-	desc = "A member of Nanotrasen's Asset Protection, THE elite protection team, but you are probably here to really test if that's true. They are armed with a pulse carbine."
-	maxHealth = 225
-	health = 225
-	speed = 1.6
-	mob_spawner = /obj/effect/mob_spawn/corpse/human/nanotrasenassetprotection
-	r_hand = /obj/item/gun/energy/pulse/carbine
-
-/mob/living/basic/trooper/nanotrasen/energy/elite/asset_protection/Initialize(mapload)
-	. = ..()
-	ADD_TRAIT(src, TRAIT_SPACEWALK, INNATE_TRAIT)
-	set_light_color(COLOR_GREEN)
-	set_light(3)
 
 /// I'm leaving this one because I really can't be bothered to edit skyrat maps.
 /mob/living/basic/trooper/nanotrasen/peaceful
