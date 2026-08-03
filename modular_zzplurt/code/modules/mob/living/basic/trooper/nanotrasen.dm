@@ -17,6 +17,13 @@
 /mob/living/basic/trooper/nanotrasen/assess_threat(judgement_criteria, lasercolor, datum/callback/weaponcheck)
 	return -10 // Respect our troops
 
+/mob/living/basic/trooper/nanotrasen/proc/ai_retaliate_behaviour(mob/living/attacker)
+	if (!istype(attacker))
+		return
+	for (var/mob/living/basic/trooper/nanotrasen/potential_trooper in oview(src, 7))
+		potential_trooper.ai_controller.insert_blackboard_key_lazylist(BB_BASIC_MOB_RETALIATE_LIST, attacker)
+
+
 // --------------------
 // VARIANTS
 // --------------------
@@ -175,7 +182,7 @@
 	maxHealth = 225
 	health = 225
 	casingtype = /obj/item/ammo_casing/energy/cybersun_big_kill
-	mob_spawner = /obj/effect/mob_spawn/corpse/human/nanotrasenelitecommander
+	mob_spawner = /obj/effect/mob_spawn/corpse/human/nanotrasenertcommander
 	r_hand = /obj/item/gun/energy/modular_laser_rifle
 
 /mob/living/basic/trooper/nanotrasen/ranged/assault/Initialize(mapload)
