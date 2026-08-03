@@ -17,6 +17,13 @@
 /mob/living/basic/trooper/nanotrasen/assess_threat(judgement_criteria, lasercolor, datum/callback/weaponcheck)
 	return -10 // Respect our troops
 
+/mob/living/basic/trooper/nanotrasen/proc/ai_retaliate_behaviour(mob/living/attacker)
+	if (!istype(attacker))
+		return
+	for (var/mob/living/basic/trooper/nanotrasen/potential_trooper in oview(src, 7))
+		potential_trooper.ai_controller.insert_blackboard_key_lazylist(BB_BASIC_MOB_RETALIATE_LIST, attacker)
+
+
 // --------------------
 // VARIANTS
 // --------------------
@@ -159,8 +166,8 @@
 	desc = "A member of Nanotrasen's Emergency Response Team. Contact Central Command if you see them, prepare to die if you're spotted off-station. They are armed with a Hoshi modular laser carbine."
 	maxHealth = 200
 	health = 200
-	unsuitable_atmos_damage = 0
-	minimum_survivable_temperature = 0
+	habitable_atmos = null
+	unsuitable_cold_damage = 0
 	ai_controller = /datum/ai_controller/basic_controller/trooper/ranged
 	casingtype = /obj/item/ammo_casing/energy/cybersun_small_hellfire
 	projectilesound = 'modular_zubbers/sound/weapons/laser.ogg'
@@ -175,7 +182,7 @@
 	maxHealth = 225
 	health = 225
 	casingtype = /obj/item/ammo_casing/energy/cybersun_big_kill
-	mob_spawner = /obj/effect/mob_spawn/corpse/human/nanotrasenelitecommander
+	mob_spawner = /obj/effect/mob_spawn/corpse/human/nanotrasenertcommander
 	r_hand = /obj/item/gun/energy/modular_laser_rifle
 
 /mob/living/basic/trooper/nanotrasen/ranged/assault/Initialize(mapload)
@@ -185,11 +192,12 @@
 
 /mob/living/basic/trooper/nanotrasen/ranged/elite
 	name = "Deathsquad Trooper"
-	desc = "A member of Nanotrasen's Deathsquad, THE elite strike team. Central Command won't help you, prepare to die if you're spotted. They are armed with a pulse rifle."
+	desc = "A member of Nanotrasen's Deathsquad, THE elite strike team. Central Command won't help you, prepare to die if you're spotted. They are armed with a Pulse Rifle."
 	maxHealth = 250
 	health = 250
-	unsuitable_atmos_damage = 0
-	minimum_survivable_temperature = 0
+	habitable_atmos = null
+	unsuitable_cold_damage = 0
+	ai_controller = /datum/ai_controller/basic_controller/trooper/ranged
 	casingtype = /obj/item/ammo_casing/energy/laser/pulse
 	projectilesound = 'sound/items/weapons/pulse.ogg'
 	ranged_cooldown = 5 SECONDS

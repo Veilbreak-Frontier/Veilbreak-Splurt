@@ -5663,7 +5663,7 @@
 #include "code\modules\mob\living\basic\trader\trader_data.dm"
 #include "code\modules\mob\living\basic\trader\trader_items.dm"
 #include "code\modules\mob\living\basic\trooper\abductor.dm"
-#include "code\modules\mob\living\basic\trooper\nanotrasen.dm"
+#include "modular_zzplurt\code\modules\mob\living\basic\trooper\nanotrasen.dm"
 #include "code\modules\mob\living\basic\trooper\pirate.dm"
 #include "code\modules\mob\living\basic\trooper\russian.dm"
 #include "code\modules\mob\living\basic\trooper\syndicate.dm"
@@ -11263,6 +11263,15 @@
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\thaumaturge\_thaumaturge_hemomancy.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\theologist\time_of_need.dm"
 #include "modular_zzveilbreak\modular_powers\code\powers\sorcerous\theologist\_theologist_datum.dm"
+#include "modular_zzveilbreak\code\datums\wires\particle_accelerator.dm"
+#include "modular_zzveilbreak\code\modules\power\singularity\collector.dm"
+#include "modular_zzveilbreak\code\modules\power\singularity\generator.dm"
+#include "modular_zzveilbreak\code\modules\power\tesla\generator.dm"
+#include "modular_zzveilbreak\code\modules\power\singularity\particle_accelerator\particle.dm"
+#include "modular_zzveilbreak\code\modules\power\singularity\particle_accelerator\particle_accelerator.dm"
+#include "modular_zzveilbreak\code\modules\power\singularity\particle_accelerator\particle_emitter.dm"
+#include "modular_zzveilbreak\code\modules\power\singularity\particle_accelerator\particle_control.dm"
+#include "modular_zzveilbreak\code\modules\cargo\engine_packs.dm"
 // END_INCLUDE
 
 
