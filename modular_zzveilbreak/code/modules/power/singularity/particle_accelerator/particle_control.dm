@@ -30,6 +30,7 @@
 	. = ..()
 	wires = new /datum/wires/particle_accelerator/control_box(src)
 	connected_parts = list()
+	update_appearance()
 
 /obj/machinery/particle_accelerator/control_box/Destroy()
 	if(active)
@@ -45,6 +46,70 @@
 	if(construction_state == PA_CONSTRUCTION_PANEL_OPEN)
 		wires.interact(user)
 		return TRUE
+	return ..()
+
+/obj/machinery/particle_accelerator/control_box/wrench_act(mob/living/user, obj/item/tool)
+	var/did_something = FALSE
+	if(construction_state == PA_CONSTRUCTION_UNSECURED && !isinspace())
+		tool.play_tool_sound(src, 75)
+		anchored = TRUE
+		user.visible_message(span_notice("[user.name] secures the [name] to the floor."), span_notice("You secure the external bolts."))
+		construction_state = PA_CONSTRUCTION_UNWIRED
+		did_something = TRUE
+	else if(construction_state == PA_CONSTRUCTION_UNWIRED)
+		tool.play_tool_sound(src, 75)
+		anchored = FALSE
+		user.visible_message(span_notice("[user.name] detaches the [name] from the floor."), span_notice("You remove the external bolts."))
+		construction_state = PA_CONSTRUCTION_UNSECURED
+		did_something = TRUE
+
+	if(did_something)
+		update_state()
+		update_appearance()
+		return TRUE
+	return ..()
+
+/obj/machinery/particle_accelerator/control_box/screwdriver_act(mob/living/user, obj/item/tool)
+	var/did_something = FALSE
+	if(construction_state == PA_CONSTRUCTION_PANEL_OPEN)
+		user.visible_message(span_notice("[user.name] closes the [name]'s access panel."), span_notice("You close the access panel."))
+		construction_state = PA_CONSTRUCTION_COMPLETE
+		did_something = TRUE
+	else if(construction_state == PA_CONSTRUCTION_COMPLETE)
+		user.visible_message(span_notice("[user.name] opens the [name]'s access panel."), span_notice("You open the access panel."))
+		construction_state = PA_CONSTRUCTION_PANEL_OPEN
+		did_something = TRUE
+
+	if(did_something)
+		update_state()
+		update_appearance()
+		return TRUE
+	return ..()
+
+/obj/machinery/particle_accelerator/control_box/wirecutter_act(mob/living/user, obj/item/tool)
+	if(construction_state == PA_CONSTRUCTION_PANEL_OPEN)
+		user.visible_message(span_notice("[user.name] removes some wires from the [name]."), span_notice("You remove some wires."))
+		construction_state = PA_CONSTRUCTION_UNWIRED
+		update_state()
+		update_appearance()
+		return TRUE
+	return ..()
+
+/obj/machinery/particle_accelerator/control_box/attackby(obj/item/W, mob/user, params)
+	var/did_something = FALSE
+
+	if(construction_state == PA_CONSTRUCTION_UNWIRED && istype(W, /obj/item/stack/cable_coil))
+		var/obj/item/stack/cable_coil/C = W
+		if(C.use(1))
+			user.visible_message(span_notice("[user.name] adds wires to the [name]."), span_notice("You add some wires."))
+			construction_state = PA_CONSTRUCTION_PANEL_OPEN
+			did_something = TRUE
+
+	if(did_something)
+		update_state()
+		update_appearance()
+		return TRUE
+
 	return ..()
 
 /obj/machinery/particle_accelerator/control_box/proc/update_state()
@@ -202,58 +267,6 @@
 			. += "It is missing some cables."
 		if(PA_CONSTRUCTION_PANEL_OPEN)
 			. += "The panel is open."
-
-/obj/machinery/particle_accelerator/control_box/attackby(obj/item/W, mob/user, params)
-	var/did_something = FALSE
-
-	switch(construction_state)
-		if(PA_CONSTRUCTION_UNSECURED)
-			if(W.tool_behaviour == TOOL_WRENCH && !isinspace())
-				W.play_tool_sound(src, 75)
-				anchored = TRUE
-				user.visible_message(span_notice("[user.name] secures the [name] to the floor."), \
-					span_notice("You secure the external bolts."))
-				construction_state = PA_CONSTRUCTION_UNWIRED
-				did_something = TRUE
-		if(PA_CONSTRUCTION_UNWIRED)
-			if(W.tool_behaviour == TOOL_WRENCH)
-				W.play_tool_sound(src, 75)
-				anchored = FALSE
-				user.visible_message(span_notice("[user.name] detaches the [name] from the floor."), \
-					span_notice("You remove the external bolts."))
-				construction_state = PA_CONSTRUCTION_UNSECURED
-				did_something = TRUE
-			else if(istype(W, /obj/item/stack/cable_coil))
-				var/obj/item/stack/cable_coil/C = W
-				if(C.use(1))
-					user.visible_message(span_notice("[user.name] adds wires to the [name]."), \
-						span_notice("You add some wires."))
-					construction_state = PA_CONSTRUCTION_PANEL_OPEN
-					did_something = TRUE
-		if(PA_CONSTRUCTION_PANEL_OPEN)
-			if(W.tool_behaviour == TOOL_WIRECUTTER)
-				user.visible_message(span_notice("[user.name] removes some wires from the [name]."), \
-					span_notice("You remove some wires."))
-				construction_state = PA_CONSTRUCTION_UNWIRED
-				did_something = TRUE
-			else if(W.tool_behaviour == TOOL_SCREWDRIVER)
-				user.visible_message(span_notice("[user.name] closes the [name]'s access panel."), \
-					span_notice("You close the access panel."))
-				construction_state = PA_CONSTRUCTION_COMPLETE
-				did_something = TRUE
-		if(PA_CONSTRUCTION_COMPLETE)
-			if(W.tool_behaviour == TOOL_SCREWDRIVER)
-				user.visible_message(span_notice("[user.name] opens the [name]'s access panel."), \
-					span_notice("You open the access panel."))
-				construction_state = PA_CONSTRUCTION_PANEL_OPEN
-				did_something = TRUE
-
-	if(did_something)
-		update_state()
-		update_appearance()
-		return TRUE
-
-	return ..()
 
 /obj/machinery/particle_accelerator/control_box/interact(mob/user)
 	if(construction_state == PA_CONSTRUCTION_PANEL_OPEN)
