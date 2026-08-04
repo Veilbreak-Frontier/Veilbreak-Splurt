@@ -1,5 +1,5 @@
-#define TESLA_DEFAULT_ENERGY (695.304 MEGA JOULES)
-#define TESLA_MINI_ENERGY (347.652 MEGA JOULES) // Has a weird scaling thing so this is a lie for now (doesn't generate power anyways).
+#define TESLA_DEFAULT_ENERGY (7.3 MEGA JOULES)
+#define TESLA_MINI_ENERGY (3.65 MEGA JOULES) // Has a weird scaling thing so this is a lie for now (doesn't generate power anyways).
 //Zap constants, speeds up targeting
 #define BIKE (COIL + 1)
 #define COIL (ROD + 1)
