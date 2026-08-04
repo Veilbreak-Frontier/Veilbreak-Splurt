@@ -261,74 +261,51 @@
 /obj/machinery/power/am_control_unit/proc/reset_stored_core_stability_delay()
 	stored_core_stability_delay = 0
 
-/obj/machinery/power/am_control_unit/ui_interact(mob/user)
-	. = ..()
-	if((get_dist(src, user) > 1) || (machine_stat & (BROKEN|NOPOWER)))
-		if(!isAI(user))
-			user << browse(null, "window=AMcontrol")
-			return
+/obj/machinery/power/am_control_unit/ui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "AmControl", name)
+		ui.open()
 
-	var/dat = ""
-	dat += "AntiMatter Control Panel<BR>"
-	dat += "<A href='?src=[REF(src)];close=1'>Close</A><BR>"
-	dat += "<A href='?src=[REF(src)];refresh=1'>Refresh</A><BR>"
-	dat += "<A href='?src=[REF(src)];refreshicons=1'>Force Shielding Update</A><BR><BR>"
-	dat += "Status: [(active?"Injecting":"Standby")] <BR>"
-	dat += "<A href='?src=[REF(src)];togglestatus=1'>Toggle Status</A><BR>"
+/obj/machinery/power/am_control_unit/ui_data(mob/user)
+	var/list/data = list()
+	data["active"] = active
+	data["stability"] = stability
+	data["linked_shielding"] = linked_shielding.len
+	data["linked_cores"] = linked_cores.len
+	data["reported_core_efficiency"] = reported_core_efficiency
+	data["stored_core_stability"] = stored_core_stability
+	data["stored_power"] = display_power(stored_power)
+	data["fuel_injection"] = fuel_injection
 
-	dat += "Stability: [stability]%<BR>"
-	dat += "Reactor parts: [linked_shielding.len]<BR>"
-	dat += "Cores: [linked_cores.len]<BR><BR>"
-	dat += "-Current Efficiency: [reported_core_efficiency]<BR>"
-	dat += "-Average Stability: [stored_core_stability] <A href='?src=[REF(src)];refreshstability=1'>(update)</A><BR>"
-	dat += "Last Produced: [display_power(stored_power)]<BR>"
-
-	dat += "Fuel: "
-	if(!fueljar)
-		dat += "<BR>No fuel receptacle detected."
+	if(fueljar)
+		data["fueljar"] = list(
+			"fuel" = fueljar.fuel,
+			"fuel_max" = fueljar.fuel_max,
+		)
 	else
-		dat += "<A href='?src=[REF(src)];ejectjar=1'>Eject</A><BR>"
-		dat += "- [fueljar.fuel]/[fueljar.fuel_max] Units<BR>"
+		data["fueljar"] = null
 
-		dat += "- Injecting: [fuel_injection] units<BR>"
-		dat += "- <A href='?src=[REF(src)];strengthdown=1'>--</A>|<A href='?src=[REF(src)];strengthup=1'>++</A><BR><BR>"
+	return data
 
-
-	user << browse(dat, "window=AMcontrol;size=420x500")
-	onclose(user, "AMcontrol")
-	return
-
-
-/obj/machinery/power/am_control_unit/Topic(href, href_list)
-	if(..())
+/obj/machinery/power/am_control_unit/ui_act(action, params)
+	. = ..()
+	if(.)
 		return
 
-	if(href_list["close"])
-		usr << browse(null, "window=AMcontrol")
-		return
-
-	if(href_list["togglestatus"])
-		toggle_power()
-
-	if(href_list["refreshicons"])
-		update_shield_icons = 1
-
-	if(href_list["ejectjar"])
-		if(fueljar)
-			fueljar.forceMove(drop_location())
-			fueljar = null
-
-	if(href_list["strengthup"])
-		fuel_injection++
-
-	if(href_list["strengthdown"])
-		fuel_injection--
-		if(fuel_injection < 0)
-			fuel_injection = 0
-
-	if(href_list["refreshstability"])
-		check_core_stability()
-
-	if(usr)
-		ui_interact(usr)
-	return
+	switch(action)
+		if("togglestatus")
+			toggle_power()
+			. = TRUE
+		if("refreshstability")
+			check_core_stability()
+			. = TRUE
+		if("ejectjar")
+			if(fueljar)
+				fueljar.forceMove(drop_location())
+				fueljar = null
+				. = TRUE
+		if("strength")
+			if(params["value"] != null)
+				fuel_injection = clamp(text2num(params["value"]), 0, 100)
+				. = TRUE
