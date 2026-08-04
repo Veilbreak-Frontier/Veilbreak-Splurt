@@ -3,6 +3,7 @@
 	desc = "A supermassive black hole or hyper-powered teslaball are the perfect way to spice up any party! Contains all 7 components required to build a Particle Accelerator."
 	cost = CARGO_CRATE_VALUE * 7.5
 	access_view = ACCESS_ENGINE_EQUIP
+	crate_type = /obj/structure/closet/crate/engineering/particle_accelerator
 	contains = list(
 		/obj/structure/particle_accelerator/fuel_chamber,
 		/obj/machinery/particle_accelerator/control_box,

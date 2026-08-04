@@ -11277,6 +11277,11 @@
 #include "modular_zzveilbreak\code\modules\power\singularity\particle_accelerator\particle_accelerator.dm"
 #include "modular_zzveilbreak\code\modules\power\singularity\particle_accelerator\particle_emitter.dm"
 #include "modular_zzveilbreak\code\modules\power\singularity\particle_accelerator\particle_control.dm"
+#include "modular_zzveilbreak\code\modules\power\antimatter\containment_jar.dm"
+#include "modular_zzveilbreak\code\modules\power\antimatter\control.dm"
+#include "modular_zzveilbreak\code\modules\power\antimatter\shielding.dm"
+#include "modular_zzveilbreak\code\modules\power\prepacked_crates.dm"
+#include "modular_zzveilbreak\code\modules\cargo\antimatter.dm"
 #include "modular_zzveilbreak\code\modules\cargo\engine_packs.dm"
 // END_INCLUDE
 
