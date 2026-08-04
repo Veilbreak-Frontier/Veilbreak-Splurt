@@ -36,7 +36,8 @@ SUBSYSTEM_DEF(radiation)
 	for (var/turf/turf_to_irradiate as anything in cached_turfs_to_process)
 		turfs_iterated += 1
 		for (var/atom/movable/target in turf_to_irradiate)
-			if (!can_irradiate_basic(target))
+			var/can_irradiate = can_irradiate_basic(target)
+			if (!can_irradiate && !target._listen_lookup?[COMSIG_IN_RANGE_OF_IRRADIATION])
 				continue
 
 			var/current_insulation = 1
@@ -55,6 +56,9 @@ SUBSYSTEM_DEF(radiation)
 					break
 
 			SEND_SIGNAL(target, COMSIG_IN_RANGE_OF_IRRADIATION, pulse_information, current_insulation)
+
+			if (!can_irradiate)
+				continue
 
 			// Check a second time, because of TRAIT_BYPASS_EARLY_IRRADIATED_CHECK
 			if (HAS_TRAIT(target, TRAIT_IRRADIATED))
