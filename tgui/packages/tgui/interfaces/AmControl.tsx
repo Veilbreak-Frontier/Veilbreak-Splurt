@@ -38,7 +38,7 @@ export const AmControl = (props) => {
   } = data;
 
   return (
-    <Window width={450} height={420}>
+    <Window width={450} height={460}>
       <Window.Content>
         <Section
           title="Status"
@@ -52,6 +52,15 @@ export const AmControl = (props) => {
           }
         >
           <LabeledList>
+            <LabeledList.Item label="Engine Power">
+              <Button
+                icon={active ? 'power-off' : 'play'}
+                content={active ? 'Turn Off Engine (Injecting)' : 'Turn On Engine (Standby)'}
+                color={active ? 'good' : 'danger'}
+                fluid
+                onClick={() => act('togglestatus')}
+              />
+            </LabeledList.Item>
             <LabeledList.Item label="Stability">
               <ProgressBar
                 value={stability}
