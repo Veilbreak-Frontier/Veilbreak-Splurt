@@ -42,7 +42,7 @@ export const AmControl = (props) => {
       <Window.Content>
         <Section
           title="Status"
-          extra={
+          buttons={
             <Button
               icon={active ? 'power-off' : 'play'}
               content={active ? 'Injecting' : 'Standby'}
@@ -136,7 +136,7 @@ export const AmControl = (props) => {
                   minValue={0}
                   maxValue={100}
                   step={1}
-                  stepPixelDensity={5}
+                  stepPixelSize={5}
                   onChange={(value) =>
                     act('strength', {
                       value,

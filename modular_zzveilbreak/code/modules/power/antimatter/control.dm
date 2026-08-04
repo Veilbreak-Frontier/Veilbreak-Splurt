@@ -8,6 +8,7 @@
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 100
 	active_power_usage = 1000
+	circuit = /obj/item/circuitboard/machine/am_control_unit
 
 	interaction_flags_atom = INTERACT_ATOM_ATTACK_HAND | INTERACT_ATOM_UI_INTERACT | INTERACT_ATOM_REQUIRES_ANCHORED
 
@@ -142,6 +143,20 @@
 		icon_state = "control_on"
 	else
 		icon_state = "control"
+
+/obj/machinery/power/am_control_unit/screwdriver_act(mob/living/user, obj/item/tool)
+	if(active)
+		to_chat(user, span_warning("Turn off the [src] first!"))
+		return TRUE
+	if(fueljar)
+		to_chat(user, span_warning("Eject the fuel jar first!"))
+		return TRUE
+	return default_deconstruction_screwdriver(user, icon_state, icon_state, tool)
+
+/obj/machinery/power/am_control_unit/crowbar_act(mob/living/user, obj/item/tool)
+	if(default_deconstruction_crowbar(tool))
+		return TRUE
+	return ..()
 
 /obj/machinery/power/am_control_unit/attackby(obj/item/W, mob/user, params)
 	if(W.tool_behaviour == TOOL_WRENCH)
