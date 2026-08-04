@@ -50,10 +50,10 @@
 	QDEL_NULL(Radio)
 	return ..()
 
-/obj/machinery/power/rad_collector/proc/on_irradiated(datum/source, datum/radiation_pulse_information/pulse_info, insulation)
+/obj/machinery/power/rad_collector/proc/on_irradiated(datum/source, datum/radiation_pulse_information/pulse_info, insulation = 1)
 	SIGNAL_HANDLER
 	if(pulse_info)
-		rad_act(pulse_info.chance * 5)
+		rad_act(pulse_info.chance * 5 * (isnull(insulation) ? 1 : insulation))
 
 /obj/machinery/power/rad_collector/proc/rad_act(pulse_strength)
 	if(loaded_tank && active && pulse_strength > RAD_COLLECTOR_EFFICIENCY)

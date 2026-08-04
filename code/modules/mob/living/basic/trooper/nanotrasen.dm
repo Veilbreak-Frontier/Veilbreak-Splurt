@@ -101,4 +101,3 @@
 	for (var/mob/living/basic/trooper/nanotrasen/potential_trooper in oview(src, 7))
 		potential_trooper.ai_controller.insert_blackboard_key_lazylist(BB_BASIC_MOB_RETALIATE_LIST, attacker)
 */
-
