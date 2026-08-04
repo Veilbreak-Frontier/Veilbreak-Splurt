@@ -21,6 +21,7 @@
 	icon_state = "ca"
 	anchored = FALSE
 	density = TRUE
+	circuit = /obj/item/circuitboard/machine/rad_collector
 	req_access = list(ACCESS_ENGINE_EQUIP)
 	max_integrity = 350
 	integrity_failure = 0.2

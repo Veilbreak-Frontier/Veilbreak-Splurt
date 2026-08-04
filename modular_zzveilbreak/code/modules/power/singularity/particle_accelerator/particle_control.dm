@@ -15,6 +15,7 @@
 	use_power = NO_POWER_USE
 	idle_power_usage = 500
 	active_power_usage = 10000
+	circuit = /obj/item/circuitboard/machine/particle_control
 	dir = NORTH
 	mouse_opacity = MOUSE_OPACITY_OPAQUE
 	var/strength_upper_limit = 2
@@ -84,6 +85,12 @@
 		update_state()
 		update_appearance()
 		return TRUE
+	return ..()
+
+/obj/machinery/particle_accelerator/control_box/crowbar_act(mob/living/user, obj/item/tool)
+	if(construction_state == PA_CONSTRUCTION_PANEL_OPEN)
+		if(default_deconstruction_crowbar(tool))
+			return TRUE
 	return ..()
 
 /obj/machinery/particle_accelerator/control_box/wirecutter_act(mob/living/user, obj/item/tool)
