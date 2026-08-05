@@ -43,6 +43,10 @@
 	votable = TRUE
 	storyteller_type = STORYTELLER_TYPE_ALWAYS_AVAILABLE
 
+// Default gamemode voted storyteller fallback to Low Chaos
+/datum/controller/subsystem/gamemode
+	voted_storyteller = /datum/storyteller/low
+
 // Disable other storytellers from being votable so votes at shift start are between Extended and Low Chaos
 /datum/storyteller/medium
 	votable = FALSE
