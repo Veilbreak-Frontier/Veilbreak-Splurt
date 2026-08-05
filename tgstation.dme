@@ -11044,6 +11044,7 @@
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_removal.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_storage.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_tool.dm"
+#include "modular_zzveilbreak\code\modules\storyteller\extended_storyteller.dm"
 #include "modular_zzveilbreak\maps\veilbreak_shuttles.dm"
 #include "modular_zzveilbreak\modular_powers\code\_globals.dm"
 #include "modular_zzveilbreak\modular_powers\code\_power.dm"
