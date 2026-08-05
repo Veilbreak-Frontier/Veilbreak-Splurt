@@ -59,8 +59,12 @@
 /datum/storyteller/low/opfor
 	votable = FALSE
 
-// Ensure default choices are dynamically computed when vote is created
+/datum/storyteller/default
+	votable = FALSE
+
+// Ensure default choices are dynamically computed when vote is created and voted_storyteller is reset
 /datum/vote/storyteller/create_vote()
+	SSgamemode.voted_storyteller = null
 	default_choices = SSgamemode.storyteller_vote_choices()
 	. = ..()
 	if(length(choices) == 1)
@@ -68,3 +72,15 @@
 		SSgamemode.storyteller_vote_result(de_facto_winner)
 		to_chat(world, span_boldannounce("The storyteller vote has been skipped because there is only one storyteller left to vote for. The storyteller has been changed to [de_facto_winner]."))
 		return FALSE
+
+// Fix bug where returning TRUE instead of VOTE_AVAILABLE caused forced votes to fail initiate_vote checks
+/datum/vote/storyteller/can_be_initiated(mob/by_who, forced = FALSE)
+	. = ..()
+	if(forced)
+		return VOTE_AVAILABLE
+
+	if(SSgamemode.storyteller_voted)
+		default_message = "The next Storyteller has already been selected."
+		return "The next Storyteller has already been selected."
+
+	return VOTE_AVAILABLE
