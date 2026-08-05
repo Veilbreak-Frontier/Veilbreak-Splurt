@@ -58,3 +58,13 @@
 
 /datum/storyteller/low/opfor
 	votable = FALSE
+
+// Ensure default choices are dynamically computed when vote is created
+/datum/vote/storyteller/create_vote()
+	default_choices = SSgamemode.storyteller_vote_choices()
+	. = ..()
+	if(length(choices) == 1)
+		var/de_facto_winner = choices[1]
+		SSgamemode.storyteller_vote_result(de_facto_winner)
+		to_chat(world, span_boldannounce("The storyteller vote has been skipped because there is only one storyteller left to vote for. The storyteller has been changed to [de_facto_winner]."))
+		return FALSE
