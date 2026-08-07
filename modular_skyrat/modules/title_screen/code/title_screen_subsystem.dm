@@ -28,11 +28,13 @@ SUBSYSTEM_DEF(title)
 
 /datum/controller/subsystem/title/Initialize()
 	var/dat
-	if(!fexists("[global.config.directory]/splurt/veilbreak_title.txt")) // SPLURT EDIT - original title_html.txt
-		to_chat(world, span_boldwarning("CRITICAL ERROR: Unable to read veilbreak_title.txt, reverting to backup title html, please check your server config and ensure this file exists.")) // BUBBER EDIT - original title_html.txt
-		dat = DEFAULT_TITLE_HTML
+	if(fexists("[global.config.directory]/splurt/veilbreak_title.txt"))
+		dat = file2text("[global.config.directory]/splurt/veilbreak_title.txt")
+	else if(fexists("[global.config.directory]/splurt/splurt_title.txt"))
+		dat = file2text("[global.config.directory]/splurt/splurt_title.txt")
 	else
-		dat = file2text("[global.config.directory]/splurt/veilbreak_title.txt") // SPLURT EDIT - original title_html.txt
+		to_chat(world, span_boldwarning("CRITICAL ERROR: Unable to read title html file, reverting to backup title html, please check your server config and ensure this file exists."))
+		dat = DEFAULT_TITLE_HTML
 
 	title_html = dat
 

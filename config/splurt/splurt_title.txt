@@ -44,7 +44,8 @@
 				transform: translateX(-50%);
 				z-index: 2; /* above background and menus */
 				pointer-events: none; /* don't block interactions below */
-				transition: opacity 0.3s ease;
+				transition: none !important;
+				opacity: 1 !important;
 			}
 
 			/* Responsive logo image sizing */
@@ -129,20 +130,20 @@
 					rgba(255, 79, 240, 0.95),
 					rgba(255, 140, 250, 0.95)
 				);
-				opacity: 0.95;
+				opacity: 0.95 !important;
 				padding: 1em;
-				transition: opacity 0.3s ease;
+				transition: none !important;
 			}
 
-
+			/* Fading feature disabled for now (creates problems for Linux users) */
 			.container_nav.inactive,
 			.container_logo.inactive {
-				opacity: 0.2;
+				opacity: 0.95 !important;
 			}
 
 			.container_nav.hidden,
 			.container_logo.hidden {
-				opacity: 0;
+				opacity: 0.95 !important;
 			}
 
 			.container_nav hr {
