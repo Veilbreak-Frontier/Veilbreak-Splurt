@@ -1,3 +1,4 @@
+/*
 var/global/storyteller_vote_ready = FALSE
 
 /datum/storyteller_data/tracks/low_chaos
@@ -89,3 +90,4 @@ var/global/storyteller_vote_ready = FALSE
 	if(vote_type == /datum/vote/storyteller && forced && !storyteller_vote_ready)
 		return FALSE
 	. = ..()
+*/
