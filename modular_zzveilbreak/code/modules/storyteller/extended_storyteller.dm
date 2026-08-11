@@ -44,6 +44,9 @@ var/global/storyteller_vote_ready = FALSE
 /datum/controller/subsystem/gamemode
 	voted_storyteller = /datum/storyteller/low
 
+/datum/controller/subsystem/gamemode/storyteller_vote_can_override()
+	return FALSE
+
 /datum/vote/storyteller/create_vote()
 	SSgamemode.voted_storyteller = null
 	default_choices = SSgamemode.storyteller_vote_choices()
@@ -78,12 +81,8 @@ var/global/storyteller_vote_ready = FALSE
 	SSgamemode.storyteller_voted = FALSE
 	SSgamemode.voted_storyteller = null
 	storyteller_vote_ready = TRUE
-	var/storyteller = CONFIG_GET(string/default_storyteller)
-	if(storyteller && !SSgamemode.storyteller_vote_can_override())
-		SSgamemode.set_storyteller(text2path(storyteller), TRUE)
-	else
-		to_chat(world, span_notice("Storyteller vote starting now."))
-		SSvote.initiate_vote(/datum/vote/storyteller, "Storyteller Vote", forced = TRUE)
+	to_chat(world, span_notice("Storyteller vote starting now."))
+	SSvote.initiate_vote(/datum/vote/storyteller, "Storyteller Vote", forced = TRUE)
 
 /datum/controller/subsystem/vote/initiate_vote(vote_type, vote_initiator_name, mob/vote_initiator, forced = FALSE)
 	if(vote_type == /datum/vote/storyteller && forced && !storyteller_vote_ready)
