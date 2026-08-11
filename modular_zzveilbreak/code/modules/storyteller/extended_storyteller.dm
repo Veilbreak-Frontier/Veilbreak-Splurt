@@ -43,7 +43,7 @@
 	voted_storyteller = /datum/storyteller/low
 
 /datum/controller/subsystem/gamemode/proc/storyteller_vote_can_override()
-	return FALSE
+	return TRUE
 
 /datum/vote/storyteller/create_vote()
 	SSgamemode.voted_storyteller = null
