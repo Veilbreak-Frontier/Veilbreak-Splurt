@@ -1,5 +1,3 @@
-var/global/storyteller_vote_ready = FALSE
-
 /datum/storyteller_data/tracks/low_chaos
 	threshold_mundane = 1200
 	threshold_moderate = 1500
@@ -44,7 +42,7 @@ var/global/storyteller_vote_ready = FALSE
 /datum/controller/subsystem/gamemode
 	voted_storyteller = /datum/storyteller/low
 
-/datum/controller/subsystem/gamemode/storyteller_vote_can_override()
+/datum/controller/subsystem/gamemode/proc/storyteller_vote_can_override()
 	return FALSE
 
 /datum/vote/storyteller/create_vote()
@@ -65,26 +63,3 @@ var/global/storyteller_vote_ready = FALSE
 		default_message = "The next Storyteller has already been selected."
 		return "The next Storyteller has already been selected."
 	return VOTE_AVAILABLE
-
-/datum/controller/subsystem/ticker
-	var/vote_started = FALSE
-
-/datum/controller/subsystem/ticker/fire()
-	. = ..()
-	if(current_state == GAME_STATE_PREGAME && !vote_started)
-		vote_started = TRUE
-		addtimer(CALLBACK(src, PROC_REF(start_storyteller_vote)), 5 SECONDS)
-
-/datum/controller/subsystem/ticker/proc/start_storyteller_vote()
-	if(current_state != GAME_STATE_PREGAME)
-		return
-	SSgamemode.storyteller_voted = FALSE
-	SSgamemode.voted_storyteller = null
-	storyteller_vote_ready = TRUE
-	to_chat(world, span_notice("Storyteller vote starting now."))
-	SSvote.initiate_vote(/datum/vote/storyteller, "Storyteller Vote", forced = TRUE)
-
-/datum/controller/subsystem/vote/initiate_vote(vote_type, vote_initiator_name, mob/vote_initiator, forced = FALSE)
-	if(vote_type == /datum/vote/storyteller && forced && !storyteller_vote_ready)
-		return FALSE
-	. = ..()
