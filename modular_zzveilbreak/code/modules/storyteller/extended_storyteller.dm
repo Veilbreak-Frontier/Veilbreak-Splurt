@@ -42,7 +42,7 @@
 /datum/controller/subsystem/gamemode
 	voted_storyteller = /datum/storyteller/low
 
-/datum/controller/subsystem/gamemode/proc/storyteller_vote_can_override()
+/datum/controller/subsystem/gamemode/storyteller_vote_can_override()
 	return TRUE
 
 /datum/vote/storyteller/create_vote()
