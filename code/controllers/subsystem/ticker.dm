@@ -157,6 +157,8 @@ SUBSYSTEM_DEF(ticker)
 				window_flash(C, ignorepref = TRUE) //let them know lobby has opened up.
 			to_chat(world, span_notice("<b>Welcome to [station_name()]!</b>"))
 			for(var/channel_tag in CONFIG_GET(str_list/channel_announce_new_game))
+				// BUBBER EDIT CHANGE BEGIN - Replace with more rich message
+				// send2chat(new /datum/tgs_message_content("New round starting on [SSmapping.current_map.map_name]!"), channel_tag)
 				send2chat(new /datum/tgs_message_content("<@&[CONFIG_GET(string/game_alert_role_id)]> Round **[GLOB.round_id]** starting on [SSmapping.current_map.map_name], [CONFIG_GET(string/servername)]! \nIf you wish to be pinged for game related stuff, go to <#[CONFIG_GET(string/role_assign_channel_id)]> and assign yourself the roles."), channel_tag)
 			current_state = GAME_STATE_PREGAME
 		// BUBBERSTATION EDIT START
@@ -605,7 +607,6 @@ SUBSYSTEM_DEF(ticker)
 					if(new_player_mob.client?.prefs?.should_be_random_hardcore(player_assigned_role, new_player_living.mind))
 						new_player_mob.client.prefs.hardcore_random_setup(new_player_living)
 					SSquirks.AssignQuirks(new_player_living, new_player_mob.client)
-					SSpowers.assign_powers(new_player_living, new_player_mob.client) // DOPPLER EDIT ADDITION - Archetype Powers
 			else // clear any personalities the prefs added since our job clearly does not want them
 				new_player_living.clear_personalities()
 
