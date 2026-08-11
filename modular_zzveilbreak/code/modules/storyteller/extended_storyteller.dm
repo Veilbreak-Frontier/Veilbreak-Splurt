@@ -1,3 +1,5 @@
+var/global/storyteller_vote_ready = FALSE
+
 /datum/storyteller_data/tracks/low_chaos
 	threshold_mundane = 1200
 	threshold_moderate = 1500
@@ -73,8 +75,17 @@
 /datum/controller/subsystem/ticker/proc/start_storyteller_vote()
 	if(current_state != GAME_STATE_PREGAME)
 		return
+	SSgamemode.storyteller_voted = FALSE
+	SSgamemode.voted_storyteller = null
+	storyteller_vote_ready = TRUE
 	var/storyteller = CONFIG_GET(string/default_storyteller)
 	if(storyteller && !SSgamemode.storyteller_vote_can_override())
 		SSgamemode.set_storyteller(text2path(storyteller), TRUE)
 	else
+		to_chat(world, span_notice("Storyteller vote starting now."))
 		SSvote.initiate_vote(/datum/vote/storyteller, "Storyteller Vote", forced = TRUE)
+
+/datum/controller/subsystem/vote/initiate_vote(vote_type, vote_initiator_name, mob/vote_initiator, forced = FALSE)
+	if(vote_type == /datum/vote/storyteller && forced && !storyteller_vote_ready)
+		return FALSE
+	. = ..()
