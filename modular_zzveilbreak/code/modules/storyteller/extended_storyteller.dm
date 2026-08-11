@@ -19,18 +19,14 @@
 	for(var/datum/round_event_control/event as anything in SSgamemode.event_pools[track])
 		if(isnull(event))
 			continue
-		// Block any antagonist events or ghost role events
 		if(ispath(event.typepath, /datum/round_event/ghost_role) || istype(event, /datum/round_event_control/antagonist))
 			event.calculated_weight = 0
 			continue
-
 		var/list/event_tags = event.tags
 		if(LAZYLEN(event_tags))
 			if((TAG_CREW_ANTAG in event_tags) || (TAG_TEAM_ANTAG in event_tags) || (TAG_OUTSIDER_ANTAG in event_tags) || (TAG_COMBAT in event_tags))
 				event.calculated_weight = 0
 				continue
-
-		// Ensure anomalies spawn with full weight in low chaos mode
 		if(istype(event, /datum/round_event_control/anomaly))
 			event.calculated_weight = max(event.calculated_weight, event.weight)
 
@@ -43,30 +39,9 @@
 	votable = TRUE
 	storyteller_type = STORYTELLER_TYPE_ALWAYS_AVAILABLE
 
-// Default gamemode voted storyteller fallback to Low Chaos
 /datum/controller/subsystem/gamemode
 	voted_storyteller = /datum/storyteller/low
 
-// Disable other storytellers from being votable so votes at shift start are between Extended and Low Chaos
-/datum/storyteller/medium
-	votable = FALSE
-
-/datum/storyteller/medium/opfor
-	votable = FALSE
-
-/datum/storyteller/high
-	votable = FALSE
-
-/datum/storyteller/high/opfor
-	votable = FALSE
-
-/datum/storyteller/low/opfor
-	votable = FALSE
-
-/datum/storyteller/default
-	votable = FALSE
-
-// Ensure default choices are dynamically computed when vote is created and voted_storyteller is reset
 /datum/vote/storyteller/create_vote()
 	SSgamemode.voted_storyteller = null
 	default_choices = SSgamemode.storyteller_vote_choices()
@@ -77,14 +52,11 @@
 		to_chat(world, span_boldannounce("The storyteller vote has been skipped because there is only one storyteller left to vote for. The storyteller has been changed to [de_facto_winner]."))
 		return FALSE
 
-// Fix bug where returning TRUE instead of VOTE_AVAILABLE caused forced votes to fail initiate_vote checks
 /datum/vote/storyteller/can_be_initiated(mob/by_who, forced = FALSE)
 	. = ..()
 	if(forced)
 		return VOTE_AVAILABLE
-
 	if(SSgamemode.storyteller_voted)
 		default_message = "The next Storyteller has already been selected."
 		return "The next Storyteller has already been selected."
-
 	return VOTE_AVAILABLE
