@@ -60,3 +60,21 @@
 		default_message = "The next Storyteller has already been selected."
 		return "The next Storyteller has already been selected."
 	return VOTE_AVAILABLE
+
+/datum/controller/subsystem/ticker
+	var/vote_started = FALSE
+
+/datum/controller/subsystem/ticker/fire()
+	. = ..()
+	if(current_state == GAME_STATE_PREGAME && !vote_started)
+		vote_started = TRUE
+		addtimer(CALLBACK(src, PROC_REF(start_storyteller_vote)), 5 SECONDS)
+
+/datum/controller/subsystem/ticker/proc/start_storyteller_vote()
+	if(current_state != GAME_STATE_PREGAME)
+		return
+	var/storyteller = CONFIG_GET(string/default_storyteller)
+	if(storyteller && !SSgamemode.storyteller_vote_can_override())
+		SSgamemode.set_storyteller(text2path(storyteller), TRUE)
+	else
+		SSvote.initiate_vote(/datum/vote/storyteller, "Storyteller Vote", forced = TRUE)
