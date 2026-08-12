@@ -11212,6 +11212,7 @@
 #include "modular_zzveilbreak\modular_powers\code\security\resonant_cuffs.dm"
 #include "modular_zzveilbreak\modular_powers\code\signalers\martial_arts_signal.dm"
 #include "modular_zzveilbreak\modules\mobs.dm"
+#include "modular_zzveilbreak\modules\alternative_job_titles\code\alt_job_titles.dm"
 #include "modular_zzveilbreak\modules\bosses\inai.dm"
 #include "modular_zzveilbreak\modules\bosses\inai_ai.dm"
 #include "modular_zzveilbreak\modules\bosses\melos_vecare\melos_vecare.dm"
