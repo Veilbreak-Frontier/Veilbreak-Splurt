@@ -1,0 +1,5 @@
+author: "Veilbreak-Frontier"
+delete-after: True
+changes:
+  - bugfix: "Storyteller vote now appears in the pre‑round lobby with all eligible storytellers listed."
+  - bugfix: "Fixed runtime errors when attempting to set an invalid storyteller type."
