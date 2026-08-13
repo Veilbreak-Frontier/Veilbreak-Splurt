@@ -3,7 +3,7 @@
 	name = "Succubus"
 	desc = "Embrace your demonic essence, becoming a Succubus. Grants all succubus abilities, allowing you to mark targets, subvert victims, and summon marked servants."
 	security_record_text = "Subject displays supernatural demonic corruption and seduction tendencies."
-	value = 10
+	value = 0
 	archetype = POWER_ARCHETYPE_VOID
 	path = POWER_PATH_VOID
 
