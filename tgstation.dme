@@ -11034,6 +11034,8 @@
 #include "modular_zzveilbreak\code\modules\research\techweb\nodes\void_gun_nodes.dm"
 #include "modular_zzveilbreak\code\modules\research\techweb\nodes\voids_blessing_nodes.dm"
 #include "modular_zzveilbreak\code\modules\research\techweb\nodes\xenobiology_tools.dm"
+#include "modular_zzveilbreak\code\modules\shuttle\mobile_port.dm"
+#include "modular_zzveilbreak\code\modules\shuttle\shuttle_move.dm"
 #include "modular_zzveilbreak\code\modules\surgery\organs\internal\lungs\delirium_breath.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_constants.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_core.dm"
