@@ -172,6 +172,12 @@
 	if(power_flags & POWER_PROCESSES)
 		STOP_PROCESSING(SSpowers, src)
 
+	if(isaction(action_path))
+		var/datum/action/act = action_path
+		act.Remove(power_holder)
+		qdel(act)
+		action_path = initial(action_path)
+
 	remove()
 
 	if(!QDELETED(power_holder))

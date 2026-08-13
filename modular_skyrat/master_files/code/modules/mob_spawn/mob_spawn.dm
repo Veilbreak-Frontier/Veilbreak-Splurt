@@ -37,8 +37,6 @@
 
         if(quirks_enabled)
             SSquirks.AssignQuirks(H, H.client)
-            H.cleanse_power_datums()
-            SSpowers.assign_powers(H, H.client)
 
         if(loadout_enabled)
             ASYNC

@@ -2,6 +2,7 @@
 	abstract_parent_type = /datum/power/void
 	archetype = POWER_ARCHETYPE_VOID
 	path = POWER_PATH_VOID
+	priority = POWER_PRIORITY_BASIC
 
 /// Void power unlocked by completing the Succubus Max Mark achievement
 /datum/power/void/succubus_mark_mastery
