@@ -2,13 +2,15 @@
 	abstract_parent_type = /datum/power/void
 	archetype = POWER_ARCHETYPE_VOID
 	path = POWER_PATH_VOID
+	priority = POWER_PRIORITY_BASIC
+	value = 0
 
 /// Void power unlocked by completing the Succubus Max Mark achievement
 /datum/power/void/succubus_mark_mastery
 	name = "Master of Marks"
 	desc = "Having brought your succubus marking to ultimate perfection in a past life, your presence radiates a subtle alluring resonance."
 	required_achievement = /datum/award/achievement/veilbreak/succubus_max_mark
-	value = 5
+	value = 0
 	power_flags = POWER_PROCESSES
 
 	/// Phrases broadcasted to nearby mobs
@@ -40,7 +42,7 @@
 	name = "Silence the Siren"
 	desc = "Having silenced Melos Vecare, her chaotic melodies no longer shake your resolve. Grants sound/ear damage protection and total immunity to slipping."
 	required_achievement = /datum/award/achievement/veilbreak/melos_vecare_kill
-	value = 5
+	value = 0
 	mob_trait = TRAIT_NO_SLIP_ALL
 
 /datum/power/void/melos_silencer/add(client/client_source)
@@ -59,7 +61,7 @@
 	name = "Unshakable Stance"
 	desc = "Having stood your ground against Inai, you possess a 15% chance to phase through incoming melee strikes, dodging the hit and stepping behind your attacker."
 	required_achievement = /datum/award/achievement/veilbreak/inai_kill
-	value = 5
+	value = 0
 
 /datum/power/void/inai_defiance/add(client/client_source)
 	RegisterSignal(power_holder, COMSIG_LIVING_CHECK_BLOCK, PROC_REF(on_check_block))
