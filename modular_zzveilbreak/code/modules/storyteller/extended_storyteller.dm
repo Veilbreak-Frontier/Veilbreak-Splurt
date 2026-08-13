@@ -1,6 +1,6 @@
 /datum/storyteller_data/tracks/low_chaos
-	threshold_mundane = 1200
-	threshold_moderate = 1500
+	threshold_mundane = 30
+	threshold_moderate = 15
 	threshold_major = 999999999
 	threshold_crewset = 999999999
 	threshold_ghostset = 999999999
