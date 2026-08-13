@@ -9,6 +9,7 @@
 	pref_flag = ROLE_SUCCUBUS
 	antag_hud_name = "succubus"
 	antag_flags = ANTAG_SKIP_GLOBAL_LIST
+	silent = TRUE
 	/// Current marked victim (one at a time); null if none
 	var/datum/succubus_mark/current_mark
 	/// Set to TRUE once any of your marks reaches level 5 at least once
