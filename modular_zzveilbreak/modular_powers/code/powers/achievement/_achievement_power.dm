@@ -13,6 +13,9 @@
 	value = 0
 	power_flags = POWER_PROCESSES
 
+	/// Cooldown before alluring resonance can proc again
+	COOLDOWN_DECLARE(allure_cooldown)
+
 	/// Phrases broadcasted to nearby mobs
 	var/static/list/alluring_phrases = list(
 		"You feel a subtle attraction towards %X%...",
@@ -24,7 +27,11 @@
 	)
 
 /datum/power/void/succubus_mark_mastery/process(seconds_between_ticks)
-	if(!power_holder || power_holder.stat != CONSCIOUS || !prob(30))
+	if(!power_holder || power_holder.stat != CONSCIOUS)
+		return
+	if(!COOLDOWN_FINISHED(src, allure_cooldown))
+		return
+	if(!prob(10))
 		return
 	var/list/mob/living/carbon/human/nearby = list()
 	for(var/mob/living/carbon/human/H in range(1, power_holder))
@@ -32,10 +39,12 @@
 			nearby += H
 	if(!length(nearby))
 		return
+	COOLDOWN_START(src, allure_cooldown, 30 SECONDS)
 	var/mob/living/carbon/human/target = pick(nearby)
 	var/phrase = pick(alluring_phrases)
 	phrase = replacetext(phrase, "%X%", power_holder.name)
 	to_chat(target, span_pink(phrase))
+	target.adjust_pleasure(5, power_holder)
 
 /// Void power unlocked by slaying Melos Vecare
 /datum/power/void/melos_silencer
