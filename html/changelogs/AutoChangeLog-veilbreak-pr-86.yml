@@ -1,0 +1,4 @@
+author: "emifen"
+delete-after: True
+changes:
+  - bugfix: "Shuttle lights now properly illuminate tiles after docking, undocking, and at round start. This resolves an issue where lights appeared on but did not emit any light, affecting cargo and other shuttles."
