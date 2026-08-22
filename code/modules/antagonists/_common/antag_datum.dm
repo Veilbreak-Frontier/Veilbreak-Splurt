@@ -45,6 +45,8 @@ GLOBAL_LIST_EMPTY(antagonists)
 	var/show_name_in_check_antagonists = FALSE
 	/// Should this antagonist be shown as antag to ghosts? Shouldn't be used for stealthy antagonists like traitors
 	var/show_to_ghosts = FALSE
+	/// Should this antagonist be shown in the orbit menu under antagonists?
+	var/show_in_orbit = TRUE
 	/// The typepath for the outfit to show in the preview for the preferences menu.
 	var/preview_outfit
 	/// Flags for antags to turn on or off and check!

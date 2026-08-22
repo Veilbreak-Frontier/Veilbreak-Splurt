@@ -8,7 +8,8 @@
 	show_name_in_check_antagonists = TRUE
 	pref_flag = ROLE_SUCCUBUS
 	antag_hud_name = "succubus"
-	antag_flags = ANTAG_SKIP_GLOBAL_LIST
+	antag_flags = ANTAG_FAKE | ANTAG_SKIP_GLOBAL_LIST
+	show_in_orbit = FALSE
 	silent = TRUE
 	/// Current marked victim (one at a time); null if none
 	var/datum/succubus_mark/current_mark
