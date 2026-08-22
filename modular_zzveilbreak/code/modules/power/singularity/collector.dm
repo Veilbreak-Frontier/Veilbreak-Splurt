@@ -1,8 +1,6 @@
 #define RAD_COLLECTOR_EFFICIENCY 80
 #define RAD_COLLECTOR_COEFFICIENT 125
-#define RAD_COLLECTOR_STORED_OUT 0.05
 #define RAD_COLLECTOR_MINING_CONVERSION_RATE 0.00001
-#define RAD_COLLECTOR_OUTPUT min(stored_power, (stored_power * RAD_COLLECTOR_STORED_OUT) + 1000)
 
 /datum/gas_mixture/proc/get_moles(gas_id)
 	return gases[gas_id] ? gases[gas_id][MOLES] : 0
@@ -15,6 +13,7 @@
 	garbage_collect(list(gas_id))
 
 /obj/machinery/power/rad_collector
+	parent_type = /obj/machinery/power/energy_accumulator
 	name = "Radiation Collector Array"
 	desc = "A device which uses Hawking Radiation and plasma to produce power."
 	icon = 'modular_zzveilbreak/icons/obj/singularity.dmi'
@@ -26,7 +25,6 @@
 	max_integrity = 350
 	integrity_failure = 0.2
 	var/obj/item/tank/internals/plasma/loaded_tank = null
-	var/stored_power = 0
 	var/last_push = 0
 	var/active = FALSE
 	var/locked = FALSE
@@ -58,9 +56,17 @@
 
 /obj/machinery/power/rad_collector/proc/rad_act(pulse_strength)
 	if(loaded_tank && active && pulse_strength > RAD_COLLECTOR_EFFICIENCY)
-		stored_power += (pulse_strength - RAD_COLLECTOR_EFFICIENCY) * RAD_COLLECTOR_COEFFICIENT
+		stored_energy += (pulse_strength - RAD_COLLECTOR_EFFICIENCY) * RAD_COLLECTOR_COEFFICIENT
 
-/obj/machinery/power/rad_collector/process()
+/obj/machinery/power/rad_collector/bullet_act(obj/projectile/hitting_projectile, def_zone, piercing_hit = FALSE, blocked = null)
+	if(istype(hitting_projectile, /obj/projectile/energy/nuclear_particle))
+		if(active && loaded_tank)
+			stored_energy += 300
+			flick("ca_active", src)
+		return BULLET_ACT_HIT
+	return ..()
+
+/obj/machinery/power/rad_collector/process(seconds_per_tick)
 	if(!loaded_tank || !active)
 		return
 	if(!bitcoinmining)
@@ -75,9 +81,8 @@
 			loaded_tank.air_contents.adjust_moles(/datum/gas/plasma, -gasdrained)
 			loaded_tank.air_contents.adjust_moles(/datum/gas/tritium, gasdrained)
 
-			var/power_produced = RAD_COLLECTOR_OUTPUT
-			add_avail(power_produced)
-			stored_power -= power_produced
+			var/power_produced = calculate_energy_output(seconds_per_tick)
+			release_energy(power_produced)
 	else if(is_station_level(z))
 		if(loaded_tank.air_contents.get_moles(/datum/gas/tritium) < 0.0001 || loaded_tank.air_contents.get_moles(/datum/gas/oxygen) < 0.0001)
 			playsound(src, 'sound/machines/ding.ogg', 50, TRUE)
@@ -89,15 +94,15 @@
 			loaded_tank.air_contents.adjust_moles(/datum/gas/tritium, -gasdrained)
 			loaded_tank.air_contents.adjust_moles(/datum/gas/oxygen, -gasdrained)
 			loaded_tank.air_contents.adjust_moles(/datum/gas/carbon_dioxide, gasdrained * 2)
-			var/bitcoins_mined = stored_power * RAD_COLLECTOR_MINING_CONVERSION_RATE
+			var/bitcoins_mined = stored_energy * RAD_COLLECTOR_MINING_CONVERSION_RATE
 			var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_ENG)
 			if(D)
 				D.adjust_money(bitcoins_mined)
 			var/datum/techweb/station_techweb = locate(/datum/techweb/science) in SSresearch.techwebs
 			if(station_techweb)
 				station_techweb.add_point_list(list(TECHWEB_POINT_TYPE_GENERIC = bitcoins_mined))
-			last_push = stored_power
-			stored_power = 0
+			last_push = stored_energy
+			stored_energy = 0
 
 /obj/machinery/power/rad_collector/interact(mob/user)
 	if(anchored)
@@ -185,7 +190,7 @@
 	. = ..()
 	if(active)
 		if(!bitcoinmining)
-			. += span_notice("[src]'s display states that it has stored <b>[display_energy(stored_power)]</b>, and is processing <b>[display_power(RAD_COLLECTOR_OUTPUT)]</b>.<br>The <b>plasma</b> within its tank is being irradiated into <b>tritium</b>.")
+			. += span_notice("[src]'s display states that it has stored <b>[display_energy(stored_energy)]</b>, and is processing <b>[display_power(processed_energy)]</b>.<br>The <b>plasma</b> within its tank is being irradiated into <b>tritium</b>.")
 		else
 			. += span_notice("[src]'s display states that it's producing a total of <b>[(last_push * RAD_COLLECTOR_MINING_CONVERSION_RATE)*((60 SECONDS)/SSmachines.wait)]</b> research points per minute.<br>The <b>tritium</b> and <b>oxygen</b> within its tank is being combusted into <b>carbon dioxide</b>.")
 	else
@@ -229,6 +234,5 @@
 
 #undef RAD_COLLECTOR_EFFICIENCY
 #undef RAD_COLLECTOR_COEFFICIENT
-#undef RAD_COLLECTOR_STORED_OUT
 #undef RAD_COLLECTOR_MINING_CONVERSION_RATE
-#undef RAD_COLLECTOR_OUTPUT
+
