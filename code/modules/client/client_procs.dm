@@ -728,7 +728,7 @@ GLOBAL_LIST_INIT(unrecommended_builds, list(
 	var/datum/db_query/query_whitelist = SSdbcore.NewQuery({"
 		SELECT ckey
 		FROM [format_table_name("whitelist")]
-		WHERE LOWER(REPLACE(REPLACE(REPLACE(ckey, ' ', ''), '_', ''), '-', '')) = :ckey
+		WHERE LOWER(REPLACE(REPLACE(REPLACE(ckey, ' ', ''), '_', ''), '-', '')) = :ckey AND active = 1
 	"}, list("ckey" = sanitized_ckey))
 
 	if(!query_whitelist.Execute())
