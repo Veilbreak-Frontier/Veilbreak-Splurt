@@ -179,6 +179,8 @@
 /datum/component/singularity/proc/consume_bullets(datum/source, obj/projectile/projectile)
 	SIGNAL_HANDLER
 
+	if(istype(projectile, /obj/projectile/energy/nuclear_particle))
+		return
 	qdel(projectile)
 	return COMPONENT_BULLET_BLOCKED
 

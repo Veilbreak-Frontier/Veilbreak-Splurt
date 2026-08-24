@@ -26,6 +26,8 @@
 	set_light(4, 3, particle_colors[our_color]) //Range of 4, brightness of 3 - Same range as a flashlight
 
 /obj/projectile/energy/nuclear_particle/on_hit(atom/target, blocked, pierce_hit)
+	if(istype(target, /obj/singularity))
+		return BULLET_ACT_FORCE_PIERCE
 	if (ishuman(target))
 		SSradiation.irradiate(target)
 
