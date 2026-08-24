@@ -4,15 +4,10 @@
 
 /obj/singularity/process(seconds_per_tick)
 	. = ..()
-	pulse_radiation()
 	fire_nuclear_particles_burst()
 
 /obj/singularity/proc/pulse_radiation()
-	if(!SSradiation.can_fire)
-		return
-	var/rad_range = current_size * 5
-	var/rad_chance = 15 + (current_size * 5)
-	radiation_pulse(src, max_range = rad_range, threshold = 0.2, chance = rad_chance)
+	return
 
 /obj/singularity/proc/fire_nuclear_particles_burst()
 	if(world.time < next_particle_fire_time)
@@ -21,4 +16,11 @@
 	var/particle_count = rand(2, 8)
 	for(var/i in 1 to particle_count)
 		fire_nuclear_particle(rand(0, 360))
+
+/obj/projectile/energy/nuclear_particle/singularity_act(current_size, obj/singularity/singularity)
+	return 0
+
+/obj/projectile/energy/nuclear_particle/singularity_pull(atom/singularity, current_size)
+	return
+
 
