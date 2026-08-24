@@ -61,7 +61,7 @@
 /obj/machinery/power/rad_collector/bullet_act(obj/projectile/hitting_projectile, def_zone, piercing_hit = FALSE, blocked = null)
 	if(istype(hitting_projectile, /obj/projectile/energy/nuclear_particle))
 		if(active && loaded_tank)
-			stored_energy += 300
+			stored_energy += 30000
 			flick("ca_active", src)
 		return BULLET_ACT_HIT
 	return ..()
