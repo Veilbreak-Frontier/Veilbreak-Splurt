@@ -82,7 +82,10 @@
 		if(resolve_tackle_gloves(tackle_source))
 			return tackle_source_params[tackle_source]
 	for(var/tackle_source in sources)
-		if(istype(tackle_source, /datum/power/warfighter/tackler) && !istype(tackle_source, /datum/power/warfighter/tackler/greater_tackler))
+		if(istype(tackle_source, /datum/power/warfighter/tackler/greater_tackler))
+			return tackle_source_params[tackle_source]
+	for(var/tackle_source in sources)
+		if(istype(tackle_source, /datum/power/warfighter/tackler))
 			return tackle_source_params[tackle_source]
 	return tackle_source_params[sources[1]]
 
