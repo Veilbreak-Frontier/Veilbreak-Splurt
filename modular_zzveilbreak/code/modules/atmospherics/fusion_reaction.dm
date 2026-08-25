@@ -9,9 +9,11 @@
 #define FUSION_BASE_BURN_RATE_DIVISOR 15
 
 /proc/fusion_mixture_ready(datum/gas_mixture/air, temperature)
+	if(!air || !air.gases)
+		return FALSE
 	var/list/healium_gas = air.gases[/datum/gas/healium]
 	if(healium_gas && healium_gas[MOLES] >= MINIMUM_MOLE_COUNT)
-		return TRUE
+		return temperature >= FUSION_MINIMUM_TEMPERATURE
 	return temperature >= FUSION_UNCATALYZED_MIN_TEMPERATURE
 
 /datum/gas_reaction/fusion
@@ -46,19 +48,26 @@
 	if(!fusion_mixture_ready(air, temperature))
 		return NO_REACTION
 	var/old_heat_capacity = air.heat_capacity()
-	var/plasma_moles = air.gases[/datum/gas/plasma][MOLES]
-	var/oxygen_moles = air.gases[/datum/gas/oxygen][MOLES]
+	var/plasma_moles = air.gases[/datum/gas/plasma] ? air.gases[/datum/gas/plasma][MOLES] : 0
+	var/oxygen_moles = air.gases[/datum/gas/oxygen] ? air.gases[/datum/gas/oxygen][MOLES] : 0
+	if(plasma_moles < MINIMUM_MOLE_COUNT || oxygen_moles < MINIMUM_MOLE_COUNT)
+		return NO_REACTION
 
 	var/energy_released = 0
 	var/burned_fuel = 0
 
-	// Resolve location for hotspot/radiation (holder can be turf or pipeline)
+	// Resolve location for hotspot/radiation (holder can be turf, pipeline, machine, or hotspot)
 	var/turf/open/location
 	if(istype(holder, /datum/pipeline))
 		var/datum/pipeline/pipenet = holder
-		location = pick(pipenet.members)
+		if(length(pipenet.members))
+			location = pick(pipenet.members)
 	else if(isturf(holder))
 		location = holder
+	else if(isatom(holder))
+		location = get_turf(holder)
+
+	var/atom/rad_source = location || (isatom(holder) ? holder : null)
 
 	// Quark-gluon plasma transition: at extreme temperatures, all matter deconfines into quark matter
 	if(temperature >= FUSION_QUARK_MATTER_THRESHOLD)
@@ -68,9 +77,10 @@
 		air.gases[/datum/gas/quark_matter][MOLES] = total_moles
 		SET_REACTION_RESULTS(total_moles)
 		energy_released = -500000000
-		radiation_pulse(location || holder, max_range = 25, threshold = 0.05, chance = 100)
-		for(var/i in 1 to 8)
-			(location || holder).fire_nuclear_particle()
+		if(rad_source)
+			radiation_pulse(rad_source, max_range = 25, threshold = 0.05, chance = 100)
+			for(var/i in 1 to 8)
+				rad_source.fire_nuclear_particle()
 		. |= REACTING | VOLATILE_REACTION
 	else
 		// Heat-based reaction levels: level 1 at 100k K, scaling up to level 10 at 127k K
@@ -93,14 +103,15 @@
 			. |= REACTING
 
 			// Radiation and nuclear particles scale with level
-			var/rad_range = clamp(reaction_level * 4, 2, GAS_REACTION_MAXIMUM_RADIATION_PULSE_RANGE)
-			var/rad_chance = clamp(15 + reaction_level * 6, 20, 85)
-			radiation_pulse(location || holder, max_range = rad_range, threshold = 0.4 - reaction_level * 0.02, chance = rad_chance)
+			if(rad_source)
+				var/rad_range = clamp(reaction_level * 4, 2, GAS_REACTION_MAXIMUM_RADIATION_PULSE_RANGE)
+				var/rad_chance = clamp(15 + reaction_level * 6, 20, 85)
+				radiation_pulse(rad_source, max_range = rad_range, threshold = 0.4 - reaction_level * 0.02, chance = rad_chance)
 
-			if(prob(reaction_level * 2))
-				var/nuclear_particle_count = clamp(floor(reaction_level / 2), 0, 3)
-				for(var/i in 1 to nuclear_particle_count)
-					(location || holder).fire_nuclear_particle()
+				if(prob(reaction_level * 2))
+					var/nuclear_particle_count = clamp(floor(reaction_level / 2), 0, 3)
+					for(var/i in 1 to nuclear_particle_count)
+						rad_source.fire_nuclear_particle()
 
 	if(. & REACTING)
 		var/new_heat_capacity = air.heat_capacity()
@@ -114,8 +125,8 @@
 
 	return .
 
-// Plasmafire only suppressed when fusion actually reacted this tick (reaction_results set in fusion/react).
+// Plasmafire suppressed when fusion is ready or actually reacted this tick.
 /datum/gas_reaction/plasmafire/react(datum/gas_mixture/air, datum/holder)
-	if(air.reaction_results[/datum/gas_reaction/fusion])
+	if(air.reaction_results[/datum/gas_reaction/fusion] || fusion_mixture_ready(air, air.temperature))
 		return NO_REACTION
 	return ..()

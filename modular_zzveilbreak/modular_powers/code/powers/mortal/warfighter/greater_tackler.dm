@@ -19,17 +19,15 @@
 	/// bonuses to knockdown duration
 	var/knockdown_bonus = 0.5 SECONDS
 
-/datum/power/warfighter/tackler/greater_tackler/post_add()
-	. = ..()
-	var/datum/component/tackler/component = power_holder.GetComponent(/datum/component/tackler)
-	if(component)
-		component.skill_mod += skill_mod_bonus
-		component.range += tackle_range_bonus
-		component.base_knockdown += knockdown_bonus
+/datum/power/warfighter/tackler/greater_tackler/add()
+	var/tackle_stam_cost = 25
+	var/base_knockdown = 1.5 SECONDS
+	var/tackle_range = 6
+	var/min_distance = 0
+	var/tackle_speed = 1
+	var/skill_mod = 5
+
+	tackler = power_holder.AddComponentFrom(src, /datum/component/tackler, stamina_cost=tackle_stam_cost, base_knockdown = base_knockdown, range = tackle_range, speed = tackle_speed, skill_mod = skill_mod, min_distance = min_distance)
 
 /datum/power/warfighter/tackler/greater_tackler/remove()
-	var/datum/component/tackler/component = power_holder.GetComponent(/datum/component/tackler)
-	if(component)
-		component.skill_mod -= skill_mod_bonus
-		component.range -= tackle_range_bonus
-		component.base_knockdown -= knockdown_bonus
+	power_holder.RemoveComponentSource(src, /datum/component/tackler)
