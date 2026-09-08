@@ -4,6 +4,9 @@
 /// Gases that use our custom icon (paths)
 #define VEILBREAK_OVERLAY_GASES list(/datum/gas/delirium)
 
+/datum/gas/proc/fusion_heat(datum/gas_mixture/mix, factor)
+	return mix.temperature
+
 generate_gas_overlays(old_offset, new_offset, datum/gas/gas_type)
 	if(gas_type in VEILBREAK_OVERLAY_GASES)
 		var/list/to_return = list()
