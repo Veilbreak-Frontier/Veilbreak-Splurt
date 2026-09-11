@@ -85,7 +85,7 @@
 /turf/open/indestructible/hotelwood,
 /area/misc/condo)
 "iA" = (
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	icon = 'modular_skyrat/modules/aesthetics/intercom/icons/intercom.dmi';
 	icon_state = "intercom";
 	pixel_y = -10;

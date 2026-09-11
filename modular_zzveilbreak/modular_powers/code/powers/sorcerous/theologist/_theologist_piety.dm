@@ -1,6 +1,9 @@
 /// Helper to format the text that gets thrown onto the piety hud element.
 #define FORMAT_PIETY_TEXT(charges) MAPTEXT("<div align='center' valign='middle' style='position:relative; top:0px; left:6px'><font color='[POWER_COLOR_THEOLOGIST]'>[round(charges)]</font></div>")
 
+/// HUD slot id for the theologist piety meter.
+#define HUD_THEOLOGIST_PIETY "veilbreak_theologist_piety"
+
 /datum/component/theologist_piety
 	dupe_mode = COMPONENT_DUPE_UNIQUE
 
@@ -35,7 +38,6 @@
 		RegisterSignal(attached_mob, COMSIG_MOB_HUD_CREATED, PROC_REF(on_hud_created))
 
 /datum/component/theologist_piety/UnregisterFromParent()
-	// UnregisterSignal(attached_mob, list(COMSIG_..., COMSIG_...))
 	. = ..()
 	if(attached_mob) // prevents runtiming when adding/removing duplicate components
 		UnregisterSignal(attached_mob, COMSIG_MOB_HUD_CREATED)
@@ -47,8 +49,7 @@
 		return
 
 	if(attached_mob.hud_used && theologist_ui)
-		attached_mob.hud_used.infodisplay -= theologist_ui
-		qdel(theologist_ui)
+		attached_mob.hud_used.remove_screen_object(HUD_THEOLOGIST_PIETY)
 		theologist_ui = null
 
 	attached_mob = null
@@ -70,9 +71,8 @@
 		return
 
 	var/datum/hud/hud_used = living_holder.hud_used
-	theologist_ui = new /atom/movable/screen/theologist_piety(null, hud_used)
+	theologist_ui = hud_used.add_screen_object(/atom/movable/screen/theologist_piety, HUD_THEOLOGIST_PIETY, HUD_GROUP_INFO, update_screen = FALSE)
 	update_screen_loc()
-	hud_used.infodisplay += theologist_ui
 
 	// Set initial text so it isn't blank until first adjust.
 	theologist_ui.maptext = FORMAT_PIETY_TEXT(piety)
@@ -101,3 +101,5 @@
 	icon = 'icons/hud/blob.dmi' // TODO: Get sprites/UI for this.
 	icon_state = "block"
 	screen_loc = THEOLOGIST_UI_SCREEN_LOC
+
+#undef HUD_THEOLOGIST_PIETY

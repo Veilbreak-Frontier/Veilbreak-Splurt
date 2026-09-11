@@ -1,0 +1,19 @@
+2026-09-12:
+  Alternativeidiot:
+  - rscadd: Added CIN uniform into loadouts + presets
+  Veilbreak-Frontier:
+  - bugfix: "Storyteller vote now appears in the pre\u2011round lobby with all eligible\
+      \ storytellers listed."
+  - bugfix: Fixed runtime errors when attempting to set an invalid storyteller type.
+  - bugfix: Fixed chameleon projector in ghost cafe.
+  - bugfix: Fixed ghost cafe law logging.
+  - bugfix: Fixed stale player data
+  - bugfix: Fixed sound bloopers config file which bubber decided to replace.
+  - bugfix: Icon corrections for fabricators.
+  YourName:
+  - bugfix: Fixed R&D consoles being locked at round start
+  - bugfix: Repaired modsuits by reversion
+  emifen:
+  - bugfix: Shuttle lights now properly illuminate tiles after docking, undocking,
+      and at round start. This resolves an issue where lights appeared on but did
+      not emit any light, affecting cargo and other shuttles.

@@ -2386,7 +2386,7 @@
 /area/ruin/space/has_grav/allamericandiner)
 "GF" = (
 /obj/machinery/firealarm/directional/north,
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /turf/open/floor/iron/kitchen,
 /area/ruin/space/has_grav/allamericandiner)
 "Hb" = (

@@ -27,7 +27,7 @@
 	)
 
 /datum/gas_reaction/quark_matter_decay/react(datum/gas_mixture/air, atom/holder)
-	var/moles = air.gases[/datum/gas/quark_matter][MOLES]
+	var/moles = air.moles[/datum/gas/quark_matter]
 	if(moles < MINIMUM_MOLE_COUNT)
 		return NO_REACTION
 
@@ -48,11 +48,11 @@
 	var/removed
 	if(moles < QUARK_DECAY_MOLE_THRESHOLD)
 		removed = moles
-		air.gases[/datum/gas/quark_matter][MOLES] = 0
+		air.moles[/datum/gas/quark_matter] = 0
 		air.garbage_collect(list(/datum/gas/quark_matter))
 	else
 		removed = moles * 0.5
-		air.gases[/datum/gas/quark_matter][MOLES] -= removed
+		air.moles[/datum/gas/quark_matter] -= removed
 
 	// Grant science points per mole while quark matter is active and decaying
 	if(removed > 0)

@@ -36,7 +36,7 @@ generate_gas_overlays(old_offset, new_offset, datum/gas/gas_type)
 SUBSYSTEM_DEF(veilbreak_atmos)
 	name = "Veilbreak Atmos"
 	init_stage = INITSTAGE_LAST
-	flags = SS_NO_FIRE | SS_NO_INIT
+	ss_flags = SS_NO_FIRE | SS_NO_INIT
 
 /datum/controller/subsystem/veilbreak_atmos/Initialize()
 	. = ..()

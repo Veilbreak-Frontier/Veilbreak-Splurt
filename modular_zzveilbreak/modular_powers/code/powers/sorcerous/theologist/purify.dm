@@ -168,12 +168,12 @@
 		return TRUE
 
 	// Melon -> Holy Melon
-	if(istype(target, /obj/item/food/grown/watermelon) && !istype(target, /obj/item/food/grown/holymelon))
+	if(istype(target, /obj/item/food/grown/melonlike/watermelon) && !istype(target, /obj/item/food/grown/melonlike/holymelon))
 		if(!try_add_cost(user, THEOLOGIST_PIETY_MINOR))
 			return FALSE
-		var/obj/item/food/grown/watermelon/melon = target
+		var/obj/item/food/grown/melonlike/watermelon/melon = target
 		var/obj/item/seeds/old_seed = melon.get_plant_seed()
-		var/obj/item/food/grown/holymelon/new_melon = replace_target(melon, /obj/item/food/grown/holymelon, user)
+		var/obj/item/food/grown/melonlike/holymelon/new_melon = replace_target(melon, /obj/item/food/grown/melonlike/holymelon, user)
 		if(new_melon && old_seed)
 			var/obj/item/seeds/new_seed = new /obj/item/seeds/watermelon/holy(null)
 			copy_seed_stats(old_seed, new_seed)

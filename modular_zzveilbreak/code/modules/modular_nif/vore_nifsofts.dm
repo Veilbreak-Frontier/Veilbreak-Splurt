@@ -467,7 +467,7 @@
 
 SUBSYSTEM_DEF(veilbreak_nifsofts)
 	name = "Veilbreak NIFSoft Catalog"
-	flags = SS_NO_FIRE
+	ss_flags = SS_NO_FIRE
 
 /datum/controller/subsystem/veilbreak_nifsofts/Initialize()
 	. = ..()

@@ -3,13 +3,13 @@
 #define RAD_COLLECTOR_MINING_CONVERSION_RATE 0.00001
 
 /datum/gas_mixture/proc/get_moles(gas_id)
-	return gases[gas_id] ? gases[gas_id][MOLES] : 0
+	return moles[gas_id] || 0
 
 /datum/gas_mixture/proc/adjust_moles(gas_id, amount)
 	if(!amount)
 		return
 	assert_gas(gas_id)
-	gases[gas_id][MOLES] = max(0, gases[gas_id][MOLES] + amount)
+	moles[gas_id] = max(0, moles[gas_id] + amount)
 	garbage_collect(list(gas_id))
 
 /obj/machinery/power/rad_collector

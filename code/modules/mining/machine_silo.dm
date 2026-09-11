@@ -73,7 +73,7 @@
 
 	materials = new ( \
 		src, \
-		SSmaterials.materials_by_category[MAT_CATEGORY_SILO], \
+		SSmaterials.get_materials_by_flag(MATERIAL_SILO_STORED), \
 		INFINITY, \
 		MATCONTAINER_EXAMINE, \
 		container_signals = list( \
@@ -159,14 +159,10 @@
 	silo_log(context, "WITHDRAWN", -sheets.amount * SHEET_MATERIAL_AMOUNT, "[sheets.name]", sheets.custom_materials, user_data)
 
 /obj/machinery/ore_silo/screwdriver_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_BLOCKING
-	if(default_deconstruction_screwdriver(user, icon_state, icon_state, tool))
-		return ITEM_INTERACT_SUCCESS
+	return default_deconstruction_screwdriver(user, tool)
 
 /obj/machinery/ore_silo/crowbar_act(mob/living/user, obj/item/tool)
-	. = ITEM_INTERACT_BLOCKING
-	if(default_deconstruction_crowbar(tool))
-		return ITEM_INTERACT_SUCCESS
+	return default_deconstruction_crowbar(user, tool)
 
 /obj/machinery/ore_silo/multitool_act(mob/living/user, obj/item/multitool/I)
 	I.set_buffer(src)
@@ -568,19 +564,17 @@
 	var/alist/user_data
 
 /datum/ore_silo_log/New(obj/machinery/M, _action, _amount, _noun, list/mats=list(), alist/user_data)
-	timestamp = station_time_timestamp()
-	machine_name = M ? M.name : "Unknown Machine"
-	area_name = M ? get_area_name(M, TRUE) : "Unknown Area"
+	timestamp = round_timestamp()
+	machine_name = M.name
+	area_name = get_area_name(M, TRUE)
 	action = _action
 	amount = _amount
 	noun = _noun
-	materials = mats ? mats.Copy() : list()
-	if(!user_data)
-		user_data = ID_DATA(null)
+	materials = mats.Copy()
 	src.user_data = user_data
 	var/list/data = list(
 		"machine_name" = machine_name,
-		"area_name" = M ? AREACOORD(M) : "Unknown",
+		"area_name" = AREACOORD(M),
 		"action" = action,
 		"amount" = abs(amount),
 		"noun" = noun,
@@ -590,7 +584,7 @@
 	)
 	logger.Log(
 		LOG_CATEGORY_SILO,
-		"[machine_name] in \[[M ? AREACOORD(M) : "Unknown"]\] [action] [abs(amount)]x [noun] | [get_raw_materials("")] | [user_data["name"]]",
+		"[machine_name] in \[[AREACOORD(M)]\] [action] [abs(amount)]x [noun] | [get_raw_materials("")] | [user_data["name"]]",
 		data,
 	)
 

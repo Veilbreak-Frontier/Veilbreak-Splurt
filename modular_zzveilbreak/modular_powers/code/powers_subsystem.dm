@@ -83,7 +83,7 @@ GLOBAL_LIST_INIT(powers_species_restrictions, generate_powers_species_restrictio
 // - Power datums are stored and hold different effects, as well as being a vector for applying trait string
 PROCESSING_SUBSYSTEM_DEF(powers)
 	name = "Powers"
-	flags = SS_BACKGROUND
+	ss_flags = SS_BACKGROUND
 	runlevels = RUNLEVEL_GAME
 	wait = 1 SECONDS
 

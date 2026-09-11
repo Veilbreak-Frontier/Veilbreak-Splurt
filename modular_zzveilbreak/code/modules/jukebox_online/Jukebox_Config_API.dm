@@ -312,7 +312,7 @@ SUBSYSTEM_DEF(jukebox)
 	name = "Online Jukebox"
 	init_stage = INITSTAGE_MAIN
 	priority = FIRE_PRIORITY_ASSETS
-	flags = SS_KEEP_TIMING
+	ss_flags = SS_KEEP_TIMING
 	wait = 10
 	var/next_health_check = 0
 

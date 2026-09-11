@@ -27,7 +27,7 @@
 /area/misc/survivalpod)
 "o" = (
 /obj/structure/wall_torch/spawns_lit/directional/north,
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /turf/open/floor/wood,
 /area/misc/survivalpod)
 "p" = (

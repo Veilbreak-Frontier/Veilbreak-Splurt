@@ -9,10 +9,10 @@
 #define FUSION_BASE_BURN_RATE_DIVISOR 15
 
 /proc/fusion_mixture_ready(datum/gas_mixture/air, temperature)
-	if(!air || !air.gases)
+	if(!air || !air.moles)
 		return FALSE
-	var/list/healium_gas = air.gases[/datum/gas/healium]
-	if(healium_gas && healium_gas[MOLES] >= MINIMUM_MOLE_COUNT)
+	var/healium_moles = air.moles[/datum/gas/healium]
+	if(healium_moles >= MINIMUM_MOLE_COUNT)
 		return temperature >= FUSION_MINIMUM_TEMPERATURE
 	return temperature >= FUSION_UNCATALYZED_MIN_TEMPERATURE
 
@@ -43,13 +43,13 @@
 		"MIN_TEMP" = FUSION_MINIMUM_TEMPERATURE
 	)
 
-/datum/gas_reaction/fusion/react(datum/gas_mixture/air, atom/holder)
+/datum/gas_reaction/fusion/react(datum/gas_mixture/air, datum/holder)
 	var/temperature = air.temperature
 	if(!fusion_mixture_ready(air, temperature))
 		return NO_REACTION
 	var/old_heat_capacity = air.heat_capacity()
-	var/plasma_moles = air.gases[/datum/gas/plasma] ? air.gases[/datum/gas/plasma][MOLES] : 0
-	var/oxygen_moles = air.gases[/datum/gas/oxygen] ? air.gases[/datum/gas/oxygen][MOLES] : 0
+	var/plasma_moles = air.moles[/datum/gas/plasma]
+	var/oxygen_moles = air.moles[/datum/gas/oxygen]
 	if(plasma_moles < MINIMUM_MOLE_COUNT || oxygen_moles < MINIMUM_MOLE_COUNT)
 		return NO_REACTION
 
@@ -72,9 +72,9 @@
 	// Quark-gluon plasma transition: at extreme temperatures, all matter deconfines into quark matter
 	if(temperature >= FUSION_QUARK_MATTER_THRESHOLD)
 		var/total_moles = air.total_moles()
-		air.gases.Cut()
+		air.moles.Cut()
 		air.assert_gas(/datum/gas/quark_matter)
-		air.gases[/datum/gas/quark_matter][MOLES] = total_moles
+		air.moles[/datum/gas/quark_matter] = total_moles
 		SET_REACTION_RESULTS(total_moles)
 		energy_released = -500000000
 		if(rad_source)
@@ -92,10 +92,10 @@
 		burned_fuel = min(fuel_burn_rate, oxygen_moles, plasma_moles)
 
 		if(burned_fuel > 0)
-			air.gases[/datum/gas/plasma][MOLES] -= burned_fuel
-			air.gases[/datum/gas/oxygen][MOLES] -= burned_fuel
+			air.moles[/datum/gas/plasma] -= burned_fuel
+			air.moles[/datum/gas/oxygen] -= burned_fuel
 			air.assert_gas(/datum/gas/carbon_dioxide)
-			air.gases[/datum/gas/carbon_dioxide][MOLES] += burned_fuel
+			air.moles[/datum/gas/carbon_dioxide] += burned_fuel
 
 			// Heat released replaces plasma burn and scales with level - level 1 = same as plasma, level 10 = 10x
 			energy_released = burned_fuel * FIRE_PLASMA_ENERGY_RELEASED * (reaction_level + 1)

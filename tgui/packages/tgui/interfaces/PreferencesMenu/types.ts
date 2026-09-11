@@ -1,6 +1,6 @@
 import type { BooleanLike } from 'tgui-core/react';
 
-import type { sendAct } from '../../backend';
+import type { sendAct } from '../../events/act';
 import type {
   LoadoutCategory,
   LoadoutList,
@@ -30,7 +30,8 @@ export enum Food {
   Sugar = 'SUGAR',
   Toxic = 'TOXIC',
   Vegetables = 'VEGETABLES',
-  Bloody = 'BLOODY', // DOPPLER EDIT ADDITION - Hemophage Food
+  Egg = 'EGG',
+  Bloody = 'BLOODY', // SKYRAT EDIT ADDITION - Hemophage Food
 }
 
 export enum JobPriority {
@@ -38,6 +39,12 @@ export enum JobPriority {
   Medium = 2,
   High = 3,
 }
+
+type JobPreference = {
+  job: string;
+  priority: JobPriority | null;
+  assigned_profile_slot: number | null;
+};
 
 export type Name = {
   can_randomize: BooleanLike;
@@ -47,9 +54,11 @@ export type Name = {
 
 export type Species = {
   name: string;
-  desc: string;
+  desc: string[];
   lore: string[];
   icon: string;
+  sort_bottom: BooleanLike;
+  //BUBBER EDIT ADD: Sort_bottom, whether a species is sorted to the bottom of the list.
 
   use_skintones: BooleanLike;
   sexes: BooleanLike;
@@ -77,13 +86,15 @@ export type Perk = {
 
 export type Department = {
   head?: string;
+  color?: string;
 };
 
 export type Job = {
   description: string;
   department: string;
-  // DOPPLER EDIT
+  // SKYRAT EDIT
   alt_titles?: string[];
+  // SKYRAT EDIT END
 };
 
 export type Quirk = {
@@ -95,15 +106,16 @@ export type Quirk = {
   customization_options?: string[];
 };
 
-/* DOPPLER EDIT START */
+// SKYRAT EDIT START
 export type Language = {
   description: string;
   name: string;
   icon: string;
+  can_understand: boolean;
+  can_speak: boolean;
 };
 /// ID of a given power path.
 export type PowerPathId = string;
-
 /// The data from a power path's datum, which is defined and communicated from DM.
 export type PowerPathData = {
   displayName: string;
@@ -116,13 +128,21 @@ export type PowerPathData = {
   themeColor: string;
 };
 
+export type Marking = {
+  name: string;
+  color: string;
+  marking_id: string;
+};
 /// archetype data, which are groups of path IDs which are members of that archetype (e.g Sorcerer)
 export type PowerArchetypeData = {
   id: string;
   pathIds: PowerPathId[];
   title: string;
 };
-
+export type MarkingData = {
+  marking_choices: string[];
+  markings_list: Marking[];
+};
 /// Location data for augment powers (where they exist on the body)
 export type PowerAugmentStatic = {
   is_arm?: boolean;
@@ -155,16 +175,16 @@ export type PowerStatic = {
   customization_options?: string[];
   augment?: PowerAugmentStatic | null;
 };
-
-/// Current status of a power: whether it is selected, the state (if it shows removal, add or is unavailable) and if it is an augment
-export type PowerState = {
+export type Limb = {
+  slot: string;
   name: string;
-  has_power?: boolean;
-  state: string;
-  achievement_unlocked?: boolean;
-  augment?: PowerAugmentState | null;
+  can_augment: boolean;
+  chosen_aug: string;
+  chosen_style: string;
+  aug_choices: Record<string, string>;
+  costs: Record<string, number>;
+  markings: MarkingData;
 };
-
 export type Power = PowerStatic &
   PowerState & {
     augment?: (PowerAugmentStatic & PowerAugmentState) | null;
@@ -176,7 +196,15 @@ export type PowerStateByPathId = Record<PowerPathId, PowerState[]>;
 export type PowerPathDataById = Record<PowerPathId, PowerPathData>;
 
 /* DOPPLER EDIT END */
+export type Organ = {
+  slot: string;
+  name: string;
+  chosen_organ: string;
+  organ_choices: Record<string, string>;
+  costs: Record<string, number>;
+};
 
+// SKYRAT EDIT END
 export type QuirkInfo = {
   max_positive_quirks: number;
   quirk_info: Record<string, Quirk>;
@@ -225,39 +253,46 @@ export enum PrefsWindow {
   Keybindings = 2,
 }
 
+export type CharacterPreferencesData = {
+  preview_options: string[]; // SKYRAT EDIT ADDITION
+  preview_selection: string; // SKYRAT EDIT ADDITION
+
+  clothing: Record<string, string>;
+  features: Record<string, string>;
+  game_preferences: Record<string, unknown>;
+  non_contextual: {
+    random_body: RandomSetting;
+    [otherKey: string]: unknown;
+  };
+  doppler_lore: Record<string, unknown> 
+  secondary_features: Record<string, unknown>;
+  character_basics: Record<string, unknown>; // BUBBER EDIT ADDITION: more character setup tabs
+  ooc_preferences: Record<string, unknown>; // BUBBER EDIT ADDITION: more character setup tabs
+  silicon_preferences: Record<string, unknown>; // BUBBER EDIT ADDITION: more character setup tabs
+  supplemental_features: Record<string, unknown>;
+  markings: Record<string, unknown> 
+  manually_rendered_features: Record<string, string>;
+
+  names: Record<string, string>;
+
+  misc: {
+    gender: Gender;
+    joblessrole: JoblessRole;
+    species: string;
+    loadout_lists: LoadoutList; // BUBBER EDIT: Multiple loadout presets: ORIGINAL: loadout_list: LoadoutList;
+    job_clothes: BooleanLike;
+    loadout_index: string; // BUBBER EDIT ADDITION: Multiple loadout presets
+    background_state: string; // BUBBER EDIT ADDITION: Swappable character editor backgrounds
+  };
+
+  randomization: Record<string, RandomSetting>;
+};
+
 export type PreferencesMenuData = {
   character_preview_view: string;
   character_profiles: (string | null)[];
 
-  preview_options: string[]; // DOPPLER EDIT ADDITION
-  preview_selection: string; // DOPPLER EDIT ADDITION
-
-  character_preferences: {
-    clothing: Record<string, string>;
-    features: Record<string, string>;
-    game_preferences: Record<string, unknown>;
-    non_contextual: {
-      random_body: RandomSetting;
-      [otherKey: string]: unknown;
-    };
-    doppler_lore: Record<string, unknown> /* DOPPLER EDIT ADDITION */;
-    secondary_features: Record<string, unknown>;
-    supplemental_features: Record<string, unknown>;
-    markings: Record<string, unknown> /* DOPPLER EDIT ADDITION */;
-    manually_rendered_features: Record<string, string>;
-
-    names: Record<string, string>;
-
-    misc: {
-      gender: Gender;
-      joblessrole: JoblessRole;
-      species: string;
-      loadout_list: LoadoutList;
-      job_clothes: BooleanLike;
-    };
-
-    randomization: Record<string, RandomSetting>;
-  };
+  character_preferences: CharacterPreferencesData;
 
   content_unlocked: BooleanLike;
 
@@ -270,14 +305,27 @@ export type PreferencesMenuData = {
       required_playtime: number;
     }
   >;
-  job_preferences: Record<string, JobPriority>;
+  job_preferences: JobPreference[];
 
   // DOPPLER EDIT
   job_alt_titles: Record<string, string>;
 
+  robotic_styles: string[];
+  limbs_data: Limb[];
+  organs_data: Organ[];
+  marking_presets: string[];
+
   selected_languages: Language[];
   unselected_languages: Language[];
   total_language_points: number;
+  quirks_balance: number;
+  positive_quirk_count: number;
+  species_restricted_jobs?: string[];
+  ckey: string;
+  // SKYRAT EDIT END
+  // SPLURT EDIT START
+  donator_tier: number;
+  // SPLURT EDIT END
 
   power_points: number;
   power_state_paths: PowerStateByPathId;
@@ -333,5 +381,6 @@ export type ServerData = {
   };
   /* DOPPLER EDIT ADDITION END */
   species: Record<string, Species>;
-  [otherKey: string]: unknown;
+  background_state: { choices: string[] }; // BUBBER EDIT ADDITION
+  [otheyKey: string]: unknown;
 };
