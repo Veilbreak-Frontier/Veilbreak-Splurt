@@ -863,7 +863,7 @@ GAME_VERB_SRC(/obj/item, move_to_top, oview(1), "Move To Top", null)
 
 GAME_VERB_SRC(/obj/item, verb_pickup, oview(1), "Pick up", null)
 
-    if(usr.incapacitated || !Adjacent(usr))
+    if(usr.incapacitated || !Adjacent(usr) || anchored)
         return
 
     if(isliving(usr))
@@ -872,7 +872,7 @@ GAME_VERB_SRC(/obj/item, verb_pickup, oview(1), "Pick up", null)
             return
 
     if(!usr.get_active_held_item())
-        attack_hand(usr)
+        attempt_pickup(usr)
 
 /**
  *This proc is executed when someone clicks the on-screen UI button.
