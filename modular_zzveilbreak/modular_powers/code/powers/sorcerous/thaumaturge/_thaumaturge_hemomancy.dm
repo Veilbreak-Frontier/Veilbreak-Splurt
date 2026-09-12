@@ -1,3 +1,6 @@
+/// HUD slot id for our hemomancy-specific blood meter.
+#define HUD_HEMOMANCY_BLOOD "veilbreak_hemomancy_blood"
+
 /datum/component/thaumaturge/hemomancy
 	dupe_mode = COMPONENT_DUPE_UNIQUE
 
@@ -10,10 +13,9 @@
 	action_background_icon_state_override = "bg_thaumaturge_hemomancy"
 
 	/// HUD element that shows current blood amount.
-	var/atom/movable/screen/hemophage/blood/thaumaturge/blood_tracker
+	var/atom/movable/screen/blood_level/thaumaturge/blood_tracker
 	/// Multiplier for converting prep_cost into blood cost.
 	var/blood_cost_multiplier = THAUMATURGE_HEMOMANCY_BLOOD_COST_MULTIPLIER
-
 
 /datum/component/thaumaturge/hemomancy/Initialize(mob/living/new_attached_mob)
 	. = ..(new_attached_mob)
@@ -45,25 +47,13 @@
 		return
 	var/datum/hud/hud_used = attached_mob.hud_used
 
-	// Hemomancy replaces the generic hemophage tracker, but should not touch any
-	// unrelated HUD element or its own subtype.
-	for(var/atom/movable/screen/hemophage/blood/existing_tracker as anything in hud_used.infodisplay)
-		if(existing_tracker.type != /atom/movable/screen/hemophage/blood)
-			continue
-		hud_used.infodisplay -= existing_tracker
-		qdel(existing_tracker)
-
 	// If our tracker was qdeleted externally, clear stale ref.
 	if(QDELETED(blood_tracker))
 		blood_tracker = null
 
 	// Create ours if missing.
 	if(!blood_tracker)
-		blood_tracker = new /atom/movable/screen/hemophage/blood/thaumaturge(null, hud_used)
-
-	// Ensure ours is in infodisplay.
-	if(!(blood_tracker in hud_used.infodisplay))
-		hud_used.infodisplay += blood_tracker
+		blood_tracker = hud_used.add_screen_object(/atom/movable/screen/blood_level/thaumaturge, HUD_HEMOMANCY_BLOOD, HUD_GROUP_INFO, update_screen = FALSE)
 
 	hud_used.show_hud(hud_used.hud_version)
 
@@ -85,8 +75,8 @@
 	if(!blood_tracker)
 		return
 	if(attached_mob?.hud_used)
-		attached_mob.hud_used.infodisplay -= blood_tracker
-	QDEL_NULL(blood_tracker)
+		attached_mob.hud_used.remove_screen_object(HUD_HEMOMANCY_BLOOD)
+	blood_tracker = null
 
 /// Updates on mob life
 /datum/component/thaumaturge/hemomancy/proc/on_owner_life(mob/living/source, seconds_per_tick, times_fired)
@@ -162,5 +152,7 @@
 		return
 	consume_action_cost(thaum_action, source)
 
-/atom/movable/screen/hemophage/blood/thaumaturge
+/atom/movable/screen/blood_level/thaumaturge
 	name = "Hemomancy Blood Meter"
+
+#undef HUD_HEMOMANCY_BLOOD

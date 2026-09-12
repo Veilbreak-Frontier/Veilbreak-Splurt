@@ -222,7 +222,7 @@
 		span_danger("[source] twists [hitting_projectile] away with a burst of psychic force!"),
 		span_userdanger("You deflect [hitting_projectile]!"),
 	)
-	playsound(source, 'sound/effects/magic/VoidDeflect02.ogg', 50, TRUE)
+	playsound(source, 'sound/effects/magic/void_deflect2.ogg', 50, TRUE)
 	hitting_projectile.process_movement(max(FLOOR(hitting_projectile.speed, 1), 1), tile_limit = TRUE)
 	return PROJECTILE_INTERRUPT_HIT_PHASE
 

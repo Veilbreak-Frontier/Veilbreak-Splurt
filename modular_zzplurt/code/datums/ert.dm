@@ -11,28 +11,24 @@
 
 /datum/antagonist/ert/private_security/operative
 	name = "NT Private Security Operative"
-	outfit = /datum/outfit/centcom/private_security
+	outfit = /datum/outfit/centcom/private_security/operative
 	plasmaman_outfit = /datum/outfit/plasmaman/centcom_intern
 	random_names = FALSE
-	role = "Operative"
 
 /datum/antagonist/ert/private_security/medic
 	name = "NT Private Security Specialist"
 	outfit = /datum/outfit/centcom/private_security/medic
 	random_names = FALSE
-	role = "Specialist"
 
 /datum/antagonist/ert/private_security/sergeant
 	name = "NT Private Security Sergeant"
 	outfit = /datum/outfit/centcom/private_security/sergeant
 	random_names = FALSE
-	role = "Sergeant"
 
 /datum/antagonist/ert/private_security/leader
 	name = "NT Private Security Captain"
 	outfit = /datum/outfit/centcom/private_security/captain
 	random_names = FALSE
-	role = "Captain"
 
 // ERT OUTFITS
 /datum/outfit/centcom/private_security
@@ -44,7 +40,7 @@
 	id_trim = /datum/id_trim/centcom/intern/privatesecurity
 	uniform = /obj/item/clothing/under/rank/security/splurt/ntps
 	suit = /obj/item/clothing/suit/armor/vest
-	back = /obj/item/storage/backpack/satchel/sec/redsec
+	back = /obj/item/storage/backpack/satchel/sec
 	belt = /obj/item/storage/belt/security/redsec/full
 	ears = /obj/item/radio/headset/headset_cent/alt/privsec
 	glasses = /obj/item/clothing/glasses/hud/security/sunglasses/redsec

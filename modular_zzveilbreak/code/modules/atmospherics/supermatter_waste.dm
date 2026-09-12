@@ -29,90 +29,90 @@
 
         if(/datum/gas/oxygen)
             merged_gasmix.assert_gases(/datum/gas/nitrogen)
-            merged_gasmix.gases[/datum/gas/nitrogen][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/nitrogen] += tetriary_production
 
         if(/datum/gas/nitrogen)
             merged_gasmix.assert_gases(/datum/gas/healium)
-            merged_gasmix.gases[/datum/gas/healium][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/healium] += tetriary_production
 
         if(/datum/gas/plasma)
             merged_gasmix.assert_gases(/datum/gas/hypernoblium)
-            merged_gasmix.gases[/datum/gas/hypernoblium][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/hypernoblium] += tetriary_production
 
         if(/datum/gas/carbon_dioxide)
             merged_gasmix.assert_gases(/datum/gas/tritium)
-            merged_gasmix.gases[/datum/gas/tritium][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/tritium] += tetriary_production
 
         if(/datum/gas/water_vapor)
             merged_gasmix.assert_gases(/datum/gas/nitrium)
-            merged_gasmix.gases[/datum/gas/nitrium][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/nitrium] += tetriary_production
 
 
         if(/datum/gas/hypernoblium)
             merged_gasmix.assert_gases(/datum/gas/zauker)
-            merged_gasmix.gases[/datum/gas/zauker][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/zauker] += tetriary_production
 
         if(/datum/gas/nitrous_oxide)
             merged_gasmix.assert_gases(/datum/gas/halon)
-            merged_gasmix.gases[/datum/gas/halon][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/halon] += tetriary_production
 
         if(/datum/gas/tritium)
             merged_gasmix.assert_gases(/datum/gas/proto_nitrate)
-            merged_gasmix.gases[/datum/gas/proto_nitrate][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/proto_nitrate] += tetriary_production
 
         if(/datum/gas/bz)
             merged_gasmix.assert_gases(/datum/gas/nitrogen)
-            merged_gasmix.gases[/datum/gas/nitrogen][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/nitrogen] += tetriary_production
 
         if(/datum/gas/pluoxium)
             merged_gasmix.assert_gases(/datum/gas/zauker)
-            merged_gasmix.gases[/datum/gas/zauker][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/zauker] += tetriary_production
 
         if(/datum/gas/freon)
             merged_gasmix.assert_gases(/datum/gas/pluoxium)
-            merged_gasmix.gases[/datum/gas/pluoxium][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/pluoxium] += tetriary_production
 
         if(/datum/gas/miasma)
             merged_gasmix.assert_gases(/datum/gas/hydrogen)
-            merged_gasmix.gases[/datum/gas/hydrogen][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/hydrogen] += tetriary_production
 
         if(/datum/gas/hydrogen)
             merged_gasmix.assert_gases(/datum/gas/water_vapor)
-            merged_gasmix.gases[/datum/gas/water_vapor][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/water_vapor] += tetriary_production
 
         if(/datum/gas/healium)
             merged_gasmix.assert_gases(/datum/gas/nitrous_oxide)
-            merged_gasmix.gases[/datum/gas/nitrous_oxide][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/nitrous_oxide] += tetriary_production
 
         if(/datum/gas/proto_nitrate)
             merged_gasmix.assert_gases(/datum/gas/freon)
-            merged_gasmix.gases[/datum/gas/freon][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/freon] += tetriary_production
 
         if(/datum/gas/zauker)
             merged_gasmix.assert_gases(/datum/gas/hypernoblium)
-            merged_gasmix.gases[/datum/gas/hypernoblium][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/hypernoblium] += tetriary_production
 
         if(/datum/gas/halon)
             merged_gasmix.assert_gases(/datum/gas/tritium)
-            merged_gasmix.gases[/datum/gas/tritium][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/tritium] += tetriary_production
 
         if(/datum/gas/nitrium)
             merged_gasmix.assert_gases(/datum/gas/freon)
-            merged_gasmix.gases[/datum/gas/freon][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/freon] += tetriary_production
 
         if(/datum/gas/antinoblium)
             merged_gasmix.assert_gases(/datum/gas/hypernoblium)
-            merged_gasmix.gases[/datum/gas/hypernoblium][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/hypernoblium] += tetriary_production
 
         if(/datum/gas/delirium)
             merged_gasmix.assert_gases(/datum/gas/hypernoblium)
-            merged_gasmix.gases[/datum/gas/hypernoblium][MOLES] += tetriary_production
+            merged_gasmix.moles[/datum/gas/hypernoblium] += tetriary_production
 
         else
 
     merged_gasmix.assert_gases(/datum/gas/plasma, /datum/gas/oxygen)
-    merged_gasmix.gases[/datum/gas/plasma][MOLES] += secondary_production
-    merged_gasmix.gases[/datum/gas/oxygen][MOLES] += primary_production
+    merged_gasmix.moles[/datum/gas/plasma] += secondary_production
+    merged_gasmix.moles[/datum/gas/oxygen] += primary_production
 
     merged_gasmix.garbage_collect()
     env.merge(merged_gasmix)

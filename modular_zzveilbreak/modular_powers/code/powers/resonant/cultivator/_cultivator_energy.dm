@@ -1,6 +1,9 @@
 /// Helper to format the text that gets thrown onto the energy hud element.
 #define FORMAT_ENERGY_TEXT(charges) MAPTEXT("<div align='center' valign='middle' style='position:relative; top:0px; left:6px'><font color='[POWER_COLOR_CULTIVATOR]'>[floor(charges)]</font></div>")
 
+/// HUD slot id for the cultivator energy meter.
+#define HUD_CULTIVATOR_ENERGY "veilbreak_cultivator_energy"
+
 /datum/component/cultivator_energy
 	dupe_mode = COMPONENT_DUPE_UNIQUE
 
@@ -51,8 +54,7 @@
 		return
 
 	if(attached_mob.hud_used && cultivator_ui)
-		attached_mob.hud_used.infodisplay -= cultivator_ui
-		qdel(cultivator_ui)
+		attached_mob.hud_used.remove_screen_object(HUD_CULTIVATOR_ENERGY)
 		cultivator_ui = null
 
 	attached_mob = null
@@ -108,8 +110,7 @@
 		return
 
 	var/datum/hud/hud_used = living_holder.hud_used
-	cultivator_ui = new /atom/movable/screen/cultivator_energy(null, hud_used)
-	hud_used.infodisplay += cultivator_ui
+	cultivator_ui = hud_used.add_screen_object(/atom/movable/screen/cultivator_energy, HUD_CULTIVATOR_ENERGY, HUD_GROUP_INFO, update_screen = FALSE)
 
 	// Scoots the theologist UI if it exists
 	var/datum/component/theologist_piety/theologist_piety = living_holder.GetComponent(/datum/component/theologist_piety)
@@ -135,3 +136,5 @@
 	icon = 'icons/hud/blob.dmi' // TODO: Get sprites/UI for this.
 	icon_state = "block"
 	screen_loc = CULTIVATOR_UI_SCREEN_LOC
+
+#undef HUD_CULTIVATOR_ENERGY

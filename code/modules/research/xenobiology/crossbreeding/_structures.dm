@@ -256,7 +256,7 @@ GLOBAL_LIST_EMPTY(bluespace_slime_crystals)
 	var/datum/gas_mixture/air = open_turf.return_air()
 
 	air.assert_gas(/datum/gas/plasma)
-	if(air.gases[/datum/gas/plasma][MOLES] > 15)
+	if(air.moles[/datum/gas/plasma] > 15)
 		air.remove_specific(/datum/gas/plasma, 15)
 		air.garbage_collect()
 		open_turf.air_update_turf(FALSE, FALSE)

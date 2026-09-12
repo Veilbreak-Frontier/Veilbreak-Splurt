@@ -66,7 +66,7 @@
 	AddComponent(/datum/component/grenade_timer_ground) // DOPPLER ADDITION - Display timers on ground for Observers & Explosives Specialist
 	RegisterSignal(src, COMSIG_ITEM_USED_AS_INGREDIENT, PROC_REF(on_used_as_ingredient))
 
-/obj/item/grenade/suicide_act(mob/living/carbon/user)
+/obj/item/grenade/suicide_act(mob/living/user)
 	user.visible_message(span_suicide("[user] primes [src], then eats it! It looks like [user.p_theyre()] trying to commit suicide!"))
 	playsound(src, 'sound/items/eatfood.ogg', 50, TRUE)
 	arm_grenade(user, det_time)
@@ -147,7 +147,7 @@
 
 /obj/item/grenade/proc/log_grenade(mob/user)
 	if(!type_cluster)
-		log_bomber(user, "has primed a", src, "for detonation", message_admins = dud_flags != NONE)
+		log_bomber(user, "has primed a", src, "for detonation", message_admins = dud_flags == NONE)
 
 /**
  * arm_grenade (formerly preprime) refers to when a grenade with a standard time fuze is activated, making it go beepbeepbeep and then detonate a few seconds later.

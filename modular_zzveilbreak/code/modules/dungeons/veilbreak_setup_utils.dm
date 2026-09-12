@@ -210,7 +210,7 @@
 			continue
 		var/area/A = T.loc
 		if(A && A.static_lighting && !T.space_lit && !T.lighting_object)
-			var/datum/lighting_object/LO = new(T)
+			var/atom/movable/lighting_object/LO = new(T)
 			if(LO)
 				LO.needs_update = TRUE
 				SSlighting.objects_queue |= LO

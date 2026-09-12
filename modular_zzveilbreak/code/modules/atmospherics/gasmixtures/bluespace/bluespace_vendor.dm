@@ -202,7 +202,7 @@
 			bluespace_gasdata.Add(list(list(
 			"name" = connected_machine.bluespace_network.gases[gas_id][GAS_META][META_GAS_NAME],
 			"id" = connected_machine.bluespace_network.gases[gas_id][GAS_META][META_GAS_ID],
-			"amount" = round(connected_machine.bluespace_network.gases[gas_id][MOLES], 0.01),
+			"amount" = round(connected_machine.bluespace_network.moles[gas_id], 0.01),
 			"price" = connected_machine.base_prices[gas_id],
 			)))
 	else

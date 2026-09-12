@@ -12,6 +12,12 @@
 	force = 15
 	throwforce = 10
 	slot_flags = ITEM_SLOT_BELT
+	custom_materials = list(
+		/datum/material/iron = SHEET_MATERIAL_AMOUNT*2,
+		/datum/material/glass =HALF_SHEET_MATERIAL_AMOUNT * 1.5,
+		/datum/material/silver =HALF_SHEET_MATERIAL_AMOUNT,
+		/datum/material/uranium =HALF_SHEET_MATERIAL_AMOUNT,
+	)
 
 	/// the mode of the resonator; has three modes: auto (1), manual (2), and matrix (3)
 	var/mode = RESONATOR_MODE_AUTO
@@ -77,11 +83,7 @@
 	if(mode == RESONATOR_MODE_MATRIX)
 		icon_state = "shield2"
 		name = "resonance matrix"
-		RegisterSignal(src, COMSIG_ATOM_ENTERED, PROC_REF(burst))
-		var/static/list/loc_connections = list(
-			COMSIG_ATOM_ENTERED = PROC_REF(burst),
-		)
-		AddElement(/datum/element/connect_loc, loc_connections)
+		AddElement(/datum/element/connect_loc, list(COMSIG_ATOM_ENTERED = PROC_REF(burst)))
 	. = ..()
 	creator = set_creator
 	parent_resonator = set_resonator
@@ -131,8 +133,9 @@
 			SEND_SIGNAL(creator, COMSIG_LIVING_RESONATOR_BURST, creator, attacked_living)
 		to_chat(attacked_living, span_userdanger("[src] ruptured with you in it!"))
 		attacked_living.apply_damage(resonance_damage, BRUTE)
-		attacked_living.add_movespeed_modifier(/datum/movespeed_modifier/resonance)
-		addtimer(CALLBACK(attacked_living, TYPE_PROC_REF(/mob, remove_movespeed_modifier), /datum/movespeed_modifier/resonance), 10 SECONDS, TIMER_UNIQUE | TIMER_OVERRIDE)
+		if(!QDELETED(attacked_living))
+			attacked_living.add_movespeed_modifier(/datum/movespeed_modifier/resonance)
+			addtimer(CALLBACK(attacked_living, TYPE_PROC_REF(/mob, remove_movespeed_modifier), /datum/movespeed_modifier/resonance), 10 SECONDS, TIMER_UNIQUE | TIMER_OVERRIDE)
 	for(var/obj/effect/temp_visual/resonance/field in orange(1, src))
 		if(field.rupturing)
 			continue

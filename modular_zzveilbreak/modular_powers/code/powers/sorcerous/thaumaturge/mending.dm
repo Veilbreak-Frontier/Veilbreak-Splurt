@@ -57,7 +57,7 @@
 
 /datum/action/cooldown/power/thaumaturge/mending/use_action(mob/living/user, atom/target)
 	/// Heals silicons or bots
-	if(istype(target, /mob/living/silicon) || istype(target, /mob/living/basic/bot) || istype(target, /mob/living/simple_animal/bot))
+	if(istype(target, /mob/living/silicon) || istype(target, /mob/living/basic/bot) || istype(target, /mob/living/basic/bot))
 		var/mob/living/target_living = target
 		if(!repair_synthetic_mob(target_living))
 			user.balloon_alert(user, "target is not damaged!")
@@ -457,7 +457,7 @@
 	for(var/turf/open/current_turf as anything in RANGE_TURFS(7, center_turf))
 		if(current_turf.air)
 			current_turf.air.assert_gas(/datum/gas/plasma)
-			current_turf.air.gases[/datum/gas/plasma][MOLES] = 0
+			current_turf.air.moles[/datum/gas/plasma] = 0
 			current_turf.air.garbage_collect()
 			current_turf.air_update_turf(FALSE, FALSE)
 

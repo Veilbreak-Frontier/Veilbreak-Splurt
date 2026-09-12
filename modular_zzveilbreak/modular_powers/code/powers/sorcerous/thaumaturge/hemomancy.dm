@@ -1,3 +1,4 @@
+#define ishemophage(A) (A.has_quirk(/datum/quirk/hemophage))
 /*
 	Variant of spell preperation. Rather than needing to choose and prepare spells, you have access to all your chosen spells (with an increased root cost to compensate).
 	You instead pay the spell's cost in blood, proportional to charge_cost.
@@ -122,7 +123,7 @@
 		source_action_ref = WEAKREF(source_action)
 
 // Adds a listener to the affinity check
-/obj/item/melee/channel_blood/equipped(mob/user, slot, initial = FALSE)
+/obj/item/melee/channel_blood/equipped(mob/living/user, slot, initial = FALSE)
 	. = ..()
 	RegisterSignal(user, COMSIG_THAUMATURGE_AFFINITY_QUERY, PROC_REF(on_thaumaturge_affinity_query))
 	// Sets the affinity higher if we're a hemophage.
@@ -368,3 +369,4 @@
 	desc = "Your blood is being drained!"
 	icon = 'icons/mob/actions/actions_cult.dmi'
 	icon_state = "manip"
+#undef ishemophage

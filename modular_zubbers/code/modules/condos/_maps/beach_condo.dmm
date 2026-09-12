@@ -63,7 +63,7 @@
 	},
 /area/misc/condo)
 "mD" = (
-/obj/machinery/jukebox{
+/obj/machinery/jukebox/online{
 	req_access = null
 	},
 /turf/open/misc/beach/sand,
