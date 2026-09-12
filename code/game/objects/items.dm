@@ -863,16 +863,16 @@ GAME_VERB_SRC(/obj/item, move_to_top, oview(1), "Move To Top", null)
 
 GAME_VERB_SRC(/obj/item, verb_pickup, oview(1), "Pick up", null)
 
-	if(usr.incapacitated || !Adjacent(usr))
-		return
+    if(usr.incapacitated || !Adjacent(usr))
+        return
 
-	if(isliving(usr))
-		var/mob/living/L = usr
-		if(!(L.mobility_flags & MOBILITY_PICKUP))
-			return
+    if(isliving(usr))
+        var/mob/living/L = usr
+        if(!(L.mobility_flags & MOBILITY_PICKUP))
+            return
 
-	if(usr.get_active_held_item() == null) // Let me know if this has any problems -Yota
-		usr.UnarmedAttack(src, TRUE)
+    if(!usr.get_active_held_item())
+        attack_hand(usr)
 
 /**
  *This proc is executed when someone clicks the on-screen UI button.
