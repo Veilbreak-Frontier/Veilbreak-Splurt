@@ -65,10 +65,10 @@
 	. = ..()
 
 /obj/machinery/research_table/screwdriver_act(mob/living/user, obj/item/I)
-	return default_deconstruction_screwdriver(user, icon_state, icon_state, I)
+	return default_deconstruction_screwdriver(user, I)
 
 /obj/machinery/research_table/crowbar_act(mob/living/user, obj/item/I)
-	return default_deconstruction_crowbar(I, FALSE)
+	return default_deconstruction_crowbar(user, I)
 
 /obj/machinery/research_table/mouse_drop_receive(mob/living/M, mob/living/user)
 	if(istype(M))
