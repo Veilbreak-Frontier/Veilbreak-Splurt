@@ -863,16 +863,46 @@ GAME_VERB_SRC(/obj/item, move_to_top, oview(1), "Move To Top", null)
 
 GAME_VERB_SRC(/obj/item, verb_pickup, oview(1), "Pick up", null)
 
-    if(usr.incapacitated || !Adjacent(usr) || anchored)
-        return
+    to_chat(world, "=== VERB ENTER ===")
+    to_chat(world, "usr=[usr] ([usr?.type]) src=[src] ([src?.type])")
+    to_chat(world, "usr.incapacitated=[usr.incapacitated]")
+    to_chat(world, "INCAPACITATED_IGNORING=[INCAPACITATED_IGNORING(usr, INCAPABLE_RESTRAINTS|INCAPABLE_STASIS)]")
+    to_chat(world, "Adjacent(usr)=[Adjacent(usr)]")
+    to_chat(world, "src.anchored=[src.anchored]")
+    to_chat(world, "usr.get_active_held_item()=[usr.get_active_held_item()]")
+    to_chat(world, "isliving(usr)=[isliving(usr)]")
+    if(isliving(usr))
+        var/mob/living/L = usr
+        to_chat(world, "L.mobility_flags=[L.mobility_flags]")
+        to_chat(world, "L.mobility_flags & MOBILITY_PICKUP=[L.mobility_flags & MOBILITY_PICKUP]")
+        to_chat(world, "interaction_flags_item=[interaction_flags_item]")
+        to_chat(world, "INTERACT_ITEM_ATTACK_HAND_PICKUP bit=[interaction_flags_item & INTERACT_ITEM_ATTACK_HAND_PICKUP]")
 
+    to_chat(world, "--- checking guard 1: incapacitated || !Adjacent || anchored ---")
+    if(usr.incapacitated || !Adjacent(usr) || anchored)
+        to_chat(world, "!!! BAIL 1: incapacitated=[usr.incapacitated] notAdjacent=[!Adjacent(usr)] anchored=[anchored]")
+        return
+    to_chat(world, "guard 1 passed")
+
+    to_chat(world, "--- checking guard 2: mobility ---")
     if(isliving(usr))
         var/mob/living/L = usr
         if(!(L.mobility_flags & MOBILITY_PICKUP))
+            to_chat(world, "!!! BAIL 2: mobility_flags=[L.mobility_flags] no MOBILITY_PICKUP")
             return
+    to_chat(world, "guard 2 passed")
 
-    if(!usr.get_active_held_item())
-        attempt_pickup(usr)
+    to_chat(world, "--- checking guard 3: active held item ---")
+    if(usr.get_active_held_item())
+        to_chat(world, "!!! BAIL 3: already holding [usr.get_active_held_item()]")
+        return
+    to_chat(world, "guard 3 passed")
+
+    to_chat(world, "--- calling attempt_pickup(usr) ---")
+    var/result = attempt_pickup(usr)
+    to_chat(world, "=== attempt_pickup returned [result] ===")
+    to_chat(world, "after call: src.loc=[src.loc] usr.get_active_held_item()=[usr.get_active_held_item()]")
+    to_chat(world, "=== VERB EXIT ===")
 
 /**
  *This proc is executed when someone clicks the on-screen UI button.
