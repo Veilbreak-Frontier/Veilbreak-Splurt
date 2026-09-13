@@ -862,8 +862,16 @@ GAME_VERB_SRC(/obj/item, move_to_top, oview(1), "Move To Top", null)
 	return M.can_equip(src, slot, disable_warning, bypass_equip_delay_self, ignore_equipped, indirect_action = indirect_action)
 
 GAME_VERB_SRC(/obj/item, verb_pickup, oview(1), "Pick up", null)
-    CRASH("VERB_PICKUP_BODY_RAN")
-//NUCLEAR OPTION
+    to_chat(usr, "VP FIRED: usr=[usr] adj=[Adjacent(usr)] anch=[anchored] inc=[usr.incapacitated] held=[usr.get_active_held_item()]")
+    if(usr.incapacitated || !Adjacent(usr) || anchored)
+        return
+    if(isliving(usr))
+        var/mob/living/L = usr
+        if(!(L.mobility_flags & MOBILITY_PICKUP))
+            return
+    if(!usr.get_active_held_item())
+        attempt_pickup(usr)
+
 /**
  *This proc is executed when someone clicks the on-screen UI button.
  *The default action is attack_self().
