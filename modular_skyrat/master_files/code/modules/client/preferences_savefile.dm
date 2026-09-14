@@ -104,7 +104,9 @@
 		parsed_languages[language] = value
 	languages = parsed_languages
 
-	// DOPPLER EDIT - Old powers save block removed; handled by save_character_doppler/load_character_doppler.
+	check_doppler_character_savefile(save_data)
+	load_character_doppler(save_data)
+	sanitize_powers()
 
 	var/tgui_migration_value = save_data["tgui_prefs_migration"]
 	if(isnull(tgui_migration_value))
@@ -343,7 +345,7 @@
 	save_data["allow_advanced_colors"] = allow_advanced_colors
 	save_data["alt_job_titles"] = alt_job_titles
 	save_data["languages"] = languages
-	// DOPPLER EDIT - Old powers save removed; handled by save_character_doppler.
+	save_character_doppler(save_data)
 	save_data["food_preferences"] = food_preferences
 	//if(updated) // BUBBER EDIT - This is bullshit, results in newly created characters getting invalid data. Load character should forcefully migrate it, so we can safely assume its up to date
 	//	save_data["modular_version"] = MODULAR_SAVEFILE_VERSION_MAX

@@ -127,6 +127,8 @@ PROCESSING_SUBSYSTEM_DEF(powers)
 	// No powers are given if the admins have turned on power spawning.
 	if(!spawn_powers_enabled)
 		return
+	if(!user || !applied_client?.prefs?.all_powers)
+		return
 
 	var/bad_power = FALSE
 	var/list/powers_by_priority = list()

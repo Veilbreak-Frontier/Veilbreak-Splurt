@@ -73,8 +73,15 @@ The game sometimes calls this spine.
 	name = "Nutriment Pump Implant"
 	desc = "This implant will synthesize and pump into your bloodstream a small amount of nutriment when you are starving."
 
-	value = 3
+	value = 2
 	augment = /obj/item/organ/cyberimp/chest/nutriment
+
+/datum/power/augmented/nutriment_pump_plus
+	name = "Nutriment Pump Implant PLUS"
+	desc = "This implant will synthesize and pump into your bloodstream a small amount of nutriment when you are hungry."
+
+	value = 4
+	augment = /obj/item/organ/cyberimp/chest/nutriment/plus
 /*
 EYE HUDS.
 Keep in mind these are HUDS. Not actual eye replacements.
