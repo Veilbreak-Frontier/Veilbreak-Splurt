@@ -39,7 +39,7 @@
 	weapon_weight = WEAPON_HEAVY
 	lefthand_file = 'modular_zzplurt/icons/obj/weapons/guns/inhands/left32x32.dmi'
 	righthand_file = 'modular_zzplurt/icons/obj/weapons/guns/inhands/right32x32.dmi'
-	worn_icon = 'modular_zzplurt/icons/obj/weapons/guns/worn.dmi'
+	worn_icon = 'modular_zzplurt/icons/obj/weapons/guns/worn/ranged.dmi'
 	worn_icon_state = "wt458"
 	inhand_icon_state = "wt458"
 	inhand_x_dimension = 32
@@ -56,16 +56,11 @@
 	recoil = 0.3
 	fire_sound = 'modular_zzplurt/sound/items/weapons/gun/wt458_shot.ogg'
 	fire_sound_volume = 70
-	actions_types = list(/datum/action/switch_mag, /datum/action/item_action/toggle_firemode)
+	actions_types = list(/datum/action/item_action/switch_mag, /datum/action/item_action/toggle_firemode)
 	/// The type of secondary magazine for the bulldog
 	var/secondary_magazine_type
 	/// The secondary magazine
 	var/obj/item/ammo_box/magazine/secondary_magazine
-	custom_materials = list(
-		/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 30,
-		/datum/material/iron = SHEET_MATERIAL_AMOUNT * 16,
-		/datum/material/titanium = SHEET_MATERIAL_AMOUNT * 10,
-	)
 //Gunshot is taken from this  https://github.com/ParadiseSS13/Paradise/tree/master/sound/weapons/gunshots#gunshot_rifle.ogg
 //However, I could not find who it was attributed to or where it comes from
 
@@ -96,12 +91,13 @@
 	button_icon = 'modular_zzplurt/icons/hud/actions.dmi'
 	button_icon_state = "swap_mag"
 
-/datum/action/switch_mag/Trigger()
-    . = ..()
-    if(!.)
-        return
-    var/obj/item/gun/my_gun = target
-    gun.toggle_magazine(usr)
+/datum/action/item_action/switch_mag/Trigger(mob/clicker, trigger_flags)
+	. = ..()
+	if(!.)
+		return
+	var/obj/item/gun/ballistic/automatic/wt458/my_gun = target
+	my_gun.toggle_magazine(usr)
+	playsound(src, 'sound/items/weapons/gun/general/magazine_insert_empty.ogg' , 50, TRUE, -1)
 
 /* Commented out incase someone in the future is interested, this lets the gun use secondary mag directly!
 /obj/item/gun/ballistic/automatic/wt458/attack_self_secondary(mob/user, modifiers)
@@ -201,6 +197,7 @@
 
 /obj/item/gun/ballistic/automatic/wt458/nomag
 	spawnwithmagazine = FALSE
+	custom_materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 30, /datum/material/iron = SHEET_MATERIAL_AMOUNT * 17, /datum/material/titanium = SHEET_MATERIAL_AMOUNT * 10)
 
 //Overridden Bubber SMG Here
 //It is pretty good though why was the spread on it non-existent for a gun that is supposedly meant to be harder to control?

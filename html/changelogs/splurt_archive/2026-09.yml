@@ -18,31 +18,18 @@
   Zattarra-Red:
   - rscadd: 'Added alt blueshield title: Bluemaid'
 2026-09-12:
-  AbsorbentHeart5:
-  - rscadd: Added Armadyne Sechuds to equipment vendor and loadouts.
   ChromeFoxxity:
-  - rscadd: Adds a new ERT, Cardinal Red.
-  - rscadd: Overhauls Nanotrasen Private Security mobs/corpses.
-  Dr-arielpro:
-  - rscadd: Two new drinks to the drinks vending machines.
-  - rscadd: Added additional flavor to a VIP dorm, making it much more personalized.
-  Erbot34567:
-  - bugfix: Removed an ability of items in crate to be made invisible when failing
-      to pack the crate with packing peanuts.
-  - bugfix: Item will no longer be put on top of crate with packing peanuts when failing
-      to pack the item in the crate
-  IgiariValkyr:
-  - bugfix: Spectre IPC parts are now pickable again
-  Muffindrake:
-  - bugfix: update Messy and Extra-Productive quirks for reagent system
-  UvvU:
-  - bugfix: fixed ANOTHER infinite loop causing MC crashes.
-  Vanilla1040:
-  - bugfix: Cousin's Club conflict fix
-  hadesoil:
-  - code_imp: announcer uses preference per person now
+  - rscadd: Refurbishes SYN-C Brutus Space Ruin.
+  Fn-OS:
+  - rscadd: Added a new tail called Experiment
+  Lucky:
+  - balance: Lone Operative can no longer spawn on Extended or with under 50 players
+      on.
+  projectkepler-ru:
+  - balance: Defender Revolver has increased fire rate, WT-458 barrel has been replaced
+      and the spread should be lessened. WT-550-B manufacturing specification has
+      reduced requirement on barrel tolerance
   thegrb93:
-  - bugfix: Fix jukebox randomly stopping music
-  tmyqlfpir:
-  - server: iZune uploads now use /tmp/ directory
-  - rscadd: Added new bsmoke emote
+  - bugfix: Bedsheet doesn't hover high up when covering anymore
+  - bugfix: Denied opfor stat not showing all the denied apps
+  - bugfix: Fixes secborg sync bugs and ninja being able to hack them

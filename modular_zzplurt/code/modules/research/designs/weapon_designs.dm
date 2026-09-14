@@ -92,7 +92,7 @@
 	desc = "Turn your fully automatic gun into a 3 round burst-firing gun with dual magazine port."
 	id = "wt458_kit"
 	build_type = PROTOLATHE | AWAY_LATHE
-	materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 15,  /datum/material/plastic =SHEET_MATERIAL_AMOUNT * 30, /datum/material/titanium =HALF_SHEET_MATERIAL_AMOUNT * 20)
+	materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 30, /datum/material/iron = SHEET_MATERIAL_AMOUNT * 16, /datum/material/titanium = SHEET_MATERIAL_AMOUNT * 10)
 	build_path = /obj/item/weaponcrafting/gunkit/wt458_kit
 	category = list(
 		RND_CATEGORY_WEAPONS + RND_SUBCATEGORY_WEAPONS_KITS
