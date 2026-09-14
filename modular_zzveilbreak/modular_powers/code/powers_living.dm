@@ -7,6 +7,15 @@
 	/// List of all powers we currently have.
 	var/list/powers = list()
 
+/mob/living/Initialize(mapload)
+	. = ..()
+	RegisterSignal(src, COMSIG_MOB_LOGIN, PROC_REF(on_powers_login))
+
+/mob/living/proc/on_powers_login(datum/source)
+	SIGNAL_HANDLER
+	if(client && SSpowers)
+		SSpowers.assign_powers(src, client)
+
 /**
  * Adds the passed power to the mob
  *
@@ -18,6 +27,8 @@
  */
 /mob/living/proc/add_archetype_power(datum/power/power_type, client/client_source, add_unique = TRUE)
 	if(has_archetype_power(power_type))
+		return FALSE
+	if((initial(power_type.power_flags) & POWER_HUMAN_ONLY) && !ishuman(src))
 		return FALSE
 	var/qname = initial(power_type.name)
 	if(!SSpowers || !SSpowers.powers[qname])
