@@ -40,6 +40,16 @@
 /datum/preferences/proc/load_character_doppler(list/save_data)
 	all_powers = SANITIZE_LIST(save_data?["all_powers"])
 
+/datum/preferences/load_character_skyrat(list/save_data)
+	. = ..()
+	check_doppler_character_savefile(save_data)
+	load_character_doppler(save_data)
+	sanitize_powers()
+
+/datum/preferences/save_character_skyrat(list/save_data, updated)
+	. = ..()
+	save_character_doppler(save_data)
+
 #undef DOPPLER_SAVEFILE_VERSION_MAX
 #undef VERSION_NEW_POWERS
 #undef SHOULD_UPDATE_DOPPLER_DATA
