@@ -18,10 +18,22 @@
 	. = ..()
 
 /datum/power/void/succubus/proc/apply_succubus()
-	if(power_holder?.mind && !power_holder.mind.has_antag_datum(/datum/antagonist/succubus))
-		power_holder.mind.add_antag_datum(/datum/antagonist/succubus)
+	if(!power_holder)
+		return
+	if(power_holder.mind)
+		UnregisterSignal(power_holder, list(COMSIG_MOB_LOGIN, COMSIG_MOB_MIND_TRANSFERRED_INTO))
+		if(!power_holder.mind.has_antag_datum(/datum/antagonist/succubus))
+			power_holder.mind.add_antag_datum(/datum/antagonist/succubus)
+	else
+		RegisterSignal(power_holder, list(COMSIG_MOB_LOGIN, COMSIG_MOB_MIND_TRANSFERRED_INTO), PROC_REF(on_mind_gained))
+
+/datum/power/void/succubus/proc/on_mind_gained(datum/source)
+	SIGNAL_HANDLER
+	apply_succubus()
 
 /datum/power/void/succubus/remove()
-	if(power_holder?.mind)
-		power_holder.mind.remove_antag_datum(/datum/antagonist/succubus)
+	if(power_holder)
+		UnregisterSignal(power_holder, list(COMSIG_MOB_LOGIN, COMSIG_MOB_MIND_TRANSFERRED_INTO))
+		if(power_holder.mind)
+			power_holder.mind.remove_antag_datum(/datum/antagonist/succubus)
 
