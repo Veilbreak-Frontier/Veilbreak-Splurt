@@ -11423,7 +11423,9 @@
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_portal_object.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_setup_utils.dm"
 #include "modular_zzveilbreak\code\modules\hallucinations\delirium_pulse.dm"
+#include "modular_zzveilbreak\code\modules\custom\path_unseen_puzzle.dm"
 #include "modular_zzveilbreak\code\modules\interraction_overrides\veilbreak_overrides.dm"
+
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_Config_API.dm"
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_Logic_Core.dm"
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_Machine_Obj.dm"

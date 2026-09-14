@@ -98,3 +98,38 @@
 
 	to_chat(power_holder, span_notice("You phase through space, dodging the attack!"))
 	return SUCCESSFUL_BLOCK
+
+/// Void power unlocked by completing the Path Unseen achievement
+/datum/power/void/path_unseen_initiate
+	name = "Initiate of the Void"
+	desc = "Having merged the shattered fragments and accepted the void within, your mind achieves an unyielding serene equilibrium."
+	required_achievement = /datum/award/achievement/veilbreak/path_unseen
+	value = 0
+	power_flags = POWER_PROCESSES
+
+/datum/power/void/path_unseen_initiate/add(client/client_source)
+	. = ..()
+	RegisterSignal(power_holder, COMSIG_CARBON_MOOD_UPDATE, PROC_REF(on_mood_update))
+	apply_mood_lock()
+
+/datum/power/void/path_unseen_initiate/remove()
+	if(power_holder)
+		UnregisterSignal(power_holder, COMSIG_CARBON_MOOD_UPDATE)
+	return ..()
+
+/datum/power/void/path_unseen_initiate/process(seconds_between_ticks)
+	apply_mood_lock()
+
+/datum/power/void/path_unseen_initiate/proc/on_mood_update(mob/living/source)
+	SIGNAL_HANDLER
+	apply_mood_lock()
+
+/datum/power/void/path_unseen_initiate/proc/apply_mood_lock()
+	if(!power_holder || !power_holder.mob_mood)
+		return
+	var/datum/mood/M = power_holder.mob_mood
+	if(M.mood_level != MOOD_LEVEL_HAPPY1)
+		M.mood_level = MOOD_LEVEL_HAPPY1
+		M.sanity = max(M.sanity, SANITY_NEUTRAL)
+		M.update_mood_icon()
+
