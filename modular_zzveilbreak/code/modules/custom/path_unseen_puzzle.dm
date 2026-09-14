@@ -188,7 +188,8 @@
 	// Visual & Audio Feedback
 	playsound(user, 'sound/effects/magic/staff_change.ogg', 100, TRUE)
 	shake_camera(user, 3 SECONDS, 2)
-	user.flash_act(visual = TRUE, length = 2 SECONDS)
+	addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living, flash_act), 1, 0, 0, TRUE, /atom/movable/screen/fullscreen/flash, 2 SECONDS), 0.2 SECONDS)
+
 
 	// Achievement Award
 	if(user.client)
