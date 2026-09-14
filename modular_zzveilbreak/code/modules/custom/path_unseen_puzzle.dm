@@ -161,6 +161,7 @@
 
 	var/turf/user_turf = get_turf(user)
 	var/obj/effect/temp_visual/cult/rune_spawn/circle = new(user_turf, 25 SECONDS, "#8a2be2")
+	var/obj/effect/temp_visual/drawing_heretic_rune/heretic_rune = new(user_turf, "#8a2be2")
 	playsound(user_turf, 'sound/effects/magic/lightning_chargeup.ogg', 75, TRUE)
 
 	// Start periodic ambient message loop during 25-second channel
@@ -171,6 +172,8 @@
 
 	if(!QDELETED(circle))
 		qdel(circle)
+	if(!QDELETED(heretic_rune))
+		qdel(heretic_rune)
 
 	if(!success)
 		cooldown_until = world.time + 5 SECONDS
@@ -178,6 +181,8 @@
 		return
 
 	// --- SUCCESSFUL CHANNELING ---
+	new /obj/effect/temp_visual/energy_dash_afterimage(user_turf, user)
+
 	to_chat(user, span_boldnotice("The Relic of the Unseen unleashes its primordial power, infusing with your very soul itself."))
 
 	// Visual & Audio Feedback
@@ -194,6 +199,22 @@
 
 	// Consume artifact
 	qdel(src)
+
+// Temporary visual afterimage effect spawned on successful channel completion
+/obj/effect/temp_visual/energy_dash_afterimage
+	name = "energy afterimage"
+	duration = 1 SECONDS
+	layer = ABOVE_MOB_LAYER
+
+/obj/effect/temp_visual/energy_dash_afterimage/Initialize(mapload, mob/living/target_mob)
+	. = ..()
+	if(target_mob)
+		appearance = target_mob.appearance
+		dir = target_mob.dir
+		color = "#8a2be2"
+		alpha = 220
+		animate(src, alpha = 0, time = 0.8 SECONDS, easing = EASE_OUT)
+
 
 /obj/item/path_unseen_artifact/proc/channel_ambient_loop(mob/living/user)
 	var/list/messages = list(
