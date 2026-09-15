@@ -37,10 +37,12 @@ var/list/consumed_pathfinder_drops = list(
 
 /// One roll when a /obj/structure/closet/crate/veilbreak_lootbox is first opened. Voidshard is the common pull; pendants are deliberately rarer.
 var/list/veilbreak_lootbox_table = list(
-	/obj/item/voidshard = 58,
-	/obj/item/clothing/neck/aether_pendant = 21,
-	/obj/item/clothing/neck/life_pendant = 21,
+	/obj/item/voidshard = 50,
+	/obj/item/clothing/neck/aether_pendant = 20,
+	/obj/item/clothing/neck/life_pendant = 20,
+	/obj/item/path_unseen_fragment/void = 10,
 )
+
 
 // Function to pick loot from a table (call this in mob death proc if needed)
 /proc/pick_loot_from_table(list/loot_table)
