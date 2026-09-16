@@ -9,7 +9,8 @@
 
 	ASSIGN_GAME_VERB(receiver, /mob/living/carbon/human, veil_taur_toggle_cropping)
 	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(veil_strip_legacy_taur_verbs), receiver), 0)
-
+	if(receiver.client)
+		receiver.client.init_verbs()
 /proc/veil_strip_legacy_taur_verbs(mob/living/carbon/receiver)
 	if(!istype(receiver))
 		return
