@@ -11698,4 +11698,5 @@
 #include "modular_zzveilbreak\modules\mob\mob.dm"
 #include "modular_zzveilbreak\modules\spells\expanding_fire_ring.dm"
 #include "modular_zzplurt\modules\synths\code\bodyparts\internal_computer\internal_computer.dm"
+#include "modular_zzveilbreak\modules\taur_mechanics\taur_body_overrides.dm"
 // END_INCLUDE
