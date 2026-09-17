@@ -84,7 +84,7 @@
 /turf/open/floor/wood,
 /area/misc/condo)
 "hc" = (
-/obj/machinery/jukebox/no_access{
+/obj/machinery/jukebox/online{
 	set_obj_flags = "EMAGGED"
 	},
 /obj/structure/window/reinforced/spawner/directional/west,

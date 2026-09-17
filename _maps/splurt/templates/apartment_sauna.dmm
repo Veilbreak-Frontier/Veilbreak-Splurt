@@ -428,7 +428,7 @@
 /turf/open/floor/carpet/red,
 /area/misc/condo)
 "MT" = (
-/obj/machinery/jukebox/no_access,
+/obj/machinery/jukebox/online,
 /turf/open/floor/carpet/red,
 /area/misc/condo)
 "NC" = (
