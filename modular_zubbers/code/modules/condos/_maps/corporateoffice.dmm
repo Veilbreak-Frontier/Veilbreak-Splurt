@@ -85,12 +85,13 @@
 /turf/open/indestructible/hotelwood,
 /area/misc/condo)
 "iA" = (
-/obj/machinery/jukebox/online{
+/obj/machinery/jukebox{
 	icon = 'modular_skyrat/modules/aesthetics/intercom/icons/intercom.dmi';
 	icon_state = "intercom";
 	pixel_y = -10;
 	name = "Enviroment Sound System";
-	desc = "It's hip to be square!"
+	desc = "It's hip to be square!";
+    req_access = null
 	},
 /turf/closed/indestructible/riveted,
 /area/misc/condo)
