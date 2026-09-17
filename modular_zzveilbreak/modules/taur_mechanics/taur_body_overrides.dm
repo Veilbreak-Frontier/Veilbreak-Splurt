@@ -5,23 +5,30 @@
 	if(accessory?.can_lay_down)
 		can_lay_down = TRUE
 		laydown_offset = accessory.laydown_offset
-		ASSIGN_GAME_VERB(receiver, /mob/living/carbon/human, veil_taur_toggle_laying)
+		add_verb(receiver, /mob/living/carbon/human/proc/veil_taur_toggle_laying)
 
-	ASSIGN_GAME_VERB(receiver, /mob/living/carbon/human, veil_taur_toggle_cropping)
+	add_verb(receiver, /mob/living/carbon/human/proc/veil_taur_toggle_cropping)
 	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(veil_strip_legacy_taur_verbs), receiver), 0)
-	if(receiver.client)
-		receiver.client.init_verbs()
+	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(veil_refresh_taur_verbs), receiver), 1)
+
 /proc/veil_strip_legacy_taur_verbs(mob/living/carbon/receiver)
 	if(!istype(receiver))
 		return
 	remove_verb(receiver, /obj/item/organ/taur_body/proc/toggle_laying)
 	remove_verb(receiver, /obj/item/organ/taur_body/proc/toggle_cropping)
 
+/proc/veil_refresh_taur_verbs(mob/living/carbon/receiver)
+	if(!istype(receiver))
+		return
+	if(!receiver.client)
+		return
+	receiver.client.init_verbs()
+
 /proc/veil_untaur_verbs(mob/living/carbon/human/owner)
 	if(!istype(owner))
 		return
-	UNASSIGN_GAME_VERB(owner, /mob/living/carbon/human, veil_taur_toggle_laying)
-	UNASSIGN_GAME_VERB(owner, /mob/living/carbon/human, veil_taur_toggle_cropping)
+	remove_verb(owner, /mob/living/carbon/human/proc/veil_taur_toggle_laying)
+	remove_verb(owner, /mob/living/carbon/human/proc/veil_taur_toggle_cropping)
 
 GAME_VERB_PROC(/mob/living/carbon/human, veil_taur_toggle_laying, "Toggle Laying Down", "Taur")
 	var/mob/living/carbon/human/owner = src
