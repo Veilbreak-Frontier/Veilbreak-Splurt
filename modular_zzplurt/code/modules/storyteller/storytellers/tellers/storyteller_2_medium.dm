@@ -28,7 +28,7 @@
 		TAG_HIGH = 0,
 		TAG_OPFOR_ONLY = 0
 	)
-	storyteller_type = STORYTELLER_TYPE_ALWAYS_AVAILABLE
+	storyteller_type = STORYTELLER_TYPE_CALM
 
 /datum/storyteller_data/tracks/medium/opfor
 	threshold_crewset = INFINITY
