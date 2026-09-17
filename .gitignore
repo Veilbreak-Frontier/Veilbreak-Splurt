@@ -270,3 +270,11 @@ rust_g64.dll
 .vscode/settings.json
 continue/mcpServers/new-mcp-server.yaml
 .agents/rules/modularity.md
+
+# mergetool / kdiff3 temp files (auto-added by merge_helper.py)
+*_BACKUP_*
+*_BASE_*
+*_LOCAL_*
+*_REMOTE_*
+*.orig
+*.rej
