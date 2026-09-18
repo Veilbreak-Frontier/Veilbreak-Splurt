@@ -38,7 +38,7 @@
 /obj/machinery/power/entropic_converter/process()
 	if(machine_stat & (NOPOWER|BROKEN))
 		return
-	if(!is_dominant_entropic_converter_on_z())
+	if(!panel_open && !is_dominant_entropic_converter_on_z())
 		return
 
 	add_avail(power_to_energy(power_output))
@@ -85,3 +85,14 @@
 			best = candidate
 			best_ref = candidate_ref
 	return best
+
+/obj/machinery/power/entropic_converter/screwdriver_act(mob/living/user, obj/item/tool)
+	return default_deconstruction_screwdriver(user, tool)
+
+/obj/machinery/power/entropic_converter/crowbar_act(mob/living/user, obj/item/tool)
+	return default_deconstruction_crowbar(user, tool)
+
+/obj/machinery/power/entropic_converter/wrench_act(mob/living/user, obj/item/tool)
+	if(default_unfasten_wrench(user, tool) == SUCCESSFUL_UNFASTEN)
+		return ITEM_INTERACT_SUCCESS
+	return NONE
