@@ -115,23 +115,16 @@
 	playsound(src, 'sound/machines/ping.ogg', 50, FALSE, SILENCED_SOUND_EXTRARANGE, ignore_walls = FALSE)
 	update_appearance()
 
+/obj/machinery/void_miner/screwdriver_act(mob/living/user, obj/item/tool)
+	return default_deconstruction_screwdriver(user, tool)
+
 /obj/machinery/void_miner/crowbar_act(mob/living/user, obj/item/tool)
-	if(default_deconstruction_crowbar(tool))
-		return TRUE
+	return default_deconstruction_crowbar(user, tool)
 
 /obj/machinery/void_miner/wrench_act(mob/living/user, obj/item/tool)
-	. = ..()
-	default_unfasten_wrench(user, tool)
-	return ITEM_INTERACT_SUCCESS
-
-/obj/machinery/void_miner/screwdriver_act(mob/living/user, obj/item/tool)
-	. = TRUE
-	if(..())
-		return
-	if(default_deconstruction_screwdriver(user, tool))
-		update_appearance()
-		return
-	return FALSE
+	if(default_unfasten_wrench(user, tool) == SUCCESSFUL_UNFASTEN)
+		return ITEM_INTERACT_SUCCESS
+	return NONE
 
 /obj/item/circuitboard/machine/void_miner
 	name = "Void Miner"
