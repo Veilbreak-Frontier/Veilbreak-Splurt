@@ -153,7 +153,7 @@
 /obj/item/radio/headset/headset_frontier_colonist
 	name = "frontier radio headset"
 	desc = "A bulky headset that should hopefully survive exposure to the elements better than station headsets might. \
-		Has a built-in antenna allowing the headset to work independently of a communications network. Unable to use encryption keys."
+		Has a built-in antenna allowing the headset to work independently of a communications network."
 	icon = 'modular_skyrat/modules/kahraman_equipment/icons/clothes/clothing.dmi'
 	icon_state = "radio"
 	worn_icon = 'modular_skyrat/modules/kahraman_equipment/icons/clothes/clothing_worn.dmi'
@@ -165,6 +165,7 @@
 	radiosound = 'modular_skyrat/modules/kahraman_equipment/sound/morse_signal.wav'
 	radio_sound_volume = 20
 	freqlock = RADIO_FREQENCY_LOCKED
+	keyslot = null
 
 /obj/item/radio/headset/headset_frontier_colonist/wide
 	worn_icon_state = "radio_wide"
