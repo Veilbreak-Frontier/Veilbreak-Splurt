@@ -60,3 +60,19 @@
 		return ITEM_INTERACT_SUCCESS
 
 	return NONE
+
+/turf/open/space/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, list/rcd_data)
+	if(rcd_data[RCD_DESIGN_MODE] == RCD_TURF && rcd_data[RCD_DESIGN_PATH] == /turf/open/floor/plating/rcd)
+		for(var/obj/structure/lattice/lat in src)
+			qdel(lat)
+		place_on_top(/turf/open/floor/plating, flags = CHANGETURF_INHERIT_AIR)
+		return TRUE
+	return ..()
+
+/turf/open/openspace/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, list/rcd_data)
+	if(rcd_data[RCD_DESIGN_MODE] == RCD_TURF && rcd_data[RCD_DESIGN_PATH] == /turf/open/floor/plating/rcd)
+		for(var/obj/structure/lattice/lat in src)
+			qdel(lat)
+		place_on_top(/turf/open/floor/plating, flags = CHANGETURF_INHERIT_AIR)
+		return TRUE
+	return ..()
