@@ -5,11 +5,12 @@
 
 /turf/open/space/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	. = ..()
-	if(ITEM_INTERACT_ANY_BLOCKER & .)
-		return .
 
 	if(!istype(tool, /obj/item/stack/rods) && !ismetaltile(tool))
 		return NONE
+
+	if(ITEM_INTERACT_ANY_BLOCKER & .)
+		return .
 
 	if(!CanBuildHere())
 		return NONE
@@ -26,8 +27,6 @@
 
 /turf/open/openspace/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	. = ..()
-	if(ITEM_INTERACT_ANY_BLOCKER & .)
-		return .
 
 	var/is_buildable_tool = istype(tool, /obj/item/stack/rods) \
 		|| ismetaltile(tool) \
@@ -36,6 +35,9 @@
 
 	if(!is_buildable_tool)
 		return NONE
+
+	if(ITEM_INTERACT_ANY_BLOCKER & .)
+		return .
 
 	if(!CanBuildHere())
 		return NONE
