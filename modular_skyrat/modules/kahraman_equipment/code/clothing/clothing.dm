@@ -164,7 +164,6 @@
 	subspace_transmission = FALSE
 	radiosound = 'modular_skyrat/modules/kahraman_equipment/sound/morse_signal.wav'
 	radio_sound_volume = 20
-	freqlock = RADIO_FREQENCY_LOCKED
 	keyslot = null
 
 /obj/item/radio/headset/headset_frontier_colonist/wide
