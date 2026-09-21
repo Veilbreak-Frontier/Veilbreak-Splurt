@@ -316,7 +316,7 @@ GLOBAL_LIST_EMPTY(all_station_safes)
 	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(setup_path_unseen_vault_fallback)), 5 SECONDS)
 	return TRUE
 
-/// Spawns exactly one void fragment inside a random dungeon cache (veilbreak_lootbox) per dungeon
+/// Spawns void fragment designations across up to 5 dungeon caches (veilbreak_lootbox). The first one opened yields the fragment, and the remaining chests revert to normal loot.
 /proc/spawn_dungeon_void_fragment(z_level)
 	if(!z_level)
 		return
@@ -325,12 +325,39 @@ GLOBAL_LIST_EMPTY(all_station_safes)
 		if(C.z == z_level)
 			crates += C
 	if(length(crates))
-		var/obj/structure/closet/crate/veilbreak_lootbox/chosen = pick(crates)
-		new /obj/item/path_unseen_fragment/void(chosen)
+		var/count_to_designate = min(5, length(crates))
+		for(var/i in 1 to count_to_designate)
+			var/obj/structure/closet/crate/veilbreak_lootbox/chosen = pick_n_take(crates)
+			chosen.has_unseen_void_shard = TRUE
+			// Replace default loot generated at map load with the void fragment
+			for(var/atom/movable/AM in chosen)
+				qdel(AM)
+			new /obj/item/path_unseen_fragment/void(chosen)
 	else
 		var/turf/T = locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), z_level)
 		if(T)
 			new /obj/item/path_unseen_fragment/void(T)
+
+/// Called when one of the designated void fragment chests is opened. Clears designation on other chests on the Z-level, rerolling their contents into standard loot.
+/proc/claim_unseen_void_shard(obj/structure/closet/crate/veilbreak_lootbox/opened_crate)
+	if(!opened_crate)
+		return
+	opened_crate.has_unseen_void_shard = FALSE
+	var/target_z = opened_crate.z
+	for(var/obj/structure/closet/crate/veilbreak_lootbox/other_crate in world)
+		if(other_crate == opened_crate || other_crate.z != target_z)
+			continue
+		if(!other_crate.has_unseen_void_shard)
+			continue
+
+		other_crate.has_unseen_void_shard = FALSE
+
+		// Replace the void fragment in other designated crates with standard weighted loot
+		for(var/obj/item/path_unseen_fragment/void/frag in other_crate)
+			qdel(frag)
+			var/obj_type = pick_loot_from_table(veilbreak_lootbox_table)
+			if(obj_type)
+				new obj_type(other_crate)
 
 
 GLOBAL_LIST_INIT(path_unseen_spawns_init, setup_path_unseen_spawns())
