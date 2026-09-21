@@ -273,18 +273,64 @@ GLOBAL_LIST_EMPTY(all_station_safes)
 	GLOB.all_station_safes -= src
 	return ..()
 
+/mob/living
+	/// Number of maintenance trash piles searched by this person this shift
+	var/path_unseen_maint_searches = 0
+	/// Tracks whether this mob has obtained their maintenance fragment this shift
+	var/path_unseen_maint_found = FALSE
+
+/mob/living/Initialize(mapload)
+	. = ..()
+	RegisterSignal(src, COMSIG_LIVING_SEARCHED_TRASH_PILE, PROC_REF(on_searched_trash_pile_unseen))
+
+/mob/living/proc/on_searched_trash_pile_unseen(mob/living/source, obj/structure/trash_pile/trash)
+	SIGNAL_HANDLER
+
+	if(path_unseen_maint_found)
+		return
+
+	path_unseen_maint_searches++
+
+	// Chance to get lucky: base 10%, scaling up to 90% with search count
+	var/luck_chance = min(90, 8 + path_unseen_maint_searches * 2)
+	if(!prob(luck_chance))
+		return
+
+	path_unseen_maint_found = TRUE
+
+	var/turf/spawn_turf = trash ? get_turf(trash) : get_turf(src)
+	if(!spawn_turf)
+		return
+
+	new /obj/item/path_unseen_fragment/maint(spawn_turf)
+	playsound(spawn_turf, 'sound/effects/magic/charge.ogg', 50, TRUE)
+	to_chat(src, span_boldnotice("Your persistence pays off! Deep within the heap, your fingers brush against a glowing Shard of Remembrance!"))
+	balloon_alert(src, "found a shard of remembrance!")
+
 /// Auto-setup procedure for fragment placement
 /proc/setup_path_unseen_spawns()
-	// Method A: Add Fragment 1 to Maintenance Oddity Loot Pool
-	if(GLOB.oddity_loot)
-		GLOB.oddity_loot[/obj/item/path_unseen_fragment/maint] = 1
-
-	// Method B: Void Dungeon Loot Crates
-	// (Integrated into veilbreak_lootbox_table in modular_zzveilbreak/code/game/objects/items/drop_list.dm)
+	// Method A: Maintenance fragment is awarded dynamically per person searching trash piles (COMSIG_LIVING_SEARCHED_TRASH_PILE)
+	// Method B: Void fragment spawns 1 per dungeon in a cache via spawn_dungeon_void_fragment()
 
 	// Method C Fallback: If no /obj/structure/safe/unseen_vault was mapped, put Fragment 3 in a random safe on station
 	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(setup_path_unseen_vault_fallback)), 5 SECONDS)
 	return TRUE
+
+/// Spawns exactly one void fragment inside a random dungeon cache (veilbreak_lootbox) per dungeon
+/proc/spawn_dungeon_void_fragment(z_level)
+	if(!z_level)
+		return
+	var/list/obj/structure/closet/crate/veilbreak_lootbox/crates = list()
+	for(var/obj/structure/closet/crate/veilbreak_lootbox/C in world)
+		if(C.z == z_level)
+			crates += C
+	if(length(crates))
+		var/obj/structure/closet/crate/veilbreak_lootbox/chosen = pick(crates)
+		new /obj/item/path_unseen_fragment/void(chosen)
+	else
+		var/turf/T = locate(round(DUNGEON_WIDTH / 2), round(DUNGEON_HEIGHT / 2), z_level)
+		if(T)
+			new /obj/item/path_unseen_fragment/void(T)
 
 
 GLOBAL_LIST_INIT(path_unseen_spawns_init, setup_path_unseen_spawns())
