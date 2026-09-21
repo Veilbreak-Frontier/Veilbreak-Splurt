@@ -190,6 +190,9 @@
 	shake_camera(user, 3 SECONDS, 2)
 	addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living, flash_act), 1, 0, 0, TRUE, /atom/movable/screen/fullscreen/flash, 2 SECONDS), 0.2 SECONDS)
 
+	// Total stamina drain
+	user.adjustStaminaLoss(user.max_stamina)
+
 
 	// Achievement Award
 	if(user.client)
