@@ -54,6 +54,8 @@
 
 			atmos_resume_z_level(z_level)
 
+			spawn_dungeon_void_fragment(z_level)
+
 			addtimer(CALLBACK(src, .proc/veilbreak_sync_portal_pair), 5)
 
 			if(connected_control_computer)
