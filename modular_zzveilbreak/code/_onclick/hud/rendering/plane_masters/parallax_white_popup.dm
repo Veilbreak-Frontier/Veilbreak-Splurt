@@ -24,6 +24,7 @@
 
 /atom/movable/screen/plane_master/parallax_white/veilbreak_popup/parallax_updated(datum/source)
 	SIGNAL_HANDLER
-	if(isnull(home.our_hud?.mymob))
+	if(istype(home, /datum/plane_master_group/popup))
+		color = initial(color)
 		return
-	color = initial(color)
+	return ..()
