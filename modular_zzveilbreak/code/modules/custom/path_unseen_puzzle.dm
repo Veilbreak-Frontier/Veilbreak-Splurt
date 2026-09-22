@@ -7,6 +7,7 @@
 #define PATH_UNSEEN_FRAG_VAULT    (1 << 2)
 #define PATH_UNSEEN_FRAG_ARCHAEO (1 << 3)
 #define PATH_UNSEEN_FRAG_ALL      (PATH_UNSEEN_FRAG_MAINT | PATH_UNSEEN_FRAG_VOID | PATH_UNSEEN_FRAG_VAULT | PATH_UNSEEN_FRAG_ARCHAEO)
+#define PATH_UNSEEN_MAX_MINING_SHARDS 3
 
 // ==========================================
 // 1. FRAGMENTS & COMBINATION
@@ -385,15 +386,19 @@ GLOBAL_LIST_INIT(path_unseen_spawns_init, setup_path_unseen_spawns())
 	new /obj/item/path_unseen_fragment/vault(src)
 
 // Method D: Archaeology & Rock Mining Drops
+GLOBAL_VAR_INIT(path_unseen_mining_shards_spawned, 0)
+
 /turf/closed/mineral/gets_drilled(mob/user, exp_multiplier = 0)
 	. = ..()
-	if(prob(2))
+	if(GLOB.path_unseen_mining_shards_spawned < PATH_UNSEEN_MAX_MINING_SHARDS && prob(2))
+		GLOB.path_unseen_mining_shards_spawned++
 		new /obj/item/path_unseen_fragment/archaeo(src)
 		if(user)
 			to_chat(user, span_boldnotice("Your mining pick unearths an ancient crimson fragment embedded in the rock!"))
 
 /obj/item/relic/reveal()
 	. = ..()
-	if(prob(25))
+	if(GLOB.path_unseen_mining_shards_spawned < PATH_UNSEEN_MAX_MINING_SHARDS && prob(25))
+		GLOB.path_unseen_mining_shards_spawned++
 		new /obj/item/path_unseen_fragment/archaeo(drop_location())
 
