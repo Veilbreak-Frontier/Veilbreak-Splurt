@@ -18,10 +18,18 @@
 
 /datum/power/expert/strider/post_add()
 	..()
-	power_holder.add_movespeed_mod_immunities(src, /datum/movespeed_modifier/equipment_speedmod)
+	power_holder.add_movespeed_mod_immunities(src, list(
+		/datum/movespeed_modifier/equipment_speedmod,
+		/datum/movespeed_modifier/equipment_speedmod/immutable,
+		/datum/movespeed_modifier/equipment_speedmod/true_immutable,
+	))
 	power_holder.mind?.adjust_experience(/datum/skill/athletics, starting_xp_base)
 
 /datum/power/expert/strider/remove()
-	power_holder.remove_movespeed_mod_immunities(src, (/datum/movespeed_modifier/equipment_speedmod))
+	power_holder.remove_movespeed_mod_immunities(src, list(
+		/datum/movespeed_modifier/equipment_speedmod,
+		/datum/movespeed_modifier/equipment_speedmod/immutable,
+		/datum/movespeed_modifier/equipment_speedmod/true_immutable,
+	))
 	power_holder.mind?.adjust_experience(/datum/skill/athletics, -starting_xp_base)
 
