@@ -1,17 +1,68 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
-"e" = (
+"a" = (
+/obj/effect/turf_decal/siding/dark/inner_corner{
+	dir = 4
+	},
+/obj/effect/turf_decal/siding/dark/inner_corner{
+	dir = 4
+	},
+/obj/structure/wall_torch/spawns_lit/directional/east,
+/turf/open/water/hot_spring,
+/area/misc/survivalpod)
+"b" = (
+/obj/structure/window/fulltile,
+/obj/structure/curtain/cloth/fancy,
+/turf/open/floor/fakebasalt,
+/area/misc/survivalpod)
+"c" = (
+/obj/structure/table/wood,
+/obj/structure/towel_bin{
+	pixel_y = 8
+	},
+/turf/open/floor/fakebasalt,
+/area/misc/survivalpod)
+"d" = (
+/obj/effect/turf_decal/siding/dark{
+	pixel_y = 0;
+	dir = 8
+	},
+/turf/open/water/hot_spring,
+/area/misc/survivalpod)
+"f" = (
 /obj/effect/turf_decal/siding/dark/inner_corner{
 	dir = 1
 	},
 /turf/open/water/hot_spring,
 /area/misc/survivalpod)
-"h" = (
-/obj/effect/turf_decal/siding/dark/inner_corner{
-	dir = 8
+"g" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on/layer4,
+/turf/open/floor/wood,
+/area/misc/survivalpod)
+"j" = (
+/turf/closed/wall/tomb,
+/area/misc/survivalpod)
+"l" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/fakebasalt,
+/area/misc/survivalpod)
+"r" = (
+/obj/effect/turf_decal/siding/dark{
+	pixel_y = 0;
+	dir = 4
 	},
 /turf/open/water/hot_spring,
 /area/misc/survivalpod)
-"m" = (
+"t" = (
+/turf/open/floor/fakebasalt,
+/area/misc/survivalpod)
+"x" = (
+/obj/effect/turf_decal/siding/dark/inner_corner{
+	dir = 2
+	},
+/obj/structure/wall_torch/spawns_lit/directional/east,
+/turf/open/water/hot_spring,
+/area/misc/survivalpod)
+"y" = (
 /obj/structure/fans/tiny/invisible,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
@@ -20,74 +71,7 @@
 	},
 /turf/open/floor/fakebasalt,
 /area/misc/survivalpod)
-"n" = (
-/obj/machinery/atmospherics/components/unary/vent_pump/on/layer4,
-/turf/open/floor/wood,
-/area/misc/survivalpod)
-"o" = (
-/obj/structure/table/wood,
-/obj/structure/towel_bin{
-	pixel_y = 8
-	},
-/turf/open/floor/fakebasalt,
-/area/misc/survivalpod)
-"p" = (
-/obj/machinery/button/door/directional/south{
-	id = "sauna-entrance"
-	},
-/turf/open/floor/fakebasalt,
-/area/misc/survivalpod)
-"q" = (
-/obj/machinery/airalarm/directional/south,
-/obj/effect/mapping_helpers/airalarm/unlocked,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/turf/open/floor/fakebasalt,
-/area/misc/survivalpod)
-"s" = (
-/obj/structure/wall_torch/spawns_lit/directional/west,
-/turf/open/floor/fakebasalt,
-/area/misc/survivalpod)
-"u" = (
-/obj/effect/turf_decal/siding/dark{
-	pixel_y = 0;
-	dir = 8
-	},
-/turf/open/water/hot_spring,
-/area/misc/survivalpod)
-"w" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
-/turf/open/floor/fakebasalt,
-/area/misc/survivalpod)
-"A" = (
-/obj/structure/window/fulltile,
-/obj/structure/curtain/cloth/fancy,
-/turf/open/floor/fakebasalt,
-/area/misc/survivalpod)
-"B" = (
-/obj/structure/medieval/bed_2x2{
-	dir = 8
-	},
-/turf/open/floor/fakebasalt,
-/area/misc/survivalpod)
-"C" = (
-/obj/effect/turf_decal/siding/dark{
-	pixel_y = 0;
-	dir = 4
-	},
-/turf/open/water/hot_spring,
-/area/misc/survivalpod)
-"D" = (
-/obj/structure/closet/cabinet,
-/obj/item/clothing/under/misc/skyrat/gear_harness,
-/obj/item/clothing/under/misc/skyrat/gear_harness,
-/obj/item/clothing/under/misc/skyrat/gear_harness,
-/obj/item/clothing/under/misc/skyrat/gear_harness,
-/obj/item/clothing/under/misc/skyrat/gear_harness,
-/obj/item/clothing/under/misc/skyrat/gear_harness,
-/obj/structure/wall_torch/spawns_lit/directional/west,
-/turf/open/floor/fakebasalt,
-/area/misc/survivalpod)
-"E" = (
+"z" = (
 /obj/machinery/light/floor,
 /obj/item/toy/plush/red_mut{
 	pixel_x = -4;
@@ -100,115 +84,131 @@
 /obj/structure/table/wood,
 /turf/open/floor/fakebasalt,
 /area/misc/survivalpod)
-"H" = (
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+"G" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
+	dir = 4
+	},
 /turf/open/floor/fakebasalt,
 /area/misc/survivalpod)
-"I" = (
+"J" = (
+/obj/structure/closet/cabinet,
+/obj/item/clothing/under/misc/skyrat/gear_harness,
+/obj/item/clothing/under/misc/skyrat/gear_harness,
+/obj/item/clothing/under/misc/skyrat/gear_harness,
+/obj/item/clothing/under/misc/skyrat/gear_harness,
+/obj/item/clothing/under/misc/skyrat/gear_harness,
+/obj/item/clothing/under/misc/skyrat/gear_harness,
+/obj/structure/wall_torch/spawns_lit/directional/west,
 /turf/open/floor/fakebasalt,
 /area/misc/survivalpod)
-"K" = (
+"L" = (
+/obj/effect/turf_decal/siding/dark/inner_corner{
+	dir = 8
+	},
+/turf/open/water/hot_spring,
+/area/misc/survivalpod)
+"O" = (
+/obj/structure/wall_torch/spawns_lit/directional/west,
+/turf/open/floor/fakebasalt,
+/area/misc/survivalpod)
+"Q" = (
 /obj/structure/chair/pew/left{
 	dir = 1
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /turf/open/floor/fakebasalt,
 /area/misc/survivalpod)
-"M" = (
-/turf/closed/wall/tomb,
+"R" = (
+/obj/machinery/airalarm/directional/south,
+/obj/effect/mapping_helpers/airalarm/unlocked,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/turf/open/floor/fakebasalt,
 /area/misc/survivalpod)
-"N" = (
-/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
-	dir = 4
+"S" = (
+/obj/structure/medieval/bed_2x2{
+	dir = 8
 	},
 /turf/open/floor/fakebasalt,
 /area/misc/survivalpod)
-"P" = (
-/obj/effect/turf_decal/siding/dark/inner_corner{
-	dir = 2
-	},
-/obj/structure/wall_torch/spawns_lit/directional/east,
-/turf/open/water/hot_spring,
-/area/misc/survivalpod)
-"V" = (
+"U" = (
 /obj/structure/chair/pew/right{
 	dir = 1
 	},
 /turf/open/floor/fakebasalt,
 /area/misc/survivalpod)
-"X" = (
-/obj/effect/turf_decal/siding/dark/inner_corner{
-	dir = 4
+"W" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/fakebasalt,
+/area/misc/survivalpod)
+"Y" = (
+/obj/machinery/button/door/directional/south{
+	id = "sauna-entrance"
 	},
-/obj/effect/turf_decal/siding/dark/inner_corner{
-	dir = 4
-	},
-/obj/structure/wall_torch/spawns_lit/directional/east,
-/turf/open/water/hot_spring,
+/turf/open/floor/fakebasalt,
 /area/misc/survivalpod)
 
 (1,1,1) = {"
-M
-M
-A
-A
-M
-M
+j
+j
+b
+b
+j
+j
 "}
 (2,1,1) = {"
-A
-D
-I
-B
-s
-M
+b
+J
+t
+S
+O
+j
 "}
 (3,1,1) = {"
-A
-I
-N
-n
-q
-M
+b
+t
+G
+g
+R
+j
 "}
 (4,1,1) = {"
-A
-o
-K
-w
-H
-m
+b
+c
+Q
+l
+W
+y
 "}
 (5,1,1) = {"
-A
-E
-V
-I
-p
-M
+b
+z
+U
+t
+Y
+j
 "}
 (6,1,1) = {"
-A
-e
-u
-u
-h
-A
+b
+f
+d
+d
+L
+b
 "}
 (7,1,1) = {"
-A
-X
-C
-C
-P
-A
+b
+a
+r
+r
+x
+b
 "}
 (8,1,1) = {"
-M
-M
-A
-A
-M
-M
+j
+j
+b
+b
+j
+j
 "}
