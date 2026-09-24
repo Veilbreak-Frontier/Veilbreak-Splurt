@@ -271,17 +271,15 @@ function constraintPosition(pos: Point, size: Point): [boolean, Point] {
 
 // Start dragging the window
 export function dragStartHandler(event): void {
-  logger.log('drag start');
-  dragging = true;
-  dragPointOffset = vecSubtract(
-    [event.screenX * pixelRatio, event.screenY * pixelRatio],
-    getWindowPosition(),
-  ) as Point;
-  // Focus click target
-  (event.target as HTMLElement)?.focus();
-  document.addEventListener('mousemove', dragMoveHandler);
-  document.addEventListener('mouseup', dragEndHandler);
-  dragMoveHandler(event);
+    logger.log('drag start');
+    dragging = true;
+    dragPointOffset = vecSubtract(
+        [event.screenX * pixelRatio, event.screenY * pixelRatio],
+        getWindowPosition(),
+    ) as Point;
+    document.addEventListener('mousemove', dragMoveHandler);
+    document.addEventListener('mouseup', dragEndHandler);
+    dragMoveHandler(event);
 }
 
 // End dragging the window
