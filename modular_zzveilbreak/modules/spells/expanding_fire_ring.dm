@@ -108,4 +108,3 @@
 	. = ..()
 	set_light(light_range, light_power, light_color)
 	playsound(src, 'sound/effects/magic/fireball.ogg', 30, TRUE)
-

@@ -622,6 +622,7 @@
 #include "code\__DEFINES\~~~veilbreak_defines\techweb.dm"
 #include "code\__DEFINES\~~~veilbreak_defines\atmospherics\atmos_gasses.dm"
 #include "code\__DEFINES\~~~veilbreak_defines\atmospherics\atmos_mapping_helpers.dm"
+#include "code\__DEFINES\~~~veilbreak_defines\veilbreak_verbs.dm"
 #include "code\__HELPERS\_auxtools_api.dm"
 #include "code\__HELPERS\_dreamluau.dm"
 #include "code\__HELPERS\_level_traits.dm"
