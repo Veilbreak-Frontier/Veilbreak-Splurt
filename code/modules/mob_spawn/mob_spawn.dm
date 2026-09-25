@@ -60,12 +60,20 @@
 /obj/effect/mob_spawn/proc/create(mob/mob_possessor, newname, apply_prefs)
 	SHOULD_NOT_SLEEP(TRUE)
 
-	var/mob/living/spawned_mob = new mob_type(get_turf(src)) //living mobs only
+	var/mob/living/spawned_mob
+	if(ispath(mob_type, /mob/living/carbon/human))
+		spawned_mob = new mob_type(get_turf(src), get_mob_species(mob_possessor, apply_prefs))
+	else
+		spawned_mob = new mob_type(get_turf(src)) //living mobs only
 	special(spawned_mob, mob_possessor, apply_prefs)
 	name_mob(spawned_mob, newname)
 	equip(spawned_mob)
 	spawned_mob_ref = WEAKREF(spawned_mob)
 	return spawned_mob
+
+/// Returns the species typepath a human spawned by this spawner should be initialized with.
+/obj/effect/mob_spawn/proc/get_mob_species(mob/mob_possessor, apply_prefs)
+	return mob_species
 
 /**
  * Any special behavior that needs to be done to the mob after it's created but before it's equipped.
@@ -101,6 +109,8 @@
 			spawned_human.set_haircolor(haircolor, update = FALSE)
 		if(facial_haircolor)
 			spawned_human.set_facial_haircolor(facial_haircolor, update = FALSE)
+		if(skin_tone)
+			spawned_human.skin_tone = skin_tone
 		spawned_human.update_body(is_creating = TRUE)
 
 /obj/effect/mob_spawn/proc/name_mob(mob/living/spawned_mob, forced_name)
@@ -289,6 +299,11 @@
 
 	return ..()
 
+/obj/effect/mob_spawn/ghost_role/get_mob_species(mob/mob_possessor, apply_prefs)
+	if(mob_possessor?.client && apply_prefs && (allow_custom_character & GHOSTROLE_TAKE_PREFS_SPECIES))
+		return mob_possessor.client.prefs.read_preference(/datum/preference/choiced/species)
+	return ..()
+
 /obj/effect/mob_spawn/ghost_role/special(mob/living/spawned_mob, mob/mob_possessor, apply_prefs)
 	. = ..()
 	if(mob_possessor)
@@ -297,7 +312,6 @@
 			if(allow_custom_character & GHOSTROLE_TAKE_PREFS_APPEARANCE)
 				mob_possessor.client.prefs.apply_prefs_to(spawned_human, icon_updates = TRUE, do_not_apply = typesof(/datum/preference/name, /datum/preference/choiced/species))
 			if(allow_custom_character & GHOSTROLE_TAKE_PREFS_SPECIES)
-				spawned_human.set_species(mob_possessor.client.prefs.read_preference(/datum/preference/choiced/species))
 				spawned_human.fully_replace_character_name(spawned_human.real_name, spawned_human.generate_random_mob_name())
 		if(mob_possessor.mind)
 			mob_possessor.mind.transfer_to(spawned_mob, force_key_move = TRUE)
