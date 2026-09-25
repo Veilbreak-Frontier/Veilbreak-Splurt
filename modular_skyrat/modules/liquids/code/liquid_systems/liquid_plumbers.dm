@@ -310,7 +310,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/plumbing/floor_pump/output/on/supply/
 		/datum/material/glass = SHEET_MATERIAL_AMOUNT * 5,
 		/datum/material/gold = HALF_SHEET_MATERIAL_AMOUNT,
 	)
-	var/static/list/engineering_design_types = list(
+	var/list/engineering_design_types = list(
 		//category 1 Synthesizers i.e devices which creates , reacts & destroys chemicals
 		"Synthesizers" = list(
 			/obj/machinery/plumbing/disposer = 10,

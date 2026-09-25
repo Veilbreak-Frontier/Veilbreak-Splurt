@@ -1,11 +1,10 @@
-/datum/ai_controller/inai
+/datum/ai_controller/basic_controller/simple/simple_hostile/inai
 	blackboard = list(
 		BB_BASIC_MOB_CURRENT_TARGET = null,
 	)
 	ai_movement = /datum/ai_movement/basic_avoidance
-	idle_behavior = /datum/idle_behavior/idle_random_walk
 
-/datum/ai_controller/inai/process(seconds_per_tick)
+/datum/ai_controller/basic_controller/simple/simple_hostile/inai/process(seconds_per_tick)
 	. = ..()
 	var/mob/living/simple_animal/hostile/megafauna/inai/inai = pawn
 	if(!inai || inai.stat == DEAD || inai.channeling)

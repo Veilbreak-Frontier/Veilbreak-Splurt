@@ -122,37 +122,37 @@
 	return FALSE
 
 /datum/martial_art/kaza_ruk/proc/low_sweep(mob/living/attacker, mob/living/defender)
-    if(defender.stat != CONSCIOUS || defender.IsParalyzed())
-        return MARTIAL_ATTACK_INVALID
-    if(HAS_TRAIT(attacker, TRAIT_PACIFISM))
-        return MARTIAL_ATTACK_INVALID
+	if(IS_UNCONSCIOUS_OR_CRIT(defender) || defender.IsParalyzed())
+		return MARTIAL_ATTACK_INVALID
+	if(HAS_TRAIT(attacker, TRAIT_PACIFISM))
+		return MARTIAL_ATTACK_INVALID // Does 5 damage, so we can't let pacifists leg sweep.
 
-    var/tail_sweeping = FALSE
-    var/sweeping_language = "leg"
+	var/tail_sweeping = FALSE
+	var/sweeping_language = "leg"
 
-    if(ishuman(attacker))
-        var/mob/living/carbon/human/H = attacker
-        if(H.pc_has_tail())
-            tail_sweeping = TRUE
-            sweeping_language = "tail"
+	if(ishuman(attacker))
+		var/mob/living/carbon/human/H = attacker
+		if(H.pc_has_tail())
+			tail_sweeping = TRUE
+			sweeping_language = "tail"
 
-    defender.visible_message(
-        span_warning("[attacker] [sweeping_language] sweeps [defender]!"),
-        span_userdanger("Your legs are sweeped by [attacker]!"),
-        span_hear("You hear a sickening sound of flesh hitting flesh!"),
-        null,
-        attacker,
-    )
-    to_chat(attacker, span_danger("You [sweeping_language] sweep [defender]!"))
-    playsound(attacker, 'sound/effects/hit_kick.ogg', 50, TRUE, -1)
+	defender.visible_message(
+		span_warning("[attacker] [sweeping_language] sweeps [defender]!"),
+		span_userdanger("Your legs are sweeped by [attacker]!"),
+		span_hear("You hear a sickening sound of flesh hitting flesh!"),
+		null,
+		attacker,
+	)
+	to_chat(attacker, span_danger("You [sweeping_language] sweep [defender]!"))
+	playsound(attacker, 'sound/effects/hit_kick.ogg', 50, TRUE, -1)
 
-    if(tail_sweeping)
-        attacker.emote("spin")
+	if(tail_sweeping)
+		attacker.emote("spin")
 
-    defender.apply_damage(5, BRUTE, BODY_ZONE_CHEST)
-    defender.Knockdown(6 SECONDS)
-    log_combat(attacker, defender, "[sweeping_language] sweeped")
-    return MARTIAL_ATTACK_SUCCESS
+	defender.apply_damage(5, BRUTE, BODY_ZONE_CHEST)
+	defender.Knockdown(6 SECONDS)
+	log_combat(attacker, defender, "[sweeping_language] sweeped")
+	return MARTIAL_ATTACK_SUCCESS
 
 /datum/martial_art/kaza_ruk/proc/quick_choke(mob/living/attacker, mob/living/defender)//is actually lung punch
 	attacker.do_attack_animation(defender)

@@ -94,30 +94,31 @@
         SSpersonalities.processing_personalities[src] -= who
 
 /datum/personality/process(seconds_per_tick)
-    var/list/processing_list = SSpersonalities.processing_personalities[src]
+	var/list/processing_list = SSpersonalities.processing_personalities[src]
 
-    for(var/mob/living/subject as anything in processing_list)
-        if(!subject || QDELETED(subject))
-            processing_list -= subject
-            continue
+	for(var/mob/living/subject as anything in processing_list)
+		if(!subject || QDELETED(subject))
+			processing_list -= subject
+			continue
 
-        if(subject.stat >= UNCONSCIOUS || HAS_TRAIT(subject, TRAIT_NO_TRANSFORM))
-            continue
+		if(IS_UNCONSCIOUS_OR_CRIT(subject) || HAS_TRAIT(subject, TRAIT_NO_TRANSFORM))
+			continue
 
-        var/res = on_tick(subject, seconds_per_tick)
+		var/res = on_tick(subject, seconds_per_tick)
 
-        if(res == PROCESS_KILL)
-            processing_list -= subject
-            continue
+		if(res == PROCESS_KILL)
+			processing_list -= subject
+			continue
 
-    return null
+	return null
+
 /**
  * Signal handler for COMSIG_QDELETING
  * Ensures the singleton stops tracking a mob that is being deleted.
  */
 /datum/personality/proc/on_mob_deleting(mob/living/source)
-    SIGNAL_HANDLER
-    remove_from_mob(source)
+	SIGNAL_HANDLER
+	remove_from_mob(source)
 
 
 /// Called every SSpersonality tick if `processes` is TRUE.

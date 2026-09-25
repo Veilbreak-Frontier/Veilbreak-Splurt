@@ -20,8 +20,7 @@
     laws = new /datum/ai_laws/roleplay()
     if(islist(laws?.inherent))
         laws.inherent = list()   // roleplay borgs have no inherent laws
-    set_zeroth_law(laws.zeroth)
-    laws_sanity_check()
+    laws.set_zeroth_law(laws.zeroth)
     log_current_laws()
 
 

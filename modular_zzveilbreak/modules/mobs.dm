@@ -30,7 +30,7 @@
 	obj_damage = 30
 	movement_type = GROUND
 	basic_mob_flags = DEL_ON_DEATH
-	ai_controller = /datum/ai_controller/basic_controller/void
+	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void
 
 /mob/living/basic/void_creature/Initialize(mapload)
 	. = ..()
@@ -85,7 +85,7 @@
 		BLUNT = 25, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0,
 		BOMB = 0, BIO = 0, FIRE = 0, ACID = 0, MAGIC = 0, RADIATION = 0,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/void/voidling
+	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void/voidling
 
 /mob/living/basic/void_creature/voidling/do_void_creature_loot_drop()
 	var/loot_type = pick_loot_from_table(voidling_loot_table)
@@ -113,7 +113,7 @@
 		BLUNT = -20, PUNCTURE = -20, SLASH = -20, LASER = -10, ENERGY = 0,
 		BOMB = 0, BIO = 50, FIRE = 30, ACID = 0, MAGIC = 30, RADIATION = 80,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/void_pathfinder
+	ai_controller = /datum/ai_controller/basic_controller/simple/simple_ranged/void_pathfinder
 
 /mob/living/basic/void_creature/consumed_pathfinder/Initialize(mapload)
 	. = ..()
@@ -145,7 +145,7 @@
 		BLUNT = 30, PUNCTURE = 30, SLASH = 30, LASER = -10, ENERGY = 0,
 		BOMB = 0, BIO = 50, FIRE = -50, ACID = 0, MAGIC = 30, RADIATION = 80,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/void/voidbug
+	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void/voidbug
 	var/block_chance = 40
 	var/last_alert_time = 0
 	var/alert_cooldown = 30 SECONDS
@@ -195,7 +195,7 @@
 		BLUNT = -20, PUNCTURE = -20, SLASH = -20, LASER = -10, ENERGY = 0,
 		BOMB = 0, BIO = 50, FIRE = 30, ACID = 0, MAGIC = 30, RADIATION = 80,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/void_healer
+	ai_controller = /datum/ai_controller/basic_controller/simple/simple_ranged/void_healer
 
 /mob/living/basic/void_creature/void_healer/Initialize(mapload)
 	. = ..()
@@ -229,34 +229,18 @@
 
 // --- AI CONTROLLERS ---
 
-/datum/ai_controller/basic_controller/void
+/datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
 		BB_AGGRO_RANGE = 10,
 	)
 	ai_movement = /datum/ai_movement/basic_avoidance
-	idle_behavior = /datum/idle_behavior/idle_random_walk
-	planning_subtrees = list(
-		/datum/ai_planning_subtree/simple_find_target,
-		/datum/ai_planning_subtree/target_retaliate/check_faction,
-		/datum/ai_planning_subtree/attack_obstacle_in_path,
-		/datum/ai_planning_subtree/basic_melee_attack_subtree
-	)
 
-/datum/ai_controller/basic_controller/void/voidling
-	// Same as base void: find target, melee, no flee (tanky attacker)
+/datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void/voidling
 
-/datum/ai_controller/basic_controller/void/voidbug
-	// Voidbug tanks and never runs: pack call + find target + melee, no flee. Aggressive on sight.
-	planning_subtrees = list(
-		/datum/ai_planning_subtree/voidbug_pack_call,
-		/datum/ai_planning_subtree/simple_find_target,
-		/datum/ai_planning_subtree/target_retaliate/check_faction,
-		/datum/ai_planning_subtree/attack_obstacle_in_path,
-		/datum/ai_planning_subtree/basic_melee_attack_subtree,
-	)
+/datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void/voidbug
 
-/datum/ai_controller/basic_controller/void_pathfinder
+/datum/ai_controller/basic_controller/simple/simple_ranged/void_pathfinder
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
 		BB_VOID_SUMMON_COOLDOWN = 0,
@@ -264,16 +248,8 @@
 		BB_RANGED_SKIRMISH_MAX_DISTANCE = 8
 	)
 	ai_movement = /datum/ai_movement/basic_avoidance
-	idle_behavior = /datum/idle_behavior/idle_random_walk
-	planning_subtrees = list(
-		/datum/ai_planning_subtree/target_retaliate,
-		/datum/ai_planning_subtree/simple_find_target,
-		/datum/ai_planning_subtree/maintain_distance,
-		/datum/ai_planning_subtree/void_pathfinder_summon,
-		/datum/ai_planning_subtree/basic_ranged_attack_subtree/void_creature
-	)
 
-/datum/ai_controller/basic_controller/void_healer
+/datum/ai_controller/basic_controller/simple/simple_ranged/void_healer
 	blackboard = list(
 		BB_VOID_HEAL_COOLDOWN = 0,
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
@@ -282,190 +258,15 @@
 		BB_RANGED_SKIRMISH_MAX_DISTANCE = 8,
 	)
 	ai_movement = /datum/ai_movement/basic_avoidance
-	idle_behavior = /datum/idle_behavior/idle_random_walk
-	planning_subtrees = list(
-		/datum/ai_planning_subtree/void_healer_find_and_heal,
-		/datum/ai_planning_subtree/simple_find_target,
-		/datum/ai_planning_subtree/target_retaliate/check_faction,
-		/datum/ai_planning_subtree/attack_obstacle_in_path,
-		/datum/ai_planning_subtree/maintain_distance,
-		/datum/ai_planning_subtree/basic_ranged_attack_subtree/void_creature
-	)
-
-/// Longer line-of-sight window than default basic_ranged_attack (3) so void bolts match skirmish range.
-/datum/ai_behavior/basic_ranged_attack/void_creature
-	required_distance = 9
-	chase_range = 12
-
-/datum/ai_planning_subtree/basic_ranged_attack_subtree/void_creature
-	ranged_attack_behavior = /datum/ai_behavior/basic_ranged_attack/void_creature
-
-// --- SUBTREES ---
-
-/// Voidbug rally: when we have a target, alert nearby void creatures so they attack it too (unique "spell").
-/datum/ai_planning_subtree/voidbug_pack_call
-	var/pack_call_cooldown = 15 SECONDS
-
-/datum/ai_planning_subtree/voidbug_pack_call/SelectBehaviors(datum/ai_controller/controller, seconds_per_tick)
-	if(!controller.blackboard_key_exists(BB_BASIC_MOB_CURRENT_TARGET))
-		return
-	var/last_pack_call = controller.blackboard[BB_VOIDBUG_LAST_PACK_CALL] || 0
-	if(world.time < last_pack_call + pack_call_cooldown)
-		return
-	controller.queue_behavior(/datum/ai_behavior/voidbug_call_pack, BB_BASIC_MOB_CURRENT_TARGET)
-	return SUBTREE_RETURN_FINISH_PLANNING
-
-/datum/ai_behavior/voidbug_call_pack
-	action_cooldown = 15 SECONDS
-
-/datum/ai_behavior/voidbug_call_pack/setup(datum/ai_controller/controller, target_key)
-	var/atom/target = controller.blackboard[target_key]
-	if(!target)
-		return FALSE
-	return ..()
-
-/datum/ai_behavior/voidbug_call_pack/perform(seconds_per_tick, datum/ai_controller/controller, target_key)
-	var/mob/living/living_pawn = controller.pawn
-	var/atom/target = controller.blackboard[target_key]
-	if(!target)
-		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
-
-	var/turf/source_turf = get_turf(living_pawn)
-	var/pack_called = FALSE
-
-	for(var/mob/living/basic/void_creature/void_mob in view(9, living_pawn))
-		if(void_mob == living_pawn || void_mob.stat == DEAD || !void_mob.ai_controller)
-			continue
-
-		var/turf/ally_turf = get_turf(void_mob)
-		if(!ally_turf)
-			continue
-
-		var/blocked = FALSE
-		for(var/turf/check_turf in get_line(source_turf, ally_turf))
-			if(check_turf == source_turf || check_turf == ally_turf)
-				continue
-
-			if(check_turf.opacity)
-				blocked = TRUE
-				break
-
-			for(var/atom/A in check_turf)
-				if(ismob(A))
-					continue
-				if(A.density)
-					blocked = TRUE
-					break
-
-			if(blocked)
-				break
-
-		if(blocked)
-			continue
-
-		if(void_mob.faction.Find(FACTION_VOID) && !void_mob.ai_controller.blackboard_key_exists(BB_BASIC_MOB_CURRENT_TARGET))
-			void_mob.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
-			pack_called = TRUE
-
-	if(pack_called)
-		living_pawn.visible_message(span_warning("[living_pawn] lets out a chittering call, rallying nearby void creatures!"))
-		playsound(living_pawn, 'sound/effects/hallucinations/growl1.ogg', 50, TRUE)
-
-	controller.blackboard[BB_VOIDBUG_LAST_PACK_CALL] = world.time
-	return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_SUCCEEDED
-
-/datum/ai_planning_subtree/void_pathfinder_summon/SelectBehaviors(datum/ai_controller/controller, seconds_per_tick)
-	if(world.time <= controller.blackboard[BB_VOID_SUMMON_COOLDOWN])
-		return
-	var/mob/living/target = controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET]
-	if(!target) return
-	var/allies = 0
-	for(var/mob/living/basic/void_creature/voidling/V in view(7, controller.pawn))
-		allies++
-	if(allies >= 3) return
-	controller.queue_behavior(/datum/ai_behavior/void_summon, BB_BASIC_MOB_CURRENT_TARGET)
-	return SUBTREE_RETURN_FINISH_PLANNING
-
-/datum/ai_planning_subtree/void_healer_find_and_heal/SelectBehaviors(datum/ai_controller/controller, seconds_per_tick)
-	if(world.time <= controller.blackboard[BB_VOID_HEAL_COOLDOWN])
-		return
-	var/mob/living/owner = controller.pawn
-	var/mob/living/best_target
-	var/worst_health_ratio = 1
-	// Find wounded void-faction ally in heal range (4 tiles) - no movement required
-	for(var/mob/living/L in view(4, owner))
-		if(L == owner || L.stat == DEAD || !L.faction)
-			continue
-		if(!(FACTION_VOID in L.faction))
-			continue
-		if(L.health >= L.maxHealth)
-			continue
-		var/hp_ratio = L.health / L.maxHealth
-		if(hp_ratio < worst_health_ratio)
-			worst_health_ratio = hp_ratio
-			best_target = L
-	if(best_target)
-		controller.set_blackboard_key(BB_HEAL_TARGET, best_target)
-		controller.queue_behavior(/datum/ai_behavior/void_heal, BB_HEAL_TARGET)
-		return SUBTREE_RETURN_FINISH_PLANNING
-
-// --- BEHAVIORS ---
-
-/datum/ai_behavior/void_summon
-	action_cooldown = 25 SECONDS
-	behavior_flags = AI_BEHAVIOR_REQUIRE_MOVEMENT
-
-/datum/ai_behavior/void_summon/perform(seconds_per_tick, datum/ai_controller/controller, target_key)
-	var/mob/living/owner = controller.pawn
-	var/mob/living/target = controller.blackboard[target_key]
-	if(!target) return AI_BEHAVIOR_FAILED
-	owner.visible_message(span_warning("[owner] begins to channel the void..."))
-	if(!do_after(owner, 30, target = target)) return AI_BEHAVIOR_FAILED
-	var/summon_count = rand(1, 2)
-	for(var/i in 1 to summon_count)
-		var/mob/living/basic/void_creature/voidling/V = new(owner.loc)
-		V.faction = owner.faction.Copy()
-		if(V.ai_controller) V.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
-	controller.set_blackboard_key(BB_VOID_SUMMON_COOLDOWN, world.time + action_cooldown)
-	playsound(owner, 'sound/effects/magic/summon_magic.ogg', 50, TRUE)
-	return AI_BEHAVIOR_SUCCEEDED
-
-/datum/ai_behavior/void_heal
-	action_cooldown = 2.5 SECONDS
-
-/datum/ai_behavior/void_heal/perform(seconds_per_tick, datum/ai_controller/controller, target_key)
-	var/mob/living/healer = controller.pawn
-	var/mob/living/target = controller.blackboard[target_key]
-	if(!target || QDELETED(target) || target.stat == DEAD)
-		controller.clear_blackboard_key(target_key)
-		return AI_BEHAVIOR_FAILED
-	if(target.health >= target.maxHealth)
-		controller.clear_blackboard_key(target_key)
-		return AI_BEHAVIOR_FAILED
-	if(!(FACTION_VOID in target.faction))
-		controller.clear_blackboard_key(target_key)
-		return AI_BEHAVIOR_FAILED
-	if(get_dist(healer, target) > 4)
-		return AI_BEHAVIOR_FAILED
-	// Moderate burst heal, 2.5s cooldown
-	target.adjust_brute_loss(-35)
-	target.adjust_fire_loss(-35)
-	target.adjust_tox_loss(-15)
-	healer.visible_message(span_notice("[healer] channels void energy into [target], mending their wounds."))
-	new /obj/effect/temp_visual/heal(target.loc, "#8A2BE2")
-	playsound(target, 'sound/effects/magic/staff_healing.ogg', 50, TRUE)
-	controller.set_blackboard_key(BB_VOID_HEAL_COOLDOWN, world.time + action_cooldown)
-	controller.clear_blackboard_key(target_key)
-	return AI_BEHAVIOR_SUCCEEDED
 
 // --- UTILS & VISUALS ---
 
-/datum/targeting_strategy/basic/void_aggressive/can_attack(mob/living/owner, atom/target, vision_range)
-	if(!target || isobserver(target))
+/datum/targeting_strategy/basic/void_aggressive/is_valid_target(mob/living/living_mob, atom/the_target, vision_range, datum/ai_controller/controller = null)
+	if(!the_target || isobserver(the_target))
 		return FALSE
 
-	var/turf/source_turf = get_turf(owner)
-	var/turf/target_turf = get_turf(target)
+	var/turf/source_turf = get_turf(living_mob)
+	var/turf/target_turf = get_turf(the_target)
 
 	if(!source_turf || !target_turf)
 		return FALSE
@@ -486,8 +287,8 @@
 			if(A.density)
 				return FALSE
 
-	if(ismob(target))
-		var/mob/living/L = target
+	if(ismob(the_target))
+		var/mob/living/L = the_target
 		if(L.stat == DEAD)
 			return FALSE
 
@@ -502,14 +303,14 @@
 				if(!orchestrator || orchestrator.dead)
 					return FALSE
 
-		if(!compare_factions(owner, L))
-			if(istype(owner, /mob/living/basic/void_creature/voidbug))
-				var/mob/living/basic/void_creature/voidbug/VB = owner
+		if(!compare_factions(living_mob, L))
+			if(istype(living_mob, /mob/living/basic/void_creature/voidbug))
+				var/mob/living/basic/void_creature/voidbug/VB = living_mob
 				VB.alert_allies(L)
 			return TRUE
 
-	if(istype(target, /obj/vehicle/sealed/mecha) || istype(target, /mob/living/silicon))
-		if(!compare_factions(owner, target))
+	if(istype(the_target, /obj/vehicle/sealed/mecha) || istype(the_target, /mob/living/silicon))
+		if(!compare_factions(living_mob, the_target))
 			return TRUE
 
 	return FALSE
