@@ -78,8 +78,8 @@
 	// Do you carry the bible on your person?
 	if(has_bible(user))
 		total_chance += 10
-	// Are you standing on a blessed tile? (Blessed with holy water).
-	if(locate(/obj/effect/blessing) in user.loc)
+	// Are you standing on a blessed tile? (Blessed with holy water or mapping helper).
+	if(HAS_TRAIT(user.loc, TRAIT_TURF_BLESSED) || (locate(/obj/effect/mapping_helpers/blessing) in user.loc))
 		total_chance += 15
 
 	return total_chance

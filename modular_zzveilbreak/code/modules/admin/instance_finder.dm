@@ -67,7 +67,7 @@ ADMIN_VERB(instance_finder, R_SPAWN, "Instance Finder", "Search object types and
 				admin_holder.instance_list_datum = new /datum/instance_list()
 
 			admin_holder.instance_list_datum.set_target_path(path)
-			admin_holder.instance_list_datum.ui_interact(ui.user.mob)
+			admin_holder.instance_list_datum.ui_interact(ui.user)
 			return TRUE
 
 /// Datum controlling the Instance List window (TGUI)
@@ -166,7 +166,7 @@ ADMIN_VERB(instance_finder, R_SPAWN, "Instance Finder", "Search object types and
 				to_chat(ui.user, span_warning("Target object is in nullspace or has no turf."))
 				return TRUE
 
-			ui.user.mob?.abstract_move(T)
+			ui.user.abstract_move(T)
 			log_admin("[key_name(ui.user)] teleported to [target_datum] ([AREACOORD(T)]) via Instance Finder")
 			message_admins("[key_name_admin(ui.user)] teleported to [target_datum] ([AREACOORD(T)]) via Instance Finder")
 			to_chat(ui.user, span_notice("Teleported to [target_datum] at [AREACOORD(T)]."))

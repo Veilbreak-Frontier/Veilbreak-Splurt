@@ -2,6 +2,7 @@
 //Generic BB keys
 ///Use this if you need a generic variable for a target; Use this if you don't have multiple different things to target in your ai (PROTIP: YOU BASICALLY NEVER DO!)
 #define BB_CURRENT_TARGET "Current Target"
+#define BB_BASIC_MOB_CURRENT_TARGET BB_CURRENT_TARGET
 ///Use this if you need a generic variable for a hiding location;
 #define BB_CURRENT_TARGET_HIDING_LOCATION "Current Target Hiding Location"
 ///For any battle screech cooldowns

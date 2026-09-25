@@ -1,7 +1,9 @@
 // Mob health stats
 #define STABLE 0
+#define CONSCIOUS STABLE
 #define SOFT_CRIT 1
 #define HARD_CRIT 2
+#define UNCONSCIOUS HARD_CRIT
 #define DEAD 3
 
 //Maximum healthiness an individual can have

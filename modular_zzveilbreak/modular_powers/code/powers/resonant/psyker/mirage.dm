@@ -188,7 +188,7 @@
 			var/mob/living/simple_animal/hostile/hostile_mob = nearest_mob
 			hostile_mob.GiveTarget(src)
 		else if(nearest_mob.ai_controller) // otherwise we just force the blackboard to use a different target.
-			nearest_mob.ai_controller.CancelActions()
+			nearest_mob.ai_controller.cancel_current_plan()
 			nearest_mob.ai_controller.clear_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET)
 			nearest_mob.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, src)
 			nearest_mob.ai_controller.insert_blackboard_key_lazylist(BB_BASIC_MOB_RETALIATE_LIST, src)
@@ -224,8 +224,6 @@
 		return
 	ai_controller.set_ai_status(AI_STATUS_ON)
 	ai_controller.SelectBehaviors(0.1)
-	for(var/datum/ai_behavior/current_behavior as anything in ai_controller.current_behaviors)
-		ai_controller.ProcessBehavior(0.1, current_behavior)
 
 /mob/living/basic/resonant_mirage/Destroy()
 	if(alt_appearance_key)
@@ -303,14 +301,14 @@
 	return TRUE
 
 /// Targeting strategy: never pick targets the mirage should ignore.
-/datum/targeting_strategy/basic/mirage/can_attack(mob/living/living_mob, atom/target, vision_range)
+/datum/targeting_strategy/basic/mirage/is_valid_target(mob/living/living_mob, atom/the_target, vision_range, datum/ai_controller/controller = null)
 	. = ..()
 	if(!.)
 		return FALSE
 	if(!istype(living_mob, /mob/living/basic/resonant_mirage))
 		return .
 	var/mob/living/basic/resonant_mirage/mirage = living_mob
-	if(mirage.should_ignore_target(target))
+	if(mirage.should_ignore_target(the_target))
 		return FALSE
 	return TRUE
 
