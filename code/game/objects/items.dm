@@ -425,23 +425,23 @@
 	// BUBBER EDIT ADDITION - Fire COMSIG_ATOM_UPDATED_ICON after all GAGS icons update so update_icon_updates_onmob can refresh worn overlays
 	SEND_SIGNAL(src, COMSIG_ATOM_UPDATED_ICON)
 
-GAME_VERB(/mob/living, move_to_top_verb, "Move To Top", null, obj/item/target in view(1))
+GAME_VERB_NATIVE(/mob/living, move_to_top_verb, "Move To Top", null, obj/item/target in view(1))
 	if(!istype(target))
 		return
 	if(!isturf(loc) || IS_UNCONSCIOUS_OR_CRIT(usr) || HAS_TRAIT(usr, TRAIT_HANDS_BLOCKED) || anchored)
 		return
 
-    var/mob/living/living_user = usr
+	var/mob/living/living_user = usr
 
-    if(!isturf(target.loc) || living_user.stat != CONSCIOUS || HAS_TRAIT(living_user, TRAIT_HANDS_BLOCKED) || target.anchored)
-        return
+	if(!isturf(target.loc) || living_user.stat != CONSCIOUS || HAS_TRAIT(living_user, TRAIT_HANDS_BLOCKED) || target.anchored)
+		return
 
-    if(!(living_user.mobility_flags & MOBILITY_PICKUP))
-        return
+	if(!(living_user.mobility_flags & MOBILITY_PICKUP))
+		return
 
-    var/turf/T = target.loc
-    target.abstract_move(null)
-    target.forceMove(T)
+	var/turf/T = target.loc
+	target.abstract_move(null)
+	target.forceMove(T)
 
 /obj/item/examine_tags(mob/user)
 	var/list/parent_tags = ..()
@@ -865,21 +865,20 @@ GAME_VERB(/mob/living, move_to_top_verb, "Move To Top", null, obj/item/target in
 
 	return M.can_equip(src, slot, disable_warning, bypass_equip_delay_self, ignore_equipped, indirect_action = indirect_action)
 
-GAME_VERB(/mob/living, pickup_verb, "Pick Up", null, obj/item/target in view(1))
+GAME_VERB_NATIVE(/mob/living, pickup_verb, "Pick Up", null, obj/item/target in view(1))
+	if(!istype(target))
+		return
 
-    if(!istype(target))
-        return
+	var/mob/living/living_user = usr
 
-    var/mob/living/living_user = usr
+	if(living_user.incapacitated || !Adjacent(living_user) || target.anchored)
+		return
 
-    if(living_user.incapacitated || !Adjacent(living_user) || target.anchored)
-        return
+	if(!(living_user.mobility_flags & MOBILITY_PICKUP))
+		return
 
-    if(!(living_user.mobility_flags & MOBILITY_PICKUP))
-        return
-
-    if(!living_user.get_active_held_item())
-        target.attempt_pickup(living_user)
+	if(!living_user.get_active_held_item())
+		target.attempt_pickup(living_user)
 
 /**
  *This proc is executed when someone clicks the on-screen UI button.

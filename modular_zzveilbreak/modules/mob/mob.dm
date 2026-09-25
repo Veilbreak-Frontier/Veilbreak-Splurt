@@ -24,7 +24,8 @@ GAME_VERB(/mob, memory, "Memories", "IC")
 GAME_VERB(/mob, view_skills, "View Skills", "IC")
 	mind?.print_levels(src)
 
-GAME_VERB(/mob, examinate_verb, "Examine", "IC", atom/examinify as mob|obj|turf in view())
+GAME_VERB_CONTEXT(/mob, examinate_verb, "Examine", "", "IC", /atom)
+	VERB_ARG_TYPED(examinify, VERB_ARG_TYPE_MOB | VERB_ARG_TYPE_OBJ | VERB_ARG_TYPE_TURF, VERB_ARG_SOURCE_VIEW, /atom)
 	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(run_examinate), examinify))
 
 GAME_VERB(/mob, mode_verb, "Activate Held Object", "Object")
@@ -135,7 +136,8 @@ GAME_VERB(/mob/living, navigate_verb, "Navigate", "IC")
 		return
 	addtimer(CALLBACK(src, PROC_REF(create_navigation)), world.tick_lag)
 
-GAME_VERB_INSTANT(/mob, say_verb_veilbreak, "Say", "IC", message as text)
+GAME_VERB_INSTANT(/mob, say_verb_veilbreak, "Say", "IC")
+	VERB_ARG(message, VERB_ARG_TYPE_TEXT, VERB_ARG_SOURCE_INPUT)
 	if(GLOB.say_disabled)
 		to_chat(src, span_danger("Speech is currently admin-disabled."))
 		return
@@ -143,7 +145,8 @@ GAME_VERB_INSTANT(/mob, say_verb_veilbreak, "Say", "IC", message as text)
 	if(message)
 		QUEUE_OR_CALL_VERB_FOR(VERB_CALLBACK(src, TYPE_PROC_REF(/atom/movable, say), message), SSspeech_controller)
 
-GAME_VERB_INSTANT(/mob, whisper_verb_veilbreak, "Whisper", "IC", message as text)
+GAME_VERB_INSTANT(/mob, whisper_verb_veilbreak, "Whisper", "IC")
+	VERB_ARG(message, VERB_ARG_TYPE_TEXT, VERB_ARG_SOURCE_INPUT)
 	if(GLOB.say_disabled)
 		to_chat(src, span_danger("Speech is currently admin-disabled."))
 		return
@@ -151,7 +154,8 @@ GAME_VERB_INSTANT(/mob, whisper_verb_veilbreak, "Whisper", "IC", message as text
 	if(message)
 		QUEUE_OR_CALL_VERB_FOR(VERB_CALLBACK(src, TYPE_PROC_REF(/mob, whisper), message), SSspeech_controller)
 
-GAME_VERB_DESC_INSTANT(/mob, me_verb_veilbreak, "Me", "Perform a custom emote. Leave blank to pick between an audible or a visible emote (Defaults to visible).", "IC", message as text)
+GAME_VERB_DESC_INSTANT(/mob, me_verb_veilbreak, "Me", "Perform a custom emote. Leave blank to pick between an audible or a visible emote (Defaults to visible).", "IC")
+	VERB_ARG(message, VERB_ARG_TYPE_TEXT, VERB_ARG_SOURCE_INPUT)
 	if(GLOB.say_disabled)
 		to_chat(src, span_danger("Speech is currently admin-disabled."))
 		return
@@ -160,7 +164,8 @@ GAME_VERB_DESC_INSTANT(/mob, me_verb_veilbreak, "Me", "Perform a custom emote. L
 
 	QUEUE_OR_CALL_VERB_FOR(VERB_CALLBACK(src, TYPE_PROC_REF(/mob, emote), "me", NONE, message, TRUE), SSspeech_controller)
 
-GAME_VERB(/mob, pray_verb, "Pray", "IC", msg as text)
+GAME_VERB(/mob, pray_verb, "Pray", "IC")
+	VERB_ARG(msg, VERB_ARG_TYPE_TEXT, VERB_ARG_SOURCE_INPUT)
 	if(GLOB.say_disabled)
 		to_chat(src, span_danger("Speech is currently admin-disabled."), confidential = TRUE)
 		return
