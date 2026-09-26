@@ -11583,6 +11583,7 @@
 #include "modular_zzveilbreak\code\modules\jukebox_online\Jukebox_UI_Handler.dm"
 #include "modular_zzveilbreak\code\modules\loadout\donator_public.dm"
 #include "modular_zzveilbreak\code\modules\machinery\flatpacker_override.dm"
+#include "modular_zzveilbreak\code\modules\modular_items\lewd_items\lewd_uniform_fixes.dm"
 #include "modular_zzveilbreak\code\modules\modular_computers\programs\guest_access_pass.dm"
 #include "modular_zzveilbreak\code\modules\modular_nif\vore_nifsofts.dm"
 #include "modular_zzveilbreak\code\modules\nanites\program_designs.dm"
