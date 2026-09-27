@@ -311,10 +311,26 @@
 
 	// 1. Snapshot every movable on the Z. Iterating world directly while qdel()
 	//    detaches contents skips entries and loses atoms inside containers.
+	//
+	// NOTE: do NOT write `as anything in world` here. That syntax disables BYOND's
+	// runtime type filter, so turfs / areas / datums (all present in world.contents)
+	// get assigned to AM, land in movables, get classified as non-players, and end
+	// up in to_delete where qdel(turf) triggers "Incorrect turf deletion" and floods
+	// the log. The plain `in world` form makes BYOND do the atom/movable check.
 	var/list/movables = list()
-	for(var/atom/movable/AM as anything in world)
+	var/scan_processed = 0
+	for(var/atom/movable/AM in world)
 		if(AM.z == z_level)
 			movables += AM
+		scan_processed++
+		if(scan_processed % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+			CHECK_TICK
+
+	// Safety net: even if something upstream re-introduces a turf/area into the
+	// snapshot, don't qdel it here — turfs must go through ChangeTurf, not qdel.
+	for(var/atom/movable/AM as anything in movables)
+		if(isturf(AM) || isarea(AM))
+			movables -= AM
 
 	var/list/to_eject = list()
 	var/list/to_delete = list()
