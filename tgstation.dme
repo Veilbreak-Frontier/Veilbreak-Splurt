@@ -11516,6 +11516,7 @@
 #include "modular_zzveilbreak\code\_onclick\hud\rendering\plane_master_group_popup.dm"
 #include "modular_zzveilbreak\code\client\click.dm"
 #include "modular_zzveilbreak\code\datums\achievements\succubus_achievements.dm"
+#include "modular_zzveilbreak\code\datums\components\shielded.dm"
 #include "modular_zzveilbreak\code\datums\quirks\ignite.dm"
 #include "modular_zzveilbreak\code\datums\quirks\static.dm"
 #include "modular_zzveilbreak\code\datums\quirks\negative\hard_of_hearing.dm"
