@@ -263,7 +263,7 @@
 /obj/structure/optic_base/reflector
 	name = "optic reflector"
 	desc = "A precision glass mirror mounted on a swivel frame. Reflects light beams. Can be rotated 360 degrees."
-	icon = 'icons/obj/structures/reflector.dmi'
+	icon = 'icons/obj/structures.dmi'
 	icon_state = "reflector"
 
 /obj/structure/optic_base/reflector/set_angle(new_angle)
