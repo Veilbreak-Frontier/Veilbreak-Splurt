@@ -11545,6 +11545,8 @@
 #include "modular_zzveilbreak\code\game\tiles\void_tile.dm"
 #include "modular_zzveilbreak\code\game\turfs\space_rcd.dm"
 #include "modular_zzveilbreak\code\modules\admin\instance_finder.dm"
+#include "modular_zzveilbreak\code\modules\customization\body_marking_conflict_resolver.dm"
+#include "modular_zzveilbreak\code\modules\customization\limbs_and_markings_push.dm"
 #include "modular_zzveilbreak\code\modules\GAGS\greyscale_configs.dm"
 #include "modular_zzveilbreak\code\modules\antagonists\succubus\succubus.dm"
 #include "modular_zzveilbreak\code\modules\antagonists\succubus\succubus_actions.dm"
@@ -11851,6 +11853,5 @@
 #include "modular_zzveilbreak\modules\medical\items\medical_crossbow.dm"
 #include "modular_zzveilbreak\modules\mob\mob.dm"
 #include "modular_zzveilbreak\modules\spells\expanding_fire_ring.dm"
-#include "modular_zzplurt\modules\synths\code\bodyparts\internal_computer\internal_computer.dm"
 #include "modular_zzveilbreak\modules\taur_mechanics\taur_body_overrides.dm"
 // END_INCLUDE
