@@ -37,15 +37,13 @@
 
 /obj/machinery/computer/operating/proc/on_user_zone_changed(mob/user, new_zone)
 	SIGNAL_HANDLER
+	to_chat(user, span_notice("DBG: signal fired, zone=[new_zone] at [world.time]"))
 	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
 	if(!ui)
+		to_chat(user, span_warning("DBG: get_open_ui returned null"))
 		return
-	ui.send_update()
-	addtimer(CALLBACK(src, PROC_REF(refresh_zone_static), user), 0.25 SECONDS, TIMER_UNIQUE | TIMER_OVERRIDE)
-
-/obj/machinery/computer/operating/proc/refresh_zone_static(mob/user)
-	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
-	ui?.send_full_update(always_instant = TRUE)
+	to_chat(user, span_notice("DBG: ui found, calling send_full_update"))
+	ui.send_full_update(force = TRUE, always_instant = TRUE)
 
 /obj/machinery/computer/operating/ui_data(mob/user)
 	. = ..()
