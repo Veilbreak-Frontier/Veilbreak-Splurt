@@ -88,6 +88,29 @@
 			if(check && check.z == z_level)
 				qdel(EG)
 
+
+/// Full atmos wipe for a Z on cleanup: deregister turfs from SSair and clear
+/// adjacency links. Fresh air datums come from the CHANGETURF_IGNORE_AIR turf
+/// rebuild in cleanup_z_level_completely.
+/datum/portal_destination/veilbreak/proc/atmos_wipe_z_level(z_level)
+	if(!SSair)
+		return
+	for(var/turf/open/T as anything in Z_TURFS(z_level))
+		if(!T)
+			continue
+		SSair.active_turfs -= T
+		if(T.atmos_adjacent_turfs)
+			for(var/turf/adj as anything in T.atmos_adjacent_turfs)
+				if(adj)
+					adj.atmos_adjacent_turfs -= T
+			T.atmos_adjacent_turfs.Cut()
+	for(var/datum/excited_group/EG as anything in SSair.excited_groups)
+		if(!length(EG.turf_list))
+			continue
+		var/turf/check = EG.turf_list[1]
+		if(check && check.z == z_level)
+			qdel(EG)
+
 /datum/portal_destination/veilbreak/proc/atmos_resume_z_level(z_level)
 	if(!SSair)
 		return

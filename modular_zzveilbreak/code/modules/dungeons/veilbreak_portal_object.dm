@@ -120,55 +120,23 @@
 /obj/machinery/portal/proc/emergency_ejection()
 	if(!target || !target.dungeon_z_level)
 		return
-
 	var/datum/portal_destination/veilbreak/saved_dest = target
-
-	var/turf/eject_to
 	var/obj/machinery/portal/station_portal = GLOB.station_veilbreak_portal
+	if(!station_portal || QDELETED(station_portal))
+		station_portal = src
 
-	if(station_portal && !QDELETED(station_portal))
-		eject_to = get_step(station_portal, SOUTH)
-		if(!eject_to)
-			eject_to = get_turf(station_portal)
-	else
-		eject_to = get_step(src, SOUTH)
-		if(!eject_to)
-			eject_to = get_turf(src)
+	var/turf/eject_to = get_step(station_portal, SOUTH)
+	if(!eject_to)
+		eject_to = get_turf(station_portal)
 
-	var/z_to_clear = saved_dest.dungeon_z_level
-	var/processed_count = 0
-
-	for(var/mob/M in GLOB.mob_list)
-		if(M.z != z_to_clear)
-			continue
-
-		if(is_player(M))
-			M.forceMove(eject_to)
-			M.throw_at(get_step(eject_to, SOUTH), 5, 2, M)
-
-		processed_count++
-		if(processed_count % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
-			CHECK_TICK
-
-	for(var/obj/item/I in world)
-		if(I.z != z_to_clear)
-			continue
-
-		if(is_player(I))
-			I.forceMove(eject_to)
-			I.throw_at(get_step(eject_to, SOUTH), 5, 2, I)
-
-		processed_count++
-		if(processed_count % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
-			CHECK_TICK
-
-	saved_dest.cleanup_z_level_completely(z_to_clear, eject_to, TRUE)
+	// Delegate the wipe to the destination datum so ejection + deletion go
+	// through the same path as a normal regenerate.
+	saved_dest.cleanup_z_level_completely(saved_dest.dungeon_z_level, eject_to, TRUE)
 
 	transport_active = FALSE
 	if(bumper)
 		qdel(bumper)
 		bumper = null
-
 	target = null
 	update_appearance()
 	// Return-pocket datum (no console); console-owned destination is QDEL_IN from cleanup shutdown.
