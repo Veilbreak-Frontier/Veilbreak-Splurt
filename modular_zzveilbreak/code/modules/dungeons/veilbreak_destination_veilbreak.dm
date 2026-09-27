@@ -81,12 +81,26 @@
 			dungeon_z_level = glob_z
 
 	if(dungeon_z_level && dungeon_z_level <= world.maxz && dungeon_z_level > 0)
+		// Detach the station portal from its target BEFORE cleanup. The cleanup
+		// path calls veilbreak_shutdown_station_portal_after_z_wipe(), which
+		// reads station.target, finds THIS in-flight destination, and resets its
+		// generated / generating / current_request_id state mid-setup. That kills
+		// the staggered init pipeline that follows (finalize_dungeon_generation ->
+		// veilbreak_initialize_zlevel -> step 7). Detaching first makes the
+		// shutdown proc's istype() guard reject us and early-return.
 		if(spawn_station_portal)
+			spawn_station_portal.target = null
 			spawn_station_portal.transport_active = FALSE
 			if(spawn_station_portal.bumper)
 				qdel(spawn_station_portal.bumper)
 				spawn_station_portal.bumper = null
 			spawn_station_portal.update_appearance()
+		// Also detach the global station portal if it's a different instance;
+		// the shutdown proc reads GLOB.station_veilbreak_portal, not ours.
+		// GLOBAL_VAR() is untyped, so narrow through a typed local first.
+		var/obj/machinery/portal/global_station = GLOB.station_veilbreak_portal
+		if(global_station && global_station != spawn_station_portal)
+			global_station.target = null
 
 		cleanup_z_level_completely(dungeon_z_level, null)
 		newly_created_z = FALSE
@@ -239,9 +253,12 @@
 	if(!length(dungeon_areas))
 		return
 
-	// ChangeTurf reassigns turfs to /area/space, so areas that only held
-	// dungeon turfs end up with zero contents by the time we get here.
-	// Anything still populated stays — better a small leak than a runtime.
+	// NOTE: on forks where ChangeTurf preserves the turf's area (including
+	// recent /tg/), dungeon areas still hold the replacement space turfs, so
+	// this loop finds them populated and skips. Pruning a populated area would
+	// orphan its turfs, so we leave them alone. The areas persist across
+	// regenerations but are bounded by the number of distinct DMM area paths,
+	// not by the number of regenerations — the same instance gets reused.
 	for(var/area/A as anything in dungeon_areas)
 		if(QDELETED(A))
 			continue

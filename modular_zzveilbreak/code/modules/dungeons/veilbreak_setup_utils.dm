@@ -79,14 +79,21 @@
 /datum/portal_destination/veilbreak/proc/atmos_freeze_z_level(z_level)
 	if(!SSair)
 		return
-	for(var/turf/T in SSair.active_turfs)
-		if(T.z == z_level)
-			SSair.active_turfs -= T
-	for(var/datum/excited_group/EG in SSair.excited_groups)
-		if(length(EG.turf_list))
-			var/turf/check = EG.turf_list[1]
-			if(check && check.z == z_level)
-				qdel(EG)
+	// Snapshot the turfs on this Z before removing them, rather than mutating
+	// the active list while iterating it. Cheap insurance against iteration
+	// order quirks across forks.
+	var/list/to_remove = list()
+	for(var/turf/T as anything in SSair.active_turfs)
+		if(T && T.z == z_level)
+			to_remove += T
+	for(var/turf/T as anything in to_remove)
+		SSair.active_turfs -= T
+	for(var/datum/excited_group/EG as anything in SSair.excited_groups)
+		if(!length(EG.turf_list))
+			continue
+		var/turf/check = EG.turf_list[1]
+		if(check && check.z == z_level)
+			qdel(EG)
 
 
 /// Full atmos wipe for a Z on cleanup: deregister turfs from SSair and clear
