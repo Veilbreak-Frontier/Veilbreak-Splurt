@@ -142,6 +142,27 @@
 /obj/structure/optic_base/examine(mob/user)
 	. = ..()
 	. += span_notice("It is angled at <b>[rotation_angle]°</b>. Interact with it to rotate it 360 degrees.")
+	. += span_notice("It is <b>[anchored ? "anchored" : "unanchored"]</b>. Use a wrench to [anchored ? "unanchor" : "anchor"] it.")
+
+/obj/structure/optic_base/add_context(atom/source, list/context, obj/item/held_item, mob/user)
+	. = ..()
+	if(held_item?.tool_behaviour == TOOL_WRENCH)
+		context[SCREENTIP_CONTEXT_LMB] = "[anchored ? "Unanchor" : "Anchor"]"
+		return TRUE
+
+/obj/structure/optic_base/wrench_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(tool.use_tool(src, user, 1 SECONDS, volume = 50))
+		set_anchored(!anchored)
+		user.balloon_alert_to_viewers("[anchored ? "anchored" : "unanchored"]")
+		to_chat(user, span_notice("You [anchored ? "anchor" : "unanchor"] [src]."))
+		if(!anchored)
+			clear_optic_beams()
+		return ITEM_INTERACT_SUCCESS
+
+/obj/structure/optic_base/Moved(atom/old_loc, movement_dir, forced, list/old_locs)
+	. = ..()
+	clear_optic_beams()
 
 /// Base handler called when an optic beam hits this object
 /obj/structure/optic_base/proc/receive_optic_beam(color_name, incoming_angle, list/visited)
@@ -149,7 +170,7 @@
 
 /// Traces a light beam from start_turf along beam_angle
 /obj/structure/optic_base/proc/trace_beam(turf/start_turf, color_name, beam_angle, max_range = 15, list/visited = list())
-	if(!start_turf || max_range <= 0)
+	if(!start_turf || max_range <= 0 || !anchored)
 		return
 
 	var/step_dir = angle2dir(beam_angle)
@@ -170,6 +191,8 @@
 		// Check for optic puzzle structures on next_turf
 		var/obj/structure/optic_base/target_optic = locate() in next_turf
 		if(target_optic)
+			if(!target_optic.anchored)
+				break
 			if(visited[target_optic])
 				break
 			visited[target_optic] = TRUE
@@ -183,7 +206,7 @@
 /obj/structure/optic_base/proc/draw_beam_segment(turf/start_turf, turf/end_turf, color_name)
 	if(!start_turf || !end_turf || start_turf == end_turf)
 		return
-	var/datum/beam/B = start_turf.Beam(end_turf, icon_state = "b_beam", time = 2 SECONDS, beam_color = get_optic_hex_color(color_name))
+	var/datum/beam/B = start_turf.Beam(end_turf, icon_state = "sendbeam", time = 2 SECONDS, beam_color = get_optic_hex_color(color_name))
 	if(B)
 		active_beams += B
 
@@ -194,8 +217,8 @@
 /obj/structure/optic_base/emitter
 	name = "optic white light emitter"
 	desc = "A heavy optical device that outputs a continuous beam of white light. Can be rotated 360 degrees."
-	icon = 'icons/obj/machines/research.dmi'
-	icon_state = "emitter"
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "reflector_base"
 	/// Whether the emitter is powered on
 	var/active = TRUE
 
@@ -212,12 +235,12 @@
 	update_emitter_beams()
 
 /obj/structure/optic_base/emitter/process(seconds_between_ticks)
-	if(active)
+	if(active && anchored)
 		update_emitter_beams()
 
 /obj/structure/optic_base/emitter/proc/update_emitter_beams()
 	clear_optic_beams()
-	if(!active)
+	if(!active || !anchored)
 		return
 	var/turf/start_turf = get_turf(src)
 	if(start_turf)
@@ -233,7 +256,7 @@
 	name = "splitter prism"
 	desc = "A crystalline prism that refracts light. Splits white light into red, green, and blue beams. Can be rotated 360 degrees."
 	icon = 'icons/obj/structures.dmi'
-	icon_state = "prism"
+	icon_state = "reflector"
 	color = "#e0ffff"
 
 /obj/structure/optic_base/prism/set_angle(new_angle)
@@ -242,7 +265,7 @@
 
 /obj/structure/optic_base/prism/receive_optic_beam(color_name, incoming_angle, list/visited)
 	var/turf/start_turf = get_turf(src)
-	if(!start_turf)
+	if(!start_turf || !anchored)
 		return
 
 	clear_optic_beams()
@@ -264,7 +287,7 @@
 	name = "optic reflector"
 	desc = "A precision glass mirror mounted on a swivel frame. Reflects light beams. Can be rotated 360 degrees."
 	icon = 'icons/obj/structures.dmi'
-	icon_state = "reflector"
+	icon_state = "reflector_map"
 
 /obj/structure/optic_base/reflector/set_angle(new_angle)
 	. = ..()
@@ -272,7 +295,7 @@
 
 /obj/structure/optic_base/reflector/receive_optic_beam(color_name, incoming_angle, list/visited)
 	var/turf/start_turf = get_turf(src)
-	if(!start_turf)
+	if(!start_turf || !anchored)
 		return
 
 	clear_optic_beams()
@@ -287,8 +310,8 @@
 /obj/structure/optic_base/receiver
 	name = "optic light receiver"
 	desc = "A photosensitive receiver that detects light colors and activates when its requested color combination is received."
-	icon = 'icons/obj/machines/research.dmi'
-	icon_state = "scanner"
+	icon = 'icons/obj/machines/wallmounts.dmi'
+	icon_state = "button"
 	/// Color required to activate the receiver
 	var/required_color = OPTIC_COLOR_RED
 	/// Active state
