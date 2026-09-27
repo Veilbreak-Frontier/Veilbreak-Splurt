@@ -27,22 +27,23 @@
 	if(ui)
 		return
 	if(ishuman(user))
+		to_chat(user, span_notice("DBG: registering signal on [user] ref [REF(user)]"))
 		RegisterSignal(user, COMSIG_MOB_SELECTED_ZONE_SET, PROC_REF(on_user_zone_changed), override = TRUE)
 	ui = new(user, src, "OperatingComputer", name)
 	ui.open()
 
 /obj/machinery/computer/operating/ui_close(mob/user)
 	. = ..()
+	to_chat(user, span_notice("DBG: unregistering signal from [user] ref [REF(user)]"))
 	UnregisterSignal(user, COMSIG_MOB_SELECTED_ZONE_SET)
 
 /obj/machinery/computer/operating/proc/on_user_zone_changed(mob/user, new_zone)
 	SIGNAL_HANDLER
-	to_chat(user, span_notice("DBG: signal fired, zone=[new_zone] at [world.time]"))
+	to_chat(user, span_notice("DBG: signal handler fired, zone=[new_zone]"))
 	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
 	if(!ui)
 		to_chat(user, span_warning("DBG: get_open_ui returned null"))
 		return
-	to_chat(user, span_notice("DBG: ui found, calling send_full_update"))
 	ui.send_full_update(force = TRUE, always_instant = TRUE)
 
 /obj/machinery/computer/operating/ui_data(mob/user)
@@ -58,3 +59,7 @@
 	if(ishuman(user))
 		target_zone = user.zone_selected
 	return ..()
+
+GAME_VERB(/mob, dbg_fire_zone_signal, "Debug: Fire Zone Signal", "Debug")
+	to_chat(src, span_notice("DBG: manually firing COMSIG_MOB_SELECTED_ZONE_SET on [src] ref [REF(src)]"))
+	SEND_SIGNAL(src, COMSIG_MOB_SELECTED_ZONE_SET, zone_selected)
