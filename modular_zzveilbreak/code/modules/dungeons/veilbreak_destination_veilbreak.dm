@@ -81,12 +81,26 @@
 			dungeon_z_level = glob_z
 
 	if(dungeon_z_level && dungeon_z_level <= world.maxz && dungeon_z_level > 0)
+		// Detach the station portal from its target BEFORE cleanup. The cleanup
+		// path calls veilbreak_shutdown_station_portal_after_z_wipe(), which
+		// reads station.target, finds THIS in-flight destination, and resets its
+		// generated / generating / current_request_id state mid-setup. That kills
+		// the staggered init pipeline that follows (finalize_dungeon_generation ->
+		// veilbreak_initialize_zlevel -> step 7). Detaching first makes the
+		// shutdown proc's istype() guard reject us and early-return.
 		if(spawn_station_portal)
+			spawn_station_portal.target = null
 			spawn_station_portal.transport_active = FALSE
 			if(spawn_station_portal.bumper)
 				qdel(spawn_station_portal.bumper)
 				spawn_station_portal.bumper = null
 			spawn_station_portal.update_appearance()
+		// Also detach the global station portal if it's a different instance;
+		// the shutdown proc reads GLOB.station_veilbreak_portal, not ours.
+		// GLOBAL_VAR() is untyped, so narrow through a typed local first.
+		var/obj/machinery/portal/global_station = GLOB.station_veilbreak_portal
+		if(global_station && global_station != spawn_station_portal)
+			global_station.target = null
 
 		cleanup_z_level_completely(dungeon_z_level, null)
 		newly_created_z = FALSE
@@ -232,6 +246,29 @@
 		if(T.x % 100 == 0)
 			CHECK_TICK
 
+/// After a Z wipe, remove any areas that previously hosted turfs on that Z
+/// and now have no contents. Prevents GLOB.areas from accumulating orphaned
+/// dungeon-defined area instances across regenerations.
+/datum/portal_destination/veilbreak/proc/prune_orphaned_areas_on_z(z_level, list/dungeon_areas)
+	if(!length(dungeon_areas))
+		return
+
+	// NOTE: on forks where ChangeTurf preserves the turf's area (including
+	// recent /tg/), dungeon areas still hold the replacement space turfs, so
+	// this loop finds them populated and skips. Pruning a populated area would
+	// orphan its turfs, so we leave them alone. The areas persist across
+	// regenerations but are bounded by the number of distinct DMM area paths,
+	// not by the number of regenerations — the same instance gets reused.
+	for(var/area/A as anything in dungeon_areas)
+		if(QDELETED(A))
+			continue
+		if(A.type == /area/space)
+			continue
+		if(length(A.contents))
+			continue
+		GLOB.areas -= A
+		qdel(A)
+
 /// After the dungeon Z is wiped, the station gateway must go dark (paired dungeon portals are gone).
 /// If delete_station_destination_datum, the main /datum/portal_destination/veilbreak (console target) is queued for deletion.
 /proc/veilbreak_shutdown_station_portal_after_z_wipe(z_level, delete_station_destination_datum = FALSE)
@@ -258,19 +295,71 @@
 
 /datum/portal_destination/veilbreak/proc/cleanup_z_level_completely(z_level, turf/ejection_turf, delete_station_destination_datum = FALSE)
 	if(cleanup_in_progress)
-		return
+		log_world("Veilbreak: cleanup already in progress for Z [z_level], skipping")
+		return FALSE
+	if(!z_level || z_level < 1 || z_level > world.maxz)
+		return FALSE
+
 	cleanup_in_progress = TRUE
 
-	var/processed = 0
+	// Resolve a fallback ejection turf up front so players are never stranded
+	// when the caller passes null (e.g. the generate_new reuse path).
+	if(!ejection_turf)
+		var/obj/machinery/portal/station = GLOB.station_veilbreak_portal
+		if(station && !QDELETED(station))
+			ejection_turf = get_step(station, SOUTH) || get_turf(station)
+
+	// 1. Snapshot every movable on the Z. Iterating world directly while qdel()
+	//    detaches contents skips entries and loses atoms inside containers.
+	//
+	// NOTE: do NOT write `as anything in world` here. That syntax disables BYOND's
+	// runtime type filter, so turfs / areas / datums (all present in world.contents)
+	// get assigned to AM, land in movables, get classified as non-players, and end
+	// up in to_delete where qdel(turf) triggers "Incorrect turf deletion" and floods
+	// the log. The plain `in world` form makes BYOND do the atom/movable check.
+	var/list/movables = list()
+	var/scan_processed = 0
 	for(var/atom/movable/AM in world)
-		if(AM.z != z_level)
-			continue
+		if(AM.z == z_level)
+			movables += AM
+		scan_processed++
+		if(scan_processed % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+			CHECK_TICK
 
+	// Safety net: even if something upstream re-introduces a turf/area into the
+	// snapshot, don't qdel it here — turfs must go through ChangeTurf, not qdel.
+	for(var/atom/movable/AM as anything in movables)
+		if(isturf(AM) || isarea(AM))
+			movables -= AM
+
+	var/list/to_eject = list()
+	var/list/to_delete = list()
+	for(var/atom/movable/AM as anything in movables)
+		// Observers are completely ignored: never ejected, never deleted.
+		if(isobserver(AM))
+			continue
 		if(is_player(AM))
-			if(ejection_turf)
-				AM.forceMove(ejection_turf)
-			continue
+			to_eject += AM
+		else
+			to_delete += AM
 
+	// 2. Eject players (to the passed turf, or the station fallback above).
+	var/processed = 0
+	for(var/atom/movable/AM as anything in to_eject)
+		if(QDELETED(AM))
+			continue
+		if(ejection_turf)
+			AM.forceMove(ejection_turf)
+		processed++
+		if(processed % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+			CHECK_TICK
+
+	// 3. Unlink dungeon portals before deleting them so paired aux datums die
+	//    cleanly instead of being orphaned by the qdel cascade.
+	processed = 0
+	for(var/atom/movable/AM as anything in to_delete)
+		if(QDELETED(AM))
+			continue
 		if(istype(AM, /obj/machinery/portal))
 			var/obj/machinery/portal/port = AM
 			if(port.is_dungeon_portal && istype(port.target, /datum/portal_destination/veilbreak))
@@ -278,22 +367,53 @@
 				port.target = null
 				if(aux != src)
 					qdel(aux)
+		processed++
+		if(processed % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
+			CHECK_TICK
 
+	// 4. Delete everything else.
+	processed = 0
+	for(var/atom/movable/AM as anything in to_delete)
+		if(QDELETED(AM))
+			continue
+		// Prune global references before deleting so we don't leak basic_mobs refs.
+		if(istype(AM, /mob/living/basic))
+			GLOB.basic_mobs -= AM
 		qdel(AM)
 		processed++
 		if(processed % VEILBREAK_CLEANUP_BATCH_SIZE == 0)
 			CHECK_TICK
 
-	var/list/turfs = block(locate(1, 1, z_level), locate(DUNGEON_WIDTH, DUNGEON_HEIGHT, z_level))
-	for(var/turf/T in turfs)
-		T.ChangeTurf(/turf/open/space/basic, null, CHANGETURF_INHERIT_AIR)
+	// 5. Snapshot areas hosting turfs on this Z so we can prune orphans after.
+	var/list/dungeon_areas = list()
+	for(var/turf/T as anything in Z_TURFS(z_level))
+		if(T && T.loc)
+			dungeon_areas[T.loc] = TRUE
+
+	// 6. Wipe EVERY turf on the Z, not just the DUNGEON_WIDTH x DUNGEON_HEIGHT block.
+	//    CHANGETURF_IGNORE_AIR so the fresh turfs get default air, not the old mix.
+	processed = 0
+	for(var/turf/T as anything in Z_TURFS(z_level))
+		if(QDELETED(T))
+			continue
+		if(T.type != /turf/open/space/basic)
+			T.ChangeTurf(/turf/open/space/basic, null, CHANGETURF_IGNORE_AIR)
 		processed++
 		if(processed % VEILBREAK_TURF_PROCESS_BATCH_SIZE == 0)
 			CHECK_TICK
 
+	// 7. Prune areas that were orphaned by the wipe.
+	prune_orphaned_areas_on_z(z_level, dungeon_areas)
+
+	// 8. Atmos clean slate: deregister every turf on the Z from SSair and kill
+	//    the excited groups that span it.
+	atmos_wipe_z_level(z_level)
+
 	generated = FALSE
 	cleanup_in_progress = FALSE
+
 	veilbreak_shutdown_station_portal_after_z_wipe(z_level, delete_station_destination_datum)
+	return TRUE
 
 /datum/portal_destination/veilbreak/proc/generation_failed(reason)
 	log_world("Veilbreak Generation Failed: [reason]")
@@ -407,11 +527,11 @@
 	if(!D || istype(D, /datum/weakref))
 		return FALSE
 
+	// Observers are ignored entirely by cleanup: not ejected, not deleted.
 	if(isobserver(D))
 		return FALSE
 
 	var/mob/living/L
-
 	if(isliving(D))
 		L = D
 	else if(istype(D, /obj/item/mmi))
@@ -427,16 +547,14 @@
 	if(!L || !istype(L))
 		return FALSE
 
+	// Void creatures are dungeon content, never players.
 	if(LAZYFIND(L.faction, "FACTION_VOID"))
 		return FALSE
 
-	if(L.client || (L.mind && L.mind.active))
-		return TRUE
-
-	if(ishuman(L) || issilicon(L))
-		return TRUE
-
-	if(L.stat == DEAD && (L.client || L.mind))
+	// Any mob with a ckey or an attached mind is a player, whether or not the
+	// client is currently connected. Truly mindless NPCs fall through.
+	if(L.ckey || L.client || L.mind)
 		return TRUE
 
 	return FALSE
+
