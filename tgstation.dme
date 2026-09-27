@@ -11530,6 +11530,7 @@
 #include "modular_zzveilbreak\code\game\area\areas.dm"
 #include "modular_zzveilbreak\code\game\controllers\void_ai.dm"
 #include "modular_zzveilbreak\code\game\machinery\void_infuser.dm"
+#include "modular_zzveilbreak\code\game\machinery\computer\operating_computer.dm"
 #include "modular_zzveilbreak\code\game\objects\items\bags_overides.dm"
 #include "modular_zzveilbreak\code\game\objects\items\bluespace_science_bag.dm"
 #include "modular_zzveilbreak\code\game\objects\items\drop_list.dm"
