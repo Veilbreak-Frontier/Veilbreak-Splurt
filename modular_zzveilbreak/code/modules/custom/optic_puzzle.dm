@@ -381,16 +381,20 @@ GLOBAL_LIST_EMPTY(optic_devices)
 	desc = "A photosensitive receiver that detects light colors and activates when its requested color combination is received."
 	icon = 'modular_zzveilbreak/icons/obj/voidlaser.dmi'
 	icon_state = "vreceiver"
-	/// Color required to activate the receiver
-	var/required_color = OPTIC_COLOR_RED
+	/// Color required to activate the receiver (editable via View Variables table)
+	var/required_color = null
 	/// Active state
 	var/active = FALSE
+	/// Receivers cannot be rotated manually
+	can_rotate = FALSE
 	/// Linked door to trigger when active
 	var/obj/machinery/door/linked_door
 	/// Search radius for auto-linking doors
 	var/door_search_range = 7
 
 /obj/structure/optic_base/receiver/Initialize(mapload)
+	if(!required_color)
+		required_color = pick(list(OPTIC_COLOR_RED, OPTIC_COLOR_GREEN, OPTIC_COLOR_BLUE, OPTIC_COLOR_YELLOW, OPTIC_COLOR_MAGENTA, OPTIC_COLOR_CYAN, OPTIC_COLOR_WHITE))
 	. = ..()
 	START_PROCESSING(SSobj, src)
 	get_linked_door()
@@ -419,34 +423,15 @@ GLOBAL_LIST_EMPTY(optic_devices)
 /obj/structure/optic_base/receiver/examine(mob/user)
 	. = ..()
 	. += span_notice("It is configured to require <b>[required_color]</b> light. Currently: <b>[active ? "ACTIVE" : "INACTIVE"]</b>.")
-	. += span_notice("Interact with a screwdriver or Alt-Click to configure requested color.")
+
+/obj/structure/optic_base/receiver/interact(mob/user)
+	return
 
 /obj/structure/optic_base/receiver/attack_hand(mob/user, list/modifiers)
-	. = ..()
-	if(.)
-		return
-	configure_color(user)
+	return
 
 /obj/structure/optic_base/receiver/screwdriver_act(mob/living/user, obj/item/tool)
-	configure_color(user)
-	return ITEM_INTERACT_SUCCESS
-
-/// Prompt allowing players/mappers to choose any of the supported color combinations
-/obj/structure/optic_base/receiver/proc/configure_color(mob/user)
-	var/list/options = list(
-		OPTIC_COLOR_RED,
-		OPTIC_COLOR_GREEN,
-		OPTIC_COLOR_BLUE,
-		OPTIC_COLOR_YELLOW,
-		OPTIC_COLOR_MAGENTA,
-		OPTIC_COLOR_CYAN,
-		OPTIC_COLOR_WHITE
-	)
-	var/choice = tgui_input_list(user, "Select required light color combination for [src.name]:", "Receiver Configuration", options, required_color)
-	if(!choice || QDELETED(user) || QDELETED(src) || !user.can_perform_action(src, FORBID_TELEKINESIS_REACH))
-		return
-	required_color = choice
-	to_chat(user, span_notice("You configure [src] to require <b>[required_color]</b> light."))
+	return ITEM_INTERACT_BLOCKING
 
 /obj/structure/optic_base/receiver/receive_optic_beam(color_name, incoming_angle, list/visited)
 	received_colors |= color_name
