@@ -1,12 +1,11 @@
 /*
  * Operating Computer Zone Selection Fix
  *
- * Operating computer zone selection is unreliable: the TGUI silently no-ops
- * ui_act when the surgeon is beyond 2 tiles, forcing them to step away and back
- * to change target, and ui_close reverts the surgeon's HUD zone, discarding the
- * TGUI selection and diverging the surgical target from what the UI displayed.
- * Additionally, the TGUI only mirrored the machine's own target_zone, so
- * changing zone via the HUD doll left the TGUI stuck on the previous selection.
+ * The TGUI zone selector silently no-op'd ui_act outside two tiles of the
+ * machine, and ui_close reverted the surgeon's HUD zone on close, so target
+ * selection had to be redone every time the UI was closed. Additionally the
+ * TGUI only mirrored the machine's own target_zone, leaving the HUD doll and
+ * the surgery UI out of sync when the zone was changed outside the UI.
  */
 
 /obj/machinery/computer/operating/ui_check(mob/living/user)
@@ -35,13 +34,18 @@
 /obj/machinery/computer/operating/ui_close(mob/user)
 	. = ..()
 	UnregisterSignal(user, COMSIG_MOB_SELECTED_ZONE_SET)
-	LAZYREMOVE(zone_on_open, WEAKREF(user))
-	if(!LAZYLEN(zone_on_open))
-		zone_on_open = initial(zone_on_open)
 
 /obj/machinery/computer/operating/proc/on_user_zone_changed(mob/user, new_zone)
 	SIGNAL_HANDLER
-	update_static_data(user)
+	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
+	if(!ui)
+		return
+	ui.send_update()
+	addtimer(CALLBACK(src, PROC_REF(refresh_zone_static), user), 0.25 SECONDS, TIMER_UNIQUE | TIMER_OVERRIDE)
+
+/obj/machinery/computer/operating/proc/refresh_zone_static(mob/user)
+	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
+	ui?.send_full_update(always_instant = TRUE)
 
 /obj/machinery/computer/operating/ui_data(mob/user)
 	. = ..()
