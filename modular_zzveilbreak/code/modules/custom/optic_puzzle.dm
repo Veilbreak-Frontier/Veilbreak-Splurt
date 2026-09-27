@@ -115,10 +115,11 @@
 /// Sets the rotation angle and applies visual transform
 /obj/structure/optic_base/proc/set_angle(new_angle)
 	rotation_angle = SIMPLIFY_DEGREES(new_angle)
-	var/matrix/M = matrix()
-	M.Turn(rotation_angle)
-	transform = M
 	dir = angle2dir(rotation_angle)
+	var/matrix/M = matrix()
+	var/dir_angle = (icon == 'modular_zzveilbreak/icons/obj/voidlaser.dmi') ? dir2angle(dir) : 0
+	M.Turn(SIMPLIFY_DEGREES(rotation_angle - dir_angle))
+	transform = M
 
 /// Opens the 360-degree rotation prompt matching standard reflectors
 /obj/structure/optic_base/proc/rotate(mob/user)
@@ -228,8 +229,8 @@
 /obj/structure/optic_base/emitter
 	name = "optic white light emitter"
 	desc = "A heavy optical device that outputs a continuous beam of white light. Can be rotated 360 degrees."
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "reflector_base"
+	icon = 'modular_zzveilbreak/icons/obj/voidlaser.dmi'
+	icon_state = "vemitter"
 	/// Whether the emitter is powered on
 	var/active = TRUE
 
@@ -322,8 +323,8 @@
 /obj/structure/optic_base/receiver
 	name = "optic light receiver"
 	desc = "A photosensitive receiver that detects light colors and activates when its requested color combination is received."
-	icon = 'icons/obj/machines/wallmounts.dmi'
-	icon_state = "button"
+	icon = 'modular_zzveilbreak/icons/obj/voidlaser.dmi'
+	icon_state = "vreceiver"
 	/// Color required to activate the receiver
 	var/required_color = OPTIC_COLOR_RED
 	/// Active state
