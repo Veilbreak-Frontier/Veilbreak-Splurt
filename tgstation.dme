@@ -11568,6 +11568,7 @@
 #include "modular_zzveilbreak\code\modules\client\preferences\ignite_incantation.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_configuration.dm"
 #include "modular_zzveilbreak\code\modules\custom\path_unseen_puzzle.dm"
+#include "modular_zzveilbreak\code\modules\custom\optic_puzzle.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_destination_veilbreak.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_dmm_normalize.dm"
 #include "modular_zzveilbreak\code\modules\dungeons\veilbreak_dungeon_assets.dm"
