@@ -171,11 +171,13 @@ GLOBAL_LIST_EMPTY(optic_devices)
 		to_chat(user, span_notice("You [anchored ? "anchor" : "unanchor"] [src]."))
 		if(!anchored)
 			clear_optic_beams()
+		update_all_optic_beams()
 		return ITEM_INTERACT_SUCCESS
 
 /obj/structure/optic_base/Moved(atom/old_loc, movement_dir, forced, list/old_locs)
 	. = ..()
 	clear_optic_beams()
+	update_all_optic_beams()
 
 /// Base handler called when an optic beam hits this object
 /obj/structure/optic_base/proc/receive_optic_beam(color_name, incoming_angle, list/visited)
@@ -250,27 +252,28 @@ GLOBAL_LIST_EMPTY(optic_devices)
 
 /obj/structure/optic_base/emitter/set_angle(new_angle)
 	. = ..()
-	update_emitter_beams()
+	update_all_optic_beams()
 
 /obj/structure/optic_base/emitter/process(seconds_between_ticks)
 	if(active && anchored)
-		update_emitter_beams()
+		update_all_optic_beams()
 
 /obj/structure/optic_base/emitter/proc/update_emitter_beams()
+	update_all_optic_beams()
+
+/// Global proc to update all optical beams and receiver states in the world
+/proc/update_all_optic_beams()
 	for(var/obj/structure/optic_base/O in GLOB.optic_devices)
 		O.clear_optic_beams()
 		O.received_colors.Cut()
 
-	if(!active || !anchored)
-		for(var/obj/structure/optic_base/receiver/R in GLOB.optic_devices)
-			R.check_receiver_state()
-		return
-
-	var/turf/start_turf = get_turf(src)
-	if(start_turf)
-		var/list/visited = list()
-		visited[src] = TRUE
-		trace_beam(start_turf, OPTIC_COLOR_WHITE, rotation_angle, 15, visited)
+	for(var/obj/structure/optic_base/emitter/E in GLOB.optic_devices)
+		if(E.active && E.anchored)
+			var/turf/start_turf = get_turf(E)
+			if(start_turf)
+				var/list/visited = list()
+				visited[E] = TRUE
+				E.trace_beam(start_turf, OPTIC_COLOR_WHITE, E.rotation_angle, 15, visited)
 
 	for(var/obj/structure/optic_base/receiver/R in GLOB.optic_devices)
 		R.check_receiver_state()
@@ -285,12 +288,10 @@ GLOBAL_LIST_EMPTY(optic_devices)
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "reflector"
 	color = "#e0ffff"
-	can_unanchor = TRUE
 
 /obj/structure/optic_base/prism/set_angle(new_angle)
 	. = ..()
-	for(var/obj/structure/optic_base/emitter/E in GLOB.optic_devices)
-		E.update_emitter_beams()
+	update_all_optic_beams()
 
 /obj/structure/optic_base/prism/receive_optic_beam(color_name, incoming_angle, list/visited)
 	var/turf/start_turf = get_turf(src)
@@ -348,12 +349,10 @@ GLOBAL_LIST_EMPTY(optic_devices)
 	desc = "A box with an internal set of mirrors that reflects all light beams out in the direction it is facing. Can be rotated 360 degrees."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "reflector_box"
-	can_unanchor = TRUE
 
 /obj/structure/optic_base/reflector/set_angle(new_angle)
 	. = ..()
-	for(var/obj/structure/optic_base/emitter/E in GLOB.optic_devices)
-		E.update_emitter_beams()
+	update_all_optic_beams()
 
 /obj/structure/optic_base/reflector/receive_optic_beam(color_name, incoming_angle, list/visited)
 	var/turf/start_turf = get_turf(src)
@@ -435,7 +434,6 @@ GLOBAL_LIST_EMPTY(optic_devices)
 
 /obj/structure/optic_base/receiver/receive_optic_beam(color_name, incoming_angle, list/visited)
 	received_colors |= color_name
-	check_receiver_state()
 
 /// Evaluates received colors against requested color and opens/closes linked door
 /obj/structure/optic_base/receiver/proc/check_receiver_state()
@@ -448,14 +446,18 @@ GLOBAL_LIST_EMPTY(optic_devices)
 			set_light(2, 1, get_optic_hex_color(required_color))
 			playsound(src, 'sound/effects/phasein.ogg', 40, TRUE)
 			to_chat(range(5, src), span_boldnotice("[src] activates as it receives [required_color] light!"))
-			if(target_door && target_door.density)
+		if(target_door && !QDELETED(target_door))
+			target_door.autoclose = FALSE
+			if(target_door.density)
 				INVOKE_ASYNC(target_door, TYPE_PROC_REF(/obj/machinery/door, open))
 	else
 		if(active)
 			active = FALSE
 			set_light(0)
-			if(target_door && !target_door.density)
-				INVOKE_ASYNC(target_door, TYPE_PROC_REF(/obj/machinery/door, close))
+			if(target_door && !QDELETED(target_door))
+				target_door.autoclose = initial(target_door.autoclose)
+				if(!target_door.density)
+					INVOKE_ASYNC(target_door, TYPE_PROC_REF(/obj/machinery/door, close))
 
 /obj/structure/optic_base/receiver/process(seconds_between_ticks)
-	check_receiver_state()
+	return
