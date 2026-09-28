@@ -36,7 +36,7 @@
 		"Fifth Layer" = 5,
 	)
 	///Design types for general plumbing constructor
-	var/static/list/general_design_types = list(
+	var/list/general_design_types = list(
 		//category 1 Synthesizers i.e devices which creates , reacts & destroys chemicals
 		"Synthesizers" = list(
 			/obj/machinery/plumbing/synthesizer = 15,
@@ -308,7 +308,7 @@
 	custom_premium_price = PAYCHECK_CREW * 6
 	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 37.5, /datum/material/glass = SHEET_MATERIAL_AMOUNT * 18.75, /datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT)
 	///Design types for plumbing service constructor
-	var/static/list/service_design_types = list(
+	var/list/service_design_types = list(
 		//Category 1 synthesizers
 		"Synthesizers" = list(
 			/obj/machinery/plumbing/synthesizer/soda = 15,
