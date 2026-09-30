@@ -18,19 +18,14 @@ GLOBAL_VAR_INIT(body_marking_conflicts_resolved, FALSE)
 
 /proc/body_marking_module_tag(typepath)
 	var/p = "[typepath]"
-	if(findtext(p, "modular_zzveilbreak"))
+	if(findtext(p, "/veilbreak/"))
 		return MARKING_MODULE_VEILBREAK
-	if(findtext(p, "modular_zzplurt"))
+	if(findtext(p, "/splurt/"))
 		return MARKING_MODULE_SPLURT
-	if(findtext(p, "modular_zubbers"))
+	if(findtext(p, "/bubber/"))
 		return MARKING_MODULE_BUBBER
-	if(findtext(p, "modular_skyrat"))
+	if(findtext(p, "/skyrat/"))
 		return MARKING_MODULE_SKYRAT
-	if(findtext(p, "modular_"))
-		var/regex/R = regex(@"modular_([a-z]+)/")
-		if(R.Find(p))
-			return capitalize(R.group[1])
-		return "Modular"
 	return MARKING_MODULE_CORE
 
 /proc/resolve_body_marking_name_conflicts()
