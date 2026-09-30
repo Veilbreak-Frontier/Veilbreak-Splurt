@@ -9,7 +9,9 @@ It also rebuilds GLOB.body_markings_per_limb and remaps GLOB.body_marking_sets s
 #define MARKING_MODULE_SKYRAT    "Skyrat"
 #define MARKING_MODULE_CORE      "Core"
 
-make_body_marking_references()
+GLOBAL_VAR_INIT(body_marking_conflicts_resolved, FALSE)
+
+/proc/make_body_marking_references()
 	..()
 	resolve_body_marking_name_conflicts()
 
@@ -31,6 +33,8 @@ make_body_marking_references()
 	return MARKING_MODULE_CORE
 
 /proc/resolve_body_marking_name_conflicts()
+	GLOB.body_marking_conflicts_resolved = TRUE
+
 	var/list/name_to_paths = list()
 	for(var/key in GLOB.body_markings)
 		var/datum/body_marking/BM = GLOB.body_markings[key]
@@ -56,6 +60,8 @@ make_body_marking_references()
 				target_BM = old_BM
 			else
 				target_BM = new typepath()
+
+			target_BM.name = new_name
 
 			if(GLOB.body_markings[new_name])
 				stack_trace("Body marking conflict resolver: two definitions of '[marking_name]' share module '[module_tag]'. Offending path: [typepath]")

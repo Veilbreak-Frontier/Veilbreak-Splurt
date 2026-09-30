@@ -11,6 +11,9 @@ It also safely overrides get_ui_data() to guarantee marking options populate int
 	H.update_body_parts(update_limb_data = TRUE)
 
 /datum/preference_middleware/limbs_and_markings/get_ui_data(mob/user)
+	if(!GLOB.body_marking_conflicts_resolved)
+		resolve_body_marking_name_conflicts()
+
 	. = ..()
 	if(!islist(.))
 		. = list()
