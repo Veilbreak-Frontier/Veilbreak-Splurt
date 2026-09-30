@@ -11,8 +11,9 @@ It also rebuilds GLOB.body_markings_per_limb and remaps GLOB.body_marking_sets s
 
 GLOBAL_VAR_INIT(body_marking_conflicts_resolved, FALSE)
 
-/proc/make_body_marking_references()
-	..()
+/// Force execution at world boot to guarantee global lists are rebuilt before clients connect
+/world/New()
+	. = ..()
 	resolve_body_marking_name_conflicts()
 
 /proc/body_marking_module_tag(typepath)
@@ -33,7 +34,17 @@ GLOBAL_VAR_INIT(body_marking_conflicts_resolved, FALSE)
 	return MARKING_MODULE_CORE
 
 /proc/resolve_body_marking_name_conflicts()
+	if(GLOB.body_marking_conflicts_resolved)
+		return
 	GLOB.body_marking_conflicts_resolved = TRUE
+
+	// Build initial references first if Skyrat hasn't populated them yet
+	if(!length(GLOB.body_markings))
+		for(var/path in subtypesof(/datum/body_marking))
+			var/datum/body_marking/BM = new path()
+			if(!BM.name)
+				continue
+			GLOB.body_markings[BM.name] = BM
 
 	var/list/name_to_paths = list()
 	for(var/key in GLOB.body_markings)
