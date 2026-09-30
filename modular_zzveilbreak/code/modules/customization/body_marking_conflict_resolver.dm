@@ -32,41 +32,45 @@ make_body_marking_references()
 
 /proc/resolve_body_marking_name_conflicts()
 	var/list/name_to_paths = list()
-	for(var/typepath in subtypesof(/datum/body_marking))
-		var/datum/body_marking/BM = typepath
-		var/marking_name = initial(BM.name)
-		if(!marking_name)
+	for(var/key in GLOB.body_markings)
+		var/datum/body_marking/BM = GLOB.body_markings[key]
+		if(!BM)
 			continue
-		LAZYADDASSOCLIST(name_to_paths, marking_name, typepath)
+		LAZYADDASSOCLIST(name_to_paths, initial(BM.name), BM.type)
 
 	for(var/marking_name in name_to_paths)
 		var/list/paths = name_to_paths[marking_name]
 		if(paths.len <= 1)
 			continue
 
+		var/datum/body_marking/old_BM = GLOB.body_markings[marking_name]
 		GLOB.body_markings -= marking_name
 
 		for(var/typepath in paths)
 			var/module_tag = body_marking_module_tag(typepath)
 			var/new_name = "[marking_name] ([module_tag])"
+			var/datum/body_marking/target_BM = (old_BM && old_BM.type == typepath) ? old_BM : new typepath()
 
 			if(GLOB.body_markings[new_name])
 				stack_trace("Body marking conflict resolver: two definitions of '[marking_name]' share module '[module_tag]'. Falling back to original name. Offending path: [typepath]")
-				GLOB.body_markings[marking_name] = typepath
+				GLOB.body_markings[marking_name] = target_BM
 				continue
 
-			GLOB.body_markings[new_name] = typepath
+			GLOB.body_markings[new_name] = target_BM
 
 	for(var/zone in GLOB.body_markings_per_limb)
 		GLOB.body_markings_per_limb[zone] = list()
 
 	for(var/key in GLOB.body_markings)
-		var/datum/body_marking/BM = GLOB.body_markings[key]
-		if(!initial(BM.affected_bodyparts))
+		var/datum/body_marking/BM_inst = GLOB.body_markings[key]
+		if(!BM_inst)
+			continue
+		var/datum/body_marking/BM_path = BM_inst.type
+		if(!initial(BM_path.affected_bodyparts))
 			continue
 		for(var/marking_zone in GLOB.marking_zones)
 			var/bitflag = GLOB.marking_zone_to_bitflag[marking_zone]
-			if(initial(BM.affected_bodyparts) & bitflag)
+			if(initial(BM_path.affected_bodyparts) & bitflag)
 				LAZYADD(GLOB.body_markings_per_limb[marking_zone], key)
 
 	for(var/set_typepath in subtypesof(/datum/body_marking_set))
