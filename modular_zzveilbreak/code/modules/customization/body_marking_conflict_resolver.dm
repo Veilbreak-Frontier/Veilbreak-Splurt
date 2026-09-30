@@ -33,45 +33,38 @@ GLOBAL_VAR_INIT(body_marking_conflicts_resolved, FALSE)
 		return
 	GLOB.body_marking_conflicts_resolved = TRUE
 
-	// Build initial references first if Skyrat hasn't populated them yet
-	if(!length(GLOB.body_markings))
-		for(var/path in subtypesof(/datum/body_marking))
-			var/datum/body_marking/BM = new path()
-			if(!BM.name)
-				continue
-			GLOB.body_markings[BM.name] = BM
-
+	// Map all sub-typepaths to their initial defined name to catch duplicates before they overwrite each other in global lists
 	var/list/name_to_paths = list()
-	for(var/key in GLOB.body_markings)
-		var/datum/body_marking/BM = GLOB.body_markings[key]
-		if(!BM)
+	for(var/path in subtypesof(/datum/body_marking))
+		var/datum/body_marking/BM_template = path
+		var/marking_name = initial(BM_template.name)
+		if(!marking_name)
 			continue
-		LAZYADDASSOCLIST(name_to_paths, initial(BM.name), BM.type)
+		LAZYADDASSOCLIST(name_to_paths, marking_name, path)
+
+	// Wipe existing GLOB.body_markings so we can cleanly populate disambiguated entries
+	GLOB.body_markings.Cut()
 
 	for(var/marking_name in name_to_paths)
 		var/list/paths = name_to_paths[marking_name]
-		if(paths.len <= 1)
+
+		// Single non-conflicting marking
+		if(paths.len == 1)
+			var/typepath = paths[1]
+			var/datum/body_marking/BM = new typepath()
+			GLOB.body_markings[marking_name] = BM
 			continue
 
-		// Remove original un-tagged key from global registry
-		var/datum/body_marking/old_BM = GLOB.body_markings[marking_name]
-		GLOB.body_markings -= marking_name
-
+		// Collision detected (> 1 definition with same name) -> Disambiguate with module tag
 		for(var/typepath in paths)
 			var/module_tag = body_marking_module_tag(typepath)
 			var/new_name = "[marking_name] ([module_tag])"
 
-			var/datum/body_marking/target_BM
-			if(old_BM && old_BM.type == typepath)
-				target_BM = old_BM
-			else
-				target_BM = new typepath()
-
+			var/datum/body_marking/target_BM = new typepath()
 			target_BM.name = new_name
 
 			if(GLOB.body_markings[new_name])
 				stack_trace("Body marking conflict resolver: two definitions of '[marking_name]' share module '[module_tag]'. Offending path: [typepath]")
-				GLOB.body_markings[marking_name] = target_BM
 				continue
 
 			GLOB.body_markings[new_name] = target_BM
