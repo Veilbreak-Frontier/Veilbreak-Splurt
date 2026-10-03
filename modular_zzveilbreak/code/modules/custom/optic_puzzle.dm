@@ -144,12 +144,6 @@ GLOBAL_LIST_EMPTY(optic_devices)
 /obj/structure/optic_base/interact(mob/user)
 	rotate(user)
 
-/obj/structure/optic_base/attack_hand(mob/user, list/modifiers)
-	. = ..()
-	if(.)
-		return
-	rotate(user)
-
 /obj/structure/optic_base/examine(mob/user)
 	. = ..()
 	. += span_notice("It is angled at <b>[rotation_angle]°</b>. Interact with it to rotate it 360 degrees.")
