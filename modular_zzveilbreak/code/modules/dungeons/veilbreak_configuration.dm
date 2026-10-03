@@ -1,4 +1,4 @@
-﻿/// Dungeon pocket Z must satisfy BOTH traits. Use level_has_all_traits(z, PORTAL_TRAIT_DUNGEON) - not level_trait(z, list).
+/// Dungeon pocket Z must satisfy BOTH traits. Use level_has_all_traits(z, PORTAL_TRAIT_DUNGEON) - not level_trait(z, list).
 GLOBAL_VAR(station_veilbreak_portal)
 GLOBAL_VAR(portal_dungeon_z_level)
 GLOBAL_LIST_EMPTY(basic_mobs)
