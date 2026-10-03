@@ -1,16 +1,4 @@
-#define DUNGEON_WIDTH 100
-#define DUNGEON_HEIGHT 100
-#define DUNGEON_GENERATOR_URL "http://127.0.0.1:8000"
-#define DUNGEON_GENERATOR_TIMEOUT 300
-#define DUNGEON_GENERATE_ENDPOINT "/generate_dungeon"
-#define PORTAL_TRAIT_DUNGEON list(ZTRAIT_AWAY, ZTRAIT_MINING)
-#define PORTAL_ACTIVE_POWER_USAGE (BASE_MACHINE_ACTIVE_CONSUMPTION * 2)
-#define VEILBREAK_TEMP_MAP_PREFIX "data/veilbreak_temp_"
-#define VEILBREAK_CLEANUP_BATCH_SIZE 50
-#define VEILBREAK_MOB_SPAWN_BATCH_SIZE 25
-#define VEILBREAK_TURF_PROCESS_BATCH_SIZE 50
-
-/// Dungeon pocket Z must satisfy BOTH traits. Use level_has_all_traits(z, PORTAL_TRAIT_DUNGEON) — not level_trait(z, list).
+/// Dungeon pocket Z must satisfy BOTH traits. Use level_has_all_traits(z, PORTAL_TRAIT_DUNGEON) - not level_trait(z, list).
 GLOBAL_VAR(station_veilbreak_portal)
 GLOBAL_VAR(portal_dungeon_z_level)
 GLOBAL_LIST_EMPTY(basic_mobs)
@@ -22,8 +10,6 @@ GLOBAL_VAR_INIT(veilbreak_void_creature_health_scale, 1)
 GLOBAL_VAR_INIT(veilbreak_void_creature_damage_scale, 1)
 /// Times veilbreak_void_creature_scaling_on_void_boss_death() has run this round (Melos / Inai).
 GLOBAL_VAR_INIT(veilbreak_void_creature_boss_kill_count, 0)
-/// Per void-boss death: both scales are multiplied by this (cumulative).
-#define VEILBREAK_VOID_CREATURE_BOSS_KILL_MULT 1.1
 
 /proc/veilbreak_void_creature_scaling_on_void_boss_death()
 	GLOB.veilbreak_void_creature_boss_kill_count++
