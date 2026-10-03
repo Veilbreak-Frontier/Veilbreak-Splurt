@@ -190,16 +190,41 @@ GLOBAL_LIST_EMPTY(optic_devices)
 	if(!start_turf || max_range <= 0 || !anchored)
 		return
 
-	var/step_dir = angle2dir(beam_angle)
-	if(!step_dir)
-		return
+	var/dx = sin(beam_angle)
+	var/dy = cos(beam_angle)
+
+	var/curr_x = start_turf.x
+	var/curr_y = start_turf.y
+	var/z = start_turf.z
 
 	var/turf/curr_turf = start_turf
 	var/turf/last_turf = start_turf
 
-	for(var/i in 1 to max_range)
-		var/turf/next_turf = get_step(curr_turf, step_dir)
-		if(!next_turf || next_turf.density)
+	var/step_size = 0.1
+	var/total_steps = round(max_range / step_size)
+
+	for(var/step in 1 to total_steps)
+		curr_x += dx * step_size
+		curr_y += dy * step_size
+
+		var/target_x = clamp(round(curr_x), 1, world.maxx)
+		var/target_y = clamp(round(curr_y), 1, world.maxy)
+		var/turf/next_turf = locate(target_x, target_y, z)
+
+		if(!next_turf)
+			break
+
+		if(next_turf == curr_turf)
+			continue
+
+		// Prevent clipping through diagonal wall corners
+		if(next_turf.x != curr_turf.x && next_turf.y != curr_turf.y)
+			var/turf/cardinal_1 = locate(next_turf.x, curr_turf.y, z)
+			var/turf/cardinal_2 = locate(curr_turf.x, next_turf.y, z)
+			if(cardinal_1?.density && cardinal_2?.density)
+				break
+
+		if(next_turf.density)
 			break
 
 		last_turf = next_turf

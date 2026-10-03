@@ -86,6 +86,8 @@
 	var/obj/machinery/door/linked_door
 	/// Search radius for auto-linking the nearest door
 	var/door_search_range = 7
+	/// Prevents multiple channel loops from running simultaneously on this tile
+	var/is_channeling = FALSE
 
 /turf/open/floor/void_tile/path_unseen/LateInitialize()
 	. = ..()
@@ -128,16 +130,33 @@
 			else
 				to_chat(L, span_warning("The void tile remains inert. You have not unlocked the Path Unseen."))
 
+/// Callback to verify the mob is still standing on this void tile and is conscious
+/turf/open/floor/void_tile/path_unseen/proc/check_still_on_tile(mob/living/L)
+	return (L && !QDELETED(L) && get_turf(L) == src && L.stat == CONSCIOUS)
+
 /// Channels for 5 seconds with a progress bar before permanently opening the door
 /turf/open/floor/void_tile/path_unseen/proc/channel_open_door(mob/living/L)
+	if(is_channeling)
+		return
 	var/obj/machinery/door/target_door = get_linked_door()
 	if(!target_door || !target_door.density)
 		return
 
+	is_channeling = TRUE
 	to_chat(L, span_boldnotice("You stand on the void tile and begin channeling energy into the Path Unseen mechanism..."))
 	playsound(src, 'sound/effects/phasein.ogg', 30, TRUE)
 
-	if(do_after(L, 5 SECONDS, target = src))
+	// Sleep 1 decisecond to yield past the active step Movement signal dispatch
+	sleep(1)
+
+	if(QDELETED(L) || get_turf(L) != src)
+		is_channeling = FALSE
+		return
+
+	var/success = do_after(L, 5 SECONDS, target = src, timed_action_flags = IGNORE_TARGET_LOC_CHANGE, extra_checks = CALLBACK(src, PROC_REF(check_still_on_tile), L))
+	is_channeling = FALSE
+
+	if(success)
 		if(target_door && target_door.density)
 			to_chat(L, span_boldnotice("The void tile resonates powerfully! The door unlocks and opens."))
 			playsound(src, 'sound/effects/phasein.ogg', 60, TRUE)
