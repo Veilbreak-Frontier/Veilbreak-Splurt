@@ -15,6 +15,8 @@ GLOBAL_LIST_EMPTY(optic_devices)
 #define OPTIC_COLOR_CYAN    "cyan"
 #define OPTIC_COLOR_WHITE   "white"
 
+#define OPTIC_BEAM_MAX_RANGE 25
+
 /// Returns the hex color string corresponding to an optic color name
 /proc/get_optic_hex_color(color_name)
 	switch(color_name)
@@ -142,12 +144,6 @@ GLOBAL_LIST_EMPTY(optic_devices)
 /obj/structure/optic_base/interact(mob/user)
 	rotate(user)
 
-/obj/structure/optic_base/attack_hand(mob/user, list/modifiers)
-	. = ..()
-	if(.)
-		return
-	rotate(user)
-
 /obj/structure/optic_base/examine(mob/user)
 	. = ..()
 	. += span_notice("It is angled at <b>[rotation_angle]°</b>. Interact with it to rotate it 360 degrees.")
@@ -184,20 +180,45 @@ GLOBAL_LIST_EMPTY(optic_devices)
 	return
 
 /// Traces a light beam from start_turf along beam_angle
-/obj/structure/optic_base/proc/trace_beam(turf/start_turf, color_name, beam_angle, max_range = 15, list/visited = list())
+/obj/structure/optic_base/proc/trace_beam(turf/start_turf, color_name, beam_angle, max_range = OPTIC_BEAM_MAX_RANGE, list/visited = list())
 	if(!start_turf || max_range <= 0 || !anchored)
 		return
 
-	var/step_dir = angle2dir(beam_angle)
-	if(!step_dir)
-		return
+	var/dx = sin(beam_angle)
+	var/dy = cos(beam_angle)
+
+	var/curr_x = start_turf.x
+	var/curr_y = start_turf.y
+	var/z = start_turf.z
 
 	var/turf/curr_turf = start_turf
 	var/turf/last_turf = start_turf
 
-	for(var/i in 1 to max_range)
-		var/turf/next_turf = get_step(curr_turf, step_dir)
-		if(!next_turf || next_turf.density)
+	var/step_size = 0.1
+	var/total_steps = round(max_range / step_size)
+
+	for(var/step in 1 to total_steps)
+		curr_x += dx * step_size
+		curr_y += dy * step_size
+
+		var/target_x = clamp(round(curr_x), 1, world.maxx)
+		var/target_y = clamp(round(curr_y), 1, world.maxy)
+		var/turf/next_turf = locate(target_x, target_y, z)
+
+		if(!next_turf)
+			break
+
+		if(next_turf == curr_turf)
+			continue
+
+		// Prevent clipping through diagonal wall corners
+		if(next_turf.x != curr_turf.x && next_turf.y != curr_turf.y)
+			var/turf/cardinal_1 = locate(next_turf.x, curr_turf.y, z)
+			var/turf/cardinal_2 = locate(curr_turf.x, next_turf.y, z)
+			if(cardinal_1?.density && cardinal_2?.density)
+				break
+
+		if(next_turf.density)
 			break
 
 		last_turf = next_turf
@@ -273,7 +294,7 @@ GLOBAL_LIST_EMPTY(optic_devices)
 			if(start_turf)
 				var/list/visited = list()
 				visited[E] = TRUE
-				E.trace_beam(start_turf, OPTIC_COLOR_WHITE, E.rotation_angle, 15, visited)
+				E.trace_beam(start_turf, OPTIC_COLOR_WHITE, E.rotation_angle, OPTIC_BEAM_MAX_RANGE, visited)
 
 	for(var/obj/structure/optic_base/receiver/R in GLOB.optic_devices)
 		R.check_receiver_state()
@@ -334,11 +355,11 @@ GLOBAL_LIST_EMPTY(optic_devices)
 	new_visited[src] = TRUE
 
 	if(has_red)
-		trace_beam(start_turf, OPTIC_COLOR_RED, rotation_angle, 15, new_visited.Copy())
+		trace_beam(start_turf, OPTIC_COLOR_RED, rotation_angle, OPTIC_BEAM_MAX_RANGE, new_visited.Copy())
 	if(has_green)
-		trace_beam(start_turf, OPTIC_COLOR_GREEN, SIMPLIFY_DEGREES(rotation_angle - 45), 15, new_visited.Copy())
+		trace_beam(start_turf, OPTIC_COLOR_GREEN, SIMPLIFY_DEGREES(rotation_angle - 45), OPTIC_BEAM_MAX_RANGE, new_visited.Copy())
 	if(has_blue)
-		trace_beam(start_turf, OPTIC_COLOR_BLUE, SIMPLIFY_DEGREES(rotation_angle + 45), 15, new_visited.Copy())
+		trace_beam(start_turf, OPTIC_COLOR_BLUE, SIMPLIFY_DEGREES(rotation_angle + 45), OPTIC_BEAM_MAX_RANGE, new_visited.Copy())
 
 // ================= ================= =================
 // OPTIC REFLECTOR BOX (MIRROR)
@@ -369,7 +390,7 @@ GLOBAL_LIST_EMPTY(optic_devices)
 	if(mixed_color)
 		var/list/new_visited = visited ? visited.Copy() : list()
 		new_visited[src] = TRUE
-		trace_beam(start_turf, mixed_color, rotation_angle, 15, new_visited)
+		trace_beam(start_turf, mixed_color, rotation_angle, OPTIC_BEAM_MAX_RANGE, new_visited)
 
 // ================= ================= =================
 // LIGHT RECEIVER
