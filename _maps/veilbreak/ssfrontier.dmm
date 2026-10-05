@@ -1440,10 +1440,6 @@
 	pixel_x = 6;
 	pixel_y = 3
 	},
-/obj/item/ai_module/core{
-	pixel_x = 6;
-	pixel_y = 9
-	},
 /turf/open/floor/carpet/purple,
 /area/station/command/heads_quarters/rd)
 "aLY" = (
@@ -3062,7 +3058,6 @@
 "bFJ" = (
 /obj/structure/table,
 /obj/item/aicard,
-/obj/item/ai_module/reset,
 /turf/open/floor/iron/dark/smooth_large,
 /area/station/engineering/storage/tech)
 "bFS" = (
@@ -7139,7 +7134,7 @@
 /turf/open/floor/iron/dark,
 /area/station/commons/toilet)
 "dFT" = (
-/obj/machinery/computer/upload/ai,
+/obj/machinery/ai_law_rack/base/core,
 /turf/open/floor/iron/dark,
 /area/station/ai/upload/chamber)
 "dGl" = (
@@ -7808,13 +7803,6 @@
 	},
 /turf/open/floor/engine/vacuum,
 /area/station/science/ordnance/burnchamber)
-"dZm" = (
-/obj/effect/turf_decal/bot_white,
-/obj/effect/decal/cleanable/blood/hitsplatter{
-	pixel_y = -12
-	},
-/turf/open/floor/wood/parquet,
-/area/station/command/gateway)
 "dZG" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/visible,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2{
@@ -12266,13 +12254,6 @@
 	},
 /turf/open/floor/iron/dark/side,
 /area/station/science/lab)
-"gnT" = (
-/obj/effect/decal/cleanable/blood/splatter{
-	pixel_x = 11;
-	pixel_y = 19
-	},
-/turf/open/floor/wood/parquet,
-/area/station/command/gateway)
 "goe" = (
 /obj/effect/turf_decal/siding/thinplating/dark{
 	dir = 1
@@ -13803,10 +13784,10 @@
 /turf/open/floor/iron/dark,
 /area/station/command/bridge)
 "hgi" = (
-/obj/machinery/computer/rdservercontrol{
-	dir = 4
-	},
 /obj/effect/turf_decal/siding/dark,
+/obj/machinery/modular_computer/preset/civilian{
+	dir = 8
+	},
 /turf/open/floor/carpet/royalblue,
 /area/station/command/bridge)
 "hgs" = (
@@ -14670,7 +14651,6 @@
 	},
 /area/station/hallway/primary/central)
 "hFc" = (
-/obj/machinery/computer/upload/borg,
 /turf/open/floor/iron/dark,
 /area/station/ai/upload/chamber)
 "hFf" = (
@@ -18372,10 +18352,6 @@
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
 	dir = 4
 	},
-/obj/effect/decal/cleanable/blood/gibs/torso{
-	pixel_y = 17;
-	pixel_x = -4
-	},
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "jCC" = (
@@ -18842,10 +18818,6 @@
 "jPv" = (
 /turf/open/floor/grass,
 /area/space/nearstation)
-"jPx" = (
-/obj/structure/sign/delam_procedure,
-/turf/closed/wall/r_wall,
-/area/station/engineering/supermatter/room)
 "jQA" = (
 /obj/machinery/camera/autoname/directional/west{
 	network = list("ss13","xeno");
@@ -19091,10 +19063,6 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/engineering/atmos)
-"jXD" = (
-/obj/machinery/button/delam_scram,
-/turf/closed/wall/r_wall,
-/area/station/engineering/supermatter/room)
 "jYa" = (
 /obj/machinery/door/poddoor/shutters{
 	id = "armory";
@@ -23261,7 +23229,6 @@
 	},
 /area/station/science/xenobiology)
 "lTP" = (
-/mob/living/simple_animal/bot/mulebot,
 /obj/effect/turf_decal/bot,
 /obj/machinery/navbeacon{
 	codes_txt = "delivery;dir=8";
@@ -25945,7 +25912,6 @@
 /obj/structure/window/reinforced/spawner/directional/north,
 /obj/structure/window/reinforced/spawner/directional/east,
 /obj/effect/spawner/random/aimodule/harmful,
-/obj/item/ai_module/reset/purge,
 /obj/machinery/door/window/right/directional/west{
 	name = "High-Risk Modules"
 	},
@@ -30442,10 +30408,6 @@
 /obj/effect/mapping_helpers/airlock/access/any/security/hos,
 /turf/open/floor/wood/parquet,
 /area/station/command/heads_quarters/hos)
-"pol" = (
-/obj/machinery/atmospherics/components/unary/delam_scram/directional/south,
-/turf/open/floor/engine,
-/area/station/engineering/supermatter)
 "poD" = (
 /obj/machinery/nuclearbomb/beer,
 /obj/machinery/light/floor,
@@ -32112,12 +32074,11 @@
 	},
 /area/station/science/research)
 "qfn" = (
-/obj/machinery/computer{
-	name = "Condo Teleportation Console";
-	desc = "Due to various fly related incident, management has disabled direct control of this console.";
-	dir = 1
-	},
 /obj/effect/turf_decal/stripes/line,
+/obj/machinery/modular_computer/preset/civilian{
+	dir = 1;
+	name = "Teleportation Unit Computer (flavor)"
+	},
 /turf/open/floor/iron/dark/side,
 /area/station/commons/dorms)
 "qfw" = (
@@ -35197,7 +35158,6 @@
 /turf/open/floor/plating,
 /area/station/maintenance/starboard/aft)
 "rHp" = (
-/obj/item/food/grown/carrot,
 /obj/structure/flora/bush/style_random,
 /turf/open/floor/grass,
 /area/station/hallway/primary/central)
@@ -35978,7 +35938,6 @@
 /turf/open/floor/iron/showroomfloor,
 /area/station/command/heads_quarters/rd)
 "sgz" = (
-/mob/living/simple_animal/bot/mulebot,
 /obj/effect/turf_decal/bot,
 /obj/machinery/navbeacon{
 	codes_txt = "delivery;dir=8";
@@ -36972,7 +36931,6 @@
 /turf/open/floor/iron/dark,
 /area/station/service/hydroponics)
 "sGV" = (
-/mob/living/simple_animal/bot/mulebot,
 /obj/effect/turf_decal/bot,
 /obj/machinery/navbeacon{
 	codes_txt = "delivery;dir=8";
@@ -38045,7 +38003,6 @@
 /area/station/service/lawoffice)
 "tdG" = (
 /obj/structure/window/spawner/directional/north,
-/obj/item/food/grown/carrot,
 /turf/open/floor/grass,
 /area/station/hallway/primary/central)
 "tdQ" = (
@@ -38127,15 +38084,6 @@
 /obj/machinery/light_switch/directional/north,
 /turf/open/floor/wood/parquet,
 /area/station/command/heads_quarters/hop)
-"tfu" = (
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2{
-	dir = 8
-	},
-/obj/structure/reagent_dispensers/beerkeg,
-/turf/open/floor/wood/parquet,
-/area/station/service/bar)
 "tfF" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2{
@@ -40081,10 +40029,6 @@
 /obj/machinery/door/airlock/vault,
 /turf/open/floor/iron/dark,
 /area/station/ai/satellite/chamber)
-"ubk" = (
-/obj/item/food/grown/carrot,
-/turf/open/floor/grass,
-/area/station/hallway/primary/central)
 "ubn" = (
 /obj/structure/closet/firecloset,
 /turf/open/floor/plating,
@@ -41803,12 +41747,6 @@
 /obj/effect/turf_decal/bot,
 /turf/open/floor/iron/dark,
 /area/station/engineering/main)
-"uWV" = (
-/mob/living/basic/rabbit,
-/obj/item/food/grown/carrot,
-/obj/structure/flora/bush/flowers_br/style_random,
-/turf/open/floor/grass,
-/area/station/hallway/primary/central)
 "uWX" = (
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
@@ -42239,22 +42177,6 @@
 "vfQ" = (
 /turf/open/floor/iron/dark,
 /area/station/maintenance/starboard/fore)
-"vfT" = (
-/obj/item/clothing/suit/caution{
-	pixel_x = 5;
-	pixel_y = -7
-	},
-/obj/item/mop{
-	pixel_x = -9;
-	pixel_y = 5
-	},
-/obj/structure/mop_bucket{
-	pixel_x = 13;
-	pixel_y = 15
-	},
-/obj/effect/decal/cleanable/blood/gibs/up,
-/turf/open/floor/wood/parquet,
-/area/station/command/gateway)
 "vgs" = (
 /obj/effect/mapping_helpers/airlock/locked,
 /obj/machinery/door/airlock/research/glass/incinerator/ordmix_exterior,
@@ -44665,10 +44587,10 @@
 /turf/open/floor/carpet/red,
 /area/station/hallway/secondary/entry)
 "wxk" = (
-/obj/machinery/computer/monitor,
 /obj/effect/turf_decal/siding/dark{
 	dir = 1
 	},
+/obj/machinery/computer/aifixer,
 /turf/open/floor/carpet/royalblue,
 /area/station/command/bridge)
 "wxn" = (
@@ -45090,6 +45012,12 @@
 /area/station/hallway/primary/central)
 "wFD" = (
 /obj/machinery/computer/portal_control,
+/obj/item/paper{
+	pixel_x = 11;
+	pixel_y = -6;
+	default_raw_text = "Please be advised some 'puzzle' rooms started appearing inside the void, wear HAZMAT class 5 suits at all time and do not interact with Her under ANY CIRCUMSTANCE.";
+	name = "Warning: Safety and Precaution"
+	},
 /turf/open/floor/wood/parquet,
 /area/station/command/gateway)
 "wFE" = (
@@ -81233,7 +81161,7 @@ nyj
 yiG
 hMX
 sYl
-tfu
+wdW
 yiG
 kbD
 iNp
@@ -81729,7 +81657,7 @@ nyj
 obk
 rHp
 auV
-ubk
+ngO
 iBk
 hhn
 hhn
@@ -82242,7 +82170,7 @@ lQy
 nyj
 tdG
 nfx
-uWV
+psr
 ngO
 iBk
 iBk
@@ -83888,7 +83816,7 @@ jKE
 cqB
 rGa
 kYg
-pol
+jKE
 odF
 mUF
 nDi
@@ -84393,7 +84321,7 @@ mOD
 mOD
 kxX
 hFR
-jPx
+xgB
 mBd
 fKy
 mQb
@@ -84650,7 +84578,7 @@ mOD
 mOD
 kxX
 xij
-jXD
+xgB
 pgr
 fKy
 cgC
@@ -92259,7 +92187,7 @@ rWg
 qOH
 wkG
 wFD
-gnT
+sdi
 pgJ
 jOz
 nec
@@ -92514,8 +92442,8 @@ xvv
 pgJ
 fMu
 leJ
-dZm
-vfT
+cdq
+sdi
 sdi
 gSN
 jOz
