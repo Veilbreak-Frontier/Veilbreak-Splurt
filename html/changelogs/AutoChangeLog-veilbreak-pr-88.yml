@@ -1,0 +1,6 @@
+author: "Vhariik"
+delete-after: True
+changes:
+  - rscadd: "Walls and floors"
+  - bugfix: "Inconsistencies in veilbreak map"
+  - rscdel: "Space"
