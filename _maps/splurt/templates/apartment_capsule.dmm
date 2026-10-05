@@ -7,11 +7,11 @@
 /obj/machinery/light/directional,
 /obj/structure/table/reinforced,
 /obj/effect/spawner/random/food_or_drink/three_course_meal,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "bl" = (
 /obj/structure/chair/sofa/bench/right,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "bD" = (
 /obj/structure/chair/office{
@@ -22,7 +22,7 @@
 "bL" = (
 /obj/structure/fans,
 /obj/effect/mapping_helpers/broken_machine,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "bP" = (
 /obj/effect/turf_decal/siding/wood,
@@ -30,7 +30,8 @@
 /turf/open/floor/wood,
 /area/misc/condo)
 "cA" = (
-/turf/closed/wall/mineral/titanium/survival/pod,
+/obj/structure/fans/tiny/invisible,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "eg" = (
 /obj/structure/flora/rock,
@@ -63,7 +64,7 @@
 "jy" = (
 /obj/effect/turf_decal/box,
 /obj/structure/ore_box,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "jE" = (
 /obj/item/toy/beach_ball,
@@ -74,10 +75,7 @@
 	dir = 4
 	},
 /obj/effect/turf_decal/vg_decals/numbers/six,
-/turf/open/floor/pod/dark{
-	pixel_x = 0;
-	pixel_y = 0
-	},
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "ln" = (
 /obj/structure/flora/rock/pile,
@@ -86,7 +84,7 @@
 "lw" = (
 /obj/structure/fans/tiny/invisible,
 /obj/machinery/door/airlock/survival_pod/glass,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "mo" = (
 /turf/closed/indestructible/rock,
@@ -131,7 +129,7 @@
 /obj/effect/turf_decal{
 	dir = 4
 	},
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "os" = (
 /obj/item/storage/box/donkpockets{
@@ -140,11 +138,11 @@
 	},
 /obj/machinery/light/directional,
 /obj/structure/table/survival_pod,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "oO" = (
 /obj/structure/table/reinforced,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "oP" = (
 /obj/structure/flora/rock/pile/jungle/style_random,
@@ -166,11 +164,11 @@
 /area/misc/condo)
 "tq" = (
 /obj/machinery/telecomms/relay/preset/auto,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "tU" = (
 /obj/machinery/door/airlock/survival_pod,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "uD" = (
 /obj/structure/fans/tiny/invisible,
@@ -184,13 +182,13 @@
 /turf/open/floor/wood,
 /area/misc/condo)
 "wC" = (
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "wD" = (
 /obj/effect/turf_decal{
 	dir = 4
 	},
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "wO" = (
 /obj/structure/flora/rock/pile/jungle/style_random,
@@ -200,7 +198,7 @@
 /obj/structure/curtain,
 /obj/item/soap/nanotrasen,
 /obj/machinery/shower/directional/north,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "yq" = (
 /obj/effect/spawner/structure/window/survival_pod,
@@ -219,7 +217,7 @@
 /area/misc/condo)
 "Bo" = (
 /obj/effect/turf_decal/vg_decals/department/mining,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "BP" = (
 /obj/effect/turf_decal/siding/wood{
@@ -245,18 +243,18 @@
 	pixel_x = 0;
 	pixel_y = 0
 	},
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "CC" = (
 /obj/machinery/room_controller/directional/west,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "CQ" = (
 /obj/item/toy/plush/bubbleplush,
 /turf/open/floor/fakebasalt,
 /area/misc/condo)
 "Eg" = (
-/turf/closed/wall/mineral/titanium/survival/nodiagonal,
+/turf/closed/wall/mineral/plastitanium/darkpod,
 /area/misc/condo)
 "EA" = (
 /obj/machinery/light_switch/directional/north,
@@ -281,7 +279,7 @@
 /obj/machinery/smartfridge/survival_pod,
 /obj/structure/sign/poster/contraband/random/directional/north,
 /obj/effect/mapping_helpers/broken_machine,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "JL" = (
 /turf/closed/indestructible/hoteldoor{
@@ -293,7 +291,7 @@
 /obj/effect/turf_decal/arrows{
 	dir = 1
 	},
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "KW" = (
 /obj/structure/rack{
@@ -320,12 +318,12 @@
 /obj/effect/turf_decal{
 	dir = 1
 	},
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "KZ" = (
 /obj/machinery/microwave,
 /obj/machinery/light_switch/directional/west,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "Lz" = (
 /obj/structure/bed/double/pod{
@@ -338,7 +336,7 @@
 /area/misc/condo)
 "LS" = (
 /obj/machinery/door/airlock/survival_pod/glass,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "MA" = (
 /obj/structure/flora/grass/jungle/b,
@@ -362,7 +360,7 @@
 /obj/machinery/light/directional{
 	dir = 8
 	},
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "Pl" = (
 /obj/effect/turf_decal/siding/wood{
@@ -390,18 +388,18 @@
 "QJ" = (
 /obj/item/gps/computer,
 /obj/effect/mapping_helpers/broken_machine,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "Rc" = (
 /turf/closed/mineral/volcanic,
 /area/misc/condo)
 "Rl" = (
 /obj/structure/mirror/directional/east,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "TM" = (
 /obj/structure/chair/sofa/bench/left,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "Vd" = (
 /turf/open/floor/carpet/royalblack,
@@ -415,7 +413,7 @@
 	},
 /obj/structure/ore_box,
 /obj/effect/turf_decal/box,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "Yb" = (
 /obj/structure/bonfire/dense,
@@ -436,11 +434,11 @@
 	pixel_y = 18
 	},
 /obj/effect/turf_decal/bot_white,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 "Zr" = (
 /obj/effect/turf_decal/box/white,
-/turf/open/floor/pod/dark,
+/turf/open/floor/mineral/plastitanium/pod/dark,
 /area/misc/condo)
 
 (1,1,1) = {"
@@ -471,16 +469,16 @@ mo
 mo
 mo
 Eg
-cA
+Eg
 JL
-cA
-cA
-cA
-cA
-cA
-cA
-cA
-cA
+Eg
+Eg
+Eg
+Eg
+Eg
+Eg
+Eg
+Eg
 Ne
 "}
 (3,1,1) = {"
@@ -490,17 +488,17 @@ mo
 rK
 rK
 rK
-cA
+Eg
 Cy
-wC
+cA
 CC
 KZ
 os
-cA
+Eg
 Ad
 Lz
 ns
-cA
+Eg
 Ne
 "}
 (4,1,1) = {"
@@ -510,17 +508,17 @@ rK
 fj
 rK
 jg
-cA
+Eg
 YN
 wC
 wC
 wC
 wC
-cA
+Eg
 EA
 Vd
 PF
-cA
+Eg
 Ne
 "}
 (5,1,1) = {"
@@ -540,7 +538,7 @@ LS
 BP
 Cd
 nl
-cA
+Eg
 Ne
 "}
 (6,1,1) = {"
@@ -550,17 +548,17 @@ rK
 rK
 rK
 rK
-cA
+Eg
 IM
 wC
 wC
 bl
 aK
-cA
+Eg
 Pl
 bD
 bP
-cA
+Eg
 Ne
 "}
 (7,1,1) = {"
@@ -570,17 +568,17 @@ wO
 EL
 rK
 rK
-cA
+Eg
 QJ
 wC
 wC
 TM
 oO
-cA
+Eg
 mC
 va
 sw
-cA
+Eg
 Ne
 "}
 (8,1,1) = {"
@@ -596,11 +594,11 @@ uD
 lw
 uD
 uD
-cA
-cA
+Eg
+Eg
 tU
-cA
-cA
+Eg
+Eg
 Ne
 "}
 (9,1,1) = {"
@@ -616,11 +614,11 @@ Ke
 Bo
 wC
 jy
-cA
+Eg
 Ox
 Rl
 xo
-cA
+Eg
 Ne
 "}
 (10,1,1) = {"
@@ -637,10 +635,10 @@ kd
 wD
 WG
 Eg
-cA
-cA
-cA
-cA
+Eg
+Eg
+Eg
+Eg
 Ne
 "}
 (11,1,1) = {"
@@ -658,9 +656,9 @@ eg
 hj
 Rc
 Rc
-cA
+Eg
 tq
-cA
+Eg
 Ne
 "}
 (12,1,1) = {"
@@ -679,7 +677,7 @@ ln
 Rc
 Rc
 Eg
-cA
+Eg
 Eg
 Ne
 "}
