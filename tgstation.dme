@@ -11554,6 +11554,7 @@
 #include "modular_zzveilbreak\code\modules\antagonists\succubus\succubus_mark.dm"
 #include "modular_zzveilbreak\code\modules\antagonists\succubus\succubus_register.dm"
 #include "modular_zzveilbreak\code\modules\antagonists\succubus\succubus_subversion.dm"
+#include "modular_zzveilbreak\code\modules\ashwalkers\items\ash_weapons.dm"
 #include "modular_zzveilbreak\code\modules\atmospherics\delirium_breakdown.dm"
 #include "modular_zzveilbreak\code\modules\atmospherics\fusion_reaction.dm"
 #include "modular_zzveilbreak\code\modules\atmospherics\gas_machinery.dm"
