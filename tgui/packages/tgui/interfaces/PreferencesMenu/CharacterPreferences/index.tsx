@@ -44,11 +44,12 @@ enum Page {
 type ProfileProps = {
   activeSlot: number;
   onClick: (index: number) => void;
+  onDuplicate: () => void;
   profiles: (string | null)[];
 };
 
 function CharacterProfiles(props: ProfileProps) {
-  const { activeSlot, onClick, profiles } = props;
+  const { activeSlot, onClick, onDuplicate, profiles } = props;
 
   return (
     <Flex align="center">
@@ -68,9 +69,7 @@ function CharacterProfiles(props: ProfileProps) {
       </Flex.Item>
       <Flex.Item ml={1}>
         <Button
-          onClick={() => {
-            act('duplicate_current_slot');
-          }}
+          onClick={onDuplicate}
           fontSize="13px"
           icon="copy"
           tooltip="Duplicate Current Character (Experimental)"
@@ -168,6 +167,9 @@ export function CharacterPreferenceWindow(props) {
             act('change_slot', {
               slot: slot + 1,
             });
+          }}
+          onDuplicate={() => {
+            act('duplicate_current_slot');
           }}
           profiles={data.character_profiles}
         />
