@@ -33,7 +33,9 @@
 	if(isnum(time_on_target) && time_on_target < 1.2 SECONDS)
 		var/list/retaliate_list = controller.blackboard[BB_BASIC_MOB_RETALIATE_LIST]
 		if(!LAZYLEN(retaliate_list))
-			controller.pawn.face_atom(target)
+			if(ismob(controller.pawn))
+				var/mob/pawn = controller.pawn
+				pawn.face_atom(target)
 			return AI_BEHAVIOR_INSTANT | AI_BEHAVIOR_SUCCEEDED
 
 	var/minimum_distance = controller.blackboard[min_dist_key] || 4
