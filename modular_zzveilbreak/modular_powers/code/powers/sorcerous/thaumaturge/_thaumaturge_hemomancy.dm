@@ -51,10 +51,11 @@
 	if(QDELETED(blood_tracker))
 		blood_tracker = null
 
-	// Create ours if missing.
-	if(!blood_tracker)
-		blood_tracker = hud_used.add_screen_object(/atom/movable/screen/blood_level/thaumaturge, HUD_HEMOMANCY_BLOOD, HUD_GROUP_INFO, update_screen = FALSE)
+	if(blood_tracker)
+		return
 
+	// Create ours if missing.
+	blood_tracker = hud_used.add_screen_object(/atom/movable/screen/blood_level/thaumaturge, HUD_HEMOMANCY_BLOOD, HUD_GROUP_INFO, update_screen = FALSE)
 	hud_used.show_hud(hud_used.hud_version)
 
 /// Updates the blood tracker with new numbers +
