@@ -29,12 +29,14 @@
 
 /mob/living/basic/mining/hivelord/Initialize(mapload)
 	. = ..()
+	AddComponent(/datum/component/ai_target_timer)
 	AddElement(/datum/element/relay_attackers)
 	AddElement(/datum/element/death_drops, /obj/item/organ/monster_core/regenerative_core)
 	AddComponent(/datum/component/clickbox, icon_state = "hivelord", max_scale = INFINITY, dead_state = "hivelord_dead") // They writhe so much.
 	AddComponent(/datum/component/appearance_on_aggro, aggro_state = "hivelord_alert")
 	spawn_brood = new(src)
 	spawn_brood.Grant(src)
+	spawn_brood.StartCooldown(2 SECONDS)
 	ai_controller.set_blackboard_key(BB_TARGETED_ACTION, spawn_brood)
 
 /mob/living/basic/mining/hivelord/Destroy()

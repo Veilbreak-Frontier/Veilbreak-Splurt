@@ -20,6 +20,20 @@
 	var/on_hit_delay = 1 SECONDS
 	/// Delay between triggering on hit
 	COOLDOWN_DECLARE(on_hit_cooldown)
+	/// Minimum time we must have tracked the target before spawning broods (when AI controlled)
+	var/min_target_time = 2 SECONDS
+
+/datum/action/cooldown/mob_cooldown/hivelord_spawn/IsAvailable(feedback)
+	. = ..()
+	if(!.)
+		return FALSE
+	if(isliving(owner))
+		var/mob/living/living_owner = owner
+		if(living_owner.ai_controller)
+			var/time_on_target = living_owner.ai_controller.blackboard[BB_BASIC_MOB_HAS_TARGET_TIME] || 0
+			if(time_on_target < min_target_time)
+				return FALSE
+	return TRUE
 
 /datum/action/cooldown/mob_cooldown/hivelord_spawn/Grant(mob/granted_to)
 	. = ..()

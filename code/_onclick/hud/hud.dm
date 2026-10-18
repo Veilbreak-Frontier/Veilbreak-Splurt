@@ -394,7 +394,7 @@ GLOBAL_LIST_INIT(available_erp_ui_styles, list(
 			if (length(group_info))
 				screenmob.client.screen += group_info
 			// Do not show open storages to viewers, they get their own storage UIs
-			if (length(group_storage) && viewmob == mymob)
+			if (length(group_storage) && screenmob == mymob)
 				screenmob.client.screen += group_storage
 
 			screenmob.client.screen += palette

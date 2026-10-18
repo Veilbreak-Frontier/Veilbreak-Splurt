@@ -19,6 +19,15 @@ GLOBAL_LIST_INIT(target_interested_atoms, typecacheof(list(/mob, /obj/machinery/
 	/// Blackboard key holding the hiding-location atom (e.g. closet the target ducked into)
 	var/hiding_location_key
 
+/datum/bt_node/ai_behavior/acquire_target/update_combat_targets/get_vision_range(datum/ai_controller/controller)
+	if(aggro_range_key && isnum(controller.blackboard[aggro_range_key]))
+		var/atom/current_target = controller.blackboard[target_key]
+		var/list/retaliate_list = controller.blackboard[BB_BASIC_MOB_RETALIATE_LIST]
+		if(!current_target && !LAZYLEN(retaliate_list))
+			return controller.blackboard[aggro_range_key]
+		return max(controller.blackboard[aggro_range_key], vision_range)
+	return ..()
+
 /datum/bt_node/ai_behavior/acquire_target/update_combat_targets/get_cooldown(datum/ai_controller/controller)
 	if(controller.blackboard[BB_FIND_TARGETS_FIELD(type)])
 		return 60 SECONDS

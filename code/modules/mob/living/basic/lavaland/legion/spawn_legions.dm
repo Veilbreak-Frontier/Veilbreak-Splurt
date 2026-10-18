@@ -16,14 +16,22 @@
 	var/spawn_type = /mob/living/basic/mining/legion_brood
 	/// How far can we fire?
 	var/max_range = 7
+	/// Minimum time we must have tracked the target before launching skulls (when AI controlled)
+	var/min_target_time = 2.5 SECONDS
 
 /datum/action/cooldown/mob_cooldown/skull_launcher/IsAvailable(feedback)
 	. = ..()
 	if (!.)
-		return
+		return FALSE
 	if (!isturf(owner.loc))
 		owner.balloon_alert(owner, "no room!")
 		return FALSE
+	if(isliving(owner))
+		var/mob/living/living_owner = owner
+		if(living_owner.ai_controller)
+			var/time_on_target = living_owner.ai_controller.blackboard[BB_BASIC_MOB_HAS_TARGET_TIME] || 0
+			if(time_on_target < min_target_time)
+				return FALSE
 	return TRUE
 
 /datum/action/cooldown/mob_cooldown/skull_launcher/Activate(atom/target)
