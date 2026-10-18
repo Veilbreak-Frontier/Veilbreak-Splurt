@@ -57,6 +57,13 @@
 	if (vision_range && get_dist(living_mob, the_target) > vision_range)
 		return FALSE
 
+	if(!HAS_TRAIT(living_mob, TRAIT_BACKSTAB_IMMUNE))
+		var/atom/current_target = our_controller.blackboard[BB_CURRENT_TARGET] || our_controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET]
+		var/list/retaliate_list = our_controller.blackboard[BB_BASIC_MOB_RETALIATE_LIST]
+		if(the_target != current_target && !(the_target in retaliate_list))
+			if(check_behind(the_target, living_mob) && get_dist(living_mob, the_target) > 1)
+				return FALSE
+
 	if(isliving(the_target)) //Targeting vs living mobs
 		if(!ignore_target_status)
 			var/mob/living/living_target = the_target

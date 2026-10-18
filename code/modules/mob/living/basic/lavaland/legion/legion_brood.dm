@@ -9,6 +9,7 @@
 	icon_gib = "syndicate_gib"
 	basic_mob_flags = DEL_ON_DEATH
 	mob_size = MOB_SIZE_SMALL
+	speed = 3
 	pass_flags = PASSTABLE | PASSMOB
 	layer = MOB_UPPER_LAYER
 	mob_biotypes = MOB_ORGANIC|MOB_UNDEAD|MOB_MINING

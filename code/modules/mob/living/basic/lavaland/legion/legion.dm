@@ -36,6 +36,7 @@
 
 /mob/living/basic/mining/legion/Initialize(mapload)
 	. = ..()
+	AddComponent(/datum/component/ai_target_timer)
 	AddElement(/datum/element/content_barfer)
 	var/list/drops = get_loot_list()
 	if (length(drops))
@@ -49,6 +50,7 @@
 	var/datum/action/cooldown/mob_cooldown/skull_launcher/skull_launcher = new(src)
 	skull_launcher.Grant(src)
 	skull_launcher.spawn_type = brood_type
+	skull_launcher.StartCooldown(2 SECONDS)
 	ai_controller.set_blackboard_key(BB_TARGETED_ACTION, skull_launcher)
 
 /// Create what we want to drop on death, in proc form so we can always return a static list

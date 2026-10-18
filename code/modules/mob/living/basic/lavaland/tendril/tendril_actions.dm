@@ -24,7 +24,7 @@
 			telegraph.dir = swipe_dir
 			line_turf = get_step(line_turf, swipe_dir)
 
-	SLEEP_CHECK_DEATH(1.2 SECONDS, owner)
+	SLEEP_CHECK_DEATH(2.4 SECONDS, owner)
 
 	for (var/swipe_dir in GLOB.cardinals)
 		shoot_projectile(get_turf(owner), get_step(owner, swipe_dir), dir2angle(swipe_dir), owner)
@@ -40,7 +40,7 @@
 			telegraph.dir = swipe_dir
 			line_turf = get_step(line_turf, swipe_dir)
 
-	SLEEP_CHECK_DEATH(1.2 SECONDS, owner)
+	SLEEP_CHECK_DEATH(2.4 SECONDS, owner)
 
 	for (var/swipe_dir in GLOB.diagonals)
 		shoot_projectile(get_turf(owner), get_step(owner, swipe_dir), dir2angle(swipe_dir), owner)
@@ -375,7 +375,7 @@
 		new /obj/effect/temp_visual/telegraphing/circle/short(target_turf)
 		spike_turfs += target_turf
 
-	SLEEP_CHECK_DEATH(1 SECONDS, owner)
+	SLEEP_CHECK_DEATH(2 SECONDS, owner)
 
 	for (var/turf/open/to_spawn in spike_turfs)
 		new /obj/effect/temp_visual/emerging_ground_spike/tendril/single(to_spawn)
@@ -404,7 +404,7 @@
 			var/obj/effect/temp_visual/telegraphing/line/short/telegraph = new(stab_turf)
 			telegraph.dir = stab_dir
 
-		SLEEP_CHECK_DEATH(0.5 SECONDS, owner)
+		SLEEP_CHECK_DEATH(1 SECONDS, owner)
 
 	for (var/stab_dir in GLOB.alldirs)
 		shoot_projectile(get_turf(owner), get_step(owner, stab_dir), firer = owner)

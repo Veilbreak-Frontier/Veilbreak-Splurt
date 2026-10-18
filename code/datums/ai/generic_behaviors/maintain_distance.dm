@@ -29,6 +29,12 @@
 	if(QDELETED(target))
 		return AI_BEHAVIOR_FAILED
 
+	var/time_on_target = controller.blackboard[BB_BASIC_MOB_HAS_TARGET_TIME]
+	if(isnum(time_on_target) && time_on_target < 1.2 SECONDS)
+		var/list/retaliate_list = controller.blackboard[BB_BASIC_MOB_RETALIATE_LIST]
+		if(!LAZYLEN(retaliate_list))
+			controller.pawn.face_atom(target)
+			return AI_BEHAVIOR_INSTANT | AI_BEHAVIOR_SUCCEEDED
 
 	var/minimum_distance = controller.blackboard[min_dist_key] || 4
 	var/maximum_distance = controller.blackboard[max_dist_key] || 6
