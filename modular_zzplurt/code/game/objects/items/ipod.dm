@@ -180,10 +180,10 @@ GLOBAL_VAR_INIT(ipod_last_play, 0) //last time of the last played track, to prev
 		to_chat(user, span_warning("File type must be OGG or MP3: [sanitize("[infile]")]"))
 		return
 	var/filelength = length(infile)
-	if(radio_mode && filelength > 3242880) // radio broadcasting has a tighter file size limit
+	if(radio_mode && filelength > 16777216) // radio broadcasting has a tighter file size limit
 		to_chat(user, span_warning("Error: Too big, 3MB or less!"))
 		return
-	if(filelength > 6485760)
+	if(filelength > 16777216)
 		to_chat(user, span_warning("Error: Too big, 6MB or less!"))
 		return
 	if(filelength < 4096)
