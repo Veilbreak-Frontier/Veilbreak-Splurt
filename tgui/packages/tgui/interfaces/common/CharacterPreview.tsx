@@ -31,9 +31,6 @@ export const CharacterPreview = (props: {
         params={{
             id: props.id,
             type: 'map',
-            // Forces the BYOND native map client viewport to automatically lock
-            // and adjust straight to the dimensions provided by the outer layout.
-            'letterbox': 'false',
         }}
         />
     );
