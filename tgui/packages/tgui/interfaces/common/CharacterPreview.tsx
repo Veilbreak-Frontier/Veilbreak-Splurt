@@ -18,14 +18,26 @@ export const CharacterPreview = (props: {
   }, []);
 
   if (!isReady) {
-    return <div style={{ width: width, height: props.height }} />;
+    return (
+      <div
+        style={{
+          width: width,
+          height: props.height,
+          minHeight: props.height === '100%' ? '250px' : props.height,
+        }}
+      />
+    );
   }
+
+  const cleanHeight = props.height === '100%' ? '100%' : props.height;
+  const minHeightFallback = props.height === '100%' ? '250px' : 'auto';
 
   return (
     <div
       style={{
         width: width,
-        height: props.height,
+        height: cleanHeight,
+        minHeight: minHeightFallback,
         position: 'relative',
         display: 'block',
         overflow: 'hidden',
@@ -33,13 +45,14 @@ export const CharacterPreview = (props: {
     >
       <ByondUi
         width={width}
-        height={props.height}
+        height={cleanHeight}
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
-          width: width,
-          height: props.height,
+          width: '100%',
+          height: '100%',
+          minHeight: minHeightFallback,
         }}
         params={{
           id: props.id,
