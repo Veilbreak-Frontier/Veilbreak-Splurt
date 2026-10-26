@@ -495,15 +495,19 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 	preferences.render_new_preview_appearance(body, show_job_clothes)
 
-	var/chosen_height = text2num(preferences.read_preference(/datum/preference/choiced/height_scaling))
+	var/raw_height = preferences.read_preference(/datum/preference/choiced/height_scaling)
+	var/chosen_height = text2num(raw_height) || raw_height
 	if(chosen_height)
+		var/datum/preference/choiced/height_scaling/height_datum = GLOB.preference_entries_by_key["height_scaling"]
+		if(height_datum)
+			height_datum.apply_to_human(body, raw_height, preferences)
+
+		body.mob_height = chosen_height
 		if("base_mob_height" in body.vars)
 			body.vars["base_mob_height"] = chosen_height
-		body.mob_height = chosen_height
 
 		if(hascall(body, "apply_height_filter"))
 			body:apply_height_filter()
-
 
 	var/canvas_size = 0
 	var/canvas_state = preferences.read_preference(/datum/preference/choiced/background_state)
@@ -517,7 +521,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	if (preferences.all_quirks.Find("Oversized"))
 		canvas_size += 1
 
-	if(chosen_height >= HUMAN_HEIGHT_TALL)
+	if(isnum(chosen_height) && chosen_height >= HUMAN_HEIGHT_TALL)
 		canvas_size = max(canvas_size, 1)
 
 	var/icon/template_icon
@@ -544,6 +548,8 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	character_overlay.layer = MOB_LAYER
 	character_overlay.plane = FLOAT_PLANE
 	add_overlay(character_overlay)
+
+
 
 
 
