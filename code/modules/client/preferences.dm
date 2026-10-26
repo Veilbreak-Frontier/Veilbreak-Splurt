@@ -504,7 +504,17 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	if("base_mob_height" in body.vars)
 		body.vars["base_mob_height"] = chosen_height
 
-	preferences.render_new_preview_appearance(body, show_job_clothes)
+	var/mutable_appearance/character_overlay = new(preferences.render_new_preview_appearance(body))
+
+	body.mob_height = chosen_height
+	if("base_mob_height" in body.vars)
+		body.vars["base_mob_height"] = chosen_height
+
+	if(chosen_height != HUMAN_HEIGHT_MEDIUM)
+		if(hascall(body, "apply_height"))
+			body:apply_height(character_overlay, ENTIRE_BODY, TRUE)
+			for(var/mutable_appearance/sub_overlay in character_overlay.overlays + character_overlay.underlays)
+				body:apply_height(sub_overlay, ENTIRE_BODY, TRUE)
 
 	var/canvas_size = 0
 	var/canvas_state = preferences.read_preference(/datum/preference/choiced/background_state)
@@ -540,12 +550,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	plane = GAME_PLANE
 	layer = GAME_PLANE
 
-	var/mutable_appearance/character_overlay = new(body.appearance)
 	character_overlay.pixel_x = body_offset_x
-
-	if(chosen_height != HUMAN_HEIGHT_MEDIUM)
-		body.apply_height(character_overlay, ENTIRE_BODY)
-
 	character_overlay.layer = MOB_LAYER
 	character_overlay.plane = FLOAT_PLANE
 	add_overlay(character_overlay)
