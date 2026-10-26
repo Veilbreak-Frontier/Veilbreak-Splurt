@@ -542,9 +542,14 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 	var/mutable_appearance/character_overlay = new(body.appearance)
 	character_overlay.pixel_x = body_offset_x
+
+	if(chosen_height != HUMAN_HEIGHT_MEDIUM)
+		body.apply_height(character_overlay, ENTIRE_BODY)
+
 	character_overlay.layer = MOB_LAYER
 	character_overlay.plane = FLOAT_PLANE
 	add_overlay(character_overlay)
+
 // VEILBREAK REWRITE
 
 /atom/movable/screen/map_view/char_preview/proc/create_body()
