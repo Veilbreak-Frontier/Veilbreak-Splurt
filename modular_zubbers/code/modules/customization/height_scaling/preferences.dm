@@ -2,6 +2,7 @@
 	category = PREFERENCE_CATEGORY_SECONDARY_FEATURES
 	savefile_key = "height_scaling"
 	savefile_identifier = PREFERENCE_CHARACTER
+	should_update_preview = TRUE
 
 	var/static/list/height_scaling_strings = list(
 		"[HUMAN_HEIGHT_SHORTEST]" = "Shortest",

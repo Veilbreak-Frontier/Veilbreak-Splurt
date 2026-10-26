@@ -2,39 +2,63 @@ import { useEffect, useState } from 'react';
 import { ByondUi } from 'tgui-core/components';
 
 export const CharacterPreview = (props: {
-    width?: string; // SKYRAT EDIT
-    height: string;
-    id: string;
+  width?: string;
+  height: string;
+  id: string;
 }) => {
-    const { width = '225px' } = props;
+  const { width = '225px' } = props;
+  const [isReady, setIsReady] = useState(false);
 
-    // Use state tracking to force a micro-delay re-render on initial mount.
-    // This gives the parent window time to layout its grid bounds properly.
-    const [isReady, setIsReady] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 50);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsReady(true);
-        }, 50); // A tiny 50ms buffer ensures the HTML container structure settles first.
+    return () => clearTimeout(timer);
+  }, []);
 
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (!isReady) {
-        return <div style={{ width: width, height: props.height }} />;
-    }
-
+  if (!isReady) {
     return (
-        <ByondUi
-        width={width} // SKYRAT EDIT
-        height={props.height}
-        params={{
-            id: props.id,
-            type: 'map',
-            // Forces the BYOND native map client viewport to automatically lock
-            // and adjust straight to the dimensions provided by the outer layout.
-            'letterbox': 'false',
+      <div
+        style={{
+          width: width,
+          height: props.height,
+          minHeight: props.height === '100%' ? '250px' : props.height,
         }}
-        />
+      />
     );
+  }
+
+  const cleanHeight = props.height === '100%' ? '100%' : props.height;
+  const minHeightFallback = props.height === '100%' ? '250px' : 'auto';
+
+  return (
+    <div
+      style={{
+        width: width,
+        height: cleanHeight,
+        minHeight: minHeightFallback,
+        position: 'relative',
+        display: 'block',
+        overflow: 'hidden',
+      }}
+    >
+      <ByondUi
+        width={width}
+        height={cleanHeight}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          minHeight: minHeightFallback,
+        }}
+        params={{
+          id: props.id,
+          type: 'map',
+        }}
+      />
+    </div>
+  );
 };

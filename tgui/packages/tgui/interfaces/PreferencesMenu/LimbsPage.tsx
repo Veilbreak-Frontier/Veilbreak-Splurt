@@ -244,8 +244,8 @@ export const LimbsPage = (props) => {
         <Section title="Character Preview" fill align="center" height="197%">
           <CharacterPreview
             id={data.character_preview_view}
-            height="25%"
-            width="100%"
+            height="320px"
+            width="225px"
           />
           <RotateCharacterButtons />
           <Box

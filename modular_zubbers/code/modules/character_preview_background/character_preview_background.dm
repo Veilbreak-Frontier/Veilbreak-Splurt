@@ -9,13 +9,13 @@ GLOBAL_LIST_INIT(background_state_options, list(
 	"FFF",
 	"white",
 	"plasteel",
-	"dark" ,
+	"dark",
 	"plating",
 	"reinforced",
 	))
 
 /datum/preference/choiced/background_state/create_default_value()
-	return GLOB.background_state_options[1]
+	return "plasteel"
 
 /datum/preference/choiced/background_state/init_possible_values()
 	return GLOB.background_state_options
