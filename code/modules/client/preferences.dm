@@ -491,33 +491,34 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	else
 		body.wipe_state()
 
-	// VEILBREAK SPRITE HEIGHT FIX OVERFLOW
-	var/chosen_height = preferences.read_preference(/datum/preference/choiced/spacer_height)
-	if(chosen_height)
-		var/datum/preference/choiced/spacer_height/height_datum = GLOB.preference_entries_by_key["spacer_height"]
-		if(height_datum)
-			height_datum.apply_to_human(body, chosen_height, preferences)
-
 	body.setDir(dir)
+
 	preferences.render_new_preview_appearance(body, show_job_clothes)
+
+	var/chosen_height = text2num(preferences.read_preference(/datum/preference/choiced/height_scaling))
+	if(chosen_height)
+		if("base_mob_height" in body.vars)
+			body.vars["base_mob_height"] = chosen_height
+		body.mob_height = chosen_height
+
+		if(hascall(body, "apply_height_filter"))
+			body:apply_height_filter()
+
 
 	var/canvas_size = 0
 	var/canvas_state = preferences.read_preference(/datum/preference/choiced/background_state)
 	if(!(canvas_state in GLOB.background_state_options))
 		canvas_state = GLOB.background_state_options[1]
 
-	// Being a taur, or over 1.1 scales it up
 	if (body.dna?.mutant_bodyparts?[FEATURE_TAUR] && body.dna.mutant_bodyparts[FEATURE_TAUR][MUTANT_INDEX_NAME] != "None")
 		canvas_size = 1
 	else if (!isnull(body.current_size) && body.current_size > 1.1)
 		canvas_size = 1
-	// Add extra level if we're oversized
 	if (preferences.all_quirks.Find("Oversized"))
 		canvas_size += 1
 
-	// VEILBREAK SPRITE HEIGHT FIX OVERFLOW
-	if(chosen_height in list("tall", "taller", "tallest"))
-		canvas_size = max(canvas_size, 1) // Enforces minimum 64x64/96x96 bounds asset rendering
+	if(chosen_height >= HUMAN_HEIGHT_TALL)
+		canvas_size = max(canvas_size, 1)
 
 	var/icon/template_icon
 	var/body_offset_x = 0
@@ -543,6 +544,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	character_overlay.layer = MOB_LAYER
 	character_overlay.plane = FLOAT_PLANE
 	add_overlay(character_overlay)
+
 
 
 /atom/movable/screen/map_view/char_preview/proc/create_body()
