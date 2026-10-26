@@ -11656,6 +11656,7 @@
 #include "modular_zzveilbreak\code\modules\research\techweb\nodes\xenobiology_tools.dm"
 #include "modular_zzveilbreak\code\modules\shuttle\shuttle_move.dm"
 #include "modular_zzveilbreak\code\modules\storyteller\extended_storyteller.dm"
+#include "modular_zzveilbreak\code\modules\surgery\operations\global_robotic_brain_override.dm"
 #include "modular_zzveilbreak\code\modules\surgery\organs\internal\lungs\delirium_breath.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_constants.dm"
 #include "modular_zzveilbreak\code\modules\tattoo\zzveilbreak_tattoo_core.dm"
