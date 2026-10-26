@@ -485,6 +485,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	return ..()
 
 /// Updates the currently displayed body
+//VEILBREAK REWRITE
 /atom/movable/screen/map_view/char_preview/proc/update_body()
 	if (isnull(body))
 		create_body()
@@ -493,27 +494,17 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 	body.setDir(dir)
 
-	preferences.render_new_preview_appearance(body, show_job_clothes)
-
 	var/raw_height = preferences.read_preference(/datum/preference/choiced/height_scaling)
 	var/chosen_height = text2num(raw_height)
 
-	if(isnull(chosen_height) && isnum(raw_height))
-		chosen_height = raw_height
+	if(isnull(chosen_height))
+		chosen_height = HUMAN_HEIGHT_MEDIUM
 
-	if(chosen_height)
-		var/datum/preference/choiced/height_scaling/height_datum = GLOB.preference_entries_by_key["height_scaling"]
-		if(height_datum)
-			height_datum.apply_to_human(body, "[chosen_height]", preferences)
+	body.mob_height = chosen_height
+	if("base_mob_height" in body.vars)
+		body.vars["base_mob_height"] = chosen_height
 
-		body.mob_height = chosen_height
-		if("base_mob_height" in body.vars)
-			body.vars["base_mob_height"] = chosen_height
-
-		if(hascall(body, "apply_height_filter"))
-			body:apply_height_filter()
-		if(hascall(body, "update_transform"))
-			body:update_transform()
+	preferences.render_new_preview_appearance(body, show_job_clothes)
 
 	var/canvas_size = 0
 	var/canvas_state = preferences.read_preference(/datum/preference/choiced/background_state)
@@ -527,7 +518,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	if (preferences.all_quirks.Find("Oversized"))
 		canvas_size += 1
 
-	if(isnum(chosen_height) && chosen_height >= HUMAN_HEIGHT_TALL)
+	if(chosen_height >= HUMAN_HEIGHT_TALL)
 		canvas_size = max(canvas_size, 1)
 
 	var/icon/template_icon
@@ -549,12 +540,12 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	plane = GAME_PLANE
 	layer = GAME_PLANE
 
-	// 4. Force compile the finalized transformed body appearance back onto the UI layer control.
 	var/mutable_appearance/character_overlay = new(body.appearance)
 	character_overlay.pixel_x = body_offset_x
 	character_overlay.layer = MOB_LAYER
 	character_overlay.plane = FLOAT_PLANE
 	add_overlay(character_overlay)
+// VEILBREAK REWRITE
 
 /atom/movable/screen/map_view/char_preview/proc/create_body()
 	QDEL_NULL(body)
