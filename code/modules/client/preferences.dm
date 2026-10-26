@@ -491,6 +491,13 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	else
 		body.wipe_state()
 
+	// VEILBREAK SPRITE HEIGHT FIX OVERFLOW
+	var/chosen_height = preferences.read_preference(/datum/preference/choiced/spacer_height)
+	if(chosen_height)
+		var/datum/preference/choiced/spacer_height/height_datum = GLOB.preference_entries_by_key["spacer_height"]
+		if(height_datum)
+			height_datum.apply_to_human(body, chosen_height, preferences)
+
 	body.setDir(dir)
 	preferences.render_new_preview_appearance(body, show_job_clothes)
 
@@ -507,6 +514,10 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	// Add extra level if we're oversized
 	if (preferences.all_quirks.Find("Oversized"))
 		canvas_size += 1
+
+	// VEILBREAK SPRITE HEIGHT FIX OVERFLOW
+	if(chosen_height in list("tall", "taller", "tallest"))
+		canvas_size = max(canvas_size, 1) // Enforces minimum 64x64/96x96 bounds asset rendering
 
 	var/icon/template_icon
 	var/body_offset_x = 0
@@ -532,6 +543,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	character_overlay.layer = MOB_LAYER
 	character_overlay.plane = FLOAT_PLANE
 	add_overlay(character_overlay)
+
 
 /atom/movable/screen/map_view/char_preview/proc/create_body()
 	QDEL_NULL(body)
