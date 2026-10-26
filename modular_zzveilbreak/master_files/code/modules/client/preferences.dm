@@ -8,11 +8,25 @@
 		chosen_height = HUMAN_HEIGHT_MEDIUM
 
 	if(chosen_height != HUMAN_HEIGHT_MEDIUM)
-		if(hascall(body, "apply_height"))
-			var/mutable_appearance/character_overlay = locate(/mutable_appearance) in overlays
-			if(character_overlay)
-				body:apply_height(character_overlay, ENTIRE_BODY, TRUE)
-				for(var/mutable_appearance/sub_overlay in character_overlay.overlays + character_overlay.underlays)
-					body:apply_height(sub_overlay, ENTIRE_BODY, TRUE)
-				cut_overlays()
-				add_overlay(character_overlay)
+		var/list/current_overlays = overlays.Copy()
+		if(length(current_overlays))
+			cut_overlays()
+			for(var/character_overlay as anything in current_overlays)
+				var/mutable_appearance/render_layer = new(character_overlay)
+
+				// Direct pixel-perfect layer offsets pulling from your server's global constants
+				if(GLOB.human_heights_to_offsets && GLOB.human_heights_to_offsets["[chosen_height]"])
+					var/offset_z = GLOB.human_heights_to_offsets["[chosen_height]"]["[UPPER_BODY]"] || 0
+					render_layer.pixel_z += offset_z
+
+					// Propagate the exact coordinate displacement down to sub-clothing attachments
+					for(var/mutable_appearance/sub_overlay in render_layer.overlays + render_layer.underlays)
+						sub_overlay.pixel_z += offset_z
+				else
+					// Mathematical fallback tracker if your local macro strings serialize unbracketed
+					var/offset_modifier = (chosen_height - HUMAN_HEIGHT_MEDIUM)
+					render_layer.pixel_z += offset_modifier
+					for(var/mutable_appearance/sub_overlay in render_layer.overlays + render_layer.underlays)
+						sub_overlay.pixel_z += offset_modifier
+
+				add_overlay(render_layer)
