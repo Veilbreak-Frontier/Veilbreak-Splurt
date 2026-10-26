@@ -485,7 +485,6 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	return ..()
 
 /// Updates the currently displayed body
-//VEILBREAK REWRITE
 /atom/movable/screen/map_view/char_preview/proc/update_body()
 	if (isnull(body))
 		create_body()
@@ -493,33 +492,12 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 		body.wipe_state()
 
 	body.setDir(dir)
-
-	var/raw_height = preferences.read_preference(/datum/preference/choiced/height_scaling)
-	var/chosen_height = text2num(raw_height)
-
-	if(isnull(chosen_height))
-		chosen_height = HUMAN_HEIGHT_MEDIUM
-
-	body.mob_height = chosen_height
-	if("base_mob_height" in body.vars)
-		body.vars["base_mob_height"] = chosen_height
-
-	var/mutable_appearance/character_overlay = new(preferences.render_new_preview_appearance(body))
-
-	body.mob_height = chosen_height
-	if("base_mob_height" in body.vars)
-		body.vars["base_mob_height"] = chosen_height
-
-	if(chosen_height != HUMAN_HEIGHT_MEDIUM)
-		if(hascall(body, "apply_height"))
-			body:apply_height(character_overlay, ENTIRE_BODY, TRUE)
-			for(var/mutable_appearance/sub_overlay in character_overlay.overlays + character_overlay.underlays)
-				body:apply_height(sub_overlay, ENTIRE_BODY, TRUE)
+	preferences.render_new_preview_appearance(body, show_job_clothes)
 
 	var/canvas_size = 0
 	var/canvas_state = preferences.read_preference(/datum/preference/choiced/background_state)
 	if(!(canvas_state in GLOB.background_state_options))
-		canvas_state = GLOB.background_state_options
+		canvas_state = GLOB.background_state_options[1]
 
 	if (body.dna?.mutant_bodyparts?[FEATURE_TAUR] && body.dna.mutant_bodyparts[FEATURE_TAUR][MUTANT_INDEX_NAME] != "None")
 		canvas_size = 1
@@ -527,9 +505,6 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 		canvas_size = 1
 	if (preferences.all_quirks.Find("Oversized"))
 		canvas_size += 1
-
-	if(chosen_height >= HUMAN_HEIGHT_TALL)
-		canvas_size = max(canvas_size, 1)
 
 	var/icon/template_icon
 	var/body_offset_x = 0
@@ -550,12 +525,12 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	plane = GAME_PLANE
 	layer = GAME_PLANE
 
+	var/mutable_appearance/character_overlay = new(body.appearance)
 	character_overlay.pixel_x = body_offset_x
 	character_overlay.layer = MOB_LAYER
 	character_overlay.plane = FLOAT_PLANE
 	add_overlay(character_overlay)
 
-// VEILBREAK REWRITE
 
 /atom/movable/screen/map_view/char_preview/proc/create_body()
 	QDEL_NULL(body)
