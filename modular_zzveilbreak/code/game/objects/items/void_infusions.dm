@@ -228,26 +228,27 @@
 			D.color = "#c8a4e9"
 			break
 
+// PROJECTILE OVERRIDE: Applies a reliable variable-based mark for basic void creatures
 /obj/projectile/destabilizer/on_hit(atom/target, blocked = 0, pierce_hit)
+	. = ..()
 	var/obj/item/kinetic_crusher/crusher = fired_from
 
 	if(istype(crusher) && crusher.void_infused && isliving(target))
 		var/mob/living/living_target = target
 
-		// Modüler Tip Kontrolü: Eğer hedef bir void creature ise veya direkt void faction üyesiyse
 		if(istype(living_target, /mob/living/basic/void_creature) || (FACTION_VOID in living_target.faction))
-			var/datum/status_effect/crusher_mark/forced_mark = living_target.has_status_effect(/datum/status_effect/crusher_mark)
-			if(!forced_mark)
-				// apply_status_effect fonksiyonunu bu yeni tipe zorla enjekte ediyoruz
-				forced_mark = living_target.apply_status_effect(/datum/status_effect/crusher_mark, boosted, crusher)
+			// Apply native status effect just in case
+			living_target.apply_status_effect(/datum/status_effect/crusher_mark, boosted, crusher)
 
-			if(forced_mark)
-				forced_mark.detonation_damage = detonation_damage
+			// Hard guarantee: We attach a direct variable mark onto the mob dynamically
+			living_target.void_crusher_marked = TRUE
 
-			// Üst fonksiyonun (..()) bu yeni basic mobları reddetmesini engellemek için çarpma işlemini burada başarıyla sonlandırıyoruz.
-			return ..()
+			// Visual indicator over the target so you know they are marked (Purple overlay/flash effect)
+			new /obj/effect/temp_visual/kinetic_blast(get_turf(living_target))
 
-	return ..()
+			// Show to user that mark applied successfully
+			if(isliving(firer))
+				to_chat(firer, span_notice("You have marked [living_target] with void destabilization!"))
 
 /obj/item/kinetic_crusher/afterattack(mob/living/target, mob/living/user, list/modifiers, list/attack_modifiers)
 	if(!isliving(target))
@@ -256,41 +257,57 @@
 	if(!void_infused || !HAS_TRAIT(src, TRAIT_WIELDED))
 		return ..()
 
+	// Capture our custom variable mark AND the native status effect before native code triggers
+	var/is_custom_marked = target.void_crusher_marked
 	var/datum/status_effect/crusher_mark/mark = target.has_status_effect(/datum/status_effect/crusher_mark)
 
+	// Execute native detonations
 	. = ..()
 
-	if(mark && !QDELETED(target) && (world.time >= void_cleave_cooldown))
-		void_cleave_cooldown = world.time + 7 SECONDS
+	// If EITHER the custom variable mark exists or the native status effect was present
+	if((is_custom_marked || mark) && !QDELETED(target))
 
-		var/cleave_dir = user.dir
-		var/turf/origin_turf = get_step(target, cleave_dir)
+		// Consume the custom mark so it cannot be double-proc'd
+		target.void_crusher_marked = FALSE
 
-		if(!origin_turf)
-			return
+		// Verify 7-second cooldown
+		if(world.time >= void_cleave_cooldown)
+			void_cleave_cooldown = world.time + 7 SECONDS
 
-		var/list/target_turfs = list(origin_turf)
+			var/cleave_dir = user.dir
+			var/turf/origin_turf = get_step(target, cleave_dir)
 
-		var/turf/left_cleave = get_step(origin_turf, turn(cleave_dir, 90))
-		if(left_cleave)
-			target_turfs += left_cleave
+			if(!origin_turf)
+				return
 
-		var/turf/right_cleave = get_step(origin_turf, turn(cleave_dir, -90))
-		if(right_cleave)
-			target_turfs += right_cleave
+			// Layout 3-tile wide sweep behind the target
+			var/list/target_turfs = list(origin_turf)
 
-		var/sweep_damage = force_wielded + detonation_damage
+			var/turf/left_cleave = get_step(origin_turf, turn(cleave_dir, 90))
+			if(left_cleave)
+				target_turfs += left_cleave
 
-		for(var/turf/T in target_turfs)
-			var/obj/effect/temp_visual/kinetic_blast/blast = new(T)
-			if(blast)
-				blast.color = "#c8a4e9"
+			var/turf/right_cleave = get_step(origin_turf, turn(cleave_dir, -90))
+			if(right_cleave)
+				target_turfs += right_cleave
 
-			for(var/mob/living/victim in T)
-				if(victim == user || victim == target)
-					continue
+			// Payload damage (Wielded 20 + Detonation 50 = 70 Brute damage)
+			var/sweep_damage = force_wielded + detonation_damage
 
-				victim.apply_damage(sweep_damage, BRUTE)
-				to_chat(victim, span_userdanger("A devastating purple void cleave from [user]'s crusher cuts through space and batters you!"))
+			for(var/turf/T in target_turfs)
+				var/obj/effect/temp_visual/kinetic_blast/blast = new(T)
+				if(blast)
+					blast.color = "#c8a4e9" // Beautiful purple effect
 
-		to_chat(user, span_notice("Marked hit successful! Void energy erupts into a Void Cleave, sweeping the area behind your target."))
+				for(var/mob/living/victim in T)
+					if(victim == user || victim == target)
+						continue
+
+					victim.apply_damage(sweep_damage, BRUTE)
+					to_chat(victim, span_userdanger("A devastating purple void cleave from [user]'s crusher cuts through space and batters you!"))
+
+			to_chat(user, span_notice("Void Cleave successful! Space ruptures behind your target."))
+
+// Dynamically define the variable onto /mob/living so it doesn't cause compiler errors
+/mob/living
+	var/void_crusher_marked = FALSE
