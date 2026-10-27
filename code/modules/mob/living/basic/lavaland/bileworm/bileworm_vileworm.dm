@@ -13,7 +13,7 @@
 /datum/action/cooldown/mob_cooldown/bileworm_spew/corrupt
 	name = "Spew Corrupted Bile"
 	desc = "Spew a barrage of corrupted bile globs."
-	cooldown_time = 2.5 SECONDS
+	cooldown_time = 3.5 SECONDS
 	acid_type = /obj/effect/bileworm_acid/corrupt
 	additional_shots = 6
 	shot_delay = 0.1 SECONDS

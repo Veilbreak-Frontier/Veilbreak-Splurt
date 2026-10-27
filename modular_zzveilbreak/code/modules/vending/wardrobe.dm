@@ -8,7 +8,6 @@
 				/obj/item/clothing/gloves/color/black = 2,
 				/obj/item/clothing/head/beret/science/fancy/robo = 2,
 				/obj/item/clothing/head/playbunnyears/roboticist = 2,
-				/obj/item/neck/tie/bunnytie/roboticist = 2,
 				/obj/item/clothing/suit/toggle/jacket/zubber/bomber/science/robotics = 2,
 				/obj/item/clothing/suit/toggle/labcoat/roboticist/doctor_tailcoat = 2,
 				/obj/item/clothing/under/rank/rnd/roboticist/skyrat/sleek = 2,
