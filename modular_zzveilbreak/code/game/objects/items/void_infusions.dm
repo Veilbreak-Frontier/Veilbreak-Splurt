@@ -179,3 +179,84 @@
 		var/damage = dist ? 8 : 15
 		victim.apply_damage(damage, BURN, spread_damage = TRUE, wound_bonus = CANT_WOUND)
 
+// --- Void-Infused Kinetic Crusher Integration ---
+
+/datum/void_infusion_recipe/kinetic_crusher
+	target_type = /obj/item/kinetic_crusher
+
+/datum/void_infusion_recipe/kinetic_crusher/apply(obj/item/kinetic_crusher/target)
+	..()
+	target.desc += " Dark void energy coils around its chassis. Striking a marked target unleashes a crushing shockwave that sweeps behind you."
+	target.void_infused = TRUE
+	return TRUE
+
+/obj/item/kinetic_crusher
+	/// Tracks whether this specific crusher has been void-infused
+	var/void_infused = FALSE
+	/// Timestamp marker for tracking the void sweep's 7-second cooldown
+	var/void_sweep_cooldown = 0
+
+/obj/item/kinetic_crusher/attack(mob/living/target, mob/living/carbon/user)
+	// If void-infused, deal full uninhibited low-pressure damage against targets belonging to the void faction
+	if(void_infused && isliving(target) && (FACTION_VOID in target.faction))
+		var/old_force = force
+		if(HAS_TRAIT(src, TRAIT_WIELDED))
+			force = force_wielded // Forces full kinetic damage bypass, overriding pressure drops
+
+		. = ..()
+
+		force = old_force
+		return .
+
+	return ..()
+
+/obj/item/kinetic_crusher/afterattack(mob/living/target, mob/living/user, list/modifiers, list/attack_modifiers)
+	if(!isliving(target))
+		return ..()
+
+	// Guard claws to prevent accidental triggers if the weapon lacks infusion or isn't wielded
+	if(!void_infused || !HAS_TRAIT(src, TRAIT_WIELDED))
+		return ..()
+
+	// Check if the target is destabilized by a crusher mark before the weapon's native hit detonates it
+	var/datum/status_effect/crusher_mark/mark = target.has_status_effect(/datum/status_effect/crusher_mark)
+
+	// Execute native detonations, trophy triggers, and calculations
+	. = ..()
+
+	// Trigger the void shockwave sweep if the target was marked and the 7-second cooldown has expired
+	if(mark && !QDELETED(target) && (world.time >= void_sweep_cooldown))
+		// Advance cooldown timestamp by 7 seconds (7 SECONDS evaluates cleanly to 70 ticks inside BYOND)
+		void_sweep_cooldown = world.time + 7 SECONDS
+
+		// Safely find the exact opposite facing direction of the user using native turning math
+		var/reverse_dir = turn(user.dir, 180)
+		var/turf/origin_turf = get_step(user, reverse_dir)
+
+		if(!origin_turf)
+			return
+
+		// Standardize a directional straight line spanning 3 tiles backward
+		var/list/target_turfs = list(origin_turf)
+		var/turf/next_tile = origin_turf
+		for(var/i in 1 to 2)
+			next_tile = get_step(next_tile, reverse_dir)
+			if(next_tile)
+				target_turfs += next_tile
+
+		// Calculate total damage payload (Wielded standard + Detonation blast = 20 + 50 = 70 Brute damage)
+		var/sweep_damage = force_wielded + detonation_damage
+
+		for(var/turf/T in target_turfs)
+			// Spawn a temporary kinetic shockwave blast aesthetic on the turf
+			new /obj/effect/temp_visual/kinetic_blast(T)
+
+			for(var/mob/living/victim in T)
+				if(victim == user || victim == target) // Protect the wielder and the initial targeted mob from double jeopardy
+					continue
+
+				// Inflict total force payload as heavy crushing brute damage
+				victim.apply_damage(sweep_damage, BRUTE)
+				to_chat(victim, span_userdanger("A devastating void-infused sweep from [user]'s crusher lashes out and batters you!"))
+
+		to_chat(user, span_notice("Marked hit successful! Void energy erupts, sweeping 3 tiles behind you with full force."))
