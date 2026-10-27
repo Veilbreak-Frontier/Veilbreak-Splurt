@@ -98,7 +98,8 @@
 															"behavior": "/datum/bt_node/ai_behavior/targeted_mob_ability/and_plan_execute",
 															"vars": {
 																"ability_key": "BB_BILEWORM_SPEW_BILE",
-																"target_key": "BB_CURRENT_TARGET"
+																"target_key": "BB_CURRENT_TARGET",
+																"maximum_distance": 7
 															}
 														}
 													}

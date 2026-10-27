@@ -102,7 +102,7 @@
 	name = "Spew Bile"
 	desc = "Spew a barrage of bile globs."
 	shared_cooldown = MOB_SHARED_COOLDOWN_1 | MOB_SHARED_COOLDOWN_2
-	cooldown_time = 3 SECONDS
+	cooldown_time = 4.5 SECONDS
 	/// Sound played when firing a projectile
 	var/projectile_sound = 'sound/mobs/non-humanoids/bileworm/bileworm_spit.ogg'
 	/// How many additional projectiles to shoot around the target?
@@ -160,7 +160,7 @@
 	/// Tiles travelled per second at maximum range
 	var/speed = 5
 	/// Maximum range for our speed calculations
-	var/max_range = 10
+	var/max_range = 7
 	/// Warning sign on the turf we're about to hit
 	var/obj/effect/bileworm_target/target_sign = null
 
