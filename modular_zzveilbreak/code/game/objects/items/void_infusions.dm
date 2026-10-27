@@ -179,6 +179,8 @@
 		var/damage = dist ? 8 : 15
 		victim.apply_damage(damage, BURN, spread_damage = TRUE, wound_bonus = CANT_WOUND)
 
+
+```dm
 // --- Void-Infused Kinetic Crusher Integration ---
 
 /datum/void_infusion_recipe/kinetic_crusher
@@ -193,6 +195,7 @@
 
 /datum/void_infusion_recipe/kinetic_crusher/apply(obj/item/kinetic_crusher/target)
 	..()
+	target.name = "[name_prefix] [initial(target.name)]"
 	target.desc += " Dark void energy coils around its chassis. Striking a marked target unleashes a crushing void cleave that tears through space behind them."
 	target.void_infused = TRUE
 	return TRUE
@@ -232,21 +235,26 @@
 
 // HOOK INTO THE DESTABILIZER PROJECTILE TO ENFORCE VOID MARKING
 /obj/projectile/destabilizer/on_hit(atom/target, blocked = 0, pierce_hit)
-	. = ..()
 	var/obj/item/kinetic_crusher/crusher = fired_from
-	if(!istype(crusher) || !crusher.void_infused)
-		return
 
-	if(isliving(target))
+	// If it's a void-infused crusher hitting a void faction unit, we bypass the native animal filter completely
+	if(istype(crusher) && crusher.void_infused && isliving(target))
 		var/mob/living/living_target = target
 		if(FACTION_VOID in living_target.faction)
-			// Forcefully apply the crusher mark status effect bypassing standard animal/fauna constraints
+			// Apply the mark directly BEFORE the base code blocks it
 			var/datum/status_effect/crusher_mark/forced_mark = living_target.has_status_effect(/datum/status_effect/crusher_mark)
 			if(!forced_mark)
 				forced_mark = living_target.apply_status_effect(/datum/status_effect/crusher_mark, boosted, crusher)
 
 			if(forced_mark)
 				forced_mark.detonation_damage = detonation_damage
+
+			// Since we manually handled the hit and mark application for the void mob,
+			// we can safely skip the base code's restriction and just return the parent hit execution
+			return ..()
+
+	// Fallback to standard behavior for Lavaland creatures
+	return ..()
 
 /obj/item/kinetic_crusher/afterattack(mob/living/target, mob/living/user, list/modifiers, list/attack_modifiers)
 	if(!isliving(target))
@@ -265,14 +273,14 @@
 	if(mark && !QDELETED(target) && (world.time >= void_cleave_cooldown))
 		void_cleave_cooldown = world.time + 7 SECONDS
 
-		// Since we want to cleave BEHIND THE TARGET, we continue the user's facing direction forward from the target
+		// Cleave BEHIND THE TARGET: continue the user's facing direction forward from the target
 		var/cleave_dir = user.dir
 		var/turf/origin_turf = get_step(target, cleave_dir)
 
 		if(!origin_turf)
 			return
 
-		// Gathers a 3-tile wide arc layout sweep directly behind the target (center-back, back-left, back-right relative to user's point of view)
+		// Gathers a 3-tile wide arc layout sweep directly behind the target (center-back, back-left, back-right)
 		var/list/target_turfs = list(origin_turf)
 
 		var/turf/left_cleave = get_step(origin_turf, turn(cleave_dir, 90))
@@ -297,4 +305,4 @@
 				victim.apply_damage(sweep_damage, BRUTE)
 				to_chat(victim, span_userdanger("A devastating purple void cleave from [user]'s crusher cuts through space and batters you!"))
 
-		to_chat(user, span_notice("Marked hit successful! Void energy erupts into a Void Cleave, sweeping the area behind your target."))
+		to_chat(user, span_notice("Marked hit successful! Void energy cleaves, sweeping the area behind your target."))
