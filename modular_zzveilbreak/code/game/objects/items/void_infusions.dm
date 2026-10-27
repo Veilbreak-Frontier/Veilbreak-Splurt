@@ -184,9 +184,16 @@
 /datum/void_infusion_recipe/kinetic_crusher
 	target_type = /obj/item/kinetic_crusher
 
+/datum/void_infusion_recipe/kinetic_crusher/matches(obj/item/target)
+	if(!istype(target, target_type))
+		return FALSE
+	if(findtext(target.name, name_prefix))
+		return FALSE
+	return TRUE
+
 /datum/void_infusion_recipe/kinetic_crusher/apply(obj/item/kinetic_crusher/target)
 	..()
-	target.desc += " Dark void energy coils around its chassis. Striking a marked target unleashes a crushing shockwave that sweeps behind you."
+	target.desc += " Dark void energy coils around its chassis. Striking a marked target unleashes a crushing shockwave that sweeps the area behind you."
 	target.void_infused = TRUE
 	return TRUE
 
@@ -214,7 +221,7 @@
 	if(!isliving(target))
 		return ..()
 
-	// Guard claws to prevent accidental triggers if the weapon lacks infusion or isn't wielded
+	// Guard clauses to prevent accidental triggers if the weapon lacks infusion or isn't wielded
 	if(!void_infused || !HAS_TRAIT(src, TRAIT_WIELDED))
 		return ..()
 
@@ -229,34 +236,41 @@
 		// Advance cooldown timestamp by 7 seconds (7 SECONDS evaluates cleanly to 70 ticks inside BYOND)
 		void_sweep_cooldown = world.time + 7 SECONDS
 
-		// Safely find the exact opposite facing direction of the user using native turning math
-		var/reverse_dir = turn(user.dir, 180)
+		// Safely find the exact opposite facing direction of the user using native REVERSE_DIR macro
+		var/reverse_dir = REVERSE_DIR(user.dir)
 		var/turf/origin_turf = get_step(user, reverse_dir)
 
 		if(!origin_turf)
 			return
 
-		// Standardize a directional straight line spanning 3 tiles backward
+		// Gathers a 3-tile wide arc layout sweep directly behind the user (center-back, back-left, back-right)
 		var/list/target_turfs = list(origin_turf)
-		var/turf/next_tile = origin_turf
-		for(var/i in 1 to 2)
-			next_tile = get_step(next_tile, reverse_dir)
-			if(next_tile)
-				target_turfs += next_tile
+
+		// Find left flank tile relative to the backward step
+		var/turf/left_sweep = get_step(origin_turf, turn(reverse_dir, 90))
+		if(left_sweep)
+			target_turfs += left_sweep
+
+		// Find right flank tile relative to the backward step
+		var/turf/right_sweep = get_step(origin_turf, turn(reverse_dir, -90))
+		if(right_sweep)
+			target_turfs += right_sweep
 
 		// Calculate total damage payload (Wielded standard + Detonation blast = 20 + 50 = 70 Brute damage)
 		var/sweep_damage = force_wielded + detonation_damage
 
 		for(var/turf/T in target_turfs)
-			// Spawn a temporary kinetic shockwave blast aesthetic on the turf
-			new /obj/effect/temp_visual/kinetic_blast(T)
+			// Spawn a temporary kinetic shockwave blast aesthetic on each swept turf tile
+			var/obj/effect/temp_visual/kinetic_blast/blast = new(T)
+			if(blast)
+				blast.color = "#c8a4e9" // Shifts the kinetic blast into a matching purple void glow
 
 			for(var/mob/living/victim in T)
-				if(victim == user || victim == target) // Protect the wielder and the initial targeted mob from double jeopardy
+				if(victim == user || victim == target) // Protect the wielder and the initial targeted mob from double hits
 					continue
 
 				// Inflict total force payload as heavy crushing brute damage
 				victim.apply_damage(sweep_damage, BRUTE)
 				to_chat(victim, span_userdanger("A devastating void-infused sweep from [user]'s crusher lashes out and batters you!"))
 
-		to_chat(user, span_notice("Marked hit successful! Void energy erupts, sweeping 3 tiles behind you with full force."))
+		to_chat(user, span_notice("Marked hit successful! Void energy erupts, sweeping a purple shockwave behind you with full force."))
