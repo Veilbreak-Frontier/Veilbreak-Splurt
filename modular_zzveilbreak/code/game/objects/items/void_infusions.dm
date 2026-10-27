@@ -193,15 +193,15 @@
 
 /datum/void_infusion_recipe/kinetic_crusher/apply(obj/item/kinetic_crusher/target)
 	..()
-	target.desc += " Dark void energy coils around its chassis. Striking a marked target unleashes a crushing shockwave that sweeps the area behind you."
+	target.desc += " Dark void energy coils around its chassis. Striking a marked target unleashes a crushing void cleave that tears through space behind them."
 	target.void_infused = TRUE
 	return TRUE
 
 /obj/item/kinetic_crusher
 	/// Tracks whether this specific crusher has been void-infused
 	var/void_infused = FALSE
-	/// Timestamp marker for tracking the void sweep's 7-second cooldown
-	var/void_sweep_cooldown = 0
+	/// Tracks the void cleave's 7-second cooldown timestamp
+	var/void_cleave_cooldown = 0
 
 /obj/item/kinetic_crusher/attack(mob/living/target, mob/living/carbon/user)
 	// If void-infused, deal full uninhibited low-pressure damage against targets belonging to the void faction
@@ -217,11 +217,41 @@
 
 	return ..()
 
+// FORCE EXTENSION FOR FIRING BLAST: We inject a custom flag into the spawned projectile
+/obj/item/kinetic_crusher/fire_kinetic_blast(atom/target, mob/living/user, list/modifiers)
+	. = ..()
+	if(!void_infused)
+		return
+
+	// Find the newly spawned projectile in the user's vicinity to recolor it
+	for(var/obj/projectile/destabilizer/D in range(1, user))
+		if(D.fired_from == src)
+			D.name = "void-infused destabilizing force"
+			D.color = "#c8a4e9"
+			break
+
+// HOOK INTO THE DESTABILIZER PROJECTILE TO ENFORCE VOID MARKING
+/obj/projectile/destabilizer/on_hit(atom/target, blocked = 0, pierce_hit)
+	. = ..()
+	var/obj/item/kinetic_crusher/crusher = fired_from
+	if(!istype(crusher) || !crusher.void_infused)
+		return
+
+	if(isliving(target))
+		var/mob/living/living_target = target
+		if(FACTION_VOID in living_target.faction)
+			// Forcefully apply the crusher mark status effect bypassing standard animal/fauna constraints
+			var/datum/status_effect/crusher_mark/forced_mark = living_target.has_status_effect(/datum/status_effect/crusher_mark)
+			if(!forced_mark)
+				forced_mark = living_target.apply_status_effect(/datum/status_effect/crusher_mark, boosted, crusher)
+
+			if(forced_mark)
+				forced_mark.detonation_damage = detonation_damage
+
 /obj/item/kinetic_crusher/afterattack(mob/living/target, mob/living/user, list/modifiers, list/attack_modifiers)
 	if(!isliving(target))
 		return ..()
 
-	// Guard clauses to prevent accidental triggers if the weapon lacks infusion or isn't wielded
 	if(!void_infused || !HAS_TRAIT(src, TRAIT_WIELDED))
 		return ..()
 
@@ -231,36 +261,31 @@
 	// Execute native detonations, trophy triggers, and calculations
 	. = ..()
 
-	// Trigger the void shockwave sweep if the target was marked and the 7-second cooldown has expired
-	if(mark && !QDELETED(target) && (world.time >= void_sweep_cooldown))
-		// Advance cooldown timestamp by 7 seconds (7 SECONDS evaluates cleanly to 70 ticks inside BYOND)
-		void_sweep_cooldown = world.time + 7 SECONDS
+	// Trigger the void cleave shockwave if the target was marked and the 7-second cooldown has expired
+	if(mark && !QDELETED(target) && (world.time >= void_cleave_cooldown))
+		void_cleave_cooldown = world.time + 7 SECONDS
 
-		// Safely find the exact opposite facing direction of the user using native REVERSE_DIR macro
-		var/reverse_dir = REVERSE_DIR(user.dir)
-		var/turf/origin_turf = get_step(user, reverse_dir)
+		// Since we want to cleave BEHIND THE TARGET, we continue the user's facing direction forward from the target
+		var/cleave_dir = user.dir
+		var/turf/origin_turf = get_step(target, cleave_dir)
 
 		if(!origin_turf)
 			return
 
-		// Gathers a 3-tile wide arc layout sweep directly behind the user (center-back, back-left, back-right)
+		// Gathers a 3-tile wide arc layout sweep directly behind the target (center-back, back-left, back-right relative to user's point of view)
 		var/list/target_turfs = list(origin_turf)
 
-		// Find left flank tile relative to the backward step
-		var/turf/left_sweep = get_step(origin_turf, turn(reverse_dir, 90))
-		if(left_sweep)
-			target_turfs += left_sweep
+		var/turf/left_cleave = get_step(origin_turf, turn(cleave_dir, 90))
+		if(left_cleave)
+			target_turfs += left_cleave
 
-		// Find right flank tile relative to the backward step
-		var/turf/right_sweep = get_step(origin_turf, turn(reverse_dir, -90))
-		if(right_sweep)
-			target_turfs += right_sweep
+		var/turf/right_cleave = get_step(origin_turf, turn(cleave_dir, -90))
+		if(right_cleave)
+			target_turfs += right_cleave
 
-		// Calculate total damage payload (Wielded standard + Detonation blast = 20 + 50 = 70 Brute damage)
 		var/sweep_damage = force_wielded + detonation_damage
 
 		for(var/turf/T in target_turfs)
-			// Spawn a temporary kinetic shockwave blast aesthetic on each swept turf tile
 			var/obj/effect/temp_visual/kinetic_blast/blast = new(T)
 			if(blast)
 				blast.color = "#c8a4e9" // Shifts the kinetic blast into a matching purple void glow
@@ -269,8 +294,7 @@
 				if(victim == user || victim == target) // Protect the wielder and the initial targeted mob from double hits
 					continue
 
-				// Inflict total force payload as heavy crushing brute damage
 				victim.apply_damage(sweep_damage, BRUTE)
-				to_chat(victim, span_userdanger("A devastating void-infused sweep from [user]'s crusher lashes out and batters you!"))
+				to_chat(victim, span_userdanger("A devastating purple void cleave from [user]'s crusher cuts through space and batters you!"))
 
-		to_chat(user, span_notice("Marked hit successful! Void energy erupts, sweeping a purple shockwave behind you with full force."))
+		to_chat(user, span_notice("Marked hit successful! Void energy erupts into a Void Cleave, sweeping the area behind your target."))
