@@ -1,3 +1,17 @@
+GLOBAL_LIST_INIT(quantum_card_gags_coloring, list(
+	/area/station/maintenance = COLOR_ASSISTANT_GRAY,
+	/area/station/security = COLOR_SECURITY_RED,
+	/area/station/service = COLOR_SERVICE_LIME,
+	/area/centcom = COLOR_CENTCOM_BLUE,
+	/area/station/command = COLOR_COMMAND_BLUE,
+	/area/station/ai = COLOR_COMMAND_BLUE,
+	/area/station/medical = COLOR_MEDICAL_BLUE,
+	/area/station/science = COLOR_SCIENCE_PINK,
+	/area/station/engineering = COLOR_ENGINEERING_ORANGE,
+	/area/station/cargo = COLOR_CARGO_BROWN,
+	/area/mine = COLOR_CARGO_BROWN,
+))
+
 /obj/item/quantum_keycard
 	name = "quantum keycard"
 	desc = "A keycard able to link to a quantum pad's particle signature, allowing other quantum pads to travel there instead of their linked pad."
@@ -15,21 +29,6 @@
 	custom_materials = list(/datum/material/glass = HALF_SHEET_MATERIAL_AMOUNT, /datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT, /datum/material/silver = HALF_SHEET_MATERIAL_AMOUNT, /datum/material/bluespace = HALF_SHEET_MATERIAL_AMOUNT)
 	/// The linked quantum pad
 	var/obj/machinery/quantumpad/qpad
-
-	/// where the pad is located and what color the card will become
-	var/static/list/gags_coloring = list(
-		/area/station/maintenance = COLOR_ASSISTANT_GRAY,
-		/area/station/security = COLOR_SECURITY_RED,
-		/area/station/service = COLOR_SERVICE_LIME,
-		/area/centcom = COLOR_CENTCOM_BLUE,  // how?
-		/area/station/command = COLOR_COMMAND_BLUE,
-		/area/station/ai = COLOR_COMMAND_BLUE,
-		/area/station/medical = COLOR_MEDICAL_BLUE,
-		/area/station/science = COLOR_SCIENCE_PINK,
-		/area/station/engineering = COLOR_ENGINEERING_ORANGE,
-		/area/station/cargo = COLOR_CARGO_BROWN,
-		/area/mine = COLOR_CARGO_BROWN
-	)
 
 /obj/item/quantum_keycard/examine(mob/user)
 	. = ..()
@@ -60,5 +59,5 @@
 		name = initial(name)
 		return
 
-	var/new_color = is_type_in_list(get_area(new_pad), gags_coloring, zebra = TRUE) || COLOR_WEBSAFE_DARK_GRAY
+	var/new_color = is_type_in_list(get_area(new_pad), GLOB.quantum_card_gags_coloring, zebra = TRUE) || COLOR_WEBSAFE_DARK_GRAY
 	set_greyscale(new_color)
