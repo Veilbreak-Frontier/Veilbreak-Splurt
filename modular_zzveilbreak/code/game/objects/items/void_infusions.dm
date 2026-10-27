@@ -205,11 +205,10 @@
 	var/void_cleave_cooldown = 0
 
 /obj/item/kinetic_crusher/attack(mob/living/target, mob/living/carbon/user)
-	// If void-infused, deal full uninhibited low-pressure damage against targets belonging to the void faction
 	if(void_infused && isliving(target) && (FACTION_VOID in target.faction))
 		var/old_force = force
 		if(HAS_TRAIT(src, TRAIT_WIELDED))
-			force = force_wielded // Forces full kinetic damage bypass, overriding pressure drops
+			force = force_wielded
 
 		. = ..()
 
@@ -218,40 +217,36 @@
 
 	return ..()
 
-// FORCE EXTENSION FOR FIRING BLAST: We inject a custom flag into the spawned projectile
 /obj/item/kinetic_crusher/fire_kinetic_blast(atom/target, mob/living/user, list/modifiers)
 	. = ..()
 	if(!void_infused)
 		return
 
-	// Find the newly spawned projectile in the user's vicinity to recolor it
 	for(var/obj/projectile/destabilizer/D in range(1, user))
 		if(D.fired_from == src)
 			D.name = "void-infused destabilizing force"
 			D.color = "#c8a4e9"
 			break
 
-// HOOK INTO THE DESTABILIZER PROJECTILE TO ENFORCE VOID MARKING
 /obj/projectile/destabilizer/on_hit(atom/target, blocked = 0, pierce_hit)
 	var/obj/item/kinetic_crusher/crusher = fired_from
 
-	// If it's a void-infused crusher hitting a void faction unit, we bypass the native animal filter completely
 	if(istype(crusher) && crusher.void_infused && isliving(target))
 		var/mob/living/living_target = target
-		if(FACTION_VOID in living_target.faction)
-			// Apply the mark directly BEFORE the base code blocks it
+
+		// Modüler Tip Kontrolü: Eğer hedef bir void creature ise veya direkt void faction üyesiyse
+		if(istype(living_target, /mob/living/basic/void_creature) || (FACTION_VOID in living_target.faction))
 			var/datum/status_effect/crusher_mark/forced_mark = living_target.has_status_effect(/datum/status_effect/crusher_mark)
 			if(!forced_mark)
+				// apply_status_effect fonksiyonunu bu yeni tipe zorla enjekte ediyoruz
 				forced_mark = living_target.apply_status_effect(/datum/status_effect/crusher_mark, boosted, crusher)
 
 			if(forced_mark)
 				forced_mark.detonation_damage = detonation_damage
 
-			// Since we manually handled the hit and mark application for the void mob,
-			// we can safely skip the base code's restriction and just return the parent hit execution
+			// Üst fonksiyonun (..()) bu yeni basic mobları reddetmesini engellemek için çarpma işlemini burada başarıyla sonlandırıyoruz.
 			return ..()
 
-	// Fallback to standard behavior for Lavaland creatures
 	return ..()
 
 /obj/item/kinetic_crusher/afterattack(mob/living/target, mob/living/user, list/modifiers, list/attack_modifiers)
@@ -261,24 +256,19 @@
 	if(!void_infused || !HAS_TRAIT(src, TRAIT_WIELDED))
 		return ..()
 
-	// Check if the target is destabilized by a crusher mark before the weapon's native hit detonates it
 	var/datum/status_effect/crusher_mark/mark = target.has_status_effect(/datum/status_effect/crusher_mark)
 
-	// Execute native detonations, trophy triggers, and calculations
 	. = ..()
 
-	// Trigger the void cleave shockwave if the target was marked and the 7-second cooldown has expired
 	if(mark && !QDELETED(target) && (world.time >= void_cleave_cooldown))
 		void_cleave_cooldown = world.time + 7 SECONDS
 
-		// Cleave BEHIND THE TARGET: continue the user's facing direction forward from the target
 		var/cleave_dir = user.dir
 		var/turf/origin_turf = get_step(target, cleave_dir)
 
 		if(!origin_turf)
 			return
 
-		// Gathers a 3-tile wide arc layout sweep directly behind the target (center-back, back-left, back-right)
 		var/list/target_turfs = list(origin_turf)
 
 		var/turf/left_cleave = get_step(origin_turf, turn(cleave_dir, 90))
@@ -294,13 +284,13 @@
 		for(var/turf/T in target_turfs)
 			var/obj/effect/temp_visual/kinetic_blast/blast = new(T)
 			if(blast)
-				blast.color = "#c8a4e9" // Shifts the kinetic blast into a matching purple void glow
+				blast.color = "#c8a4e9"
 
 			for(var/mob/living/victim in T)
-				if(victim == user || victim == target) // Protect the wielder and the initial targeted mob from double hits
+				if(victim == user || victim == target)
 					continue
 
 				victim.apply_damage(sweep_damage, BRUTE)
 				to_chat(victim, span_userdanger("A devastating purple void cleave from [user]'s crusher cuts through space and batters you!"))
 
-		to_chat(user, span_notice("Marked hit successful! Void energy cleaves, sweeping the area behind your target."))
+		to_chat(user, span_notice("Marked hit successful! Void energy erupts into a Void Cleave, sweeping the area behind your target."))
