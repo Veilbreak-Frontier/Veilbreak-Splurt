@@ -179,8 +179,6 @@
 		var/damage = dist ? 8 : 15
 		victim.apply_damage(damage, BURN, spread_damage = TRUE, wound_bonus = CANT_WOUND)
 
-
-```dm
 // --- Void-Infused Kinetic Crusher Integration ---
 
 /datum/void_infusion_recipe/kinetic_crusher
