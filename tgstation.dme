@@ -11597,6 +11597,7 @@
 #include "modular_zzveilbreak\code\modules\atmospherics\gasmixtures\gas_types.dm"
 #include "modular_zzveilbreak\code\modules\atmospherics\gasmixtures\supermatter_extras.dm"
 #include "modular_zzveilbreak\code\modules\atmospherics\gasmixtures\bluespace\bluespace_sender.dm"
+#include "modular_zzveilbreak\code\modules\bitrunning\components\avatar_connection.dm"
 #include "modular_zzveilbreak\code\modules\cargo\antimatter.dm"
 #include "modular_zzveilbreak\code\modules\cargo\engine_packs.dm"
 #include "modular_zzveilbreak\code\modules\cargo\veilbreak_import_exports.dm"
