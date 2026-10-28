@@ -1,12 +1,16 @@
+#define OVERRIDE_ALARM_PERIOD 45 SECONDS
+
 // Define the custom Tarkon terminal path for map tracking
 /obj/machinery/computer/crew/tarkon
 	name = "Tarkon Crew Monitoring Console"
 	desc = "Used to monitor active health sensors built into Tarkon military uniforms."
 	icon_state = "crew_tarkon"
-	var/faction_restriction = "tarkon"
 
-/obj/machinery/computer/crew
-	var/faction_restriction = "nanotrasen" // Default standard station monitor classification
+// Define the administrative omni-monitoring console type
+/obj/machinery/computer/crew/admin
+	name = "Master Crew Monitoring Console"
+	desc = "An unrestricted, high-clearance terminal that aggregates all medical sensor signatures across all networks."
+	icon_state = "crew_admin"
 
 /**
  * STRICT FACTION MATCH MATRIX:
@@ -19,13 +23,17 @@
 
 	var/console_faction = src.get_console_faction()
 
-	// Handle Tarkon network isolation
+	// 1. Handle Admin Omni-Monitoring Clearance
+	if(console_faction == "admin")
+		return TRUE // Bypasses all faction blocks and maps everything globally!
+
+	// 2. Handle Tarkon network isolation
 	if(console_faction == "tarkon")
 		if(M.faction && (("tarkon" in M.faction) || ("Port Tarkon Survivor" in M.faction)))
 			return TRUE
 		return FALSE
 
-	// Handle Nanotrasen / Main Station network isolation
+	// 3. Handle Nanotrasen / Main Station network isolation
 	if(console_faction == "nanotrasen")
 		// If they belong to an external or hostile faction group, filter them out completely
 		if(M.faction)
@@ -41,11 +49,13 @@
 /obj/machinery/computer/crew/proc/get_console_faction()
 	if(src.type == /obj/machinery/computer/crew/tarkon || initial(src.icon_state) == "crew_tarkon")
 		return "tarkon"
+	if(src.type == /obj/machinery/computer/crew/admin || initial(src.icon_state) == "crew_admin")
+		return "admin"
 	return "nanotrasen"
 
 /**
  * GLOBAL OVERRIDE: Refactor the alarm beep logic to process cross-Z checks globally
- * while respecting the strict faction isolation rule.
+ * while respecting the strict faction isolation rule and verified sound paths.
  */
 /obj/machinery/computer/crew/alarm()
 	if(machine_stat & (NOPOWER|BROKEN))
@@ -62,7 +72,7 @@
 		if(!is_faction_authorized(mob))
 			continue
 
-		// Removed the old station_level check block entirely
+		// Removed the old station_level check block entirely to support all Z levels globally
 		var/turf/pos = get_turf(mob)
 		if(!pos)
 			continue
@@ -82,8 +92,9 @@
 			break
 
 	if(canalarm && COOLDOWN_FINISHED(src, alarm_cooldown))
-		COOLDOWN_START(src, alarm_cooldown, ALARM_PERIOD)
-		playsound(src, 'sound/machines/alarm.ogg', 50, FALSE, frequency = 1)
+		COOLDOWN_START(src, alarm_cooldown, OVERRIDE_ALARM_PERIOD)
+		// Fixed sound pathway asset to point to the exact verified subdirectory path
+		playsound(src.loc, 'sound/machines/beep/twobeep.ogg', 50, FALSE)
 
 	alarm_timer = addtimer(CALLBACK(src, PROC_REF(alarm)), SENSORS_UPDATE_PERIOD)
 
