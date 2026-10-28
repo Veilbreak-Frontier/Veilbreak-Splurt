@@ -31,7 +31,7 @@
 	obj_damage = 30
 	movement_type = GROUND
 	basic_mob_flags = DEL_ON_DEATH
-	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void
+	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void
 
 /mob/living/basic/void_creature/Initialize(mapload)
 	. = ..()
@@ -87,7 +87,7 @@
 		BLUNT = 25, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0,
 		BOMB = 0, BIO = 0, FIRE = 0, ACID = 0, MAGIC = 0, RADIATION = 0,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void/voidling
+	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void/voidling
 
 /mob/living/basic/void_creature/voidling/do_void_creature_loot_drop()
 	var/loot_type = pick_loot_from_table(voidling_loot_table)
@@ -119,12 +119,7 @@
 
 /mob/living/basic/void_creature/consumed_pathfinder/Initialize(mapload)
 	. = ..()
-	AddComponent(\
-		/datum/component/ranged_attacks,\
-		projectile_type = /obj/projectile/magic/voidbolt,\
-		projectile_sound = 'sound/effects/magic/magic_missile.ogg',\
-		cooldown_time = 2 SECONDS,\
-	)
+	AddComponent(		/datum/component/ranged_attacks,		projectile_type = /obj/projectile/magic/voidbolt,		projectile_sound = 'sound/effects/magic/magic_missile.ogg',		cooldown_time = 2 SECONDS,	)
 
 /mob/living/basic/void_creature/consumed_pathfinder/do_void_creature_loot_drop()
 	var/loot_type = pick_loot_from_table(consumed_pathfinder_drops)
@@ -147,7 +142,7 @@
 		BLUNT = 30, PUNCTURE = 30, SLASH = 30, LASER = -10, ENERGY = 0,
 		BOMB = 0, BIO = 50, FIRE = -50, ACID = 0, MAGIC = 30, RADIATION = 80,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void/voidbug
+	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void/voidbug
 	var/block_chance = 40
 	var/last_alert_time = 0
 	var/alert_cooldown = 30 SECONDS
@@ -201,12 +196,7 @@
 
 /mob/living/basic/void_creature/void_healer/Initialize(mapload)
 	. = ..()
-	AddComponent(\
-		/datum/component/ranged_attacks,\
-		projectile_type = /obj/projectile/magic/voidbolt,\
-		projectile_sound = 'sound/effects/magic/magic_missile.ogg',\
-		cooldown_time = 2.5 SECONDS,\
-	)
+	AddComponent(		/datum/component/ranged_attacks,		projectile_type = /obj/projectile/magic/voidbolt,		projectile_sound = 'sound/effects/magic/magic_missile.ogg',		cooldown_time = 2.5 SECONDS,	)
 
 /mob/living/basic/void_creature/void_healer/do_void_creature_loot_drop()
 	var/loot_type = pick_loot_from_table(void_healer_table)
@@ -231,23 +221,23 @@
 
 // --- AI CONTROLLERS ---
 
-/datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void
+/datum/ai_controller/basic_controller/simple/hostile/void
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
 		BB_AGGRO_RANGE = 10,
 	)
 	ai_movement = /datum/ai_movement/basic_avoidance
 
-/datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void/voidling
+/datum/ai_controller/basic_controller/simple/hostile/void/voidling
 
-/datum/ai_controller/basic_controller/simple/simple_hostile_obstacles/void/voidbug
+/datum/ai_controller/basic_controller/simple/hostile/void/voidbug
 
 /datum/ai_controller/basic_controller/simple/simple_ranged/void_pathfinder
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
 		BB_VOID_SUMMON_COOLDOWN = 0,
-		BB_RANGED_SKIRMISH_MIN_DISTANCE = 3,
-		BB_RANGED_SKIRMISH_MAX_DISTANCE = 8
+		BB_RANGED_SKIRMISH_MIN_DISTANCE = 1,
+		BB_RANGED_SKIRMISH_MAX_DISTANCE = 5
 	)
 	ai_movement = /datum/ai_movement/basic_avoidance
 
@@ -256,8 +246,8 @@
 		BB_VOID_HEAL_COOLDOWN = 0,
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
 		BB_AGGRO_RANGE = 10,
-		BB_RANGED_SKIRMISH_MIN_DISTANCE = 3,
-		BB_RANGED_SKIRMISH_MAX_DISTANCE = 8,
+		BB_RANGED_SKIRMISH_MIN_DISTANCE = 1,
+		BB_RANGED_SKIRMISH_MAX_DISTANCE = 6,
 	)
 	ai_movement = /datum/ai_movement/basic_avoidance
 
