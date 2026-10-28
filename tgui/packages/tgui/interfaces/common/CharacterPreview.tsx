@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { ByondUi } from 'tgui-core/components';
 
 export const CharacterPreview = (props: {
@@ -7,30 +6,17 @@ export const CharacterPreview = (props: {
   id: string;
 }) => {
   const { width = '225px' } = props;
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsReady(true);
-    }, 50);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!isReady) {
-    return (
-      <div
-        style={{
-          width: width,
-          height: props.height,
-          minHeight: props.height === '100%' ? '250px' : props.height,
-        }}
-      />
-    );
-  }
 
   const cleanHeight = props.height === '100%' ? '100%' : props.height;
   const minHeightFallback = props.height === '100%' ? '250px' : 'auto';
+
+  // Parse pure integer dimensions for native window sizing
+  const nativeWidthInt = parseInt(width, 10) || 225;
+  const nativeHeightInt =
+    props.height === '100%' ? 250 : parseInt(props.height, 10) || 250;
+
+  // Fallback string construction to grab the window identifier across downstreams
+  const windowId = (window as any).__windowId__ || 'mainwindow';
 
   return (
     <div
@@ -44,19 +30,22 @@ export const CharacterPreview = (props: {
       }}
     >
       <ByondUi
-        width={width}
-        height={cleanHeight}
+        width="100%"
+        height="100%"
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          minHeight: minHeightFallback,
         }}
         params={{
           id: props.id,
           type: 'map',
+          // Correctly assigns the parent skin frame context to map asset layouts
+          parent: windowId,
+          width: nativeWidthInt,
+          height: nativeHeightInt,
         }}
       />
     </div>
