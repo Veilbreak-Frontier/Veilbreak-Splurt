@@ -11580,6 +11580,7 @@
 #include "modular_zzveilbreak\code\game\spells\ignite.dm"
 #include "modular_zzveilbreak\code\game\tiles\void_tile.dm"
 #include "modular_zzveilbreak\code\game\turfs\space_rcd.dm"
+#include "modular_zzveilbreak\code\modules\crew_monitor_faction_and_z_fix.dm"
 #include "modular_zzveilbreak\code\modules\admin\instance_finder.dm"
 #include "modular_zzveilbreak\code\modules\antagonists\succubus\succubus.dm"
 #include "modular_zzveilbreak\code\modules\antagonists\succubus\succubus_actions.dm"
