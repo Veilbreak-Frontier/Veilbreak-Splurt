@@ -204,7 +204,7 @@
 	/// Tracks the void cleave's 7-second cooldown timestamp
 	var/void_cleave_cooldown = 0
 
-// MENZİLLİ ATIŞ: Atış rengini mor yapmak için mevcut kodun
+/// RANGED ATTACK: Changes the projectile color and name to fit the void theme
 /obj/item/kinetic_crusher/fire_kinetic_blast(atom/target, mob/living/user, list/modifiers)
 	. = ..()
 	if(!void_infused)
@@ -216,7 +216,7 @@
 			D.color = "#c8a4e9"
 			break
 
-// MENZİLLİ VURUŞ (MARK): Mermi hedefe deyince hem native mark'ı hem bizim custom mark'ı uygular
+/// RANGED HIT (MARKING): Applies both native and custom marks when the projectile hits a void creature
 /obj/projectile/destabilizer/on_hit(atom/target, blocked = 0, pierce_hit)
 	. = ..()
 	var/obj/item/kinetic_crusher/crusher = fired_from
@@ -225,48 +225,45 @@
 		var/mob/living/living_target = target
 
 		if(istype(living_target, /mob/living/basic/void_creature) || (FACTION_VOID in living_target.faction))
-			// Native status effect'i uygula (Biotype sayesinde native animasyon artık burada sorunsuz tetiklenecek)
+			// Apply native status effect so the engine processes the mark correctly
 			living_target.apply_status_effect(/datum/status_effect/crusher_mark, boosted, crusher)
-
-			// Yedek ve garanti değişkenimiz
+			// Hard guarantee variable mark backup
 			living_target.void_crusher_marked = TRUE
 
-			// Mermi çarpma efekti
+			// Visual indicator for a successful ranged mark hit
 			new /obj/effect/temp_visual/kinetic_blast(get_turf(living_target))
 
 			if(isliving(firer))
 				to_chat(firer, span_notice("You have marked [living_target] with void destabilization!"))
 
-// YAKIN DÖVÜŞ VURUŞU (DETONATION): Esas patlama ve animasyonun döndüğü yer!
+/// MELEE ATTACK (DETONATION): Triggered when striking the target up close
 /obj/item/kinetic_crusher/attack(mob/living/target, mob/living/carbon/user)
 	if(!void_infused || !isliving(target))
 		return ..()
 
-	// Eğer silah iki elle tutuluyorsa ve hedef bir şekilde işaretliyse (Custom veya Native Status Effect)
+	// Capture the mark status BEFORE the native code detonates and clears it
 	var/has_mark = (target.void_crusher_marked || target.has_status_effect(/datum/status_effect/crusher_mark))
 	var/is_wielded = HAS_TRAIT(src, TRAIT_WIELDED)
 
-	// Void faction'ına hasar bağışıklığı/düzenlemesi yaptığın orijinal kodun bloğu
+	// Adjust force variables for void faction if needed
 	var/old_force = force
 	if(is_wielded && (FACTION_VOID in target.faction))
 		force = force_wielded
 
-	// --- KRİTİK ADIM ---
-	// Parent call (..()) çağrısını yapıyoruz.
-	// İçeride biotype = MOB_MINING aktif olduğu için TG native kodu mark'ı bulacak,
-	// orijinal patlama animasyonunu/sesini (Crusher Deplete) OYNATACAK ve mark'ı temizleyecektir.
+	// Execute parent call. Thanks to relay_attackers element on the mob,
+	// the native code will now fully recognize the target, detonate the mark, and play standard animations/sounds.
 	. = ..()
 
-	force = old_force // Force'u eski haline geri çek
+	force = old_force
 
-	// Eğer vuruş yapıldığında mark var idiyse, silah wielded ise ve hedef ölmediyse Void Cleave'i patlat!
+	// If the target was successfully marked and hit while wielded, unleash the Void Cleave behind them
 	if(is_wielded && has_mark && !QDELETED(target))
-		target.void_crusher_marked = FALSE // Bizim markı sıfırla
-		handle_void_cleave(target, user)   // Ekstra mor Void Cleave alan hasarını tetikle
+		target.void_crusher_marked = FALSE
+		handle_void_cleave(target, user)
 
 	return .
 
-// VOID CLEAVE ALAN HASARI VE GÖRSEL EFEKT YARDIMCI PROC'U
+/// Unleashes a 3-tile wide area sweep behind the target, dealing brute damage
 /obj/item/kinetic_crusher/proc/handle_void_cleave(mob/living/target, mob/living/user)
 	if(world.time < void_cleave_cooldown)
 		return
@@ -287,13 +284,13 @@
 	if(right_cleave)
 		target_turfs += right_cleave
 
-	// (Wielded + Detonation) Hasarı
+	// Payload damage calculation (Wielded force + Detonation damage)
 	var/sweep_damage = force_wielded + detonation_damage
 
 	for(var/turf/T in target_turfs)
 		var/obj/effect/temp_visual/kinetic_blast/blast = new(T)
 		if(blast)
-			blast.color = "#c8a4e9" // Mor Void Efekti
+			blast.color = "#c8a4e9" // Beautiful purple void effect
 
 		for(var/mob/living/victim in T)
 			if(victim == user || victim == target)
@@ -304,7 +301,5 @@
 
 	to_chat(user, span_notice("Void Cleave successful! Space ruptures behind your target."))
 
-// Mob değişken tanımı
 /mob/living
 	var/void_crusher_marked = FALSE
-
