@@ -10,6 +10,7 @@
 	desc = "A creature from the void."
 	faction = list(FACTION_VOID)
 	gender = NEUTER
+	mob_biotypes = MOB_MINING|MOB_SPECIAL
 	speak_emote = list("hums")
 	response_help_continuous = "touches"
 	response_help_simple = "touch"
@@ -37,6 +38,7 @@
 	AddElement(/datum/element/simple_flying)
 	AddElement(/datum/element/ai_retaliate)
 	faction |= FACTION_HOSTILE
+	AddElement(/datum/element/relay_attackers)
 	apply_veilbreak_void_creature_stat_scaling()
 
 /// Applies GLOB veilbreak_void_creature_*_scale to this mob (void trash only; megafauna use another type path).
