@@ -219,38 +219,6 @@
 		var/mob/living/L = target
 		L.adjust_stutter(4 SECONDS)
 
-// --- AI CONTROLLERS ---
-
-/datum/ai_controller/basic_controller/simple/hostile/void
-	blackboard = list(
-		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
-		BB_AGGRO_RANGE = 10,
-	)
-	ai_movement = /datum/ai_movement/basic_avoidance
-
-/datum/ai_controller/basic_controller/simple/hostile/void/voidling
-
-/datum/ai_controller/basic_controller/simple/hostile/void/voidbug
-
-/datum/ai_controller/basic_controller/simple/simple_ranged/void_pathfinder
-	blackboard = list(
-		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
-		BB_VOID_SUMMON_COOLDOWN = 0,
-		BB_RANGED_SKIRMISH_MIN_DISTANCE = 1,
-		BB_RANGED_SKIRMISH_MAX_DISTANCE = 5
-	)
-	ai_movement = /datum/ai_movement/basic_avoidance
-
-/datum/ai_controller/basic_controller/simple/simple_ranged/void_healer
-	blackboard = list(
-		BB_VOID_HEAL_COOLDOWN = 0,
-		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
-		BB_AGGRO_RANGE = 10,
-		BB_RANGED_SKIRMISH_MIN_DISTANCE = 1,
-		BB_RANGED_SKIRMISH_MAX_DISTANCE = 6,
-	)
-	ai_movement = /datum/ai_movement/basic_avoidance
-
 // --- UTILS & VISUALS ---
 
 /datum/targeting_strategy/basic/void_aggressive/is_valid_target(mob/living/living_mob, atom/the_target, vision_range, datum/ai_controller/controller = null)
