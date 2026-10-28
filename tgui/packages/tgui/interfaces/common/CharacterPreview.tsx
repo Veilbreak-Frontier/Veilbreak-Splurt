@@ -8,14 +8,27 @@ export const CharacterPreview = (props: {
 }) => {
   const { width = '225px' } = props;
   const [isReady, setIsReady] = useState(false);
+  const [remountKey, setRemountKey] = useState(0);
 
   useEffect(() => {
+    // Phase 1: Wait for CSS Grid/Flexbox containers to stabilize
     const timer = setTimeout(() => {
       setIsReady(true);
-    }, 300);
+    }, 150);
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    // Phase 2: Force a secondary layout tick to break BYOND's sizing cache
+    const nativeTick = setTimeout(() => {
+      setRemountKey((prev) => prev + 1);
+    }, 100);
+
+    return () => clearTimeout(nativeTick);
+  }, [isReady]);
 
   if (!isReady) {
     return (
@@ -44,6 +57,7 @@ export const CharacterPreview = (props: {
       }}
     >
       <ByondUi
+        key={`${props.id}-${remountKey}`} // Changing this key completely obliterates and recreates the BYOND skin control
         width={width}
         height={cleanHeight}
         style={{
