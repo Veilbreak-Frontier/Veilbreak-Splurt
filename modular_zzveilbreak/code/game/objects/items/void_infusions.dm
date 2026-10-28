@@ -204,19 +204,7 @@
 	/// Tracks the void cleave's 7-second cooldown timestamp
 	var/void_cleave_cooldown = 0
 
-/obj/item/kinetic_crusher/attack(mob/living/target, mob/living/carbon/user)
-	if(void_infused && isliving(target) && (FACTION_VOID in target.faction))
-		var/old_force = force
-		if(HAS_TRAIT(src, TRAIT_WIELDED))
-			force = force_wielded
-
-		. = ..()
-
-		force = old_force
-		return .
-
-	return ..()
-
+// MENZİLLİ ATIŞ: Atış rengini mor yapmak için mevcut kodun
 /obj/item/kinetic_crusher/fire_kinetic_blast(atom/target, mob/living/user, list/modifiers)
 	. = ..()
 	if(!void_infused)
@@ -228,7 +216,7 @@
 			D.color = "#c8a4e9"
 			break
 
-// PROJECTILE OVERRIDE: Applies a reliable variable-based mark for basic void creatures
+// MENZİLLİ VURUŞ (MARK): Mermi hedefe deyince hem native mark'ı hem bizim custom mark'ı uygular
 /obj/projectile/destabilizer/on_hit(atom/target, blocked = 0, pierce_hit)
 	. = ..()
 	var/obj/item/kinetic_crusher/crusher = fired_from
@@ -237,77 +225,86 @@
 		var/mob/living/living_target = target
 
 		if(istype(living_target, /mob/living/basic/void_creature) || (FACTION_VOID in living_target.faction))
-			// Apply native status effect just in case
+			// Native status effect'i uygula (Biotype sayesinde native animasyon artık burada sorunsuz tetiklenecek)
 			living_target.apply_status_effect(/datum/status_effect/crusher_mark, boosted, crusher)
 
-			// Hard guarantee: We attach a direct variable mark onto the mob dynamically
+			// Yedek ve garanti değişkenimiz
 			living_target.void_crusher_marked = TRUE
 
-			// Visual indicator over the target so you know they are marked (Purple overlay/flash effect)
+			// Mermi çarpma efekti
 			new /obj/effect/temp_visual/kinetic_blast(get_turf(living_target))
 
-			// Show to user that mark applied successfully
 			if(isliving(firer))
 				to_chat(firer, span_notice("You have marked [living_target] with void destabilization!"))
 
-/obj/item/kinetic_crusher/afterattack(mob/living/target, mob/living/user, list/modifiers, list/attack_modifiers)
-	if(!isliving(target))
+// YAKIN DÖVÜŞ VURUŞU (DETONATION): Esas patlama ve animasyonun döndüğü yer!
+/obj/item/kinetic_crusher/attack(mob/living/target, mob/living/carbon/user)
+	if(!void_infused || !isliving(target))
 		return ..()
 
-	if(!void_infused || !HAS_TRAIT(src, TRAIT_WIELDED))
-		return ..()
+	// Eğer silah iki elle tutuluyorsa ve hedef bir şekilde işaretliyse (Custom veya Native Status Effect)
+	var/has_mark = (target.void_crusher_marked || target.has_status_effect(/datum/status_effect/crusher_mark))
+	var/is_wielded = HAS_TRAIT(src, TRAIT_WIELDED)
 
-	// Capture our custom variable mark AND the native status effect before native code triggers
-	var/is_custom_marked = target.void_crusher_marked
-	var/datum/status_effect/crusher_mark/mark = target.has_status_effect(/datum/status_effect/crusher_mark)
+	// Void faction'ına hasar bağışıklığı/düzenlemesi yaptığın orijinal kodun bloğu
+	var/old_force = force
+	if(is_wielded && (FACTION_VOID in target.faction))
+		force = force_wielded
 
-	// Execute native detonations
+	// --- KRİTİK ADIM ---
+	// Parent call (..()) çağrısını yapıyoruz.
+	// İçeride biotype = MOB_MINING aktif olduğu için TG native kodu mark'ı bulacak,
+	// orijinal patlama animasyonunu/sesini (Crusher Deplete) OYNATACAK ve mark'ı temizleyecektir.
 	. = ..()
 
-	// If EITHER the custom variable mark exists or the native status effect was present
-	if((is_custom_marked || mark) && !QDELETED(target))
+	force = old_force // Force'u eski haline geri çek
 
-		// Consume the custom mark so it cannot be double-proc'd
-		target.void_crusher_marked = FALSE
+	// Eğer vuruş yapıldığında mark var idiyse, silah wielded ise ve hedef ölmediyse Void Cleave'i patlat!
+	if(is_wielded && has_mark && !QDELETED(target))
+		target.void_crusher_marked = FALSE // Bizim markı sıfırla
+		handle_void_cleave(target, user)   // Ekstra mor Void Cleave alan hasarını tetikle
 
-		// Verify 7-second cooldown
-		if(world.time >= void_cleave_cooldown)
-			void_cleave_cooldown = world.time + 7 SECONDS
+	return .
 
-			var/cleave_dir = user.dir
-			var/turf/origin_turf = get_step(target, cleave_dir)
+// VOID CLEAVE ALAN HASARI VE GÖRSEL EFEKT YARDIMCI PROC'U
+/obj/item/kinetic_crusher/proc/handle_void_cleave(mob/living/target, mob/living/user)
+	if(world.time < void_cleave_cooldown)
+		return
 
-			if(!origin_turf)
-				return
+	void_cleave_cooldown = world.time + 7 SECONDS
+	var/cleave_dir = user.dir
+	var/turf/origin_turf = get_step(target, cleave_dir)
 
-			// Layout 3-tile wide sweep behind the target
-			var/list/target_turfs = list(origin_turf)
+	if(!origin_turf)
+		return
 
-			var/turf/left_cleave = get_step(origin_turf, turn(cleave_dir, 90))
-			if(left_cleave)
-				target_turfs += left_cleave
+	var/list/target_turfs = list(origin_turf)
+	var/turf/left_cleave = get_step(origin_turf, turn(cleave_dir, 90))
+	if(left_cleave)
+		target_turfs += left_cleave
 
-			var/turf/right_cleave = get_step(origin_turf, turn(cleave_dir, -90))
-			if(right_cleave)
-				target_turfs += right_cleave
+	var/turf/right_cleave = get_step(origin_turf, turn(cleave_dir, -90))
+	if(right_cleave)
+		target_turfs += right_cleave
 
-			// Payload damage (Wielded 20 + Detonation 50 = 70 Brute damage)
-			var/sweep_damage = force_wielded + detonation_damage
+	// (Wielded + Detonation) Hasarı
+	var/sweep_damage = force_wielded + detonation_damage
 
-			for(var/turf/T in target_turfs)
-				var/obj/effect/temp_visual/kinetic_blast/blast = new(T)
-				if(blast)
-					blast.color = "#c8a4e9" // Beautiful purple effect
+	for(var/turf/T in target_turfs)
+		var/obj/effect/temp_visual/kinetic_blast/blast = new(T)
+		if(blast)
+			blast.color = "#c8a4e9" // Mor Void Efekti
 
-				for(var/mob/living/victim in T)
-					if(victim == user || victim == target)
-						continue
+		for(var/mob/living/victim in T)
+			if(victim == user || victim == target)
+				continue
 
-					victim.apply_damage(sweep_damage, BRUTE)
-					to_chat(victim, span_userdanger("A devastating purple void cleave from [user]'s crusher cuts through space and batters you!"))
+			victim.apply_damage(sweep_damage, BRUTE)
+			to_chat(victim, span_userdanger("A devastating purple void cleave from [user]'s crusher cuts through space and batters you!"))
 
-			to_chat(user, span_notice("Void Cleave successful! Space ruptures behind your target."))
+	to_chat(user, span_notice("Void Cleave successful! Space ruptures behind your target."))
 
-// Dynamically define the variable onto /mob/living so it doesn't cause compiler errors
+// Mob değişken tanımı
 /mob/living
 	var/void_crusher_marked = FALSE
+
