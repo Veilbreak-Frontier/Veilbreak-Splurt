@@ -12,7 +12,7 @@ export const CharacterPreview = (props: {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsReady(true);
-    }, 50);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, []);
