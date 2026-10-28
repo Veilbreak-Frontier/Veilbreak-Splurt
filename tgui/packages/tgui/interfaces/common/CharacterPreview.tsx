@@ -1,5 +1,4 @@
 import { ByondUi } from 'tgui-core/components';
-import { config } from 'tgui-core/config';
 
 export const CharacterPreview = (props: {
   width?: string;
@@ -15,6 +14,9 @@ export const CharacterPreview = (props: {
   const nativeWidthInt = parseInt(width, 10) || 225;
   const nativeHeightInt =
     props.height === '100%' ? 250 : parseInt(props.height, 10) || 250;
+
+  // Fallback string construction to grab the window identifier across downstreams
+  const windowId = (window as any).__windowId__ || 'mainwindow';
 
   return (
     <div
@@ -40,7 +42,8 @@ export const CharacterPreview = (props: {
         params={{
           id: props.id,
           type: 'map',
-          parent: config.window,
+          // Correctly assigns the parent skin frame context to map asset layouts
+          parent: windowId,
           width: nativeWidthInt,
           height: nativeHeightInt,
         }}
