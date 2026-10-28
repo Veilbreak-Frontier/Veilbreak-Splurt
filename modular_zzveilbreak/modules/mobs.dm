@@ -10,6 +10,7 @@
 	desc = "A creature from the void."
 	faction = list(FACTION_VOID)
 	gender = NEUTER
+	mob_biotypes = MOB_MINING|MOB_SPECIAL
 	speak_emote = list("hums")
 	response_help_continuous = "touches"
 	response_help_simple = "touch"
