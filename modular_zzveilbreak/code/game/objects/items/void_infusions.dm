@@ -194,15 +194,13 @@
 /datum/void_infusion_recipe/kinetic_crusher/apply(obj/item/kinetic_crusher/target)
 	..()
 	target.name = "[name_prefix] [initial(target.name)]"
-	target.desc += " Dark void energy coils around its chassis. Striking a marked target unleashes a crushing void cleave that tears through space behind them."
+	target.desc += " Dark void energy coils around its chassis. Striking a marked target has a chance to unleash a crushing void cleave that tears through space behind them."
 	target.void_infused = TRUE
 	return TRUE
 
 /obj/item/kinetic_crusher
 	/// Tracks whether this specific crusher has been void-infused
 	var/void_infused = FALSE
-	/// Tracks the void cleave's 7-second cooldown timestamp
-	var/void_cleave_cooldown = 0
 
 /// RANGED ATTACK: Changes the projectile color and name to fit the void theme
 /obj/item/kinetic_crusher/fire_kinetic_blast(atom/target, mob/living/user, list/modifiers)
@@ -256,19 +254,18 @@
 
 	force = old_force
 
-	// If the target was successfully marked and hit while wielded, unleash the Void Cleave behind them
+	// If the target was successfully marked and hit while wielded, roll for a 65% chance to unleash Void Cleave
 	if(is_wielded && has_mark && !QDELETED(target))
 		target.void_crusher_marked = FALSE
-		handle_void_cleave(target, user)
+		if(prob(65))
+			handle_void_cleave(target, user)
+		else
+			to_chat(user, span_warning("The void mark detonates, but the spatial rift fails to materialize!"))
 
 	return .
 
 /// Unleashes a 3-tile wide area sweep behind the target, dealing brute damage
 /obj/item/kinetic_crusher/proc/handle_void_cleave(mob/living/target, mob/living/user)
-	if(world.time < void_cleave_cooldown)
-		return
-
-	void_cleave_cooldown = world.time + 7 SECONDS
 	var/cleave_dir = user.dir
 	var/turf/origin_turf = get_step(target, cleave_dir)
 
