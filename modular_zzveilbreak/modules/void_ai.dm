@@ -1,8 +1,8 @@
-// --- Refactored Void AI Controllers with Movement & Correct Inheritance ---
+// --- Refactored Void AI Controllers with Correct Movement Type paths ---
 
 /datum/ai_controller/basic_controller/simple/hostile/void_melee
 	behavior_tree_json = "modular_zzveilbreak/modules/void_melee.json"
-	ai_movement = /datum/ai_movement/basic/pathfinding // Hareket motoru bağlandı
+	ai_movement = /datum/ai_movement/basic_avoidance // Kod tabanınızla tam uyumlu hareket motoru
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
 		BB_AGGRO_RANGE = 10
@@ -10,7 +10,7 @@
 
 /datum/ai_controller/basic_controller/simple/hostile/void_ranged_pathfinder
 	behavior_tree_json = "modular_zzveilbreak/modules/void_ranged.json"
-	ai_movement = /datum/ai_movement/basic/pathfinding
+	ai_movement = /datum/ai_movement/basic_avoidance
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
 		BB_VOID_SUMMON_COOLDOWN = 0,
@@ -20,7 +20,7 @@
 
 /datum/ai_controller/basic_controller/simple/hostile/void_ranged_healer
 	behavior_tree_json = "modular_zzveilbreak/modules/void_healer.json"
-	ai_movement = /datum/ai_movement/basic/pathfinding
+	ai_movement = /datum/ai_movement/basic_avoidance
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
 		BB_VOID_HEAL_COOLDOWN = 0,
