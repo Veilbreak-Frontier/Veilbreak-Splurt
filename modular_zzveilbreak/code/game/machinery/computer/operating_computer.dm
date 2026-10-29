@@ -1,11 +1,9 @@
 /*
  * Operating Computer Zone Selection Fix
+ * Ensures the target surgery zone stays synchronized with the user's active HUD zone selection.
  *
- * The TGUI zone selector silently no-op'd ui_act outside two tiles of the
- * machine, and ui_close reverted the surgeon's HUD zone on close, so target
- * selection had to be redone every time the UI was closed. Additionally the
- * TGUI only mirrored the machine's own target_zone, leaving the HUD doll and
- * the surgery UI out of sync when the zone was changed outside the UI.
+ * Patient Passive Interface Observation Patch
+ * Allows awake patients lying down or resting within two tiles to view the console read-only.
  */
 
 /obj/machinery/computer/operating/ui_check(mob/living/user)
@@ -13,8 +11,12 @@
 		return UI_CLOSE
 	if(IS_UNCONSCIOUS(user))
 		return UI_CLOSE
+
 	if(user.body_position == LYING_DOWN)
-		return (user.loc == table?.loc) ? UI_CLOSE : UI_DISABLED
+		if(get_dist(user, src) > 2)
+			return UI_DISABLED
+		return UI_UPDATE
+
 	if(user.incapacitated)
 		return UI_DISABLED
 	if(!(user in viewers(world.view, src)))
