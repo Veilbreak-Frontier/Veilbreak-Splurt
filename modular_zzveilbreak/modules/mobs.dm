@@ -31,7 +31,6 @@
 	obj_damage = 30
 	movement_type = GROUND
 	basic_mob_flags = DEL_ON_DEATH
-	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void
 
 /mob/living/basic/void_creature/Initialize(mapload)
 	. = ..()
@@ -87,7 +86,7 @@
 		BLUNT = 25, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0,
 		BOMB = 0, BIO = 0, FIRE = 0, ACID = 0, MAGIC = 0, RADIATION = 0,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void/voidling
+
 
 /mob/living/basic/void_creature/voidling/do_void_creature_loot_drop()
 	var/loot_type = pick_loot_from_table(voidling_loot_table)
@@ -115,7 +114,6 @@
 		BLUNT = -20, PUNCTURE = -20, SLASH = -20, LASER = -10, ENERGY = 0,
 		BOMB = 0, BIO = 50, FIRE = 30, ACID = 0, MAGIC = 30, RADIATION = 80,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/simple/simple_ranged/void_pathfinder
 
 /mob/living/basic/void_creature/consumed_pathfinder/Initialize(mapload)
 	. = ..()
@@ -142,7 +140,6 @@
 		BLUNT = 30, PUNCTURE = 30, SLASH = 30, LASER = -10, ENERGY = 0,
 		BOMB = 0, BIO = 50, FIRE = -50, ACID = 0, MAGIC = 30, RADIATION = 80,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void/voidbug
 	var/block_chance = 40
 	var/last_alert_time = 0
 	var/alert_cooldown = 30 SECONDS
@@ -192,7 +189,6 @@
 		BLUNT = -20, PUNCTURE = -20, SLASH = -20, LASER = -10, ENERGY = 0,
 		BOMB = 0, BIO = 50, FIRE = 30, ACID = 0, MAGIC = 30, RADIATION = 80,
 	)
-	ai_controller = /datum/ai_controller/basic_controller/simple/simple_ranged/void_healer
 
 /mob/living/basic/void_creature/void_healer/Initialize(mapload)
 	. = ..()
@@ -210,7 +206,7 @@
 	damage = 5
 	damage_type = BURN
 	range = 14
-	speed = 2.5
+	speed = 2
 	hitsound = 'sound/effects/magic/magic_missile.ogg'
 
 /obj/projectile/magic/voidbolt/on_hit(atom/target, blocked = 0, pierce_hit)

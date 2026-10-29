@@ -1,5 +1,114 @@
 {
 	"dm_type": "/datum/ai_controller/basic_controller/void_ranged_healer",
+	"file": "modular_zzveilbreak/modules/void_ai.dm",
 	"type": "selector",
-	"children": []
+	"children": [
+		{
+			"type": "sequence",
+			"children": [
+				{
+					"type": "leaf",
+					"behavior": "/datum/bt_node/ai_behavior/acquire_target/target_from_retaliate_list",
+					"vars": {
+						"target_key": "target",
+						"check_faction": false
+					}
+				},
+				{
+					"type": "selector",
+					"children": [
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/run_away_from_target",
+							"vars": {
+								"target_key": "target",
+								"distance": 4
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "sequence",
+			"children": [
+				{
+					"type": "leaf",
+					"behavior": "/datum/bt_node/ai_behavior/acquire_target/ally",
+					"vars": {
+						"target_key": "heal_target",
+						"need_healing": true
+					}
+				},
+				{
+					"type": "selector",
+					"children": [
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/cast_spell/heal",
+							"vars": {
+								"target_key": "heal_target",
+								"cooldown_key": "void_heal_cooldown"
+							}
+						},
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/move_to_target",
+							"vars": {
+								"target_key": "heal_target"
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "sequence",
+			"children": [
+				{
+					"type": "leaf",
+					"behavior": "/datum/bt_node/ai_behavior/acquire_target",
+					"vars": {
+						"target_key": "target"
+					}
+				},
+				{
+					"type": "selector",
+					"children": [
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/run_away_from_target",
+							"vars": {
+								"target_key": "target",
+								"distance": 4
+							}
+						},
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/shoot_target",
+							"vars": {
+								"target_key": "target"
+							}
+						},
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/move_to_target",
+							"vars": {
+								"target_key": "target"
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "sequence",
+			"children": [
+				{
+					"type": "leaf",
+					"behavior": "/datum/bt_node/ai_behavior/idle_random_walk/not_while_on_target"
+				}
+			]
+		}
+	]
 }

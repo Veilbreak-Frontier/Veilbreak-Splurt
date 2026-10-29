@@ -1,5 +1,86 @@
 {
 	"dm_type": "/datum/ai_controller/basic_controller/void_melee",
 	"type": "selector",
-	"children": []
+	"children": [
+		{
+			"type": "sequence",
+			"children": [
+				{
+					"type": "leaf",
+					"behavior": "/datum/bt_node/ai_behavior/acquire_target/target_from_retaliate_list",
+					"vars": {
+						"target_key": "target",
+						"check_faction": false
+					}
+				},
+				{
+					"type": "selector",
+					"children": [
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/basic_melee_attack",
+							"vars": {
+								"target_key": "target"
+							}
+						},
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/move_to_target",
+							"vars": {
+								"target_key": "target"
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "sequence",
+			"children": [
+				{
+					"type": "leaf",
+					"behavior": "/datum/bt_node/ai_behavior/acquire_target",
+					"vars": {
+						"target_key": "target"
+					}
+				},
+				{
+					"type": "selector",
+					"children": [
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/basic_melee_attack",
+							"vars": {
+								"target_key": "target"
+							}
+						},
+						{
+							"type": "leaf",
+							"behavior": "/datum/bt_node/ai_behavior/move_to_target",
+							"vars": {
+								"target_key": "target"
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "sequence",
+			"children": [
+				{
+					"type": "leaf",
+					"behavior": "/datum/bt_node/ai_behavior/idle_random_walk/not_while_on_target"
+				},
+				{
+					"type": "leaf",
+					"behavior": "/datum/bt_node/ai_behavior/random_speech",
+					"vars": {
+						"time_between_perform": 25,
+						"speech_chance": 25
+					}
+				}
+			]
+		}
+	]
 }
