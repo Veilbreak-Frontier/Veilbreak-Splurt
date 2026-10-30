@@ -2,7 +2,6 @@
 #define BB_VOID_HEAL_COOLDOWN "void_heal_cooldown"
 #define BB_HEAL_TARGET "heal_target"
 #define BB_VOIDBUG_LAST_PACK_CALL "voidbug_last_pack_call"
-/// Chance (0-100) for trash void mobs to run their weighted loot table on death.
 #define VEILBREAK_VOID_CREATURE_LOOT_CHANCE 10
 
 /mob/living/basic/void_creature
@@ -40,7 +39,7 @@
 	AddElement(/datum/element/relay_attackers)
 	apply_veilbreak_void_creature_stat_scaling()
 
-/// Applies GLOB veilbreak_void_creature_*_scale to this mob (void trash only; megafauna use another type path).
+// Applies modular scaling multipliers to health, raw damage values, and object destruction power.
 /mob/living/basic/void_creature/proc/apply_veilbreak_void_creature_stat_scaling()
 	var/h_mult = GLOB.veilbreak_void_creature_health_scale
 	var/d_mult = GLOB.veilbreak_void_creature_damage_scale
@@ -87,7 +86,6 @@
 		BOMB = 0, BIO = 0, FIRE = 0, ACID = 0, MAGIC = 0, RADIATION = 0,
 	)
 
-
 /mob/living/basic/void_creature/voidling/do_void_creature_loot_drop()
 	var/loot_type = pick_loot_from_table(voidling_loot_table)
 	if(loot_type)
@@ -117,7 +115,7 @@
 
 /mob/living/basic/void_creature/consumed_pathfinder/Initialize(mapload)
 	. = ..()
-	AddComponent(		/datum/component/ranged_attacks,		projectile_type = /obj/projectile/magic/voidbolt,		projectile_sound = 'sound/effects/magic/magic_missile.ogg',		cooldown_time = 2 SECONDS,	)
+	AddComponent(/datum/component/ranged_attacks, projectile_type = /obj/projectile/magic/voidbolt, projectile_sound = 'sound/effects/magic/magic_missile.ogg', cooldown_time = 2 SECONDS)
 
 /mob/living/basic/void_creature/consumed_pathfinder/do_void_creature_loot_drop()
 	var/loot_type = pick_loot_from_table(consumed_pathfinder_drops)
@@ -156,10 +154,11 @@
 		return BULLET_ACT_BLOCK
 	return ..()
 
+// Aggro signaling process that passes targets to nearby dormant hive members.
 /mob/living/basic/void_creature/voidbug/proc/alert_allies(mob/living/target)
 	if(world.time < last_alert_time + alert_cooldown || stat == DEAD)
 		return
-	if(!target || target.stat == DEAD || compare_factions(src, target))
+	if(!target || target.stat == DEAD || (FACTION_VOID in target.faction))
 		return
 	last_alert_time = world.time
 	visible_message(span_danger("[src] lets out a resonant, vibrating hum, alerting nearby void creatures!"))
@@ -167,8 +166,6 @@
 	new /obj/effect/temp_visual/void_tear(loc)
 	for(var/mob/living/basic/void_creature/V in view(7, src))
 		if(V == src || V.stat == DEAD || !V.ai_controller)
-			continue
-		if(!can_see(V))
 			continue
 		V.ai_controller.set_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET, target)
 		new /obj/effect/temp_visual/void_alert(V.loc)
@@ -192,7 +189,23 @@
 
 /mob/living/basic/void_creature/void_healer/Initialize(mapload)
 	. = ..()
-	AddComponent(		/datum/component/ranged_attacks,		projectile_type = /obj/projectile/magic/voidbolt,		projectile_sound = 'sound/effects/magic/magic_missile.ogg',		cooldown_time = 2.5 SECONDS,	)
+	// Add ranged attack functionality
+	AddComponent(/datum/component/ranged_attacks, projectile_type = /obj/projectile/magic/voidbolt, projectile_sound = 'sound/effects/magic/magic_missile.ogg', cooldown_time = 2.5 SECONDS)
+
+	// Setup the Artificer style healing component targeting void creatures
+	AddComponent(\
+		/datum/component/healing_touch,\
+		heal_brute = 5,\
+		heal_burn = 5,\
+		heal_time = 0,\
+		valid_targets_typecache = typecacheof(list(/mob/living/basic/void_creature)),\
+		valid_biotypes = MOB_MINING | MOB_SPECIAL,\
+		self_targeting = HEALING_TOUCH_NOT_SELF,\
+		action_text = "%SOURCE% begins reweaving %TARGET%'s structural essence.",\
+		complete_text = "%TARGET%'s essence is restored.",\
+		show_health = TRUE,\
+		heal_color = "#8A2BE2",\
+	)
 
 /mob/living/basic/void_creature/void_healer/do_void_creature_loot_drop()
 	var/loot_type = pick_loot_from_table(void_healer_table)
@@ -215,75 +228,67 @@
 		var/mob/living/L = target
 		L.adjust_stutter(4 SECONDS)
 
-// --- UTILS & VISUALS ---
+// --- TARGETING STRATEGIES ALIGNED WITH THE BASE SUBSYSTEM ---
+
+/datum/targeting_strategy/basic/void_aggressive
 
 /datum/targeting_strategy/basic/void_aggressive/is_valid_target(mob/living/living_mob, atom/the_target, vision_range, datum/ai_controller/controller = null)
-	if(!the_target || isobserver(the_target))
+	// Execute core targeting validation checks from base class
+	if(!..())
 		return FALSE
 
 	var/turf/source_turf = get_turf(living_mob)
 	var/turf/target_turf = get_turf(the_target)
-
 	if(!source_turf || !target_turf)
 		return FALSE
 
-	if(get_dist(source_turf, target_turf) > 9)
-		return FALSE
-
+	// Enforce strict Line-Of-Sight opacity rules preventing processing targets behind obstacles
 	for(var/turf/check_turf in get_line(source_turf, target_turf))
 		if(check_turf == source_turf || check_turf == target_turf)
 			continue
-
 		if(check_turf.opacity)
 			return FALSE
-
 		for(var/atom/A in check_turf)
 			if(ismob(A))
 				continue
 			if(A.density)
 				return FALSE
 
-	if(ismob(the_target))
+	// Handling Splurt specific modsuit/brain-orchestrator exceptions for Proteans
+	if(ishuman(the_target))
+		var/mob/living/carbon/human/H = the_target
+		if(istype(H.dna?.species, /datum/species/protean))
+			var/datum/species/protean/P = H.dna.species
+			if(H.loc == P.species_modsuit)
+				return FALSE
+			var/obj/item/organ/brain/protean/orchestrator = H.get_organ_slot(ORGAN_SLOT_BRAIN)
+			if(!orchestrator || orchestrator.dead)
+				return FALSE
+
+	// Aggressive evaluation against targets outside our faction
+	if(isliving(the_target))
 		var/mob/living/L = the_target
-		if(L.stat == DEAD)
-			return FALSE
-
-		if(ishuman(L))
-			var/mob/living/carbon/human/H = L
-			if(istype(H.dna?.species, /datum/species/protean))
-				var/datum/species/protean/P = H.dna.species
-				if(H.loc == P.species_modsuit)
-					return FALSE
-
-				var/obj/item/organ/brain/protean/orchestrator = H.get_organ_slot(ORGAN_SLOT_BRAIN)
-				if(!orchestrator || orchestrator.dead)
-					return FALSE
-
-		if(!compare_factions(living_mob, L))
-			if(istype(living_mob, /mob/living/basic/void_creature/voidbug))
-				var/mob/living/basic/void_creature/voidbug/VB = living_mob
-				VB.alert_allies(L)
-			return TRUE
+		if(istype(living_mob, /mob/living/basic/void_creature/voidbug))
+			var/mob/living/basic/void_creature/voidbug/VB = living_mob
+			VB.alert_allies(L)
+		return TRUE
 
 	if(istype(the_target, /obj/vehicle/sealed/mecha) || istype(the_target, /mob/living/silicon))
-		if(!compare_factions(living_mob, the_target))
-			return TRUE
+		return TRUE
 
 	return FALSE
 
-/proc/compare_factions(mob/living/owner, atom/target)
-	if(!owner.faction) return FALSE
-	var/list/tf
-	if(ismob(target))
-		var/mob/M = target
-		tf = M.faction
-	else if(istype(target, /obj/vehicle/sealed/mecha))
-		var/obj/vehicle/sealed/mecha/Mech = target
-		tf = Mech.faction
-	if(!tf) return FALSE
-	for(var/F in owner.faction)
-		if(F in tf) return TRUE
-	return FALSE
+// Void Healer Subtype - Reverts faction validation logic to prioritize healing injured hive assets.
+/datum/targeting_strategy/basic/void_aggressive/healer
+	invert_faction_check = TRUE
+	target_wounded_key = BB_TARGET_WOUNDED_ONLY
+
+/datum/targeting_strategy/basic/void_aggressive/healer/is_valid_target(mob/living/living_mob, atom/the_target, vision_range, datum/ai_controller/controller = null)
+	if(!istype(the_target, /mob/living/basic/void_creature))
+		return FALSE
+	return ..()
+
+// --- Visual Effects ---
 
 /obj/effect/temp_visual/heal
 	icon = 'icons/effects/effects.dmi'
