@@ -24,8 +24,17 @@ GAME_VERB(/mob, memory, "Memories", "IC")
 GAME_VERB(/mob, view_skills, "View Skills", "IC")
 	mind?.print_levels(src)
 
+/// Clamps the contextual examine action loop parameters down to strictly target visible line-of-sight bounds.
+/// Aborts execution if the evaluated target atom falls outside the player viewport matrix or if the user is blind.
 GAME_VERB_CONTEXT(/mob, examinate_verb, "Examine", "", "IC", /atom)
 	VERB_ARG_TYPED(examinify, VERB_ARG_TYPE_MOB | VERB_ARG_TYPE_OBJ | VERB_ARG_TYPE_TURF, VERB_ARG_SOURCE_VIEW, /atom)
+	var/max_view = src.client ? src.client.view : world.view
+	if(!(examinify in view(max_view, src)))
+		to_chat(src, span_warning("You can't see that from here!"))
+		return
+	if(src.is_blind())
+		to_chat(src, span_warning("You can't see anything right now, you're blind!"))
+		return
 	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(run_examinate), examinify))
 
 GAME_VERB(/mob, mode_verb, "Activate Held Object", "Object")
