@@ -24,17 +24,70 @@ GAME_VERB(/mob, memory, "Memories", "IC")
 GAME_VERB(/mob, view_skills, "View Skills", "IC")
 	mind?.print_levels(src)
 
-/// Clamps the contextual examine action loop parameters down to strictly target visible line-of-sight bounds.
-/// Aborts execution if the evaluated target atom falls outside the player viewport matrix or if the user is blind.
-GAME_VERB_CONTEXT(/mob, examinate_verb, "Examine", "", "IC", /atom)
-	VERB_ARG_TYPED(examinify, VERB_ARG_TYPE_MOB | VERB_ARG_TYPE_OBJ | VERB_ARG_TYPE_TURF, VERB_ARG_SOURCE_VIEW, /atom)
-	var/max_view = src.client ? src.client.view : world.view
-	if(!(examinify in view(max_view, src)))
-		to_chat(src, span_warning("You can't see that from here!"))
-		return
-	if(src.is_blind())
-		to_chat(src, span_warning("You can't see anything right now, you're blind!"))
-		return
+/// Returns atoms this mob can examine: items they are holding and atoms they can currently see.
+/// When only_visible is FALSE (validating a direct context-menu target), also allows non-UI HUD items and blind-adjacent atoms.
+/mob/proc/get_examinable_atoms(only_visible = TRUE)
+	var/list/examinable = list()
+	var/list/seen_refs = list()
+
+	for(var/obj/item/held_item in held_items)
+		if(!held_item.name)
+			continue
+		seen_refs[held_item] = TRUE
+		examinable += held_item
+
+	if(!is_blind())
+		var/view_range = client ? client.view : world.view
+		var/view_blocked = istype(screens?["remote_view"], /atom/movable/screen/fullscreen/impaired)
+		var/list/visible_atoms = (client && !view_blocked) ? view(view_range, client) : view(view_range, src)
+		var/turf/eye_turf = get_turf((client && !view_blocked && client.eye) ? client.eye : src)
+		var/turf/mob_turf = get_turf(src)
+		var/can_see_dark = has_nightvision()
+		var/mob/living/living_mob = isliving(src) ? src : null
+		var/check_fov = living_mob && mob_turf && (!client || client.eye == src)
+
+		for(var/atom/target as anything in visible_atoms)
+			if(seen_refs[target])
+				continue
+			if(!ismob(target) && !isobj(target) && !isturf(target))
+				continue
+			if(!target.name)
+				continue
+			if(target.loc == src)
+				continue
+			var/turf/target_turf = get_turf(target)
+			if(target_turf)
+				if(!can_see_dark && !(target_turf.luminosity || target_turf.get_dynamic_lumcount()) && (!eye_turf || get_dist(eye_turf, target_turf) > 1))
+					continue
+				if(check_fov && !living_mob.in_fov(target_turf, ignore_self = TRUE))
+					continue
+			seen_refs[target] = TRUE
+			examinable += target
+
+	if(!only_visible)
+		if(client)
+			for(var/atom/screen_atom as anything in client.screen)
+				if(seen_refs[screen_atom])
+					continue
+				if(istype(screen_atom, /atom/movable/screen))
+					continue
+				if(!ismob(screen_atom) && !isobj(screen_atom) && !isturf(screen_atom))
+					continue
+				seen_refs[screen_atom] = TRUE
+				examinable += screen_atom
+		if(is_blind())
+			for(var/atom/adj as anything in orange(1, src))
+				if(seen_refs[adj] || adj.loc == src)
+					continue
+				if(!ismob(adj) && !isobj(adj) && !isturf(adj))
+					continue
+				seen_refs[adj] = TRUE
+				examinable += adj
+
+	return examinable
+
+_GAME_VERB_CONTEXT_SOURCE(/mob, examinate_verb, "Examine", "", "IC", FALSE, /atom, mob|obj|turf, get_examinable_atoms(expanding))
+	VERB_ARG_TYPED(examinify, VERB_ARG_TYPE_MOB | VERB_ARG_TYPE_OBJ | VERB_ARG_TYPE_TURF, VERB_ARG_SOURCE_EXAMINE, /atom)
 	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(run_examinate), examinify))
 
 GAME_VERB(/mob, mode_verb, "Activate Held Object", "Object")
