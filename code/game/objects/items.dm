@@ -425,23 +425,22 @@
 	// BUBBER EDIT ADDITION - Fire COMSIG_ATOM_UPDATED_ICON after all GAGS icons update so update_icon_updates_onmob can refresh worn overlays
 	SEND_SIGNAL(src, COMSIG_ATOM_UPDATED_ICON)
 
-GAME_VERB_NATIVE(/mob/living, move_to_top_verb, "Move To Top", null, obj/item/target in view(1))
+// VEILBREAK EDIT BEGIN - mob-based Move To Top context verb
+GAME_VERB_CONTEXT_IN(/mob/living, move_to_top_verb, "Move To Top", "", null, /obj/item, oview(1))
+	VERB_ARG_TYPED(target, VERB_ARG_TYPE_OBJ, VERB_ARG_SOURCE_OVIEW_1, /obj/item)
 	if(!istype(target))
 		return
-	if(!isturf(loc) || IS_UNCONSCIOUS_OR_CRIT(usr) || HAS_TRAIT(usr, TRAIT_HANDS_BLOCKED) || anchored)
+
+	if(!isturf(target.loc) || !in_range(target, src) || !loc?.AllowClick() || IS_UNCONSCIOUS_OR_CRIT(src) || HAS_TRAIT(src, TRAIT_HANDS_BLOCKED) || target.anchored)
 		return
 
-	var/mob/living/living_user = usr
-
-	if(!isturf(target.loc) || living_user.stat != CONSCIOUS || HAS_TRAIT(living_user, TRAIT_HANDS_BLOCKED) || target.anchored)
-		return
-
-	if(!(living_user.mobility_flags & MOBILITY_PICKUP))
+	if(!(mobility_flags & MOBILITY_PICKUP))
 		return
 
 	var/turf/T = target.loc
 	target.abstract_move(null)
 	target.forceMove(T)
+// VEILBREAK EDIT END
 
 /obj/item/examine_tags(mob/user)
 	var/list/parent_tags = ..()
@@ -865,20 +864,22 @@ GAME_VERB_NATIVE(/mob/living, move_to_top_verb, "Move To Top", null, obj/item/ta
 
 	return M.can_equip(src, slot, disable_warning, bypass_equip_delay_self, ignore_equipped, indirect_action = indirect_action)
 
-GAME_VERB_NATIVE(/mob/living, pickup_verb, "Pick Up", null, obj/item/target in view(1))
-	if(!istype(target))
+// VEILBREAK EDIT BEGIN - mob-based Pick Up context verb
+GAME_VERB_CONTEXT_IN(/mob/living, pickup_verb, "Pick Up", "", null, /obj/item, oview(1))
+	VERB_ARG_TYPED(target, VERB_ARG_TYPE_OBJ, VERB_ARG_SOURCE_OVIEW_1, /obj/item)
+	if(!istype(target) || target.loc == src)
 		return
 
-	var/mob/living/living_user = usr
-
-	if(living_user.incapacitated || !Adjacent(living_user) || target.anchored)
+	var/reachable = (target.loc == loc) || (loc?.AllowClick() && target.Adjacent(src))
+	if(incapacitated || !reachable || target.anchored)
 		return
 
-	if(!(living_user.mobility_flags & MOBILITY_PICKUP))
+	if(!(mobility_flags & MOBILITY_PICKUP))
 		return
 
-	if(!living_user.get_active_held_item())
-		target.attempt_pickup(living_user)
+	if(!get_active_held_item())
+		target.attempt_pickup(src)
+// VEILBREAK EDIT END
 
 /**
  *This proc is executed when someone clicks the on-screen UI button.

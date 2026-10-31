@@ -579,8 +579,8 @@ GAME_VERB_PROC(/mob, Cell, "Cell", "Admin")
  * [this byond forum post](https://secure.byond.com/forum/?post=1326139&page=2#comment8198716)
  * for why this isn't atom/verb/examine()
  */
-GAME_VERB_CONTEXT(/mob, examinate, "Examine", "", null, /atom)
-	VERB_ARG_TYPED(examinify, VERB_ARG_TYPE_MOB | VERB_ARG_TYPE_OBJ | VERB_ARG_TYPE_TURF, VERB_ARG_SOURCE_VIEW, /atom)
+_GAME_VERB_CONTEXT_SOURCE(/mob, examinate, "Examine", "", null, TRUE, /atom, mob|obj|turf, get_examinable_atoms(expanding)) // VEILBREAK EDIT - restrict examine prompt to visible and held atoms
+	VERB_ARG_TYPED(examinify, VERB_ARG_TYPE_MOB | VERB_ARG_TYPE_OBJ | VERB_ARG_TYPE_TURF, VERB_ARG_SOURCE_EXAMINE, /atom) // VEILBREAK EDIT
 
 	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(run_examinate), examinify))
 

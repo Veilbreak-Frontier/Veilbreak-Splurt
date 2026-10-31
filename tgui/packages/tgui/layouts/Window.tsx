@@ -67,16 +67,15 @@ export function Window(props: Props) {
             'is-visible': false,
         });
         setIsReadyToRender(true);
-        Byond.sendMessage('visible');
-        globalEvents.emit('window-geometry-finished');
-        logger.log('set to visible');
     }, []);
 
     const { scale } = config?.window || false;
 
     useEffect(() => {
+        let unmounted = false;
+
         if (!suspended && isReadyToRender) {
-            const updateGeometry = () => {
+            const updateGeometry = async () => {
                 const options = {
                     ...config.window,
                     size: DEFAULT_SIZE,
@@ -88,10 +87,15 @@ export function Window(props: Props) {
                 if (config.window?.key) {
                     setWindowKey(config.window.key);
                 }
-                recallWindowGeometry(options);
+                await recallWindowGeometry(options);
+                if (unmounted) {
+                    return;
+                }
                 Byond.winset(Byond.windowId, {
                     'is-visible': true,
                 });
+                globalEvents.emit('window-geometry-finished');
+                Byond.sendMessage('visible');
                 logger.log('set to visible');
             };
 
@@ -102,6 +106,7 @@ export function Window(props: Props) {
             updateGeometry();
         }
         return () => {
+            unmounted = true;
             logger.log('unmounting');
         };
     }, [isReadyToRender, width, height, scale]);
