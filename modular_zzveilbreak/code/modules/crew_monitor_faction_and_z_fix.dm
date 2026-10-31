@@ -13,6 +13,19 @@
 	desc = "An unrestricted, high-clearance terminal that aggregates all medical sensor signatures across all networks."
 	icon_state = "crew_admin"
 
+/// Syndicate Persistence (landcrawler) crew monitor. Sees everyone sharing the Syndicate faction or the Persistence ghost role.
+/obj/machinery/computer/crew/syndie/persistence
+	name = "Persistence Crew Monitoring Console"
+	desc = "Used to monitor active health sensors of Syndicate operatives and Persistence crew."
+
+/// Returns TRUE if the mob shares the Syndicate faction or was spawned as a Persistence (landcrawler) ghost role.
+/obj/machinery/computer/crew/proc/is_persistence_crew(mob/living/M)
+	if(M.faction && ((ROLE_SYNDICATE in M.faction) || ("syndicate" in M.faction) || (ROLE_PERSISTENCE in M.faction)))
+		return TRUE
+	if(istype(M.mind?.assigned_role, /datum/job/persistence))
+		return TRUE
+	return FALSE
+
 /obj/machinery/computer/crew/proc/is_faction_authorized(mob/living/M)
 	if(!istype(M))
 		return FALSE
@@ -27,7 +40,12 @@
 			return TRUE
 		return FALSE
 
+	if(console_faction == "persistence")
+		return is_persistence_crew(M)
+
 	if(console_faction == "nanotrasen")
+		if(is_persistence_crew(M))
+			return FALSE
 		if(M.faction)
 			if(("tarkon" in M.faction) || ("Port Tarkon Survivor" in M.faction) || ("void" in M.faction) || ("syndicate" in M.faction) || ("pirate" in M.faction) || ("Abductor" in M.faction) || ("cult" in M.faction) || ("ashwalker" in M.faction))
 				return FALSE
@@ -40,6 +58,11 @@
 		return "tarkon"
 	if(src.type == /obj/machinery/computer/crew/admin || initial(src.icon_state) == "crew_admin")
 		return "admin"
+	if(istype(src, /obj/machinery/computer/crew/syndie/persistence))
+		return "persistence"
+	// Consoles already mapped (or rebuilt) inside the Persistence landcrawler act as Persistence consoles.
+	if(istype(get_area(src), /area/ruin/space/has_grav/bubbers/persistance))
+		return "persistence"
 	return "nanotrasen"
 
 /obj/machinery/computer/crew/alarm()
