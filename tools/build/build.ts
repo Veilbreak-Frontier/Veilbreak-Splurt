@@ -201,10 +201,16 @@ export const BehaviorTreeCompilerTarget = new Juke.Target({
     'code/__DEFINES/**/*.dm',
     'modular_skyrat/**/*.bt.json',
     'modular_zubbers/**/*.bt.json', // BUBBER EDIT ADD
+    'modular_zzveilbreak/**/*.bt.json',
     'tools/build_bt.py',
   ],
   outputs: () => {
-    return Juke.glob('code/**/*.bt.json').map((file) => {
+    return [
+      ...Juke.glob('code/**/*.bt.json'),
+      ...Juke.glob('modular_skyrat/**/*.bt.json'),
+      ...Juke.glob('modular_zubbers/**/*.bt.json'),
+      ...Juke.glob('modular_zzveilbreak/**/*.bt.json'),
+    ].map((file) => {
       const rel = file.replace(/\.bt\.json$/, '');
       return `build/behavior_trees/${rel}.bt.compiled.json`;
     });
@@ -238,6 +244,7 @@ export const DmTarget = new Juke.Target({
     'modular_skyrat/**', ///SKYRAT EDIT ADDITION - Making the CBT work
     'modular_zubbers/**', ///BUBBER EDIT ADDITION - Making the CBT work
     'modular_zzplurt/**', ///SPLURT EDIT ADDITION - Making the CBT work
+    'modular_zzveilbreak/**',
     'sound/**',
     'tgui/public/tgui.html',
     `${DME_NAME}.dme`,

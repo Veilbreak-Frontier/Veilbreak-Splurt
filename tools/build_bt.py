@@ -63,22 +63,30 @@ def parse_defines(repo_root: Path) -> dict:
 
     pending: list[tuple[str, str]] = []
     seen_names: set[str] = set(defines)
-    defines_dir = repo_root / 'code'
-    for fpath in sorted(defines_dir.rglob('*.dm')):
-        for line in fpath.read_text(encoding='utf-8', errors='ignore').splitlines():
-            line = line.strip()
-            if not line.startswith('#define '):
-                continue
-            rest = line[len('#define '):]
-            parts = rest.split(None, 1)
-            if len(parts) < 2:
-                continue
-            name, raw = parts[0], parts[1].strip()
-            raw = re.sub(r'\s*//.*$', '', raw).strip()
-            if not raw or name in seen_names:
-                continue  # value-less define or already seen (first wins)
-            seen_names.add(name)
-            pending.append((name, raw))
+    defines_dirs = [
+        repo_root / 'code',
+        repo_root / 'modular_skyrat',
+        repo_root / 'modular_zubbers',
+        repo_root / 'modular_zzveilbreak',
+    ]
+    for defines_dir in defines_dirs:
+        if not defines_dir.exists():
+            continue
+        for fpath in sorted(defines_dir.rglob('*.dm')):
+            for line in fpath.read_text(encoding='utf-8', errors='ignore').splitlines():
+                line = line.strip()
+                if not line.startswith('#define '):
+                    continue
+                rest = line[len('#define '):]
+                parts = rest.split(None, 1)
+                if len(parts) < 2:
+                    continue
+                name, raw = parts[0], parts[1].strip()
+                raw = re.sub(r'\s*//.*$', '', raw).strip()
+                if not raw or name in seen_names:
+                    continue  # value-less define or already seen (first wins)
+                seen_names.add(name)
+                pending.append((name, raw))
 
     while pending:
         resolved_this_pass = 0
@@ -267,7 +275,8 @@ def main() -> int:
         repo_root / 'code',
         # BUBBER EDIT BEGIN
         repo_root / 'modular_skyrat',
-        repo_root / 'modular_zubbers'
+        repo_root / 'modular_zubbers',
+        repo_root / 'modular_zzveilbreak',
         # BUBBER EDIT END
     ]
 
@@ -311,7 +320,11 @@ def main() -> int:
 
             # either write or check depending on flag
             if check_mode:
-                existing = compiled_path.read_text(encoding='utf-8', newline='') if compiled_path.exists() else ''
+                if compiled_path.exists():
+                    with compiled_path.open('r', encoding='utf-8', newline='') as f:
+                        existing = f.read()
+                else:
+                    existing = ''
                 if existing != compiled_text:
                     print(f'OUT OF DATE: {compiled_path.relative_to(repo_root)}', file=sys.stderr)
                     dirty += 1

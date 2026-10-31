@@ -10,6 +10,7 @@ on:
       - "modular_bubber/**/*.bt.json"
       - "modular_skyrat/**/*.bt.json"
       - "modular_zubbers/**/*.bt.json"
+      - "modular_zzveilbreak/**/*.bt.json"
       # BUBBER EDIT END
       - "tools/build_bt.py"
 
