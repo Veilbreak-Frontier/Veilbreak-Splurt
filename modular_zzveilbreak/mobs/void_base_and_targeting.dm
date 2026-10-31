@@ -3,6 +3,7 @@
 #define BB_VOID_SUMMON_COOLDOWN "void_summon_cooldown"
 #define BB_VOID_HEAL_COOLDOWN "void_heal_cooldown"
 #define BB_HEAL_TARGET "heal_target"
+#define BB_HEAL_TARGET_HIDING_LOCATION "heal_target_hiding_location"
 #define BB_VOIDBUG_LAST_PACK_CALL "voidbug_last_pack_call"
 #define VEILBREAK_VOID_CREATURE_LOOT_CHANCE 10
 
@@ -32,6 +33,7 @@
 	obj_damage = 30
 	movement_type = GROUND
 	basic_mob_flags = DEL_ON_DEATH
+	ai_controller = /datum/ai_controller/basic_controller/simple/void_melee
 
 /mob/living/basic/void_creature/Initialize(mapload)
 	. = ..()
@@ -75,20 +77,6 @@
 /datum/targeting_strategy/basic/void_aggressive/is_valid_target(mob/living/living_mob, atom/the_target, vision_range, datum/ai_controller/controller = null)
 	if(!..())
 		return FALSE
-	var/turf/source_turf = get_turf(living_mob)
-	var/turf/target_turf = get_turf(the_target)
-	if(!source_turf || !target_turf)
-		return FALSE
-	for(var/turf/check_turf in get_line(source_turf, target_turf))
-		if(check_turf == source_turf || check_turf == target_turf)
-			continue
-		if(check_turf.opacity)
-			return FALSE
-		for(var/atom/A in check_turf)
-			if(ismob(A))
-				continue
-			if(A.density)
-				return FALSE
 	if(ishuman(the_target))
 		var/mob/living/carbon/human/H = the_target
 		if(istype(H.dna?.species, /datum/species/protean))
@@ -98,15 +86,10 @@
 			var/obj/item/organ/brain/protean/orchestrator = H.get_organ_slot(ORGAN_SLOT_BRAIN)
 			if(!orchestrator || orchestrator.dead)
 				return FALSE
-	if(isliving(the_target))
-		var/mob/living/L = the_target
-		if(istype(living_mob, /mob/living/basic/void_creature/voidbug))
-			var/mob/living/basic/void_creature/voidbug/VB = living_mob
-			VB.alert_allies(L)
-		return TRUE
-	if(istype(the_target, /obj/vehicle/sealed/mecha) || istype(the_target, /mob/living/silicon))
-		return TRUE
-	return FALSE
+	if(!invert_faction_check && isliving(the_target) && istype(living_mob, /mob/living/basic/void_creature/voidbug))
+		var/mob/living/basic/void_creature/voidbug/VB = living_mob
+		VB.alert_allies(the_target)
+	return TRUE
 
 /obj/projectile/magic/voidbolt
 	name = "void bolt"

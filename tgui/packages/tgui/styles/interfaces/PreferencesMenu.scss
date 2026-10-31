@@ -239,19 +239,3 @@
     }
   }
 }
-.ByondUi {
-  &[params*='type=map'] {
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 225px !important;
-    min-height: 250px !important;
-    object-fit: contain !important;
-    image-rendering: pixelated !important;
-  }
-}
-
-div:has(> .ByondUi[params*='type=map']) {
-  min-width: 225px !important;
-  min-height: 250px !important;
-  display: block !important;
-}

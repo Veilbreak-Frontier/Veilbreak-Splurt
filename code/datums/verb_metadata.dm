@@ -59,7 +59,7 @@
 
 	if(!isnull(context_target) && length(arguments))
 		for(var/datum/verb_arg_metadata/arg in arguments)
-			if(isnull(structured_args[arg.name]) && (arg.source == VERB_ARG_SOURCE_WORLD || arg.source == VERB_ARG_SOURCE_VIEW))
+			if(isnull(structured_args[arg.name]) && (arg.source == VERB_ARG_SOURCE_WORLD || arg.source == VERB_ARG_SOURCE_VIEW || arg.source == VERB_ARG_SOURCE_EXAMINE || arg.source == VERB_ARG_SOURCE_OVIEW_1)) // VEILBREAK EDIT
 				structured_args[arg.name] = context_target
 				break
 
@@ -85,6 +85,17 @@
 			return get_world_targets(viewer)
 		if(VERB_ARG_SOURCE_VIEW)
 			return get_view_targets(viewer)
+		if(VERB_ARG_SOURCE_EXAMINE) // VEILBREAK EDIT
+			return viewer?.mob ? viewer.mob.get_examinable_atoms(TRUE) : list()
+		if(VERB_ARG_SOURCE_OVIEW_1) // VEILBREAK EDIT
+			if(!viewer?.mob)
+				return list()
+			var/list/targets = list()
+			for(var/atom/target as anything in oview(1, viewer.mob))
+				if(type_path && !istype(target, type_path))
+					continue
+				targets += target
+			return targets
 	return list()
 
 /datum/verb_arg_metadata/proc/get_world_targets(client/viewer)
@@ -112,21 +123,18 @@
 	if(!viewer.mob)
 		return list()
 	var/list/visible = view(viewer.view, viewer.mob)
-	if(arg_type & VERB_ARG_TYPE_MOB)
-		var/list/mobs = list()
-		for(var/mob/target in visible)
-			mobs += target
-		return mobs
-	if(arg_type & VERB_ARG_TYPE_OBJ)
-		var/list/objs = list()
-		for(var/obj/target in visible)
-			objs += target
-		return objs
-	if(arg_type & VERB_ARG_TYPE_TURF)
-		var/list/turfs = list()
-		for(var/turf/target in visible)
-			turfs += target
-		return turfs
+	if(arg_type & (VERB_ARG_TYPE_MOB | VERB_ARG_TYPE_OBJ | VERB_ARG_TYPE_TURF | VERB_ARG_TYPE_AREA)) // VEILBREAK EDIT - support combined bitflags instead of early-returning only mobs
+		var/list/targets = list()
+		for(var/atom/target as anything in visible)
+			if((arg_type & VERB_ARG_TYPE_MOB) && ismob(target))
+				targets += target
+			else if((arg_type & VERB_ARG_TYPE_OBJ) && isobj(target))
+				targets += target
+			else if((arg_type & VERB_ARG_TYPE_TURF) && isturf(target))
+				targets += target
+			else if((arg_type & VERB_ARG_TYPE_AREA) && isarea(target))
+				targets += target
+		return targets
 	return visible
 
 GLOBAL_LIST_INIT(____pending_verb_args, list())

@@ -89,6 +89,8 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy)
 	update_lips(null, null, null, update = FALSE)
 	cut_overlays(TRUE)
 	clear_filters()
+	if(current_size != RESIZE_DEFAULT_SIZE) // VEILBREAK EDIT - Reset size transform so body_size_restricted species don't inherit previous size
+		update_transform(RESIZE_DEFAULT_SIZE / current_size)
 
 /mob/living/carbon/human/dummy/setup_human_dna()
 	randomize_human_normie(src, randomize_mutations = FALSE)

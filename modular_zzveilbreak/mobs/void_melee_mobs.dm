@@ -1,7 +1,7 @@
 // Melee controllers and specific mob paths for Voidlings and Voidbugs.
 
-/datum/ai_controller/basic_controller/simple/hostile/void_melee
-	behavior_tree_json = "modular_zzveilbreak/modules/void_melee.json"
+/datum/ai_controller/basic_controller/simple/void_melee
+	behavior_tree_json = "modular_zzveilbreak/mobs/void_melee.bt.json"
 	ai_movement = /datum/ai_movement/basic_avoidance
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
@@ -16,7 +16,7 @@
 	icon_state = "voidling"
 	icon_living = "voidling"
 	icon_dead = "voidling_dead"
-	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void_melee
+	ai_controller = /datum/ai_controller/basic_controller/simple/void_melee
 	maxHealth = 60
 	health = 60
 	melee_damage_lower = 8
@@ -44,7 +44,7 @@
 	icon_state = "void_bug"
 	icon_living = "void_bug"
 	icon_dead = "void_bug_dead"
-	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void_melee
+	ai_controller = /datum/ai_controller/basic_controller/simple/void_melee
 	maxHealth = 140
 	health = 140
 	melee_damage_lower = 5
