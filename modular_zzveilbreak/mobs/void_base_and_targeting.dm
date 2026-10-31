@@ -108,6 +108,22 @@
 		return TRUE
 	return FALSE
 
+/obj/projectile/magic/voidbolt
+	name = "void bolt"
+	icon = 'modular_zzveilbreak/icons/item_icons/voidring.dmi'
+	icon_state = "voidbolt"
+	damage = 5
+	damage_type = BURN
+	range = 14
+	speed = 2
+	hitsound = 'sound/effects/magic/magic_missile.ogg'
+
+/obj/projectile/magic/voidbolt/on_hit(atom/target, blocked = 0, pierce_hit)
+	. = ..()
+	if(isliving(target) && blocked < 100)
+		var/mob/living/L = target
+		L.adjust_stutter(4 SECONDS)
+
 /obj/effect/temp_visual/heal
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "heal"
