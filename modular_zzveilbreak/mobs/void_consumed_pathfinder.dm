@@ -1,14 +1,15 @@
 // Ranged skirmisher configuration for the Pathfinder type.
 
-/datum/ai_controller/basic_controller/simple/hostile/void_ranged_pathfinder
-	behavior_tree_json = "modular_zzveilbreak/modules/void_ranged.json"
+/datum/ai_controller/basic_controller/simple/void_ranged_pathfinder
+	behavior_tree_json = "modular_zzveilbreak/mobs/void_ranged.bt.json"
 	ai_movement = /datum/ai_movement/basic_avoidance
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
 		BB_TARGET_MINIMUM_STAT = HARD_CRIT,
+		BB_AGGRO_RANGE = 10,
 		BB_VOID_SUMMON_COOLDOWN = 0,
-		BB_RANGED_SKIRMISH_MIN_DISTANCE = 1,
-		BB_RANGED_SKIRMISH_MAX_DISTANCE = 5
+		BB_RANGED_SKIRMISH_MIN_DISTANCE = 3,
+		BB_RANGED_SKIRMISH_MAX_DISTANCE = 7
 	)
 
 /mob/living/basic/void_creature/consumed_pathfinder
@@ -17,7 +18,7 @@
 	icon = 'modular_zzveilbreak/icons/mob/mobs.dmi'
 	icon_state = "consumed"
 	icon_living = "consumed"
-	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void_ranged_pathfinder
+	ai_controller = /datum/ai_controller/basic_controller/simple/void_ranged_pathfinder
 	maxHealth = 80
 	health = 80
 	speed = 1

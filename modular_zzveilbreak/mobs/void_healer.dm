@@ -1,16 +1,17 @@
 // Artificer-like logic targeting friendly void assets with healing components.
 
-/datum/ai_controller/basic_controller/simple/hostile/void_ranged_healer
-	behavior_tree_json = "modular_zzveilbreak/modules/void_healer.json"
+/datum/ai_controller/basic_controller/simple/void_ranged_healer
+	behavior_tree_json = "modular_zzveilbreak/mobs/void_healer.bt.json"
 	ai_movement = /datum/ai_movement/basic_avoidance
 	blackboard = list(
-		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive/healer,
-		BB_FLEE_TARGETING_STRATEGY = /datum/targeting_strategy/basic,
+		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic/void_aggressive,
+		BB_TARGETING_STRATEGY_FRIEND = /datum/targeting_strategy/basic/void_aggressive/healer,
+		BB_TARGET_MINIMUM_STAT = HARD_CRIT,
 		BB_TARGET_WOUNDED_ONLY = TRUE,
 		BB_VOID_HEAL_COOLDOWN = 0,
 		BB_AGGRO_RANGE = 10,
-		BB_RANGED_SKIRMISH_MIN_DISTANCE = 1,
-		BB_RANGED_SKIRMISH_MAX_DISTANCE = 6
+		BB_RANGED_SKIRMISH_MIN_DISTANCE = 3,
+		BB_RANGED_SKIRMISH_MAX_DISTANCE = 7
 	)
 
 /datum/targeting_strategy/basic/void_aggressive/healer
@@ -18,7 +19,10 @@
 	target_wounded_key = BB_TARGET_WOUNDED_ONLY
 
 /datum/targeting_strategy/basic/void_aggressive/healer/is_valid_target(mob/living/living_mob, atom/the_target, vision_range, datum/ai_controller/controller = null)
-	if(!istype(the_target, /mob/living/basic/void_creature))
+	if(the_target == living_mob || !istype(the_target, /mob/living/basic/void_creature))
+		return FALSE
+	var/mob/living/basic/void_creature/void_ally = the_target
+	if(!void_ally.get_brute_loss() && !void_ally.get_fire_loss())
 		return FALSE
 	return ..()
 
@@ -29,7 +33,7 @@
 	icon_state = "void_healer"
 	icon_living = "void_healer"
 	icon_dead = "void_healer_dead"
-	ai_controller = /datum/ai_controller/basic_controller/simple/hostile/void_ranged_healer
+	ai_controller = /datum/ai_controller/basic_controller/simple/void_ranged_healer
 	maxHealth = 40
 	health = 40
 	speed = 0.7
