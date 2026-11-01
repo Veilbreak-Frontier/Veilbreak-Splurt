@@ -86,9 +86,8 @@ GAME_VERB(/mob, view_skills, "View Skills", "IC")
 
 	return examinable
 
-_GAME_VERB_CONTEXT_SOURCE(/mob, examinate_verb, "Examine", "", "IC", FALSE, /atom, mob|obj|turf, get_examinable_atoms(expanding))
-	VERB_ARG_TYPED(examinify, VERB_ARG_TYPE_MOB | VERB_ARG_TYPE_OBJ | VERB_ARG_TYPE_TURF, VERB_ARG_SOURCE_EXAMINE, /atom)
-	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(run_examinate), examinify))
+// The IC-tab "Examine" verb is the core /mob/verb/examinate (code/modules/mob/mob.dm), now categorised as "IC".
+// A second verb with the same name here collided with it and hid Examine from the right-click menu.
 
 GAME_VERB(/mob, mode_verb, "Activate Held Object", "Object")
 	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(execute_mode)))
