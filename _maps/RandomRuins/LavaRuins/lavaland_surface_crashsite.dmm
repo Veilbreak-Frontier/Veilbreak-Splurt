@@ -1,13 +1,13 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "b" = (
 /obj/machinery/door/airlock/titanium{
 	name = "Escape Pod Airlock"
 	},
 /turf/open/floor/mineral/titanium/blue,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "c" = (
 /obj/item/gps/computer,
 /obj/structure/tubes,
@@ -24,7 +24,7 @@
 	dir = 4
 	},
 /turf/open/floor/mineral/titanium/blue,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "f" = (
 /obj/structure/bed/pod{
 	dir = 1
@@ -45,25 +45,25 @@
 "h" = (
 /obj/effect/decal/cleanable/rubble,
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "i" = (
 /obj/effect/mob_spawn/corpse/goliath,
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "j" = (
 /obj/structure/chair/comfy/shuttle{
 	dir = 4
 	},
 /obj/item/disk/bitrunning/item/pka_mods,
 /turf/open/floor/mineral/titanium/blue,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "k" = (
 /obj/structure/girder,
 /turf/open/floor/plating/lavaland_atmos,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "l" = (
 /turf/open/water/hot_spring/lavaland_atmos,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "m" = (
 /obj/machinery/door/airlock/survival_pod/glass,
 /turf/open/floor/mineral/plastitanium/pod/dark,
@@ -72,7 +72,7 @@
 /turf/closed/wall/mineral/titanium{
 	initial_gas_mix = "LAVALAND_ATMOS"
 	},
-/area/ruin/unpowered)
+/area/ruin/powered)
 "o" = (
 /turf/closed/mineral/volcanic/lava_land_surface/biome_replace,
 /area/lavaland/surface/outdoors)
@@ -84,68 +84,71 @@
 /area/ruin/powered)
 "q" = (
 /turf/closed/wall/mineral/titanium/interior,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "r" = (
 /obj/machinery/door/airlock/titanium{
 	name = "Escape Pod Airlock"
 	},
 /turf/open/floor/mineral/titanium/blue/lavaland_atmos,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "s" = (
 /turf/open/floor/mineral/plastitanium/pod/dark,
 /area/ruin/powered)
 "t" = (
 /obj/structure/flora/tree/stump,
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "u" = (
 /obj/structure/bonfire/prelit,
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "v" = (
 /obj/effect/decal/cleanable/rubble,
 /obj/item/stack/sheet/mineral/titanium,
 /obj/item/stack/sheet/mineral/titanium,
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "w" = (
 /obj/effect/decal/cleanable/glass/titanium,
 /obj/item/stack/sheet/mineral/titanium,
 /obj/item/stack/sheet/mineral/titanium,
 /turf/open/floor/plating,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "x" = (
 /obj/structure/chair/plastic{
 	dir = 8
 	},
 /turf/open/misc/ashplanet/wateryrock/lavaland_atmos,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "y" = (
 /obj/structure/chair/comfy/shuttle{
 	dir = 1
 	},
 /obj/effect/mob_spawn/corpse/human/engineer,
 /turf/open/floor/mineral/titanium/blue/lavaland_atmos,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "z" = (
 /obj/item/book/manual/fish_catalog,
 /turf/open/misc/ashplanet/wateryrock/lavaland_atmos,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
+"A" = (
+/turf/open/misc/ashplanet/wateryrock/lavaland_atmos,
+/area/ruin/powered)
 "B" = (
 /mob/living/basic/mining/goliath,
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "D" = (
 /obj/item/gun/energy/recharge/kinetic_accelerator,
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "E" = (
 /turf/open/misc/ashplanet/wateryrock/lavaland_atmos,
 /area/lavaland/surface/outdoors)
 "F" = (
 /obj/effect/mob_spawn/corpse/human/cargo_tech,
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "G" = (
 /turf/template_noop,
 /area/template_noop)
@@ -155,13 +158,13 @@
 	},
 /obj/effect/mob_spawn/corpse/human/cook,
 /turf/open/floor/mineral/titanium/blue,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "I" = (
 /obj/structure/chair/comfy/shuttle{
 	dir = 1
 	},
 /turf/open/floor/mineral/titanium/blue/lavaland_atmos,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "J" = (
 /obj/machinery/smartfridge/survival_pod{
 	desc = "A heated storage unit. This one's seen better days.";
@@ -176,7 +179,7 @@
 "L" = (
 /obj/item/storage/toolbox/fishing,
 /turf/open/misc/ashplanet/wateryrock/lavaland_atmos,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "M" = (
 /obj/structure/rack,
 /obj/item/pickaxe/emergency,
@@ -190,18 +193,18 @@
 "O" = (
 /obj/effect/spawner/structure/window/reinforced/shuttle,
 /turf/open/floor/plating,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "P" = (
 /obj/effect/mob_spawn/corpse/human/miner,
 /turf/open/misc/asteroid/basalt/lava_land_surface/biome_replace,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "Q" = (
 /turf/closed/wall/mineral/titanium/nodiagonal,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "R" = (
 /mob/living/basic/mining/goliath/ancient,
 /turf/open/misc/asteroid/basalt/lava_land_surface,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "S" = (
 /obj/structure/bed/pod,
 /obj/item/bedsheet/black,
@@ -214,7 +217,7 @@
 "U" = (
 /obj/item/bait_can/worm/premium,
 /turf/open/misc/ashplanet/wateryrock/lavaland_atmos,
-/area/lavaland/surface/outdoors)
+/area/ruin/powered)
 "V" = (
 /obj/structure/table/survival_pod,
 /obj/item/food/meat/steak/goliath,
@@ -228,11 +231,11 @@
 	dir = 8
 	},
 /turf/closed/wall/mineral/titanium/interior,
-/area/ruin/unpowered)
+/area/ruin/powered)
 "Z" = (
 /obj/machinery/power/shuttle_engine/propulsion/burst,
 /turf/closed/wall/mineral/titanium/interior,
-/area/ruin/unpowered)
+/area/ruin/powered)
 
 (1,1,1) = {"
 G
@@ -379,13 +382,13 @@ o
 o
 a
 a
-E
+A
 l
 l
 l
 l
-E
-E
+A
+A
 F
 N
 N
@@ -406,13 +409,13 @@ a
 a
 a
 t
-E
+A
 l
 l
 l
 l
-E
-E
+A
+A
 a
 N
 K
@@ -433,12 +436,12 @@ a
 a
 a
 a
-E
-E
+A
+A
 l
 l
 l
-E
+A
 h
 a
 N
@@ -461,11 +464,11 @@ q
 Z
 a
 a
-E
-E
+A
+A
 l
 U
-E
+A
 a
 a
 N
@@ -734,8 +737,8 @@ N
 N
 N
 N
+N
 W
-o
 q
 H
 q
