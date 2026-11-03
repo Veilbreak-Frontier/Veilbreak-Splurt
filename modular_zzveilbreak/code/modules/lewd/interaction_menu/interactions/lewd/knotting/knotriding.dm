@@ -1,0 +1,3 @@
+// VEILBREAK OVERRIDES - CORRECTED ANAL KNOTRIDE DIRECTIONS
+/datum/interaction/lewd/knotting/knotfucking/knotride_anus
+	cum_target = list(CLIMAX_POSITION_USER = ORGAN_SLOT_PENIS, CLIMAX_POSITION_TARGET = ORGAN_SLOT_ANUS)

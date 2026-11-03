@@ -1,0 +1,6 @@
+// VEILBREAK OVERRIDES - CORRECTED PORTAL ANAL DIRECTIONS
+/datum/interaction/lewd/portal/fuck_anus
+	cum_target = list(CLIMAX_POSITION_USER = ORGAN_SLOT_PENIS, CLIMAX_POSITION_TARGET = ORGAN_SLOT_ANUS)
+
+/datum/interaction/lewd/portal/anal_ride
+	cum_target = list(CLIMAX_POSITION_USER = ORGAN_SLOT_PENIS, CLIMAX_POSITION_TARGET = ORGAN_SLOT_ANUS)
