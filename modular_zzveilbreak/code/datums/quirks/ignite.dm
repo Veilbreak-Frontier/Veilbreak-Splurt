@@ -5,13 +5,13 @@
 	icon = FA_ICON_FIRE
 
 /datum/quirk/ignite/add(client/client_source)
-    var/datum/action/cooldown/spell/pointed/ignite/spell = new(quirk_holder)
-    spell.Grant(quirk_holder)
+	var/datum/action/cooldown/spell/pointed/ignite/spell = new(quirk_holder)
+	spell.Grant(quirk_holder)
 
-    if(client_source?.prefs)
-        var/custom_incantation = client_source.prefs.read_preference(/datum/preference/text/ignite_incantation)
-        if(custom_incantation)
-            spell.invocation = custom_incantation
+	if(client_source?.prefs)
+		var/custom_incantation = trim(client_source.prefs.read_preference(/datum/preference/text/ignite_incantation))
+		if(custom_incantation)
+			spell.invocation = custom_incantation
 
 /datum/quirk/ignite/remove()
 	var/datum/action/cooldown/spell/pointed/ignite/spell = locate() in quirk_holder.actions
