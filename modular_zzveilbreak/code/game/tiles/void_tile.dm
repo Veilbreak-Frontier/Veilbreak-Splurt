@@ -74,6 +74,8 @@
 // PATH UNSEEN PUZZLE TILE & DOOR INTEGRATION
 // ==========================================
 
+GLOBAL_LIST_EMPTY(path_unseen_tiles)
+
 /// Void tile descendant that opens a linked door after a 5-second channel by a player with the Path Unseen achievement.
 /turf/open/floor/void_tile/path_unseen
 	name = "Path Unseen void floor"
@@ -88,6 +90,15 @@
 	var/door_search_range = 7
 	/// Prevents multiple channel loops from running simultaneously on this tile
 	var/is_channeling = FALSE
+
+/turf/open/floor/void_tile/path_unseen/Initialize(mapload)
+	. = ..()
+	GLOB.path_unseen_tiles += src
+
+/turf/open/floor/void_tile/path_unseen/Destroy()
+	GLOB.path_unseen_tiles -= src
+	linked_door = null
+	return ..()
 
 /turf/open/floor/void_tile/path_unseen/LateInitialize()
 	. = ..()
@@ -117,6 +128,8 @@
 				best_dist = dist
 				best_door = D
 
+	if(best_door)
+		best_door.enable_path_unseen_lock()
 	linked_door = best_door
 	return linked_door
 
@@ -125,6 +138,9 @@
 	if(isliving(arrived))
 		var/mob/living/L = arrived
 		if(L.client)
+			if(issilicon(L) || isdrone(L))
+				to_chat(L, span_warning("The void tile remains inert to synthetic minds."))
+				return
 			if(L.client.get_award_status(/datum/award/achievement/veilbreak/path_unseen))
 				INVOKE_ASYNC(src, PROC_REF(channel_open_door), L)
 			else
@@ -132,7 +148,7 @@
 
 /// Callback to verify the mob is still standing on this void tile and is conscious
 /turf/open/floor/void_tile/path_unseen/proc/check_still_on_tile(mob/living/L)
-	return (L && !QDELETED(L) && get_turf(L) == src && L.stat == CONSCIOUS)
+	return (L && !QDELETED(L) && !issilicon(L) && !isdrone(L) && get_turf(L) == src && L.stat == CONSCIOUS)
 
 /// Channels for 5 seconds with a progress bar before permanently opening the door
 /turf/open/floor/void_tile/path_unseen/proc/channel_open_door(mob/living/L)
@@ -164,6 +180,124 @@
 	else
 		to_chat(L, span_warning("Channel interrupted! You must remain standing on the void tile."))
 
+// ==========================================
+// SILICON LOCKOUT FOR PATH UNSEEN DOORS
+// ==========================================
+
+/obj/machinery/door
+	/// Whether this door is bound to a Path Unseen puzzle mechanism (prevents silicons/borgs/AIs from opening or interfacing with it)
+	var/path_unseen_locked = FALSE
+
+/obj/machinery/door/proc/enable_path_unseen_lock()
+	path_unseen_locked = TRUE
+	opens_with_door_remote = FALSE
+
+/obj/machinery/door/airlock/enable_path_unseen_lock()
+	..()
+	aiControlDisabled = AI_WIRE_DISABLED
+	hackProof = TRUE
+
+/obj/machinery/door/Initialize(mapload)
+	. = ..()
+	if(path_unseen_locked)
+		enable_path_unseen_lock()
+	else if(length(GLOB.path_unseen_tiles))
+		for(var/turf/open/floor/void_tile/path_unseen/T as anything in GLOB.path_unseen_tiles)
+			if(T.z == z && get_dist(src, T) <= T.door_search_range && (!T.linked_door || QDELETED(T.linked_door)))
+				T.get_linked_door()
+
+/obj/machinery/door/attack_ai(mob/user)
+	if(path_unseen_locked && !isAdminGhostAI(user))
+		to_chat(user, span_warning("Unable to interface: [src] is sealed by void energy."))
+		balloon_alert(user, "sealed by void energy!")
+		return FALSE
+	return ..()
+
+/obj/machinery/door/attack_robot(mob/user)
+	if(path_unseen_locked && !isAdminGhostAI(user))
+		to_chat(user, span_warning("Unable to interface: [src] is sealed by void energy."))
+		balloon_alert(user, "sealed by void energy!")
+		return FALSE
+	return ..()
+
+/obj/machinery/door/attack_ai_secondary(mob/user, list/modifiers)
+	if(path_unseen_locked && !isAdminGhostAI(user))
+		balloon_alert(user, "sealed by void energy!")
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	return ..()
+
+/obj/machinery/door/attack_robot_secondary(mob/user, list/modifiers)
+	if(path_unseen_locked && !isAdminGhostAI(user))
+		balloon_alert(user, "sealed by void energy!")
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	return ..()
+
+/obj/machinery/door/try_to_activate_door(mob/user, access_bypass = FALSE, bumped = FALSE)
+	if(path_unseen_locked && (issilicon(user) || HAS_TRAIT(user, TRAIT_SILICON_ACCESS)) && !isAdminGhostAI(user))
+		if(!operating && density)
+			run_animation(DOOR_DENY_ANIMATION)
+		balloon_alert(user, "sealed by void energy!")
+		return FALSE
+	return ..()
+
+/obj/machinery/door/allowed(mob/accessor)
+	if(path_unseen_locked && (issilicon(accessor) || HAS_TRAIT(accessor, TRAIT_SILICON_ACCESS)) && !isAdminGhostAI(accessor))
+		return FALSE
+	return ..()
+
+/obj/machinery/door/base_item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(path_unseen_locked && (issilicon(user) || HAS_TRAIT(user, TRAIT_SILICON_ACCESS)) && !isAdminGhostAI(user))
+		balloon_alert(user, "sealed by void energy!")
+		return ITEM_INTERACT_BLOCKING
+	return ..()
+
+/obj/machinery/door/hostile_lockdown(mob/origin)
+	if(path_unseen_locked)
+		return
+	return ..()
+
+/obj/machinery/door/disable_lockdown()
+	if(path_unseen_locked)
+		return
+	return ..()
+
+/obj/machinery/door/airlock/canAIControl(mob/user)
+	if(path_unseen_locked)
+		return FALSE
+	return ..()
+
+/obj/machinery/door/airlock/canAIHack()
+	if(path_unseen_locked)
+		return FALSE
+	return ..()
+
+/obj/machinery/door/airlock/user_allowed(mob/user)
+	if(path_unseen_locked && !isAdminGhostAI(user))
+		to_chat(user, span_warning("Unable to interface: [src] is sealed by void energy."))
+		balloon_alert(user, "sealed by void energy!")
+		return FALSE
+	return ..()
+
+/obj/machinery/door/airlock/attack_ai(mob/user)
+	if(path_unseen_locked && !isAdminGhostAI(user))
+		to_chat(user, span_warning("Unable to interface: [src] is sealed by void energy."))
+		balloon_alert(user, "sealed by void energy!")
+		return
+	return ..()
+
+/obj/machinery/door/airlock/ui_interact(mob/user, datum/tgui/ui)
+	if(path_unseen_locked && !isAdminGhostAI(user))
+		to_chat(user, span_warning("Unable to interface: [src] is sealed by void energy."))
+		return FALSE
+	return ..()
+
+/obj/machinery/door/firedoor/attack_ai(mob/user)
+	if(path_unseen_locked && !isAdminGhostAI(user))
+		to_chat(user, span_warning("Unable to interface: [src] is sealed by void energy."))
+		balloon_alert(user, "sealed by void energy!")
+		return FALSE
+	return ..()
+
 /// Indestructible blast door designed to be controlled by the Path Unseen void tile.
 /obj/machinery/door/poddoor/path_unseen
 	name = "Path Unseen blast door"
@@ -173,6 +307,7 @@
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 	can_open_with_hands = FALSE
 	autoclose = FALSE
+	path_unseen_locked = TRUE
 
 /obj/machinery/door/poddoor/path_unseen/screwdriver_act(mob/living/user, obj/item/tool)
 	balloon_alert(user, "sealed by void energy!")
