@@ -426,7 +426,7 @@
 	SEND_SIGNAL(src, COMSIG_ATOM_UPDATED_ICON)
 
 // VEILBREAK EDIT BEGIN - mob-based Move To Top context verb
-GAME_VERB_CONTEXT_IN(/mob/living, move_to_top_verb, "Move To Top", "", null, /obj/item, oview(1))
+GAME_VERB_CONTEXT(/mob/living, move_to_top_verb, "Move To Top", "", null, /obj/item)
 	VERB_ARG_TYPED(target, VERB_ARG_TYPE_OBJ, VERB_ARG_SOURCE_OVIEW_1, /obj/item)
 	if(!istype(target))
 		return
@@ -865,7 +865,7 @@ GAME_VERB_CONTEXT_IN(/mob/living, move_to_top_verb, "Move To Top", "", null, /ob
 	return M.can_equip(src, slot, disable_warning, bypass_equip_delay_self, ignore_equipped, indirect_action = indirect_action)
 
 // VEILBREAK EDIT BEGIN - mob-based Pick Up context verb
-GAME_VERB_CONTEXT_IN(/mob/living, pickup_verb, "Pick Up", "", null, /obj/item, oview(1))
+GAME_VERB_CONTEXT(/mob/living, pickup_verb, "Pick Up", "", null, /obj/item)
 	VERB_ARG_TYPED(target, VERB_ARG_TYPE_OBJ, VERB_ARG_SOURCE_OVIEW_1, /obj/item)
 	if(!istype(target) || target.loc == src)
 		return
