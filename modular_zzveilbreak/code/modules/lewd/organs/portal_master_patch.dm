@@ -1,6 +1,6 @@
-// This module provides global server fluid tracking systems, 3-minute continuous regeneration timelines, and medical scanner readouts.
-// It manages delta-time scaling variables on status effects to maintain uniform refill thresholds regardless of subsystem tick intervals.
-// It uses bitmask equipment matrices to dynamically route dripping liquids onto floor turf layouts if characters wear loose attire.
+// This file overhauls global fluid tracking, calibrated 3-minute regeneration loops, apparel bitmask leaks, and medical scanner outputs.
+// It overrides portal configuration directions and scales status effect variables cleanly based on delta time fields.
+// It tracks equipment bits coverage matrices to dynamically pass liquid droplets onto floor turf layouts if characters wear loose garments.
 
 /datum/interaction/lewd/portal/fuck_anus
 	cum_target = list(CLIMAX_POSITION_USER = ORGAN_SLOT_ANUS, CLIMAX_POSITION_TARGET = ORGAN_SLOT_PENIS)
@@ -123,3 +123,15 @@
 			scan_text += "   [R.volume] units of [R.name].<br>"
 	if(scan_text != "")
 		to_chat(user, scan_text)
+
+/mob/living/carbon/human/Initialize(mapload)
+	. = ..()
+	var/static/list/fluid_signals = list(COMSIG_REAGENT_ADD_CUM, COMSIG_REAGENT_ADD_BREASTMILK)
+	RegisterSignals(src, fluid_signals, PROC_REF(handle_concubus_metabolism))
+
+/mob/living/carbon/human/proc/handle_concubus_metabolism(datum/source, datum/reagent/handled_reagent, amount)
+	SIGNAL_HANDLER
+	if(!has_quirk(/datum/quirk/concubus) && !HAS_TRAIT(src, TRAIT_CONCUBUS))
+		return
+	var/nutrition_bonus = amount * 2
+	adjust_nutrition(nutrition_bonus)
