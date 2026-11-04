@@ -53,8 +53,10 @@
 		var/turf/T = get_turf(owner)
 		if(T && drip_volume > 0)
 			reagents.remove_any(drip_volume)
-			if(prob(12))
-				add_cum_splatter_floor(T, female = (src.slot == ORGAN_SLOT_VAGINA ? TRUE : FALSE))
+			var/datum/reagents/LeakR = new(drip_volume)
+			LeakR.add_reagent(src.internal_fluid_datum, drip_volume)
+			T.add_liquid_from_reagents(LeakR, FALSE, 1)
+			qdel(LeakR)
 	if(!reagents.total_volume)
 		STOP_PROCESSING(SSprocessing, src)
 
@@ -177,4 +179,3 @@
 		return
 	var/nutrition_bonus = amount * 2
 	adjust_nutrition(nutrition_bonus)
-	to_chat(src, span_purple("Your Concubus traits surge, absorbing [nutrition_bonus] units of somatic energy from the fluid container."))
