@@ -1,6 +1,6 @@
-// This module intercepts human climax parameters to isolate fluid transmission secure layers within reproductive organ slots.
-// It hooks universal reagent transfer signals on human entities to implement absolute background stomach dumping blocker constraints.
-// It integrates automatic siphoning nutrition conversion multipliers natively without triggering chat interface warning alerts.
+// This module implements the core human climax fluid routing interceptions and cavity containment logic loops.
+// It overrides the human mob climax proc to isolate fluid transfers directly into reproductive organ receptacles.
+// It hooks universal reagent injection signals to provide Concubus quirk metabolic tracking whenever fluids fill any organ slot.
 
 /mob/living/carbon/human/climax(climax_choice, manual, nonhuman_bypass_partner)
 	var/obj/item/organ/genital/testicles/testicles = get_organ_slot(ORGAN_SLOT_TESTICLES)

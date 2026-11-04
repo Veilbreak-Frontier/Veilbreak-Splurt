@@ -113,12 +113,12 @@
 	var/scan_text = ""
 	var/obj/item/organ/genital/vagina/V = patient.get_organ_slot(ORGAN_SLOT_VAGINA)
 	if(V && V.reagents && length(V.reagents.reagent_list))
-		scan_text += "<br>Subject contains the following reagents in their womb:<br>"
+		scan_text += "<br>Subject contains the following reagents in their Womb:<br>"
 		for(var/datum/reagent/R in V.reagents.reagent_list)
 			scan_text += "   [R.volume] units of [R.name].<br>"
 	var/obj/item/organ/genital/anus/An = patient.get_organ_slot(ORGAN_SLOT_ANUS)
 	if(An && An.reagents && length(An.reagents.reagent_list))
-		scan_text += "Subject contains the following reagents in their bowels:<br>"
+		scan_text += "Subject contains the following reagents in their Bowels:<br>"
 		for(var/datum/reagent/R in An.reagents.reagent_list)
 			scan_text += "   [R.volume] units of [R.name].<br>"
 	if(scan_text != "")
