@@ -1,5 +1,6 @@
 // This file overhauls global fluid tracking, calibrated 3-minute regeneration loops, apparel bitmask leaks, and medical scanner outputs.
-// It overrides portal configuration directions and intercepts human climax calls to completely isolate fluid containers away from the stomach.
+// It overrides portal configuration directions and scales status effect variables cleanly based on delta time fields.
+// It tracks equipment bits coverage matrices to dynamically pass liquid droplets onto floor turf layouts if characters wear loose garments.
 
 /datum/interaction/lewd/portal/fuck_anus
 	cum_target = list(CLIMAX_POSITION_USER = ORGAN_SLOT_ANUS, CLIMAX_POSITION_TARGET = ORGAN_SLOT_PENIS)
@@ -111,71 +112,14 @@
 	var/mob/living/carbon/human/patient = A
 	var/scan_text = ""
 	var/obj/item/organ/genital/vagina/V = patient.get_organ_slot(ORGAN_SLOT_VAGINA)
-	if(V && V.reagents && V.reagents.total_volume)
-		scan_text += "\n <span class='notice ml-1'>* Subject contains the following reagents in their Womb:</span><br>"
+	if(V && V.reagents && length(V.reagents.reagent_list))
+		scan_text += "<br>Subject contains the following reagents in their womb:<br>"
 		for(var/datum/reagent/R in V.reagents.reagent_list)
-			scan_text += " <span class='notice ml-2'>- [R.name]: [R.volume]u</span><br>"
+			scan_text += "   [R.volume] units of [R.name].<br>"
 	var/obj/item/organ/genital/anus/An = patient.get_organ_slot(ORGAN_SLOT_ANUS)
-	if(An && An.reagents && An.reagents.total_volume)
-		scan_text += "\n <span class='notice ml-1'>* Subject contains the following reagents in their Bowels:</span><br>"
+	if(An && An.reagents && length(An.reagents.reagent_list))
+		scan_text += "Subject contains the following reagents in their bowels:<br>"
 		for(var/datum/reagent/R in An.reagents.reagent_list)
-			scan_text += " <span class='notice ml-2'>- [R.name]: [R.volume]u</span><br>"
+			scan_text += "   [R.volume] units of [R.name].<br>"
 	if(scan_text != "")
-		to_chat(user, "<span class='notice'><b>Anatomical Content Analysis Results:</b></span>[scan_text]")
-
-/mob/living/carbon/human/climax(climax_choice, manual, nonhuman_bypass_partner)
-	var/obj/item/organ/genital/testicles/testicles = get_organ_slot(ORGAN_SLOT_TESTICLES)
-	var/obj/item/organ/genital/vagina/vagina = get_organ_slot(ORGAN_SLOT_VAGINA)
-	var/mob/living/carbon/human/partner_mob = partner
-	var/destination_slot = null
-	var/transfer_volume = 0
-	var/fluid_type = null
-	if(climax_choice == CLIMAX_PENIS && testicles)
-		transfer_volume = testicles.cumshot_size
-		fluid_type = testicles.internal_fluid_datum
-		if(climax_interaction)
-			var/target_raw = climax_interaction.cum_target[interaction_position]
-			if(target_raw == ORGAN_SLOT_ANUS || target_raw == ORGAN_SLOT_VAGINA)
-				destination_slot = target_raw
-		if(!destination_slot && partner_mob)
-			if(partner_mob.get_organ_slot(ORGAN_SLOT_VAGINA))
-				destination_slot = ORGAN_SLOT_VAGINA
-			else
-				destination_slot = ORGAN_SLOT_ANUS
-		if(partner_mob && destination_slot)
-			var/obj/item/organ/genital/target_organ = partner_mob.get_organ_slot(destination_slot)
-			if(target_organ && target_organ.reagents)
-				target_organ.reagents.add_reagent(fluid_type, transfer_volume)
-				testicles.reagents.remove_all(transfer_volume)
-				START_PROCESSING(SSprocessing, target_organ)
-				if(prob(5 + partner_mob.arousal))
-					partner_mob.apply_status_effect(/datum/status_effect/pregnancy, partner_mob, src)
-				return TRUE
-	if((climax_choice == CLIMAX_VAGINA || climax_choice == CLIMAX_BOTH) && vagina)
-		transfer_volume = vagina.reagents.total_volume
-		fluid_type = vagina.internal_fluid_datum
-		if(partner_mob)
-			if(partner_mob.get_organ_slot(ORGAN_SLOT_VAGINA))
-				destination_slot = ORGAN_SLOT_VAGINA
-			else
-				destination_slot = ORGAN_SLOT_ANUS
-		if(partner_mob && destination_slot)
-			var/obj/item/organ/genital/target_organ = partner_mob.get_organ_slot(destination_slot)
-			if(target_organ && target_organ.reagents)
-				target_organ.reagents.add_reagent(fluid_type, transfer_volume)
-				vagina.reagents.remove_all(transfer_volume)
-				START_PROCESSING(SSprocessing, target_organ)
-				return TRUE
-	return ..()
-
-/mob/living/carbon/human/Initialize(mapload)
-	. = ..()
-	var/static/list/fluid_signals = list(COMSIG_REAGENT_ADD_CUM, COMSIG_REAGENT_ADD_BREASTMILK)
-	RegisterSignals(src, fluid_signals, PROC_REF(handle_concubus_metabolism))
-
-/mob/living/carbon/human/proc/handle_concubus_metabolism(datum/source, datum/reagent/handled_reagent, amount)
-	SIGNAL_HANDLER
-	if(!has_quirk(/datum/quirk/concubus) && !HAS_TRAIT(src, TRAIT_CONCUBUS))
-		return
-	var/nutrition_bonus = amount * 2
-	adjust_nutrition(nutrition_bonus)
+		to_chat(user, scan_text)
