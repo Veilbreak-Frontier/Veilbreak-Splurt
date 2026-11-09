@@ -41,7 +41,7 @@ jobs:
       - name: Generate App Token
         id: app-token-generation
         uses: actions/create-github-app-token@v3.2.0
-        if: env.APP_PRIVATE_KEY != '' && env.APP_ID != ''
+        if: secrets.APP_ID != '' && secrets.APP_PRIVATE_KEY != ''
         with:
           client-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
@@ -51,7 +51,7 @@ jobs:
 
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
-        if: ${{ success() }}
+        if: ${{ success() && (secrets.APP_ID != '' || secrets.GITHUB_TOKEN != '') }}
         with:
           source_branch: "tgs-dmapi-update"
           destination_branch: "master"
