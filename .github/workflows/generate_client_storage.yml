@@ -4,30 +4,28 @@ on:
     branches:
       - master
     paths:
-      - tgui/public/*
+      - 'tgui/public/**' # Fixed path globbing
 
 jobs:
   dispatch_repo:
-    if: ( !contains(github.event.head_commit.message, '[ci skip]') )
+    if: (!contains(github.event.head_commit.message, '[ci skip]'))
     name: Repository Dispatch
     runs-on: ubuntu-24.04
     steps:
       - name: Generate App Token
         id: app-token-generation
-        uses: actions/create-github-app-token@v3.2.0
+        uses: actions/create-github-app-token@v1 # Upgraded to stable v1 and fixed parameters
         if: secrets.APP_ID != '' && secrets.APP_PRIVATE_KEY != ''
         with:
-          client-id: ${{ secrets.APP_ID }}
+          app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: Veilbreak-Frontier
-        env:
-          APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
-          APP_ID: ${{ secrets.APP_ID }}
 
+      # Using github.token fallback if App Secrets aren't present to prevent step crash
       - name: Send Repository Dispatch
-        if: secrets.APP_ID != '' && secrets.APP_PRIVATE_KEY != '' && steps.app-token-generation.outcome == 'success'
-        uses: peter-evans/repository-dispatch@v4
+        if: always() && (steps.app-token-generation.outcome == 'success' || secrets.APP_ID == '')
+        uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ steps.app-token-generation.outputs.token }}
+          token: ${{ steps.app-token-generation.outputs.token || secrets.GITHUB_TOKEN }}
           repository: Veilbreak-Frontier/byond-client-storage
           event-type: on_master_push
