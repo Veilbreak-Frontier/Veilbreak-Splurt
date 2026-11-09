@@ -13,14 +13,25 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Clone
-        uses: actions/checkout@v7
+      - name: Generate App Token
+        id: app-token-generation
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
+      # 1. We checkout USING the App Token so the pushed branch can trigger other CI checks
+      - name: Clone
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token-generation.outputs.token }}
+          fetch-depth: 0
+
+      # 2. Corrected branch isolation logic
       - name: Branch
         run: |
-          git branch -f tgs-dmapi-update
-          git checkout tgs-dmapi-update
-          git reset --hard master
+          git checkout master
+          git checkout -B tgs-dmapi-update
 
       - name: Apply DMAPI update
         uses: tgstation/tgs-dmapi-updater@v2
@@ -29,34 +40,33 @@ jobs:
           header-path: "code/__DEFINES/tgs.dm"
           library-path: "code/modules/tgs"
 
+      # 3. Only commit and push if there are actual code changes
       - name: Commit and Push
-        continue-on-error: true
+        id: git-push
         run: |
-          git config user.name "Veilbreak-bot[bot]"
-          git config user.email "Veilbreak-bot[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m 'Update TGS DMAPI'
-          git push -f -u origin tgs-dmapi-update
+          if git diff --cached --quiet; then
+            echo "No changes detected in TGS DMAPI."
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m 'Update TGS DMAPI'
+            git push -f -u origin tgs-dmapi-update
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Generate App Token
-        id: app-token-generation
-        uses: actions/create-github-app-token@v3.2.0
-        if: secrets.APP_ID != '' && secrets.APP_PRIVATE_KEY != ''
-        with:
-          client-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-        env:
-          APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
-          APP_ID: ${{ secrets.APP_ID }}
-
+      # 4. Modern, native PR creation that gracefully uses the GitHub App context
       - name: Create Pull Request
-        uses: repo-sync/pull-request@v2
-        if: ${{ success() && (secrets.APP_ID != '' || secrets.GITHUB_TOKEN != '') }}
-        with:
-          source_branch: "tgs-dmapi-update"
-          destination_branch: "master"
-          pr_title: "Automatic TGS DMAPI Update"
-          pr_body: "This pull request updates the TGS DMAPI to the latest version. Please note any changes that may be breaking or unimplemented in your codebase by checking what changes are in the definitions file: code/__DEFINES/tgs.dm before merging.\n\n${{ steps.dmapi-update.outputs.release-notes }}"
-          pr_label: "Tools"
-          pr_allow_empty: false
-          github_token: ${{ steps.app-token-generation.outputs.token || secrets.GITHUB_TOKEN }}
+        if: steps.git-push.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token-generation.outputs.token }}
+        run: |
+          gh pr create \
+            --head "tgs-dmapi-update" \
+            --base "master" \
+            --title "Automatic TGS DMAPI Update" \
+            --body "This pull request updates the TGS DMAPI to the latest version. Please note any changes that may be breaking or unimplemented in your codebase by checking what changes are in the definitions file: code/__DEFINES/tgs.dm before merging.
+
+            ${{ steps.dmapi-update.outputs.release-notes }}" \
+            --label "Tools" || echo "PR already exists or could not be created."
