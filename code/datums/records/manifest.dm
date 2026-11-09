@@ -174,6 +174,7 @@ GLOBAL_DATUM_INIT(manifest, /datum/manifest, new)
 		power_notes_major = person.get_sec_power_string(CAT_POWER_MAJOR_THREAT, include_empty_text = FALSE),
 		// DOPPLER EDIT END
 		// SKYRAT EDIT START - RP Records
+		security_note = person.get_quirk_security_string(CAT_QUIRK_NOTES),
 		past_general_records = person_client?.prefs.read_preference(/datum/preference/text/general) || "",
 		past_medical_records = person_client?.prefs.read_preference(/datum/preference/text/medical) || "",
 		past_security_records = person_client?.prefs.read_preference(/datum/preference/text/security) || "",
