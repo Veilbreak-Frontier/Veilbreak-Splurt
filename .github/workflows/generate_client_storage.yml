@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - 'tgui/public/**' # Fixed path globbing
+      - 'tgui/public/**' # Matches files inside subfolders recursively
 
 jobs:
   dispatch_repo:
@@ -12,20 +12,24 @@ jobs:
     name: Repository Dispatch
     runs-on: ubuntu-24.04
     steps:
+      # 1. Map secrets to local env variables so GitHub allows us to use them in an 'if:' check
       - name: Generate App Token
         id: app-token-generation
-        uses: actions/create-github-app-token@v1 # Upgraded to stable v1 and fixed parameters
-        if: secrets.APP_ID != '' && secrets.APP_PRIVATE_KEY != ''
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          APP_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+        if: env.APP_ID != '' && env.APP_KEY != ''
+        uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: Veilbreak-Frontier
 
-      # Using github.token fallback if App Secrets aren't present to prevent step crash
+      # 2. Use the generated App Token, or fallback cleanly to the default github.token if secrets are empty
       - name: Send Repository Dispatch
-        if: always() && (steps.app-token-generation.outcome == 'success' || secrets.APP_ID == '')
+        id: send-dispatch
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ steps.app-token-generation.outputs.token || secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token-generation.outputs.token || github.token }}
           repository: Veilbreak-Frontier/byond-client-storage
           event-type: on_master_push
