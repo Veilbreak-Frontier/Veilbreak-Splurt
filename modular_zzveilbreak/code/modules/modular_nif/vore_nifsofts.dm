@@ -313,24 +313,27 @@
 	if(. == FALSE)
 		return FALSE
 
-	if(!linked_mob?.dna || linked_mob.dna.species.body_size_restricted)
-		var/obj/item/organ/cyberimp/brain/nif/installed_nif = get_parent_nif()
-		installed_nif?.send_message("Mass alteration is incompatible with this body.", TRUE)
+	if(!linked_mob)
 		refund_activation_cost()
 		return FALSE
 
-	var/new_size_percent = tgui_input_number(linked_mob, "Choose desired size ([BODY_SIZE_MIN * 100]-[BODY_SIZE_MAX * 100]%).", "Set Size", linked_mob.dna.features["body_size"] * 100, BODY_SIZE_MAX * 100, BODY_SIZE_MIN * 100)
+	var/new_size_percent = tgui_input_number(linked_mob, "Choose desired size ([BODY_SIZE_MIN * 100]-[BODY_SIZE_MAX * 100]%).", "Set Size", linked_mob.current_size * 100, BODY_SIZE_MAX * 100, BODY_SIZE_MIN * 100)
 	if(!new_size_percent)
 		refund_activation_cost()
 		return FALSE
 
-	var/new_size = clamp(new_size_percent * 0.01, BODY_SIZE_MIN, BODY_SIZE_MAX)
-	if(linked_mob.update_size(new_size))
-		linked_mob.visible_message(span_warning("Swirling streams of nanites envelop [linked_mob] as [linked_mob.p_they()] change size!"), span_notice("Swirling streams of nanites wrap around you as your size changes."))
+	var/target_scale = clamp(new_size_percent * 0.01, BODY_SIZE_MIN, BODY_SIZE_MAX)
+
+	var/resize_multiplier = target_scale / linked_mob.current_size
+
+	linked_mob.update_transform(resize_multiplier)
+
+	linked_mob.visible_message(span_warning("Swirling streams of nanites envelop [linked_mob] as [linked_mob.p_they()] change size!"), span_notice("Swirling streams of nanites wrap around you as your size changes."))
 
 	if(active)
 		activate()
 	return TRUE
+
 
 /obj/item/disk/nifsoft_uploader/vore_mass_alteration
 	name = "Mass Alteration NIFSoft datadisk"
