@@ -5,7 +5,7 @@
 	icon = 'icons/obj/medical/chemical.dmi'
 	icon_state = "dispenser"
 	base_icon_state = "dispenser"
-	interaction_flags_machine = INTERACT_MACHINE_OPEN | INTERACT_MACHINE_ALLOW_SILICON | INTERACT_MACHINE_OFFLINE
+	interaction_flags_machine = INTERACT_MACHINE_OPEN | INTERACT_MACHINE_ALLOW_SILICON | INTERACT_MACHINE_OFFLINE | INTERACT_MACHINE_WIRES_IF_OPEN
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	circuit = /obj/item/circuitboard/machine/chem_dispenser
 	processing_flags = NONE
@@ -44,6 +44,8 @@
 	// BUBBER EDIT ADDITION END - Multi-tiered dispenser upgrades
 	/// These become available once the machine has been emaged
 	var/list/emagged_reagents = list()
+	/// Whether the safeties have been bypassed via wire hacking
+	var/hacked = FALSE
 	/// Starting purity of the created reagents
 	var/base_reagent_purity = 1
 	/// Records the reagents dispensed by the user if this list is not null
@@ -142,6 +144,8 @@
 
 	. = ..() // So that we call RefreshParts() after adjusting the lists
 
+	set_wires(new /datum/wires/chem_dispenser(src))
+
 	if(is_operational)
 		begin_processing()
 	update_appearance()
@@ -202,9 +206,39 @@
 		balloon_alert(user, "already emagged!")
 		return FALSE
 	balloon_alert(user, "safeties shorted out")
-	dispensable_reagents |= emagged_reagents//add the emagged reagents to the dispensable ones
 	obj_flags |= EMAGGED
+	update_reagent_list()
 	return TRUE
+
+/// Toggles the wire-hacked state and refreshes the available reagent list.
+/obj/machinery/chem_dispenser/proc/adjust_hacked(state)
+	if(hacked == state)
+		return
+	hacked = state
+	update_reagent_list()
+
+/// Recomputes the reagents available for dispensing from the emag and wire-hack state.
+/// NOTE: relies on emagged_reagents never overlapping dispensable_reagents, since we
+/// remove the emag list wholesale when unhacking or un-emagging.
+/obj/machinery/chem_dispenser/proc/update_reagent_list()
+	if(hacked || (obj_flags & EMAGGED))
+		dispensable_reagents |= emagged_reagents
+	else
+		dispensable_reagents -= emagged_reagents
+	dispensable_reagents = sort_list(dispensable_reagents, GLOBAL_PROC_REF(cmp_reagents_asc))
+	SStgui.update_uis(src)
+
+/// Reverts a temporary pulse hack, unless the safeties wire has since been cut.
+/obj/machinery/chem_dispenser/proc/reset_hack(wire)
+	if(wire == WIRE_SAFETIES && !wires.is_cut(wire))
+		adjust_hacked(FALSE)
+
+/obj/machinery/chem_dispenser/shock(mob/living/shocking, chance, shock_source, siemens_coeff)
+	if(machine_stat & (BROKEN|NOPOWER))
+		return FALSE
+	if(isnull(siemens_coeff))
+		siemens_coeff = 0.7
+	return ..()
 
 /obj/machinery/chem_dispenser/ex_act(severity, target)
 	return severity <= EXPLODE_LIGHT ? FALSE : ..()
@@ -460,6 +494,10 @@
 	return default_deconstruction_crowbar(user, tool)
 
 /obj/machinery/chem_dispenser/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(is_wire_tool(tool) && panel_open && wires)
+		wires.interact(user)
+		return ITEM_INTERACT_SUCCESS
+
 	if(!tool.can_insert_container(user, src))
 		return NONE
 	// BUBBER EDIT ADDITION BEGIN - CHEMISTRY QOL

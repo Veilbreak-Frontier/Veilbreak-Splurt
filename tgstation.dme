@@ -2525,6 +2525,7 @@
 #include "code\datums\wires\atmosshieldgen.dm"
 #include "code\datums\wires\autolathe.dm"
 #include "code\datums\wires\big_manipulator.dm"
+#include "code\datums\wires\chem_dispenser.dm"
 #include "code\datums\wires\collar_bomb.dm"
 #include "code\datums\wires\conveyor.dm"
 #include "code\datums\wires\ecto_sniffer.dm"
